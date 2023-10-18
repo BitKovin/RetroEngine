@@ -21,11 +21,16 @@ namespace Engine
 
             float ScaleY = (float)GameMain.inst.Window.ClientBounds.Height / Constants.ResoultionY;
 
-            Vector2 mousePos = new Vector2(Mouse.GetState().X, Mouse.GetState().Y) / ScaleY;
+            Vector2 mousePos = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
             MouseDelta = mousePos - MousePos;
+            MouseDelta /= ScaleY;
+
+            Vector2 windowCenter = new Vector2(GameMain.inst.GraphicsDevice.Viewport.Width / 2, GameMain.inst.GraphicsDevice.Viewport.Height / 2);
+
             if (LockCursor)
-                Mouse.SetPosition(GameMain.inst.GraphicsDevice.Viewport.Width / 2, GameMain.inst.GraphicsDevice.Viewport.Height / 2);
-            MousePos = new Vector2(Mouse.GetState().X, Mouse.GetState().Y) / ScaleY;
+                if(Vector2.Distance(windowCenter,mousePos)>10)
+                Mouse.SetPosition((int)windowCenter.X,(int)windowCenter.Y);
+            MousePos = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
             
 
 

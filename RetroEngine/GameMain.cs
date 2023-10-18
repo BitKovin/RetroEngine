@@ -64,9 +64,11 @@ namespace Engine
                 _graphics.PreferredBackBufferWidth = 1280;  // set this value to the desired width of your window
                 _graphics.PreferredBackBufferHeight = 720;   // set this value to the desired height of your window
             }
-            this.IsFixedTimeStep = true;
-            this.TargetElapsedTime = TimeSpan.FromSeconds(1d / 500d);
-            _graphics.SynchronizeWithVerticalRetrace = false;
+            //this.IsFixedTimeStep = true;
+            //this.TargetElapsedTime = TimeSpan.FromSeconds(1d / 2000d);
+
+            IsFixedTimeStep = false;
+            //_graphics.SynchronizeWithVerticalRetrace = false;
 
             //if (platform == Platform.Mobile)
                 //_graphics.IsFullScreen = true;
