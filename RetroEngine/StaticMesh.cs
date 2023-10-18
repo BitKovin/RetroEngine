@@ -19,6 +19,7 @@ namespace RetroEngine
 
         public Model model;
 
+        public Texture2D texture;
 
         public virtual void Draw()
         {
@@ -29,6 +30,8 @@ namespace RetroEngine
                     effect.World = GetWorldMatrix();
                     effect.View = Camera.view;
                     effect.Projection = Camera.projection;
+                    effect.Texture = texture;
+                    effect.TextureEnabled = texture is not null;
                 }
 
                 mesh.Draw();
@@ -117,7 +120,7 @@ namespace RetroEngine
                     {
                         var vertex = mesh.Vertices[face.Indices[2-i]];
                         var normal = mesh.Normals[face.Indices[2-i]];
-                        var textureCoord = mesh.HasTextureCoords(0) ? mesh.TextureCoordinateChannels[0][face.Indices[i]] : new Assimp.Vector3D(0, 0, 0);
+                        var textureCoord = mesh.HasTextureCoords(0) ? mesh.TextureCoordinateChannels[0][face.Indices[2-i]] : new Assimp.Vector3D(0, 0, 0);
 
                         // Negate the x-coordinate to correct mirroring
                         vertices[vertexIndex] = new VertexPositionNormalTexture(

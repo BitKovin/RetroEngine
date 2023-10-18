@@ -59,6 +59,7 @@ namespace Engine.Entities
             meshes.Add(mesh);
 
             mesh.LoadFromFile("pistol.obj");
+            mesh.texture = Utils.LoadTextureFromFile("usp.png");
 
 
             buttonRotate.onClicked += ButtonRotate_onClicked;
@@ -146,8 +147,6 @@ namespace Engine.Entities
 
             mesh.Position = Camera.position * -1;
             mesh.Rotation = Camera.rotation;
-
-            Console.Write(Camera.position);
 
         }
 

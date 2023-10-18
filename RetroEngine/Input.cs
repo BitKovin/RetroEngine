@@ -25,7 +25,6 @@ namespace Engine
             MouseDelta = mousePos - MousePos;
             if (LockCursor)
                 Mouse.SetPosition(GameMain.inst.GraphicsDevice.Viewport.Width / 2, GameMain.inst.GraphicsDevice.Viewport.Height / 2);
-            Console.WriteLine(MouseDelta);
             MousePos = new Vector2(Mouse.GetState().X, Mouse.GetState().Y) / ScaleY;
             
 
