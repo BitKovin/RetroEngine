@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using Engine.UI;
 using RetroEngine;
+using MonoGame.ImGuiNet;
 
 namespace Engine
 {
@@ -39,6 +40,8 @@ namespace Engine
         public static GameTime time;
 
         Render render;
+        ImGuiRenderer ImGuiRenderer;
+
 
         public GameMain()
         {
@@ -48,6 +51,7 @@ namespace Engine
             inst = this;
             curentLevel = new Level();
             UiElement.main = UiManger;
+
         }
 
         protected override void Initialize()
@@ -55,6 +59,8 @@ namespace Engine
             // TODO: Add your initialization logic here
 
             base.Initialize();
+
+            
 
             render = new Render();
 
@@ -64,11 +70,10 @@ namespace Engine
                 _graphics.PreferredBackBufferWidth = 1280;  // set this value to the desired width of your window
                 _graphics.PreferredBackBufferHeight = 720;   // set this value to the desired height of your window
             }
-            //this.IsFixedTimeStep = true;
-            //this.TargetElapsedTime = TimeSpan.FromSeconds(1d / 2000d);
+            this.IsFixedTimeStep = true;
+            this.TargetElapsedTime = TimeSpan.FromSeconds(1d / 200d);
 
-            IsFixedTimeStep = false;
-            //_graphics.SynchronizeWithVerticalRetrace = false;
+            _graphics.SynchronizeWithVerticalRetrace = false;
 
             //if (platform == Platform.Mobile)
                 //_graphics.IsFullScreen = true;
@@ -79,6 +84,9 @@ namespace Engine
 
         protected override void LoadContent()
         {
+            ImGuiRenderer = new ImGuiRenderer(this);
+            ImGuiRenderer.RebuildFontAtlas();
+
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             content = Content;
             // TODO: use this.Content to load your game content here
@@ -116,7 +124,6 @@ namespace Engine
             foreach (UiElement elem in UiElement.main.childs)
                 elem.Update();
             // TODO: Add your update logic here
-
 
             base.Update(gameTime);
         }
@@ -168,6 +175,10 @@ namespace Engine
 
 
             _spriteBatch.End();
+
+            ImGuiRenderer.BeforeLayout(gameTime);
+
+            ImGuiRenderer.AfterLayout();
 
             //SetupFullViewport();
             base.Draw(gameTime);
