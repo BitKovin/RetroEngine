@@ -7,9 +7,9 @@ namespace RetroEngine.Game
 {
     public class Game : Engine.GameMain
     {
-        protected override void Initialize()
+        protected override void LoadContent()
         {
-            base.Initialize();
+            base.LoadContent();
 
             curentLevel.entities.Add(new Player());
 

@@ -11,6 +11,7 @@ matrix World;
 matrix View;
 matrix Projection;
 
+
 struct VertexShaderInput
 {
     float4 Position : POSITION0;
@@ -44,7 +45,7 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 float4 MainPS(VertexShaderOutput input) : SV_TARGET
 {
     // Use the world space normal as color
-    float3 color = abs((input.Normal)); // Map normal to [0,1] range
+    float3 color = (input.Normal) * 0.5 + 0.5; // Map normal to [0,1] range
 
     return float4(color, 1.0f);
 }

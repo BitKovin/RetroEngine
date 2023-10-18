@@ -55,10 +55,10 @@ namespace Engine.Entities
             Position = new Vector3(-100);
 
 
-            Model model = GameMain.content.Load<Model>("pistol");
+            //Model model = GameMain.content.Load<Model>("pistol");
             meshes.Add(mesh);
 
-            mesh.model = model;
+            mesh.LoadFromFile("pistol.obj");
 
 
             buttonRotate.onClicked += ButtonRotate_onClicked;
@@ -96,6 +96,9 @@ namespace Engine.Entities
 
             Camera.rotation += new Vector3(Input.MouseDelta.Y, -Input.MouseDelta.X, 0)/2f;
             Camera.rotation = new Vector3(Math.Clamp(Camera.rotation.X, -89, 89), Camera.rotation.Y, 0);
+
+            //Camera.rotation = new Vector3();
+
             if (input.Length()>0)
             {
                 input.Normalize();

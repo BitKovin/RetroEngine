@@ -13,6 +13,7 @@ namespace RetroEngine
     {
 
         RenderTarget2D colorPath;
+        RenderTarget2D normalPath;
 
         RenderTarget2D outputPath;
 
@@ -23,11 +24,14 @@ namespace RetroEngine
             graphics = GameMain.inst._graphics;
 
             InitRenderTargetIfNeed(ref colorPath);
+            InitRenderTargetIfNeed(ref normalPath);
             InitRenderTargetIfNeed(ref outputPath);
 
             RenderColorPath(level);
+            RenderNormalPath(level);
+            PerformLighting();
 
-            outputPath = colorPath;
+            //outputPath = colorPath;
 
             return outputPath;
         }
@@ -41,11 +45,66 @@ namespace RetroEngine
 
             foreach (Entity ent in level.entities)
             {
-                
-                if(ent.meshes is not null)
-                foreach (StaticMesh mesh in ent.meshes)
-                    mesh.DrawNormals();
+
+                if (ent.meshes is not null)
+                    foreach (StaticMesh mesh in ent.meshes)
+                        mesh.Draw();
             }
+        }
+
+        void RenderNormalPath(Level level)
+        {
+            graphics.GraphicsDevice.SetRenderTarget(normalPath);
+
+            graphics.GraphicsDevice.Clear(Color.Black);
+
+            graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+
+            foreach (Entity ent in level.entities)
+            {
+
+                if (ent.meshes is not null)
+                    foreach (StaticMesh mesh in ent.meshes)
+                        mesh.DrawNormals();
+            }
+        }
+
+        void PerformLighting()
+        {
+            // Load the custom lighting effect
+            Effect lightingEffect = GameMain.content.Load<Effect>("DeferredLighting");
+
+            // Set the render target to the output path
+            graphics.GraphicsDevice.SetRenderTarget(outputPath);
+
+            // Clear the render target
+            //graphics.GraphicsDevice.Clear(Color.Transparent);
+
+            // Set the necessary parameters for the lighting effect
+            lightingEffect.Parameters["ColorTexture"].SetValue(colorPath);
+            lightingEffect.Parameters["NormalTexture"].SetValue(normalPath);
+
+            // Begin drawing with SpriteBatch
+            SpriteBatch spriteBatch = new SpriteBatch(graphics.GraphicsDevice);
+            spriteBatch.Begin(effect: lightingEffect);
+
+            // Draw a full-screen quad to apply the lighting
+            DrawFullScreenQuad(spriteBatch);
+
+            // End the SpriteBatch
+            spriteBatch.End();
+
+            // Reset the render target to the default render target
+            graphics.GraphicsDevice.SetRenderTarget(null);
+        }
+
+        void DrawFullScreenQuad(SpriteBatch spriteBatch)
+        {
+            // Create a rectangle covering the entire screen
+            Rectangle screenRectangle = new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
+
+            // Draw the full-screen quad using SpriteBatch
+            spriteBatch.Draw(colorPath, screenRectangle, Color.White);
         }
 
         void InitRenderTargetIfNeed(ref RenderTarget2D target)
@@ -68,7 +127,5 @@ namespace RetroEngine
                     depthFormat); // Depth format
             }
         }
-
-
     }
 }
