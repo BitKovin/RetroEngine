@@ -28,8 +28,11 @@ namespace Engine
             Vector2 windowCenter = new Vector2(GameMain.inst.GraphicsDevice.Viewport.Width / 2, GameMain.inst.GraphicsDevice.Viewport.Height / 2);
 
             if (LockCursor)
-                if(Vector2.Distance(windowCenter,mousePos)>10)
-                Mouse.SetPosition((int)windowCenter.X,(int)windowCenter.Y);
+                if (Vector2.Distance(windowCenter, mousePos) > 10)
+                {
+                    Mouse.SetPosition((int)windowCenter.X, (int)windowCenter.Y);
+                }
+
             MousePos = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
             
 

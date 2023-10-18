@@ -19,6 +19,13 @@ namespace RetroEngine
 
         GraphicsDeviceManager graphics;
 
+        Effect lightingEffect;
+
+        public Render()
+        {
+            lightingEffect = GameMain.content.Load<Effect>("DeferredLighting");
+        }
+
         public RenderTarget2D StartRenderLevel(Level level)
         {
             graphics = GameMain.inst._graphics;
@@ -71,8 +78,7 @@ namespace RetroEngine
 
         void PerformLighting()
         {
-            // Load the custom lighting effect
-            Effect lightingEffect = GameMain.content.Load<Effect>("DeferredLighting");
+
 
             // Set the render target to the output path
             graphics.GraphicsDevice.SetRenderTarget(outputPath);
