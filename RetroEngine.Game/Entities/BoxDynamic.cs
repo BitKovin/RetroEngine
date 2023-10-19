@@ -23,7 +23,7 @@ namespace RetroEngine.Game.Entities
 
             mesh.model = model;
 
-            body = Physics.Physics.CreateBox(this);
+            body = Physics.Physics.CreateBox(this, new BulletSharp.Math.Vector3(1,1,1));
         }
 
 
@@ -43,6 +43,7 @@ namespace RetroEngine.Game.Entities
 
             mesh.Position = Position;
             mesh.Rotation = Rotation;
+            
         }
     }
 }

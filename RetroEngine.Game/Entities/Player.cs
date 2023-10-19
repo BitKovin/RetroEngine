@@ -24,7 +24,7 @@ namespace Engine.Entities
 
         StaticMesh mesh = new StaticMesh();
 
-        float speed = 2;
+        float speed = 5;
 
         public Player():base()
         {

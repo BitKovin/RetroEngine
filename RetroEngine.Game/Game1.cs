@@ -19,7 +19,7 @@ namespace RetroEngine.Game
 
             curentLevel.entities.Add(player);
 
-            Engine.Camera.position = player.Position = new Vector3(0, -3, 0);
+            Engine.Camera.position = player.Position = new Vector3(0, 3, -2);
 
             Box box = new Box();
             box.Position = new Vector3(0, 0, 0);
@@ -27,11 +27,14 @@ namespace RetroEngine.Game
 
             box.Start();
 
-            BoxDynamic boxDynamic = new BoxDynamic();
-            boxDynamic.Position = new Vector3(0,3, 0);
-            curentLevel.entities.Add(boxDynamic);
+            for (float i = 1; i < 10; i++)
+            {
+                BoxDynamic boxDynamic = new BoxDynamic();
+                boxDynamic.Position = new Vector3(0, i*3, i * 0.5f);
+                curentLevel.entities.Add(boxDynamic);
 
-            boxDynamic.Start();
+                boxDynamic.Start();
+            }
 
         }
     }

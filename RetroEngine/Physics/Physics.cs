@@ -55,11 +55,7 @@ namespace RetroEngine.Physics
                     Matrix rotationMatrix = rigidBody.WorldTransform.Basis;
                     Quaternion rotation = Quaternion.RotationMatrix(rotationMatrix);
 
-                    Vector3 rotationEulerAngles;
-
-                    rotationEulerAngles.X = (float)Math.Atan2(rotationMatrix.M32, rotationMatrix.M33); // Pitch
-                    rotationEulerAngles.Y = (float)Math.Atan2(-rotationMatrix.M31, Math.Sqrt(rotationMatrix.M32 * rotationMatrix.M32 + rotationMatrix.M33 * rotationMatrix.M33)); // Yaw
-                    rotationEulerAngles.Z = (float)Math.Atan2(rotationMatrix.M21, rotationMatrix.M11); // Roll
+                    Vector3 rotationEulerAngles = ToEulerAngles(rotation);
 
                     ent.Rotation = new Microsoft.Xna.Framework.Vector3((float)rotationEulerAngles.X, (float)rotationEulerAngles.Y, (float)rotationEulerAngles.Z);
 
@@ -68,44 +64,83 @@ namespace RetroEngine.Physics
 
         }
 
-        public static RigidBody CreateSphere(Entity entity, CollisionFlags collisionFlags = CollisionFlags.None)
+        static Vector3 ToEulerAngles(Quaternion quaternion)
         {
-            RigidBody sphereRigidBody;
+            Vector3 angles = new Vector3();
+            double sinr_cosp = 2.0 * (quaternion.W * quaternion.X + quaternion.Y * quaternion.Z);
+            double cosr_cosp = 1.0 - 2.0 * (quaternion.X * quaternion.X + quaternion.Y * quaternion.Y);
+            angles.X = (float)Math.Atan2(sinr_cosp, cosr_cosp);
+
+            double sinp = 2.0 * (quaternion.W * quaternion.Y - quaternion.Z * quaternion.X);
+            if (Math.Abs(sinp) >= 1)
+            {
+                angles.Y = (float)Math.CopySign(Math.PI / 2, sinp); // Use 90 degrees if out of range
+            }
+            else
+            {
+                angles.Y = (float)Math.Asin(sinp);
+            }
+
+            double siny_cosp = 2.0 * (quaternion.W * quaternion.Z + quaternion.X * quaternion.Y);
+            double cosy_cosp = 1.0 - 2.0 * (quaternion.Y * quaternion.Y + quaternion.Z * quaternion.Z);
+            angles.Z = (float)Math.Atan2(siny_cosp, cosy_cosp);
+
+            return angles / (float)Math.PI * 180;
+        }
+
+
+        public static RigidBody CreateSphere(Entity entity, float mass = 1, CollisionFlags collisionFlags = CollisionFlags.None)
+        {
+            RigidBody RigidBody;
 
             // Create a sphere shape
             var sphereShape = new SphereShape(1.0f);
             var motionState = new DefaultMotionState(Matrix.Translation(0, 10, 0));
 
+            Vector3 inertia = Vector3.Zero;
+            sphereShape.CalculateLocalInertia(mass, out inertia);
+
             // Create a rigid body for the sphere
-            var sphereRigidBodyInfo = new RigidBodyConstructionInfo(1.0f, motionState, sphereShape);
-            sphereRigidBody = new RigidBody(sphereRigidBodyInfo);
-            sphereRigidBody.CollisionFlags = collisionFlags;
+            var sphereRigidBodyInfo = new RigidBodyConstructionInfo(collisionFlags == CollisionFlags.StaticObject ? 0 : mass, motionState, sphereShape);
+            RigidBody = new RigidBody(sphereRigidBodyInfo);
+            RigidBody.CollisionFlags = collisionFlags;
 
-            sphereRigidBody.UserObject = entity;
+            RigidBody.UserObject = entity;
 
-            dynamicsWorld.AddRigidBody(sphereRigidBody);
+            dynamicsWorld.AddRigidBody(RigidBody);
 
-            return sphereRigidBody;
+            RigidBody.Friction = 0.5f;
+            RigidBody.SetDamping(0.1f, 0.1f);
+            RigidBody.Restitution = 0.5f;
+
+            return RigidBody;
         }
 
-        public static RigidBody CreateBox(Entity entity, CollisionFlags collisionFlags = CollisionFlags.None)
+        public static RigidBody CreateBox(Entity entity,Vector3 size,float mass = 1, CollisionFlags collisionFlags = CollisionFlags.None)
         {
-            RigidBody boxRigidBody;
+            RigidBody RigidBody;
 
             // Create a sphere shape
-            var sphereShape = new BoxShape(new Vector3(1,1,1));
-            var motionState = new DefaultMotionState(Matrix.Translation(0, 10, 0));
+            var sphereShape = new BoxShape(size);
+            var motionState = new DefaultMotionState(Matrix.Translation(0, 0, 0));
+
+            Vector3 inertia = Vector3.Zero;
+            sphereShape.CalculateLocalInertia(mass, out inertia);
 
             // Create a rigid body for the sphere
-            var boxRigidBodyInfo = new RigidBodyConstructionInfo(1.0f, motionState, sphereShape);
-            boxRigidBody = new RigidBody(boxRigidBodyInfo);
-            boxRigidBody.CollisionFlags = collisionFlags;
+            var boxRigidBodyInfo = new RigidBodyConstructionInfo(collisionFlags==CollisionFlags.StaticObject? 0:mass, motionState, sphereShape, inertia);
+            RigidBody = new RigidBody(boxRigidBodyInfo);
+            RigidBody.CollisionFlags = collisionFlags;
 
-            boxRigidBody.UserObject = entity;
+            RigidBody.UserObject = entity;
 
-            dynamicsWorld.AddRigidBody(boxRigidBody);
+            dynamicsWorld.AddRigidBody(RigidBody);
 
-            return boxRigidBody;
+            RigidBody.Friction = 1f;
+            RigidBody.SetDamping(0.1f, 0.1f);
+            RigidBody.Restitution = 0.1f;
+
+            return RigidBody;
         }
 
     }
