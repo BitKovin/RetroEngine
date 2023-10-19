@@ -24,7 +24,9 @@ namespace Engine.Entities
 
             mesh.model = model;
 
-            body = Physics.CreateBox(this, CollisionFlags.KinematicObject);
+            body = Physics.CreateBox(this, CollisionFlags.StaticObject);
+
+            body.SetMassProps(0, new BulletSharp.Math.Vector3(0,0,0));
 
         }
 
