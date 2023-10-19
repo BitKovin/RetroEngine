@@ -160,7 +160,8 @@ namespace Engine.Entities
             {
                 if (hit.CollisionObject is not null)
                 {
-                    RigidBody.Upcast(hit.CollisionObject).LinearVelocity = Camera.rotation.GetForwardVector().ToPhysics() * 100;
+                    RigidBody.Upcast(hit.CollisionObject).Activate(true);
+                    RigidBody.Upcast(hit.CollisionObject).ApplyCentralImpulse(Camera.rotation.GetForwardVector().ToPhysics() * 10);
                     Console.WriteLine("pew");
                 }
             }
