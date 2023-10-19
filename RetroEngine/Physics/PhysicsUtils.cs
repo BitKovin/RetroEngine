@@ -14,7 +14,7 @@ namespace RetroEngine.Physics
         public static void SetPosition(this RigidBody body, Vector3 newPosition)
         {
             // Get the current orientation (rotation) of the body
-            Quaternion currentRotation = body.WorldTransform.GetRotation();
+            Quaternion currentRotation = Quaternion.Identity;
 
             // Create a new motion state with the updated position and current rotation
             Matrix newTransform = Matrix.Translation(newPosition) * Matrix.RotationQuaternion(currentRotation);
@@ -25,6 +25,16 @@ namespace RetroEngine.Physics
 
             // Update the body's world transform directly to apply the transformation
             body.WorldTransform = newTransform;
+        }
+
+        public static Vector3 ToPhysics(this Microsoft.Xna.Framework.Vector3 vector)
+        {
+            return new Vector3(vector.X, vector.Y, vector.Z);
+        }
+
+        public static Microsoft.Xna.Framework.Vector3 FromPhysics(this Vector3 vector)
+        {
+            return new Microsoft.Xna.Framework.Vector3((float)vector.X, (float)vector.Y, (float)vector.Z);
         }
 
     }

@@ -17,6 +17,8 @@ namespace Engine.Entities
 
         RigidBody body;
 
+        public Vector3 size = Vector3.One;
+
         public Box():base()
         {
             Model model = GameMain.content.Load<Model>("box");
@@ -24,11 +26,7 @@ namespace Engine.Entities
 
             mesh.model = model;
 
-            body = Physics.CreateBox(this, new BulletSharp.Math.Vector3(5, 1, 5), collisionFlags: CollisionFlags.StaticObject);
 
-            mesh.Scale = new Microsoft.Xna.Framework.Vector3(5, 1, 5);
-
-            body.SetMassProps(0, new BulletSharp.Math.Vector3(0,0,0));
 
         }
 
@@ -36,6 +34,13 @@ namespace Engine.Entities
         public override void Start()
         {
             base.Start();
+
+            body = Physics.CreateBox(this, new BulletSharp.Math.Vector3(size.X, size.Y, size.Z), collisionFlags: CollisionFlags.StaticObject);
+
+            mesh.Scale = size;
+
+            body.SetMassProps(0, new BulletSharp.Math.Vector3(0, 0, 0));
+
             body.SetPosition(new BulletSharp.Math.Vector3(Position.X, Position.Y, Position.Z));
         }
 

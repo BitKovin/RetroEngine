@@ -88,6 +88,24 @@ namespace RetroEngine.Physics
             return angles / (float)Math.PI * 180;
         }
 
+        static Quaternion ToQuaternion(Vector3 eulerAngles)
+        {
+            eulerAngles *= (float)Math.PI / 180.0f; // Convert degrees to radians
+
+            float cosX = (float)Math.Cos(eulerAngles.X / 2.0f);
+            float sinX = (float)Math.Sin(eulerAngles.X / 2.0f);
+            float cosY = (float)Math.Cos(eulerAngles.Y / 2.0f);
+            float sinY = (float)Math.Sin(eulerAngles.Y / 2.0f);
+            float cosZ = (float)Math.Cos(eulerAngles.Z / 2.0f);
+            float sinZ = (float)Math.Sin(eulerAngles.Z / 2.0f);
+
+            float x = sinX * cosY * cosZ + cosX * sinY * sinZ;
+            float y = cosX * sinY * cosZ - sinX * cosY * sinZ;
+            float z = cosX * cosY * sinZ - sinX * sinY * cosZ;
+            float w = cosX * cosY * cosZ + sinX * sinY * sinZ;
+
+            return new Quaternion(x, y, z, w);
+        }
 
         public static RigidBody CreateSphere(Entity entity, float mass = 1, CollisionFlags collisionFlags = CollisionFlags.None)
         {
@@ -116,7 +134,7 @@ namespace RetroEngine.Physics
             return RigidBody;
         }
 
-        public static RigidBody CreateBox(Entity entity,Vector3 size,float mass = 1, CollisionFlags collisionFlags = CollisionFlags.None)
+        public static RigidBody CreateBox(Entity entity, Vector3 size, float mass = 1, CollisionFlags collisionFlags = CollisionFlags.None)
         {
             RigidBody RigidBody;
 
@@ -128,7 +146,7 @@ namespace RetroEngine.Physics
             sphereShape.CalculateLocalInertia(mass, out inertia);
 
             // Create a rigid body for the sphere
-            var boxRigidBodyInfo = new RigidBodyConstructionInfo(collisionFlags==CollisionFlags.StaticObject? 0:mass, motionState, sphereShape, inertia);
+            var boxRigidBodyInfo = new RigidBodyConstructionInfo(collisionFlags == CollisionFlags.StaticObject ? 0 : mass, motionState, sphereShape, inertia);
             RigidBody = new RigidBody(boxRigidBodyInfo);
             RigidBody.CollisionFlags = collisionFlags;
 
@@ -141,6 +159,33 @@ namespace RetroEngine.Physics
             RigidBody.Restitution = 0.1f;
 
             return RigidBody;
+        }
+
+
+        public static ClosestRayResultCallback LineTrace(Vector3 rayStart, Vector3 rayEnd)
+        {
+            CollisionWorld world = dynamicsWorld as CollisionWorld;
+
+
+            ClosestRayResultCallback rayCallback = new ClosestRayResultCallback(ref rayStart, ref rayEnd);
+
+            // Perform the ray cast
+            world.RayTest(rayStart, rayEnd, rayCallback);
+
+            // Check if the ray hit something
+            if (rayCallback.HasHit)
+            {
+                // Access information about the hit object
+                RigidBody hitRigidBody = RigidBody.Upcast(rayCallback.CollisionObject);
+                Vector3 hitPoint = rayCallback.HitPointWorld;
+                Vector3 hitNormal = rayCallback.HitNormalWorld;
+
+                // Now, you can use 'hitRigidBody', 'hitPoint', and 'hitNormal' for further processing
+            }
+
+            return rayCallback;
+
+
         }
 
     }

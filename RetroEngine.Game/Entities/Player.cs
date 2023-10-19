@@ -3,11 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using BulletSharp;
 using Engine.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using RetroEngine;
+using RetroEngine.Physics;
 
 namespace Engine.Entities
 {
@@ -24,7 +26,7 @@ namespace Engine.Entities
 
         StaticMesh mesh = new StaticMesh();
 
-        float speed = 5;
+        float speed = 20;
 
         public Player():base()
         {
@@ -68,7 +70,7 @@ namespace Engine.Entities
 
         private void ButtonRotate_onClicked()
         {
-            Jump();
+            Shoot();
         }
 
         public override void Start()
@@ -132,8 +134,8 @@ namespace Engine.Entities
             }
 
 
-            if (Input.pressedKeys.Contains(Keys.W))
-                Jump();
+            if (Input.pressedKeys.Contains(Keys.Space))
+                Shoot();
 
             
 
@@ -150,8 +152,19 @@ namespace Engine.Entities
 
         }
 
-        void Jump()
+        void Shoot()
         {
+            var hit = Physics.LineTrace(Camera.position.ToPhysics(), Camera.rotation.GetForwardVector().ToPhysics() * 100 + Camera.position.ToPhysics());
+
+            if(hit is not null)
+            {
+                if (hit.CollisionObject is not null)
+                {
+                    RigidBody.Upcast(hit.CollisionObject).LinearVelocity = Camera.rotation.GetForwardVector().ToPhysics() * 100;
+                    Console.WriteLine("pew");
+                }
+            }
+
 
         }
 
