@@ -1,38 +1,38 @@
 ﻿using BulletSharp;
-using Microsoft.Xna.Framework;
+using Engine;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Media;
-using RetroEngine;
 using RetroEngine.Physics;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace Engine.Entities
+namespace RetroEngine.Game.Entities
 {
-    public class Box:Entity
+    internal class BoxDynamic : Entity
     {
-
         StaticMesh mesh = new StaticMesh();
 
         RigidBody body;
 
-        public Box():base()
+        public BoxDynamic() : base()
         {
             Model model = GameMain.content.Load<Model>("box");
             meshes.Add(mesh);
 
             mesh.model = model;
 
-            body = Physics.CreateBox(this, CollisionFlags.KinematicObject);
-
+            body = Physics.Physics.CreateBox(this);
         }
 
 
         public override void Start()
         {
             base.Start();
+
             body.SetPosition(new BulletSharp.Math.Vector3(Position.X, Position.Y, Position.Z));
+
         }
 
         public override void Update()
@@ -44,6 +44,5 @@ namespace Engine.Entities
             mesh.Position = Position;
             mesh.Rotation = Rotation;
         }
-
     }
 }

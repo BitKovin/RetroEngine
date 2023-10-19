@@ -21,9 +21,12 @@ namespace RetroEngine
 
         Effect lightingEffect;
 
+        public Effect NormalEffect;
+
         public Render()
         {
             lightingEffect = GameMain.content.Load<Effect>("DeferredLighting");
+            NormalEffect = GameMain.content.Load<Effect>("NormalOutput");
         }
 
         public RenderTarget2D StartRenderLevel(Level level)
@@ -91,7 +94,7 @@ namespace RetroEngine
             lightingEffect.Parameters["NormalTexture"].SetValue(normalPath);
 
             // Begin drawing with SpriteBatch
-            SpriteBatch spriteBatch = new SpriteBatch(graphics.GraphicsDevice);
+            SpriteBatch spriteBatch = GameMain.inst.SpriteBatch;
             spriteBatch.Begin(effect: lightingEffect);
 
             // Draw a full-screen quad to apply the lighting

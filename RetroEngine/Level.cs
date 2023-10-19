@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RetroEngine.Physics;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,11 +17,14 @@ namespace Engine
 
         public virtual void Start()
         {
-
+            Physics.Start();
         }
+
 
         public virtual void Update()
         {
+            Physics.Update();
+
             foreach (Entity entity in entities)
                 entity.Update();
         }

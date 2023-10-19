@@ -31,8 +31,8 @@ namespace Engine
             //rotation = new Vector3(Input.MousePos.Y, Input.MousePos.X, 0);
             //position = new Vector3(0, 0, 0);
             world = Matrix.CreateTranslation(Vector3.Zero);
-            view = Matrix.CreateLookAt(-position, -position + rotation.GetForwardVector(), Vector3.UnitY);
-            projection = Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.ToRadians(60), (float)GameMain.inst.Window.ClientBounds.Width / (float)GameMain.inst.Window.ClientBounds.Height, 0.01f, 1000000f); view = Matrix.CreateLookAt(-position, -position + rotation.GetForwardVector(), Vector3.UnitY);
+            view = Matrix.CreateLookAt(position, position + rotation.GetForwardVector(), Vector3.UnitY);
+            projection = Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.ToRadians(60), (float)GameMain.inst.Window.ClientBounds.Width / (float)GameMain.inst.Window.ClientBounds.Height, 0.01f, 1000000f); 
 
         }
 

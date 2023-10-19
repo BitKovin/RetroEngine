@@ -42,7 +42,7 @@ namespace RetroEngine
         {
             GraphicsDevice graphicsDevice = GameMain.inst._graphics.GraphicsDevice;
             // Load the custom effect
-            Effect effect = GameMain.content.Load<Effect>("NormalOutput");
+            Effect effect = GameMain.inst.render.NormalEffect;
 
 
             if (model is not null)

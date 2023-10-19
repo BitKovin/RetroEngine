@@ -24,7 +24,7 @@ namespace Engine
 
 
         public GraphicsDeviceManager _graphics;
-        private SpriteBatch _spriteBatch;
+        public SpriteBatch SpriteBatch;
         public static ContentManager content;
         static public GameMain inst;
 
@@ -39,9 +39,10 @@ namespace Engine
 
         public static GameTime time;
 
-        Render render;
+        public Render render;
         ImGuiRenderer ImGuiRenderer;
 
+        protected DevMenu devMenu;
 
         public GameMain()
         {
@@ -70,7 +71,7 @@ namespace Engine
                 _graphics.PreferredBackBufferWidth = 1280;  // set this value to the desired width of your window
                 _graphics.PreferredBackBufferHeight = 720;   // set this value to the desired height of your window
             }
-            this.IsFixedTimeStep = true;
+            this.IsFixedTimeStep = false;
             this.TargetElapsedTime = TimeSpan.FromSeconds(1d / 200d);
 
             _graphics.SynchronizeWithVerticalRetrace = false;
@@ -87,11 +88,13 @@ namespace Engine
             ImGuiRenderer = new ImGuiRenderer(this);
             ImGuiRenderer.RebuildFontAtlas();
 
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            SpriteBatch = new SpriteBatch(GraphicsDevice);
             content = Content;
             // TODO: use this.Content to load your game content here
 
             font = Content.Load<SpriteFont>("Font"); // Use the name of your sprite font file here instead of 'Score'.
+
+            curentLevel.Start();
         }
 
         protected override void Update(GameTime gameTime)
@@ -153,30 +156,33 @@ namespace Engine
             GraphicsDevice.SetRenderTarget(null);
 
 
-            _spriteBatch.Begin();
+            SpriteBatch.Begin();
 
             // Draw the render target to the screen
-            _spriteBatch.Draw(frame, Vector2.Zero, Color.White);
+            SpriteBatch.Draw(frame, Vector2.Zero, Color.White);
 
-            _spriteBatch.End();
-
-
-            _spriteBatch.Begin(transformMatrix: Camera.UiMatrix);
-
-            UiManger.Draw(gameTime,_spriteBatch);
-
-            _spriteBatch.End();
-
-            _spriteBatch.Begin();
-
-            _spriteBatch.DrawString(font, $"FPS: {(1f/Time.deltaTime).ToString()}", new Vector2(100, 100), Color.Red);
-            _spriteBatch.DrawString(font, $"Camera Position: {Camera.position.ToString()}", new Vector2(100, 200), Color.Red);
-            _spriteBatch.DrawString(font, $"Camera Vector: {Camera.rotation.GetForwardVector()}", new Vector2(100, 300), Color.Red);
+            SpriteBatch.End();
 
 
-            _spriteBatch.End();
+            SpriteBatch.Begin(transformMatrix: Camera.UiMatrix);
+
+            UiManger.Draw(gameTime,SpriteBatch);
+
+            SpriteBatch.End();
+
+            SpriteBatch.Begin();
+
+            SpriteBatch.DrawString(font, $"FPS: {(1f/Time.deltaTime).ToString()}", new Vector2(100, 100), Color.Red);
+            SpriteBatch.DrawString(font, $"Camera Position: {Camera.position.ToString()}", new Vector2(100, 200), Color.Red);
+            SpriteBatch.DrawString(font, $"Camera Vector: {Camera.rotation.GetForwardVector()}", new Vector2(100, 300), Color.Red);
+
+
+            SpriteBatch.End();
 
             ImGuiRenderer.BeforeLayout(gameTime);
+
+            if(devMenu is not null)
+                devMenu.Update();
 
             ImGuiRenderer.AfterLayout();
 

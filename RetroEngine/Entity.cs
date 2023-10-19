@@ -14,6 +14,8 @@ namespace Engine
     {
         public Vector3 Position;
 
+        public Vector3 Rotation;
+
         public List<StaticMesh> meshes = new List<StaticMesh>();
 
         public Collision collision;

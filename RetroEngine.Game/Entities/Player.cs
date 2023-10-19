@@ -84,16 +84,16 @@ namespace Engine.Entities
             Vector2 input = new Vector2();
 
             if (buttonUp.pressing || Keyboard.GetState().IsKeyDown(Keys.W)|| buttonUpRight.pressing || buttonUpLeft.pressing)
-                input += new Vector2(0, -100)*Time.deltaTime;
+                input += new Vector2(0, 100)*Time.deltaTime;
 
             if (buttonDown.pressing || Keyboard.GetState().IsKeyDown(Keys.S))
-                input -= new Vector2(0, -100) * Time.deltaTime;
+                input -= new Vector2(0, 100) * Time.deltaTime;
 
             if (buttonRight.pressing || Keyboard.GetState().IsKeyDown(Keys.D) || buttonUpRight.pressing)
-                input += new Vector2(100, 0) * Time.deltaTime;
+                input -= new Vector2(100, 0) * Time.deltaTime;
 
             if (buttonLeft.pressing || Keyboard.GetState().IsKeyDown(Keys.A) || buttonUpLeft.pressing)
-                input -= new Vector2(100, 0) * Time.deltaTime;
+                input += new Vector2(100, 0) * Time.deltaTime;
 
             Camera.rotation += new Vector3(Input.MouseDelta.Y, -Input.MouseDelta.X, 0)/2f;
             Camera.rotation = new Vector3(Math.Clamp(Camera.rotation.X, -89, 89), Camera.rotation.Y, 0);
@@ -145,7 +145,7 @@ namespace Engine.Entities
         {
             //Camera.Follow(this);
 
-            mesh.Position = Camera.position * -1;
+            mesh.Position = Camera.position;
             mesh.Rotation = Camera.rotation;
 
         }
