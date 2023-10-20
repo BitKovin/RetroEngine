@@ -51,7 +51,7 @@ float4 MainPS(VertexShaderOutput input) : SV_TARGET
 
 	depthValue /= 100;
 
-	depthValue = pow(depthValue, 0.5);
+	depthValue = pow(depthValue, 0.7);
 
     return float4(depthValue,0,0,1);
 }

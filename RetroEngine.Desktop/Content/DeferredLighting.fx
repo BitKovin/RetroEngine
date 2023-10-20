@@ -30,7 +30,7 @@ float4 PixelShaderFunction(PixelInput input) : COLOR0
 
     float depth = tex2D(MiscSampler, input.TexCoord).r;
 
-    depth = pow(depth, 2) * 100;
+    depth = pow(depth, 1/0.7) * 100;
 
     // Example lighting calculation (dot product of normal and a light direction)
     float lightingFactor = max(-0.3, dot(normal, normalize(float3(0, 1, 0.2)))) * 0.5; // Example light direction
@@ -39,7 +39,7 @@ float4 PixelShaderFunction(PixelInput input) : COLOR0
 
 	lightingFactor += 0.5;
 
-    lightingFactor *= 1 - depth/50;
+    lightingFactor *= 1 - min((depth + 2) / 20, 1)*0.9;
 
     // Apply lighting to color
     color.rgb *= lightingFactor;

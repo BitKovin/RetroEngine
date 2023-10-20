@@ -113,13 +113,13 @@ namespace RetroEngine.Physics
 
             // Create a sphere shape
             var sphereShape = new SphereShape(1.0f);
-            var motionState = new DefaultMotionState(Matrix.Translation(0, 10, 0));
+            var motionState = new DefaultMotionState(Matrix.Translation(0, 0, 0));
 
             Vector3 inertia = Vector3.Zero;
             sphereShape.CalculateLocalInertia(mass, out inertia);
 
             // Create a rigid body for the sphere
-            var sphereRigidBodyInfo = new RigidBodyConstructionInfo(collisionFlags == CollisionFlags.StaticObject ? 0 : mass, motionState, sphereShape);
+            var sphereRigidBodyInfo = new RigidBodyConstructionInfo(collisionFlags == CollisionFlags.StaticObject ? 0 : mass, motionState, sphereShape, inertia);
             RigidBody = new RigidBody(sphereRigidBodyInfo);
             RigidBody.CollisionFlags = collisionFlags;
 
@@ -161,6 +161,36 @@ namespace RetroEngine.Physics
             return RigidBody;
         }
 
+        
+
+        public static RigidBody CreateCharacterCapsule(Entity entity, float height,float radius, float mass = 1, CollisionFlags collisionFlags = CollisionFlags.None)
+        {
+            RigidBody RigidBody;
+
+            // Create a sphere shape
+            var Shape = new CapsuleShape(radius,height);
+            var motionState = new DefaultMotionState(Matrix.Translation(0, 0, 0));
+
+            
+
+            // Create a rigid body for the sphere
+            var boxRigidBodyInfo = new RigidBodyConstructionInfo(collisionFlags == CollisionFlags.StaticObject ? 0 : mass, motionState, Shape);
+            RigidBody = new RigidBody(boxRigidBodyInfo);
+            RigidBody.CollisionFlags = collisionFlags;
+
+            RigidBody.UserObject = entity;
+
+            dynamicsWorld.AddRigidBody(RigidBody);
+
+            RigidBody.Friction = 0f;
+            RigidBody.SetDamping(0.1f, 0.1f);
+            RigidBody.Restitution = 0.1f;
+
+
+            Matrix fixedRotation = Matrix.Identity;
+
+            return RigidBody;
+        }
 
         public static ClosestRayResultCallback LineTrace(Vector3 rayStart, Vector3 rayEnd)
         {

@@ -26,7 +26,15 @@ namespace Engine.Entities
 
         StaticMesh mesh = new StaticMesh();
 
+        RigidBody body;
+
         float speed = 20;
+
+        float bobProgress = 0;
+
+        Vector3 OldCameraPos;
+
+        Vector3 bob;
 
         public Player():base()
         {
@@ -54,7 +62,6 @@ namespace Engine.Entities
 
             collision.size = new Vector3(1,1,1);
 
-            Position = new Vector3(-100);
 
 
             //Model model = GameMain.content.Load<Model>("pistol");
@@ -76,6 +83,12 @@ namespace Engine.Entities
         public override void Start()
         {
             base.Start();
+
+            body = Physics.CreateCharacterCapsule(this, 2, 0.3f, 2);
+            body.Gravity = new BulletSharp.Math.Vector3(0, -50, 0);
+
+            body.SetPosition(new Vector3(3, 20, 3).ToPhysics());
+
         }
 
         public override void Update()
@@ -102,44 +115,50 @@ namespace Engine.Entities
 
             //Camera.rotation = new Vector3();
 
+            Vector3 motion = new Vector3();
+
+            
+
             if (input.Length()>0)
             {
                 input.Normalize();
 
-                Camera.position += Camera.rotation.GetRightVector() * input.X * speed*Time.deltaTime;
-                Camera.position += Camera.rotation.GetForwardVector() * input.Y * speed * Time.deltaTime;
+                bobProgress += Time.deltaTime;
+
+                motion += Camera.rotation.GetRightVector().XZ() * input.X * speed;
+                motion += Camera.rotation.GetForwardVector().XZ() * input.Y * speed;
 
 
-                for (int i = 0; i < 10; i++)
-                {
-                    //Position += new Vector2((input * speed * Time.deltaTime).X, 0)*0.1f;
-                    UpdateCollision();
-                    if (IsCollide())
-                    {
-                        //Position -= new Vector2((input * speed * Time.deltaTime).X, 0) * 0.1f;
-                    }
-
-                    //Position += new Vector2(0, (input * speed * Time.deltaTime).Y) * 0.1f;
-                    UpdateCollision();
-                    if (IsCollide())
-                    {
-                        //Position -= new Vector2(0, (input * speed * Time.deltaTime).Y) * 0.1f;
-                    }
-                    UpdateCollision();
-                }
-            }
-            else
-            {
                 
             }
 
 
+            body.Activate(true);
+            body.LinearVelocity = new Vector3(motion.X, (float)body.LinearVelocity.Y, motion.Z).ToPhysics();
+
+            Vector3 newCameraPos = Position + new Vector3(0, 1f, 0);
+
+            Camera.position = Vector3.Lerp(OldCameraPos, newCameraPos, Time.deltaTime * 10);
+
+            bob = Vector3.Zero;
+
+            bob += Camera.rotation.GetRightVector() * ((float)Math.Sin(bobProgress*1 * 7)) * 0.2f;
+            bob += new Vector3(0, (float)(Math.Abs(Math.Sin(bobProgress * 7 * 1))) * 0.2f, 0) ;
+
+            Camera.position += bob;
+
+            OldCameraPos = newCameraPos;
+
+            Console.WriteLine((float)Math.Sin(bobProgress*90) * 0.2f);
+
             if (Input.pressedKeys.Contains(Keys.Space))
+                Jump();
+
+            if (Input.pressedKeys.Contains(Keys.E))
                 Shoot();
 
-            
 
-            
+
 
         }
 
@@ -147,13 +166,19 @@ namespace Engine.Entities
         {
             //Camera.Follow(this);
 
-            mesh.Position = Camera.position;
+            mesh.Position = Camera.position + bob*0.05f;
             mesh.Rotation = Camera.rotation;
 
         }
 
+        void Jump()
+        {
+            body.ApplyCentralImpulse(new BulletSharp.Math.Vector3(0, 40, 0));
+        }
+
         void Shoot()
         {
+
             var hit = Physics.LineTrace(Camera.position.ToPhysics(), Camera.rotation.GetForwardVector().ToPhysics() * 100 + Camera.position.ToPhysics());
 
             if(hit is not null)

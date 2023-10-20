@@ -20,11 +20,13 @@ namespace RetroEngine.Game
 
             curentLevel.entities.Add(player);
 
+            player.Start();
+
             Engine.Camera.position = player.Position = new Vector3(0, 3, -2);
 
             Box box = new Box();
-            box.size = new Vector3(5, 1, 5);
-            box.Position = new Vector3(0, 0, 0);
+            box.size = new Vector3(5, 5, 5);
+            box.Position = new Vector3(0, -3, 0);
             curentLevel.entities.Add(box);
 
             box.Start();
