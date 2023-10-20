@@ -88,7 +88,7 @@ namespace RetroEngine
         {
             graphics.GraphicsDevice.SetRenderTarget(miscPath);
 
-            graphics.GraphicsDevice.Clear(Color.Black);
+            graphics.GraphicsDevice.Clear(Color.White);
 
 
             foreach (Entity ent in level.entities)

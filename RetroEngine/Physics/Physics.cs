@@ -14,12 +14,13 @@ namespace RetroEngine.Physics
 
         private static DiscreteDynamicsWorld dynamicsWorld;
 
+        private static int steps = 2;
+
         public static void Start()
         {
             // Create a collision configuration and dispatcher
             var collisionConfig = new DefaultCollisionConfiguration();
             var dispatcher = new CollisionDispatcher(collisionConfig);
-
             // Create a broadphase and a solver
             var broadphase = new DbvtBroadphase();
             var solver = new SequentialImpulseConstraintSolver();
@@ -27,12 +28,17 @@ namespace RetroEngine.Physics
             // Create the dynamics world
             dynamicsWorld = new DiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfig);
             dynamicsWorld.Gravity = new BulletSharp.Math.Vector3(0, -9.81f, 0); // Set gravity
+            dynamicsWorld.DispatchInfo.UseContinuous = true;
+
         }
 
         public static void Update()
         {
-            dynamicsWorld.StepSimulation(Engine.Time.deltaTime);
 
+
+            dynamicsWorld.StepSimulation(Engine.Time.deltaTime,steps, Math.Max(1f/60f,Time.deltaTime));
+
+            
             for (int i = 0; i < dynamicsWorld.NumCollisionObjects; i++)
             {
                 CollisionObject colObj = dynamicsWorld.CollisionObjectArray[i];
@@ -139,7 +145,7 @@ namespace RetroEngine.Physics
             RigidBody RigidBody;
 
             // Create a sphere shape
-            var sphereShape = new BoxShape(size);
+            var sphereShape = new BoxShape(size/2);
             var motionState = new DefaultMotionState(Matrix.Translation(0, 0, 0));
 
             Vector3 inertia = Vector3.Zero;
@@ -163,15 +169,15 @@ namespace RetroEngine.Physics
 
         
 
-        public static RigidBody CreateCharacterCapsule(Entity entity, float height,float radius, float mass = 1, CollisionFlags collisionFlags = CollisionFlags.None)
+        public static RigidBody CreateCharacterCapsule(Entity entity, float HalfHeight,float radius, float mass = 1, CollisionFlags collisionFlags = CollisionFlags.None)
         {
             RigidBody RigidBody;
 
             // Create a sphere shape
-            var Shape = new CapsuleShape(radius,height);
+            var Shape = new CapsuleShape(radius,HalfHeight);
             var motionState = new DefaultMotionState(Matrix.Translation(0, 0, 0));
 
-            
+            Shape.Margin = 0f;
 
             // Create a rigid body for the sphere
             var boxRigidBodyInfo = new RigidBodyConstructionInfo(collisionFlags == CollisionFlags.StaticObject ? 0 : mass, motionState, Shape);
@@ -184,8 +190,8 @@ namespace RetroEngine.Physics
 
             RigidBody.Friction = 0f;
             RigidBody.SetDamping(0.1f, 0.1f);
-            RigidBody.Restitution = 0.1f;
-
+            RigidBody.Restitution = 0f;
+            
 
             Matrix fixedRotation = Matrix.Identity;
 

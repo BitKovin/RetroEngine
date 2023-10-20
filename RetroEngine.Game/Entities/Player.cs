@@ -26,9 +26,11 @@ namespace Engine.Entities
 
         StaticMesh mesh = new StaticMesh();
 
+        StaticMesh cylinder = new StaticMesh();
+
         RigidBody body;
 
-        float speed = 20;
+        float speed = 10;
 
         float bobProgress = 0;
 
@@ -70,6 +72,8 @@ namespace Engine.Entities
             mesh.LoadFromFile("pistol.obj");
             mesh.texture = Utils.LoadTextureFromFile("usp.png");
 
+            cylinder.LoadFromFile("cylinder.obj");
+            //meshes.Add(cylinder);
 
             buttonRotate.onClicked += ButtonRotate_onClicked;
 
@@ -84,10 +88,13 @@ namespace Engine.Entities
         {
             base.Start();
 
-            body = Physics.CreateCharacterCapsule(this, 2, 0.3f, 2);
+            body = Physics.CreateCharacterCapsule(this, 1, 0.5f, 2);
             body.Gravity = new BulletSharp.Math.Vector3(0, -50, 0);
 
             body.SetPosition(new Vector3(3, 20, 3).ToPhysics());
+
+            body.CcdMotionThreshold = 0.000001f;
+            body.CcdSweptSphereRadius = 0.3f;
 
         }
 
@@ -136,20 +143,19 @@ namespace Engine.Entities
             body.Activate(true);
             body.LinearVelocity = new Vector3(motion.X, (float)body.LinearVelocity.Y, motion.Z).ToPhysics();
 
-            Vector3 newCameraPos = Position + new Vector3(0, 1f, 0);
+            Vector3 newCameraPos = Position + new Vector3(0, 0.8f, 0);
 
-            Camera.position = Vector3.Lerp(OldCameraPos, newCameraPos, Time.deltaTime * 10);
+            Camera.position = Vector3.Lerp(OldCameraPos, newCameraPos, 1);
+
+            OldCameraPos = Camera.position;
 
             bob = Vector3.Zero;
 
             bob += Camera.rotation.GetRightVector() * ((float)Math.Sin(bobProgress*1 * 7)) * 0.2f;
             bob += new Vector3(0, (float)(Math.Abs(Math.Sin(bobProgress * 7 * 1))) * 0.2f, 0) ;
 
-            Camera.position += bob;
+            //Camera.position += bob;
 
-            OldCameraPos = newCameraPos;
-
-            Console.WriteLine((float)Math.Sin(bobProgress*90) * 0.2f);
 
             if (Input.pressedKeys.Contains(Keys.Space))
                 Jump();
@@ -169,6 +175,7 @@ namespace Engine.Entities
             mesh.Position = Camera.position + bob*0.05f;
             mesh.Rotation = Camera.rotation;
 
+            cylinder.Position = Position + Camera.rotation.GetForwardVector().XZ()*3;
         }
 
         void Jump()

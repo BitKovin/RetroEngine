@@ -26,17 +26,24 @@ namespace RetroEngine.Game
 
             Box box = new Box();
             box.size = new Vector3(5, 5, 5);
-            box.Position = new Vector3(0, -3, 0);
+            box.Position = new Vector3(0, -4, 0);
             curentLevel.entities.Add(box);
 
             box.Start();
 
             Box box2 = new Box();
-            box2.Position = new Vector3(0, -10, 0);
+            box2.Position = new Vector3(0, -6, 0);
             box2.size = new Vector3(100, 1, 100);
             curentLevel.entities.Add(box2);
 
             box2.Start();
+
+            Box box3 = new Box();
+            box3.size = new Vector3(7, 5, 5);
+            box3.Position = new Vector3(0, -1, 0);
+            curentLevel.entities.Add(box3);
+
+            box3.Start();
 
             for (float i = 1; i < 10; i++)
             {
