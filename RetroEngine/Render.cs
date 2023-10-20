@@ -14,6 +14,7 @@ namespace RetroEngine
 
         RenderTarget2D colorPath;
         RenderTarget2D normalPath;
+        RenderTarget2D miscPath;
 
         RenderTarget2D outputPath;
 
@@ -22,11 +23,13 @@ namespace RetroEngine
         Effect lightingEffect;
 
         public Effect NormalEffect;
+        public Effect MiscEffect;
 
         public Render()
         {
             lightingEffect = GameMain.content.Load<Effect>("DeferredLighting");
             NormalEffect = GameMain.content.Load<Effect>("NormalOutput");
+            MiscEffect = GameMain.content.Load<Effect>("MiscOutput");
         }
 
         public RenderTarget2D StartRenderLevel(Level level)
@@ -36,9 +39,11 @@ namespace RetroEngine
             InitRenderTargetIfNeed(ref colorPath);
             InitRenderTargetIfNeed(ref normalPath);
             InitRenderTargetIfNeed(ref outputPath);
+            InitRenderTargetIfNeed(ref miscPath);
 
             RenderColorPath(level);
             RenderNormalPath(level);
+            RenderMiscPath(level);
             PerformLighting();
 
             //outputPath = colorPath;
@@ -79,6 +84,22 @@ namespace RetroEngine
             }
         }
 
+        void RenderMiscPath(Level level)
+        {
+            graphics.GraphicsDevice.SetRenderTarget(miscPath);
+
+            graphics.GraphicsDevice.Clear(Color.Black);
+
+
+            foreach (Entity ent in level.entities)
+            {
+
+                if (ent.meshes is not null)
+                    foreach (StaticMesh mesh in ent.meshes)
+                        mesh.DrawMisc();
+            }
+        }
+
         void PerformLighting()
         {
 
@@ -92,6 +113,7 @@ namespace RetroEngine
             // Set the necessary parameters for the lighting effect
             lightingEffect.Parameters["ColorTexture"].SetValue(colorPath);
             lightingEffect.Parameters["NormalTexture"].SetValue(normalPath);
+            lightingEffect.Parameters["MiscTexture"].SetValue(miscPath);
 
             // Begin drawing with SpriteBatch
             SpriteBatch spriteBatch = GameMain.inst.SpriteBatch;

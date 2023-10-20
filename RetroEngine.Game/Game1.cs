@@ -36,7 +36,7 @@ namespace RetroEngine.Game
 
             box2.Start();
 
-            for (float i = 1; i < 1000; i++)
+            for (float i = 1; i < 10; i++)
             {
                 BoxDynamic boxDynamic = new BoxDynamic();
                 boxDynamic.Position = new Vector3(0, i*6, (float)Math.Sin(i*5) * 0.4f);

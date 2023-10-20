@@ -10,6 +10,7 @@
 matrix World;
 matrix View;
 matrix Projection;
+float3 CameraPosition;
 
 
 struct VertexShaderInput
@@ -23,7 +24,7 @@ struct VertexShaderOutput
 {
     float4 Position : SV_POSITION;
     float4 Color : COLOR0;
-    float3 Normal : TEXCOORD0; // Pass normal to pixel shader
+    float4 myPosition : TEXCOORD1;
 };
 
 VertexShaderOutput MainVS(in VertexShaderInput input)
@@ -35,19 +36,24 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
     output.Position = mul(output.Position, View);
     output.Position = mul(output.Position, Projection);
     output.Color = input.Color;
-
-    // Pass the world space normal to the pixel shader
-    output.Normal = mul(input.Normal, (float3x3)World);
+    output.myPosition = mul(input.Position, World);
 
     return output;
 }
 
 float4 MainPS(VertexShaderOutput input) : SV_TARGET
 {
-    // Use the world space normal as color
-    float3 color = (input.Normal) * 0.5 + 0.5; // Map normal to [0,1] range
 
-    return float4(color, 1);
+    // Retrieve the depth value from the depth buffer
+    float depthValue = length(input.myPosition.xyz - CameraPosition);
+
+
+
+	depthValue /= 100;
+
+	depthValue = pow(depthValue, 0.5);
+
+    return float4(depthValue,0,0,1);
 }
 
 technique NormalColorDrawing

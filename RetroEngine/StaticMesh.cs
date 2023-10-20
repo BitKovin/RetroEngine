@@ -77,6 +77,46 @@ namespace RetroEngine
             }
         }
 
+        public virtual void DrawMisc()
+        {
+            GraphicsDevice graphicsDevice = GameMain.inst._graphics.GraphicsDevice;
+            // Load the custom effect
+            Effect effect = GameMain.inst.render.MiscEffect;
+
+
+            if (model is not null)
+            {
+                foreach (ModelMesh mesh in model.Meshes)
+                {
+                    foreach (ModelMeshPart meshPart in mesh.MeshParts)
+                    {
+                        // Set the vertex buffer and index buffer for this mesh part
+                        graphicsDevice.SetVertexBuffer(meshPart.VertexBuffer);
+                        graphicsDevice.Indices = meshPart.IndexBuffer;
+
+                        // Set effect parameters
+                        effect.Parameters["World"].SetValue(GetWorldMatrix());
+                        effect.Parameters["View"].SetValue(Camera.view);
+                        effect.Parameters["Projection"].SetValue(Camera.projection);
+                        effect.Parameters["CameraPosition"].SetValue(Camera.position);
+
+                        // Draw the primitives using the custom effect
+                        foreach (EffectPass pass in effect.CurrentTechnique.Passes)
+                        {
+                            pass.Apply();
+                            graphicsDevice.DrawIndexedPrimitives(
+                                PrimitiveType.TriangleList,
+                                meshPart.VertexOffset,
+                                0,
+                                meshPart.NumVertices,
+                                meshPart.StartIndex,
+                                meshPart.PrimitiveCount);
+                        }
+                    }
+                }
+            }
+        }
+
         protected Matrix GetWorldMatrix()
         {
             Matrix worldMatrix = Matrix.CreateScale(Scale) *

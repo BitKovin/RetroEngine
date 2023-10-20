@@ -45,6 +45,12 @@
 /processorParam:TextureFormat=Compressed
 /build:Font.spritefont
 
+#begin MiscOutput.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:MiscOutput.fx
+
 #begin NormalOutput.fx
 /importer:EffectImporter
 /processor:EffectProcessor

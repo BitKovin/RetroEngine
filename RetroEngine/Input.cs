@@ -28,7 +28,7 @@ namespace Engine
             Vector2 windowCenter = new Vector2(GameMain.inst.GraphicsDevice.Viewport.Width / 2, GameMain.inst.GraphicsDevice.Viewport.Height / 2);
 
             if (LockCursor)
-                if (Vector2.Distance(windowCenter, mousePos) > 10)
+                if (Vector2.Distance(windowCenter, mousePos) > 1)
                 {
                     Mouse.SetPosition((int)windowCenter.X, (int)windowCenter.Y);
                 }
@@ -68,8 +68,6 @@ namespace Engine
             oldKeys.Clear();
             foreach (Keys key in Keyboard.GetState().GetPressedKeys())
                 oldKeys.Add(key);
-
-
 
         }
 
