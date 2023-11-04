@@ -23,6 +23,8 @@ namespace RetroEngine.Game.Entities
 
             mesh.model = model;
 
+            mesh.texture = AssetRegistry.LoadTextureFromFile("cat.png");
+
             body = Physics.Physics.CreateBox(this, new BulletSharp.Math.Vector3(1,1,1));
         }
 

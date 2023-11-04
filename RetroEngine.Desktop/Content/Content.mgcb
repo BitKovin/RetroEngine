@@ -76,3 +76,9 @@
 /processorParam:TextureFormat=Compressed
 /build:pistol.fbx
 
+#begin UnifiedOutput.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:UnifiedOutput.fx
+

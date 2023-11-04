@@ -38,6 +38,53 @@ namespace RetroEngine
             }
         }
 
+        public virtual void DrawUnified()
+        {
+            GraphicsDevice graphicsDevice = GameMain.inst._graphics.GraphicsDevice;
+            // Load the custom effect
+            Effect effect = GameMain.inst.render.UnifiedEffect;
+
+
+            if (model is not null)
+            {
+                foreach (ModelMesh mesh in model.Meshes)
+                {
+                    foreach (ModelMeshPart meshPart in mesh.MeshParts)
+                    {
+                        // Set the vertex buffer and index buffer for this mesh part
+                        graphicsDevice.SetVertexBuffer(meshPart.VertexBuffer);
+                        graphicsDevice.Indices = meshPart.IndexBuffer;
+
+                        // Set effect parameters
+                        effect.Parameters["World"].SetValue(GetWorldMatrix());
+                        effect.Parameters["View"].SetValue(Camera.view);
+                        effect.Parameters["Projection"].SetValue(Camera.projection);
+                        if (texture is not null)
+                        {
+                            effect.Parameters["Texture"].SetValue(texture);
+                        }
+                        else
+                        {
+
+                        }
+
+                        // Draw the primitives using the custom effect
+                        foreach (EffectPass pass in effect.CurrentTechnique.Passes)
+                        {
+                            pass.Apply();
+                            graphicsDevice.DrawIndexedPrimitives(
+                                PrimitiveType.TriangleList,
+                                meshPart.VertexOffset,
+                                0,
+                                meshPart.NumVertices,
+                                meshPart.StartIndex,
+                                meshPart.PrimitiveCount);
+                        }
+                    }
+                }
+            }
+        }
+
         public virtual void DrawNormals()
         {
             GraphicsDevice graphicsDevice = GameMain.inst._graphics.GraphicsDevice;
@@ -130,7 +177,12 @@ namespace RetroEngine
 
         public void LoadFromFile(string filePath)
         {
+            model = GetModelFromPath(filePath);
+            
+        }
 
+        protected Model GetModelFromPath(string filePath)
+        {
             GraphicsDevice graphicsDevice = GameMain.inst.GraphicsDevice;
 
 
@@ -140,14 +192,14 @@ namespace RetroEngine
             if (scene == null)
             {
                 // Error handling for failed file import
-                return;
+                return null;
             }
 
-           
+
             var meshParts = new List<ModelMeshPart>();
 
             List<ModelMesh> modelMesh = new List<ModelMesh>();
-            BoundingSphere boundingSphere = new BoundingSphere(Vector3.Zero,100);
+            BoundingSphere boundingSphere = new BoundingSphere(Vector3.Zero, 100);
             foreach (var mesh in scene.Meshes)
             {
                 var vertices = new VertexPositionNormalTexture[mesh.VertexCount];
@@ -158,9 +210,9 @@ namespace RetroEngine
                 {
                     for (int i = 0; i < 3; i++)
                     {
-                        var vertex = mesh.Vertices[face.Indices[2-i]];
-                        var normal = mesh.Normals[face.Indices[2-i]];
-                        var textureCoord = mesh.HasTextureCoords(0) ? mesh.TextureCoordinateChannels[0][face.Indices[2-i]] : new Assimp.Vector3D(0, 0, 0);
+                        var vertex = mesh.Vertices[face.Indices[2 - i]];
+                        var normal = mesh.Normals[face.Indices[2 - i]];
+                        var textureCoord = mesh.HasTextureCoords(0) ? mesh.TextureCoordinateChannels[0][face.Indices[2 - i]] : new Assimp.Vector3D(0, 0, 0);
 
                         // Negate the x-coordinate to correct mirroring
                         vertices[vertexIndex] = new VertexPositionNormalTexture(
@@ -187,11 +239,11 @@ namespace RetroEngine
                 boundingSphere = CalculateBoundingSphere(vertices);
 
 
-                meshParts.Add(new ModelMeshPart {VertexBuffer = vertexBuffer, IndexBuffer = indexBuffer,StartIndex = 0, NumVertices = indices.Length, PrimitiveCount = primitiveCount});
+                meshParts.Add(new ModelMeshPart { VertexBuffer = vertexBuffer, IndexBuffer = indexBuffer, StartIndex = 0, NumVertices = indices.Length, PrimitiveCount = primitiveCount });
             }
 
 
-            modelMesh.Add(new ModelMesh(graphicsDevice, meshParts) {BoundingSphere = boundingSphere});
+            modelMesh.Add(new ModelMesh(graphicsDevice, meshParts) { BoundingSphere = boundingSphere });
 
             var defaultEffect = new BasicEffect(graphicsDevice);
 
@@ -200,10 +252,7 @@ namespace RetroEngine
                 meshPart.Effect = defaultEffect;
             }
 
-            model = new Model(graphicsDevice, new List<ModelBone>(), modelMesh);
-            //model.Meshes.Add(new ModelMesh(graphicsDevice, meshParts));
-
-            
+            return new Model(graphicsDevice, new List<ModelBone>(), modelMesh);
         }
 
         private BoundingSphere CalculateBoundingSphere(VertexPositionNormalTexture[] vertices)

@@ -61,6 +61,8 @@ namespace Engine
 
         public void Dispose()
         {
+            AssetRegistry.RemoveReference(this);
+
             // Suppress finalization.
             GC.SuppressFinalize(this);
         }

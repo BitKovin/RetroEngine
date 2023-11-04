@@ -26,6 +26,7 @@ namespace Engine.Entities
 
             mesh.model = model;
 
+            mesh.texture = AssetRegistry.LoadTextureFromFile("cat.png");
 
         }
 

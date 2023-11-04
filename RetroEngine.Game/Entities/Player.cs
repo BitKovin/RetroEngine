@@ -24,7 +24,7 @@ namespace Engine.Entities
         Button buttonRight = new Button();
         Button buttonRotate = new Button();
 
-        StaticMesh mesh = new StaticMesh();
+        AnimatedStaticMesh mesh = new AnimatedStaticMesh();
 
         StaticMesh cylinder = new StaticMesh();
 
@@ -69,8 +69,18 @@ namespace Engine.Entities
             //Model model = GameMain.content.Load<Model>("pistol");
             meshes.Add(mesh);
 
-            mesh.LoadFromFile("pistol.obj");
-            mesh.texture = Utils.LoadTextureFromFile("usp.png");
+            mesh.AddFrame("Data/Animations/Pistol/Fire/frame_0001.obj");
+            mesh.AddFrame("Data/Animations/Pistol/Fire/frame_0002.obj");
+            mesh.AddFrame("Data/Animations/Pistol/Fire/frame_0003.obj");
+            mesh.AddFrame("Data/Animations/Pistol/Fire/frame_0004.obj");
+            mesh.AddFrame("Data/Animations/Pistol/Fire/frame_0005.obj");
+            mesh.AddFrame("Data/Animations/Pistol/Fire/frame_0006.obj");
+            mesh.AddFrame("Data/Animations/Pistol/Fire/frame_0007.obj");
+            mesh.AddFrame("Data/Animations/Pistol/Fire/frame_0008.obj");
+            mesh.AddFrame("Data/Animations/Pistol/Fire/frame_0009.obj");
+            mesh.AddFrame("Data/Animations/Pistol/Fire/frame_0010.obj");
+            mesh.frameTime = 1f / 30f;
+            mesh.texture = AssetRegistry.LoadTextureFromFile("usp.png");
 
             cylinder.LoadFromFile("cylinder.obj");
             //meshes.Add(cylinder);
@@ -120,11 +130,7 @@ namespace Engine.Entities
             Camera.rotation += new Vector3(Input.MouseDelta.Y, -Input.MouseDelta.X, 0)/2f;
             Camera.rotation = new Vector3(Math.Clamp(Camera.rotation.X, -89, 89), Camera.rotation.Y, 0);
 
-            //Camera.rotation = new Vector3();
-
             Vector3 motion = new Vector3();
-
-            
 
             if (input.Length()>0)
             {
@@ -133,19 +139,18 @@ namespace Engine.Entities
                 bobProgress += Time.deltaTime;
 
                 motion += Camera.rotation.GetRightVector().XZ() * input.X * speed;
-                motion += Camera.rotation.GetForwardVector().XZ() * input.Y * speed;
+                motion += Camera.rotation.GetForwardVector().XZ()/ Camera.rotation.GetForwardVector().XZ().Length() * input.Y * speed;
 
 
                 
             }
 
-
             body.Activate(true);
             body.LinearVelocity = new Vector3(motion.X, (float)body.LinearVelocity.Y, motion.Z).ToPhysics();
 
-            Vector3 newCameraPos = Position + new Vector3(0, 0.8f, 0);
+            Vector3 newCameraPos = Position + new Vector3(0, 0.7f, 0);
 
-            Camera.position = Vector3.Lerp(OldCameraPos, newCameraPos, 1);
+            Camera.position = Vector3.Lerp(OldCameraPos, newCameraPos, Time.deltaTime * 30);
 
             OldCameraPos = Camera.position;
 
@@ -154,7 +159,7 @@ namespace Engine.Entities
             bob += Camera.rotation.GetRightVector() * ((float)Math.Sin(bobProgress*1 * 7)) * 0.2f;
             bob += new Vector3(0, (float)(Math.Abs(Math.Sin(bobProgress * 7 * 1))) * 0.2f, 0) ;
 
-            //Camera.position += bob;
+            Camera.position += bob;
 
 
             if (Input.pressedKeys.Contains(Keys.Space))
@@ -163,8 +168,8 @@ namespace Engine.Entities
             if (Input.pressedKeys.Contains(Keys.E))
                 Shoot();
 
-
-
+            mesh.AddTime(Time.deltaTime);
+            mesh.Update();
 
         }
 
@@ -185,6 +190,8 @@ namespace Engine.Entities
 
         void Shoot()
         {
+
+            mesh.Play();
 
             var hit = Physics.LineTrace(Camera.position.ToPhysics(), Camera.rotation.GetForwardVector().ToPhysics() * 100 + Camera.position.ToPhysics());
 

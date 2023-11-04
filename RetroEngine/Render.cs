@@ -24,12 +24,14 @@ namespace RetroEngine
 
         public Effect NormalEffect;
         public Effect MiscEffect;
+        public Effect UnifiedEffect;
 
         public Render()
         {
             lightingEffect = GameMain.content.Load<Effect>("DeferredLighting");
             NormalEffect = GameMain.content.Load<Effect>("NormalOutput");
             MiscEffect = GameMain.content.Load<Effect>("MiscOutput");
+            UnifiedEffect = GameMain.content.Load<Effect>("UnifiedOutput");
         }
 
         public RenderTarget2D StartRenderLevel(Level level)
@@ -41,14 +43,31 @@ namespace RetroEngine
             InitRenderTargetIfNeed(ref outputPath);
             InitRenderTargetIfNeed(ref miscPath);
 
-            RenderColorPath(level);
-            RenderNormalPath(level);
-            RenderMiscPath(level);
-            PerformLighting();
+            RenderUnifiedPath(level);
+            //RenderColorPath(level);
+            //RenderNormalPath(level);
+            //RenderMiscPath(level);
+            //PerformLighting();
 
             //outputPath = colorPath;
 
             return outputPath;
+        }
+
+        void RenderUnifiedPath(Level level)
+        {
+            graphics.GraphicsDevice.SetRenderTarget(outputPath);
+
+
+            graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+
+            foreach (Entity ent in level.entities)
+            {
+
+                if (ent.meshes is not null)
+                    foreach (StaticMesh mesh in ent.meshes)
+                        mesh.DrawUnified();
+            }
         }
 
         void RenderColorPath(Level level)

@@ -202,7 +202,6 @@ namespace RetroEngine.Physics
         {
             CollisionWorld world = dynamicsWorld as CollisionWorld;
 
-
             ClosestRayResultCallback rayCallback = new ClosestRayResultCallback(ref rayStart, ref rayEnd);
 
             // Perform the ray cast
