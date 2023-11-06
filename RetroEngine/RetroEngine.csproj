@@ -5,9 +5,12 @@
   <ItemGroup>
     <PackageReference Include="Assimp" Version="3.0.0" />
     <PackageReference Include="BulletSharp.x64" Version="0.12.0" />
+    <PackageReference Include="MIConvexHull" Version="1.1.19.1019" />
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.1.303">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Speckle.Triangle" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MGSkinnedModel\MGSkinnedModel.csproj" />

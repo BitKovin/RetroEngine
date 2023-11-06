@@ -45,7 +45,7 @@ PixelInput VertexShaderFunction(VertexInput input)
 float4 PixelShaderFunction(PixelInput input) : COLOR0
 {
 
-	float3 textureColor = tex2D(TextureSampler, input.TexCoord);
+	float3 textureColor = tex2D(TextureSampler, input.TexCoord).xyz;
 	float textureAlpha = tex2D(TextureSampler, input.TexCoord).w;
 
 	float lightingFactor = max(-0.3, dot(input.Normal, normalize(float3(0, 1, 0.2)))) * 0.5; // Example light direction

@@ -59,14 +59,10 @@ namespace RetroEngine
                         effect.Parameters["World"].SetValue(GetWorldMatrix());
                         effect.Parameters["View"].SetValue(Camera.view);
                         effect.Parameters["Projection"].SetValue(Camera.projection);
-                        if (texture is not null)
-                        {
+                        
                             effect.Parameters["Texture"].SetValue(texture);
-                        }
-                        else
-                        {
-
-                        }
+                        
+                        
 
                         // Draw the primitives using the custom effect
                         foreach (EffectPass pass in effect.CurrentTechnique.Passes)
@@ -255,7 +251,45 @@ namespace RetroEngine
             return new Model(graphicsDevice, new List<ModelBone>(), modelMesh);
         }
 
-        private BoundingSphere CalculateBoundingSphere(VertexPositionNormalTexture[] vertices)
+        public static Model CreateModelFromVertices(List<Vector3> vertexPositions)
+        {
+            GraphicsDevice graphicsDevice = GameMain.inst.GraphicsDevice;
+
+            List<ModelMeshPart> meshParts = new List<ModelMeshPart>();
+
+            VertexPositionNormalTexture[] vertices = new VertexPositionNormalTexture[vertexPositions.Count];
+            int[] indices = new int[vertexPositions.Count];
+
+            for (int i = 0; i < vertexPositions.Count; i++)
+            {
+                vertices[i] = new VertexPositionNormalTexture(vertexPositions[i], Vector3.Zero, Vector2.Zero);
+                indices[i] = i;
+            }
+
+            // Ensure there are at least 3 vertices to form a triangle
+            if (vertices.Length >= 3)
+            {
+                var vertexBuffer = new VertexBuffer(graphicsDevice, typeof(VertexPositionNormalTexture), vertices.Length, BufferUsage.WriteOnly);
+                vertexBuffer.SetData(vertices);
+
+                var indexBuffer = new IndexBuffer(graphicsDevice, IndexElementSize.ThirtyTwoBits, indices.Length, BufferUsage.WriteOnly);
+                indexBuffer.SetData(indices);
+
+                meshParts.Add(new ModelMeshPart { VertexBuffer = vertexBuffer, IndexBuffer = indexBuffer, StartIndex = 0, NumVertices = vertices.Length, PrimitiveCount = indices.Length / 3 });
+            }
+
+            ModelMesh mesh = new ModelMesh(graphicsDevice, meshParts);
+
+            List<ModelMesh> meshes = new List<ModelMesh>();
+            meshes.Add(mesh);
+
+            return new Model(graphicsDevice, new List<ModelBone>(), meshes);
+        }
+
+
+
+
+        protected static BoundingSphere CalculateBoundingSphere(VertexPositionNormalTexture[] vertices)
         {
             Vector3 center = Vector3.Zero;
             foreach (var vertex in vertices)

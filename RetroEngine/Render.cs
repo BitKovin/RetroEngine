@@ -43,6 +43,8 @@ namespace RetroEngine
             InitRenderTargetIfNeed(ref outputPath);
             InitRenderTargetIfNeed(ref miscPath);
 
+            graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+
             RenderUnifiedPath(level);
             //RenderColorPath(level);
             //RenderNormalPath(level);

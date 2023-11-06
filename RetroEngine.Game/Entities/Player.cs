@@ -99,9 +99,9 @@ namespace Engine.Entities
             base.Start();
 
             body = Physics.CreateCharacterCapsule(this, 1, 0.5f, 2);
-            body.Gravity = new BulletSharp.Math.Vector3(0, -50, 0);
+            body.Gravity = new BulletSharp.Math.Vector3(0, -0, 0);
 
-            body.SetPosition(new Vector3(3, 20, 3).ToPhysics());
+            body.SetPosition(Position.ToPhysics());
 
             body.CcdMotionThreshold = 0.000001f;
             body.CcdSweptSphereRadius = 0.3f;
@@ -139,14 +139,14 @@ namespace Engine.Entities
                 bobProgress += Time.deltaTime;
 
                 motion += Camera.rotation.GetRightVector().XZ() * input.X * speed;
-                motion += Camera.rotation.GetForwardVector().XZ()/ Camera.rotation.GetForwardVector().XZ().Length() * input.Y * speed;
+                motion += Camera.rotation.GetForwardVector()/ Camera.rotation.GetForwardVector().Length() * input.Y * speed;
 
 
                 
             }
 
             body.Activate(true);
-            body.LinearVelocity = new Vector3(motion.X, (float)body.LinearVelocity.Y, motion.Z).ToPhysics();
+            body.LinearVelocity = new Vector3(motion.X, motion.Y, motion.Z).ToPhysics();
 
             Vector3 newCameraPos = Position + new Vector3(0, 0.7f, 0);
 
