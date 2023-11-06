@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Framework;
 using RetroEngine;
+using RetroEngine.Map;
 
 namespace Engine
 {
@@ -38,6 +39,11 @@ namespace Engine
         }
 
         public virtual void Update()
+        {
+
+        }
+
+        public virtual void FromData(EntityData data)
         {
 
         }

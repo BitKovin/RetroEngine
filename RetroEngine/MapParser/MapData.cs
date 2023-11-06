@@ -26,41 +26,58 @@ namespace RetroEngine.Map
 
             foreach(EntityData ent in Entities)
             {
-                
-                foreach (BrushData brush in ent.Brushes)
+                if (ent.Brushes.Count > 0)
                 {
-
-                    Entity entity = new Entity();
-
-                    CompoundShape shape = new CompoundShape();
-
-                    foreach (var face in BrushFaceMesh.GetFacesFromPath(Path.Replace(".map",".obj"), "entity" + ent.name + "_" + "brush" + brush.Name))
-                    {
-                        entity.meshes.Add(face);
-
-
-                        shape.AddChildShape(BulletSharp.Math.Matrix.Identity, Physics.Physics.CreateCollisionShapeFromModel(face.model));
-                        
-
-                    }
-
-
-
-                    foreach(StaticMesh mesh in entity.meshes)
+                    foreach (BrushData brush in ent.Brushes)
                     {
 
+                        Entity entity = new Entity();
+
+                        CompoundShape shape = new CompoundShape();
+
+                        foreach (var face in BrushFaceMesh.GetFacesFromPath(Path.Replace(".map", ".obj"), "entity" + ent.name + "_" + "brush" + brush.Name))
+                        {
+                            entity.meshes.Add(face);
+
+
+                            shape.AddChildShape(BulletSharp.Math.Matrix.Identity, Physics.Physics.CreateCollisionShapeFromModel(face.model));
+
+
+                        }
+
+
+
+                        foreach (StaticMesh mesh in entity.meshes)
+                        {
+
+                        }
+
+                        Model collisionModel = BrushFaceMesh.GetCollisionModel(Path.Replace(".map", ".obj"), "entity" + ent.name + "_" + "brush" + brush.Name);
+
+                        RigidBody rigidBody = Physics.Physics.CreateFromShape(entity, Vector3.One.ToPhysics(), shape, collisionFlags: BulletSharp.CollisionFlags.StaticObject);
+
+                        entity.body = rigidBody;
+
+                        level.entities.Add(entity);
+                        entity.Start();
+                    }
+                }
+                else
+                {
+                    Entity entity = LevelObjectFactory.CreateByTechnicalName(ent.Classname) as Entity;
+                    if (entity is null) continue;
+
+                    if (ent.Properties.ContainsKey("origin"))
+                    {
+                        Vector3 position = ent.GetPropertyVector("origin");
+                        entity.Position = position;
                     }
 
-                    Model collisionModel = BrushFaceMesh.GetCollisionModel(Path.Replace(".map", ".obj"), "entity" + ent.name + "_" + "brush" + brush.Name);
-
-                    RigidBody rigidBody = Physics.Physics.CreateFromShape(entity, Vector3.One.ToPhysics(),shape , collisionFlags: BulletSharp.CollisionFlags.StaticObject);
-
-                    entity.body = rigidBody;
+                    entity.FromData(ent);
 
                     level.entities.Add(entity);
                     entity.Start();
                 }
-                
 
             }
 

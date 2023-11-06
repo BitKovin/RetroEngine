@@ -2,6 +2,7 @@
 using Engine;
 using Microsoft.Xna.Framework.Graphics;
 using RetroEngine.Physics;
+using RetroEngine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,9 @@ using System.Threading.Tasks;
 
 namespace RetroEngine.Game.Entities
 {
-    internal class BoxDynamic : Entity
+
+    [LevelObject("ent_cat_point")]
+    public class BoxDynamic : Entity
     {
         StaticMesh mesh = new StaticMesh();
 
