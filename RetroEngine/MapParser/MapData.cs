@@ -1,5 +1,8 @@
-﻿using Engine;
+﻿using BulletSharp;
+using Engine;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using RetroEngine.Physics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,17 +26,41 @@ namespace RetroEngine.Map
 
             foreach(EntityData ent in Entities)
             {
-                Entity entity = new Entity();
-
+                
                 foreach (BrushData brush in ent.Brushes)
                 {
-                    foreach(var face in BrushFaceMesh.GetFacesFromPath(Path.Replace(".map",".obj"), "entity" + ent.name + "_" + "brush" + brush.Name))
+
+                    Entity entity = new Entity();
+
+                    CompoundShape shape = new CompoundShape();
+
+                    foreach (var face in BrushFaceMesh.GetFacesFromPath(Path.Replace(".map",".obj"), "entity" + ent.name + "_" + "brush" + brush.Name))
                     {
                         entity.meshes.Add(face);
+
+
+                        shape.AddChildShape(BulletSharp.Math.Matrix.Identity, Physics.Physics.CreateCollisionShapeFromModel(face.model));
+                        
+
                     }
+
+
+
+                    foreach(StaticMesh mesh in entity.meshes)
+                    {
+
+                    }
+
+                    Model collisionModel = BrushFaceMesh.GetCollisionModel(Path.Replace(".map", ".obj"), "entity" + ent.name + "_" + "brush" + brush.Name);
+
+                    RigidBody rigidBody = Physics.Physics.CreateFromShape(entity, Vector3.One.ToPhysics(),shape , collisionFlags: BulletSharp.CollisionFlags.StaticObject);
+
+                    entity.body = rigidBody;
+
+                    level.entities.Add(entity);
+                    entity.Start();
                 }
-                level.entities.Add(entity);
-                entity.Start();
+                
 
             }
 

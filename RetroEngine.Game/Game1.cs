@@ -50,11 +50,11 @@ namespace RetroEngine.Game
             }
 
             Box box = new Box();
-            box.size = new Vector3(5, 5, 5);
+            box.size = new Vector3(1, 1, 1);
             box.Position = new Vector3(0, -4, 0);
-            //curentLevel.entities.Add(box);
+            curentLevel.entities.Add(box);
 
-            //box.Start();
+            box.Start();
 
             Box box2 = new Box();
             box2.Position = new Vector3(0, -6, 0);

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection.Metadata;
 using System.Text;
+using BulletSharp;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -19,6 +20,8 @@ namespace Engine
         public List<StaticMesh> meshes = new List<StaticMesh>();
 
         public Collision collision;
+
+        public RigidBody body;
 
         public Entity()
         {

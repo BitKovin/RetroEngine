@@ -1,6 +1,7 @@
 ﻿using BulletSharp;
 using BulletSharp.Math;
 using Engine;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -167,7 +168,33 @@ namespace RetroEngine.Physics
             return RigidBody;
         }
 
-        
+
+        public static RigidBody CreateFromShape(Entity entity, Vector3 size,CollisionShape shape, float mass = 1, CollisionFlags collisionFlags = CollisionFlags.None)
+        {
+            RigidBody RigidBody;
+
+
+            var motionState = new DefaultMotionState(Matrix.Translation(0, 0, 0));
+
+            Vector3 inertia = Vector3.Zero;
+            shape.CalculateLocalInertia(mass, out inertia);
+
+            // Create a rigid body for the sphere
+            var boxRigidBodyInfo = new RigidBodyConstructionInfo(collisionFlags == CollisionFlags.StaticObject ? 0 : mass, motionState, shape, inertia);
+            RigidBody = new RigidBody(boxRigidBodyInfo);
+            RigidBody.CollisionFlags = collisionFlags;
+
+            RigidBody.UserObject = entity;
+
+            dynamicsWorld.AddRigidBody(RigidBody);
+
+            RigidBody.Friction = 1f;
+            RigidBody.SetDamping(0.1f, 0.1f);
+            RigidBody.Restitution = 0.1f;
+
+            return RigidBody;
+        }
+
 
         public static RigidBody CreateCharacterCapsule(Entity entity, float HalfHeight,float radius, float mass = 1, CollisionFlags collisionFlags = CollisionFlags.None)
         {
@@ -221,6 +248,50 @@ namespace RetroEngine.Physics
             return rayCallback;
 
 
+        }
+
+        public static CollisionShape CreateCollisionShapeFromModel(Model model, float scale = 1.0f)
+        {
+            // Create a compound shape to hold multiple child collision shapes
+            CompoundShape compoundShape = new CompoundShape();
+
+            // Loop through the model's meshes
+            foreach (ModelMesh mesh in model.Meshes)
+            {
+                // Create a convex hull shape for each mesh
+                ConvexHullShape convexShape = CreateConvexHullShape(mesh, scale);
+
+                Matrix scaling = Matrix.Scaling(scale);
+
+
+
+                // Calculate the mesh's transformation matrix (position and rotation)
+                Matrix transform = Matrix.Identity;
+
+                // Add the convex shape to the compound shape with the calculated transformation
+                compoundShape.AddChildShape(transform, convexShape);
+            }
+
+            return compoundShape;
+        }
+
+        public static ConvexHullShape CreateConvexHullShape(ModelMesh mesh, float scale)
+        {
+            // Get the vertices from the model's mesh part
+            VertexPositionNormalTexture[] vertices = new VertexPositionNormalTexture[mesh.MeshParts[0].VertexBuffer.VertexCount];
+            mesh.MeshParts[0].VertexBuffer.GetData(vertices);
+
+            // Extract the positions and scale them if necessary
+            Vector3[] positions = new Vector3[vertices.Length];
+            for (int i = 0; i < vertices.Length; i++)
+            {
+                positions[i] = vertices[i].Position.ToPhysics() * scale;
+            }
+
+            // Create a convex hull shape from the positions
+            ConvexHullShape shape = new ConvexHullShape(positions);
+
+            return shape;
         }
 
     }

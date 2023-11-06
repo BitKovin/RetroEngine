@@ -28,7 +28,6 @@ namespace Engine.Entities
 
         StaticMesh cylinder = new StaticMesh();
 
-        RigidBody body;
 
         float speed = 10;
 

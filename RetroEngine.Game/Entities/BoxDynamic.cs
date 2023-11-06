@@ -14,7 +14,6 @@ namespace RetroEngine.Game.Entities
     {
         StaticMesh mesh = new StaticMesh();
 
-        RigidBody body;
 
         public BoxDynamic() : base()
         {

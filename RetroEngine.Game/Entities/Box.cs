@@ -15,7 +15,6 @@ namespace Engine.Entities
 
         StaticMesh mesh = new StaticMesh();
 
-        RigidBody body;
 
         public Vector3 size = Vector3.One;
 
@@ -35,7 +34,7 @@ namespace Engine.Entities
         {
             base.Start();
 
-            body = Physics.CreateBox(this, new BulletSharp.Math.Vector3(size.X, size.Y, size.Z), collisionFlags: CollisionFlags.StaticObject);
+            body = Physics.CreateFromShape(this,Vector3.One.ToPhysics(), Physics.CreateCollisionShapeFromModel(mesh.model), collisionFlags: CollisionFlags.StaticObject);
 
             mesh.Scale = size;
 
