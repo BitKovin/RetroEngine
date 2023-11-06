@@ -25,7 +25,7 @@ namespace Engine
             return new Vector3(vector.X, 0, vector.Z);
         }
 
-            public static Vector3 GetRightVector(this Vector3 rot)
+        public static Vector3 GetRightVector(this Vector3 rot)
         {
             double X = Math.Sin((rot.Y+90) / 180d * Math.PI);
             double Y = 0;//-Math.Tan(rot.X / 180d * Math.PI);
@@ -33,7 +33,7 @@ namespace Engine
             //Console.WriteLine(Z);
             Vector3 rotation = new Vector3((float)X, (float)Y, (float)Z);
             rotation.Normalize();
-            return rotation;
+            return rotation * -1f;
         }
 
     }

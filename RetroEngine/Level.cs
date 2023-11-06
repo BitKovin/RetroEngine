@@ -25,13 +25,20 @@ namespace Engine
         {
             Physics.Update();
 
-            foreach (Entity entity in entities)
+            List<Entity> list = new List<Entity>(); 
+            list.AddRange(entities);
+
+            foreach (Entity entity in list)
                 entity.Update();
         }
 
         public virtual void AsyncUpdate()
         {
-            Parallel.ForEach(entities, entity =>
+
+            List<Entity> list = new List<Entity>();
+            list.AddRange(entities);
+
+            Parallel.ForEach(list, entity =>
             {
                 entity.AsyncUpdate();
             });
@@ -39,7 +46,11 @@ namespace Engine
 
         public virtual void LateUpdate()
         {
-            foreach (Entity entity in entities)
+
+            List<Entity> list = new List<Entity>();
+            list.AddRange(entities);
+
+            foreach (Entity entity in list)
                 entity.LateUpdate();
         }
 

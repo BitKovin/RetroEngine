@@ -9,10 +9,14 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using RetroEngine;
+using RetroEngine.Game.Entities;
+using RetroEngine.Map;
 using RetroEngine.Physics;
 
 namespace Engine.Entities
 {
+
+    [LevelObject("info_player_start")]
     public class Player:Entity
     {
 
@@ -91,6 +95,14 @@ namespace Engine.Entities
         private void ButtonRotate_onClicked()
         {
             Shoot();
+        }
+
+        public override void FromData(EntityData data)
+        {
+            base.FromData(data);
+
+            Camera.position = Position = OldCameraPos = data.GetPropertyVector("origin");
+
         }
 
         public override void Start()
@@ -192,6 +204,21 @@ namespace Engine.Entities
 
             mesh.Play();
 
+
+            BoxDynamic box = new BoxDynamic();
+
+            box.Position = Camera.rotation.GetForwardVector()*2;
+            box.Rotation = Camera.rotation;
+            GameMain.inst.curentLevel.entities.Add(box);
+            box.Start();
+            box.body.Activate();
+            box.body.SetIgnoreCollisionCheck(body, true);
+            box.body.SetPosition(Camera.position.ToPhysics() + Camera.rotation.GetRightVector().ToPhysics()/2f);
+            box.body.CcdSweptSphereRadius = 0.4f;
+            box.body.CcdMotionThreshold = 0.1f;
+            box.body.ApplyCentralImpulse(Camera.rotation.GetForwardVector().ToPhysics() * 200);
+
+            return;
             var hit = Physics.LineTrace(Camera.position.ToPhysics(), Camera.rotation.GetForwardVector().ToPhysics() * 100 + Camera.position.ToPhysics());
 
             if(hit is not null)
