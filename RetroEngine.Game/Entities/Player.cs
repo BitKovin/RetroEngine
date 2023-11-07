@@ -133,10 +133,10 @@ namespace Engine.Entities
                 input -= new Vector2(0, 100) * Time.deltaTime;
 
             if (buttonRight.pressing || Keyboard.GetState().IsKeyDown(Keys.D) || buttonUpRight.pressing)
-                input -= new Vector2(100, 0) * Time.deltaTime;
+                input += new Vector2(100, 0) * Time.deltaTime;
 
             if (buttonLeft.pressing || Keyboard.GetState().IsKeyDown(Keys.A) || buttonUpLeft.pressing)
-                input += new Vector2(100, 0) * Time.deltaTime;
+                input -= new Vector2(100, 0) * Time.deltaTime;
 
             Camera.rotation += new Vector3(Input.MouseDelta.Y, -Input.MouseDelta.X, 0)/2f;
             Camera.rotation = new Vector3(Math.Clamp(Camera.rotation.X, -89, 89), Camera.rotation.Y, 0);
@@ -216,7 +216,7 @@ namespace Engine.Entities
             box.body.SetPosition(Camera.position.ToPhysics() + Camera.rotation.GetRightVector().ToPhysics()/2f);
             box.body.CcdSweptSphereRadius = 0.4f;
             box.body.CcdMotionThreshold = 0.1f;
-            box.body.ApplyCentralImpulse(Camera.rotation.GetForwardVector().ToPhysics() * 200);
+            box.body.ApplyCentralImpulse(Camera.rotation.GetForwardVector().ToPhysics() * 100);
 
             return;
             var hit = Physics.LineTrace(Camera.position.ToPhysics(), Camera.rotation.GetForwardVector().ToPhysics() * 100 + Camera.position.ToPhysics());
