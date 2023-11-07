@@ -28,12 +28,15 @@ namespace RetroEngine.Map
             {
                 if (ent.Brushes.Count > 0)
                 {
+                    Entity entity = LevelObjectFactory.CreateByTechnicalName(ent.Classname) as Entity;
+
+                    if (entity is null)
+                        entity = new Entity();
+
+                    CompoundShape shape = new CompoundShape();
                     foreach (BrushData brush in ent.Brushes)
                     {
-
-                        Entity entity = new Entity();
-
-                        CompoundShape shape = new CompoundShape();
+                        
 
                         foreach (var face in BrushFaceMesh.GetFacesFromPath(Path.Replace(".map", ".obj"), "entity" + ent.name + "_" + "brush" + brush.Name))
                         {
@@ -44,23 +47,15 @@ namespace RetroEngine.Map
 
 
                         }
-
-
-
-                        foreach (StaticMesh mesh in entity.meshes)
-                        {
-
-                        }
-
-                        Model collisionModel = BrushFaceMesh.GetCollisionModel(Path.Replace(".map", ".obj"), "entity" + ent.name + "_" + "brush" + brush.Name);
-
-                        RigidBody rigidBody = Physics.Physics.CreateFromShape(entity, Vector3.One.ToPhysics(), shape, collisionFlags: BulletSharp.CollisionFlags.StaticObject);
-
-                        entity.body = rigidBody;
-
-                        level.entities.Add(entity);
-                        entity.Start();
                     }
+
+                    RigidBody rigidBody = Physics.Physics.CreateFromShape(entity, Vector3.One.ToPhysics(), shape, collisionFlags: BulletSharp.CollisionFlags.StaticObject);
+
+                    entity.body = rigidBody;
+
+                    level.entities.Add(entity);
+                    entity.Start();
+
                 }
                 else
                 {

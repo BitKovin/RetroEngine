@@ -33,10 +33,15 @@ namespace RetroEngine.Physics
 
         }
 
+        public static void PerformContactCheck(CollisionObject collisionObject, CollisionCallback callback) 
+        {
+        
+            dynamicsWorld.ContactTest(collisionObject, callback);
+
+        }
+
         public static void Update()
         {
-
-
             dynamicsWorld.StepSimulation(Engine.Time.deltaTime,steps, Math.Max(1f/60f,Time.deltaTime));
 
             

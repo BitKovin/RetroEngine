@@ -7,3 +7,8 @@
 @baseclass size(-16 -16 -16, 16 16 16) color(255 255 0) = PointEntity []
 
 @PointClass base(PointEntity) = ent_cat_point : "Cat" []
+
+@SolidClass = trigger : "Trigger"
+[
+	targetTag(string) : "Target Tag" : ""
+]
