@@ -73,13 +73,21 @@ namespace Engine
 
             foreach (Entity ent in entities)
             {
-
                 if (ent.meshes is not null)
                     foreach (StaticMesh mesh in ent.meshes)
-                        list.Add(mesh);
+                        if(mesh.Transperent)
+                            list.Add(mesh);
             }
 
             list = list.OrderByDescending(mesh => mesh.CalculatedCameraDistance).ToList();
+
+            foreach (Entity ent in entities)
+            {
+                if (ent.meshes is not null)
+                    foreach (StaticMesh mesh in ent.meshes)
+                        if (mesh.Transperent == false)
+                            list.Insert(0,mesh);
+            }
 
             return list;
         }

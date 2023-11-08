@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework.Audio;
+using RetroEngine.Audio;
 
 namespace RetroEngine.Game.Entities
 {
@@ -17,6 +19,7 @@ namespace RetroEngine.Game.Entities
     {
         StaticMesh mesh = new StaticMesh();
 
+        SoundEffectInstance soundEffectInstance;
 
         public BoxDynamic() : base()
         {
@@ -28,6 +31,10 @@ namespace RetroEngine.Game.Entities
             mesh.texture = AssetRegistry.LoadTextureFromFile("cat.png");
 
             body = Physics.Physics.CreateBox(this, new BulletSharp.Math.Vector3(1,1,1));
+
+            soundEffectInstance = AssetRegistry.LoadSoundFromFile("Sounds/test.wav").CreateInstance();
+
+            soundEffectInstance.Play();
         }
 
 
@@ -47,7 +54,10 @@ namespace RetroEngine.Game.Entities
 
             mesh.Position = Position;
             mesh.Rotation = Rotation;
-            
+
+            soundEffectInstance.ApplyPosition(Position);
+
+
         }
     }
 }

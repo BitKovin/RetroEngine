@@ -21,6 +21,8 @@ namespace Engine
 
         public static float FOV = 60;
 
+        public static Vector3 velocity = new Vector3(0,0,0);
+
         public static float GetHorizontalFOV()
         {
             return FOV*HtW;

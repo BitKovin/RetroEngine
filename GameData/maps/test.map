@@ -88,11 +88,6 @@
 }
 // entity 3
 {
-"classname" "ent_cat_point"
-"origin" "208 96 32"
-}
-// entity 4
-{
 "classname" "trigger"
 // brush 0
 {

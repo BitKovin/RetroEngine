@@ -1,4 +1,5 @@
 ﻿using Engine;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -14,15 +15,14 @@ namespace RetroEngine
 
         static Dictionary<string, Texture2D> textures = new Dictionary<string, Texture2D>();
 
+        static Dictionary<string, SoundEffect> sounds = new Dictionary<string, SoundEffect>();
+
         static Dictionary<object, string> references = new Dictionary<object, string>();
 
         const string ROOT_PATH = "../../../../";
 
         public static Texture2D LoadTextureFromFile(string path)
         {
-
-            
-
             if (textures.ContainsKey(path))
                 return textures[path];
 
@@ -36,6 +36,32 @@ namespace RetroEngine
                     textures.Add(path, Texture2D.FromStream(GameMain.inst.GraphicsDevice, stream));
 
                     return textures[path];
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions that occur during texture loading
+                Console.WriteLine("Failed to load texture: " + ex.Message);
+                return null;
+            }
+
+        }
+
+        public static SoundEffect LoadSoundFromFile(string path)
+        {
+            if (sounds.ContainsKey(path))
+                return sounds[path];
+
+            string filePpath = FindPathForFile(path);
+
+            try
+            {
+                using (FileStream stream = new FileStream(filePpath, FileMode.Open))
+                {
+
+                    sounds.Add(path, SoundEffect.FromStream(stream));
+
+                    return sounds[path];
                 }
             }
             catch (Exception ex)

@@ -8,6 +8,7 @@ using System;
 using Engine.UI;
 using RetroEngine;
 using MonoGame.ImGuiNet;
+using RetroEngine.Audio;
 
 namespace Engine
 {
@@ -79,6 +80,10 @@ namespace Engine
             //if (platform == Platform.Mobile)
                 //_graphics.IsFullScreen = true;
             _graphics.ApplyChanges();
+
+
+            SoundManager.Init();
+
         }
 
 
@@ -120,10 +125,13 @@ namespace Engine
 
             curentLevel.LateUpdate();
 
+            SoundManager.Update();
+
             curentLevel.RenderPreparation();
 
             Camera.Update();
 
+            SoundManager.Update();
 
             foreach (UiElement elem in UiElement.main.childs)
                 elem.Update();

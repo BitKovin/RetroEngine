@@ -71,7 +71,7 @@ namespace RetroEngine
                         effect.Parameters["View"].SetValue(Camera.view);
                         effect.Parameters["Projection"].SetValue(Camera.projection);
                         
-                            effect.Parameters["Texture"].SetValue(texture);
+                        effect.Parameters["Texture"].SetValue(texture);
                         
                         
 

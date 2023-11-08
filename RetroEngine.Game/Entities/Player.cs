@@ -138,7 +138,7 @@ namespace Engine.Entities
             if (buttonLeft.pressing || Keyboard.GetState().IsKeyDown(Keys.A) || buttonUpLeft.pressing)
                 input -= new Vector2(100, 0) * Time.deltaTime;
 
-            Camera.rotation += new Vector3(Input.MouseDelta.Y, -Input.MouseDelta.X, 0)/2f;
+            Camera.rotation += new Vector3(Input.MouseDelta.Y, -Input.MouseDelta.X, 10)/2f;
             Camera.rotation = new Vector3(Math.Clamp(Camera.rotation.X, -89, 89), Camera.rotation.Y, 0);
 
             Vector3 motion = new Vector3();
@@ -167,8 +167,8 @@ namespace Engine.Entities
 
             bob = Vector3.Zero;
 
-            bob += Camera.rotation.GetRightVector() * ((float)Math.Sin(bobProgress*1 * 7)) * 0.2f;
-            bob += new Vector3(0, (float)(Math.Abs(Math.Sin(bobProgress * 7 * 1))) * 0.2f, 0) ;
+            //bob += Camera.rotation.GetRightVector() * ((float)Math.Sin(bobProgress*1 * 7)) * 0.2f;
+            bob += new Vector3(0,1,0) * (float)(Math.Abs(Math.Sin(bobProgress * 7 * 1))) * 0.2f;
 
             Camera.position += bob;
 
