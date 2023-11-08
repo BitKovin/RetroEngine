@@ -19,9 +19,16 @@ namespace Engine
         public static Matrix view;
         public static Matrix projection;
 
+        public static float FOV = 60;
+
+        public static float GetHorizontalFOV()
+        {
+            return FOV*HtW;
+        }
+
         public static void Update()
         {
-            HtW = 1; //GameMain.inst.Window.ClientBounds.Width / GameMain.inst.Window.ClientBounds.Height;
+            HtW = GameMain.inst.Window.ClientBounds.Width / GameMain.inst.Window.ClientBounds.Height;
 
             float ScaleY = (float)GameMain.inst.Window.ClientBounds.Height / Constants.ResoultionY;
             var scale = Matrix.CreateScale(ScaleY * HtW, ScaleY, 1);
@@ -32,7 +39,7 @@ namespace Engine
             //position = new Vector3(0, 0, 0);
             world = Matrix.CreateTranslation(Vector3.Zero);
             view = Matrix.CreateLookAt(position, position + rotation.GetForwardVector(), Vector3.UnitY);
-            projection = Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.ToRadians(60), (float)GameMain.inst.Window.ClientBounds.Width / (float)GameMain.inst.Window.ClientBounds.Height, 0.01f, 1000000f); 
+            projection = Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.ToRadians(FOV), (float)GameMain.inst.Window.ClientBounds.Width / (float)GameMain.inst.Window.ClientBounds.Height, 0.01f, 1000000f); 
 
         }
 

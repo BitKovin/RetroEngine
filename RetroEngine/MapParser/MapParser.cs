@@ -30,6 +30,8 @@ namespace RetroEngine.MapParser
         {
             mapData = new MapData();
 
+            path = AssetRegistry.FindPathForFile(path);
+
             mapData.Path = path;
 
             using (StreamReader reader = new StreamReader(path))

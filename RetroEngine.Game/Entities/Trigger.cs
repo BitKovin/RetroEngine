@@ -24,6 +24,7 @@ namespace RetroEngine.Game.Entities
 
             collisionCallback.CollisionEvent += OnTriggerEntered;
 
+            meshes[0].Transperent = true;
         }
 
         private void OnTriggerEntered(BulletSharp.CollisionObjectWrapper thisObject, BulletSharp.CollisionObjectWrapper collidedObject, Entity collidedEntity, BulletSharp.ManifoldPoint contactPoint)

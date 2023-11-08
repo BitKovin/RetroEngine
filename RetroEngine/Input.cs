@@ -30,7 +30,7 @@ namespace Engine
             if (LockCursor)
                 if (Vector2.Distance(windowCenter, mousePos) > 1)
                 {
-                    Mouse.SetPosition((int)windowCenter.X, (int)windowCenter.Y);
+                    //Mouse.SetPosition((int)windowCenter.X, (int)windowCenter.Y);
                 }
 
             MousePos = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);

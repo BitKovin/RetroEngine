@@ -63,13 +63,16 @@ namespace RetroEngine
 
             graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 
-            foreach (Entity ent in level.entities)
-            {
+            //int n = 0;
 
-                if (ent.meshes is not null)
-                    foreach (StaticMesh mesh in ent.meshes)
-                        mesh.DrawUnified();
-            }
+            foreach (StaticMesh mesh in level.GetMeshesToRender())
+                if (mesh.isRendered)
+                {
+                    mesh.DrawUnified();
+                    //n++;
+                }
+            //Console.WriteLine("Drawed " + n.ToString());
+
         }
 
         void RenderColorPath(Level level)

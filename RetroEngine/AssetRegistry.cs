@@ -16,15 +16,21 @@ namespace RetroEngine
 
         static Dictionary<object, string> references = new Dictionary<object, string>();
 
+        const string ROOT_PATH = "../../../../";
+
         public static Texture2D LoadTextureFromFile(string path)
         {
 
-            if(textures.ContainsKey(path))
+            
+
+            if (textures.ContainsKey(path))
                 return textures[path];
+
+            string filePpath = FindPathForFile(path);
 
             try
             {
-                using (FileStream stream = new FileStream(path, FileMode.Open))
+                using (FileStream stream = new FileStream(filePpath, FileMode.Open))
                 {
 
                     textures.Add(path, Texture2D.FromStream(GameMain.inst.GraphicsDevice, stream));
@@ -41,6 +47,26 @@ namespace RetroEngine
 
         }
 
+        public static string FindPathForFile(string path)
+        {
+
+            string directory = Path.GetDirectoryName(path);
+            string fileName = Path.GetFileName(path);
+
+            Console.WriteLine(ROOT_PATH + "GameData/" + path);
+
+            if (File.Exists(ROOT_PATH + "GameData/" + path))
+                return ROOT_PATH + "GameData/" + path;
+
+            if (File.Exists(ROOT_PATH + "GameData/brushes/" + path))
+                return ROOT_PATH + "GameData/brushes/" + path;
+
+            if (File.Exists(ROOT_PATH + "GameData/maps/" + path))
+                return ROOT_PATH + "GameData/maps/" + path;
+
+
+            return path;
+        }
         public static void AddReference(object reference, string key)
         {
             references.Add(reference, key);

@@ -1,6 +1,8 @@
-﻿using RetroEngine.Physics;
+﻿using RetroEngine;
+using RetroEngine.Physics;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -54,6 +56,33 @@ namespace Engine
                 entity.LateUpdate();
         }
 
+        public virtual void RenderPreparation()
+        {
+            
+            Parallel.ForEach(entities, entity =>
+            {
+                foreach(StaticMesh mesh in entity.meshes)
+                    mesh.RenderPreparation();
+                
+            });
+        }
+
+        public virtual List<StaticMesh> GetMeshesToRender()
+        {
+            List <StaticMesh> list = new List<StaticMesh >();
+
+            foreach (Entity ent in entities)
+            {
+
+                if (ent.meshes is not null)
+                    foreach (StaticMesh mesh in ent.meshes)
+                        list.Add(mesh);
+            }
+
+            list = list.OrderByDescending(mesh => mesh.CalculatedCameraDistance).ToList();
+
+            return list;
+        }
 
     }
 }

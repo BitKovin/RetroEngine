@@ -61,7 +61,7 @@ namespace Engine
 
             base.Initialize();
 
-            
+            Window.ClientSizeChanged += Window_ClientSizeChanged;
 
             render = new Render();
 
@@ -120,6 +120,7 @@ namespace Engine
 
             curentLevel.LateUpdate();
 
+            curentLevel.RenderPreparation();
 
             Camera.Update();
 
@@ -194,6 +195,19 @@ namespace Engine
         {
             return this.Services.GetService(type);
         }
+
+
+        private void Window_ClientSizeChanged(object sender, System.EventArgs e)
+        {
+            // Handle window resizing here
+            // You can update your graphics settings, camera, etc. based on the new window size
+            // For example, you can set the new resolution and adjust the viewport
+
+            _graphics.PreferredBackBufferWidth = Window.ClientBounds.Width;
+            _graphics.PreferredBackBufferHeight = Window.ClientBounds.Height;
+            _graphics.ApplyChanges();
+        }
+
 
     }
 }

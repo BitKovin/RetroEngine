@@ -72,16 +72,16 @@ namespace Engine.Entities
             //Model model = GameMain.content.Load<Model>("pistol");
             meshes.Add(mesh);
 
-            mesh.AddFrame("Data/Animations/Pistol/Fire/frame_0001.obj");
-            mesh.AddFrame("Data/Animations/Pistol/Fire/frame_0002.obj");
-            mesh.AddFrame("Data/Animations/Pistol/Fire/frame_0003.obj");
-            mesh.AddFrame("Data/Animations/Pistol/Fire/frame_0004.obj");
-            mesh.AddFrame("Data/Animations/Pistol/Fire/frame_0005.obj");
-            mesh.AddFrame("Data/Animations/Pistol/Fire/frame_0006.obj");
-            mesh.AddFrame("Data/Animations/Pistol/Fire/frame_0007.obj");
-            mesh.AddFrame("Data/Animations/Pistol/Fire/frame_0008.obj");
-            mesh.AddFrame("Data/Animations/Pistol/Fire/frame_0009.obj");
-            mesh.AddFrame("Data/Animations/Pistol/Fire/frame_0010.obj");
+            mesh.AddFrame("Animations/Pistol/Fire/frame_0001.obj");
+            mesh.AddFrame("Animations/Pistol/Fire/frame_0002.obj");
+            mesh.AddFrame("Animations/Pistol/Fire/frame_0003.obj");
+            mesh.AddFrame("Animations/Pistol/Fire/frame_0004.obj");
+            mesh.AddFrame("Animations/Pistol/Fire/frame_0005.obj");
+            mesh.AddFrame("Animations/Pistol/Fire/frame_0006.obj");
+            mesh.AddFrame("Animations/Pistol/Fire/frame_0007.obj");
+            mesh.AddFrame("Animations/Pistol/Fire/frame_0008.obj");
+            mesh.AddFrame("Animations/Pistol/Fire/frame_0009.obj");
+            mesh.AddFrame("Animations/Pistol/Fire/frame_0010.obj");
             mesh.frameTime = 1f / 30f;
             mesh.texture = AssetRegistry.LoadTextureFromFile("usp.png");
 
@@ -110,7 +110,7 @@ namespace Engine.Entities
             base.Start();
 
             body = Physics.CreateCharacterCapsule(this, 1, 0.5f, 2);
-            body.Gravity = new BulletSharp.Math.Vector3(0, -50, 0);
+            body.Gravity = new BulletSharp.Math.Vector3(0, -35, 0);
 
             body.SetPosition(Position.ToPhysics());
 
@@ -196,7 +196,7 @@ namespace Engine.Entities
 
         void Jump()
         {
-            body.ApplyCentralImpulse(new BulletSharp.Math.Vector3(0, 40, 0));
+            body.ApplyCentralImpulse(new BulletSharp.Math.Vector3(0, 25, 0));
         }
 
         void Shoot()

@@ -1,0 +1,9 @@
+newmtl __TB_empty
+map_Kd textures\__TB_empty.png
+
+newmtl cat
+map_Kd textures\cat.png
+
+newmtl trigger
+map_Kd textures\trigger.png
+

@@ -40,6 +40,9 @@ namespace RetroEngine.Map
 
                         foreach (var face in BrushFaceMesh.GetFacesFromPath(Path.Replace(".map", ".obj"), "entity" + ent.name + "_" + "brush" + brush.Name))
                         {
+
+                            face.useAvgVertexPosition = true;
+
                             entity.meshes.Add(face);
 
 

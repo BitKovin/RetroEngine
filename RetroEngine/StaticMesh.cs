@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using RetroEngine.Physics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,16 @@ namespace RetroEngine
         public Model model;
 
         public Texture2D texture;
+
+        public float CalculatedCameraDistance = 0;
+
+        public bool isRendered = true;
+
+        public bool useAvgVertexPosition;
+
+        protected Vector3 avgVertexPosition;
+
+        public bool Transperent = false;
 
         public virtual void Draw()
         {
@@ -174,13 +185,15 @@ namespace RetroEngine
         public void LoadFromFile(string filePath)
         {
             model = GetModelFromPath(filePath);
-            
+
+            avgVertexPosition = CalculateAvgVertexLocation();
         }
 
         protected Model GetModelFromPath(string filePath)
         {
             GraphicsDevice graphicsDevice = GameMain.inst.GraphicsDevice;
 
+            filePath = AssetRegistry.FindPathForFile(filePath);
 
             var importer = new Assimp.AssimpContext();
             var scene = importer.ImportFile(filePath, Assimp.PostProcessSteps.MakeLeftHanded | Assimp.PostProcessSteps.FlipUVs);
@@ -286,8 +299,80 @@ namespace RetroEngine
             return new Model(graphicsDevice, new List<ModelBone>(), meshes);
         }
 
+        protected bool IsBoundingSphereInFrustum(BoundingSphere sphere)
+        {
 
+            // Calculate the combined view-projection matrix
+            Matrix viewProjection = Camera.view * Camera.projection;
 
+            // Transform the sphere position into view space
+            Vector3 sphereCenterView = Vector3.Transform(sphere.Center, Camera.view);
+
+            // Calculate the squared radius of the bounding sphere
+            float sphereRadiusSquared = sphere.Radius * sphere.Radius;
+
+            // Check if the sphere is inside the camera frustum
+            if (sphereCenterView.Z + sphere.Radius < -sphereRadiusSquared
+                || sphereCenterView.Z - sphere.Radius > sphereRadiusSquared
+                || sphereCenterView.X + sphere.Radius < -sphereRadiusSquared
+                || sphereCenterView.X - sphere.Radius > sphereRadiusSquared
+                || sphereCenterView.Y + sphere.Radius < -sphereRadiusSquared
+                || sphereCenterView.Y - sphere.Radius > sphereRadiusSquared)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public void RenderPreparation()
+        {
+
+            isRendered = true;
+
+            Vector3 location = useAvgVertexPosition ? avgVertexPosition : Position;
+
+            if (Transperent)
+            {
+                CalculatedCameraDistance = Vector3.Distance(location, Camera.position);
+            }else
+            {
+                CalculatedCameraDistance = 1000000000000;
+            }
+
+            return;
+
+            foreach (ModelMesh mesh in model.Meshes)
+            {
+                if (IsBoundingSphereInFrustum(mesh.BoundingSphere))
+                    isRendered = true;
+            }
+
+        }
+
+        private Vector3 CalculateAvgVertexLocation()
+        {
+            float n = 0;
+
+            Vector3 vector = new Vector3();
+
+            foreach (ModelMesh mesh in model.Meshes)
+            {
+
+                // Get the vertices from the model's mesh part
+                VertexPositionNormalTexture[] vertices = new VertexPositionNormalTexture[mesh.MeshParts[0].VertexBuffer.VertexCount];
+                mesh.MeshParts[0].VertexBuffer.GetData(vertices);
+                // Extract the positions and scale them if necessary
+                Vector3[] positions = new Vector3[vertices.Length];
+                for (int i = 0; i < vertices.Length; i++)
+                {
+                    vector += vertices[i].Position;
+                    n++;
+                }
+
+            }
+            return vector/n;
+        }
 
         protected static BoundingSphere CalculateBoundingSphere(VertexPositionNormalTexture[] vertices)
         {
