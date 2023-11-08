@@ -35,10 +35,6 @@ namespace RetroEngine.Audio
 
 
 
-
-            // Set the reference distance (the distance at which the sound is at full volume)
-            float referenceDistance = 0; // Adjust this value based on your needs
-
             float n = 3;
 
             distance -= MinDistance;

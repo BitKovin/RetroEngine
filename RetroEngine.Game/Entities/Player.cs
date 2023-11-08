@@ -167,10 +167,10 @@ namespace Engine.Entities
 
             bob = Vector3.Zero;
 
-            //bob += Camera.rotation.GetRightVector() * ((float)Math.Sin(bobProgress*1 * 7)) * 0.2f;
-            bob += new Vector3(0,1,0) * (float)(Math.Abs(Math.Sin(bobProgress * 7 * 1))) * 0.2f;
+            bob += Camera.rotation.GetRightVector() * ((float)Math.Sin(bobProgress*1 * 7)) * 0.2f;
+            bob += Camera.rotation.GetUpVector() * (float)(Math.Abs(Math.Sin(bobProgress * 7 * 1))) * 0.2f;
 
-            Camera.position += bob;
+            //Camera.position += new Vector3(0,1,0) * (float)(Math.Abs(Math.Sin(bobProgress * 7 * 1))) * 0.2f;
 
 
             if (Input.pressedKeys.Contains(Keys.Space))
@@ -207,13 +207,12 @@ namespace Engine.Entities
 
             BoxDynamic box = new BoxDynamic();
 
-            box.Position = Camera.rotation.GetForwardVector()*2;
             box.Rotation = Camera.rotation;
             GameMain.inst.curentLevel.entities.Add(box);
             box.Start();
             box.body.Activate();
             box.body.SetIgnoreCollisionCheck(body, true);
-            box.body.SetPosition(Camera.position.ToPhysics() + Camera.rotation.GetRightVector().ToPhysics()/2f);
+            box.body.SetPosition(Camera.position.ToPhysics() +Camera.rotation.GetForwardVector().ToPhysics()/2f + Camera.rotation.GetRightVector().ToPhysics()/2f - Camera.rotation.GetUpVector().ToPhysics() / 2f);
             box.body.CcdSweptSphereRadius = 0.4f;
             box.body.CcdMotionThreshold = 0.1f;
             box.body.ApplyCentralImpulse(Camera.rotation.GetForwardVector().ToPhysics() * 100);

@@ -181,10 +181,6 @@ namespace Engine
 
             SpriteBatch.Begin();
 
-            SpriteBatch.DrawString(font, $"FPS: {(1f/Time.deltaTime).ToString()}", new Vector2(100, 100), Color.Red);
-            SpriteBatch.DrawString(font, $"Camera Position: {Camera.position.ToString()}", new Vector2(100, 200), Color.Red);
-            SpriteBatch.DrawString(font, $"Camera Vector: {Camera.rotation.GetForwardVector()}", new Vector2(100, 300), Color.Red);
-
 
             SpriteBatch.End();
 

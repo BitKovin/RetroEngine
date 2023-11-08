@@ -17,6 +17,8 @@ namespace RetroEngine.Game
 
             ImGui.Text((1 / Time.deltaTime).ToString());
 
+            ImGui.Text("Camera.up " + Camera.rotation.GetUpVector().ToString());
+
         }
 
     }

@@ -15,7 +15,7 @@ namespace Engine
 
             Vector3 vector = new Vector3((float)X, (float)Y, (float)Z);
 
-            vector.Normalize();
+            vector = Vector3.Normalize(vector);
 
             return vector;
         }
@@ -27,19 +27,28 @@ namespace Engine
             double Z = Math.Cos((rot.Y + 90) / 180d * Math.PI);
             
             Vector3 rotation = new Vector3((float)X, (float)Y, (float)Z);
-            rotation.Normalize();
+            
+            rotation = Vector3.Normalize(rotation);
+
             return rotation * -1f;
         }
 
         public static Vector3 GetUpVector(this Vector3 rot)
         {
-            if (rot.X > 0)
-            {
-                return (rot + new Vector3(89.9f, 0, 0)).GetForwardVector();
-            }else
-            {
-                return (rot + new Vector3(89.9f, 0, 0)).GetForwardVector() * -1f;
-            }
+            if (rot.X == 0)
+                rot.X = 0.00001f;
+
+            double X = Math.Sin((rot.Y) / 180d * Math.PI);
+            double Y = -Math.Tan((rot.X+90f) / 180d * Math.PI);
+            double Z = Math.Cos((rot.Y) / 180d * Math.PI);
+
+            Vector3 rotation = new Vector3((float)X, (float)Y, (float)Z);
+            rotation = Vector3.Normalize(rotation);
+
+            if(rot.X>=0)
+                rotation = rotation * -1f;
+
+            return rotation * -1f;
         }
 
         public static Vector3 XZ(this Vector3 vector)
