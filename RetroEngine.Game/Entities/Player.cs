@@ -90,7 +90,8 @@ namespace RetroEngine.Entities
             mesh.AddFrame("Animations/Pistol/Fire/frame_0009.obj");
             mesh.AddFrame("Animations/Pistol/Fire/frame_0010.obj");
             mesh.frameTime = 1f / 30f;
-            mesh.texture = AssetRegistry.LoadTextureFromFile("usp.png");
+            //mesh.texture = AssetRegistry.LoadTextureFromFile("usp.png");
+            mesh.textureSearchPath = "textures/weapons/";
 
             cylinder.LoadFromFile("cylinder.obj");
             //meshes.Add(cylinder);
@@ -214,16 +215,19 @@ namespace RetroEngine.Entities
 
             BoxDynamic box = new BoxDynamic();
 
+            box.scale = new Vector3(0.2f);
+
             box.Rotation = Camera.rotation;
             GameMain.inst.curentLevel.entities.Add(box);
             box.Start();
             box.body.Activate();
             box.body.SetIgnoreCollisionCheck(body, true);
-            box.body.SetPosition(Camera.position.ToPhysics() +Camera.rotation.GetForwardVector().ToPhysics()/2f + Camera.rotation.GetRightVector().ToPhysics()/2f - Camera.rotation.GetUpVector().ToPhysics() / 2f);
-            box.body.CcdSweptSphereRadius = 0.4f;
+            box.body.SetPosition(Camera.position.ToPhysics() +Camera.rotation.GetForwardVector().ToPhysics()/2f + Camera.rotation.GetRightVector().ToPhysics()/4f - Camera.rotation.GetUpVector().ToPhysics() / 4f);
+            box.body.CcdSweptSphereRadius = 0.1f;
             box.body.CcdMotionThreshold = 0.1f;
-            box.body.ApplyCentralImpulse(Camera.rotation.GetForwardVector().ToPhysics() * 100);
-
+            box.body.ApplyCentralImpulse(Camera.rotation.GetForwardVector().ToPhysics() * 30);
+            box.body.Gravity = new Vector3(0.1f).ToPhysics();
+            box.Update();
             return;
             var hit = Physics.LineTrace(Camera.position.ToPhysics(), Camera.rotation.GetForwardVector().ToPhysics() * 100 + Camera.position.ToPhysics());
 

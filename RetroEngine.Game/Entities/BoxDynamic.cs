@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Audio;
 using RetroEngine.Audio;
+using Microsoft.Xna.Framework;
 
 namespace RetroEngine.Game.Entities
 {
@@ -20,6 +21,8 @@ namespace RetroEngine.Game.Entities
 
         SoundEffectInstance soundEffectInstance;
 
+        public Vector3 scale = new Vector3(1);
+
         public BoxDynamic() : base()
         {
             Model model = GameMain.content.Load<Model>("box");
@@ -29,11 +32,10 @@ namespace RetroEngine.Game.Entities
 
             mesh.texture = AssetRegistry.LoadTextureFromFile("cat.png");
 
-            body = Physics.CreateBox(this, new BulletSharp.Math.Vector3(1,1,1));
-
             soundEffectInstance = AssetRegistry.LoadSoundFromFile("Sounds/test.wav").CreateInstance();
 
             soundEffectInstance.Play();
+            soundEffectInstance.IsLooped = true;
         }
 
 
@@ -41,8 +43,10 @@ namespace RetroEngine.Game.Entities
         {
             base.Start();
 
+            body = Physics.CreateBox(this, scale.ToPhysics());
             body.SetPosition(new BulletSharp.Math.Vector3(Position.X, Position.Y, Position.Z));
-
+            body.SetMassProps(scale.Length(), body.CollisionShape.CalculateLocalInertia(scale.Length()));
+            mesh.Scale = scale;
         }
 
         public override void Update()

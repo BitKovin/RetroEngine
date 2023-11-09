@@ -8,9 +8,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Formats.Asn1.AsnWriter;
+using System.IO;
 
 namespace RetroEngine
 {
+
+    class MeshPartData
+    {
+        public string textureName = "";
+    }
+
     public class StaticMesh
     {
         public Vector3 Position { get; set; } = Vector3.Zero;
@@ -20,6 +27,7 @@ namespace RetroEngine
         public Model model;
 
         public Texture2D texture;
+        public string textureSearchPath = "";
 
         public float CalculatedCameraDistance = 0;
 
@@ -61,6 +69,7 @@ namespace RetroEngine
                 {
                     foreach (ModelMeshPart meshPart in mesh.MeshParts)
                     {
+
                         // Set the vertex buffer and index buffer for this mesh part
                         graphicsDevice.SetVertexBuffer(meshPart.VertexBuffer);
                         graphicsDevice.Indices = meshPart.IndexBuffer;
@@ -69,9 +78,17 @@ namespace RetroEngine
                         effect.Parameters["World"].SetValue(GetWorldMatrix());
                         effect.Parameters["View"].SetValue(Camera.view);
                         effect.Parameters["Projection"].SetValue(Camera.projection);
-                        
-                        effect.Parameters["Texture"].SetValue(texture);
-                        
+
+                        MeshPartData meshPartData = meshPart.Tag as MeshPartData;
+
+                        if (meshPartData is not null)
+                        {
+                            effect.Parameters["Texture"].SetValue(FindTexture(meshPartData.textureName));
+                        }
+                        else
+                        {
+                            effect.Parameters["Texture"].SetValue(texture);
+                        }
                         
 
                         // Draw the primitives using the custom effect
@@ -91,6 +108,15 @@ namespace RetroEngine
             }
         }
 
+        Texture2D FindTexture(string name)
+        {
+            if (textureSearchPath.Length > 2)
+            {
+                return AssetRegistry.LoadTextureFromFile(textureSearchPath + name);
+            }
+            return texture;
+            
+        }
         public virtual void DrawNormals()
         {
             GraphicsDevice graphicsDevice = GameMain.inst._graphics.GraphicsDevice;
@@ -203,6 +229,7 @@ namespace RetroEngine
                 return null;
             }
 
+            
 
             var meshParts = new List<ModelMeshPart>();
 
@@ -247,7 +274,7 @@ namespace RetroEngine
                 boundingSphere = CalculateBoundingSphere(vertices);
 
 
-                meshParts.Add(new ModelMeshPart { VertexBuffer = vertexBuffer, IndexBuffer = indexBuffer, StartIndex = 0, NumVertices = indices.Length, PrimitiveCount = primitiveCount });
+                meshParts.Add(new ModelMeshPart { VertexBuffer = vertexBuffer, IndexBuffer = indexBuffer, StartIndex = 0, NumVertices = indices.Length, PrimitiveCount = primitiveCount, Tag= new MeshPartData {textureName = Path.GetFileName(scene.Materials[mesh.MaterialIndex].TextureDiffuse.FilePath) } });
             }
 
 
