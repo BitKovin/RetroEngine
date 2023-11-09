@@ -1,0 +1,43 @@
+import bpy
+import bmesh
+import os
+
+# Set the path where you want to save the OBJ files.
+output_path = "F:/GitHub/RetroEngine/GameData/Animations/Pistol/Fire/"
+
+# Ensure the output folder exists
+os.makedirs(output_path, exist_ok=True)
+
+# Function to triangulate a mesh
+def triangulate_mesh(obj):
+    bm = bmesh.new()
+    bm.from_mesh(obj.data)
+    bmesh.ops.triangulate(bm, faces=bm.faces[:])
+    bm.to_mesh(obj.data)
+    bm.free()
+
+# Iterate through the animation frames
+for frame in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end + 1):
+    # Set the current frame
+    bpy.context.scene.frame_set(frame)
+
+    # Triangulate all mesh objects in the scene
+    for obj in bpy.context.scene.objects:
+        if obj.type == 'MESH':
+            triangulate_mesh(obj)
+
+    # Define the filename for the OBJ file (you can customize the naming scheme)
+    obj_filename = os.path.join(output_path, f"frame_{frame:04d}.obj")
+
+    # Export the entire scene as a single OBJ file for the current frame
+    bpy.ops.export_scene.obj(
+        filepath=obj_filename,
+        check_existing=False,
+        use_selection=False,  # Export the entire scene
+        use_animation=False,
+        use_mesh_modifiers=True,  # Apply modifiers to the mesh
+        use_edges=True,  # Triangulation is applied before export
+        use_smooth_groups=False,
+        use_normals=True,
+        use_materials=True,
+    )
