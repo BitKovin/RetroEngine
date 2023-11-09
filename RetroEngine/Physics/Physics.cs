@@ -1,5 +1,4 @@
 ﻿using BulletSharp;
-using BulletSharp.Math;
 using RetroEngine;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -7,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Numerics;
 
 namespace RetroEngine
 {
@@ -28,7 +28,7 @@ namespace RetroEngine
 
             // Create the dynamics world
             dynamicsWorld = new DiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfig);
-            dynamicsWorld.Gravity = new BulletSharp.Math.Vector3(0, -9.81f, 0); // Set gravity
+            dynamicsWorld.Gravity = new Vector3(0, -9.81f, 0); // Set gravity
             dynamicsWorld.DispatchInfo.UseContinuous = true;
 
         }
@@ -61,12 +61,12 @@ namespace RetroEngine
 
                     Entity ent = (Entity)colObj.UserObject;
 
-                    Vector3 pos = colObj.WorldTransform.Origin;
+                    Vector3 pos = colObj.WorldTransform.Translation;
 
                     ent.Position = new Microsoft.Xna.Framework.Vector3((float)pos.X, (float)pos.Y, (float)pos.Z);
 
-                    Matrix rotationMatrix = rigidBody.WorldTransform.Basis;
-                    Quaternion rotation = Quaternion.RotationMatrix(rotationMatrix);
+                    Matrix4x4 rotationMatrix = rigidBody.WorldTransform.GetBasis();
+                    Quaternion rotation = Quaternion.CreateFromRotationMatrix(rotationMatrix);
 
                     Vector3 rotationEulerAngles = ToEulerAngles(rotation);
 
@@ -126,7 +126,7 @@ namespace RetroEngine
 
             // Create a sphere shape
             var sphereShape = new SphereShape(1.0f);
-            var motionState = new DefaultMotionState(Matrix.Translation(0, 0, 0));
+            var motionState = new DefaultMotionState(Matrix4x4.CreateTranslation(0, 0, 0));
 
             Vector3 inertia = Vector3.Zero;
             sphereShape.CalculateLocalInertia(mass, out inertia);
@@ -153,7 +153,7 @@ namespace RetroEngine
 
             // Create a sphere shape
             var sphereShape = new BoxShape(size/2);
-            var motionState = new DefaultMotionState(Matrix.Translation(0, 0, 0));
+            var motionState = new DefaultMotionState(Matrix4x4.CreateTranslation(0, 0, 0));
 
             Vector3 inertia = Vector3.Zero;
             sphereShape.CalculateLocalInertia(mass, out inertia);
@@ -180,7 +180,7 @@ namespace RetroEngine
             RigidBody RigidBody;
 
 
-            var motionState = new DefaultMotionState(Matrix.Translation(0, 0, 0));
+            var motionState = new DefaultMotionState(Matrix4x4.CreateTranslation(0, 0, 0));
 
             Vector3 inertia = Vector3.Zero;
             shape.CalculateLocalInertia(mass, out inertia);
@@ -208,7 +208,7 @@ namespace RetroEngine
 
             // Create a sphere shape
             var Shape = new CapsuleShape(radius,HalfHeight);
-            var motionState = new DefaultMotionState(Matrix.Translation(0, 0, 0));
+            var motionState = new DefaultMotionState(Matrix4x4.CreateTranslation(0, 0, 0));
 
             Shape.Margin = 0f;
 
@@ -226,7 +226,7 @@ namespace RetroEngine
             RigidBody.Restitution = 0f;
             
 
-            Matrix fixedRotation = Matrix.Identity;
+            Matrix4x4 fixedRotation = Matrix4x4.Identity;
 
             return RigidBody;
         }
@@ -267,12 +267,12 @@ namespace RetroEngine
                 // Create a convex hull shape for each mesh
                 ConvexHullShape convexShape = CreateConvexHullShape(mesh, scale);
 
-                Matrix scaling = Matrix.Scaling(scale);
+                Matrix4x4 scaling = Matrix4x4.CreateScale(scale);
 
 
 
                 // Calculate the mesh's transformation matrix (position and rotation)
-                Matrix transform = Matrix.Identity;
+                Matrix4x4 transform = Matrix4x4.Identity;
 
                 // Add the convex shape to the compound shape with the calculated transformation
                 compoundShape.AddChildShape(transform, convexShape);

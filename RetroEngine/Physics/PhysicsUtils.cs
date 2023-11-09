@@ -1,5 +1,5 @@
 ﻿using BulletSharp;
-using BulletSharp.Math;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,27 +14,35 @@ namespace RetroEngine
         public static void SetPosition(this RigidBody body, Vector3 newPosition)
         {
             // Get the current orientation (rotation) of the body
-            Quaternion currentRotation = Quaternion.Identity;
+            Quaternion currentRotation = body.WorldTransform.GetRotation();
 
             // Create a new motion state with the updated position and current rotation
-            Matrix newTransform = Matrix.Translation(newPosition) * Matrix.RotationQuaternion(currentRotation);
-            DefaultMotionState newMotionState = new DefaultMotionState(newTransform);
+            Matrix newTransform = Matrix.CreateTranslation(newPosition) * Matrix.CreateFromQuaternion(currentRotation);
 
-            // Update the body's motion state to set the new position
-            body.MotionState = newMotionState;
 
             // Update the body's world transform directly to apply the transformation
-            body.WorldTransform = newTransform;
+            body.WorldTransform = newTransform.ToNumerics();
         }
 
-        public static Vector3 ToPhysics(this Microsoft.Xna.Framework.Vector3 vector)
+        public static void SetRotation(this RigidBody body, Quaternion newRotation)
         {
-            return new Vector3(vector.X, vector.Y, vector.Z);
+
+            // Create a new motion state with the updated position and current rotation
+            Matrix newTransform = Matrix.CreateTranslation(body.WorldTransform.Translation) * Matrix.CreateFromQuaternion(newRotation);
+
+
+            // Update the body's world transform directly to apply the transformation
+            body.WorldTransform = newTransform.ToNumerics();
         }
 
-        public static Matrix ToPhysics(this Microsoft.Xna.Framework.Matrix matrix)
+        public static System.Numerics.Vector3 ToPhysics(this Microsoft.Xna.Framework.Vector3 vector)
         {
-            Matrix newM = new Matrix();
+            return new System.Numerics.Vector3(vector.X, vector.Y, vector.Z);
+        }
+
+        public static System.Numerics.Matrix4x4 ToPhysics(this Microsoft.Xna.Framework.Matrix matrix)
+        {
+            System.Numerics.Matrix4x4 newM = new System.Numerics.Matrix4x4();
 
             newM.M11 = matrix.M11;
             newM.M12 = matrix.M12;

@@ -16,7 +16,7 @@ namespace RetroEngine
 
         public event CollisionEventHandler CollisionEvent;
 
-        public override double AddSingleResult(ManifoldPoint cp, CollisionObjectWrapper colObj0Wrap, int partId0, int index0, CollisionObjectWrapper colObj1Wrap, int partId1, int index1)
+        public override float AddSingleResult(ManifoldPoint cp, CollisionObjectWrapper colObj0Wrap, int partId0, int index0, CollisionObjectWrapper colObj1Wrap, int partId1, int index1)
         {
 
             CollisionEvent?.Invoke(colObj0Wrap, colObj1Wrap, colObj1Wrap.CollisionObject.UserObject as Entity, cp);

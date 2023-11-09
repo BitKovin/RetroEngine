@@ -94,7 +94,7 @@ namespace RetroEngine.Entities
             mesh.textureSearchPaths.Add("textures/weapons/");
             mesh.textureSearchPaths.Add("textures/weapons/pistol/");
 
-            cylinder.LoadFromFile("cylinder.obj");
+            //cylinder.LoadFromFile("cylinder.obj");
             //meshes.Add(cylinder);
 
             buttonRotate.onClicked += ButtonRotate_onClicked;
@@ -121,7 +121,7 @@ namespace RetroEngine.Entities
             base.Start();
 
             body = Physics.CreateCharacterCapsule(this, 1, 0.5f, 2);
-            body.Gravity = new BulletSharp.Math.Vector3(0, -35, 0);
+            body.Gravity = new Vector3(0, -35, 0).ToNumerics();
 
             body.SetPosition(Position.ToPhysics());
 
@@ -207,7 +207,7 @@ namespace RetroEngine.Entities
 
         void Jump()
         {
-            body.ApplyCentralImpulse(new BulletSharp.Math.Vector3(0, 25, 0));
+            body.ApplyCentralImpulse(new Vector3(0, 25, 0).ToNumerics());
         }
 
         void Shoot()

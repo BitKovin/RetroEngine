@@ -37,9 +37,9 @@ namespace RetroEngine.Entities
 
             mesh.Scale = size;
 
-            body.SetMassProps(0, new BulletSharp.Math.Vector3(0, 0, 0));
+            body.SetMassProps(0, new Vector3(0,0,0).ToNumerics());
 
-            body.SetPosition(new BulletSharp.Math.Vector3(Position.X, Position.Y, Position.Z));
+            body.SetPosition(Position.ToNumerics());
         }
 
         public override void Update()

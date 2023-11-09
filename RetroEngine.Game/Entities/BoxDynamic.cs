@@ -39,7 +39,7 @@ namespace RetroEngine.Game.Entities
             base.Start();
 
             body = Physics.CreateBox(this, scale.ToPhysics());
-            body.SetPosition(new BulletSharp.Math.Vector3(Position.X, Position.Y, Position.Z));
+            body.SetPosition(Position.ToNumerics());
             body.SetMassProps(scale.Length(), body.CollisionShape.CalculateLocalInertia(scale.Length()));
             mesh.Scale = scale;
 
@@ -56,6 +56,9 @@ namespace RetroEngine.Game.Entities
             base.Update();
 
             UpdateCollision();
+
+            if(Input.pressedKeys.Contains(Microsoft.Xna.Framework.Input.Keys.T))
+            body.SetRotation(Quaternion.CreateFromYawPitchRoll(0, 0, 0));
 
             mesh.Position = Position;
             mesh.Rotation = Rotation;
