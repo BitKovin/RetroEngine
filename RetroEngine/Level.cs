@@ -1,12 +1,11 @@
 ﻿using RetroEngine;
-using RetroEngine.Physics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Engine
+namespace RetroEngine
 {
     public class Level
     {
@@ -31,7 +30,8 @@ namespace Engine
             list.AddRange(entities);
 
             foreach (Entity entity in list)
-                entity.Update();
+                if(entity.UpdateWhilePaused&&GameMain.inst.paused|| GameMain.inst.paused == false)
+                    entity.Update();
         }
 
         public virtual void AsyncUpdate()
@@ -42,7 +42,8 @@ namespace Engine
 
             Parallel.ForEach(list, entity =>
             {
-                entity.AsyncUpdate();
+                if (entity.UpdateWhilePaused && GameMain.inst.paused || GameMain.inst.paused == false)
+                    entity.AsyncUpdate();
             });
         }
 
@@ -53,7 +54,8 @@ namespace Engine
             list.AddRange(entities);
 
             foreach (Entity entity in list)
-                entity.LateUpdate();
+                if (entity.UpdateWhilePaused && GameMain.inst.paused || GameMain.inst.paused == false)
+                    entity.LateUpdate();
         }
 
         public virtual void RenderPreparation()

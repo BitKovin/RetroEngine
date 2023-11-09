@@ -5,12 +5,13 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
-using Engine.UI;
+using RetroEngine.UI;
 using RetroEngine;
 using MonoGame.ImGuiNet;
 using RetroEngine.Audio;
+using ImGuiNET;
 
-namespace Engine
+namespace RetroEngine
 {
 
     public enum Platform
@@ -43,7 +44,9 @@ namespace Engine
         public Render render;
         ImGuiRenderer ImGuiRenderer;
 
-        protected DevMenu devMenu;
+        public DevMenu devMenu;
+
+        public bool paused = false;
 
         public GameMain()
         {
@@ -92,6 +95,7 @@ namespace Engine
         {
             ImGuiRenderer = new ImGuiRenderer(this);
             ImGuiRenderer.RebuildFontAtlas();
+            ImGui.StyleColorsDark();
 
             SpriteBatch = new SpriteBatch(GraphicsDevice);
             content = Content;
@@ -186,6 +190,7 @@ namespace Engine
 
             ImGuiRenderer.BeforeLayout(gameTime);
 
+
             if(devMenu is not null)
                 devMenu.Update();
 
@@ -212,6 +217,10 @@ namespace Engine
             _graphics.ApplyChanges();
         }
 
+        public virtual void OnLevelChanged()
+        {
+
+        }
 
     }
 }

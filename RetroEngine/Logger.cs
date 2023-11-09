@@ -1,20 +1,19 @@
 ﻿using RetroEngine;
-using ImGuiNET;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RetroEngine.Game
+namespace RetroEngine
 {
-    internal class GameDevMenu : DevMenu
+    public static class Logger
     {
 
-        public override void Update()
+        public static void Log(string s)
         {
-            base.Update();
-
+            Console.WriteLine(s);
+            GameMain.inst.devMenu.log.Add(s);
         }
 
     }

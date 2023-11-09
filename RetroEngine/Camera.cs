@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Engine
+namespace RetroEngine
 {
 
     public class Camera
@@ -30,10 +30,10 @@ namespace Engine
 
         public static void Update()
         {
-            HtW = GameMain.inst.Window.ClientBounds.Width / GameMain.inst.Window.ClientBounds.Height;
+            HtW = (float)GameMain.inst.Window.ClientBounds.Width / (float)GameMain.inst.Window.ClientBounds.Height;
 
             float ScaleY = (float)GameMain.inst.Window.ClientBounds.Height / Constants.ResoultionY;
-            var scale = Matrix.CreateScale(ScaleY * HtW, ScaleY, 1);
+            var scale = Matrix.CreateScale(ScaleY, ScaleY, 1);
 
             UiMatrix = scale;
 

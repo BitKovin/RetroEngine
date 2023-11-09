@@ -4,7 +4,7 @@ internal class Program
     private static void Main(string[] args)
     {
         using var game = new RetroEngine.Game.Game();
-        Engine.GameMain.platform = Engine.Platform.Desktop;
+        RetroEngine.GameMain.platform = RetroEngine.Platform.Desktop;
         game.Run();
     }
 }

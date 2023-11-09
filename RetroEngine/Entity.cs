@@ -10,7 +10,7 @@ using MonoGame.Framework;
 using RetroEngine;
 using RetroEngine.Map;
 
-namespace Engine
+namespace RetroEngine
 {
     public class Entity : IDisposable
     {
@@ -23,6 +23,8 @@ namespace Engine
         public Collision collision;
 
         public RigidBody body;
+
+        public bool UpdateWhilePaused = false;
 
         public Entity()
         {

@@ -1,6 +1,6 @@
 ﻿using BulletSharp;
 using BulletSharp.Math;
-using Engine;
+using RetroEngine;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RetroEngine.Physics
+namespace RetroEngine
 {
     public class Physics
     {
@@ -42,7 +42,8 @@ namespace RetroEngine.Physics
 
         public static void Update()
         {
-            dynamicsWorld.StepSimulation(Engine.Time.deltaTime,steps, Math.Max(1f/60f,Time.deltaTime));
+            if(GameMain.inst.paused == false)
+            dynamicsWorld.StepSimulation(RetroEngine.Time.deltaTime,steps, Math.Max(1f/60f,Time.deltaTime));
 
             
             for (int i = 0; i < dynamicsWorld.NumCollisionObjects; i++)

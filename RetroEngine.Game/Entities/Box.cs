@@ -3,12 +3,11 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using RetroEngine;
-using RetroEngine.Physics;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Engine.Entities
+namespace RetroEngine.Entities
 {
     public class Box:Entity
     {

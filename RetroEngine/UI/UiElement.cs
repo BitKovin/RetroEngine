@@ -3,11 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework.Input;
-using Engine;
+using RetroEngine;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
 
-namespace Engine.UI
+namespace RetroEngine.UI
 {
 
     public enum Origin
@@ -15,7 +15,9 @@ namespace Engine.UI
         Top,
         Bottom,
         Left,
-        Right
+        Right,
+        CenterH,
+        CenterV,
     }
 
     public static class Origins
@@ -23,10 +25,17 @@ namespace Engine.UI
         public static Vector2 Top = new Vector2();
         public static Vector2 Bottom = new Vector2(0, Constants.ResoultionY);
         public static Vector2 Left = new Vector2();
-        public static Vector2 Right = new Vector2(1280, 0);
+        public static Vector2 Right = new Vector2(Constants.ResoultionY*Camera.HtW, 0);
+        public static Vector2 CenterH = new Vector2(Constants.ResoultionY*Camera.HtW/2,0);
+        public static Vector2 CenterV = new Vector2(0, Constants.ResoultionY/2);
 
         public static Vector2 Get(Origin origin)
         {
+
+        Right = new Vector2(Constants.ResoultionY * Camera.HtW, 0);
+        CenterH = new Vector2(Constants.ResoultionY * Camera.HtW / 2, 0);
+        CenterV = new Vector2(0, Constants.ResoultionY / 2);
+
             switch (origin)
             {
                 default:
@@ -43,6 +52,12 @@ namespace Engine.UI
 
                 case Origin.Right:
                     return Right;
+
+                case Origin.CenterH:
+                    return CenterH;
+
+                case Origin.CenterV:
+                    return CenterV;
 
             }
 
@@ -74,9 +89,6 @@ namespace Engine.UI
 
         public virtual void Update()
         {
-
-            
-
             float ScaleY = GameMain.inst.Window.ClientBounds.Height / Constants.ResoultionY;
             float HtV = ((float)GameMain.inst.Window.ClientBounds.Width) / ((float)GameMain.inst.Window.ClientBounds.Height);
             Origins.Right = new Vector2(Constants.ResoultionY * HtV, 0);

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Engine
+namespace RetroEngine
 {
     public static class Time
     {

@@ -1,31 +1,30 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Engine.Entities;
+using RetroEngine.Entities;
 using RetroEngine.Game.Entities;
 using System;
 using RetroEngine.MapParser;
 using RetroEngine.Map;
-using Engine;
+using RetroEngine;
 
 namespace RetroEngine.Game
 {
-    public class Game : Engine.GameMain
+    public class Game : RetroEngine.GameMain
     {
         protected override void LoadContent()
         {
-
-            devMenu = new GameDevMenu();
-
             base.LoadContent();
+            devMenu = new GameDevMenu();
+            devMenu.Init();
+
+            
 
 
             MapData mapData = MapParser.MapParser.ParseMap("test.map");
 
             GameMain.inst.curentLevel = mapData.GetLevel();
-
-
-
+            GameMain.inst.OnLevelChanged();
 
             for (float i = 1; i < 0; i++)
             {
@@ -37,5 +36,14 @@ namespace RetroEngine.Game
             }
 
         }
+
+        public override void OnLevelChanged()
+        {
+            base.OnLevelChanged();
+
+            GameMain.inst.curentLevel.entities.Add(new PlayerGlobal());
+
+        }
+
     }
 }

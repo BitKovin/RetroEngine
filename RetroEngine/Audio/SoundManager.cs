@@ -1,4 +1,4 @@
-﻿using Engine;
+﻿using RetroEngine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using System;
@@ -35,7 +35,7 @@ namespace RetroEngine.Audio
 
 
 
-            float n = 3;
+            float n = 2.5f;
 
             distance -= MinDistance;
 
@@ -46,7 +46,7 @@ namespace RetroEngine.Audio
             float x = (distance / MaxDistance);
 
             // Calculate the attenuation factor based on the inverse square law
-            float attenuation = (1f-x) / ((x*5 + (1/n))*n);
+            float attenuation = (1f-x) / ((x*8 + (1/n))*n);
 
             // Set the volume and pitch based on attenuation
             float maxVolume = 1.0f; // Adjust this value for maximum volume

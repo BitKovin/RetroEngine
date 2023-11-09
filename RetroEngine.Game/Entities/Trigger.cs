@@ -1,6 +1,5 @@
-﻿using Engine;
-using Engine.Entities;
-using RetroEngine.Physics;
+﻿using RetroEngine;
+using RetroEngine.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,7 +43,7 @@ namespace RetroEngine.Game.Entities
         {
             base.Update();
 
-            Physics.Physics.PerformContactCheck(body, collisionCallback);
+            Physics.PerformContactCheck(body, collisionCallback);
 
         }
 

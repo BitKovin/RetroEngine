@@ -1,7 +1,6 @@
 ﻿using BulletSharp;
-using Engine;
+using RetroEngine;
 using Microsoft.Xna.Framework.Graphics;
-using RetroEngine.Physics;
 using RetroEngine;
 using System;
 using System.Collections.Generic;
@@ -30,7 +29,7 @@ namespace RetroEngine.Game.Entities
 
             mesh.texture = AssetRegistry.LoadTextureFromFile("cat.png");
 
-            body = Physics.Physics.CreateBox(this, new BulletSharp.Math.Vector3(1,1,1));
+            body = Physics.CreateBox(this, new BulletSharp.Math.Vector3(1,1,1));
 
             soundEffectInstance = AssetRegistry.LoadSoundFromFile("Sounds/test.wav").CreateInstance();
 

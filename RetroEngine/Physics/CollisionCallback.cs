@@ -1,12 +1,12 @@
 ﻿using BulletSharp;
-using Engine;
+using RetroEngine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RetroEngine.Physics
+namespace RetroEngine
 {
 
     public delegate void CollisionEventHandler(CollisionObjectWrapper thisObject, CollisionObjectWrapper collidedObject, Entity collidedEntity, ManifoldPoint contactPoint);

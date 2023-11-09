@@ -1,8 +1,7 @@
 ﻿using BulletSharp;
-using Engine;
+using RetroEngine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using RetroEngine.Physics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +22,8 @@ namespace RetroEngine.Map
         public Level GetLevel()
         {
             Level level = new Level();
+
+            level.Start();
 
             foreach(EntityData ent in Entities)
             {
@@ -46,13 +47,13 @@ namespace RetroEngine.Map
                             entity.meshes.Add(face);
 
 
-                            shape.AddChildShape(BulletSharp.Math.Matrix.Identity, Physics.Physics.CreateCollisionShapeFromModel(face.model));
+                            shape.AddChildShape(BulletSharp.Math.Matrix.Identity, Physics.CreateCollisionShapeFromModel(face.model));
 
 
                         }
                     }
 
-                    RigidBody rigidBody = Physics.Physics.CreateFromShape(entity, Vector3.One.ToPhysics(), shape, collisionFlags: BulletSharp.CollisionFlags.StaticObject);
+                    RigidBody rigidBody = Physics.CreateFromShape(entity, Vector3.One.ToPhysics(), shape, collisionFlags: BulletSharp.CollisionFlags.StaticObject);
 
                     entity.body = rigidBody;
 
@@ -78,6 +79,8 @@ namespace RetroEngine.Map
                 }
 
             }
+
+            //level.Start();
 
             return level;
         }

@@ -1,4 +1,4 @@
-﻿using Engine;
+﻿using RetroEngine;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -78,8 +78,6 @@ namespace RetroEngine
 
             string directory = Path.GetDirectoryName(path);
             string fileName = Path.GetFileName(path);
-
-            Console.WriteLine(ROOT_PATH + "GameData/" + path);
 
             if (File.Exists(ROOT_PATH + "GameData/" + path))
                 return ROOT_PATH + "GameData/" + path;

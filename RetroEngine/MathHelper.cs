@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Engine
+namespace RetroEngine
 {
     public static class MathHelper
     {

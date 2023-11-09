@@ -4,16 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using BulletSharp;
-using Engine.UI;
+using RetroEngine.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using RetroEngine;
 using RetroEngine.Game.Entities;
 using RetroEngine.Map;
-using RetroEngine.Physics;
 
-namespace Engine.Entities
+namespace RetroEngine.Entities
 {
 
     [LevelObject("info_player_start")]
@@ -67,7 +66,12 @@ namespace Engine.Entities
 
             collision.size = new Vector3(1,1,1);
 
+            Image crosshair = new Image();
 
+            crosshair.originH = Origin.CenterH;
+            crosshair.originV = Origin.CenterV;
+            crosshair.size = new Vector2(5, 5);
+            UiElement.main.childs.Add(crosshair);
 
             //Model model = GameMain.content.Load<Model>("pistol");
             meshes.Add(mesh);
