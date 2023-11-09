@@ -91,7 +91,8 @@ namespace RetroEngine.Entities
             mesh.AddFrame("Animations/Pistol/Fire/frame_0010.obj");
             mesh.frameTime = 1f / 30f;
             //mesh.texture = AssetRegistry.LoadTextureFromFile("usp.png");
-            mesh.textureSearchPath = "textures/weapons/";
+            mesh.textureSearchPaths.Add("textures/weapons/");
+            mesh.textureSearchPaths.Add("textures/weapons/pistol/");
 
             cylinder.LoadFromFile("cylinder.obj");
             //meshes.Add(cylinder);

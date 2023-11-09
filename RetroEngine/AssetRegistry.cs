@@ -21,7 +21,7 @@ namespace RetroEngine
 
         const string ROOT_PATH = "../../../../";
 
-        public static Texture2D LoadTextureFromFile(string path)
+        public static Texture2D LoadTextureFromFile(string path, bool ignoreErrors = false)
         {
             if (textures.ContainsKey(path))
                 return textures[path];
@@ -40,8 +40,9 @@ namespace RetroEngine
             }
             catch (Exception ex)
             {
-                // Handle any exceptions that occur during texture loading
-                Console.WriteLine("Failed to load texture: " + ex.Message);
+                if(!ignoreErrors)
+                    Console.WriteLine("Failed to load texture: " + ex.Message);
+                textures.Add(path,null);
                 return null;
             }
 
@@ -67,7 +68,7 @@ namespace RetroEngine
             catch (Exception ex)
             {
                 // Handle any exceptions that occur during texture loading
-                Console.WriteLine("Failed to load texture: " + ex.Message);
+                Console.WriteLine("Failed to load sound: " + ex.Message);
                 return null;
             }
 

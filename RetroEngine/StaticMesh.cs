@@ -27,7 +27,7 @@ namespace RetroEngine
         public Model model;
 
         public Texture2D texture;
-        public string textureSearchPath = "";
+        public List<string> textureSearchPaths = new List<string>();
 
         public float CalculatedCameraDistance = 0;
 
@@ -110,9 +110,16 @@ namespace RetroEngine
 
         Texture2D FindTexture(string name)
         {
-            if (textureSearchPath.Length > 2)
+            Texture2D output;
+            if (textureSearchPaths.Count > 0)
             {
-                return AssetRegistry.LoadTextureFromFile(textureSearchPath + name);
+                foreach (string item in textureSearchPaths)
+                {
+                    output = AssetRegistry.LoadTextureFromFile(item + name, true);
+                    if (output != null)
+                        return output;
+                }
+                
             }
             return texture;
             
