@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace RetroEngine
 {
-    public class Level
+    public class Level : IDisposable
     {
         public List<Entity> entities;
 
@@ -21,6 +21,36 @@ namespace RetroEngine
             Physics.Start();
         }
 
+        public static Level GetCurrent()
+        {
+            return GameMain.inst.curentLevel;
+        }
+
+        public static void LoadFromFile(string name)
+        {
+
+            List<Entity> list = new List<Entity>();
+            list.AddRange(GameMain.inst.curentLevel.entities);
+
+            foreach (Entity entity in list)
+            {
+                entity.Destroy();
+            }
+
+            GameMain.inst.curentLevel = MapParser.MapParser.ParseMap(AssetRegistry.FindPathForFile(name)).GetLevel();
+            GameMain.inst.OnLevelChanged();
+            GameMain.inst.curentLevel.StartEnities();
+        }
+
+        public virtual void StartEnities()
+        {
+            List<Entity> list = new List<Entity>();
+            list.AddRange(entities);
+            foreach (Entity entity in list)
+            {
+                entity.Start();
+            }
+        }
 
         public virtual void Update()
         {
@@ -94,5 +124,20 @@ namespace RetroEngine
             return list;
         }
 
+        public Entity AddEntity(Entity ent)
+        {
+            entities.Add(ent);
+
+            return ent;
+        }
+
+        public void Dispose()
+        {
+            foreach (Entity ent in entities)
+                ent.Dispose();
+
+            entities.Clear();
+            entities = null;
+        }
     }
 }

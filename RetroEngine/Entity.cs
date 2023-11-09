@@ -26,6 +26,8 @@ namespace RetroEngine
 
         public bool UpdateWhilePaused = false;
 
+        public List<string> Tags = new List<string>();
+
         public Entity()
         {
             collision = new Collision();
@@ -67,14 +69,12 @@ namespace RetroEngine
 
         public virtual void Destroy()
         {
-
+            GameMain.inst.curentLevel.entities.Remove(this);
+            Dispose();
         }
 
         public void Dispose()
         {
-            AssetRegistry.RemoveReference(this);
-
-            // Suppress finalization.
             GC.SuppressFinalize(this);
         }
     }

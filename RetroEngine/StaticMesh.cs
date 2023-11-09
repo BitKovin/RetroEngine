@@ -39,6 +39,8 @@ namespace RetroEngine
 
         public bool Transperent = false;
 
+        Dictionary<string, Texture2D> textures = new Dictionary<string, Texture2D>();
+
         public virtual void Draw()
         {
             foreach (ModelMesh mesh in model.Meshes)
@@ -110,6 +112,9 @@ namespace RetroEngine
 
         Texture2D FindTexture(string name)
         {
+            if (textures.ContainsKey(name))
+                return textures[name];
+
             Texture2D output;
             if (textureSearchPaths.Count > 0)
             {
@@ -117,7 +122,10 @@ namespace RetroEngine
                 {
                     output = AssetRegistry.LoadTextureFromFile(item + name, true);
                     if (output != null)
+                    {
+                        textures.Add(name, output);
                         return output;
+                    }
                 }
                 
             }

@@ -18,13 +18,7 @@ namespace RetroEngine.Game
             devMenu = new GameDevMenu();
             devMenu.Init();
 
-            
-
-
-            MapData mapData = MapParser.MapParser.ParseMap("test.map");
-
-            GameMain.inst.curentLevel = mapData.GetLevel();
-            GameMain.inst.OnLevelChanged();
+            Level.LoadFromFile("test.map");
 
             for (float i = 1; i < 0; i++)
             {

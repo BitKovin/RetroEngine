@@ -99,6 +99,8 @@ namespace RetroEngine.Entities
 
             buttonRotate.onClicked += ButtonRotate_onClicked;
 
+            Tags.Add("player");
+
         }
 
         private void ButtonRotate_onClicked()

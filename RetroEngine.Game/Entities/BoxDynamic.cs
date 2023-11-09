@@ -1,7 +1,6 @@
 ﻿using BulletSharp;
 using RetroEngine;
 using Microsoft.Xna.Framework.Graphics;
-using RetroEngine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Audio;
 using RetroEngine.Audio;
 using Microsoft.Xna.Framework;
+using RetroEngine.Entities;
 
 namespace RetroEngine.Game.Entities
 {
@@ -19,9 +19,9 @@ namespace RetroEngine.Game.Entities
     {
         StaticMesh mesh = new StaticMesh();
 
-        SoundEffectInstance soundEffectInstance;
-
         public Vector3 scale = new Vector3(1);
+
+        SoundPlayer soundPlayer;
 
         public BoxDynamic() : base()
         {
@@ -31,11 +31,6 @@ namespace RetroEngine.Game.Entities
             mesh.model = model;
 
             mesh.texture = AssetRegistry.LoadTextureFromFile("cat.png");
-
-            soundEffectInstance = AssetRegistry.LoadSoundFromFile("Sounds/test.wav").CreateInstance();
-
-            soundEffectInstance.Play();
-            soundEffectInstance.IsLooped = true;
         }
 
 
@@ -47,6 +42,13 @@ namespace RetroEngine.Game.Entities
             body.SetPosition(new BulletSharp.Math.Vector3(Position.X, Position.Y, Position.Z));
             body.SetMassProps(scale.Length(), body.CollisionShape.CalculateLocalInertia(scale.Length()));
             mesh.Scale = scale;
+
+            soundPlayer = Level.GetCurrent().AddEntity(new SoundPlayer()) as SoundPlayer;
+
+            soundPlayer.SetSound(AssetRegistry.LoadSoundFromFile("Sounds/test.wav"));
+            soundPlayer.IsLooped = true;
+            soundPlayer.Play();
+
         }
 
         public override void Update()
@@ -58,9 +60,7 @@ namespace RetroEngine.Game.Entities
             mesh.Position = Position;
             mesh.Rotation = Rotation;
 
-            soundEffectInstance.ApplyPosition(Position);
-
-
+            soundPlayer.Position = Position;
         }
     }
 }

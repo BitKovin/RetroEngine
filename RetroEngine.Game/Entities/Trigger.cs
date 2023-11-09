@@ -10,40 +10,14 @@ namespace RetroEngine.Game.Entities
 {
 
     [LevelObject("trigger")]
-    public class Trigger : Entity
+    public class Trigger : TriggerBase
     {
 
-        CollisionCallback collisionCallback = new CollisionCallback();
-
-        public override void Start()
+        public override void OnTriggerEnter(Entity entity)
         {
-            base.Start();
+            base.OnTriggerEnter(entity);
 
-            body.CollisionFlags = BulletSharp.CollisionFlags.NoContactResponse;
-
-            collisionCallback.CollisionEvent += OnTriggerEntered;
-
-            meshes[0].Transperent = true;
-        }
-
-        private void OnTriggerEntered(BulletSharp.CollisionObjectWrapper thisObject, BulletSharp.CollisionObjectWrapper collidedObject, Entity collidedEntity, BulletSharp.ManifoldPoint contactPoint)
-        {
-            if (collidedEntity is null) return;
-
-            if(collidedEntity.GetType() == typeof(Player)) 
-            {
-
-                Console.WriteLine("trigger");
-
-            }
-
-        }
-
-        public override void Update()
-        {
-            base.Update();
-
-            Physics.PerformContactCheck(body, collisionCallback);
+            Console.WriteLine(entity.Position.ToString());
 
         }
 

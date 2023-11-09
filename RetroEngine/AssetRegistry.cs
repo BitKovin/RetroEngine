@@ -17,14 +17,21 @@ namespace RetroEngine
 
         static Dictionary<string, SoundEffect> sounds = new Dictionary<string, SoundEffect>();
 
-        static Dictionary<object, string> references = new Dictionary<object, string>();
+        static List<string> texturesHistory = new List<string>();
+
+        static List<string> nullTextures= new List<string>();
 
         const string ROOT_PATH = "../../../../";
+
+        const int MaxTexturesInMemory = 50;
 
         public static Texture2D LoadTextureFromFile(string path, bool ignoreErrors = false)
         {
             if (textures.ContainsKey(path))
                 return textures[path];
+
+            if(nullTextures.Contains(path))
+                return null;
 
             string filePpath = FindPathForFile(path);
 
@@ -34,6 +41,7 @@ namespace RetroEngine
                 {
 
                     textures.Add(path, Texture2D.FromStream(GameMain.inst.GraphicsDevice, stream));
+                    texturesHistory.Add(path);
 
                     return textures[path];
                 }
@@ -42,7 +50,7 @@ namespace RetroEngine
             {
                 if(!ignoreErrors)
                     Console.WriteLine("Failed to load texture: " + ex.Message);
-                textures.Add(path,null);
+                nullTextures.Add(path);
                 return null;
             }
 
@@ -74,6 +82,21 @@ namespace RetroEngine
 
         }
 
+        public static void ClearTexturesIfNeeded()
+        {
+            if(texturesHistory.Count>MaxTexturesInMemory)
+            {
+                int numToRemove = texturesHistory.Count - MaxTexturesInMemory;
+
+                for (int i = 0; i < numToRemove; i++)
+                {
+                    textures.Remove(texturesHistory[0]);
+                    texturesHistory.RemoveAt(0);
+                    
+                }
+            }
+        }
+
         public static string FindPathForFile(string path)
         {
 
@@ -91,15 +114,6 @@ namespace RetroEngine
 
 
             return path;
-        }
-        public static void AddReference(object reference, string key)
-        {
-            references.Add(reference, key);
-        }
-
-        public static void RemoveReference(object reference)
-        {
-            references.Remove(reference);
         }
 
     }

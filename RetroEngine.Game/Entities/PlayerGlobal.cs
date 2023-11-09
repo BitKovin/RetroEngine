@@ -19,14 +19,17 @@ namespace RetroEngine.Game.Entities
         {
             base.Update();
 
-            if(Input.pressedKeys.Contains(Keys.Escape))
+            if (Input.pressedKeys.Contains(Keys.Escape))
             {
                 GameMain.inst.paused = !GameMain.inst.paused;
             }
 
             Input.LockCursor = !GameMain.inst.paused;
 
+            if (Input.pressedKeys.Contains(Keys.R))
+            {
+                Level.LoadFromFile("maps/test.map");
+            }
         }
-
     }
 }

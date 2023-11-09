@@ -113,6 +113,8 @@ namespace RetroEngine
 
             time = gameTime;
 
+            AssetRegistry.ClearTexturesIfNeeded();
+
             this.Exiting += Game1_Exiting;
 
             Time.deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;

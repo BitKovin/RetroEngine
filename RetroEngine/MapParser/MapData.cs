@@ -58,8 +58,6 @@ namespace RetroEngine.Map
                     entity.body = rigidBody;
 
                     level.entities.Add(entity);
-                    entity.Start();
-
                 }
                 else
                 {
@@ -75,7 +73,7 @@ namespace RetroEngine.Map
                     entity.FromData(ent);
 
                     level.entities.Add(entity);
-                    entity.Start();
+                    //entity.Start();
                 }
 
             }
