@@ -27,6 +27,11 @@ struct PixelInput
 	float3 Normal : TEXCOORD1; // Pass normal to pixel shader
 };
 
+float3 normalize(float3 v)
+{
+  return rsqrt(dot(v,v))*v;
+}
+
 PixelInput VertexShaderFunction(VertexInput input)
 {
     PixelInput output;
@@ -38,6 +43,7 @@ PixelInput VertexShaderFunction(VertexInput input)
 
 	// Pass the world space normal to the pixel shader
     output.Normal = mul(input.Normal, (float3x3)World);
+    output.Normal = normalize(output.Normal);
 
     return output;
 }

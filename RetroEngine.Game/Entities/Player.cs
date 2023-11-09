@@ -77,6 +77,8 @@ namespace RetroEngine.Entities
             //Model model = GameMain.content.Load<Model>("pistol");
             meshes.Add(mesh);
 
+            mesh.Scale = new Vector3(1,1,1);
+
             mesh.AddFrame("Animations/Pistol/Fire/frame_0001.obj");
             mesh.AddFrame("Animations/Pistol/Fire/frame_0002.obj");
             mesh.AddFrame("Animations/Pistol/Fire/frame_0003.obj");
