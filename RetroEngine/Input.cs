@@ -28,7 +28,9 @@ namespace RetroEngine
 
             Vector2 windowCenter = new Vector2(GameMain.inst.GraphicsDevice.Viewport.Width / 2, GameMain.inst.GraphicsDevice.Viewport.Height / 2);
 
-            if (LockCursor)
+            GameMain.inst.IsMouseVisible = !LockCursor;
+
+            if (LockCursor) 
                 if (Vector2.Distance(windowCenter, mousePos) > 1)
                 {
                     Mouse.SetPosition((int)windowCenter.X, (int)windowCenter.Y);

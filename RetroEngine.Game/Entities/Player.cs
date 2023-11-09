@@ -70,7 +70,8 @@ namespace RetroEngine.Entities
 
             crosshair.originH = Origin.CenterH;
             crosshair.originV = Origin.CenterV;
-            crosshair.size = new Vector2(5, 5);
+            crosshair.position = new Vector2(-2);
+            crosshair.size = new Vector2(4, 4);
             UiElement.main.childs.Add(crosshair);
 
             //Model model = GameMain.content.Load<Model>("pistol");
