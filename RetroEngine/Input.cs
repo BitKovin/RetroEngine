@@ -17,14 +17,15 @@ namespace RetroEngine
 
         public static bool LockCursor = true;
 
+        public static float sensitivity = 0.5f;
+
         public static void Update()
         {
 
-            float ScaleY = (float)GameMain.inst.Window.ClientBounds.Height / Constants.ResoultionY;
-
             Vector2 mousePos = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
             MouseDelta = mousePos - MousePos;
-            MouseDelta /= ScaleY;
+
+            MouseDelta *= sensitivity;
 
             Vector2 windowCenter = new Vector2(GameMain.inst.GraphicsDevice.Viewport.Width / 2, GameMain.inst.GraphicsDevice.Viewport.Height / 2);
 
@@ -38,8 +39,6 @@ namespace RetroEngine
 
             MousePos = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
             
-
-
             pressedKeys.Clear();
             releasedKeys.Clear();
 

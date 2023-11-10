@@ -47,9 +47,10 @@ namespace RetroEngine.Entities
                 soundEffectInstance.Play();
             
 
-            soundEffectInstance.ApplyPosition(Position, MaxDistance, MinDistance);
+                soundEffectInstance.ApplyPosition(Position, MaxDistance, MinDistance);
 
-            soundEffectInstance.Volume *= Volume;
+                soundEffectInstance.Volume *= Volume;
+
             }
         }
 

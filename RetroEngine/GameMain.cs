@@ -117,7 +117,7 @@ namespace RetroEngine
 
             this.Exiting += Game1_Exiting;
 
-            Time.deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            Time.deltaTime = (float)Math.Min(gameTime.ElapsedGameTime.TotalSeconds,0.07d);
 
             ScreenHeight = GraphicsDevice.PresentationParameters.Bounds.Height;
 
