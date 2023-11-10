@@ -39,6 +39,8 @@ namespace RetroEngine
 
         public bool Transperent = false;
 
+        public bool Viewmodel = false;
+
         Dictionary<string, Texture2D> textures = new Dictionary<string, Texture2D>();
 
         public virtual void Draw()
@@ -79,7 +81,7 @@ namespace RetroEngine
                         // Set effect parameters
                         effect.Parameters["World"].SetValue(GetWorldMatrix());
                         effect.Parameters["View"].SetValue(Camera.view);
-                        effect.Parameters["Projection"].SetValue(Camera.projection);
+                        effect.Parameters["Projection"].SetValue(Viewmodel? Camera.projectionViewmodel : Camera.projection);
 
                         MeshPartData meshPartData = meshPart.Tag as MeshPartData;
 

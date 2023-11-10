@@ -18,8 +18,11 @@ namespace RetroEngine
         public static Matrix world;
         public static Matrix view;
         public static Matrix projection;
+        public static Matrix projectionViewmodel;
 
-        public static float FOV = 60;
+        public static float roll = 10;
+        public static float FOV = 70;
+        public static float ViewmodelFOV = 60;
 
         public static Vector3 velocity = new Vector3(0,0,0);
 
@@ -40,9 +43,10 @@ namespace RetroEngine
             //rotation = new Vector3(Input.MousePos.Y, Input.MousePos.X, 0);
             //position = new Vector3(0, 0, 0);
             world = Matrix.CreateTranslation(Vector3.Zero);
-            view = Matrix.CreateLookAt(position, position + rotation.GetForwardVector(), Vector3.UnitY);
-            projection = Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.ToRadians(FOV), (float)GameMain.inst.Window.ClientBounds.Width / (float)GameMain.inst.Window.ClientBounds.Height, 0.01f, 1000000f); 
+            view = Matrix.CreateLookAt(position, position + rotation.GetForwardVector(), rotation.GetUpVector().RotateVector(rotation.GetForwardVector(),roll));
 
+            projection = Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.ToRadians(FOV), (float)GameMain.inst.Window.ClientBounds.Width / (float)GameMain.inst.Window.ClientBounds.Height, 0.01f, 100000f);
+            projectionViewmodel = Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.ToRadians(ViewmodelFOV), (float)GameMain.inst.Window.ClientBounds.Width / (float)GameMain.inst.Window.ClientBounds.Height, 0.02f, 100f);
         }
 
         public static void Follow(Entity target)

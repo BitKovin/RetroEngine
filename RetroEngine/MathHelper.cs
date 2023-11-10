@@ -56,7 +56,19 @@ namespace RetroEngine
             return new Vector3(vector.X, 0, vector.Z);
         }
 
-        
+        public static Vector3 RotateVector(this Vector3 vector, Vector3 axis, float angleInDegrees)
+        {
+            // Convert angle to radians
+            float angleInRadians = angleInDegrees/180f * 3.141f;
+
+            // Create a rotation matrix
+            Matrix rotationMatrix = Matrix.CreateFromAxisAngle(axis, angleInRadians);
+
+            // Apply the rotation matrix to the vector
+            Vector3 rotatedVector = Vector3.Transform(vector, rotationMatrix);
+
+            return rotatedVector;
+        }
 
     }
 }

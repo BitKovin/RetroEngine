@@ -94,6 +94,8 @@ namespace RetroEngine.Entities
             mesh.textureSearchPaths.Add("textures/weapons/");
             mesh.textureSearchPaths.Add("textures/weapons/pistol/");
 
+            mesh.Viewmodel = true;
+
             //cylinder.LoadFromFile("cylinder.obj");
             //meshes.Add(cylinder);
 
@@ -138,19 +140,21 @@ namespace RetroEngine.Entities
             Vector2 input = new Vector2();
 
             if (buttonUp.pressing || Keyboard.GetState().IsKeyDown(Keys.W)|| buttonUpRight.pressing || buttonUpLeft.pressing)
-                input += new Vector2(0, 100)*Time.deltaTime;
+                input += new Vector2(0, 1);
 
             if (buttonDown.pressing || Keyboard.GetState().IsKeyDown(Keys.S))
-                input -= new Vector2(0, 100) * Time.deltaTime;
+                input -= new Vector2(0, 1) ;
 
             if (buttonRight.pressing || Keyboard.GetState().IsKeyDown(Keys.D) || buttonUpRight.pressing)
-                input += new Vector2(100, 0) * Time.deltaTime;
+                input += new Vector2(1, 0);
 
             if (buttonLeft.pressing || Keyboard.GetState().IsKeyDown(Keys.A) || buttonUpLeft.pressing)
-                input -= new Vector2(100, 0) * Time.deltaTime;
+                input -= new Vector2(1, 0);
 
             Camera.rotation += new Vector3(Input.MouseDelta.Y, -Input.MouseDelta.X, 10)/2f;
             Camera.rotation = new Vector3(Math.Clamp(Camera.rotation.X, -89, 89), Camera.rotation.Y, 0);
+
+            Camera.roll = input.X;
 
             Vector3 motion = new Vector3();
 
