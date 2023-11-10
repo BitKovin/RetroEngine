@@ -57,9 +57,6 @@ namespace RetroEngine.Game.Entities
 
             UpdateCollision();
 
-            if(Input.pressedKeys.Contains(Microsoft.Xna.Framework.Input.Keys.T))
-            body.SetRotation(Quaternion.CreateFromYawPitchRoll(0, 0, 0));
-
             mesh.Position = Position;
             mesh.Rotation = Rotation;
 
