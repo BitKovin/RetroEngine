@@ -56,6 +56,10 @@ namespace RetroEngine
             return new Vector3(vector.X, 0, vector.Z);
         }
 
+        public static float Lerp(float a, float b, float progress)
+        {
+            return Vector2.Lerp(new Vector2(a), new Vector2(b), progress).X;
+        }
         public static Vector3 RotateVector(this Vector3 vector, Vector3 axis, float angleInDegrees)
         {
             // Convert angle to radians

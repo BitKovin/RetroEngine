@@ -20,7 +20,7 @@ namespace RetroEngine
         public static Matrix projection;
         public static Matrix projectionViewmodel;
 
-        public static float roll = 10;
+        public static float roll = 0;
         public static float FOV = 70;
         public static float ViewmodelFOV = 60;
 

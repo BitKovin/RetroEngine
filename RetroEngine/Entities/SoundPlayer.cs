@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Audio;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using RetroEngine.Audio;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,11 @@ namespace RetroEngine.Entities
 
         bool _looped;
 
+        bool playing = false;
+
         public bool IsLooped { get { return _looped; } set { if (soundEffectInstance != null) { soundEffectInstance.IsLooped = value; } _looped = value; } }
+
+        bool paused;
 
         public SoundPlayer() { }
 
@@ -27,10 +32,25 @@ namespace RetroEngine.Entities
         {
             base.LateUpdate();
 
+            if (Vector3.Distance(Camera.position, Position) > MaxDistance * 1.1f)
+            {
+                soundEffectInstance.Pause();
+                return;
+            }
+
+            if (paused) 
+            {
+                soundEffectInstance.Pause();
+            }
+            else if(playing)
+            {
+                soundEffectInstance.Play();
+            
+
             soundEffectInstance.ApplyPosition(Position, MaxDistance, MinDistance);
 
             soundEffectInstance.Volume *= Volume;
-
+            }
         }
 
         public void SetSound(SoundEffect sound)
@@ -45,16 +65,19 @@ namespace RetroEngine.Entities
         public void Play()
         {
             soundEffectInstance.Play();
+            paused = false;
+            playing = true;
         }
 
         public void Stop()
         {
             soundEffectInstance.Stop();
+            playing = false;
         }
 
         public void Pause()
         {
-            soundEffectInstance.Pause();
+            paused = true;
         }
 
         public override void Destroy()

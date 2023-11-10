@@ -20,7 +20,6 @@ namespace RetroEngine
 
         public List<StaticMesh> meshes = new List<StaticMesh>();
 
-        public Collision collision;
 
         public RigidBody body;
 
@@ -30,9 +29,6 @@ namespace RetroEngine
 
         public Entity()
         {
-            collision = new Collision();
-
-            //PhysicsBody = Physics.Physics.CreateBox(0, 0, 0, 0, this);
 
         }
 

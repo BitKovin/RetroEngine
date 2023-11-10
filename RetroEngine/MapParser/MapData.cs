@@ -25,6 +25,7 @@ namespace RetroEngine.Map
 
             level.Start();
 
+
             foreach(EntityData ent in Entities)
             {
                 if (ent.Brushes.Count > 0)
@@ -37,8 +38,6 @@ namespace RetroEngine.Map
                     CompoundShape shape = new CompoundShape();
                     foreach (BrushData brush in ent.Brushes)
                     {
-                        
-
                         foreach (var face in BrushFaceMesh.GetFacesFromPath(Path.Replace(".map", ".obj"), "entity" + ent.name + "_" + "brush" + brush.Name))
                         {
 

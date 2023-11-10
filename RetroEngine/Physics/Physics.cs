@@ -43,7 +43,7 @@ namespace RetroEngine
         public static void Update()
         {
             if(GameMain.inst.paused == false)
-            dynamicsWorld.StepSimulation(RetroEngine.Time.deltaTime,steps, Math.Max(1f/60f,Time.deltaTime));
+                dynamicsWorld.StepSimulation(RetroEngine.Time.deltaTime,steps, Math.Max(1f/60f,Time.deltaTime));
 
             
             for (int i = 0; i < dynamicsWorld.NumCollisionObjects; i++)

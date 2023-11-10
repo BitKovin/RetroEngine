@@ -40,6 +40,8 @@ namespace RetroEngine.Entities
 
         Vector3 bob;
 
+        float cameraRoll;
+
         public Player():base()
         {
 
@@ -64,7 +66,6 @@ namespace RetroEngine.Entities
             }
             //Camera.Follow(this);
 
-            collision.size = new Vector3(1,1,1);
 
             Image crosshair = new Image();
 
@@ -91,7 +92,7 @@ namespace RetroEngine.Entities
             mesh.AddFrame("Animations/Pistol/Fire/frame_0010.obj");
             mesh.frameTime = 1f / 30f;
             //mesh.texture = AssetRegistry.LoadTextureFromFile("usp.png");
-            mesh.textureSearchPaths.Add("textures/weapons/");
+            mesh.textureSearchPaths.Add("textures/weapons/arms/");
             mesh.textureSearchPaths.Add("textures/weapons/pistol/");
 
             mesh.Viewmodel = true;
@@ -154,7 +155,9 @@ namespace RetroEngine.Entities
             Camera.rotation += new Vector3(Input.MouseDelta.Y, -Input.MouseDelta.X, 10)/2f;
             Camera.rotation = new Vector3(Math.Clamp(Camera.rotation.X, -89, 89), Camera.rotation.Y, 0);
 
-            Camera.roll = input.X;
+            cameraRoll = MathHelper.Lerp(cameraRoll, input.X * 2, Time.deltaTime*10);
+
+            Camera.roll = cameraRoll;
 
             Vector3 motion = new Vector3();
 
@@ -250,20 +253,6 @@ namespace RetroEngine.Entities
 
 
         }
-
-
-        bool IsCollide()
-        {
-            foreach(Entity entity in GameMain.inst.curentLevel.entities)
-            {
-                if(entity!=this)
-                if(Collision.MakeCollionTest(collision, entity.collision))
-                    return true;
-            }
-            return false;
-        }
-
-
 
     }
 }

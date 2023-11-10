@@ -25,6 +25,7 @@ namespace RetroEngine
             //string consoleContent = sb.ToString();
 
             ImGui.Begin("Console");
+            ImGui.Text("fps: " + 1f / Time.deltaTime);
 
             //ImGui.InputTextMultiline("log", ref consoleContent, uint.MaxValue, new Vector2(ImGui.GetWindowWidth(), ImGui.GetWindowHeight()-60),ImGuiInputTextFlags.ReadOnly);
 

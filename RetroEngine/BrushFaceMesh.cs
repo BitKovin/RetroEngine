@@ -19,6 +19,8 @@ namespace RetroEngine
             this.texture = texture;
         }
 
+        static Dictionary<string, Assimp.Scene> scenes = new Dictionary<string, Assimp.Scene>();
+
         public static List<BrushFaceMesh> GetFacesFromPath(string filePath, string objectName, float unitSize = 32)
         {
             GraphicsDevice graphicsDevice = GameMain.inst.GraphicsDevice;
@@ -26,7 +28,22 @@ namespace RetroEngine
             List<BrushFaceMesh> models = new List<BrushFaceMesh>();
 
             var importer = new Assimp.AssimpContext();
-            var scene = importer.ImportFile(filePath, Assimp.PostProcessSteps.MakeLeftHanded | Assimp.PostProcessSteps.FlipUVs);
+
+            Assimp.Scene scene;
+            if (scenes.ContainsKey(filePath))
+                scene = scenes[filePath];
+            else
+            {
+                scene = importer.ImportFile(filePath, Assimp.PostProcessSteps.MakeLeftHanded | Assimp.PostProcessSteps.FlipUVs);
+                scenes.Add(filePath, scene);
+            }
+
+            if (scene == null)
+            {
+                // Error handling for failed file import
+                return null;
+            }
+
 
             if (scene == null)
             {
