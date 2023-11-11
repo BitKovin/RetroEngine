@@ -29,6 +29,8 @@ namespace RetroEngine.Game
                 boxDynamic.Start();
             }
 
+            Window.Title = "Game";
+
         }
 
         public override void OnLevelChanged()
