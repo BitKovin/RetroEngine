@@ -14,6 +14,7 @@ namespace RetroEngine
         static List<Keys> oldKeys = new List<Keys>();
         public static List<Keys> pressedKeys = new List<Keys>();
         public static List<Keys> releasedKeys = new List<Keys>();
+        public static List<Keys> holdKeys = new List<Keys>();
 
         public static bool LockCursor = true;
 
@@ -43,6 +44,7 @@ namespace RetroEngine
             releasedKeys.Clear();
 
             Keys[] keysNow = Keyboard.GetState().GetPressedKeys();
+            holdKeys = new List<Keys>(keysNow);
             List<Keys> keysOld = oldKeys;
             List<Keys> pressingKeys = new List<Keys>();
 

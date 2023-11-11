@@ -12,6 +12,11 @@ matrix View;
 matrix Projection;
 texture Texture;
 sampler TextureSampler = sampler_state { texture = <Texture>; };
+
+float DirectBrightness;
+float GlobalBrightness;
+float3 LightDirection;
+
 struct VertexInput
 {
     float4 Position : POSITION0;
@@ -54,9 +59,9 @@ float4 PixelShaderFunction(PixelInput input) : COLOR0
 	float3 textureColor = tex2D(TextureSampler, input.TexCoord).xyz;
 	float textureAlpha = tex2D(TextureSampler, input.TexCoord).w;
 
-	float lightingFactor = max(-0.3, dot(input.Normal, normalize(float3(0, 1, 0.2)))) * 0.5; // Example light direction
+	float lightingFactor = max(-0.3, dot(input.Normal, normalize(-LightDirection))) * DirectBrightness; // Example light direction
 
-	lightingFactor += 0.5;
+	lightingFactor += GlobalBrightness;
 
 	textureColor *= lightingFactor;
 

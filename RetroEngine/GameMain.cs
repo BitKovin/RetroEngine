@@ -10,6 +10,7 @@ using RetroEngine;
 using MonoGame.ImGuiNet;
 using RetroEngine.Audio;
 using ImGuiNET;
+using System.Threading.Tasks;
 
 namespace RetroEngine
 {
@@ -48,6 +49,8 @@ namespace RetroEngine
 
         public bool paused = false;
 
+        Task physicsTask;
+
         public GameMain()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -56,7 +59,6 @@ namespace RetroEngine
             inst = this;
             curentLevel = new Level();
             UiElement.main = UiManger;
-
         }
 
         protected override void Initialize()
@@ -111,6 +113,8 @@ namespace RetroEngine
             //if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             // Exit();
 
+            physicsTask?.Wait();
+
             time = gameTime;
 
             AssetRegistry.ClearTexturesIfNeeded();
@@ -144,6 +148,9 @@ namespace RetroEngine
             // TODO: Add your update logic here
 
             base.Update(gameTime);
+
+            physicsTask?.Wait();
+            physicsTask = Task.Factory.StartNew(() => { Physics.Simulate(); });
         }
 
         private void Game1_Exiting(object sender, System.EventArgs e)

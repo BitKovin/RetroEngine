@@ -83,6 +83,10 @@ namespace RetroEngine
                         effect.Parameters["View"].SetValue(Camera.view);
                         effect.Parameters["Projection"].SetValue(Viewmodel? Camera.projectionViewmodel : Camera.projection);
 
+                        effect.Parameters["DirectBrightness"].SetValue(Graphics.DirectLighting);
+                        effect.Parameters["GlobalBrightness"].SetValue(Graphics.GlobalLighting);
+                        effect.Parameters["LightDirection"].SetValue(Graphics.LightDirection);
+
                         MeshPartData meshPartData = meshPart.Tag as MeshPartData;
 
                         if (meshPartData is not null)

@@ -20,12 +20,16 @@ namespace RetroEngine
         public virtual void Update()
         {
 
+            ImGui.BeginMainMenuBar();
+            ImGui.Text("fps: " + 1f / Time.deltaTime);
+            ImGui.EndMainMenuBar();
+
             if (!GameMain.inst.paused) return;
 
             //string consoleContent = sb.ToString();
 
             ImGui.Begin("Console");
-            ImGui.Text("fps: " + 1f / Time.deltaTime);
+            
 
             //ImGui.InputTextMultiline("log", ref consoleContent, uint.MaxValue, new Vector2(ImGui.GetWindowWidth(), ImGui.GetWindowHeight()-60),ImGuiInputTextFlags.ReadOnly);
 
@@ -87,7 +91,7 @@ namespace RetroEngine
             style.Colors[(int)ImGuiCol.TitleBg] = new Vector4(0.04f, 0.04f, 0.04f, 1.00f);
             style.Colors[(int)ImGuiCol.TitleBgActive] = new Vector4(0.48f, 0.16f, 0.16f, 1.00f);
             style.Colors[(int)ImGuiCol.TitleBgCollapsed] = new Vector4(0.48f, 0.16f, 0.16f, 1.00f);
-            style.Colors[(int)ImGuiCol.MenuBarBg] = new Vector4(0.14f, 0.14f, 0.14f, 1.00f);
+            style.Colors[(int)ImGuiCol.MenuBarBg] = new Vector4(0.34f, 0.34f, 0.34f, 0f);
             style.Colors[(int)ImGuiCol.ScrollbarBg] = new Vector4(0.02f, 0.02f, 0.02f, 0.53f);
             style.Colors[(int)ImGuiCol.ScrollbarGrab] = new Vector4(0.31f, 0.31f, 0.31f, 1.00f);
             style.Colors[(int)ImGuiCol.ScrollbarGrabHovered] = new Vector4(0.41f, 0.41f, 0.41f, 1.00f);

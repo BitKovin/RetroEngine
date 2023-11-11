@@ -40,12 +40,14 @@ namespace RetroEngine
 
         }
 
+        public static void Simulate()
+        {
+            if (GameMain.inst.paused == false)
+                dynamicsWorld.StepSimulation(RetroEngine.Time.deltaTime, steps, Math.Max(1f / 60f, Time.deltaTime));
+        }
+
         public static void Update()
         {
-            if(GameMain.inst.paused == false)
-                dynamicsWorld.StepSimulation(RetroEngine.Time.deltaTime,steps, Math.Max(1f/60f,Time.deltaTime));
-
-            
             for (int i = 0; i < dynamicsWorld.NumCollisionObjects; i++)
             {
                 CollisionObject colObj = dynamicsWorld.CollisionObjectArray[i];
