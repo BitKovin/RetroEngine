@@ -29,6 +29,8 @@ namespace RetroEngine
 
             var importer = new Assimp.AssimpContext();
 
+            
+
             Assimp.Scene scene;
             if (scenes.ContainsKey(filePath))
                 scene = scenes[filePath];
@@ -55,6 +57,9 @@ namespace RetroEngine
 
             foreach (var mesh in scene.Meshes)
             {
+
+                bool transperent = false;
+
                 if (mesh.Name != objectName && operatingMesh == false)
                 {
                     continue;
@@ -72,6 +77,9 @@ namespace RetroEngine
 
                 List<ModelMesh> modelMeshes = new List<ModelMesh>();
                 Texture2D texture = AssetRegistry.LoadTextureFromFile(scene.Materials[mesh.MaterialIndex].Name + ".png");
+
+                if (scene.Materials[mesh.MaterialIndex].Name.Contains("_tranperent"))
+                    transperent = true;
 
                 var vertices = new List<VertexPositionNormalTexture>();
                 var indices = new List<int>();
@@ -136,7 +144,7 @@ namespace RetroEngine
 
                 meshPart.Effect = defaultEffect;
 
-                models.Add(new BrushFaceMesh(new Model(graphicsDevice, new List<ModelBone>(), new List<ModelMesh> { modelMesh }), texture));
+                models.Add(new BrushFaceMesh(new Model(graphicsDevice, new List<ModelBone>(), new List<ModelMesh> { modelMesh }), texture) {Transperent = transperent });
             }
 
             return models;

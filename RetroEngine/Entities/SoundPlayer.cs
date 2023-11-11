@@ -32,9 +32,12 @@ namespace RetroEngine.Entities
         {
             base.LateUpdate();
 
-            if (Vector3.Distance(Camera.position, Position) > MaxDistance * 1.1f)
+            if (Vector3.Distance(Camera.position, Position) > MaxDistance * 2f)
             {
-                soundEffectInstance.Pause();
+                if (soundEffectInstance.State != SoundState.Stopped)
+                {
+                    soundEffectInstance.Stop();
+                }
                 return;
             }
 
@@ -44,8 +47,11 @@ namespace RetroEngine.Entities
             }
             else if(playing)
             {
-                soundEffectInstance.Play();
-            
+                try
+                {
+                    soundEffectInstance.Play();
+                }
+                catch (Exception ex) { }
 
                 soundEffectInstance.ApplyPosition(Position, MaxDistance, MinDistance);
 
@@ -65,7 +71,6 @@ namespace RetroEngine.Entities
 
         public void Play()
         {
-            soundEffectInstance.Play();
             paused = false;
             playing = true;
         }
@@ -79,6 +84,7 @@ namespace RetroEngine.Entities
         public void Pause()
         {
             paused = true;
+            soundEffectInstance.Pause();
         }
 
         public override void Destroy()
@@ -86,6 +92,8 @@ namespace RetroEngine.Entities
             base.Destroy();
 
             soundEffectInstance.Stop(true);
+            soundEffectInstance.Dispose();
+            soundEffectInstance = null;
 
         }
 

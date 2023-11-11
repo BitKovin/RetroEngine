@@ -19,11 +19,6 @@ namespace RetroEngine.Game.Entities
         {
             base.Update();
 
-            if (Input.pressedKeys.Contains(Keys.Escape))
-            {
-                GameMain.inst.paused = !GameMain.inst.paused;
-            }
-
             Input.LockCursor = !GameMain.inst.paused;
 
             if (Input.pressedKeys.Contains(Keys.R))
@@ -31,5 +26,17 @@ namespace RetroEngine.Game.Entities
                 Level.LoadFromFile("maps/test.map");
             }
         }
+
+        public override void LateUpdate()
+        {
+            base.LateUpdate();
+
+            if (Input.pressedKeys.Contains(Keys.Escape))
+            {
+                GameMain.inst.paused = !GameMain.inst.paused;
+            }
+
+        }
+
     }
 }

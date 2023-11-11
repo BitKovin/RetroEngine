@@ -30,6 +30,7 @@ struct PixelInput
     float4 Position : SV_POSITION;
     float2 TexCoord : TEXCOORD0;
 	float3 Normal : TEXCOORD1; // Pass normal to pixel shader
+    float light : TEXCOORD2;
 };
 
 float3 normalize(float3 v)
@@ -50,6 +51,12 @@ PixelInput VertexShaderFunction(VertexInput input)
     output.Normal = mul(input.Normal, (float3x3)World);
     output.Normal = normalize(output.Normal);
 
+    float lightingFactor = max(-0.3, dot(output.Normal, normalize(-LightDirection))) * DirectBrightness; // Example light direction
+
+	lightingFactor += GlobalBrightness;
+
+    output.light = lightingFactor;
+
     return output;
 }
 
@@ -59,11 +66,7 @@ float4 PixelShaderFunction(PixelInput input) : COLOR0
 	float3 textureColor = tex2D(TextureSampler, input.TexCoord).xyz;
 	float textureAlpha = tex2D(TextureSampler, input.TexCoord).w;
 
-	float lightingFactor = max(-0.3, dot(input.Normal, normalize(-LightDirection))) * DirectBrightness; // Example light direction
-
-	lightingFactor += GlobalBrightness;
-
-	textureColor *= lightingFactor;
+	textureColor *= input.light;
 
     return float4(textureColor, textureAlpha);
 }

@@ -111,7 +111,7 @@ namespace RetroEngine
                             list.Add(mesh);
             }
 
-            list = list.OrderByDescending(mesh => mesh.CalculatedCameraDistance).ToList();
+            //list = list.OrderByDescending(mesh => mesh.CalculatedCameraDistance).ToList();
 
             foreach (Entity ent in entities)
             {

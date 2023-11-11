@@ -377,14 +377,14 @@ namespace RetroEngine
 
             isRendered = true;
 
-            Vector3 location = useAvgVertexPosition ? avgVertexPosition : Position;
+            //Vector3 location = useAvgVertexPosition ? avgVertexPosition : Position;
 
             if (Transperent)
             {
-                CalculatedCameraDistance = Vector3.Distance(location, Camera.position);
+                //CalculatedCameraDistance = Vector3.Distance(location, Camera.position);
             }else
             {
-                CalculatedCameraDistance = 1000000000000;
+                //CalculatedCameraDistance = 1000000000000;
             }
 
             return;
