@@ -137,8 +137,9 @@ namespace RetroEngine
 
             SoundManager.Update();
 
-            curentLevel.RenderPreparation();
+            physicsTask = Task.Factory.StartNew(() => { Physics.Simulate(); });
 
+            curentLevel.RenderPreparation();
             Camera.Update();
 
             SoundManager.Update();
@@ -149,8 +150,7 @@ namespace RetroEngine
 
             base.Update(gameTime);
 
-            physicsTask?.Wait();
-            physicsTask = Task.Factory.StartNew(() => { Physics.Simulate(); });
+            
         }
 
         private void Game1_Exiting(object sender, System.EventArgs e)
