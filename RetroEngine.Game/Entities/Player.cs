@@ -49,6 +49,7 @@ namespace RetroEngine.Entities
         public Player():base()
         {
 
+
             if (GameMain.platform == Platform.Mobile)
             {
 
@@ -263,6 +264,7 @@ namespace RetroEngine.Entities
             body.ApplyCentralImpulse(new Vector3(0, 25, 0).ToNumerics());
         }
 
+        int bulletId = 0;
         void Shoot()
         {
 
@@ -280,6 +282,8 @@ namespace RetroEngine.Entities
             bullet.Rotation = Camera.rotation;
             GameMain.inst.curentLevel.entities.Add(bullet);
 
+            bullet.name = bulletId.ToString();
+
             if (!attack)
             {
                 bullet.body.SetPosition(Camera.position.ToPhysics() + Camera.rotation.GetForwardVector().ToPhysics() / 1f + Camera.rotation.GetRightVector().ToPhysics() / 4f - Camera.rotation.GetUpVector().ToPhysics() / 3f);
@@ -288,11 +292,14 @@ namespace RetroEngine.Entities
                 bullet.body.SetPosition(Camera.position.ToPhysics() + Camera.rotation.GetForwardVector().ToPhysics() / 1f - Camera.rotation.GetRightVector().ToPhysics() / 4f - Camera.rotation.GetUpVector().ToPhysics() / 3f);
             }
 
+            bullet.ignore.Add(this);
+
             bullet.Start();
 
-            bullet.body.SetIgnoreCollisionCheck(body, true);
 
             attack = !attack;
+
+            bulletId++;
 
             return;
             var hit = Physics.LineTrace(Camera.position.ToPhysics(), Camera.rotation.GetForwardVector().ToPhysics() * 100 + Camera.position.ToPhysics());

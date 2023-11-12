@@ -46,8 +46,15 @@ namespace RetroEngine
                 dynamicsWorld.StepSimulation(RetroEngine.Time.deltaTime, steps, Math.Max(1f / 60f, Time.deltaTime));
         }
 
+        public static void Remove(CollisionObject collisionObject)
+        {
+            dynamicsWorld.RemoveCollisionObject(collisionObject);
+        }
+
         public static void Update()
         {
+            Simulate();
+
             for (int i = 0; i < dynamicsWorld.NumCollisionObjects; i++)
             {
                 CollisionObject colObj = dynamicsWorld.CollisionObjectArray[i];

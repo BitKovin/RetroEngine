@@ -13,6 +13,9 @@ namespace RetroEngine.Game.Entities
         StaticMesh mesh = new StaticMesh();
 
         CollisionCallback collisionCallback = new CollisionCallback();
+
+        public List<Entity> ignore = new List<Entity>();
+
         public Bullet() 
         {
             mesh.LoadFromFile("models/weapons/bullet/bullet.obj");
@@ -44,13 +47,25 @@ namespace RetroEngine.Game.Entities
 
             body.ApplyCentralImpulse(Rotation.GetForwardVector().ToNumerics() * 5f);
 
+
+            collisionCallback.owner = this;
+            collisionCallback.ignore = ignore;
+
+            foreach(Entity e in ignore)
+            {
+                body.SetIgnoreCollisionCheck(e.body,true);
+            }
+
             collisionCallback.CollisionEvent += Hit;
 
         }
 
         private void Hit(BulletSharp.CollisionObjectWrapper thisObject, BulletSharp.CollisionObjectWrapper collidedObject, Entity collidedEntity, BulletSharp.ManifoldPoint contactPoint)
         {
-            Console.WriteLine("hit");
+            if (thisObject == collidedObject)
+                Console.WriteLine("wtf");
+
+            Console.WriteLine($"me: {(thisObject.CollisionObject.UserObject as Entity).GetType()}   other: {(collidedObject.CollisionObject.UserObject as Entity).GetType()}");
             Destroy();
         }
 

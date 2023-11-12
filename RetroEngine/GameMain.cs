@@ -137,7 +137,7 @@ namespace RetroEngine
 
             SoundManager.Update();
 
-            Physics.Simulate();
+            //Physics.Simulate();
 
             //physicsTask = Task.Factory.StartNew(() => { Physics.Simulate(); });
 

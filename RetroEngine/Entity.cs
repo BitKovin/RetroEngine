@@ -25,6 +25,8 @@ namespace RetroEngine
 
         public bool UpdateWhilePaused = false;
 
+        public string name;
+
         public List<string> Tags = new List<string>();
 
         public Entity()
@@ -69,6 +71,8 @@ namespace RetroEngine
             {
                 mesh.Dispose();
             }
+
+            Physics.Remove(body);
 
             GameMain.inst.curentLevel.entities.Remove(this);
             Dispose();
