@@ -113,7 +113,7 @@ namespace RetroEngine
             //if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             // Exit();
 
-            physicsTask?.Wait();
+            //physicsTask?.Wait();
 
             time = gameTime;
 
@@ -137,7 +137,9 @@ namespace RetroEngine
 
             SoundManager.Update();
 
-            physicsTask = Task.Factory.StartNew(() => { Physics.Simulate(); });
+            Physics.Simulate();
+
+            //physicsTask = Task.Factory.StartNew(() => { Physics.Simulate(); });
 
             curentLevel.RenderPreparation();
             Camera.Update();

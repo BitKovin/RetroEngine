@@ -205,7 +205,7 @@ namespace RetroEngine.Entities
             if (Input.pressedKeys.Contains(Keys.Space))
                 Jump();
 
-            if (Input.holdKeys.Contains(Keys.E))
+            if (Input.pressedKeys.Contains(Keys.E))
                 Shoot();
 
             mesh.AddTime(Time.deltaTime);
