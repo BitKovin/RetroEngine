@@ -28,6 +28,7 @@ namespace RetroEngine.Entities
         Button buttonRotate = new Button();
 
         AnimatedStaticMesh mesh = new AnimatedStaticMesh();
+        AnimatedStaticMesh mesh2 = new AnimatedStaticMesh();
 
         StaticMesh cylinder = new StaticMesh();
 
@@ -39,6 +40,8 @@ namespace RetroEngine.Entities
         Vector3 OldCameraPos;
 
         Vector3 bob;
+
+        bool attack = false;
 
         float cameraRoll;
 
@@ -97,6 +100,30 @@ namespace RetroEngine.Entities
             mesh.textureSearchPaths.Add("textures/weapons/pistol/");
 
             mesh.Viewmodel = true;
+
+            //Model model = GameMain.content.Load<Model>("pistol");
+            meshes.Add(mesh);
+
+
+            mesh2.Scale = new Vector3(-1, 1, 1);
+
+            mesh2.AddFrame("Animations/Pistol/Fire/frame_0001.obj");
+            mesh2.AddFrame("Animations/Pistol/Fire/frame_0002.obj");
+            mesh2.AddFrame("Animations/Pistol/Fire/frame_0003.obj");
+            mesh2.AddFrame("Animations/Pistol/Fire/frame_0004.obj");
+            mesh2.AddFrame("Animations/Pistol/Fire/frame_0005.obj");
+            mesh2.AddFrame("Animations/Pistol/Fire/frame_0006.obj");
+            mesh2.AddFrame("Animations/Pistol/Fire/frame_0007.obj");
+            mesh2.AddFrame("Animations/Pistol/Fire/frame_0008.obj");
+            mesh2.AddFrame("Animations/Pistol/Fire/frame_0009.obj");
+            mesh2.AddFrame("Animations/Pistol/Fire/frame_0010.obj");
+            mesh2.frameTime = 1f / 30f;
+            //mesh.texture = AssetRegistry.LoadTextureFromFile("usp.png");
+            mesh2.textureSearchPaths.Add("textures/weapons/arms/");
+            mesh2.textureSearchPaths.Add("textures/weapons/pistol/");
+
+            mesh2.Viewmodel = true;
+            meshes.Add(mesh2);
 
             //cylinder.LoadFromFile("cylinder.obj");
             //meshes.Add(cylinder);
@@ -211,6 +238,9 @@ namespace RetroEngine.Entities
             mesh.AddTime(Time.deltaTime);
             mesh.Update();
 
+            mesh2.AddTime(Time.deltaTime);
+            mesh2.Update();
+
             FirstTick = false;
 
         }
@@ -221,6 +251,9 @@ namespace RetroEngine.Entities
 
             mesh.Position = Camera.position + bob*0.05f;
             mesh.Rotation = Camera.rotation;
+
+            mesh2.Position = Camera.position + bob * 0.05f;
+            mesh2.Rotation = Camera.rotation;
 
             cylinder.Position = Position + Camera.rotation.GetForwardVector().XZ()*3;
         }
@@ -233,24 +266,34 @@ namespace RetroEngine.Entities
         void Shoot()
         {
 
-            mesh.Play();
+            if (!attack)
+            {
+                mesh.Play();
+            }else
+            {
+                mesh2.Play();
+            }
 
 
-            BoxDynamic box = new BoxDynamic();
+            Bullet bullet = new Bullet();
 
-            box.scale = new Vector3(0.2f);
+            bullet.Rotation = Camera.rotation;
+            GameMain.inst.curentLevel.entities.Add(bullet);
 
-            box.Rotation = Camera.rotation;
-            GameMain.inst.curentLevel.entities.Add(box);
-            box.Start();
-            box.body.Activate();
-            box.body.SetIgnoreCollisionCheck(body, true);
-            box.body.SetPosition(Camera.position.ToPhysics() +Camera.rotation.GetForwardVector().ToPhysics()/2f + Camera.rotation.GetRightVector().ToPhysics()/4f - Camera.rotation.GetUpVector().ToPhysics() / 4f);
-            box.body.CcdSweptSphereRadius = 0.02f;
-            box.body.CcdMotionThreshold = 0.1f;
-            box.body.ApplyCentralImpulse(Camera.rotation.GetForwardVector().ToPhysics() * 30);
-            box.body.Gravity = new Vector3(0.1f).ToPhysics();
-            box.Update();
+            if (!attack)
+            {
+                bullet.body.SetPosition(Camera.position.ToPhysics() + Camera.rotation.GetForwardVector().ToPhysics() / 1f + Camera.rotation.GetRightVector().ToPhysics() / 4f - Camera.rotation.GetUpVector().ToPhysics() / 3f);
+            }else
+            {
+                bullet.body.SetPosition(Camera.position.ToPhysics() + Camera.rotation.GetForwardVector().ToPhysics() / 1f - Camera.rotation.GetRightVector().ToPhysics() / 4f - Camera.rotation.GetUpVector().ToPhysics() / 3f);
+            }
+
+            bullet.Start();
+
+            bullet.body.SetIgnoreCollisionCheck(body, true);
+
+            attack = !attack;
+
             return;
             var hit = Physics.LineTrace(Camera.position.ToPhysics(), Camera.rotation.GetForwardVector().ToPhysics() * 100 + Camera.position.ToPhysics());
 

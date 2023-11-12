@@ -18,7 +18,7 @@ namespace RetroEngine
         public string textureName = "";
     }
 
-    public class StaticMesh
+    public class StaticMesh : IDisposable
     {
         public Vector3 Position { get; set; } = Vector3.Zero;
         public Vector3 Rotation { get; set; } = Vector3.Zero;
@@ -118,6 +118,10 @@ namespace RetroEngine
 
         Texture2D FindTexture(string name)
         {
+
+            if (name == null)
+                return texture;
+
             if (textures.ContainsKey(name))
                 return textures[name];
 
@@ -440,5 +444,11 @@ namespace RetroEngine
             return new BoundingSphere(center, radius);
         }
 
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
+            texture = null;
+            model = null;
+        }
     }
 }

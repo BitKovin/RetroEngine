@@ -13,11 +13,11 @@ namespace RetroEngine
 
         public static void SetPosition(this RigidBody body, Vector3 newPosition)
         {
-            // Get the current orientation (rotation) of the body
-            Quaternion currentRotation = body.WorldTransform.GetRotation();
+            System.Numerics.Matrix4x4 rotationMatrix = body.WorldTransform.GetBasis();
+            Quaternion rotation = Quaternion.CreateFromRotationMatrix(rotationMatrix);
 
             // Create a new motion state with the updated position and current rotation
-            Matrix newTransform = Matrix.CreateTranslation(newPosition) * Matrix.CreateFromQuaternion(currentRotation);
+            Matrix newTransform = Matrix.CreateTranslation(newPosition) * Matrix.CreateFromQuaternion(rotation);
 
 
             // Update the body's world transform directly to apply the transformation
@@ -28,11 +28,12 @@ namespace RetroEngine
         {
 
             // Create a new motion state with the updated position and current rotation
-            Matrix newTransform = Matrix.CreateTranslation(body.WorldTransform.Translation) * Matrix.CreateFromQuaternion(newRotation);
+            Matrix newTransform = Matrix.CreateFromQuaternion(newRotation) * Matrix.CreateTranslation(body.WorldTransform.Translation) ;
 
 
             // Update the body's world transform directly to apply the transformation
             body.WorldTransform = newTransform.ToNumerics();
+            body.MotionState.WorldTransform = newTransform.ToNumerics();
         }
 
         public static System.Numerics.Vector3 ToPhysics(this Microsoft.Xna.Framework.Vector3 vector)

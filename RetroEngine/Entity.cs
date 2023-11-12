@@ -65,6 +65,11 @@ namespace RetroEngine
 
         public virtual void Destroy()
         {
+            foreach(StaticMesh mesh in meshes)
+            {
+                mesh.Dispose();
+            }
+
             GameMain.inst.curentLevel.entities.Remove(this);
             Dispose();
         }

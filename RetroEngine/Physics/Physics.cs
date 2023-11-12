@@ -79,7 +79,7 @@ namespace RetroEngine
 
         }
 
-        static Vector3 ToEulerAngles(Quaternion quaternion)
+        public static Vector3 ToEulerAngles(Quaternion quaternion)
         {
             Vector3 angles = new Vector3();
             double sinr_cosp = 2.0 * (quaternion.W * quaternion.X + quaternion.Y * quaternion.Z);
@@ -103,7 +103,7 @@ namespace RetroEngine
             return angles / (float)Math.PI * 180;
         }
 
-        static Quaternion ToQuaternion(Vector3 eulerAngles)
+        public static Quaternion ToQuaternion(Vector3 eulerAngles)
         {
             eulerAngles *= (float)Math.PI / 180.0f; // Convert degrees to radians
 
@@ -122,12 +122,12 @@ namespace RetroEngine
             return new Quaternion(x, y, z, w);
         }
 
-        public static RigidBody CreateSphere(Entity entity, float mass = 1, CollisionFlags collisionFlags = CollisionFlags.None)
+        public static RigidBody CreateSphere(Entity entity, float mass = 1, float radius = 1, CollisionFlags collisionFlags = CollisionFlags.None)
         {
             RigidBody RigidBody;
 
             // Create a sphere shape
-            var sphereShape = new SphereShape(1.0f);
+            var sphereShape = new SphereShape(radius);
             var motionState = new DefaultMotionState(Matrix4x4.CreateTranslation(0, 0, 0));
 
             Vector3 inertia = Vector3.Zero;
