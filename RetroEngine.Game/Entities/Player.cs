@@ -42,6 +42,7 @@ namespace RetroEngine.Entities
 
         float cameraRoll;
 
+        bool FirstTick = true;
         public Player():base()
         {
 
@@ -104,6 +105,8 @@ namespace RetroEngine.Entities
 
             Tags.Add("player");
 
+            Input.CenterCursor();
+
         }
 
         private void ButtonRotate_onClicked()
@@ -117,6 +120,10 @@ namespace RetroEngine.Entities
 
             Camera.position = Position = OldCameraPos = data.GetPropertyVector("origin");
 
+            
+
+            Camera.rotation = new Vector3(0, data.GetPropertyFloat("angle")-90, 0);
+
         }
 
         public override void Start()
@@ -127,6 +134,8 @@ namespace RetroEngine.Entities
             body.Gravity = new Vector3(0, -35, 0).ToNumerics();
 
             body.SetPosition(Position.ToPhysics());
+
+            Input.MouseDelta = new Vector2();
 
             body.CcdMotionThreshold = 0.000001f;
             body.CcdSweptSphereRadius = 0.3f;
@@ -152,7 +161,9 @@ namespace RetroEngine.Entities
             if (buttonLeft.pressing || Keyboard.GetState().IsKeyDown(Keys.A) || buttonUpLeft.pressing)
                 input -= new Vector2(1, 0);
 
-            Camera.rotation += new Vector3(Input.MouseDelta.Y, -Input.MouseDelta.X, 10)/2f;
+            if(!FirstTick)
+                Camera.rotation += new Vector3(Input.MouseDelta.Y, -Input.MouseDelta.X, 10)/2f;
+
             Camera.rotation = new Vector3(Math.Clamp(Camera.rotation.X, -89, 89), Camera.rotation.Y, 0);
 
             cameraRoll = MathHelper.Lerp(cameraRoll, input.X * 2, Time.deltaTime*10);
@@ -200,6 +211,8 @@ namespace RetroEngine.Entities
             mesh.AddTime(Time.deltaTime);
             mesh.Update();
 
+            FirstTick = false;
+
         }
 
         public override void LateUpdate()
@@ -233,7 +246,7 @@ namespace RetroEngine.Entities
             box.body.Activate();
             box.body.SetIgnoreCollisionCheck(body, true);
             box.body.SetPosition(Camera.position.ToPhysics() +Camera.rotation.GetForwardVector().ToPhysics()/2f + Camera.rotation.GetRightVector().ToPhysics()/4f - Camera.rotation.GetUpVector().ToPhysics() / 4f);
-            box.body.CcdSweptSphereRadius = 0.1f;
+            box.body.CcdSweptSphereRadius = 0.02f;
             box.body.CcdMotionThreshold = 0.1f;
             box.body.ApplyCentralImpulse(Camera.rotation.GetForwardVector().ToPhysics() * 30);
             box.body.Gravity = new Vector3(0.1f).ToPhysics();

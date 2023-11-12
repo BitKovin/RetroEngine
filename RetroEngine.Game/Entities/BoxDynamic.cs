@@ -47,7 +47,7 @@ namespace RetroEngine.Game.Entities
 
             soundPlayer.SetSound(AssetRegistry.LoadSoundFromFile("Sounds/test.wav"));
             soundPlayer.IsLooped = true;
-            soundPlayer.Play();
+            //soundPlayer.Play();
 
         }
 

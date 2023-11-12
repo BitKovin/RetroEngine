@@ -36,21 +36,32 @@ namespace RetroEngine.Map
                         entity = new Entity();
 
                     CompoundShape shape = new CompoundShape();
+
+                    List<BrushFaceMesh> faces = new List<BrushFaceMesh>();
+
                     foreach (BrushData brush in ent.Brushes)
                     {
                         foreach (var face in BrushFaceMesh.GetFacesFromPath(Path.Replace(".map", ".obj"), "entity" + ent.name + "_" + "brush" + brush.Name))
                         {
 
-                            face.useAvgVertexPosition = true;
-
-                            entity.meshes.Add(face);
-
-
                             shape.AddChildShape(System.Numerics.Matrix4x4.Identity, Physics.CreateCollisionShapeFromModel(face.model));
 
+                        }
+
+                        foreach (var face in BrushFaceMesh.GetMergedFacesFromPath(Path.Replace(".map", ".obj"), "entity" + ent.name + "_" + "brush" + brush.Name))
+                        {
+
+                            //face.useAvgVertexPosition = true;
+
+                            faces.Add(face);
 
                         }
+
+                        
+
                     }
+
+                    entity.meshes.AddRange(BrushFaceMesh.MergeFaceMeshes(faces));
 
                     RigidBody rigidBody = Physics.CreateFromShape(entity, Vector3.One.ToPhysics(), shape, collisionFlags: BulletSharp.CollisionFlags.StaticObject);
 
@@ -109,6 +120,20 @@ namespace RetroEngine.Map
             string[] parts = Properties[name].Split(" ");
 
             return new Vector3(float.Parse(parts[0])*-1, float.Parse(parts[2]), float.Parse(parts[1])) / MapData.UnitSize;
+        }
+
+        public float GetPropertyFloat(string name)
+        {
+            try
+            {
+
+                string[] parts = Properties[name].Split(" ");
+
+                return float.Parse(parts[0]);
+            }catch (Exception)
+            {
+                return 0;
+            }
         }
 
     }

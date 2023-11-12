@@ -14,7 +14,10 @@ namespace RetroEngine.Game
     {
         protected override void LoadContent()
         {
+
             base.LoadContent();
+            Input.CenterCursor();
+
             devMenu = new GameDevMenu();
             devMenu.Init();
 
@@ -30,6 +33,8 @@ namespace RetroEngine.Game
             }
 
             Window.Title = "Game";
+
+            
 
         }
 

@@ -20,6 +20,7 @@ namespace RetroEngine
 
         public static float sensitivity = 0.5f;
 
+
         public static void Update()
         {
 
@@ -73,6 +74,13 @@ namespace RetroEngine
             foreach (Keys key in Keyboard.GetState().GetPressedKeys())
                 oldKeys.Add(key);
 
+        }
+
+        public static void CenterCursor()
+        {
+            Vector2 windowCenter = new Vector2(GameMain.inst.GraphicsDevice.Viewport.Width / 2, GameMain.inst.GraphicsDevice.Viewport.Height / 2);
+            Mouse.SetPosition((int)windowCenter.X, (int)windowCenter.Y);
+            MouseDelta = new Vector2();
         }
 
     }

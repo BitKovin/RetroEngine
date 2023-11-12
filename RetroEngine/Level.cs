@@ -121,6 +121,8 @@ namespace RetroEngine
                             list.Insert(0,mesh);
             }
 
+            Console.WriteLine(list.Count);
+
             return list;
         }
 

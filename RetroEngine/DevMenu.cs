@@ -21,7 +21,7 @@ namespace RetroEngine
         {
 
             ImGui.BeginMainMenuBar();
-            ImGui.Text("fps: " + 1f / Time.deltaTime);
+            ImGui.Text("fps: " + 1f / Time.deltaTime + "    entity count: " + Level.GetCurrent().entities.Count);
             ImGui.EndMainMenuBar();
 
             if (!GameMain.inst.paused) return;

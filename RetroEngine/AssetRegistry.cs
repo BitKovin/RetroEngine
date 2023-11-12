@@ -106,8 +106,11 @@ namespace RetroEngine
             if (File.Exists(ROOT_PATH + "GameData/" + path))
                 return ROOT_PATH + "GameData/" + path;
 
-            if (File.Exists(ROOT_PATH + "GameData/brushes/" + path))
-                return ROOT_PATH + "GameData/brushes/" + path;
+            if (File.Exists(ROOT_PATH + "GameData/textures/" + path))
+                return ROOT_PATH + "GameData/textures/" + path;
+
+            if (File.Exists(ROOT_PATH + "GameData/textures/brushes/" + path))
+                return ROOT_PATH + "GameData/textures/brushes/" + path;
 
             if (File.Exists(ROOT_PATH + "GameData/maps/" + path))
                 return ROOT_PATH + "GameData/maps/" + path;
