@@ -49,6 +49,7 @@ namespace RetroEngine
         public static void Remove(CollisionObject collisionObject)
         {
             dynamicsWorld.RemoveCollisionObject(collisionObject);
+            collisionObject.Dispose();
         }
 
         public static void Update()

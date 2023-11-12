@@ -250,10 +250,10 @@ namespace RetroEngine.Entities
         {
             //Camera.Follow(this);
 
-            mesh.Position = Camera.position + bob*0.05f;
+            mesh.Position = Camera.position + bob * 0.05f + Camera.rotation.GetForwardVector() * Camera.rotation.X / 3000f;
             mesh.Rotation = Camera.rotation;
 
-            mesh2.Position = Camera.position + bob * 0.05f;
+            mesh2.Position = mesh.Position;
             mesh2.Rotation = Camera.rotation;
 
             cylinder.Position = Position + Camera.rotation.GetForwardVector().XZ()*3;

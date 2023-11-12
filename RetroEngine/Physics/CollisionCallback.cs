@@ -23,6 +23,12 @@ namespace RetroEngine
         public override float AddSingleResult(ManifoldPoint cp, CollisionObjectWrapper colObj0Wrap, int partId0, int index0, CollisionObjectWrapper colObj1Wrap, int partId1, int index1)
         {
 
+            if (colObj0Wrap == null) return 0;
+            if (colObj1Wrap == null) return 0;
+
+            if (colObj0Wrap.CollisionObject == null) return 0;
+            if (colObj1Wrap.CollisionObject == null) return 0;
+
             if (colObj0Wrap.CollisionObject.UserObject == owner)
             {
 
