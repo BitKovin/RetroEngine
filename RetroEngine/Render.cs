@@ -56,13 +56,9 @@ namespace RetroEngine
             //RenderMiscPath(level);
             //PerformLighting();
 
-            if (Input.holdKeys.Contains(Microsoft.Xna.Framework.Input.Keys.Tab))
-            {
-                return colorPath;
-            }
-            else { 
+
             PerformPostProcessing();
-                }
+                
             //outputPath = colorPath;
 
             return outputPath;

@@ -177,16 +177,16 @@ namespace RetroEngine.Entities
 
             Vector2 input = new Vector2();
 
-            if (buttonUp.pressing || Keyboard.GetState().IsKeyDown(Keys.W)|| buttonUpRight.pressing || buttonUpLeft.pressing)
+            if (buttonUp.pressing || Input.GetAction("moveForward").Holding()|| buttonUpRight.pressing || buttonUpLeft.pressing)
                 input += new Vector2(0, 1);
 
-            if (buttonDown.pressing || Keyboard.GetState().IsKeyDown(Keys.S))
+            if (buttonDown.pressing || Input.GetAction("moveBackward").Holding())
                 input -= new Vector2(0, 1) ;
 
-            if (buttonRight.pressing || Keyboard.GetState().IsKeyDown(Keys.D) || buttonUpRight.pressing)
+            if (buttonRight.pressing || Input.GetAction("moveRight").Holding() || buttonUpRight.pressing)
                 input += new Vector2(1, 0);
 
-            if (buttonLeft.pressing || Keyboard.GetState().IsKeyDown(Keys.A) || buttonUpLeft.pressing)
+            if (buttonLeft.pressing || Input.GetAction("moveLeft").Holding() || buttonUpLeft.pressing)
                 input -= new Vector2(1, 0);
 
             if(!FirstTick)
@@ -230,10 +230,10 @@ namespace RetroEngine.Entities
             //Camera.position += new Vector3(0,1,0) * (float)(Math.Abs(Math.Sin(bobProgress * 7 * 1))) * 0.2f;
 
 
-            if (Input.pressedKeys.Contains(Keys.Space))
+            if (Input.GetAction("jump").Pressed())
                 Jump();
 
-            if (Input.pressedKeys.Contains(Keys.E))
+            if (Input.GetAction("attack").Pressed())
                 Shoot();
 
             mesh.AddTime(Time.deltaTime);

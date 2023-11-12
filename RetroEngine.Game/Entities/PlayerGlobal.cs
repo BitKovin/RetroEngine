@@ -21,17 +21,13 @@ namespace RetroEngine.Game.Entities
 
             Input.LockCursor = !GameMain.inst.paused;
 
-            if (Input.pressedKeys.Contains(Keys.R))
-            {
-                Level.LoadFromFile("maps/test.map");
-            }
         }
 
         public override void LateUpdate()
         {
             base.LateUpdate();
 
-            if (Input.pressedKeys.Contains(Keys.Escape))
+            if (Input.GetAction("pause").Pressed())
             {
                 GameMain.inst.paused = !GameMain.inst.paused;
             }

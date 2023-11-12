@@ -17,7 +17,7 @@ namespace RetroEngine.Game
 
             base.LoadContent();
             Input.CenterCursor();
-
+            CreateInputActions();
             devMenu = new GameDevMenu();
             devMenu.Init();
 
@@ -43,6 +43,21 @@ namespace RetroEngine.Game
             base.OnLevelChanged();
 
             GameMain.inst.curentLevel.entities.Add(new PlayerGlobal());
+
+        }
+
+        void CreateInputActions()
+        {
+            Input.AddAction("pause").AddKeyboardKey(Keys.Escape);
+
+            Input.AddAction("jump").AddKeyboardKey(Keys.Space);
+            Input.AddAction("attack").LMB = true;
+
+            Input.AddAction("moveForward").AddKeyboardKey(Keys.W);
+            Input.AddAction("moveBackward").AddKeyboardKey(Keys.S);
+            Input.AddAction("moveLeft").AddKeyboardKey(Keys.A);
+            Input.AddAction("moveRight").AddKeyboardKey(Keys.D);
+
 
         }
 

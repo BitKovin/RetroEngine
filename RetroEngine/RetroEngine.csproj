@@ -4,6 +4,12 @@
     <Platforms>AnyCPU;x86;x64</Platforms>
   </PropertyGroup>
   <ItemGroup>
+    <Content Remove="C:\Users\bogda\.nuget\packages\rhubulletsharp\1.0.0\contentFiles\any\netstandard2.1\runtimes\linux-arm64\native\liblibbulletc.so" />
+    <Content Remove="C:\Users\bogda\.nuget\packages\rhubulletsharp\1.0.0\contentFiles\any\netstandard2.1\runtimes\linux-x64\native\liblibbulletc.so" />
+    <Content Remove="C:\Users\bogda\.nuget\packages\rhubulletsharp\1.0.0\contentFiles\any\netstandard2.1\runtimes\win-x64\native\libbulletc.dll" />
+    <Content Remove="C:\Users\bogda\.nuget\packages\rhubulletsharp\1.0.0\contentFiles\any\netstandard2.1\runtimes\win10-x64\native\libbulletc.dll" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Assimp" Version="3.0.0" />
     <PackageReference Include="MIConvexHull" Version="1.1.19.1019" />
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.1.303">
