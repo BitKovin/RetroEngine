@@ -20,7 +20,7 @@ namespace RetroEngine.Game.Entities
         {
             mesh.LoadFromFile("models/weapons/bullet/bullet.obj");
 
-            mesh.texture = AssetRegistry.LoadTextureFromFile("cat.png");
+            mesh.texture = AssetRegistry.LoadTextureFromFile("models/weapons/bullet/bullet.png");
 
             meshes.Add(mesh);
 
@@ -62,8 +62,6 @@ namespace RetroEngine.Game.Entities
 
         private void Hit(BulletSharp.CollisionObjectWrapper thisObject, BulletSharp.CollisionObjectWrapper collidedObject, Entity collidedEntity, BulletSharp.ManifoldPoint contactPoint)
         {
-            if (thisObject == collidedObject)
-                Console.WriteLine("wtf");
 
             Console.WriteLine($"me: {(thisObject.CollisionObject.UserObject as Entity).GetType()}   other: {(collidedObject.CollisionObject.UserObject as Entity).GetType()}");
             Destroy();

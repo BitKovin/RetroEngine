@@ -14,6 +14,7 @@ namespace RetroEngine.Game
     {
         protected override void LoadContent()
         {
+            
 
             base.LoadContent();
             Input.CenterCursor();
@@ -34,8 +35,11 @@ namespace RetroEngine.Game
 
             Window.Title = "Game";
 
-            
+        }
 
+        public override void GameInitialized()
+        {
+            MakeFullscreen();
         }
 
         public override void OnLevelChanged()
@@ -43,6 +47,8 @@ namespace RetroEngine.Game
             base.OnLevelChanged();
 
             GameMain.inst.curentLevel.entities.Add(new PlayerGlobal());
+
+            
 
         }
 

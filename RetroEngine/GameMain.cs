@@ -51,6 +51,12 @@ namespace RetroEngine
 
         Task physicsTask;
 
+        public bool Fullscreen = false;
+
+        int tick = 0;
+
+        bool pendingGraphicsUpdate = false;
+        bool wasFocused = true;
         public GameMain()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -110,10 +116,11 @@ namespace RetroEngine
 
         protected override void Update(GameTime gameTime)
         {
-            //if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-            // Exit();
 
-            //physicsTask?.Wait();
+            checkAppRegainedFocus();
+
+            if (tick == 100)
+                GameInitialized();
 
             time = gameTime;
 
@@ -152,7 +159,8 @@ namespace RetroEngine
 
             base.Update(gameTime);
 
-            
+            tick++;
+
         }
 
         private void Game1_Exiting(object sender, System.EventArgs e)
@@ -173,7 +181,8 @@ namespace RetroEngine
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-
+            if (pendingGraphicsUpdate)
+                _graphics.ApplyChanges();
 
             RenderTarget2D frame =  render.StartRenderLevel(curentLevel);
 
@@ -207,8 +216,16 @@ namespace RetroEngine
 
             ImGuiRenderer.AfterLayout();
 
+
             //SetupFullViewport();
             base.Draw(gameTime);
+
+            if(_graphics.IsFullScreen != Fullscreen)
+            {
+                _graphics.IsFullScreen = Fullscreen;
+                pendingGraphicsUpdate = true;
+            }
+
         }
 
         public object GetView(System.Type type)
@@ -225,7 +242,37 @@ namespace RetroEngine
 
             _graphics.PreferredBackBufferWidth = Window.ClientBounds.Width;
             _graphics.PreferredBackBufferHeight = Window.ClientBounds.Height;
+
+            pendingGraphicsUpdate = true;
+        }
+
+        void checkAppRegainedFocus()
+        {
+            if (!this.IsActive)
+            {
+                wasFocused = false;
+            }
+            else if (!wasFocused && _graphics.IsFullScreen)
+            {
+                wasFocused = true;
+                _graphics.ToggleFullScreen();
+                _graphics.ToggleFullScreen();
+            }
+        }
+
+        public void MakeFullscreen()
+        {
+            _graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+            _graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+
             _graphics.ApplyChanges();
+
+            Fullscreen = true;
+        }
+
+        public virtual void GameInitialized()
+        {
+
         }
 
         public virtual void OnLevelChanged()

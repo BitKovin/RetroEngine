@@ -276,7 +276,6 @@ namespace RetroEngine.Entities
                 mesh2.Play();
             }
 
-
             Bullet bullet = new Bullet();
 
             bullet.Rotation = Camera.rotation;
