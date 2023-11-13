@@ -46,6 +46,12 @@ namespace RetroEngine.Entities
         float cameraRoll;
 
         bool FirstTick = true;
+
+        Delay attackDelay = new Delay();
+
+        SoundPlayer stepSoundPlayer;
+        SoundPlayer fireSoundPlayer;
+
         public Player():base()
         {
 
@@ -160,6 +166,7 @@ namespace RetroEngine.Entities
 
             body = Physics.CreateCharacterCapsule(this, 1, 0.5f, 2);
             body.Gravity = new Vector3(0, -35, 0).ToNumerics();
+            
 
             body.SetPosition(Position.ToPhysics());
 
@@ -168,6 +175,12 @@ namespace RetroEngine.Entities
             body.CcdMotionThreshold = 0.000001f;
             body.CcdSweptSphereRadius = 0.3f;
 
+            stepSoundPlayer = Level.GetCurrent().AddEntity(new SoundPlayer()) as SoundPlayer;
+            stepSoundPlayer.SetSound(AssetRegistry.LoadSoundFromFile("sounds/step.wav"));
+
+            fireSoundPlayer = Level.GetCurrent().AddEntity(new SoundPlayer()) as SoundPlayer;
+            fireSoundPlayer.SetSound(AssetRegistry.LoadSoundFromFile("sounds/pistol_fire.wav"));
+            fireSoundPlayer.Volume = 0.3f;
         }
 
         public override void Update()
@@ -200,17 +213,29 @@ namespace RetroEngine.Entities
 
             Vector3 motion = new Vector3();
 
-            if (input.Length()>0)
+            if (input.Length() > 0)
             {
                 input.Normalize();
 
+
+                if (Math.Sin(bobProgress*14) <=0 && Math.Sin((bobProgress + Time.deltaTime)*14) > 0)
+                {
+                    stepSoundPlayer.Play(true);
+                }
+                
+
                 bobProgress += Time.deltaTime;
 
+
                 motion += Camera.rotation.GetRightVector().XZ() * input.X * speed;
-                motion += Camera.rotation.GetForwardVector().XZ()/ Camera.rotation.GetForwardVector().XZ().Length() * input.Y * speed;
+                motion += Camera.rotation.GetForwardVector().XZ() / Camera.rotation.GetForwardVector().XZ().Length() * input.Y * speed;
 
+                body.Friction = 0.0f;
 
-                
+            }
+            else
+            {
+                body.Friction = 1f;
             }
 
             body.Activate(true);
@@ -233,7 +258,7 @@ namespace RetroEngine.Entities
             if (Input.GetAction("jump").Pressed())
                 Jump();
 
-            if (Input.GetAction("attack").Pressed())
+            if (Input.GetAction("attack").Holding())
                 Shoot();
 
             mesh.AddTime(Time.deltaTime);
@@ -241,6 +266,8 @@ namespace RetroEngine.Entities
 
             mesh2.AddTime(Time.deltaTime);
             mesh2.Update();
+
+            
 
             FirstTick = false;
 
@@ -257,6 +284,9 @@ namespace RetroEngine.Entities
             mesh2.Rotation = Camera.rotation;
 
             cylinder.Position = Position + Camera.rotation.GetForwardVector().XZ()*3;
+
+            stepSoundPlayer.Position = Camera.position;
+            fireSoundPlayer.Position = Camera.position;
         }
 
         void Jump()
@@ -267,6 +297,11 @@ namespace RetroEngine.Entities
         int bulletId = 0;
         void Shoot()
         {
+            if (attackDelay.Wait()) return;
+
+            attackDelay.AddDelay(0.13f);
+
+            fireSoundPlayer.Play(true);
 
             if (!attack)
             {

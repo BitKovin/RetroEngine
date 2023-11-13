@@ -16,6 +16,8 @@ namespace RetroEngine.Game.Entities
 
         public List<Entity> ignore = new List<Entity>();
 
+        Delay destroyDelay =new Delay();
+
         public Bullet() 
         {
             mesh.LoadFromFile("models/weapons/bullet/bullet.obj");
@@ -28,6 +30,7 @@ namespace RetroEngine.Game.Entities
 
             body.Gravity = new System.Numerics.Vector3(0,0,0);
 
+            body.Friction = 1;
 
             body.CcdSweptSphereRadius = 0.02f;
             body.CcdMotionThreshold = 0.1f;
@@ -43,7 +46,7 @@ namespace RetroEngine.Game.Entities
 
             startRotation = Rotation;
 
-            body.SetRotation(Quaternion.CreateFromYawPitchRoll(startRotation.X, startRotation.Y, startRotation.Z));
+            body.SetRotation(Physics.ToQuaternion(startRotation.ToNumerics()));
 
             body.ApplyCentralImpulse(Rotation.GetForwardVector().ToNumerics() * 5f);
 
@@ -58,12 +61,13 @@ namespace RetroEngine.Game.Entities
 
             collisionCallback.CollisionEvent += Hit;
 
+            destroyDelay.AddDelay(1);
+
         }
 
         private void Hit(BulletSharp.CollisionObjectWrapper thisObject, BulletSharp.CollisionObjectWrapper collidedObject, Entity collidedEntity, BulletSharp.ManifoldPoint contactPoint)
         {
-
-            Console.WriteLine($"me: {(thisObject.CollisionObject.UserObject as Entity).GetType()}   other: {(collidedObject.CollisionObject.UserObject as Entity).GetType()}");
+            
             Destroy();
         }
 
@@ -71,17 +75,26 @@ namespace RetroEngine.Game.Entities
         {
             base.Update();
 
+            if(!destroyDelay.Wait())
+                Destroy();
+
             Physics.PerformContactCheck(body, collisionCallback);
 
+
+        }
+
+        public override void AsyncUpdate()
+        {
+            base.AsyncUpdate();
+
+            mesh.Position = Position;
+            mesh.Rotation = Rotation;
         }
 
         public override void LateUpdate()
         {
-            base.LateUpdate();
-            mesh.Position = Position;
-            mesh.Rotation = Rotation;
 
-            body.SetRotation(Physics.ToQuaternion(startRotation.ToNumerics()));
+            base.LateUpdate();
 
         }
 

@@ -56,6 +56,12 @@ namespace RetroEngine
             return new Vector3(vector.X, 0, vector.Z);
         }
 
+        public static Vector3 Normalized (this Vector3 vector)
+        {
+            vector.Normalize();
+            return vector;
+        }
+
         public static float Lerp(float a, float b, float progress)
         {
             return Vector2.Lerp(new Vector2(a), new Vector2(b), progress).X;

@@ -29,17 +29,15 @@ namespace RetroEngine.Audio
             listener.Velocity = Camera.velocity;
         }
 
-        public static void ApplyPosition(this SoundEffectInstance soundEffectInstance, Vector3 position, float MaxDistance = 10, float MinDistance = 2)
+        public static void ApplyPosition(this SoundEffectInstance soundEffectInstance, Vector3 position, float MaxDistance = 10, float MinDistance = 1)
         {
             float distance = Vector3.Distance(listener.Position, position);
-
-
 
             float n = 2.5f;
 
             distance -= MinDistance;
 
-            distance = Math.Max(distance, 0);
+            distance = Math.Max(distance, 0f);
 
             MaxDistance -= MinDistance;
 
@@ -58,7 +56,8 @@ namespace RetroEngine.Audio
 
             toEmitter.Normalize();
 
-            volume /= ((Vector3.Dot(listener.Forward, toEmitter) + 1) / 4f) + 1;
+            if(distance>0.2f)
+                volume /= ((Vector3.Dot(listener.Forward, toEmitter) + 1) / 4f) + 1;
 
             Vector3 right = Vector3.Cross(listener.Up, listener.Forward);
 

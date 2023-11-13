@@ -40,6 +40,7 @@ namespace RetroEngine.Entities
                 }
                 return;
             }
+            soundEffectInstance.IsLooped = IsLooped;
 
             if (paused) 
             {
@@ -47,17 +48,23 @@ namespace RetroEngine.Entities
             }
             else if(playing)
             {
-                try
+                if (IsLooped)
                 {
-                    soundEffectInstance.Play();
+                    try
+                    {
+                        soundEffectInstance.Play();
+                    }
+                    catch (Exception ex) { }
                 }
-                catch (Exception ex) { }
-
-                soundEffectInstance.ApplyPosition(Position, MaxDistance, MinDistance);
-
-                soundEffectInstance.Volume *= Volume;
+                
 
             }
+
+            soundEffectInstance.ApplyPosition(Position, MaxDistance, MinDistance);
+
+            soundEffectInstance.Volume *= Volume;
+
+            Console.WriteLine(soundEffectInstance.Volume);
         }
 
         public void SetSound(SoundEffect sound)
@@ -69,15 +76,32 @@ namespace RetroEngine.Entities
             }
         }
 
-        public void Play()
+        public void Play(bool fromStart = false)
         {
             paused = false;
             playing = true;
+
+            soundEffectInstance.Volume = 0;
+
+            LateUpdate();
+
+            
+
+            if(fromStart)
+            {
+                soundEffectInstance.Stop();
+            }
+
+            try
+            {
+                soundEffectInstance.Play();
+            }
+            catch (Exception ex) { }
         }
 
         public void Stop()
         {
-            soundEffectInstance.Stop();
+            soundEffectInstance.Stop(true);
             playing = false;
         }
 

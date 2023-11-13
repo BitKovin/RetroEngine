@@ -108,13 +108,13 @@ namespace RetroEngine
 
         }
 
-        public void AddKeyboardKey(Keys key) { keys.Add(key); }
+        public InputAction AddKeyboardKey(Keys key) { keys.Add(key); return this; }
 
-        public void RemoveKeyboardKey(Keys key) { keys.Remove(key); }
+        public InputAction RemoveKeyboardKey(Keys key) { keys.Remove(key); return this; }
 
-        public void AddButton(Buttons button) { buttons.Add(button); }
+        public InputAction AddButton(Buttons button) { buttons.Add(button); return this; }
 
-        public void RemoveButton(Buttons button) { buttons.Remove(button); }
+        public InputAction RemoveButton(Buttons button) { buttons.Remove(button); return this; }
 
         public bool Pressed()
         {
@@ -137,90 +137,34 @@ namespace RetroEngine
             bool newRmb = Mouse.GetState().RightButton == ButtonState.Pressed;
             bool newMmb = Mouse.GetState().MiddleButton == ButtonState.Pressed;
 
-            pressed = released = false;
+            bool oldPressing = pressing;
+
+            pressed = released = pressing = false;
 
             if (LMB)
             {
-                //LMB
-                if (!lmbOld && newLmb)
-                {
-                    lmbOld = newLmb;
-                    pressed = true;
-                    released = false;
+                if(newLmb)
                     pressing = true;
-                }
-                else if (lmbOld && !newLmb)
-                {
-                    lmbOld = newLmb;
-                    pressed = false;
-                    released = true;
-                    pressing = false;
-                }
             }
 
             if (RMB)
             {
-                //RMB
-                if (!rmbOld && newRmb)
-                {
-                    rmbOld = newRmb;
-                    pressed = true;
-                    released = false;
+                if (newRmb)
                     pressing = true;
-                }
-                else if (rmbOld && !newRmb)
-                {
-                    rmbOld = newRmb;
-                    pressed = false;
-                    released = true;
-                    pressing = false;
-                }
             }
             if (MMB)
             {
-                //MMB
-                if (!mmbOld && newMmb)
-                {
-                    mmbOld = newMmb;
-                    pressed = true;
-                    released = false;
+                if(newMmb)
                     pressing = true;
-                }
-                else if (mmbOld && !newMmb)
-                {
-                    mmbOld = newMmb;
-                    pressed = false;
-                    released = true;
-                    pressing = false;
-                }
             }
             //keyboard
 
             Keys[] keysNow = Keyboard.GetState().GetPressedKeys();
 
-            foreach (Keys key in keysNow)
+            foreach(Keys key in keysNow)
             {
-                if (!keysOld.Contains(key))
-                {
-                    if (keys.Contains(key) == false) continue;
-
-                    pressed = true;
+                if(keys.Contains(key))
                     pressing = true;
-                    released = false;
-
-                }
-            }
-
-            foreach (Keys key in keysOld)
-            {
-                if (!keysNow.Contains(key))
-                {
-                    if (keys.Contains(key) == false) continue;
-
-                    pressed = false;
-                    pressing = false;
-                    released = true;
-                }
             }
 
             keysOld = keysNow;
@@ -233,18 +177,23 @@ namespace RetroEngine
 
                 if(buttonDown&& !pressing)
                 {
-                    pressed = true;
                     pressing = true;
-                    released = false;
                 }
 
                 if(!buttonDown && pressing)
                 {
-                    pressed = false;
-                    pressing = false;
-                    released = true;
+
                 }
 
+            }
+
+
+            if(pressing && !oldPressing)
+            {
+                pressed = true;
+            }else if (!pressing & oldPressing)
+            {
+                released = true;
             }
 
         }

@@ -32,10 +32,10 @@ namespace RetroEngine.Map
                 {
                     Entity entity = LevelObjectFactory.CreateByTechnicalName(ent.Classname) as Entity;
 
-                    entity.name = ent.Classname;
-
                     if (entity is null)
                         entity = new Entity();
+
+                    entity.name = ent.Classname;
 
                     CompoundShape shape = new CompoundShape();
 

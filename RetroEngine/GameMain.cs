@@ -128,7 +128,10 @@ namespace RetroEngine
 
             this.Exiting += Game1_Exiting;
 
-            Time.deltaTime = (float)Math.Min(gameTime.ElapsedGameTime.TotalSeconds,0.07d);
+            Time.deltaTime = (float)Math.Min(gameTime.ElapsedGameTime.TotalSeconds,0.08d);
+
+            if(!paused)
+                Time.gameTime += Time.deltaTime;
 
             ScreenHeight = GraphicsDevice.PresentationParameters.Bounds.Height;
 
@@ -277,7 +280,7 @@ namespace RetroEngine
 
         public virtual void OnLevelChanged()
         {
-
+            Time.gameTime = 0;
         }
 
     }

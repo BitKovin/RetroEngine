@@ -36,6 +36,8 @@ namespace RetroEngine
         public static void PerformContactCheck(CollisionObject collisionObject, CollisionCallback callback) 
         {
         
+            if(collisionObject is null) return;
+
             dynamicsWorld.ContactTest(collisionObject, callback);
 
         }
@@ -43,7 +45,7 @@ namespace RetroEngine
         public static void Simulate()
         {
             if (GameMain.inst.paused == false)
-                dynamicsWorld.StepSimulation(RetroEngine.Time.deltaTime, steps, Math.Max(1f / 60f, Time.deltaTime));
+                dynamicsWorld.StepSimulation(RetroEngine.Time.deltaTime, steps, 1/100f);
         }
 
         public static void Remove(CollisionObject collisionObject)

@@ -1,0 +1,11 @@
+newmtl __TB_empty
+
+newmtl brushes/bricks
+map_Kd textures\brushes\bricks.png
+
+newmtl brushes/grass
+map_Kd textures\brushes\grass.png
+
+newmtl brushes/trigger
+map_Kd textures\brushes\trigger.png
+

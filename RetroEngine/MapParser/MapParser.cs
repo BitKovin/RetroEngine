@@ -12,11 +12,6 @@ using System.Text.RegularExpressions;
 using System.Globalization;
 using System.Reflection.Metadata;
 using Microsoft.Xna.Framework.Audio;
-using MIConvexHull;
-using TriangleNet.Geometry;
-using TriangleNet.Meshing;
-using TriangleNet.Topology;
-using TriangleNet;
 
 namespace RetroEngine.MapParser
 {
@@ -204,50 +199,6 @@ namespace RetroEngine.MapParser
             }
 
             return faces;
-        }
-
-
-
-
-        public static List<Vector3> CutMeshByPlane(List<Vector3> vertices, Vector3 planeLocation, Vector3 normal)
-        {
-            List<Vector3> positiveVertices = new List<Vector3>();
-            List<Vector3> negativeVertices = new List<Vector3>();
-
-            foreach (var vertex in vertices)
-            {
-                float distance = Vector3.Dot(vertex - planeLocation, normal);
-                if (distance >= 0)
-                {
-                    positiveVertices.Add(vertex);
-                }
-                else
-                {
-                    negativeVertices.Add(vertex);
-                }
-            }
-
-            // Create a Triangle.NET polygon from the positive vertices
-            var polygon = new Polygon();
-            foreach (var vertex in positiveVertices)
-            {
-                polygon.Add(new Vertex(vertex.X, vertex.Y));
-            }
-
-            // Triangulate the polygon
-            var qualityOptions = new ConstraintOptions();
-            var mesh = (Mesh)polygon.Triangulate(qualityOptions);
-
-            // Get the triangles from the generated mesh
-            var cutMesh = new List<Vector3>(negativeVertices);
-
-            foreach (var vertex in mesh.Vertices)
-            {
-                cutMesh.Add(new Vector3((float)vertex.X, (float)vertex.Y, 0f)); // Adjust the Z-coordinate as needed
-            }
-
-
-            return cutMesh;
         }
 
         public static Vector3 CalculatePlaneNormal(Vector3 point1, Vector3 point2, Vector3 point3)

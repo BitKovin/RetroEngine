@@ -22,7 +22,7 @@ namespace RetroEngine.Game
             devMenu = new GameDevMenu();
             devMenu.Init();
 
-            Level.LoadFromFile("test2.map");
+            Level.LoadFromFile("test.map");
 
             for (float i = 1; i < 0; i++)
             {
@@ -39,7 +39,7 @@ namespace RetroEngine.Game
 
         public override void GameInitialized()
         {
-            MakeFullscreen();
+            //MakeFullscreen();
         }
 
         public override void OnLevelChanged()
@@ -59,10 +59,10 @@ namespace RetroEngine.Game
             Input.AddAction("jump").AddKeyboardKey(Keys.Space);
             Input.AddAction("attack").LMB = true;
 
-            Input.AddAction("moveForward").AddKeyboardKey(Keys.W);
-            Input.AddAction("moveBackward").AddKeyboardKey(Keys.S);
-            Input.AddAction("moveLeft").AddKeyboardKey(Keys.A);
-            Input.AddAction("moveRight").AddKeyboardKey(Keys.D);
+            Input.AddAction("moveForward").AddKeyboardKey(Keys.W).AddButton(Buttons.DPadUp);
+            Input.AddAction("moveBackward").AddKeyboardKey(Keys.S).AddButton(Buttons.DPadDown);
+            Input.AddAction("moveLeft").AddKeyboardKey(Keys.A).AddButton(Buttons.DPadLeft);
+            Input.AddAction("moveRight").AddKeyboardKey(Keys.D).AddButton(Buttons.DPadRight);
 
 
         }
