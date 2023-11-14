@@ -22,6 +22,7 @@ namespace RetroEngine.Entities
             base.Start();
 
             body.CollisionFlags = BulletSharp.CollisionFlags.NoContactResponse;
+            body.UserIndex = (int)RayFlags.NoRayTest;
 
             collisionCallback.CollisionEvent += TriggerEntered;
 

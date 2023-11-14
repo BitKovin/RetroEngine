@@ -315,6 +315,7 @@ namespace RetroEngine.Entities
                 mesh2.Play();
             }
 
+            /*
             Bullet bullet = new Bullet();
 
             bullet.Rotation = Camera.rotation;
@@ -334,12 +335,12 @@ namespace RetroEngine.Entities
 
             bullet.Start();
 
-
+            */
             attack = !attack;
 
             bulletId++;
 
-            return;
+            
             var hit = Physics.LineTrace(Camera.position.ToPhysics(), Camera.rotation.GetForwardVector().ToPhysics() * 100 + Camera.position.ToPhysics());
 
             if(hit is not null)

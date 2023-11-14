@@ -245,9 +245,9 @@ namespace RetroEngine
 
         public static ClosestRayResultCallback LineTrace(Vector3 rayStart, Vector3 rayEnd)
         {
-            CollisionWorld world = dynamicsWorld as CollisionWorld;
+            CollisionWorld world = dynamicsWorld;
 
-            ClosestRayResultCallback rayCallback = new ClosestRayResultCallback(ref rayStart, ref rayEnd);
+            ClosestRayResultCallback rayCallback = new MyClosestRayResultCallback(ref rayStart, ref rayEnd);
 
             // Perform the ray cast
             world.RayTest(rayStart, rayEnd, rayCallback);
