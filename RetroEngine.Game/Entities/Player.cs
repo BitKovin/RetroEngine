@@ -105,6 +105,7 @@ namespace RetroEngine.Entities
             //mesh.texture = AssetRegistry.LoadTextureFromFile("usp.png");
             mesh.textureSearchPaths.Add("textures/weapons/arms/");
             mesh.textureSearchPaths.Add("textures/weapons/pistol/");
+            mesh.CastShadows = false;
 
             mesh.Viewmodel = true;
 
@@ -128,6 +129,7 @@ namespace RetroEngine.Entities
             //mesh.texture = AssetRegistry.LoadTextureFromFile("usp.png");
             mesh2.textureSearchPaths.Add("textures/weapons/arms/");
             mesh2.textureSearchPaths.Add("textures/weapons/pistol/");
+            mesh2.CastShadows = false;
 
             mesh2.Viewmodel = true;
             meshes.Add(mesh2);

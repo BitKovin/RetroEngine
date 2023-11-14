@@ -43,6 +43,8 @@ namespace RetroEngine
 
         Dictionary<string, Texture2D> textures = new Dictionary<string, Texture2D>();
 
+        public bool CastShadows = true;
+
         public virtual void Draw()
         {
             foreach (ModelMesh mesh in model.Meshes)
@@ -122,6 +124,8 @@ namespace RetroEngine
 
         public virtual void DrawShadow()
         {
+            if (!CastShadows) return;
+
             GraphicsDevice graphicsDevice = GameMain.inst._graphics.GraphicsDevice;
             // Load the custom effect
             Effect effect = GameMain.inst.render.ShadowMapEffect;
