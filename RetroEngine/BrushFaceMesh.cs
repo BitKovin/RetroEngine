@@ -241,7 +241,7 @@ namespace RetroEngine
                     // Negate the x-coordinate to correct mirroring
                     vertices.Add(new VertexPositionNormalTexture(
                         new Vector3(-vertex.X / unitSize, vertex.Y / unitSize, vertex.Z / unitSize), // Negate x-coordinate
-                        new Vector3(normal.X, normal.Y, normal.Z),
+                        new Vector3(-normal.X, normal.Y, normal.Z),
                         new Vector2(textureCoord.X, textureCoord.Y)
                     ));
                 }

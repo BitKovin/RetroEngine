@@ -29,7 +29,7 @@ namespace RetroEngine.Audio
             listener.Velocity = Camera.velocity;
         }
 
-        public static void ApplyPosition(this SoundEffectInstance soundEffectInstance, Vector3 position, float MaxDistance = 10, float MinDistance = 1)
+        public static void ApplyPosition(this SoundEffectInstance soundEffectInstance, Vector3 position, float MaxDistance = 10, float MinDistance = 1, float Volume = 1)
         {
             float distance = Vector3.Distance(listener.Position, position);
 
@@ -49,7 +49,7 @@ namespace RetroEngine.Audio
             // Set the volume and pitch based on attenuation
             float maxVolume = 1.0f; // Adjust this value for maximum volume
             float minVolume = 0.0f; // Adjust this value for minimum volume
-            float volume = minVolume + (maxVolume - minVolume) * attenuation;
+            float volume = minVolume + (maxVolume - minVolume) * attenuation * Volume;
 
 
             Vector3 toEmitter =  listener.Position - position;

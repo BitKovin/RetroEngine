@@ -87,7 +87,7 @@ namespace RetroEngine
                         effect.Parameters["GlobalBrightness"].SetValue(Graphics.GlobalLighting);
                         effect.Parameters["LightDirection"].SetValue(Graphics.LightDirection);
 
-                        effect.Parameters["ShadowMapViewProjection"].SetValue(Graphics.GetLightView() * Graphics.GetLightProjection());
+                        effect.Parameters["ShadowMapViewProjection"].SetValue(Graphics.LightViewProjection);
                         effect.Parameters["ShadowMap"].SetValue(GameMain.inst.render.shadowMap);
                         effect.Parameters["ShadowBias"].SetValue(Graphics.ShadowBias);
 

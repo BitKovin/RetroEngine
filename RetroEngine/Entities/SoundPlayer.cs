@@ -28,12 +28,20 @@ namespace RetroEngine.Entities
 
         public SoundPlayer() { }
 
+        bool pendingPlay = false;
+        Delay pendingPlayDelay = new Delay();
+
         public override void LateUpdate()
         {
             base.LateUpdate();
 
-            soundEffectInstance.ApplyPosition(Position, MaxDistance, MinDistance);
-            soundEffectInstance.Volume *= Volume;
+            if (pendingPlay && !pendingPlayDelay.Wait())
+            {
+                soundEffectInstance.Play();
+                pendingPlay = false;
+            }
+
+            soundEffectInstance.ApplyPosition(Position, MaxDistance, MinDistance, Volume);
 
             if (Vector3.Distance(Camera.position, Position) > MaxDistance * 2f)
             {
@@ -80,7 +88,7 @@ namespace RetroEngine.Entities
             paused = false;
             playing = true;
 
-            soundEffectInstance.Volume = Volume;
+            soundEffectInstance.Volume = 0;
 
             LateUpdate();
 
@@ -88,9 +96,9 @@ namespace RetroEngine.Entities
 
             if(fromStart)
             {
-                soundEffectInstance.Stop();
+                soundEffectInstance.Stop(true);
             }
-
+            soundEffectInstance.Volume = 0;
             try
             {
                 soundEffectInstance.Play();

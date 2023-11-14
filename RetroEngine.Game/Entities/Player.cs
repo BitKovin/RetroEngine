@@ -177,10 +177,12 @@ namespace RetroEngine.Entities
 
             stepSoundPlayer = Level.GetCurrent().AddEntity(new SoundPlayer()) as SoundPlayer;
             stepSoundPlayer.SetSound(AssetRegistry.LoadSoundFromFile("sounds/step.wav"));
+            stepSoundPlayer.Volume = 0.5f;
 
             fireSoundPlayer = Level.GetCurrent().AddEntity(new SoundPlayer()) as SoundPlayer;
             fireSoundPlayer.SetSound(AssetRegistry.LoadSoundFromFile("sounds/pistol_fire.wav"));
-            fireSoundPlayer.Volume = 0.3f;
+            fireSoundPlayer.Volume = 0.05f;
+            
         }
 
         public override void Update()

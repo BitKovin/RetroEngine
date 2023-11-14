@@ -34,7 +34,7 @@ namespace RetroEngine
 
         public Effect fxaaEffect;
 
-        int shadowMapResolution = 8192;
+        int shadowMapResolution = 2048*2;
 
         public Render()
         {
@@ -96,6 +96,9 @@ namespace RetroEngine
 
         void RenderShadowMap(Level level)
         {
+
+            Graphics.LightViewProjection = Graphics.GetLightView() * Graphics.GetLightProjection();
+
             // Set up the shadow map render target with the desired resolution
             graphics.GraphicsDevice.SetRenderTarget(shadowMap);
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, shadowMapResolution, shadowMapResolution);
