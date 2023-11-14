@@ -61,9 +61,7 @@ PixelInput VertexShaderFunction(VertexInput input)
     output.Normal = mul(input.Normal, (float3x3)World);
     output.Normal = normalize(output.Normal);
 
-    float lightingFactor = max(-0.3, dot(output.Normal, normalize(-LightDirection))) * DirectBrightness; // Example light direction
-
-	lightingFactor += GlobalBrightness;
+    float lightingFactor = max(-0.0, dot(output.Normal, normalize(-LightDirection))) * DirectBrightness; // Example light direction
 
     output.light = lightingFactor;
 
@@ -96,8 +94,12 @@ float4 PixelShaderFunction(PixelInput input) : COLOR0
         shadow = 1;
     }
     
+    float light = input.light;
 
-	textureColor *= input.light - shadow*0.3f;
+    light *= 1.0f- shadow;
+    light += GlobalBrightness;
+
+	textureColor *= light;
 
     return float4(textureColor, textureAlpha);
 }
