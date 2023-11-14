@@ -301,7 +301,7 @@ namespace RetroEngine.Entities
         {
             if (attackDelay.Wait()) return;
 
-            attackDelay.AddDelay(0.13f);
+            attackDelay.AddDelay(0.12f);
 
             fireSoundPlayer.Play(true);
 

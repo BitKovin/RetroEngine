@@ -88,8 +88,6 @@ namespace RetroEngine.Entities
             paused = false;
             playing = true;
 
-            soundEffectInstance.Volume = 0;
-
             LateUpdate();
 
             
@@ -98,7 +96,6 @@ namespace RetroEngine.Entities
             {
                 soundEffectInstance.Stop(true);
             }
-            soundEffectInstance.Volume = 0;
             try
             {
                 soundEffectInstance.Play();
