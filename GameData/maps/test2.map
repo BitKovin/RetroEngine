@@ -83,3 +83,47 @@
 ( 248 -176 216 ) ( 248 -384 16 ) ( 248 -384 216 ) brushes/trigger 0 0 0 1 1
 }
 }
+// entity 4
+{
+"classname" "func_group"
+"_tb_type" "_tb_layer"
+"_tb_name" "navigation"
+"_tb_id" "1"
+"_tb_layer_sort_index" "0"
+}
+// entity 5
+{
+"classname" "info.navpoint"
+"origin" "-88 -472 24"
+"_tb_layer" "1"
+}
+// entity 6
+{
+"classname" "info.navpoint"
+"origin" "376 -504 24"
+"_tb_layer" "1"
+}
+// entity 7
+{
+"classname" "info.navpoint"
+"origin" "-360 -600 24"
+"_tb_layer" "1"
+}
+// entity 8
+{
+"classname" "info.navpoint"
+"origin" "584 -568 24"
+"_tb_layer" "1"
+}
+// entity 9
+{
+"classname" "info.navpoint"
+"origin" "-616 -440 24"
+"_tb_layer" "1"
+}
+// entity 10
+{
+"classname" "info.navpoint"
+"origin" "840 -168 24"
+"_tb_layer" "1"
+}

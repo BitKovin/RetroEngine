@@ -87,6 +87,10 @@ namespace RetroEngine
                         effect.Parameters["GlobalBrightness"].SetValue(Graphics.GlobalLighting);
                         effect.Parameters["LightDirection"].SetValue(Graphics.LightDirection);
 
+                        effect.Parameters["ShadowMapViewProjection"].SetValue(Graphics.GetLightView() * Graphics.GetLightProjection());
+                        effect.Parameters["ShadowMap"].SetValue(GameMain.inst.render.shadowMap);
+                        effect.Parameters["ShadowBias"].SetValue(Graphics.ShadowBias);
+
                         MeshPartData meshPartData = meshPart.Tag as MeshPartData;
 
                         if (meshPartData is not null)
@@ -97,6 +101,47 @@ namespace RetroEngine
                         {
                             effect.Parameters["Texture"].SetValue(texture);
                         }
+                        
+
+                        // Draw the primitives using the custom effect
+                        foreach (EffectPass pass in effect.CurrentTechnique.Passes)
+                        {
+                            pass.Apply();
+                            graphicsDevice.DrawIndexedPrimitives(
+                                PrimitiveType.TriangleList,
+                                meshPart.VertexOffset,
+                                0,
+                                meshPart.NumVertices,
+                                meshPart.StartIndex,
+                                meshPart.PrimitiveCount);
+                        }
+                    }
+                }
+            }
+        }
+
+        public virtual void DrawShadow()
+        {
+            GraphicsDevice graphicsDevice = GameMain.inst._graphics.GraphicsDevice;
+            // Load the custom effect
+            Effect effect = GameMain.inst.render.ShadowMapEffect;
+
+
+            if (model is not null)
+            {
+                foreach (ModelMesh mesh in model.Meshes)
+                {
+                    foreach (ModelMeshPart meshPart in mesh.MeshParts)
+                    {
+
+                        // Set the vertex buffer and index buffer for this mesh part
+                        graphicsDevice.SetVertexBuffer(meshPart.VertexBuffer);
+                        graphicsDevice.Indices = meshPart.IndexBuffer;
+
+                        // Set effect parameters
+                        effect.Parameters["World"].SetValue(GetWorldMatrix());
+                        effect.Parameters["View"].SetValue(Graphics.GetLightView());
+                        effect.Parameters["Projection"].SetValue(Graphics.GetLightProjection());
                         
 
                         // Draw the primitives using the custom effect

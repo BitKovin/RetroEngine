@@ -82,6 +82,12 @@
 /processorParam:TextureFormat=Compressed
 /build:pistol.fbx
 
+#begin ShadowMap.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:ShadowMap.fx
+
 #begin UnifiedOutput.fx
 /importer:EffectImporter
 /processor:EffectProcessor

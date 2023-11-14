@@ -13,9 +13,18 @@ matrix Projection;
 texture Texture;
 sampler TextureSampler = sampler_state { texture = <Texture>; };
 
+texture ShadowMap;
+sampler ShadowMapSampler = sampler_state { texture = <ShadowMap>; };
+
 float DirectBrightness;
 float GlobalBrightness;
 float3 LightDirection;
+
+float ShadowBias;
+
+bool test;
+
+matrix ShadowMapViewProjection;
 
 struct VertexInput
 {
@@ -31,6 +40,7 @@ struct PixelInput
     float2 TexCoord : TEXCOORD0;
 	float3 Normal : TEXCOORD1; // Pass normal to pixel shader
     float light : TEXCOORD2;
+    float4 lightPos :TEXCOORD3;
 };
 
 float3 normalize(float3 v)
@@ -57,6 +67,8 @@ PixelInput VertexShaderFunction(VertexInput input)
 
     output.light = lightingFactor;
 
+    output.lightPos = mul(float4(mul(input.Position, World)),ShadowMapViewProjection);
+
     return output;
 }
 
@@ -66,7 +78,26 @@ float4 PixelShaderFunction(PixelInput input) : COLOR0
 	float3 textureColor = tex2D(TextureSampler, input.TexCoord).xyz;
 	float textureAlpha = tex2D(TextureSampler, input.TexCoord).w;
 
-	textureColor *= input.light;
+    float3 lightCoords = input.lightPos.xyz / input.lightPos.w;
+
+    float shadow = 0;
+
+    lightCoords = (lightCoords + 1.0f) / 2.0f;
+
+    lightCoords.y = 1.0f - lightCoords.y;
+
+    if(lightCoords.x>=0 && lightCoords.x <=1 && lightCoords.y>=0 && lightCoords.y <=1)
+    {
+
+    float closestDepth = tex2D(ShadowMapSampler,lightCoords.xy).r;
+    float currentDepth = lightCoords.z * 2 - 1;
+
+    if(currentDepth > closestDepth + ShadowBias)
+        shadow = 1;
+    }
+    
+
+	textureColor *= input.light - shadow*0.3f;
 
     return float4(textureColor, textureAlpha);
 }

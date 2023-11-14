@@ -13,9 +13,10 @@ namespace RetroEngine
 
         public List<string> log = new List<string>();
 
-        string input = "";
 
         bool scrolldown = false;
+
+        string input = "";
 
         public virtual void Update()
         {
@@ -25,6 +26,12 @@ namespace RetroEngine
             ImGui.EndMainMenuBar();
 
             if (!GameMain.inst.paused) return;
+
+            ImGui.Begin("lighting");
+
+            ImGui.SliderFloat("shadow bias", ref Graphics.ShadowBias, 0.002f, 0.01f);
+
+            ImGui.End();
 
             //string consoleContent = sb.ToString();
 

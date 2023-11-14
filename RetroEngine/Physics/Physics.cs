@@ -15,7 +15,7 @@ namespace RetroEngine
 
         private static DiscreteDynamicsWorld dynamicsWorld;
 
-        private static int steps = 2;
+        private static int steps = 1;
 
         public static void Start()
         {

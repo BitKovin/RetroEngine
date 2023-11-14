@@ -32,6 +32,9 @@ namespace RetroEngine.Entities
         {
             base.LateUpdate();
 
+            soundEffectInstance.ApplyPosition(Position, MaxDistance, MinDistance);
+            soundEffectInstance.Volume *= Volume;
+
             if (Vector3.Distance(Camera.position, Position) > MaxDistance * 2f)
             {
                 if (soundEffectInstance.State != SoundState.Stopped)
@@ -60,11 +63,7 @@ namespace RetroEngine.Entities
 
             }
 
-            soundEffectInstance.ApplyPosition(Position, MaxDistance, MinDistance);
 
-            soundEffectInstance.Volume *= Volume;
-
-            Console.WriteLine(soundEffectInstance.Volume);
         }
 
         public void SetSound(SoundEffect sound)
@@ -81,7 +80,7 @@ namespace RetroEngine.Entities
             paused = false;
             playing = true;
 
-            soundEffectInstance.Volume = 0;
+            soundEffectInstance.Volume = Volume;
 
             LateUpdate();
 

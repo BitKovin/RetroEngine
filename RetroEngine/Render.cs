@@ -18,6 +18,8 @@ namespace RetroEngine
         RenderTarget2D normalPath;
         RenderTarget2D miscPath;
 
+        public RenderTarget2D shadowMap;
+
         RenderTarget2D outputPath;
 
         GraphicsDeviceManager graphics;
@@ -28,7 +30,11 @@ namespace RetroEngine
         public Effect MiscEffect;
         public Effect UnifiedEffect;
 
+        public Effect ShadowMapEffect;
+
         public Effect fxaaEffect;
+
+        int shadowMapResolution = 8192;
 
         public Render()
         {
@@ -37,6 +43,7 @@ namespace RetroEngine
             MiscEffect = GameMain.content.Load<Effect>("MiscOutput");
             UnifiedEffect = GameMain.content.Load<Effect>("UnifiedOutput");
             fxaaEffect = GameMain.content.Load<Effect>("fxaa");
+            ShadowMapEffect = GameMain.content.Load<Effect>("ShadowMap");
         }
 
         public RenderTarget2D StartRenderLevel(Level level)
@@ -48,8 +55,14 @@ namespace RetroEngine
             InitRenderTargetIfNeed(ref outputPath);
             InitRenderTargetIfNeed(ref miscPath);
 
+            if(shadowMap is null)
+            InitShadowMap(ref shadowMap);
+
             graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
 
+            RenderShadowMap(level);
+
+            graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
             RenderUnifiedPath(level);
             //RenderColorPath(level);
             //RenderNormalPath(level);
@@ -58,7 +71,6 @@ namespace RetroEngine
 
 
             PerformPostProcessing();
-                
             //outputPath = colorPath;
 
             return outputPath;
@@ -70,21 +82,49 @@ namespace RetroEngine
             graphics.GraphicsDevice.Clear(Graphics.BackgroundColor);
 
             graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+            graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 
-            //int n = 0;
+            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
 
             foreach (StaticMesh mesh in level.GetMeshesToRender())
                 if (mesh.isRendered)
                 {
                     mesh.DrawUnified();
-                    //n++;
                 }
-            //Console.WriteLine("Drawed " + n.ToString());
 
+        }
+
+        void RenderShadowMap(Level level)
+        {
+            // Set up the shadow map render target with the desired resolution
+            graphics.GraphicsDevice.SetRenderTarget(shadowMap);
+            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, shadowMapResolution, shadowMapResolution);
+
+            // Clear the shadow map with the desired clear color (e.g., Color.White)
+            graphics.GraphicsDevice.Clear(Color.White);
+
+            // Set depth stencil and rasterizer states
+            graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+            graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
+
+            // Iterate through meshes and draw shadows
+            foreach (StaticMesh mesh in level.GetMeshesToRender())
+            {
+                if (mesh.isRendered)
+                {
+                    mesh.DrawShadow();
+                }
+            }
+
+            // Reset the render target and viewport to the back buffer's dimensions
+            graphics.GraphicsDevice.SetRenderTarget(null);
+            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
         }
 
         void PerformPostProcessing()
         {
+            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, shadowMapResolution, shadowMapResolution);
+
             PerformFXAA();
         }
 
@@ -209,6 +249,21 @@ namespace RetroEngine
 
             // Draw the full-screen quad using SpriteBatch
             spriteBatch.Draw(colorPath, screenRectangle, Color.White);
+        }
+
+        void InitShadowMap(ref RenderTarget2D target)
+        {
+            // Set the depth format based on your requirements
+            DepthFormat depthFormat = DepthFormat.Depth24;
+
+            // Create the new render target with the specified depth format
+            target = new RenderTarget2D(
+                graphics.GraphicsDevice,
+                shadowMapResolution,
+                shadowMapResolution,
+                false, // No mipmaps
+                SurfaceFormat.Color, // Color format
+                depthFormat); // Depth format
         }
 
         void InitRenderTargetIfNeed(ref RenderTarget2D target)
