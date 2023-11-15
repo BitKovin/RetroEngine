@@ -116,7 +116,7 @@
 // entity 1
 {
 "classname" "info_player_start"
-"origin" "128 432 40"
+"origin" "304 384 40"
 "angle" "-90"
 }
 // entity 2
@@ -148,36 +148,36 @@
 // entity 5
 {
 "classname" "info.navpoint"
-"origin" "216 -584 24"
+"origin" "-88 -472 24"
 "_tb_layer" "1"
 }
 // entity 6
 {
 "classname" "info.navpoint"
-"origin" "-616 -584 24"
+"origin" "376 -504 24"
 "_tb_layer" "1"
 }
 // entity 7
 {
 "classname" "info.navpoint"
-"origin" "840 -168 24"
+"origin" "-360 -600 24"
 "_tb_layer" "1"
 }
 // entity 8
 {
 "classname" "info.navpoint"
-"origin" "664 -536 24"
+"origin" "584 -568 24"
 "_tb_layer" "1"
 }
 // entity 9
 {
 "classname" "info.navpoint"
-"origin" "136 168 24"
+"origin" "-616 -440 24"
 "_tb_layer" "1"
 }
 // entity 10
 {
 "classname" "info.navpoint"
-"origin" "-632 88 24"
+"origin" "840 -168 24"
 "_tb_layer" "1"
 }

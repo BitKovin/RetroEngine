@@ -14,7 +14,7 @@ namespace RetroEngine.UI
 
         Texture2D tex;
 
-        Color baseColor = Color.White;
+        public Color baseColor = Color.White;
 
         public Image() : base()
         {
@@ -22,6 +22,11 @@ namespace RetroEngine.UI
             tex.SetData(new Color[] { Color.White });
         }
 
+
+        public void SetTexture(string path)
+        {
+            tex = AssetRegistry.LoadTextureFromFile(path);
+        }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {

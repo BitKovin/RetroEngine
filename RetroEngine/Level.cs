@@ -37,9 +37,13 @@ namespace RetroEngine
                 entity.Destroy();
             }
 
+            Navigation.ClearNavData();
+
             GameMain.inst.curentLevel = MapParser.MapParser.ParseMap(AssetRegistry.FindPathForFile(name)).GetLevel();
-            GameMain.inst.OnLevelChanged();
             GameMain.inst.curentLevel.StartEnities();
+            Navigation.RebuildConnectionsData();
+
+            GameMain.inst.OnLevelChanged();
         }
 
         public virtual void StartEnities()

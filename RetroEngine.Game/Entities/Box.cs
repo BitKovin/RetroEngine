@@ -35,7 +35,7 @@ namespace RetroEngine.Entities
 
             body = Physics.CreateFromShape(this,Vector3.One.ToPhysics(), Physics.CreateCollisionShapeFromModel(mesh.model), collisionFlags: CollisionFlags.StaticObject);
 
-            mesh.Scale = size;
+            
 
             body.SetMassProps(0, new Vector3(0,0,0).ToNumerics());
 
@@ -50,6 +50,8 @@ namespace RetroEngine.Entities
 
             mesh.Position = Position;
             mesh.Rotation = Rotation;
+
+            mesh.Scale = size;
         }
 
     }

@@ -10,23 +10,38 @@ namespace RetroEngine
      public static class Graphics
     {
         public static float DirectLighting = 0.5f;
-        public static float GlobalLighting = 0.5f;
+        public static float GlobalLighting = 0.35f;
         public static Vector3 LightDirection = new Vector3 (-1f, -1, -0.2f);
         public static Color BackgroundColor = new Color(0.15f,0.15f,0.2f);
 
         public static float ShadowBias = 0.003f;
+        public static int shadowMapResolution = 2048;
 
         public static Matrix LightViewProjection;
+        public static float LightDistance = 100;
 
         public static Matrix GetLightProjection()
         {
             
-            return Matrix.CreateOrthographic(100,100, -30, 100);
+            return Matrix.CreateOrthographic(LightDistance, LightDistance, -30, 100);
         }
 
         public static Matrix GetLightView()
         {
-            return Matrix.CreateLookAt(Camera.position, Camera.position + LightDirection, new Vector3(1, 0, 0));
+            return Matrix.CreateLookAt(GetCameraPositionByPixelGrid(), GetCameraPositionByPixelGrid() + LightDirection, new Vector3(1, 0, 0));
+        }
+
+        static Vector3 GetCameraPositionByPixelGrid()
+        {
+            Vector3 pos = Camera.position;
+
+            float step = 0.1f; 
+
+            pos*=step;
+            pos.Round();
+            pos /= step;
+
+            return pos;
         }
 
     }

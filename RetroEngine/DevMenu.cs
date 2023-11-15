@@ -21,6 +21,7 @@ namespace RetroEngine
         public virtual void Update()
         {
 
+            return;
             ImGui.BeginMainMenuBar();
             ImGui.Text("fps: " + 1f / Time.deltaTime + "    entity count: " + Level.GetCurrent().entities.Count);
             ImGui.EndMainMenuBar();
@@ -30,6 +31,10 @@ namespace RetroEngine
             ImGui.Begin("lighting");
 
             ImGui.SliderFloat("shadow bias", ref Graphics.ShadowBias, 0.002f, 0.01f);
+
+            ImGui.SliderFloat("light direction X", ref Graphics.LightDirection.X, -1, 1);
+            ImGui.SliderFloat("light direction Y", ref Graphics.LightDirection.Y, -1, 1);
+            ImGui.SliderFloat("light direction Z", ref Graphics.LightDirection.Z, -1, 1);
 
             ImGui.End();
 

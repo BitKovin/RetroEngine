@@ -7,6 +7,7 @@ using System;
 using RetroEngine.MapParser;
 using RetroEngine.Map;
 using RetroEngine;
+using RetroEngine.Entities.Navigaion;
 
 namespace RetroEngine.Game
 {
@@ -48,7 +49,18 @@ namespace RetroEngine.Game
 
             GameMain.inst.curentLevel.entities.Add(new PlayerGlobal());
 
-            
+            GameMain.inst.curentLevel.entities.Add(new NavDebuger());
+
+            foreach (NavPoint point in Navigation.GetNavPoints())
+            {
+                int n = point.connected.Count;
+
+                for (int i = 0;  i < n; i++)
+                {
+                    //Level.GetCurrent().AddEntity(new Box { Position = point.Position + new Vector3(0, i, 0) });
+                }
+
+            }
 
         }
 
@@ -64,7 +76,8 @@ namespace RetroEngine.Game
             Input.AddAction("moveLeft").AddKeyboardKey(Keys.A).AddButton(Buttons.DPadLeft);
             Input.AddAction("moveRight").AddKeyboardKey(Keys.D).AddButton(Buttons.DPadRight);
 
-
+            Input.AddAction("test").AddKeyboardKey(Keys.R);
+            Input.AddAction("test2").AddKeyboardKey(Keys.T);
         }
 
     }

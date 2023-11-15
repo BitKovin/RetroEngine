@@ -70,6 +70,31 @@ PixelInput VertexShaderFunction(VertexInput input)
     return output;
 }
 
+float GetShadow(float3 lightCoords)
+{
+
+    float shadow = 0;
+
+    float3 centerCoords = lightCoords;
+
+    
+
+
+            if(lightCoords.x>=0 && lightCoords.x <=1 && lightCoords.y>=0 && lightCoords.y <=1)
+            {
+
+                float closestDepth = tex2D(ShadowMapSampler,lightCoords.xy).r;
+                float currentDepth = lightCoords.z * 2 - 1;
+
+                if(currentDepth > closestDepth + ShadowBias)
+                    shadow +=1;
+            }
+        
+    
+
+    return shadow;
+}
+
 float4 PixelShaderFunction(PixelInput input) : COLOR0
 {
 
@@ -84,25 +109,19 @@ float4 PixelShaderFunction(PixelInput input) : COLOR0
 
     lightCoords.y = 1.0f - lightCoords.y;
 
-    if(lightCoords.x>=0 && lightCoords.x <=1 && lightCoords.y>=0 && lightCoords.y <=1)
-    {
-
-    float closestDepth = tex2D(ShadowMapSampler,lightCoords.xy).r;
-    float currentDepth = lightCoords.z * 2 - 1;
-
-    if(currentDepth > closestDepth + ShadowBias)
-        shadow = 1;
-    }
+    shadow += GetShadow(lightCoords);
     
     float light = input.light;
 
-    light *= 1.0f- shadow;
+    light *= 1.0f - shadow;
     light += GlobalBrightness;
 
 	textureColor *= light;
 
     return float4(textureColor, textureAlpha);
 }
+
+
 
 technique BasicTechnique
 {

@@ -45,7 +45,7 @@ namespace RetroEngine
         public static void Simulate()
         {
             if (GameMain.inst.paused == false)
-                dynamicsWorld.StepSimulation(RetroEngine.Time.deltaTime, steps, 1/100f);
+                dynamicsWorld.StepSimulation(RetroEngine.Time.deltaTime, steps, Math.Max(1 / 100f, Time.deltaTime));
         }
 
         public static void Remove(CollisionObject collisionObject)
@@ -252,16 +252,21 @@ namespace RetroEngine
             // Perform the ray cast
             world.RayTest(rayStart, rayEnd, rayCallback);
 
-            // Check if the ray hit something
-            if (rayCallback.HasHit)
-            {
-                // Access information about the hit object
-                RigidBody hitRigidBody = RigidBody.Upcast(rayCallback.CollisionObject);
-                Vector3 hitPoint = rayCallback.HitPointWorld;
-                Vector3 hitNormal = rayCallback.HitNormalWorld;
+            return rayCallback;
 
-                // Now, you can use 'hitRigidBody', 'hitPoint', and 'hitNormal' for further processing
-            }
+
+        }
+
+        public static MyClosestRayResultCallback LineTraceForStatic(Vector3 rayStart, Vector3 rayEnd)
+        {
+            CollisionWorld world = dynamicsWorld;
+
+            MyClosestRayResultCallback rayCallback = new MyClosestRayResultCallback(ref rayStart, ref rayEnd);
+
+            rayCallback.FlagToRespond = CollisionFlags.StaticObject;
+
+            // Perform the ray cast
+            world.RayTest(rayStart, rayEnd, rayCallback);
 
             return rayCallback;
 

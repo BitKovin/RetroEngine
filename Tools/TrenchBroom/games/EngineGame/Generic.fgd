@@ -16,5 +16,5 @@
 	targetTag(string) : "Target Tag" : ""
 ]
 
-@baseclass size(-8 -8 -8, 8 8 8) color(70 70 255) = NavPoint []
+@baseclass size(-8 -8 -8, 8 8 48) color(70 70 255) = NavPoint []
 @PointClass base(NavPoint) = info.navpoint : "Nav Point" []

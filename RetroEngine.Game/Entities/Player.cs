@@ -79,11 +79,13 @@ namespace RetroEngine.Entities
 
 
             Image crosshair = new Image();
+            crosshair.baseColor = new Color(0.9f, 0.8f, 0.6f) * 0.6f;
+            crosshair.SetTexture("ui/crosshair.png");
 
             crosshair.originH = Origin.CenterH;
             crosshair.originV = Origin.CenterV;
-            crosshair.position = new Vector2(-2);
-            crosshair.size = new Vector2(4, 4);
+            crosshair.position = new Vector2(-4);
+            crosshair.size = new Vector2(8, 8);
             UiElement.main.childs.Add(crosshair);
 
             //Model model = GameMain.content.Load<Model>("pistol");
@@ -191,6 +193,7 @@ namespace RetroEngine.Entities
         {
             base.Update();
 
+            //Console.WriteLine(1f / Time.deltaTime);
 
             Vector2 input = new Vector2();
 
@@ -315,7 +318,7 @@ namespace RetroEngine.Entities
                 mesh2.Play();
             }
 
-            /*
+            
             Bullet bullet = new Bullet();
 
             bullet.Rotation = Camera.rotation;
@@ -334,13 +337,12 @@ namespace RetroEngine.Entities
             bullet.ignore.Add(this);
 
             bullet.Start();
-
-            */
+            
             attack = !attack;
 
             bulletId++;
+            return;
 
-            
             var hit = Physics.LineTrace(Camera.position.ToPhysics(), Camera.rotation.GetForwardVector().ToPhysics() * 100 + Camera.position.ToPhysics());
 
             if(hit is not null)

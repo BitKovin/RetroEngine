@@ -34,7 +34,7 @@ namespace RetroEngine
 
         public Effect fxaaEffect;
 
-        int shadowMapResolution = 2048*2;
+        Delay shadowPassRenderDelay = new Delay();
 
         public Render()
         {
@@ -78,6 +78,7 @@ namespace RetroEngine
 
         void RenderUnifiedPath(Level level)
         {
+
             graphics.GraphicsDevice.SetRenderTarget(colorPath);
             graphics.GraphicsDevice.Clear(Graphics.BackgroundColor);
 
@@ -97,11 +98,14 @@ namespace RetroEngine
         void RenderShadowMap(Level level)
         {
 
+            if (shadowPassRenderDelay.Wait()) return;
+            shadowPassRenderDelay.AddDelay(0.02f);
+
             Graphics.LightViewProjection = Graphics.GetLightView() * Graphics.GetLightProjection();
 
             // Set up the shadow map render target with the desired resolution
             graphics.GraphicsDevice.SetRenderTarget(shadowMap);
-            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, shadowMapResolution, shadowMapResolution);
+            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, Graphics.shadowMapResolution, Graphics.shadowMapResolution);
 
             // Clear the shadow map with the desired clear color (e.g., Color.White)
             graphics.GraphicsDevice.Clear(Color.White);
@@ -126,7 +130,7 @@ namespace RetroEngine
 
         void PerformPostProcessing()
         {
-            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, shadowMapResolution, shadowMapResolution);
+            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, Graphics.shadowMapResolution, Graphics.shadowMapResolution);
 
             PerformFXAA();
         }
@@ -262,8 +266,8 @@ namespace RetroEngine
             // Create the new render target with the specified depth format
             target = new RenderTarget2D(
                 graphics.GraphicsDevice,
-                shadowMapResolution,
-                shadowMapResolution,
+                Graphics.shadowMapResolution,
+                Graphics.shadowMapResolution,
                 false, // No mipmaps
                 SurfaceFormat.Color, // Color format
                 depthFormat); // Depth format

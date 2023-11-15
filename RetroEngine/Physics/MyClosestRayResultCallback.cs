@@ -21,6 +21,8 @@ namespace RetroEngine
         {
         }
 
+        public CollisionFlags FlagToRespond = CollisionFlags.None;
+
         public override bool NeedsCollision(BroadphaseProxy proxy0)
         {
 
@@ -35,6 +37,13 @@ namespace RetroEngine
                         return false; // Exclude this object from the collision test
                     }
                 }
+
+                if(FlagToRespond!= CollisionFlags.None)
+                    if(collisionObject.CollisionFlags.HasFlag(FlagToRespond) == false)
+                    {
+                        return false; // Exclude this object from the collision test
+                    }
+
             }
 
             return base.NeedsCollision(proxy0);

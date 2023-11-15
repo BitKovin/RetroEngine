@@ -93,7 +93,7 @@ namespace RetroEngine
             _graphics.ApplyChanges();
 
 
-            SoundManager.Init();
+            
 
         }
 
@@ -105,6 +105,8 @@ namespace RetroEngine
             ImGuiRenderer.RebuildFontAtlas();
             ImGui.StyleColorsDark();
 
+            SoundManager.Init();
+
             SpriteBatch = new SpriteBatch(GraphicsDevice);
             content = Content;
             // TODO: use this.Content to load your game content here
@@ -112,6 +114,8 @@ namespace RetroEngine
             font = Content.Load<SpriteFont>("Font"); // Use the name of your sprite font file here instead of 'Score'.
 
             curentLevel.Start();
+
+            this.Exiting += Game1_Exiting;
         }
 
         protected override void Update(GameTime gameTime)
@@ -125,8 +129,6 @@ namespace RetroEngine
             time = gameTime;
 
             AssetRegistry.ClearTexturesIfNeeded();
-
-            this.Exiting += Game1_Exiting;
 
             Time.deltaTime = (float)Math.Min(gameTime.ElapsedGameTime.TotalSeconds,0.08d);
 
@@ -200,16 +202,12 @@ namespace RetroEngine
             SpriteBatch.End();
 
 
-            SpriteBatch.Begin(transformMatrix: Camera.UiMatrix);
+            SpriteBatch.Begin(transformMatrix: Camera.UiMatrix, blendState: BlendState.AlphaBlend);
 
             UiManger.Draw(gameTime,SpriteBatch);
 
             SpriteBatch.End();
 
-            SpriteBatch.Begin();
-
-
-            SpriteBatch.End();
 
             ImGuiRenderer.BeforeLayout(gameTime);
 
