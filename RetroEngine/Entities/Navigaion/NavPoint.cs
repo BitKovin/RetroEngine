@@ -46,7 +46,7 @@ namespace RetroEngine.Entities.Navigaion
         {
             List<NavPoint> myHistory = new List<NavPoint>(history);
 
-            connected = connected.OrderBy(point => (point.Position - Position).Length()).ToList();
+            connected = connected.OrderByDescending(point => Vector3.Dot((point.Position - Position).Normalized(), (target - point.Position).Normalized())).ToList();
 
             myHistory.Add(this);
 
