@@ -14,6 +14,8 @@ namespace RetroEngine.Entities.Navigaion
 
         public List<NavPoint> connected = new List<NavPoint>();
 
+        int MaxDepth = 10;
+
         public override void Start()
         {
             base.Start();
@@ -38,13 +40,30 @@ namespace RetroEngine.Entities.Navigaion
 
             }
 
-            Console.WriteLine(connected.Count);
-
         }
 
         public List<Vector3> GetPathNext(List<NavPoint> history, Vector3 target)
         {
+            List<Vector3> output = new List<Vector3>();
+
             List<NavPoint> myHistory = new List<NavPoint>(history);
+
+            if (history.Count>MaxDepth)
+            {
+                output = PointsToPositions(history);
+                Console.WriteLine($"not found path with depth: {history.Count}");
+
+                Vector3 closest = output.OrderByDescending(pos => Vector3.Distance(pos, target)).ToArray()[0];
+
+                List <Vector3> result = new List<Vector3>();
+
+                foreach (Vector3 p in output)
+                {
+                    result.Add(p);
+                    if (Vector3.Distance(p, target) < 0.1f) 
+                        return result;
+                }
+            }
 
             connected = connected.OrderByDescending(point => Vector3.Dot((point.Position - Position).Normalized(), (target - point.Position).Normalized())).ToList();
 
@@ -52,7 +71,7 @@ namespace RetroEngine.Entities.Navigaion
 
             var hit = Physics.LineTraceForStatic(Position.ToNumerics(), target.ToNumerics());
 
-            List <Vector3> output = new List<Vector3>();
+            
 
             if (hit.HasHit)
             {

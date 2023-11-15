@@ -40,7 +40,7 @@ namespace RetroEngine.Game.Entities
         {
             base.Update();
 
-            if(Input.GetAction("test").Pressed())
+            if(Input.GetAction("test").Holding())
             {
                 startPoint = Camera.position;
 
@@ -48,7 +48,7 @@ namespace RetroEngine.Game.Entities
 
             }
 
-            if (Input.GetAction("test2").Pressed())
+            if (Input.GetAction("test2").Holding())
             {
                 targetPoint = Camera.position;
 
@@ -73,6 +73,8 @@ namespace RetroEngine.Game.Entities
 
         void updateNavPoints()
         {
+            if(targetPoint != Vector3.Zero && startPoint != Vector3.Zero)
+
             locations = Navigation.FindPath(startPoint, targetPoint);
         }
 

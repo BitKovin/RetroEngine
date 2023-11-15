@@ -31,7 +31,7 @@ namespace RetroEngine
 
         static NavPoint GetStartNavPoint(Vector3 start)
         {
-            navPoints = navPoints.OrderBy(point => (point.Position - start).Length()).ToList();
+            navPoints = navPoints.OrderBy(point => Vector3.Distance(start, point.Position)).ToList();
 
             foreach (var point in navPoints)
             {
@@ -41,6 +41,8 @@ namespace RetroEngine
                     return point;
 
             }
+
+            Console.WriteLine("failed to find point");
 
             return navPoints[0];
 
