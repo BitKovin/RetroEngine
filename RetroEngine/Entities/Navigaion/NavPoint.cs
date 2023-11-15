@@ -53,16 +53,7 @@ namespace RetroEngine.Entities.Navigaion
                 output = PointsToPositions(history);
                 Console.WriteLine($"not found path with depth: {history.Count}");
 
-                Vector3 closest = output.OrderByDescending(pos => Vector3.Distance(pos, target)).ToArray()[0];
-
-                List <Vector3> result = new List<Vector3>();
-
-                foreach (Vector3 p in output)
-                {
-                    result.Add(p);
-                    if (Vector3.Distance(p, target) < 0.1f) 
-                        return result;
-                }
+                return output;
             }
 
             connected = connected.OrderByDescending(point => Vector3.Dot((point.Position - Position).Normalized(), (target - point.Position).Normalized())).ToList();
