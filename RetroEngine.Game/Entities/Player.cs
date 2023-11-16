@@ -141,6 +141,7 @@ namespace RetroEngine.Entities
 
             weapons.Add(new WeaponData { weaponType = typeof(weapon_pistols), ammo = 50 });
 
+            Weapon.PreloadAllWeapons();
         }
 
         public override void Update()
@@ -210,7 +211,7 @@ namespace RetroEngine.Entities
 
             Vector3 motion = new Vector3();
 
-            Vector3 right = Camera.rotation.GetRightVector().XZ().Normalized();
+            Vector3 right = Camera.rotation.GetRightVector().XZ();
             Vector3 forward = Camera.rotation.GetForwardVector().XZ().Normalized();
 
             // Ground movement
@@ -222,7 +223,7 @@ namespace RetroEngine.Entities
             {
                 input.Normalize();
 
-                if (body.LinearVelocity.Y > -0.1f)
+                if (onGround)
                 {
 
                     if (Math.Sin(bobProgress * 14) <= 0 && Math.Sin((bobProgress + Time.deltaTime) * 14) > 0)

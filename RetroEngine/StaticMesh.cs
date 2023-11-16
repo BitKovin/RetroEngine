@@ -41,7 +41,7 @@ namespace RetroEngine
 
         public bool Viewmodel = false;
 
-        Dictionary<string, Texture2D> textures = new Dictionary<string, Texture2D>();
+        static Dictionary<string, Texture2D> textures = new Dictionary<string, Texture2D>();
 
         public bool CastShadows = true;
 
@@ -59,6 +59,20 @@ namespace RetroEngine
                 }
 
                 mesh.Draw();
+            }
+        }
+
+        protected void LoadCurrentTextures()
+        {
+            foreach (ModelMesh mesh in model.Meshes)
+            {
+                foreach (ModelMeshPart meshPart in mesh.MeshParts)
+                {
+                    MeshPartData meshPartData = meshPart.Tag as MeshPartData;
+
+                    if(meshPartData != null)
+                        FindTexture(meshPartData.textureName);
+                }
             }
         }
 
@@ -167,7 +181,6 @@ namespace RetroEngine
 
         Texture2D FindTexture(string name)
         {
-
             if (name == null)
                 return texture;
 
@@ -289,6 +302,7 @@ namespace RetroEngine
         }
 
         static Dictionary<string, Assimp.Scene> loadedScenes = new Dictionary<string, Assimp.Scene>();
+        static Dictionary<string, Model> loadedModels = new Dictionary<string, Model>();
         static Assimp.AssimpContext importer = new Assimp.AssimpContext();
 
         protected Model GetModelFromPath(string filePath)
@@ -297,6 +311,10 @@ namespace RetroEngine
 
             filePath = AssetRegistry.FindPathForFile(filePath);
 
+            if(loadedModels.ContainsKey(filePath))
+            {
+                return loadedModels[filePath];
+            }
 
             Assimp.Scene scene;
 
@@ -367,14 +385,16 @@ namespace RetroEngine
 
             modelMesh.Add(new ModelMesh(graphicsDevice, meshParts) { BoundingSphere = boundingSphere });
 
-            var defaultEffect = new BasicEffect(graphicsDevice);
+            Model model = new Model(graphicsDevice, new List<ModelBone>(), modelMesh);
 
-            foreach (var meshPart in meshParts)
-            {
-                meshPart.Effect = defaultEffect;
-            }
+            loadedModels.TryAdd(filePath, model);
 
-            return new Model(graphicsDevice, new List<ModelBone>(), modelMesh);
+            return model;
+        }
+
+        public virtual void PreloadTextures()
+        {
+            LoadCurrentTextures();
         }
 
         public static Model CreateModelFromVertices(List<Vector3> vertexPositions)

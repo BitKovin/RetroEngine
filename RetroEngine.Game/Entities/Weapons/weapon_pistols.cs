@@ -28,11 +28,11 @@ namespace RetroEngine.Game.Entities.Weapons
             base.Start();
 
             //Model model = GameMain.content.Load<Model>("pistol");
-            meshes.Add(mesh1);
 
             mesh1.Scale = new Vector3(1, 1, 1);
 
             mesh1.AddFrame("Animations/Pistol/Fire/frame_0001.obj");
+
 
             mesh1.AddFrame("Animations/Pistol/Fire/frame_0002.obj");
             mesh1.AddFrame("Animations/Pistol/Fire/frame_0003.obj");
@@ -48,7 +48,7 @@ namespace RetroEngine.Game.Entities.Weapons
             mesh1.textureSearchPaths.Add("textures/weapons/arms/");
             mesh1.textureSearchPaths.Add("textures/weapons/pistol/");
             mesh1.CastShadows = false;
-
+            mesh1.PreloadTextures();
             mesh1.Viewmodel = true;
 
             meshes.Add(mesh1);
@@ -71,6 +71,7 @@ namespace RetroEngine.Game.Entities.Weapons
             mesh2.textureSearchPaths.Add("textures/weapons/arms/");
             mesh2.textureSearchPaths.Add("textures/weapons/pistol/");
             mesh2.CastShadows = false;
+            mesh2.PreloadTextures();
 
             mesh2.Viewmodel = true;
             meshes.Add(mesh2);
@@ -95,6 +96,13 @@ namespace RetroEngine.Game.Entities.Weapons
             if (Input.GetAction("attack").Holding())
                 Shoot();
 
+        }
+
+        public override void Destroy()
+        {
+            base.Destroy();
+
+            fireSoundPlayer.Destroy();
         }
 
         public override void LateUpdate()

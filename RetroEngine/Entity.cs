@@ -29,6 +29,8 @@ namespace RetroEngine
 
         public List<string> Tags = new List<string>();
 
+        public float SpawnTime = 0;
+
         public Entity()
         {
 
@@ -37,7 +39,7 @@ namespace RetroEngine
 
         public virtual void Start()
         {
-
+            SpawnTime = Time.gameTime;
         }
 
         public virtual void Update()

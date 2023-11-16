@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -37,7 +38,22 @@ namespace RetroEngine.Game.Entities.Weapons
             return weapon;
         }
 
-        
+        public static void PreloadAllWeapons()
+        {
+            Type[] types = Assembly.GetAssembly(typeof(Weapon)).GetTypes().Where(t => t.IsSubclassOf(typeof(Weapon))).ToArray();
+
+
+            foreach (Type type in types) 
+            {
+                Weapon weapon = Activator.CreateInstance(type) as Weapon;
+                weapon.data = new WeaponData();
+                weapon.Start();
+                weapon.Destroy();
+            }
+
+            types = null;
+
+        }
 
     }
 }

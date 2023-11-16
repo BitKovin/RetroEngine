@@ -59,5 +59,15 @@ namespace RetroEngine
             animationTime = time;
         }
 
+        public override void PreloadTextures()
+        {
+            foreach(Model m in frames)
+            {
+                model = m;
+                LoadCurrentTextures();
+            }
+            
+        }
+
     }
 }
