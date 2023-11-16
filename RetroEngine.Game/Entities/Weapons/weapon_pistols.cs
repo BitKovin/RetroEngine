@@ -102,7 +102,7 @@ namespace RetroEngine.Game.Entities.Weapons
         {
             base.Destroy();
 
-            fireSoundPlayer.Destroy(3);
+            fireSoundPlayer.Destroy(2);
         }
 
         public override void LateUpdate()

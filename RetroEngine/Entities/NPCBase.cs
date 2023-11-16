@@ -42,14 +42,12 @@ namespace RetroEngine.Entities
                 }
                 catch (Exception ex) { Logger.Log("error while pathfinding"); }
 
-                updateDelay.AddDelay(Vector3.Distance(Position, Camera.position) / 30f);
+                updateDelay.AddDelay(Vector3.Distance(Position, Camera.position) / 35f + 0.1f);
             }
         }
 
         public override void AsyncUpdate()
         {
-
-
             body.LinearVelocity = new System.Numerics.Vector3(MoveDirection.X * speed, body.LinearVelocity.Y, MoveDirection.Z * speed);
 
             mesh.Position = Position - new Vector3(0, 1, 0);
@@ -63,8 +61,6 @@ namespace RetroEngine.Entities
         {
 
             List<Vector3> path = Navigation.FindPath(Position, Camera.position);
-
-            
 
             Vector3 targetLocation = new Vector3();
 
