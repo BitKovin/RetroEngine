@@ -55,6 +55,9 @@ namespace RetroEngine.Game.Entities
 
             foreach(Entity e in ignore)
             {
+                if(e is null) continue;
+                if(e.body is null) continue;
+
                 body.SetIgnoreCollisionCheck(e.body,true);
             }
 
@@ -85,7 +88,7 @@ namespace RetroEngine.Game.Entities
             if(!destroyDelay.Wait())
                 Destroy();
 
-            body.LinearVelocity = startRotation.GetForwardVector().ToNumerics() * 40f;
+            body.LinearVelocity = startRotation.GetForwardVector().ToNumerics() * 60f;
 
             Physics.PerformContactCheck(body, collisionCallback);
 

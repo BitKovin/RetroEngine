@@ -288,14 +288,27 @@ namespace RetroEngine
             avgVertexPosition = CalculateAvgVertexLocation();
         }
 
+        static Dictionary<string, Assimp.Scene> loadedScenes = new Dictionary<string, Assimp.Scene>();
+        static Assimp.AssimpContext importer = new Assimp.AssimpContext();
+
         protected Model GetModelFromPath(string filePath)
         {
             GraphicsDevice graphicsDevice = GameMain.inst.GraphicsDevice;
 
             filePath = AssetRegistry.FindPathForFile(filePath);
 
-            var importer = new Assimp.AssimpContext();
-            var scene = importer.ImportFile(filePath, Assimp.PostProcessSteps.MakeLeftHanded | Assimp.PostProcessSteps.FlipUVs);
+
+            Assimp.Scene scene;
+
+            if (loadedScenes.ContainsKey(filePath))
+            {
+                scene = loadedScenes[filePath];
+            }
+            else
+            {
+                scene = importer.ImportFile(filePath, Assimp.PostProcessSteps.MakeLeftHanded | Assimp.PostProcessSteps.FlipUVs);
+                loadedScenes.Add(filePath, scene);
+            }
 
             if (scene == null)
             {

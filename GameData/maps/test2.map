@@ -33,15 +33,6 @@
 }
 // brush 3
 {
-( -976 -880 -16 ) ( -976 -866.3750000000001 -16 ) ( -976 -880 -15 ) __TB_empty 0 0 0 1 1
-( -976 -880 -16 ) ( -976 -880 -15 ) ( -960.125 -880 -16 ) __TB_empty 0 0 0 1 1
-( -976 -880 -16 ) ( -960.125 -880 -16 ) ( -976 -866.3750000000001 -16 ) __TB_empty 0 0 0 1 1
-( 1056 864 16 ) ( 1056 877.625 16 ) ( 1071.8749999999995 864 16 ) brushes/grass 0 0 0 1 1
-( 1056 864 16 ) ( 1071.8749999999995 864 16 ) ( 1056 864 17 ) __TB_empty 0 0 0 1 1
-( 1056 864 16 ) ( 1056 864 17 ) ( 1056 877.625 16 ) brushes/grass 0 0 0 1 1
-}
-// brush 4
-{
 ( -552 -800 448 ) ( -552 -680 16 ) ( -552 -680 448 ) brushes/bricks 0 0 0 0.25 0.25
 ( 736 -800 448 ) ( -552 -800 16 ) ( -552 -800 448 ) brushes/bricks 0 0 0 0.25 0.25
 ( 736 -680 16 ) ( -552 -800 16 ) ( 736 -800 16 ) brushes/bricks 0 0 0 0.25 0.25
@@ -49,7 +40,7 @@
 ( 736 -680 448 ) ( -552 -680 16 ) ( 736 -680 16 ) brushes/bricks 0 0 0 0.25 0.25
 ( 736 -680 448 ) ( 736 -800 16 ) ( 736 -800 448 ) brushes/bricks 0 0 0 0.25 0.25
 }
-// brush 5
+// brush 4
 {
 ( -848 288 272 ) ( -848 768 16 ) ( -848 768 272 ) brushes/bricks 0 0 0 0.25 0.25
 ( -608 288 272 ) ( -848 288 16 ) ( -848 288 272 ) brushes/bricks 0 0 0 0.25 0.25
@@ -58,7 +49,7 @@
 ( -608 768 272 ) ( -848 768 16 ) ( -608 768 16 ) brushes/bricks 0 0 0 0.25 0.25
 ( -608 768 272 ) ( -608 288 16 ) ( -608 288 272 ) brushes/bricks 0 0 0 0.25 0.25
 }
-// brush 6
+// brush 5
 {
 ( -320 -160 304 ) ( -320 -144 16 ) ( -320 -144 304 ) brushes/bricks 0 0 0 0.25 0.25
 ( -144 -160 304 ) ( -320 -160 16 ) ( -320 -160 304 ) brushes/bricks 0 0 0 0.25 0.25
@@ -67,7 +58,7 @@
 ( -144 -144 304 ) ( -320 -144 16 ) ( -144 -144 16 ) brushes/bricks 0 0 0 0.25 0.25
 ( -144 -144 304 ) ( -144 -160 16 ) ( -144 -160 304 ) brushes/bricks 0 0 0 0.25 0.25
 }
-// brush 7
+// brush 6
 {
 ( -320 256 304 ) ( -320 272 16 ) ( -320 272 304 ) brushes/bricks 0 0 0 0.25 0.25
 ( -144 256 304 ) ( -320 256 16 ) ( -320 256 304 ) brushes/bricks 0 0 0 0.25 0.25
@@ -76,7 +67,7 @@
 ( -144 272 304 ) ( -320 272 16 ) ( -144 272 16 ) brushes/bricks 0 0 0 0.25 0.25
 ( -144 272 304 ) ( -144 256 16 ) ( -144 256 304 ) brushes/bricks 0 0 0 0.25 0.25
 }
-// brush 8
+// brush 7
 {
 ( -320 -144 304 ) ( -320 256 288 ) ( -320 256 304 ) brushes/bricks 0 0 90 0.25 0.25
 ( -144 -144 304 ) ( -320 -144 288 ) ( -320 -144 304 ) brushes/bricks 0 0 90 0.25 0.25
@@ -85,7 +76,7 @@
 ( -144 256 304 ) ( -320 256 288 ) ( -144 256 288 ) brushes/bricks 0 0 90 0.25 0.25
 ( -144 256 304 ) ( -144 -144 288 ) ( -144 -144 304 ) brushes/bricks 0 0 90 0.25 0.25
 }
-// brush 9
+// brush 8
 {
 ( -160 -144 288 ) ( -160 0 16 ) ( -160 0 288 ) brushes/bricks 0 0 0 0.25 0.25
 ( -144 -144 288 ) ( -160 -144 16 ) ( -160 -144 288 ) brushes/bricks 0 0 0 0.25 0.25
@@ -94,7 +85,7 @@
 ( -144 0 288 ) ( -160 0 16 ) ( -144 0 16 ) brushes/bricks 0 0 0 0.25 0.25
 ( -144 0 288 ) ( -144 -144 16 ) ( -144 -144 288 ) brushes/bricks 0 0 0 0.25 0.25
 }
-// brush 10
+// brush 9
 {
 ( -160 112 288 ) ( -160 256 16 ) ( -160 256 288 ) brushes/bricks 0 0 0 0.25 0.25
 ( -144 112 288 ) ( -160 112 16 ) ( -160 112 288 ) brushes/bricks 0 0 0 0.25 0.25
@@ -103,7 +94,7 @@
 ( -144 256 288 ) ( -160 256 16 ) ( -144 256 16 ) brushes/bricks 0 0 0 0.25 0.25
 ( -144 256 288 ) ( -144 112 16 ) ( -144 112 288 ) brushes/bricks 0 0 0 0.25 0.25
 }
-// brush 11
+// brush 10
 {
 ( -160 0 288 ) ( -160 112 160 ) ( -160 112 288 ) brushes/bricks 0 0 0 0.25 0.25
 ( -144 0 288 ) ( -160 0 160 ) ( -160 0 288 ) brushes/bricks 0 0 0 0.25 0.25
@@ -111,6 +102,62 @@
 ( -144 112 288 ) ( -160 0 288 ) ( -160 112 288 ) brushes/bricks 0 0 0 0.25 0.25
 ( -144 112 288 ) ( -160 112 160 ) ( -144 112 160 ) brushes/bricks 0 0 0 0.25 0.25
 ( -144 112 288 ) ( -144 0 160 ) ( -144 0 288 ) brushes/bricks 0 0 0 0.25 0.25
+}
+// brush 11
+{
+( -1456 -880 -16 ) ( -1456 -866.3750000000001 -16 ) ( -1456 -880 -15 ) __TB_empty 0 0 0 1 1
+( -1456 -880 -16 ) ( -1456 -880 -15 ) ( -1436.3749999999998 -880 -16 ) __TB_empty 0 0 0 1 1
+( -1456 -880 -16 ) ( -1436.3749999999998 -880 -16 ) ( -1456 -866.3750000000001 -16 ) __TB_empty 0 0 0 1 1
+( 1056 864 16 ) ( 1056 877.625 16 ) ( 1075.6249999999995 864 16 ) brushes/grass 0 0 0 1 1
+( 1056 864 16 ) ( 1075.6249999999995 864 16 ) ( 1056 864 17 ) __TB_empty 0 0 0 1 1
+( 1056 864 16 ) ( 1056 864 17 ) ( 1056 877.625 16 ) brushes/grass 0 0 0 1 1
+}
+// brush 12
+{
+( -1456 304 64 ) ( -1456 544 16 ) ( -1456 544 64 ) brushes/__TB_empty 0 0 0 1 1
+( -1120 288 16 ) ( -1456 304 16 ) ( -1456 304 64 ) brushes/__TB_empty 0 0 0 1 1
+( -992 288 16 ) ( -1456 304 64 ) ( -1216 304 64 ) brushes/__TB_empty 0 0 0 1 1
+( -992 400 16 ) ( -1120 288 16 ) ( -992 288 16 ) brushes/__TB_empty 0 0 0 1 1
+( -1216 544 64 ) ( -1456 304 64 ) ( -1456 544 64 ) brushes/__TB_empty 0 0 0 1 1
+( -1200 544 16 ) ( -1456 544 64 ) ( -1456 544 16 ) brushes/__TB_empty 0 0 0 1 1
+( -992 400 16 ) ( -1216 304 64 ) ( -1216 544 64 ) brushes/__TB_empty 0 0 0 1 1
+( -992 400 16 ) ( -1216 544 64 ) ( -1200 544 16 ) brushes/__TB_empty 0 0 0 1 1
+}
+// brush 13
+{
+( -1792 304 64 ) ( -1792 544 16 ) ( -1792 544 64 ) brushes/__TB_empty 0 0 0 1 1
+( -1456 304 64 ) ( -1792 304 16 ) ( -1792 304 64 ) brushes/__TB_empty 0 0 0 1 1
+( -1456 544 16 ) ( -1792 304 16 ) ( -1456 304 16 ) brushes/__TB_empty 0 0 0 1 1
+( -1456 544 64 ) ( -1792 304 64 ) ( -1792 544 64 ) brushes/__TB_empty 0 0 0 1 1
+( -1456 544 64 ) ( -1792 544 16 ) ( -1456 544 16 ) brushes/__TB_empty 0 0 0 1 1
+( -1456 544 64 ) ( -1456 304 16 ) ( -1456 304 64 ) brushes/__TB_empty 0 0 0 1 1
+}
+// brush 14
+{
+( -1792 -32 64 ) ( -1792 304 16 ) ( -1792 304 64 ) brushes/__TB_empty 0 0 0 1 1
+( -1568 -32 64 ) ( -1792 -32 16 ) ( -1792 -32 64 ) brushes/__TB_empty 0 0 0 1 1
+( -1568 304 16 ) ( -1792 -32 16 ) ( -1568 -32 16 ) brushes/__TB_empty 0 0 0 1 1
+( -1568 304 64 ) ( -1792 -32 64 ) ( -1792 304 64 ) brushes/__TB_empty 0 0 0 1 1
+( -1568 304 64 ) ( -1792 304 16 ) ( -1568 304 16 ) brushes/__TB_empty 0 0 0 1 1
+( -1568 304 64 ) ( -1568 -32 16 ) ( -1568 -32 64 ) brushes/__TB_empty 0 0 0 1 1
+}
+// brush 15
+{
+( -1568 -32 112 ) ( -1568 304 16 ) ( -1568 304 112 ) brushes/__TB_empty 0 0 0 1 1
+( -1552 -32 112 ) ( -1568 -32 16 ) ( -1568 -32 112 ) brushes/__TB_empty 0 0 0 1 1
+( -1552 304 16 ) ( -1568 -32 16 ) ( -1552 -32 16 ) brushes/__TB_empty 0 0 0 1 1
+( -1552 304 112 ) ( -1568 -32 112 ) ( -1568 304 112 ) brushes/__TB_empty 0 0 0 1 1
+( -1552 304 112 ) ( -1568 304 16 ) ( -1552 304 16 ) brushes/__TB_empty 0 0 0 1 1
+( -1552 304 112 ) ( -1552 -32 16 ) ( -1552 -32 112 ) brushes/__TB_empty 0 0 0 1 1
+}
+// brush 16
+{
+( -1552 288 112 ) ( -1552 304 16 ) ( -1552 304 112 ) brushes/__TB_empty 0 0 0 1 1
+( -1056 288 112 ) ( -1552 288 16 ) ( -1552 288 112 ) brushes/__TB_empty 0 0 0 1 1
+( -1056 304 16 ) ( -1552 288 16 ) ( -1056 288 16 ) brushes/__TB_empty 0 0 0 1 1
+( -1056 304 112 ) ( -1552 288 112 ) ( -1552 304 112 ) brushes/__TB_empty 0 0 0 1 1
+( -1056 304 112 ) ( -1552 304 16 ) ( -1056 304 16 ) brushes/__TB_empty 0 0 0 1 1
+( -1056 304 112 ) ( -1056 288 16 ) ( -1056 288 112 ) brushes/__TB_empty 0 0 0 1 1
 }
 }
 // entity 1
@@ -139,187 +186,111 @@
 }
 // entity 4
 {
+"classname" "info.navpoint"
+"origin" "-968 328 24"
+}
+// entity 5
+{
+"classname" "info.navpoint"
+"origin" "-1224 392 72"
+}
+// entity 6
+{
+"classname" "info.navpoint"
+"origin" "-1704 456 72"
+}
+// entity 7
+{
+"classname" "info.navpoint"
+"origin" "-1688 8 72"
+}
+// entity 8
+{
 "classname" "func_group"
 "_tb_type" "_tb_layer"
 "_tb_name" "navigation"
 "_tb_id" "1"
 "_tb_layer_sort_index" "0"
 }
-// entity 5
+// entity 9
 {
 "classname" "info.navpoint"
 "origin" "216 -584 24"
 "_tb_layer" "1"
 }
-// entity 6
+// entity 10
 {
 "classname" "info.navpoint"
 "origin" "-600 -840 24"
 "_tb_layer" "1"
 }
-// entity 7
+// entity 11
 {
 "classname" "info.navpoint"
 "origin" "840 -168 24"
 "_tb_layer" "1"
 }
-// entity 8
-{
-"classname" "info.navpoint"
-"origin" "664 -536 24"
-"_tb_layer" "1"
-}
-// entity 9
-{
-"classname" "info.navpoint"
-"origin" "136 168 24"
-"_tb_layer" "1"
-}
-// entity 10
-{
-"classname" "info.navpoint"
-"origin" "-632 88 24"
-"_tb_layer" "1"
-}
-// entity 11
-{
-"classname" "info.navpoint"
-"origin" "408 216 24"
-"_tb_layer" "1"
-}
 // entity 12
 {
 "classname" "info.navpoint"
-"origin" "424 -136 24"
+"origin" "280 216 24"
 "_tb_layer" "1"
 }
 // entity 13
 {
 "classname" "info.navpoint"
-"origin" "120 232 24"
+"origin" "-184 456 24"
 "_tb_layer" "1"
 }
 // entity 14
 {
 "classname" "info.navpoint"
-"origin" "-8 232 24"
+"origin" "648 744 24"
 "_tb_layer" "1"
 }
 // entity 15
 {
 "classname" "info.navpoint"
-"origin" "248 -8 24"
+"origin" "856 -824 24"
 "_tb_layer" "1"
 }
 // entity 16
 {
 "classname" "info.navpoint"
-"origin" "360 -328 24"
+"origin" "-184 -584 24"
 "_tb_layer" "1"
 }
 // entity 17
 {
 "classname" "info.navpoint"
-"origin" "-216 -424 24"
+"origin" "488 -584 24"
 "_tb_layer" "1"
 }
 // entity 18
 {
 "classname" "info.navpoint"
-"origin" "-184 456 24"
+"origin" "-488 536 24"
 "_tb_layer" "1"
 }
 // entity 19
 {
 "classname" "info.navpoint"
-"origin" "328 376 24"
+"origin" "-632 -184 24"
 "_tb_layer" "1"
 }
 // entity 20
 {
 "classname" "info.navpoint"
-"origin" "328 56 24"
+"origin" "-808 -504 24"
 "_tb_layer" "1"
 }
 // entity 21
 {
 "classname" "info.navpoint"
-"origin" "840 456 24"
-"_tb_layer" "1"
-}
-// entity 22
-{
-"classname" "info.navpoint"
-"origin" "648 744 24"
-"_tb_layer" "1"
-}
-// entity 23
-{
-"classname" "info.navpoint"
-"origin" "664 104 24"
-"_tb_layer" "1"
-}
-// entity 24
-{
-"classname" "info.navpoint"
-"origin" "984 104 24"
-"_tb_layer" "1"
-}
-// entity 25
-{
-"classname" "info.navpoint"
-"origin" "936 -616 24"
-"_tb_layer" "1"
-}
-// entity 26
-{
-"classname" "info.navpoint"
-"origin" "-184 -584 24"
-"_tb_layer" "1"
-}
-// entity 27
-{
-"classname" "info.navpoint"
-"origin" "488 -584 24"
-"_tb_layer" "1"
-}
-// entity 28
-{
-"classname" "info.navpoint"
-"origin" "-792 -152 24"
-"_tb_layer" "1"
-}
-// entity 29
-{
-"classname" "info.navpoint"
-"origin" "-424 -152 24"
-"_tb_layer" "1"
-}
-// entity 30
-{
-"classname" "info.navpoint"
-"origin" "-488 536 24"
-"_tb_layer" "1"
-}
-// entity 31
-{
-"classname" "info.navpoint"
-"origin" "-632 -184 24"
-"_tb_layer" "1"
-}
-// entity 32
-{
-"classname" "info.navpoint"
-"origin" "-808 -504 24"
-"_tb_layer" "1"
-}
-// entity 33
-{
-"classname" "info.navpoint"
 "origin" "-88 72 24"
 "_tb_layer" "1"
 }
-// entity 34
+// entity 22
 {
 "classname" "info.navpoint"
 "origin" "-264 72 24"

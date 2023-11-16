@@ -26,6 +26,11 @@ namespace RetroEngine
 
         public static List<Vector3> FindPath(Vector3 start, Vector3 target)
         {
+
+            target = Physics.LineTraceForStatic(target.ToNumerics(), (target - new Vector3(0, 100, 0)).ToNumerics()).HitPointWorld;
+
+            target += new Vector3(0, 0.25f, 0);
+
             List<Vector3> points = GetStartNavPoint(start).GetPathNext(new List<NavPoint>(), target);
             List<Vector3> result = new List<Vector3>(points);
 
