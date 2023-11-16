@@ -102,7 +102,7 @@ namespace RetroEngine.Game.Entities.Weapons
         {
             base.Destroy();
 
-            fireSoundPlayer.Destroy();
+            fireSoundPlayer.Destroy(3);
         }
 
         public override void LateUpdate()
@@ -110,16 +110,18 @@ namespace RetroEngine.Game.Entities.Weapons
             base.LateUpdate();
 
             mesh1.Position = Position;
-            mesh1.Rotation = Camera.rotation;
+            mesh1.Rotation = Camera.rotation + DrawRotation;
 
             mesh2.Position = Position;
-            mesh2.Rotation = Camera.rotation;
+            mesh2.Rotation = Camera.rotation + DrawRotation;
 
             fireSoundPlayer.Position = Camera.position;
         }
 
         void Shoot()
         {
+            if (Drawing) return;
+
             if (attackDelay.Wait()) return;
 
             attackDelay.AddDelay(0.12f);

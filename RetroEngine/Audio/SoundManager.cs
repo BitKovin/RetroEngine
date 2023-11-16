@@ -31,6 +31,8 @@ namespace RetroEngine.Audio
 
         public static void ApplyPosition(this SoundEffectInstance soundEffectInstance, Vector3 position, float MaxDistance = 10, float MinDistance = 1, float Volume = 1)
         {
+            if (soundEffectInstance is null) return;
+
             float distance = Vector3.Distance(listener.Position, position);
 
             float n = 2.5f;

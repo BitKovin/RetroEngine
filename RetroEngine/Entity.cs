@@ -31,6 +31,10 @@ namespace RetroEngine
 
         public float SpawnTime = 0;
 
+        Delay destroyDelay = new Delay();
+
+        bool pendingDestroy = false;
+
         public Entity()
         {
 
@@ -44,7 +48,9 @@ namespace RetroEngine
 
         public virtual void Update()
         {
-
+            if(pendingDestroy)
+            if (destroyDelay.Wait() == false)
+                Destroy();
         }
 
         public virtual void FromData(EntityData data)
@@ -78,6 +84,12 @@ namespace RetroEngine
 
             GameMain.inst.curentLevel.entities.Remove(this);
             Dispose();
+        }
+
+        public virtual void Destroy(float delay)
+        {
+            destroyDelay.AddDelay(delay);
+            pendingDestroy = true;
         }
 
         public void Dispose()
