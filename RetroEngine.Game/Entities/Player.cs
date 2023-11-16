@@ -52,6 +52,7 @@ namespace RetroEngine.Entities
         SoundPlayer stepSoundPlayer;
         SoundPlayer fireSoundPlayer;
 
+        bool onGround = false;
         public Player():base()
         {
 
@@ -193,6 +194,8 @@ namespace RetroEngine.Entities
         {
             base.Update();
 
+            CheckGround();
+
             //Console.WriteLine(1f / Time.deltaTime);
 
             Vector2 input = new Vector2();
@@ -220,33 +223,36 @@ namespace RetroEngine.Entities
 
             Vector3 motion = new Vector3();
 
-            if (input.Length() > 0)
-            {
-                input.Normalize();
-
-
-                if (Math.Sin(bobProgress*14) <=0 && Math.Sin((bobProgress + Time.deltaTime)*14) > 0)
+            if (onGround)
+                if (input.Length() > 0)
                 {
-                    stepSoundPlayer.Play(true);
+                    input.Normalize();
+
+
+                    if (Math.Sin(bobProgress * 14) <= 0 && Math.Sin((bobProgress + Time.deltaTime) * 14) > 0)
+                    {
+                        stepSoundPlayer.Play(true);
+                    }
+
+
+                    bobProgress += Time.deltaTime;
+
+
+                    motion += Camera.rotation.GetRightVector().XZ() * input.X * speed;
+                    motion += Camera.rotation.GetForwardVector().XZ() / Camera.rotation.GetForwardVector().XZ().Length() * input.Y * speed;
+
+                    body.Friction = 0.0f;
+
+                    body.Activate(true);
+                    body.LinearVelocity = new Vector3(motion.X, (float)body.LinearVelocity.Y, motion.Z).ToPhysics();
+
                 }
-                
+                else
+                {
+                    body.Friction = 1f;
+                }
 
-                bobProgress += Time.deltaTime;
-
-
-                motion += Camera.rotation.GetRightVector().XZ() * input.X * speed;
-                motion += Camera.rotation.GetForwardVector().XZ() / Camera.rotation.GetForwardVector().XZ().Length() * input.Y * speed;
-
-                body.Friction = 0.0f;
-
-            }
-            else
-            {
-                body.Friction = 1f;
-            }
-
-            body.Activate(true);
-            body.LinearVelocity = new Vector3(motion.X, (float)body.LinearVelocity.Y, motion.Z).ToPhysics();
+            
 
             Vector3 newCameraPos = Position + new Vector3(0, 0.7f, 0);
 
@@ -280,6 +286,48 @@ namespace RetroEngine.Entities
 
         }
 
+        void CheckGround()
+        {
+            onGround = false;
+
+            if(CheckGroundAtOffset(new Vector3(0,0,0)))
+                onGround = true;
+
+            if (CheckGroundAtOffset(new Vector3(0.45f, 0, 0)))
+                onGround = true;
+
+            if (CheckGroundAtOffset(new Vector3(-0.45f, 0, 0)))
+                onGround = true;
+
+            if (CheckGroundAtOffset(new Vector3(0, 0, 0.45f)))
+                onGround = true;
+
+            if (CheckGroundAtOffset(new Vector3(0, 0, -0.45f)))
+                onGround = true;
+
+
+
+            if (CheckGroundAtOffset(new Vector3(0.315f, 0, 0.315f)))
+                onGround = true;
+
+            if (CheckGroundAtOffset(new Vector3(-0.315f, 0, 0.315f)))
+                onGround = true;
+
+            if (CheckGroundAtOffset(new Vector3(0.315f, 0, -0.315f)))
+                onGround = true;
+
+            if (CheckGroundAtOffset(new Vector3(-0.315f, 0, -0.315f)))
+                onGround = true;
+
+        }
+
+        bool CheckGroundAtOffset(Vector3 offset)
+        {
+            var hit = Physics.LineTrace(Position.ToNumerics() + offset.ToNumerics(), (Position - new Vector3(0, 1.05f, 0) + offset).ToNumerics(), new List<CollisionObject>() {body });
+
+            return hit.HasHit;
+        }
+
         public override void LateUpdate()
         {
             //Camera.Follow(this);
@@ -298,7 +346,9 @@ namespace RetroEngine.Entities
 
         void Jump()
         {
-            body.ApplyCentralImpulse(new Vector3(0, 25, 0).ToNumerics());
+            if(onGround)
+
+                body.ApplyCentralImpulse(new Vector3(0, 25, 0).ToNumerics());
         }
 
         int bulletId = 0;

@@ -23,11 +23,15 @@ namespace RetroEngine
 
         public CollisionFlags FlagToRespond = CollisionFlags.None;
 
+        public List<CollisionObject> ignoreList = new List<CollisionObject>();
+
         public override bool NeedsCollision(BroadphaseProxy proxy0)
         {
 
             if (proxy0.ClientObject is CollisionObject collisionObject)
             {
+                if (ignoreList.Contains(proxy0.ClientObject)) return false;
+
                 RayFlags rayFlags = (RayFlags)collisionObject.UserIndex;
 
                 if (collisionObject.UserIndex > -1)

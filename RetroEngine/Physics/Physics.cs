@@ -243,11 +243,13 @@ namespace RetroEngine
             return RigidBody;
         }
 
-        public static ClosestRayResultCallback LineTrace(Vector3 rayStart, Vector3 rayEnd)
+        public static ClosestRayResultCallback LineTrace(Vector3 rayStart, Vector3 rayEnd, List<CollisionObject> ignoreList = null)
         {
             CollisionWorld world = dynamicsWorld;
 
-            ClosestRayResultCallback rayCallback = new MyClosestRayResultCallback(ref rayStart, ref rayEnd);
+            MyClosestRayResultCallback rayCallback = new MyClosestRayResultCallback(ref rayStart, ref rayEnd);
+            if(ignoreList is not null)
+                rayCallback.ignoreList = ignoreList;
 
             // Perform the ray cast
             world.RayTest(rayStart, rayEnd, rayCallback);

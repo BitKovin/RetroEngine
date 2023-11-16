@@ -84,6 +84,7 @@ namespace RetroEngine
                         effect.Parameters["World"].SetValue(GetWorldMatrix());
                         effect.Parameters["View"].SetValue(Camera.view);
                         effect.Parameters["Projection"].SetValue(Viewmodel? Camera.projectionViewmodel : Camera.projection);
+                        //effect.Parameters["scale"].SetValue(Scale);
 
                         effect.Parameters["DirectBrightness"].SetValue(Graphics.DirectLighting);
                         effect.Parameters["GlobalBrightness"].SetValue(Graphics.GlobalLighting);
@@ -146,7 +147,6 @@ namespace RetroEngine
                         effect.Parameters["World"].SetValue(GetWorldMatrix());
                         effect.Parameters["View"].SetValue(Graphics.GetLightView());
                         effect.Parameters["Projection"].SetValue(Graphics.GetLightProjection());
-                        
 
                         // Draw the primitives using the custom effect
                         foreach (EffectPass pass in effect.CurrentTechnique.Passes)
