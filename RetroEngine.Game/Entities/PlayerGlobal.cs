@@ -13,6 +13,7 @@ namespace RetroEngine.Game.Entities
         public PlayerGlobal() 
         { 
             UpdateWhilePaused = true;
+            LateUpdateWhilePaused = true;
         }
 
         public override void Update()

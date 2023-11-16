@@ -215,13 +215,15 @@ namespace RetroEngine.Entities
             Vector3 forward = Camera.rotation.GetForwardVector().XZ().Normalized();
 
             // Ground movement
-            motion += right * input.X * speed;
-            motion += forward * input.Y * speed;
+            
 
 
             if (input.Length() > 0)
             {
                 input.Normalize();
+
+                motion += right * input.X * speed;
+                motion += forward * input.Y * speed;
 
                 if (onGround)
                 {
@@ -242,7 +244,17 @@ namespace RetroEngine.Entities
                 }
                 else
                 {
-                    body.ApplyCentralForce(motion.ToNumerics() * 2);
+
+                    float airControlPower = Vector3.Dot(motion, ((Vector3)body.LinearVelocity).XZ());
+
+                    airControlPower /= 100;
+
+                    airControlPower += 1;
+                    airControlPower /= 2;
+
+                    airControlPower = 1 - airControlPower;
+
+                    body.ApplyCentralForce(motion.ToNumerics() * 12 * airControlPower);
                 }
             }
             else
@@ -262,33 +274,35 @@ namespace RetroEngine.Entities
         {
             onGround = false;
 
+            float radius = 0.495f;
+
             if (CheckGroundAtOffset(new Vector3(0, 0, 0)))
                 onGround = true;
 
-            if (CheckGroundAtOffset(new Vector3(0.45f, 0, 0)))
+            if (CheckGroundAtOffset(new Vector3(radius, 0, 0)))
                 onGround = true;
 
-            if (CheckGroundAtOffset(new Vector3(-0.45f, 0, 0)))
+            if (CheckGroundAtOffset(new Vector3(-radius, 0, 0)))
                 onGround = true;
 
-            if (CheckGroundAtOffset(new Vector3(0, 0, 0.45f)))
+            if (CheckGroundAtOffset(new Vector3(0, 0, radius)))
                 onGround = true;
 
-            if (CheckGroundAtOffset(new Vector3(0, 0, -0.45f)))
+            if (CheckGroundAtOffset(new Vector3(0, 0, -radius)))
                 onGround = true;
 
 
 
-            if (CheckGroundAtOffset(new Vector3(0.315f, 0, 0.315f)))
+            if (CheckGroundAtOffset(new Vector3(radius*0.77f, 0, radius * 0.77f)))
                 onGround = true;
 
-            if (CheckGroundAtOffset(new Vector3(-0.315f, 0, 0.315f)))
+            if (CheckGroundAtOffset(new Vector3(-radius * 0.77f, 0, radius * 0.77f)))
                 onGround = true;
 
-            if (CheckGroundAtOffset(new Vector3(0.315f, 0, -0.315f)))
+            if (CheckGroundAtOffset(new Vector3(radius * 0.77f, 0, -radius * 0.77f)))
                 onGround = true;
 
-            if (CheckGroundAtOffset(new Vector3(-0.315f, 0, -0.315f)))
+            if (CheckGroundAtOffset(new Vector3(-radius * 0.77f, 0, -radius * 0.77f)))
                 onGround = true;
 
         }

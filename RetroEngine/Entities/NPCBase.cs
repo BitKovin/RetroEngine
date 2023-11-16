@@ -16,7 +16,13 @@ namespace RetroEngine.Entities
 
         float speed = 5;
 
-        Delay updateDelay = new Delay();
+        static Delay updateDelay = new Delay();
+
+        static List<NPCBase> npcList = new List<NPCBase>();
+        static NPCBase currentUpdateNPC = null;
+        static int currentUpdateIndex = 0;
+
+        static float lastUpdateTime = 0;
 
         public override void Start()
         {
@@ -30,20 +36,23 @@ namespace RetroEngine.Entities
             mesh.texture = AssetRegistry.LoadTextureFromFile("cat.png");
             meshes.Add(mesh);
             mesh.CastShadows = false;
+
+            npcList.Add(this);
+
         }
 
         public override void Update()
         {
-            if (!updateDelay.Wait())
-            {
-                try
-                {
-                    UpdateMovementDirection();
-                }
-                catch (Exception ex) { Logger.Log("error while pathfinding"); }
 
-                updateDelay.AddDelay(Vector3.Distance(Position, Camera.position) / 35f + 0.1f);
+            UpdateNPCList();
+
+            if(currentUpdateNPC == this)
+            try
+            {
+                UpdateMovementDirection();
             }
+            catch (Exception ex) { Logger.Log("error while pathfinding"); }
+
         }
 
         public override void AsyncUpdate()
@@ -55,6 +64,14 @@ namespace RetroEngine.Entities
         public override void LateUpdate()
         {
             base.LateUpdate();
+        }
+
+        public override void Destroy()
+        {
+            base.Destroy();
+
+            npcList.Remove(this);
+
         }
 
         void UpdateMovementDirection()
@@ -69,6 +86,25 @@ namespace RetroEngine.Entities
 
             MoveDirection = targetLocation - Position;
             MoveDirection.Normalize();
+        }
+
+        static void UpdateNPCList()
+        {
+
+            if (updateDelay.Wait())
+                return;
+
+            updateDelay.AddDelay(0.002f);
+
+            currentUpdateIndex++;
+
+            if(npcList.Count>0)
+                while(currentUpdateIndex>= npcList.Count)
+                {
+                    currentUpdateIndex -= npcList.Count;
+                }
+            currentUpdateNPC = npcList[currentUpdateIndex];
+
         }
 
     }

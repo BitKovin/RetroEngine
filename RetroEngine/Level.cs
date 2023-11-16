@@ -88,7 +88,7 @@ namespace RetroEngine
             list.AddRange(entities);
 
             foreach (Entity entity in list)
-                if (entity.UpdateWhilePaused && GameMain.inst.paused || GameMain.inst.paused == false)
+                if (entity.LateUpdateWhilePaused && GameMain.inst.paused || GameMain.inst.paused == false)
                     entity.LateUpdate();
         }
 

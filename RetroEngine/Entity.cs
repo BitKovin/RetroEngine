@@ -24,6 +24,7 @@ namespace RetroEngine
         public RigidBody body;
 
         public bool UpdateWhilePaused = false;
+        public bool LateUpdateWhilePaused = false;
 
         public string name;
 

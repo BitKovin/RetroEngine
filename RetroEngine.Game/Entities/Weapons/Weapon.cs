@@ -50,6 +50,8 @@ namespace RetroEngine.Game.Entities.Weapons
         {
             base.Update();
 
+            LateUpdateWhilePaused = true;
+
             if(Time.gameTime - SpawnTime > DrawTime)
                 Drawing = false;
 
@@ -77,7 +79,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             float progress = Math.Clamp((Time.gameTime - SpawnTime)/DrawTime, 0, 1);
 
-            DrawRotation = new Vector3((1 - progress) * 30, (1 - progress) * -10, 0);
+            DrawRotation = new Vector3((1 - progress) * 20, (1 - progress) * -10, 0);
 
         }
 
