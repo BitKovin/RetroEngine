@@ -21,7 +21,7 @@ namespace RetroEngine
         public virtual void Update()
         {
 
-            return;
+            //return;
             ImGui.BeginMainMenuBar();
             ImGui.Text("fps: " + 1f / Time.deltaTime + "    entity count: " + Level.GetCurrent().entities.Count);
             ImGui.EndMainMenuBar();

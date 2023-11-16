@@ -99,6 +99,7 @@ namespace RetroEngine
         {
 
             if (shadowPassRenderDelay.Wait()) return;
+
             shadowPassRenderDelay.AddDelay(0.02f);
 
             Graphics.LightViewProjection = Graphics.GetLightView() * Graphics.GetLightProjection();

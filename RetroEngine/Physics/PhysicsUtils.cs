@@ -17,7 +17,7 @@ namespace RetroEngine
             Quaternion rotation = Quaternion.CreateFromRotationMatrix(rotationMatrix);
 
             // Create a new motion state with the updated position and current rotation
-            Matrix newTransform = Matrix.CreateTranslation(newPosition) * Matrix.CreateFromQuaternion(rotation);
+            Matrix newTransform = Matrix.CreateFromQuaternion(rotation) * Matrix.CreateTranslation(newPosition);
 
 
             // Update the body's world transform directly to apply the transformation

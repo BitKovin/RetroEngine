@@ -14,7 +14,7 @@ namespace RetroEngine.Entities.Navigaion
 
         public List<NavPoint> connected = new List<NavPoint>();
 
-        int MaxDepth = 10;
+        int MaxDepth = 20;
 
         public override void Start()
         {

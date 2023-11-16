@@ -26,7 +26,22 @@ namespace RetroEngine
 
         public static List<Vector3> FindPath(Vector3 start, Vector3 target)
         {
-            return GetStartNavPoint(start).GetPathNext(new List<NavPoint>(), target);
+            List<Vector3> points = GetStartNavPoint(start).GetPathNext(new List<NavPoint>(), target);
+            List<Vector3> result = new List<Vector3>(points);
+
+            for(int i = points.Count -1; i >=0; i--)
+            {
+                var hit = Physics.LineTraceForStatic(start.ToNumerics(), points[i].ToNumerics());
+
+                if(hit.HasHit == false)
+                {
+                    result.RemoveRange(0, i); break;
+                }
+
+            }
+
+            return result;
+
         }
 
         static NavPoint GetStartNavPoint(Vector3 start)
