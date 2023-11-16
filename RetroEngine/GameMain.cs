@@ -130,7 +130,7 @@ namespace RetroEngine
 
             AssetRegistry.ClearTexturesIfNeeded();
 
-            Time.deltaTime = (float)Math.Min(gameTime.ElapsedGameTime.TotalSeconds,0.08d);
+            Time.deltaTime = (float)Math.Min(gameTime.ElapsedGameTime.TotalSeconds,0.04d);
 
             if(!paused)
                 Time.gameTime += Time.deltaTime;

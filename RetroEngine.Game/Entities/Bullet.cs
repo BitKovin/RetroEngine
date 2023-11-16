@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using BulletSharp;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,15 +27,15 @@ namespace RetroEngine.Game.Entities
 
             meshes.Add(mesh);
 
-            body = Physics.CreateSphere(this, 0.06f,0.03f);
+            body = Physics.CreateBox(this, new System.Numerics.Vector3(0.05f),0.03f);
 
             body.Gravity = new System.Numerics.Vector3(0,0,0);
 
             body.Friction = 1;
 
-            body.CcdSweptSphereRadius = 0.02f;
+            body.CcdSweptSphereRadius = 0.01f;
             body.CcdMotionThreshold = 0.1f;
-
+            body.Restitution = 0;
         }
 
         Vector3 startRotation;
@@ -47,8 +48,6 @@ namespace RetroEngine.Game.Entities
             startRotation = Rotation;
 
             body.SetRotation(Physics.ToQuaternion(startRotation.ToNumerics()));
-
-            body.ApplyCentralImpulse(Rotation.GetForwardVector().ToNumerics() * 5f);
 
 
             collisionCallback.owner = this;
@@ -67,7 +66,15 @@ namespace RetroEngine.Game.Entities
 
         private void Hit(BulletSharp.CollisionObjectWrapper thisObject, BulletSharp.CollisionObjectWrapper collidedObject, Entity collidedEntity, BulletSharp.ManifoldPoint contactPoint)
         {
-            
+
+            RigidBody hitBody = collidedObject.CollisionObject as RigidBody;
+
+            if(hitBody != null)
+            {
+                hitBody.Activate();
+                hitBody.ApplyCentralImpulse(startRotation.GetForwardVector().ToNumerics() * 10f);
+            }
+
             Destroy();
         }
 
@@ -77,6 +84,8 @@ namespace RetroEngine.Game.Entities
 
             if(!destroyDelay.Wait())
                 Destroy();
+
+            body.LinearVelocity = startRotation.GetForwardVector().ToNumerics() * 40f;
 
             Physics.PerformContactCheck(body, collisionCallback);
 

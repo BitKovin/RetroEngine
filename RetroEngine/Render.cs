@@ -98,9 +98,9 @@ namespace RetroEngine
         void RenderShadowMap(Level level)
         {
 
-            if (shadowPassRenderDelay.Wait()) return;
+            //if (shadowPassRenderDelay.Wait()) return;
 
-            shadowPassRenderDelay.AddDelay(0.02f);
+            //shadowPassRenderDelay.AddDelay(0.02f);
 
             Graphics.LightViewProjection = Graphics.GetLightView() * Graphics.GetLightProjection();
 

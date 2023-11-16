@@ -14,7 +14,9 @@ namespace RetroEngine.Entities
 
         StaticMesh mesh = new StaticMesh();
 
-        float speed = 3;
+        float speed = 5;
+
+        Delay updateDelay = new Delay();
 
         public override void Start()
         {
@@ -27,21 +29,34 @@ namespace RetroEngine.Entities
             mesh.LoadFromFile("models/npc_base.obj");
             mesh.texture = AssetRegistry.LoadTextureFromFile("cat.png");
             meshes.Add(mesh);
+            mesh.CastShadows = false;
         }
 
         public override void Update()
         {
-            UpdateMovementDirection();
+            if (!updateDelay.Wait())
+            {
+                try
+                {
+                    UpdateMovementDirection();
+                }
+                catch (Exception ex) { Logger.Log("error while pathfinding"); }
 
-            body.LinearVelocity = new System.Numerics.Vector3(MoveDirection.X * speed, body.LinearVelocity.Y, MoveDirection.Z * speed);
+                updateDelay.AddDelay(Vector3.Distance(Position, Camera.position) / 30f);
+            }
         }
 
+        public override void AsyncUpdate()
+        {
+
+
+            body.LinearVelocity = new System.Numerics.Vector3(MoveDirection.X * speed, body.LinearVelocity.Y, MoveDirection.Z * speed);
+
+            mesh.Position = Position - new Vector3(0, 1, 0);
+        }
         public override void LateUpdate()
         {
             base.LateUpdate();
-
-            mesh.Position = Position - new Vector3(0, 1, 0);
-
         }
 
         void UpdateMovementDirection()
