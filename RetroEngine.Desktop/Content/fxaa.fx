@@ -68,10 +68,10 @@ float invViewportWidth;
 float invViewportHeight;
 
 // texturing
-Texture2D texScreen;
+Texture2D screenColor;
 sampler splScreen = sampler_state
 {
-    texture = <texScreen>;
+    texture = <screenColor>;
 };
 
 /*=======LUMINOSITY FUNCTION================================================*/

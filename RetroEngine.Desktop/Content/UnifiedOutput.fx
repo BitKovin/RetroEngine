@@ -12,6 +12,8 @@ matrix View;
 matrix Projection;
 texture Texture;
 sampler TextureSampler = sampler_state { texture = <Texture>; };
+texture EmissiveTexture;
+sampler EmissiveTextureSampler = sampler_state { texture = <EmissiveTexture>; };
 
 texture ShadowMap;
 sampler ShadowMapSampler = sampler_state { texture = <ShadowMap>; };
@@ -19,6 +21,8 @@ sampler ShadowMapSampler = sampler_state { texture = <ShadowMap>; };
 float DirectBrightness;
 float GlobalBrightness;
 float3 LightDirection;
+
+float EmissionPower;
 
 float ShadowBias;
 
@@ -117,6 +121,10 @@ float4 PixelShaderFunction(PixelInput input) : COLOR0
     light += GlobalBrightness;
 
 	textureColor *= light;
+
+    textureColor /= 4.0f;
+
+    textureColor += tex2D(EmissiveTextureSampler, input.TexCoord).xyz / 4.0f * EmissionPower;
 
     return float4(textureColor, textureAlpha);
 }

@@ -23,6 +23,14 @@ namespace RetroEngine
         public static void Update()
         {
 
+            UpdateMouse();
+
+            UpdateActions();
+
+        }
+
+        static void UpdateMouse()
+        {
             Vector2 mousePos = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
             MouseDelta = mousePos - MousePos;
 
@@ -32,16 +40,13 @@ namespace RetroEngine
 
             GameMain.inst.IsMouseVisible = !LockCursor;
 
-            if (LockCursor) 
+            if (LockCursor)
                 if (Vector2.Distance(windowCenter, mousePos) > 1)
                 {
                     Mouse.SetPosition((int)windowCenter.X, (int)windowCenter.Y);
                 }
 
             MousePos = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
-
-            UpdateActions();
-
         }
 
         public static void CenterCursor()

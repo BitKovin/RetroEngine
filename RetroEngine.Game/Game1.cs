@@ -61,7 +61,7 @@ namespace RetroEngine.Game
                 }
 
             }
-            for (int i = 1; i <= 100; i++)
+            for (int i = 1; i <= 300; i++)
             {
 
                 NPCBase npc = new NPCBase();

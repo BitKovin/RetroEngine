@@ -17,8 +17,11 @@ namespace RetroEngine
         RenderTarget2D colorPath;
         RenderTarget2D normalPath;
         RenderTarget2D miscPath;
+        RenderTarget2D postProcessingOutput;
 
         public RenderTarget2D shadowMap;
+
+        public Texture2D black;
 
         RenderTarget2D outputPath;
 
@@ -34,6 +37,8 @@ namespace RetroEngine
 
         public Effect fxaaEffect;
 
+        public Effect PostProcessingEffect;
+
         Delay shadowPassRenderDelay = new Delay();
 
         public Render()
@@ -44,18 +49,22 @@ namespace RetroEngine
             UnifiedEffect = GameMain.content.Load<Effect>("UnifiedOutput");
             fxaaEffect = GameMain.content.Load<Effect>("fxaa");
             ShadowMapEffect = GameMain.content.Load<Effect>("ShadowMap");
+            PostProcessingEffect = GameMain.content.Load<Effect>("PostProcessing");
         }
 
         public RenderTarget2D StartRenderLevel(Level level)
         {
             graphics = GameMain.inst._graphics;
 
+            CreateBlackTexture();
+
             InitRenderTargetIfNeed(ref colorPath);
             InitRenderTargetIfNeed(ref normalPath);
             InitRenderTargetIfNeed(ref outputPath);
-            InitRenderTargetIfNeed(ref miscPath);
+            //InitRenderTargetIfNeed(ref miscPath);
+            InitRenderTargetIfNeed(ref postProcessingOutput);
 
-            if(shadowMap is null)
+            if (shadowMap is null)
             InitShadowMap(ref shadowMap);
 
             graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
@@ -71,7 +80,6 @@ namespace RetroEngine
 
 
             PerformPostProcessing();
-            //outputPath = colorPath;
 
             return outputPath;
         }
@@ -80,7 +88,7 @@ namespace RetroEngine
         {
 
             graphics.GraphicsDevice.SetRenderTarget(colorPath);
-            graphics.GraphicsDevice.Clear(Graphics.BackgroundColor);
+            graphics.GraphicsDevice.Clear(Graphics.BackgroundColor * 0.25f);
 
             graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
@@ -131,9 +139,24 @@ namespace RetroEngine
 
         void PerformPostProcessing()
         {
-            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, Graphics.shadowMapResolution, Graphics.shadowMapResolution);
+            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
+
+            graphics.GraphicsDevice.SetRenderTarget(postProcessingOutput);
+
+            PostProcessingEffect.Parameters["ColorTexture"].SetValue(colorPath);
+
+
+            SpriteBatch spriteBatch = GameMain.inst.SpriteBatch;
+            spriteBatch.Begin(effect: PostProcessingEffect);
+
+            DrawFullScreenQuad(spriteBatch, colorPath);
+
+            spriteBatch.End();
 
             PerformFXAA();
+
+            graphics.GraphicsDevice.SetRenderTarget(null);          
+
         }
 
         void PerformFXAA()
@@ -154,14 +177,14 @@ namespace RetroEngine
 
             fxaaEffect.Parameters["invViewportWidth"].SetValue(1f / graphics.PreferredBackBufferWidth);
             fxaaEffect.Parameters["invViewportHeight"].SetValue(1f / graphics.PreferredBackBufferHeight);
-            fxaaEffect.Parameters["texScreen"].SetValue((Texture2D)colorPath);
+            fxaaEffect.Parameters["screenColor"].SetValue(postProcessingOutput);
 
             // Begin drawing with SpriteBatch
             SpriteBatch spriteBatch = GameMain.inst.SpriteBatch;
             spriteBatch.Begin(effect: fxaaEffect);
 
             // Draw a full-screen quad to apply the lighting
-            DrawFullScreenQuad(spriteBatch);
+            DrawFullScreenQuad(spriteBatch, postProcessingOutput);
 
             // End the SpriteBatch
             spriteBatch.End();
@@ -241,7 +264,7 @@ namespace RetroEngine
             spriteBatch.Begin(effect: lightingEffect);
 
             // Draw a full-screen quad to apply the lighting
-            DrawFullScreenQuad(spriteBatch);
+            DrawFullScreenQuad(spriteBatch, colorPath);
 
             // End the SpriteBatch
             spriteBatch.End();
@@ -250,13 +273,13 @@ namespace RetroEngine
             graphics.GraphicsDevice.SetRenderTarget(null);
         }
 
-        void DrawFullScreenQuad(SpriteBatch spriteBatch)
+        void DrawFullScreenQuad(SpriteBatch spriteBatch, Texture2D inputTexture)
         {
             // Create a rectangle covering the entire screen
             Rectangle screenRectangle = new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
 
             // Draw the full-screen quad using SpriteBatch
-            spriteBatch.Draw(colorPath, screenRectangle, Color.White);
+            spriteBatch.Draw(inputTexture, screenRectangle, Color.White);
         }
 
         void InitShadowMap(ref RenderTarget2D target)
@@ -313,6 +336,16 @@ namespace RetroEngine
             }
 
             return effect;
+        }
+
+        void CreateBlackTexture()
+        {
+            if (black != null) return;
+
+            // Create a 1x1 black texture
+            black = new Texture2D(graphics.GraphicsDevice, 1, 1);
+            Color[] data = new Color[1] { Color.Black };
+            black.SetData(data);
         }
 
     }

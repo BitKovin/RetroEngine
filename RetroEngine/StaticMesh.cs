@@ -27,7 +27,9 @@ namespace RetroEngine
         public Model model;
 
         public Texture2D texture;
+        public Texture2D emisssiveTexture;
         public List<string> textureSearchPaths = new List<string>();
+        public float EmissionPower = 1;
 
         public float CalculatedCameraDistance = 0;
 
@@ -118,7 +120,16 @@ namespace RetroEngine
                         {
                             effect.Parameters["Texture"].SetValue(texture);
                         }
-                        
+
+                        if (meshPartData is not null)
+                        {
+                            effect.Parameters["EmissiveTexture"].SetValue(FindEmissiveTexture(meshPartData.textureName));
+                        }
+                        else
+                        {
+                            effect.Parameters["EmissiveTexture"].SetValue(GameMain.inst.render.black);
+                        }
+                        effect.Parameters["EmissionPower"].SetValue(EmissionPower);
 
                         // Draw the primitives using the custom effect
                         foreach (EffectPass pass in effect.CurrentTechnique.Passes)
@@ -204,6 +215,50 @@ namespace RetroEngine
             return texture;
             
         }
+
+        Texture2D FindEmissiveTexture(string name)
+        {
+
+            if (name == null)
+                if (emisssiveTexture == null)
+                {
+                    return GameMain.inst.render.black;
+                }else
+                {
+                    return emisssiveTexture;
+                }
+
+            name = name.ToLower();
+            name = name.Replace(".png", "_em.png");
+
+            if (textures.ContainsKey(name))
+                return textures[name];
+
+            Texture2D output;
+            if (textureSearchPaths.Count > 0)
+            {
+                foreach (string item in textureSearchPaths)
+                {
+                    output = AssetRegistry.LoadTextureFromFile(item + name, true);
+                    if (output != null)
+                    {
+                        textures.Add(name, output);
+                        return output;
+                    }
+                }
+
+            }
+            if (emisssiveTexture == null)
+            {
+                return GameMain.inst.render.black;
+            }
+            else
+            {
+                return emisssiveTexture;
+            }
+
+        }
+
         public virtual void DrawNormals()
         {
             GraphicsDevice graphicsDevice = GameMain.inst._graphics.GraphicsDevice;

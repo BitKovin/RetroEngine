@@ -29,52 +29,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             //Model model = GameMain.content.Load<Model>("pistol");
 
-            mesh1.Scale = new Vector3(1, 1, 1);
-
-            mesh1.AddFrame("Animations/Pistol/Fire/frame_0001.obj");
-
-
-            mesh1.AddFrame("Animations/Pistol/Fire/frame_0002.obj");
-            mesh1.AddFrame("Animations/Pistol/Fire/frame_0003.obj");
-            mesh1.AddFrame("Animations/Pistol/Fire/frame_0004.obj");
-            mesh1.AddFrame("Animations/Pistol/Fire/frame_0005.obj");
-            mesh1.AddFrame("Animations/Pistol/Fire/frame_0006.obj");
-            mesh1.AddFrame("Animations/Pistol/Fire/frame_0007.obj");
-            mesh1.AddFrame("Animations/Pistol/Fire/frame_0008.obj");
-            mesh1.AddFrame("Animations/Pistol/Fire/frame_0009.obj");
-            mesh1.AddFrame("Animations/Pistol/Fire/frame_0010.obj");
-            mesh1.frameTime = 1f / 30f;
-            //mesh.texture = AssetRegistry.LoadTextureFromFile("usp.png");
-            mesh1.textureSearchPaths.Add("textures/weapons/arms/");
-            mesh1.textureSearchPaths.Add("textures/weapons/pistol/");
-            mesh1.CastShadows = false;
-            mesh1.PreloadTextures();
-            mesh1.Viewmodel = true;
-
-            meshes.Add(mesh1);
-
-
-            mesh2.Scale = new Vector3(-1, 1, 1);
-
-            mesh2.AddFrame("Animations/Pistol/Fire/frame_0001.obj");
-            mesh2.AddFrame("Animations/Pistol/Fire/frame_0002.obj");
-            mesh2.AddFrame("Animations/Pistol/Fire/frame_0003.obj");
-            mesh2.AddFrame("Animations/Pistol/Fire/frame_0004.obj");
-            mesh2.AddFrame("Animations/Pistol/Fire/frame_0005.obj");
-            mesh2.AddFrame("Animations/Pistol/Fire/frame_0006.obj");
-            mesh2.AddFrame("Animations/Pistol/Fire/frame_0007.obj");
-            mesh2.AddFrame("Animations/Pistol/Fire/frame_0008.obj");
-            mesh2.AddFrame("Animations/Pistol/Fire/frame_0009.obj");
-            mesh2.AddFrame("Animations/Pistol/Fire/frame_0010.obj");
-            mesh2.frameTime = 1f / 30f;
-
-            mesh2.textureSearchPaths.Add("textures/weapons/arms/");
-            mesh2.textureSearchPaths.Add("textures/weapons/pistol/");
-            mesh2.CastShadows = false;
-            mesh2.PreloadTextures();
-
-            mesh2.Viewmodel = true;
-            meshes.Add(mesh2);
+            LoadVisual();
 
 
             fireSoundPlayer = Level.GetCurrent().AddEntity(new SoundPlayer()) as SoundPlayer;
@@ -172,7 +127,56 @@ namespace RetroEngine.Game.Entities.Weapons
                 }
             }
 
+        }
 
+        void LoadVisual()
+        {
+            mesh1.Scale = new Vector3(1, 1, 1);
+
+            mesh1.AddFrame("Animations/Pistol/Fire/frame_0001.obj");
+
+
+            mesh1.AddFrame("Animations/Pistol/Fire/frame_0002.obj");
+            mesh1.AddFrame("Animations/Pistol/Fire/frame_0003.obj");
+            mesh1.AddFrame("Animations/Pistol/Fire/frame_0004.obj");
+            mesh1.AddFrame("Animations/Pistol/Fire/frame_0005.obj");
+            mesh1.AddFrame("Animations/Pistol/Fire/frame_0006.obj");
+            mesh1.AddFrame("Animations/Pistol/Fire/frame_0007.obj");
+            mesh1.AddFrame("Animations/Pistol/Fire/frame_0008.obj");
+            mesh1.AddFrame("Animations/Pistol/Fire/frame_0009.obj");
+            mesh1.AddFrame("Animations/Pistol/Fire/frame_0010.obj");
+            mesh1.frameTime = 1f / 30f;
+            //mesh.texture = AssetRegistry.LoadTextureFromFile("usp.png");
+            mesh1.textureSearchPaths.Add("textures/weapons/arms/");
+            mesh1.textureSearchPaths.Add("textures/weapons/pistol/");
+            mesh1.CastShadows = false;
+            mesh1.PreloadTextures();
+            mesh1.Viewmodel = true;
+
+            meshes.Add(mesh1);
+
+
+            mesh2.Scale = new Vector3(-1, 1, 1);
+
+            mesh2.AddFrame("Animations/Pistol/Fire/frame_0001.obj");
+            mesh2.AddFrame("Animations/Pistol/Fire/frame_0002.obj");
+            mesh2.AddFrame("Animations/Pistol/Fire/frame_0003.obj");
+            mesh2.AddFrame("Animations/Pistol/Fire/frame_0004.obj");
+            mesh2.AddFrame("Animations/Pistol/Fire/frame_0005.obj");
+            mesh2.AddFrame("Animations/Pistol/Fire/frame_0006.obj");
+            mesh2.AddFrame("Animations/Pistol/Fire/frame_0007.obj");
+            mesh2.AddFrame("Animations/Pistol/Fire/frame_0008.obj");
+            mesh2.AddFrame("Animations/Pistol/Fire/frame_0009.obj");
+            mesh2.AddFrame("Animations/Pistol/Fire/frame_0010.obj");
+            mesh2.frameTime = 1f / 30f;
+
+            mesh2.textureSearchPaths.Add("textures/weapons/arms/");
+            mesh2.textureSearchPaths.Add("textures/weapons/pistol/");
+            mesh2.CastShadows = false;
+            mesh2.PreloadTextures();
+
+            mesh2.Viewmodel = true;
+            meshes.Add(mesh2);
         }
 
     }
