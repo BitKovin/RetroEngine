@@ -1,5 +1,6 @@
 ﻿using RetroEngine;
 using RetroEngine.Entities;
+using RetroEngine.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -64,6 +65,8 @@ namespace RetroEngine
             {
                 entity.Destroy();
             }
+
+            UiElement.main.childs.Clear();
 
             Navigation.ClearNavData();
             NPCBase.ResetStaticData();
