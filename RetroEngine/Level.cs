@@ -1,8 +1,10 @@
 ﻿using RetroEngine;
+using RetroEngine.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace RetroEngine
@@ -16,6 +18,8 @@ namespace RetroEngine
         List<StaticMesh> renderList = new List<StaticMesh>();
 
         List<Entity> pendingAddEntity = new List<Entity>();
+
+        static string pendingLevelChange = null;
 
         public Level()
         {
@@ -32,8 +36,26 @@ namespace RetroEngine
             return GameMain.inst.curentLevel;
         }
 
+        public static bool LoadPendingLevel()
+        {
+            if (pendingLevelChange != null)
+            {
+                LoadFromFile(pendingLevelChange);
+
+                pendingLevelChange = null;
+                return true;
+            }
+            return false;
+        }
+
         public static void LoadFromFile(string name)
         {
+
+            if(GameMain.RenderThread != Thread.CurrentThread)
+            {
+                pendingLevelChange = name;
+                return;
+            }
 
             List<Entity> list = new List<Entity>();
             list.AddRange(GameMain.inst.curentLevel.entities);
@@ -44,6 +66,7 @@ namespace RetroEngine
             }
 
             Navigation.ClearNavData();
+            NPCBase.ResetStaticData();
 
             GameMain.inst.curentLevel = MapParser.MapParser.ParseMap(AssetRegistry.FindPathForFile(name)).GetLevel();
             GameMain.inst.curentLevel.StartEnities();
@@ -127,6 +150,14 @@ namespace RetroEngine
                 }
             }
 
+        }
+
+        public void LoadAssets()
+        {
+            foreach(Entity ent in entities)
+            {
+                ent.LoadAssetsIfNeeded();
+            }
         }
 
         public virtual List<StaticMesh> GetMeshesToRender()

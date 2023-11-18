@@ -114,5 +114,13 @@ namespace RetroEngine.Entities
             }
         }
 
+        public static void ResetStaticData()
+        {
+            npcList.Clear();
+            currentUpdateNPCs.Clear();
+            currentUpdateIndex = 0;
+            updateDelay = new Delay();
+        }
+
     }
 }

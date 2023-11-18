@@ -27,14 +27,17 @@ namespace RetroEngine.Game.Entities.Weapons
         {
             base.Start();
 
-            //Model model = GameMain.content.Load<Model>("pistol");
-
-            LoadVisual();
-
-
             fireSoundPlayer = Level.GetCurrent().AddEntity(new SoundPlayer()) as SoundPlayer;
             fireSoundPlayer.SetSound(AssetRegistry.LoadSoundFromFile("sounds/pistol_fire.wav"));
             fireSoundPlayer.Volume = 0.05f;
+
+        }
+
+        protected override void LoadAssets()
+        {
+            base.LoadAssets();
+
+            LoadVisual();
 
         }
 

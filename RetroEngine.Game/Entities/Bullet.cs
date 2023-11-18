@@ -23,10 +23,6 @@ namespace RetroEngine.Game.Entities
 
         public Bullet() 
         {
-            mesh.LoadFromFile("models/weapons/bullet/bullet.obj");
-
-            mesh.texture = AssetRegistry.LoadTextureFromFile("models/weapons/bullet/bullet.png");
-            mesh.emisssiveTexture = AssetRegistry.LoadTextureFromFile("models/weapons/bullet/bullet_em.png");
             mesh.EmissionPower = 3;
 
             meshes.Add(mesh);
@@ -44,6 +40,16 @@ namespace RetroEngine.Game.Entities
 
         Vector3 startRotation;
 
+        protected override void LoadAssets()
+        {
+            base.LoadAssets();
+
+            mesh.LoadFromFile("models/weapons/bullet/bullet.obj");
+
+            mesh.texture = AssetRegistry.LoadTextureFromFile("models/weapons/bullet/bullet.png");
+            mesh.emisssiveTexture = AssetRegistry.LoadTextureFromFile("models/weapons/bullet/bullet_em.png");
+
+        }
 
         public override void Start()
         {

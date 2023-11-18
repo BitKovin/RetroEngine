@@ -61,7 +61,7 @@ namespace RetroEngine
 
         public static Thread RenderThread;
 
-        bool asyncGameThread = false;
+        bool asyncGameThread = true;
 
         public GameMain()
         {
@@ -103,7 +103,10 @@ namespace RetroEngine
 
         }
 
-
+        public static bool IsOnRenderThread()
+        {
+            return RenderThread == Thread.CurrentThread;
+        }
 
         protected override void LoadContent()
         {
@@ -161,8 +164,9 @@ namespace RetroEngine
             Physics.Update();
 
             curentLevel.UpdatePending();
-
-            if (asyncGameThread)
+            curentLevel.LoadAssets();
+            bool changedLevel = Level.LoadPendingLevel();
+            if (asyncGameThread && changedLevel == false)
             {
                 gameTask = Task.Factory.StartNew(() => { GameLogic(); });
             }
@@ -172,7 +176,7 @@ namespace RetroEngine
             }
             base.Update(gameTime);
 
-            tick++;
+            
 
         }
 
@@ -196,6 +200,7 @@ namespace RetroEngine
             foreach (UiElement elem in UiElement.main.childs)
                 elem.Update();
 
+            tick++;
         }
         private void Game1_Exiting(object sender, System.EventArgs e)
         {

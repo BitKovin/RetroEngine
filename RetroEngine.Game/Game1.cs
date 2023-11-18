@@ -50,7 +50,7 @@ namespace RetroEngine.Game
             GameMain.inst.curentLevel.entities.Add(new PlayerGlobal());
 
  
-            for (int i = 1; i <= 0; i++)
+            for (int i = 1; i <= 500; i++)
             {
 
                 NPCBase npc = new NPCBase();
@@ -77,7 +77,6 @@ namespace RetroEngine.Game
             Input.AddAction("slot3").AddKeyboardKey(Keys.D3);
 
             Input.AddAction("test").AddKeyboardKey(Keys.R);
-            Input.AddAction("test2").AddKeyboardKey(Keys.T);
         }
 
     }

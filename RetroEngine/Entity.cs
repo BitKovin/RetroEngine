@@ -40,6 +40,8 @@ namespace RetroEngine
 
         public float Health = 0;
 
+        public bool loadedAssets = false;
+
         public Entity()
         {
 
@@ -112,5 +114,21 @@ namespace RetroEngine
         {
             GC.SuppressFinalize(this);
         }
+
+        public void LoadAssetsIfNeeded()
+        {
+            if(loadedAssets) return;
+
+            LoadAssets();
+
+            loadedAssets =true;
+
+        }
+
+        protected virtual void LoadAssets()
+        {
+
+        }
+
     }
 }

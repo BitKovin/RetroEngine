@@ -65,8 +65,7 @@ namespace RetroEngine.Game.Entities.Weapons
             {
                 Weapon weapon = Activator.CreateInstance(type) as Weapon;
                 weapon.data = new WeaponData();
-                weapon.Start();
-                weapon.Destroy();
+                weapon.LoadAssetsIfNeeded();
             }
 
             types = null;

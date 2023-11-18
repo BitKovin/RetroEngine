@@ -36,6 +36,12 @@ namespace RetroEngine
             if(nullTextures.Contains(path))
                 return null;
 
+            if (GameMain.IsOnRenderThread() == false) 
+            {
+                Logger.Log($"THREAD ERROR:  attempted to load texture from not render thread. Texture: {path}");
+                return GameMain.inst.render.black;
+            }
+
             string filePpath = FindPathForFile(path);
 
             try

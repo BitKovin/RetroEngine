@@ -55,6 +55,8 @@ namespace RetroEngine.Entities
 
         Weapon currentWeapon;
 
+        Image crosshair = new Image();
+
         public Player() : base()
         {
             if (GameMain.platform == Platform.Mobile)
@@ -78,10 +80,7 @@ namespace RetroEngine.Entities
             }
             //Camera.Follow(this);
 
-
-            Image crosshair = new Image();
             crosshair.baseColor = new Color(0.9f, 0.8f, 0.6f) * 0.6f;
-            crosshair.SetTexture("ui/crosshair.png");
 
             crosshair.originH = Origin.CenterH;
             crosshair.originV = Origin.CenterV;
@@ -104,6 +103,16 @@ namespace RetroEngine.Entities
 
         private void ButtonRotate_onClicked()
         {
+
+        }
+
+        protected override void LoadAssets()
+        {
+            base.LoadAssets();
+
+            crosshair.SetTexture("ui/crosshair.png");
+
+            Weapon.PreloadAllWeapons();
 
         }
 
@@ -140,7 +149,6 @@ namespace RetroEngine.Entities
 
             weapons.Add(new WeaponData { weaponType = typeof(weapon_pistols), ammo = 50 });
 
-            Weapon.PreloadAllWeapons();
         }
 
         public override void Update()
@@ -165,6 +173,10 @@ namespace RetroEngine.Entities
             if (Input.GetAction("slot3").Pressed())
                 SwitchToSlot(2);
 
+            if(Input.GetAction("test").Released())
+            {
+                Level.LoadFromFile("test2.map");
+            }
 
             FirstTick = false;
 
