@@ -382,6 +382,13 @@ namespace RetroEngine
 
         protected Model GetModelFromPath(string filePath)
         {
+
+            if (GameMain.IsOnRenderThread() == false)
+            {
+                Logger.Log($"THREAD ERROR:  attempted to load model from not render thread. Model: {filePath}");
+                return null;
+            }
+
             GraphicsDevice graphicsDevice = GameMain.inst.GraphicsDevice;
 
             filePath = AssetRegistry.FindPathForFile(filePath);
@@ -474,6 +481,13 @@ namespace RetroEngine
 
         public static Model CreateModelFromVertices(List<Vector3> vertexPositions)
         {
+
+            if (GameMain.IsOnRenderThread() == false)
+            {
+                Logger.Log($"THREAD ERROR:  attempted to create model from not render thread.");
+                return null;
+            }
+
             GraphicsDevice graphicsDevice = GameMain.inst.GraphicsDevice;
 
             List<ModelMeshPart> meshParts = new List<ModelMeshPart>();

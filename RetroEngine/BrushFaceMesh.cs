@@ -24,13 +24,18 @@ namespace RetroEngine
 
         public static List<BrushFaceMesh> GetFacesFromPath(string filePath, string objectName, float unitSize = 32)
         {
+
+            if (GameMain.IsOnRenderThread() == false)
+            {
+                Logger.Log($"THREAD ERROR:  attempted to load merged faces from not render thread. Model path: {filePath}  object name: {objectName}");
+                return null;
+            }
+
             GraphicsDevice graphicsDevice = GameMain.inst.GraphicsDevice;
 
             List<BrushFaceMesh> models = new List<BrushFaceMesh>();
 
             var importer = new Assimp.AssimpContext();
-
-            
 
             Assimp.Scene scene;
             if (scenes.ContainsKey(filePath))
@@ -154,6 +159,12 @@ namespace RetroEngine
 
         public static List<BrushFaceMesh> GetMergedFacesFromPath(string filePath, string objectName, float unitSize = 32)
         {
+            if (GameMain.IsOnRenderThread() == false)
+            {
+                Logger.Log($"THREAD ERROR:  attempted to load merged model from not render thread. Model path: {filePath}  object name: {objectName}");
+                return null;
+            }
+
             GraphicsDevice graphicsDevice = GameMain.inst.GraphicsDevice;
 
             List<BrushFaceMesh> models = new List<BrushFaceMesh>();

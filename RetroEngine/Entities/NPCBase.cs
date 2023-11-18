@@ -32,12 +32,19 @@ namespace RetroEngine.Entities
             body.Gravity = new Vector3(0, -35, 0).ToNumerics();
             body.SetPosition(Position.ToPhysics());
 
-            mesh.LoadFromFile("models/npc_base.obj");
-            mesh.texture = AssetRegistry.LoadTextureFromFile("cat.png");
             meshes.Add(mesh);
             mesh.CastShadows = false;
 
             npcList.Add(this);
+
+        }
+
+        protected override void LoadAssets()
+        {
+            base.LoadAssets();
+
+            mesh.LoadFromFile("models/npc_base.obj");
+            mesh.texture = AssetRegistry.LoadTextureFromFile("cat.png");
 
         }
 
