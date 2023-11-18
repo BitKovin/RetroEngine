@@ -18,6 +18,24 @@ namespace RetroEngine
         public string textureName = "";
     }
 
+    struct FrameStaticMeshData
+    {
+        public Model model;
+
+        public float EmissionPower;
+        public bool Transperent;
+        public bool Viewmodel;
+
+        public Matrix World;
+        public Matrix View;
+        public Matrix Projection;
+        public Matrix ProjectionViewmodel;
+
+        public Matrix LightView;
+        public Matrix LightProjection;
+
+    }
+
     public class StaticMesh : IDisposable
     {
         public Vector3 Position { get; set; } = Vector3.Zero;
@@ -47,6 +65,8 @@ namespace RetroEngine
 
         public bool CastShadows = true;
 
+        FrameStaticMeshData frameStaticMeshData = new FrameStaticMeshData();
+
         public virtual void Draw()
         {
             foreach (ModelMesh mesh in model.Meshes)
@@ -58,6 +78,7 @@ namespace RetroEngine
                     effect.Projection = Camera.projection;
                     effect.Texture = texture;
                     effect.TextureEnabled = texture is not null;
+
                 }
 
                 mesh.Draw();
@@ -85,9 +106,9 @@ namespace RetroEngine
             Effect effect = GameMain.inst.render.UnifiedEffect;
 
 
-            if (model is not null)
+            if (frameStaticMeshData.model is not null)
             {
-                foreach (ModelMesh mesh in model.Meshes)
+                foreach (ModelMesh mesh in frameStaticMeshData.model.Meshes)
                 {
                     foreach (ModelMeshPart meshPart in mesh.MeshParts)
                     {
@@ -97,10 +118,9 @@ namespace RetroEngine
                         graphicsDevice.Indices = meshPart.IndexBuffer;
 
                         // Set effect parameters
-                        effect.Parameters["World"].SetValue(GetWorldMatrix());
-                        effect.Parameters["View"].SetValue(Camera.view);
-                        effect.Parameters["Projection"].SetValue(Viewmodel? Camera.projectionViewmodel : Camera.projection);
-                        //effect.Parameters["scale"].SetValue(Scale);
+                        effect.Parameters["World"].SetValue(frameStaticMeshData.World);
+                        effect.Parameters["View"].SetValue(frameStaticMeshData.View);
+                        effect.Parameters["Projection"].SetValue(frameStaticMeshData.Viewmodel? frameStaticMeshData.ProjectionViewmodel : frameStaticMeshData.Projection);
 
                         effect.Parameters["DirectBrightness"].SetValue(Graphics.DirectLighting);
                         effect.Parameters["GlobalBrightness"].SetValue(Graphics.GlobalLighting);
@@ -159,7 +179,7 @@ namespace RetroEngine
 
             if (model is not null)
             {
-                foreach (ModelMesh mesh in model.Meshes)
+                foreach (ModelMesh mesh in frameStaticMeshData.model.Meshes)
                 {
                     foreach (ModelMeshPart meshPart in mesh.MeshParts)
                     {
@@ -169,9 +189,9 @@ namespace RetroEngine
                         graphicsDevice.Indices = meshPart.IndexBuffer;
 
                         // Set effect parameters
-                        effect.Parameters["World"].SetValue(GetWorldMatrix());
-                        effect.Parameters["View"].SetValue(Graphics.GetLightView());
-                        effect.Parameters["Projection"].SetValue(Graphics.GetLightProjection());
+                        effect.Parameters["World"].SetValue(frameStaticMeshData.World);
+                        effect.Parameters["View"].SetValue(frameStaticMeshData.LightView);
+                        effect.Parameters["Projection"].SetValue(frameStaticMeshData.LightProjection);
 
                         // Draw the primitives using the custom effect
                         foreach (EffectPass pass in effect.CurrentTechnique.Passes)
@@ -518,24 +538,16 @@ namespace RetroEngine
 
             isRendered = true;
 
-            //Vector3 location = useAvgVertexPosition ? avgVertexPosition : Position;
-
-            if (Transperent)
-            {
-                //CalculatedCameraDistance = Vector3.Distance(location, Camera.position);
-            }else
-            {
-                //CalculatedCameraDistance = 1000000000000;
-            }
-
-            return;
-
-            foreach (ModelMesh mesh in model.Meshes)
-            {
-                if (IsBoundingSphereInFrustum(mesh.BoundingSphere))
-                    isRendered = true;
-            }
-
+            frameStaticMeshData.Projection = Camera.projection;
+            frameStaticMeshData.ProjectionViewmodel = Camera.projectionViewmodel;
+            frameStaticMeshData.model = model;
+            frameStaticMeshData.Transperent = Transperent;
+            frameStaticMeshData.EmissionPower = EmissionPower;
+            frameStaticMeshData.View = Camera.view;
+            frameStaticMeshData.World = GetWorldMatrix();
+            frameStaticMeshData.Viewmodel = Viewmodel;
+            frameStaticMeshData.LightView = Graphics.GetLightView();
+            frameStaticMeshData.LightProjection = Graphics.GetLightProjection();
         }
 
         private Vector3 CalculateAvgVertexLocation()

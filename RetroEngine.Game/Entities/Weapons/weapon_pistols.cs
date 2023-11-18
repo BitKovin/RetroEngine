@@ -91,12 +91,12 @@ namespace RetroEngine.Game.Entities.Weapons
             {
                 mesh2.Play();
             }
-
+            
 
             Bullet bullet = new Bullet();
-
+            
             bullet.Rotation = Camera.rotation;
-            GameMain.inst.curentLevel.entities.Add(bullet);
+            Level.GetCurrent().AddEntity(bullet);
 
 
             if (!attack)

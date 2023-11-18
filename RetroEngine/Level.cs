@@ -13,6 +13,10 @@ namespace RetroEngine
 
         int entityID = 0;
 
+        List<StaticMesh> renderList = new List<StaticMesh>();
+
+        List<Entity> pendingAddEntity = new List<Entity>();
+
         public Level()
         {
             entities = new List<Entity>();
@@ -48,6 +52,15 @@ namespace RetroEngine
             GameMain.inst.OnLevelChanged();
         }
 
+        public void UpdatePending()
+        {
+            foreach(Entity entity in pendingAddEntity)
+            {
+                entities.Add(entity);
+            }
+            pendingAddEntity.Clear();
+        }
+
         public virtual void StartEnities()
         {
             Entity[] list = entities.ToArray();
@@ -59,7 +72,7 @@ namespace RetroEngine
 
         public virtual void Update()
         {
-            Physics.Update();
+            
 
             Entity[] list = entities.ToArray();
 
@@ -97,11 +110,8 @@ namespace RetroEngine
                 foreach (StaticMesh mesh in entity.meshes)
                     mesh.RenderPreparation();
             });
-        }
 
-        public virtual List<StaticMesh> GetMeshesToRender()
-        {
-            List<StaticMesh> list = new List<StaticMesh>();
+            renderList = new List<StaticMesh>();
 
             foreach (Entity ent in entities)
             {
@@ -110,14 +120,18 @@ namespace RetroEngine
                     foreach (StaticMesh mesh in ent.meshes)
                     {
                         if (mesh.Transperent)
-                            list.Add(mesh);
+                            renderList.Add(mesh);
                         else
-                            list.Insert(0, mesh);
+                            renderList.Insert(0, mesh);
                     }
                 }
             }
 
-            return list;
+        }
+
+        public virtual List<StaticMesh> GetMeshesToRender()
+        {
+            return renderList;
         }
 
         public int GetNextEntityID()
@@ -128,7 +142,7 @@ namespace RetroEngine
 
         public Entity AddEntity(Entity ent)
         {
-            entities.Add(ent);
+            pendingAddEntity.Add(ent);
 
             return ent;
         }

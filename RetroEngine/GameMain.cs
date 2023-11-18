@@ -11,6 +11,7 @@ using MonoGame.ImGuiNet;
 using RetroEngine.Audio;
 using ImGuiNET;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace RetroEngine
 {
@@ -49,7 +50,7 @@ namespace RetroEngine
 
         public bool paused = false;
 
-        Task physicsTask;
+        Task gameTask;
 
         public bool Fullscreen = false;
 
@@ -57,6 +58,11 @@ namespace RetroEngine
 
         bool pendingGraphicsUpdate = false;
         bool wasFocused = true;
+
+        public static Thread RenderThread;
+
+        bool asyncGameThread = false;
+
         public GameMain()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -92,7 +98,7 @@ namespace RetroEngine
                 //_graphics.IsFullScreen = true;
             _graphics.ApplyChanges();
 
-
+            RenderThread = Thread.CurrentThread;
             
 
         }
@@ -139,7 +145,39 @@ namespace RetroEngine
 
             ScreenWidth = GraphicsDevice.PresentationParameters.Bounds.Width;
 
+
+            if (asyncGameThread)
+            {
+                if (gameTask is null)
+                {
+                    GameLogic();
+                }
+                else
+                {
+                    gameTask.Wait();
+                }
+            }
             Input.Update();
+            Physics.Update();
+
+            curentLevel.UpdatePending();
+
+            if (asyncGameThread)
+            {
+                gameTask = Task.Factory.StartNew(() => { GameLogic(); });
+            }
+            else
+            {
+                GameLogic();
+            }
+            base.Update(gameTime);
+
+            tick++;
+
+        }
+
+        void GameLogic()
+        {
 
             curentLevel.Update();
 
@@ -149,25 +187,16 @@ namespace RetroEngine
 
             SoundManager.Update();
 
-            //Physics.Simulate();
-
-            //physicsTask = Task.Factory.StartNew(() => { Physics.Simulate(); });
+            Camera.Update();
 
             curentLevel.RenderPreparation();
-            Camera.Update();
 
             SoundManager.Update();
 
             foreach (UiElement elem in UiElement.main.childs)
                 elem.Update();
-            // TODO: Add your update logic here
-
-            base.Update(gameTime);
-
-            tick++;
 
         }
-
         private void Game1_Exiting(object sender, System.EventArgs e)
         {
             Environment.Exit(0);
