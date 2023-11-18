@@ -11,6 +11,8 @@ namespace RetroEngine
     {
         public List<Entity> entities;
 
+        int entityID = 0;
+
         public Level()
         {
             entities = new List<Entity>();
@@ -48,8 +50,7 @@ namespace RetroEngine
 
         public virtual void StartEnities()
         {
-            List<Entity> list = new List<Entity>();
-            list.AddRange(entities);
+            Entity[] list = entities.ToArray();
             foreach (Entity entity in list)
             {
                 entity.Start();
@@ -60,8 +61,7 @@ namespace RetroEngine
         {
             Physics.Update();
 
-            List<Entity> list = new List<Entity>(); 
-            list.AddRange(entities);
+            Entity[] list = entities.ToArray();
 
             foreach (Entity entity in list)
                 if(entity.UpdateWhilePaused&&GameMain.inst.paused|| GameMain.inst.paused == false)
@@ -71,8 +71,7 @@ namespace RetroEngine
         public virtual void AsyncUpdate()
         {
 
-            List<Entity> list = new List<Entity>();
-            list.AddRange(entities);
+            Entity[] list = entities.ToArray();
 
             Parallel.ForEach(list, entity =>
             {
@@ -84,8 +83,7 @@ namespace RetroEngine
         public virtual void LateUpdate()
         {
 
-            List<Entity> list = new List<Entity>();
-            list.AddRange(entities);
+            Entity[] list = entities.ToArray();
 
             foreach (Entity entity in list)
                 if (entity.LateUpdateWhilePaused && GameMain.inst.paused || GameMain.inst.paused == false)
@@ -94,38 +92,38 @@ namespace RetroEngine
 
         public virtual void RenderPreparation()
         {
-            
             Parallel.ForEach(entities, entity =>
             {
-                foreach(StaticMesh mesh in entity.meshes)
+                foreach (StaticMesh mesh in entity.meshes)
                     mesh.RenderPreparation();
-                
             });
         }
 
         public virtual List<StaticMesh> GetMeshesToRender()
         {
-            List <StaticMesh> list = new List<StaticMesh >();
+            List<StaticMesh> list = new List<StaticMesh>();
 
             foreach (Entity ent in entities)
             {
-                if (ent.meshes is not null)
+                if (ent.meshes != null)
+                {
                     foreach (StaticMesh mesh in ent.meshes)
-                        if(mesh.Transperent)
+                    {
+                        if (mesh.Transperent)
                             list.Add(mesh);
-            }
-
-            //list = list.OrderByDescending(mesh => mesh.CalculatedCameraDistance).ToList();
-
-            foreach (Entity ent in entities)
-            {
-                if (ent.meshes is not null)
-                    foreach (StaticMesh mesh in ent.meshes)
-                        if (mesh.Transperent == false)
-                            list.Insert(0,mesh);
+                        else
+                            list.Insert(0, mesh);
+                    }
+                }
             }
 
             return list;
+        }
+
+        public int GetNextEntityID()
+        {
+            entityID++;
+            return entityID;
         }
 
         public Entity AddEntity(Entity ent)

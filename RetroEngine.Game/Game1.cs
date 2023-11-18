@@ -49,19 +49,8 @@ namespace RetroEngine.Game
 
             GameMain.inst.curentLevel.entities.Add(new PlayerGlobal());
 
-            GameMain.inst.curentLevel.entities.Add(new NavDebuger());
-
-            foreach (NavPoint point in Navigation.GetNavPoints())
-            {
-                int n = point.connected.Count;
-
-                for (int i = 0;  i < n; i++)
-                {
-                    //Level.GetCurrent().AddEntity(new Box { Position = point.Position + new Vector3(0, i, 0) });
-                }
-
-            }
-            for (int i = 1; i <= 300; i++)
+ 
+            for (int i = 1; i <= 100; i++)
             {
 
                 NPCBase npc = new NPCBase();

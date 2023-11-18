@@ -35,7 +35,7 @@ namespace RetroEngine
         {
             Vector3 pos = Camera.position;
 
-            float step = 0.1f; 
+            float step = 0.5f; 
 
             pos*=step;
             pos.Round();

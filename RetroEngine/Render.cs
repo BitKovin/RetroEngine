@@ -69,10 +69,12 @@ namespace RetroEngine
 
             graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
 
-            RenderShadowMap(level);
+            List<StaticMesh> renderList = level.GetMeshesToRender();
+
+            RenderShadowMap(renderList);
 
             graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
-            RenderUnifiedPath(level);
+            RenderUnifiedPath(renderList);
             //RenderColorPath(level);
             //RenderNormalPath(level);
             //RenderMiscPath(level);
@@ -84,7 +86,7 @@ namespace RetroEngine
             return outputPath;
         }
 
-        void RenderUnifiedPath(Level level)
+        void RenderUnifiedPath(List<StaticMesh> renderList)
         {
 
             graphics.GraphicsDevice.SetRenderTarget(colorPath);
@@ -95,7 +97,7 @@ namespace RetroEngine
 
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
 
-            foreach (StaticMesh mesh in level.GetMeshesToRender())
+            foreach (StaticMesh mesh in renderList)
                 if (mesh.isRendered)
                 {
                     mesh.DrawUnified();
@@ -103,7 +105,7 @@ namespace RetroEngine
 
         }
 
-        void RenderShadowMap(Level level)
+        void RenderShadowMap(List<StaticMesh> renderList)
         {
 
             //if (shadowPassRenderDelay.Wait()) return;
@@ -124,7 +126,7 @@ namespace RetroEngine
             graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 
             // Iterate through meshes and draw shadows
-            foreach (StaticMesh mesh in level.GetMeshesToRender())
+            foreach (StaticMesh mesh in renderList)
             {
                 if (mesh.isRendered)
                 {

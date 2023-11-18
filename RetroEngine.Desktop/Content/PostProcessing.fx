@@ -28,27 +28,34 @@ float4 PixelShaderFunction(PixelInput input) : COLOR0
 {
     float4 color = tex2D(ColorSampler, input.TexCoord);
 
-	color *= 4;
+	color *= 4; // restoring color from 0 to 1 for not emissive and 0 to 4 for
 
 	float4 bloom;
 
 	float n = 0;
 
-	float radius = 0.007;
-	float step = radius/10;
+	float radius = 0.005;
+	float step = radius/5;
 
-	for(float x = -radius; x<=radius; x+=step)
+	for(float x = -radius; x<=radius; x+=step){
 		for(float y = -radius; y<=radius; y+=step)
 		{
 
-			if(abs(x)+abs(y) > radius) continue;
+			float dist = distance(float2(x,y),float2(0,0));
 
+			dist /= radius;
+
+			if(dist > 1) continue;
+			
 			n++;
-			bloom += clamp(SamplePixelWithOffset(input.TexCoord, float2(x,y)) * 4.0f - 1, 0,2);
 
+			float smpl = SamplePixelWithOffset(input.TexCoord, float2(x,y)) * 4.0f - 0.8f;
+			bloom += clamp(smpl,0,5);
 		}
-
+	}
 	bloom /= n;
+
+	bloom*=bloom;
 
 	color += bloom;
 

@@ -14,7 +14,7 @@ namespace RetroEngine.Entities.Navigaion
 
         public List<NavPoint> connected = new List<NavPoint>();
 
-        int MaxDepth = 8;
+        int MaxDepth = 12;
 
         public override void Start()
         {
@@ -60,9 +60,10 @@ namespace RetroEngine.Entities.Navigaion
 
             if (history.Count>MaxDepth)
             {
+                return new List<Vector3>();
                 output = PointsToPositions(history);
 
-                return output;
+                
 
                 Vector3 closest = output.OrderByDescending(pos => Vector3.Distance(pos, target)).ToArray()[0];
 

@@ -36,6 +36,10 @@ namespace RetroEngine
 
         bool pendingDestroy = false;
 
+        public int Id;
+
+        public float Health = 0;
+
         public Entity()
         {
 
@@ -45,6 +49,7 @@ namespace RetroEngine
         public virtual void Start()
         {
             SpawnTime = Time.gameTime;
+            Id = Level.GetCurrent().GetNextEntityID();
         }
 
         public virtual void Update()
@@ -67,6 +72,16 @@ namespace RetroEngine
         public virtual void LateUpdate()
         {
 
+        }
+
+        public virtual void OnDamaged(float damage, Entity causer = null, Entity weapon = null)
+        {
+            Health -= damage;
+        }
+
+        public virtual void OnPointDamage(float damage, Vector3 point, Vector3 direction, Entity causer = null, Entity weapon = null)
+        {
+            OnDamaged(damage, causer, weapon);
         }
 
         protected void UpdateCollision()

@@ -19,6 +19,8 @@ namespace RetroEngine.Game.Entities
 
         Delay destroyDelay =new Delay();
 
+
+
         public Bullet() 
         {
             mesh.LoadFromFile("models/weapons/bullet/bullet.obj");
@@ -78,6 +80,9 @@ namespace RetroEngine.Game.Entities
             {
                 hitBody.Activate();
                 hitBody.ApplyCentralImpulse(startRotation.GetForwardVector().ToNumerics() * 10f);
+
+                collidedEntity.OnPointDamage(10, Position, startRotation.GetForwardVector());
+
             }
 
             Destroy();

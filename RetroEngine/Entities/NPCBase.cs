@@ -19,7 +19,7 @@ namespace RetroEngine.Entities
         static Delay updateDelay = new Delay();
 
         static List<NPCBase> npcList = new List<NPCBase>();
-        static NPCBase currentUpdateNPC = null;
+        static List<NPCBase> currentUpdateNPCs = new List<NPCBase>();
         static int currentUpdateIndex = 0;
 
         static float lastUpdateTime = 0;
@@ -46,12 +46,15 @@ namespace RetroEngine.Entities
 
             UpdateNPCList();
 
-            if(currentUpdateNPC == this)
-            try
-            {
+            if(currentUpdateNPCs.Contains(this))
                 UpdateMovementDirection();
-            }
-            catch (Exception ex) { Logger.Log("error while pathfinding"); }
+        }
+
+        public override void OnDamaged(float damage, Entity causer = null, Entity weapon = null)
+        {
+            base.OnDamaged(damage, causer, weapon);
+
+            Destroy();
 
         }
 
@@ -76,7 +79,7 @@ namespace RetroEngine.Entities
 
         void UpdateMovementDirection()
         {
-
+            body.Activate();
             List<Vector3> path = Navigation.FindPath(Position, Camera.position);
 
             Vector3 targetLocation = new Vector3();
@@ -94,17 +97,21 @@ namespace RetroEngine.Entities
             if (updateDelay.Wait())
                 return;
 
-            updateDelay.AddDelay(0.002f);
+            updateDelay.AddDelay(0.001f);
 
-            currentUpdateIndex++;
+            currentUpdateNPCs.Clear();
 
-            if(npcList.Count>0)
-                while(currentUpdateIndex>= npcList.Count)
-                {
-                    currentUpdateIndex -= npcList.Count;
-                }
-            currentUpdateNPC = npcList[currentUpdateIndex];
+            for (int i = 0; i < 2; i++)
+            {
+                currentUpdateIndex++;
 
+                if (npcList.Count > 0)
+                    while (currentUpdateIndex >= npcList.Count)
+                    {
+                        currentUpdateIndex -= npcList.Count;
+                    }
+                currentUpdateNPCs.Add(npcList[currentUpdateIndex]);
+            }
         }
 
     }
