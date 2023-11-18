@@ -32,8 +32,8 @@ float4 PixelShaderFunction(PixelInput input) : COLOR0
 
 	float n = 0;
 
-	float radius = 0.0035;
-	float step = radius/4;
+	float radius = 0.005;
+	float step = radius/5;
 
 	float3 smpl = float3(0,0,0);
 

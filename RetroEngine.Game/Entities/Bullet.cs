@@ -27,7 +27,7 @@ namespace RetroEngine.Game.Entities
 
             mesh.texture = AssetRegistry.LoadTextureFromFile("models/weapons/bullet/bullet.png");
             mesh.emisssiveTexture = AssetRegistry.LoadTextureFromFile("models/weapons/bullet/bullet_em.png");
-            mesh.EmissionPower = 1;
+            mesh.EmissionPower = 3;
 
             meshes.Add(mesh);
 
