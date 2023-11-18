@@ -31,7 +31,9 @@ namespace RetroEngine
 
             target += new Vector3(0, 0.25f, 0);
 
-            List<Vector3> points = GetStartNavPoint(start).GetPathNext(new List<NavPoint>(), target);
+            int it = 0;
+
+            List<Vector3> points = GetStartNavPoint(start).GetPathNext(new List<NavPoint>(), target, ref it);
             List<Vector3> result = new List<Vector3>(points);
 
             for(int i = points.Count -1; i >=0; i--)

@@ -52,11 +52,31 @@ namespace RetroEngine.Entities.Navigaion
 
         }
 
-        public List<Vector3> GetPathNext(List<NavPoint> history, Vector3 target)
+        public List<Vector3> GetPathNext(List<NavPoint> history, Vector3 target, ref int totalItterations)
         {
             List<Vector3> output = new List<Vector3>();
 
             List<NavPoint> myHistory = new List<NavPoint>(history);
+
+            totalItterations++;
+
+            if (totalItterations > 40)
+            {
+                output = PointsToPositions(history);
+
+
+
+                Vector3 closest = output.OrderByDescending(pos => Vector3.Distance(pos, target)).ToArray()[0];
+
+                List<Vector3> result = new List<Vector3>();
+
+                foreach (Vector3 p in output)
+                {
+                    result.Add(p);
+                    if (Vector3.Distance(p, target) < 0.1f)
+                        return result;
+                }
+            }
 
             if (history.Count>MaxDepth)
             {
@@ -91,7 +111,7 @@ namespace RetroEngine.Entities.Navigaion
                 {
                     if (myHistory.Contains(point)) continue;
 
-                    List<Vector3> result = point.GetPathNext(myHistory, target);
+                    List<Vector3> result = point.GetPathNext(myHistory, target, ref totalItterations);
 
                     if(result.Count>0)
                     {
