@@ -1,6 +1,4 @@
-﻿using RetroEngine;
-using RetroEngine.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -33,7 +31,7 @@ namespace RetroEngine.Entities
         {
             if (collidedEntity is null) return;
 
-            if(collidedEntity.Tags.Contains(collideToTag)) 
+            if (collidedEntity.Tags.Contains(collideToTag))
             {
                 entities.Add(collidedEntity);
             }
@@ -48,11 +46,11 @@ namespace RetroEngine.Entities
             entities.Clear();
             Physics.PerformContactCheck(body, collisionCallback);
 
-            foreach(Entity entity in entities)
+            foreach (Entity entity in entities)
             {
-                if(entity is null) continue;
+                if (entity is null) continue;
 
-                if(oldEntities.Contains(entity) == false)
+                if (oldEntities.Contains(entity) == false)
                     OnTriggerEnter(entity);
 
             }

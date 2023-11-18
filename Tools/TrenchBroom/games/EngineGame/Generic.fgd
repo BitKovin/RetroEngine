@@ -18,3 +18,8 @@
 
 @baseclass size(-8 -8 -8, 8 8 48) color(70 70 255) = NavPoint []
 @PointClass base(NavPoint) = info.navpoint : "Nav Point" []
+
+@SolidClass = destructible : "Destructible Brush"
+[
+	health(float) : "Health" : "30"
+]

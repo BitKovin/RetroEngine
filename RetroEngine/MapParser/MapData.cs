@@ -124,7 +124,7 @@ namespace RetroEngine.Map
             return new Vector3(float.Parse(parts[0])*-1, float.Parse(parts[2]), float.Parse(parts[1])) / MapData.UnitSize;
         }
 
-        public float GetPropertyFloat(string name)
+        public float GetPropertyFloat(string name, float defaultValue = 0)
         {
             try
             {
@@ -134,7 +134,7 @@ namespace RetroEngine.Map
                 return float.Parse(parts[0]);
             }catch (Exception)
             {
-                return 0;
+                return defaultValue;
             }
         }
 
