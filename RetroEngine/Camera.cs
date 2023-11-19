@@ -22,7 +22,7 @@ namespace RetroEngine
 
         public static float roll = 0;
         public static float FOV = 70;
-        public static float ViewmodelFOV = 55;
+        public static float ViewmodelFOV = 58;
 
         public static Vector3 velocity = new Vector3(0,0,0);
 
