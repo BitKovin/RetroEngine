@@ -1,4 +1,5 @@
-﻿using RetroEngine.Particles;
+﻿using Microsoft.Xna.Framework;
+using RetroEngine.Particles;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +10,33 @@ namespace RetroEngine.Game.Effects.Particles
 {
     public class particle_hitSmoke : ParticleEmitter
     {
-
-        public override void UpdateParticle(Particle particle)
+        public particle_hitSmoke()
         {
-            base.UpdateParticle(particle);
+            TexturePath = "textures/particles/smoke.png";
+
+            InitialSpawnCount = 3;
         }
 
+        public override Particle UpdateParticle(Particle particle)
+        {
+            particle = base.UpdateParticle(particle);
+
+            particle.transparency = particle.transparency -= Time.deltaTime/2f;
+
+            return particle;
+        }
+
+        public override Particle GetNewParticle()
+        {
+            Particle particle =  base.GetNewParticle();
+
+            particle.Scale = 0.2f;
+
+            particle.position += RandomPosition(0.12f);
+            particle.velocity = new Vector3(0, 0.2f, 0);
+            particle.transparency = 0.8f;
+
+            return particle;
+        }
     }
 }

@@ -20,7 +20,9 @@ namespace RetroEngine.Entities
 
             foreach (var emitter in emitters)
             {
+                emitter.Position = Position;
                 emitter.Start();
+                meshes.Add(emitter);
             }
         }
 
@@ -36,5 +38,14 @@ namespace RetroEngine.Entities
             }
         }
 
+        protected override void LoadAssets()
+        {
+            base.LoadAssets();
+
+            foreach (var emitter in emitters)
+            {
+                emitter.LoadAssets();
+            }
+        }
     }
 }

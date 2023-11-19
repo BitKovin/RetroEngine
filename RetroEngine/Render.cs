@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using System.IO;
+using RetroEngine.Particles;
 
 namespace RetroEngine
 {
@@ -40,6 +41,8 @@ namespace RetroEngine
         public Effect PostProcessingEffect;
 
         Delay shadowPassRenderDelay = new Delay();
+
+        public List<ParticleEmitter.Particle> particlesToDraw = new List<ParticleEmitter.Particle>();
 
         public Render()
         {
@@ -89,6 +92,7 @@ namespace RetroEngine
         void RenderUnifiedPath(List<StaticMesh> renderList)
         {
 
+
             graphics.GraphicsDevice.SetRenderTarget(colorPath);
             graphics.GraphicsDevice.Clear(Graphics.BackgroundColor * 0.25f);
 
@@ -97,11 +101,15 @@ namespace RetroEngine
 
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
 
+            particlesToDraw.Clear();
+
             foreach (StaticMesh mesh in renderList)
                 if (mesh.isRendered)
                 {
                     mesh.DrawUnified();
                 }
+
+            ParticleEmitter.RenderEmitter?.DrawParticles(particlesToDraw);
 
         }
 

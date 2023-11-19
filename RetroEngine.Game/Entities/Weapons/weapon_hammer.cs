@@ -1,6 +1,7 @@
 ﻿using BulletSharp;
 using Microsoft.Xna.Framework;
 using RetroEngine.Entities;
+using RetroEngine.Game.Effects.Particles;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -117,12 +118,25 @@ namespace RetroEngine.Game.Entities.Weapons
                         hitEnt.OnPointDamage(30, hit.HitPointWorld, Camera.rotation.GetForwardVector(), player, this);
                     }
 
+                    CreateHitParticle(hit.HitPointWorld + hit.HitNormalWorld * 0.2f);
+
                     hitSoundPlayer.Position = hit.HitPointWorld;
                     hitSoundPlayer.Update();
 
                     hitSoundPlayer.Play(true);
                 }
             }
+        }
+
+        void CreateHitParticle(Vector3 pos)
+        {
+
+            ParticleSystem system = new ParticleSystem();
+            Level.GetCurrent().AddEntity(system);
+            system.emitters.Add(new particle_hitSmoke());
+            system.Position = pos;
+            system.Start();
+
         }
 
         void LoadVisual()

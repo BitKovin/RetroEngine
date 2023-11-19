@@ -568,6 +568,7 @@ namespace RetroEngine
             frameStaticMeshData.Viewmodel = Viewmodel;
             frameStaticMeshData.LightView = Graphics.GetLightView();
             frameStaticMeshData.LightProjection = Graphics.GetLightProjection();
+            frameStaticMeshData.Transparency = Transparency;
         }
 
         private Vector3 CalculateAvgVertexLocation()
