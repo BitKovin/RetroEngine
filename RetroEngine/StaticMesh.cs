@@ -18,13 +18,15 @@ namespace RetroEngine
         public string textureName = "";
     }
 
-    struct FrameStaticMeshData
+    public struct FrameStaticMeshData
     {
         public Model model;
 
         public float EmissionPower;
         public bool Transperent;
         public bool Viewmodel;
+
+        public float Transparency;
 
         public Matrix World;
         public Matrix View;
@@ -65,7 +67,9 @@ namespace RetroEngine
 
         public bool CastShadows = true;
 
-        FrameStaticMeshData frameStaticMeshData = new FrameStaticMeshData();
+        public float Transparency = 1;
+
+        protected FrameStaticMeshData frameStaticMeshData = new FrameStaticMeshData();
 
         public virtual void Draw()
         {
@@ -129,6 +133,8 @@ namespace RetroEngine
                         effect.Parameters["ShadowMapViewProjection"].SetValue(Graphics.LightViewProjection);
                         effect.Parameters["ShadowMap"].SetValue(GameMain.inst.render.shadowMap);
                         effect.Parameters["ShadowBias"].SetValue(Graphics.ShadowBias);
+
+                        effect.Parameters["Transparency"].SetValue(frameStaticMeshData.Transparency);
 
                         MeshPartData meshPartData = meshPart.Tag as MeshPartData;
 
@@ -547,7 +553,7 @@ namespace RetroEngine
             return true;
         }
 
-        public void RenderPreparation()
+        public virtual void RenderPreparation()
         {
 
             isRendered = true;

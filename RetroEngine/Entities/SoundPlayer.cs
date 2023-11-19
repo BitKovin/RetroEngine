@@ -35,6 +35,8 @@ namespace RetroEngine.Entities
         {
             base.LateUpdate();
 
+            if(soundEffectInstance == null) return;
+
             if (pendingPlay && !pendingPlayDelay.Wait())
             {
                 soundEffectInstance.Play();
@@ -94,33 +96,33 @@ namespace RetroEngine.Entities
 
             if(fromStart)
             {
-                soundEffectInstance.Stop(true);
+                soundEffectInstance?.Stop(true);
             }
             try
             {
-                soundEffectInstance.Play();
+                soundEffectInstance?.Play();
             }
             catch (Exception ex) { }
         }
 
         public void Stop()
         {
-            soundEffectInstance.Stop(true);
+            soundEffectInstance?.Stop(true);
             playing = false;
         }
 
         public void Pause()
         {
             paused = true;
-            soundEffectInstance.Pause();
+            soundEffectInstance?.Pause();
         }
 
         public override void Destroy()
         {
             base.Destroy();
 
-            soundEffectInstance.Stop(true);
-            soundEffectInstance.Dispose();
+            soundEffectInstance?.Stop(true);
+            soundEffectInstance?.Dispose();
             soundEffectInstance = null;
 
         }

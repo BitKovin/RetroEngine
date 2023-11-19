@@ -26,7 +26,7 @@ float EmissionPower;
 
 float ShadowBias;
 
-bool test;
+float Transparency;
 
 matrix ShadowMapViewProjection;
 
@@ -80,10 +80,6 @@ float GetShadow(float3 lightCoords)
     float shadow = 0;
 
     float3 centerCoords = lightCoords;
-
-    
-
-
             if(lightCoords.x>=0 && lightCoords.x <=1 && lightCoords.y>=0 && lightCoords.y <=1)
             {
 
@@ -93,8 +89,6 @@ float GetShadow(float3 lightCoords)
                 if(currentDepth > closestDepth + ShadowBias)
                     shadow +=1;
             }
-        
-    
 
     return shadow;
 }
@@ -104,6 +98,8 @@ float4 PixelShaderFunction(PixelInput input) : COLOR0
 
 	float3 textureColor = tex2D(TextureSampler, input.TexCoord).xyz;
 	float textureAlpha = tex2D(TextureSampler, input.TexCoord).w;
+
+    textureAlpha *= Transparency;
 
     float3 lightCoords = input.lightPos.xyz / input.lightPos.w;
 

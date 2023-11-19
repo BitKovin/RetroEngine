@@ -10,7 +10,7 @@ namespace RetroEngine
      public static class Graphics
     {
         public static float DirectLighting = 0.5f;
-        public static float GlobalLighting = 0.35f;
+        public static float GlobalLighting = 0.3f;
         public static Vector3 LightDirection = new Vector3 (-1f, -1, -0.2f);
         public static Color BackgroundColor = new Color(0.15f,0.15f,0.2f);
 

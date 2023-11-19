@@ -45,8 +45,6 @@ namespace RetroEngine.Entities
 
         bool FirstTick = true;
 
-
-
         SoundPlayer stepSoundPlayer;
 
         bool onGround = false;
@@ -54,6 +52,8 @@ namespace RetroEngine.Entities
         List<WeaponData> weapons = new List<WeaponData>();
 
         Weapon currentWeapon;
+        int currentSlot = -1;
+        int lastSlot = -1;
 
         Image crosshair = new Image();
 
@@ -174,7 +174,10 @@ namespace RetroEngine.Entities
             if (Input.GetAction("slot3").Pressed())
                 SwitchToSlot(2);
 
-            if(Input.GetAction("test").Released())
+            if (Input.GetAction("lastSlot").Pressed())
+                SwitchToSlot(lastSlot);
+
+            if (Input.GetAction("test").Released())
             {
                 Level.LoadFromFile("test2.map");
             }
@@ -348,8 +351,16 @@ namespace RetroEngine.Entities
 
         void SwitchToSlot(int slot)
         {
-            if (weapons.Count > slot)
+            if (slot == currentSlot) return;
+
+           
+
+            if (weapons.Count > slot && slot>=0)
             {
+
+                lastSlot = currentSlot;
+                currentSlot = slot;
+
                 SwitchWeapon(weapons[slot]);
             }
         }

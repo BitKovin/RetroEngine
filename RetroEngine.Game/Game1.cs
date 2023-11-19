@@ -76,6 +76,8 @@ namespace RetroEngine.Game
             Input.AddAction("slot2").AddKeyboardKey(Keys.D2);
             Input.AddAction("slot3").AddKeyboardKey(Keys.D3);
 
+            Input.AddAction("lastSlot").AddKeyboardKey(Keys.Q);
+
             Input.AddAction("test").AddKeyboardKey(Keys.R);
         }
 

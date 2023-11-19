@@ -88,7 +88,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             if (attackDelay.Wait()) return;
 
-            attackDelay.AddDelay(0.5f);
+            attackDelay.AddDelay(0.4f);
 
             pendingAttackDelay.AddDelay(0.16f);
             pendingMeleeAttack = true;
