@@ -147,6 +147,7 @@ namespace RetroEngine.Entities
             stepSoundPlayer.SetSound(AssetRegistry.LoadSoundFromFile("sounds/step.wav"));
             stepSoundPlayer.Volume = 0.5f;
 
+            weapons.Add(new WeaponData { weaponType = typeof(weapon_hammer), ammo = 1 });
             weapons.Add(new WeaponData { weaponType = typeof(weapon_pistols), ammo = 50 });
 
         }
@@ -266,6 +267,8 @@ namespace RetroEngine.Entities
                     airControlPower = 1 - airControlPower;
 
                     body.ApplyCentralForce(motion.ToNumerics() * 12 * airControlPower);
+
+                    body.Friction = 0.0f;
                 }
             }
             else

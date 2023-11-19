@@ -29,7 +29,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             fireSoundPlayer = Level.GetCurrent().AddEntity(new SoundPlayer()) as SoundPlayer;
             fireSoundPlayer.SetSound(AssetRegistry.LoadSoundFromFile("sounds/pistol_fire.wav"));
-            fireSoundPlayer.Volume = 0.05f;
+            fireSoundPlayer.Volume = 0.1f;
 
         }
 
