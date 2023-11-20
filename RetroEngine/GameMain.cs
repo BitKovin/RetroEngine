@@ -165,6 +165,7 @@ namespace RetroEngine
 
             curentLevel.UpdatePending();
             curentLevel.LoadAssets();
+            curentLevel.RenderPreparation();
             bool changedLevel = Level.LoadPendingLevel();
             if (asyncGameThread && changedLevel == false)
             {
@@ -193,7 +194,6 @@ namespace RetroEngine
 
             Camera.Update();
 
-            curentLevel.RenderPreparation();
 
             SoundManager.Update();
 

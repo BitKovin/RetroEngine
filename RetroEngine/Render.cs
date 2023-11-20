@@ -155,9 +155,10 @@ namespace RetroEngine
             graphics.GraphicsDevice.SetRenderTarget(postProcessingOutput);
 
             PostProcessingEffect.Parameters["ColorTexture"].SetValue(colorPath);
-
+            //PostProcessingEffect.Parameters["Enabled"].SetValue(Graphics.EnablePostPocessing);
 
             SpriteBatch spriteBatch = GameMain.inst.SpriteBatch;
+
             spriteBatch.Begin(effect: PostProcessingEffect);
 
             DrawFullScreenQuad(spriteBatch, colorPath);

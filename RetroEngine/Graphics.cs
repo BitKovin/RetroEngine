@@ -20,6 +20,8 @@ namespace RetroEngine
         public static Matrix LightViewProjection;
         public static float LightDistance = 100;
 
+        public static bool EnablePostPocessing = false;
+
         public static Matrix GetLightProjection()
         {
             

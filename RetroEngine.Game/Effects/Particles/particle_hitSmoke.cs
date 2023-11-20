@@ -32,8 +32,10 @@ namespace RetroEngine.Game.Effects.Particles
 
             particle.Scale = 0.2f;
 
-            particle.position += RandomPosition(0.12f);
-            particle.velocity = RandomPosition(1).Normalized()*0.5f;
+            Vector3 randPos = RandomPosition(0.12f);
+
+            particle.position += randPos;
+            particle.velocity = randPos.Normalized()*0.5f;
             particle.transparency = 0.8f;
             particle.deathTime = 1;
 
