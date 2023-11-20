@@ -109,7 +109,8 @@ namespace RetroEngine
                     mesh.DrawUnified();
                 }
 
-            ParticleEmitter.RenderEmitter?.DrawParticles(particlesToDraw);
+            ParticleEmitter.LoadRenderEmitter();
+            ParticleEmitter.RenderEmitter.DrawParticles(particlesToDraw);
 
         }
 

@@ -21,20 +21,21 @@ namespace RetroEngine.Game.Effects.Particles
         {
             particle = base.UpdateParticle(particle);
 
-            particle.transparency = particle.transparency -= Time.deltaTime/2f;
+            particle.transparency = particle.transparency -= Time.deltaTime;
 
             return particle;
         }
 
         public override Particle GetNewParticle()
         {
-            Particle particle =  base.GetNewParticle();
+            Particle particle = base.GetNewParticle();
 
             particle.Scale = 0.2f;
 
             particle.position += RandomPosition(0.12f);
-            particle.velocity = new Vector3(0, 0.2f, 0);
+            particle.velocity = RandomPosition(1).Normalized()*0.5f;
             particle.transparency = 0.8f;
+            particle.deathTime = 1;
 
             return particle;
         }

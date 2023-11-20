@@ -22,7 +22,7 @@ namespace RetroEngine.Particles
 
         protected string TexturePath = null;
 
-        public static ParticleEmitter RenderEmitter = null;
+        public static ParticleEmitter RenderEmitter = new ParticleEmitter();
 
         public ParticleEmitter()
         {
@@ -92,7 +92,7 @@ namespace RetroEngine.Particles
         public virtual Particle GetNewParticle()
         {
             currentId++;
-            return new Particle {position = Position, id = currentId };
+            return new Particle {position = Position, id = currentId, texturePath = TexturePath };
         }
 
         public override void RenderPreparation()
@@ -100,7 +100,6 @@ namespace RetroEngine.Particles
             base.RenderPreparation();
 
             finalizedParticles = new List<Particle>(particles);
-
         }
 
         Matrix GetWorldForParticle(Particle particle)
@@ -119,30 +118,30 @@ namespace RetroEngine.Particles
         }
         public override void DrawUnified()
         {
-            if (model == null)
+
+            if (particleModel == null)
             {
-                if (particleModel == null)
-                {
-                    LoadFromFile("models/particle.obj");
-                    particleModel = model;
-                }
-
-                model = particleModel;
+                LoadFromFile("models/particle.obj");
+                particleModel = model;
             }
-
-            if (RenderEmitter == null)
-                RenderEmitter = this;
 
             GameMain.inst.render.particlesToDraw.AddRange(finalizedParticles);
         }
 
-        public void DrawParticles(List<Particle> particles)
+        public static void LoadRenderEmitter()
         {
-            particles = particles.OrderByDescending(p => Vector3.Dot(p.position - Camera.position, Camera.rotation.GetForwardVector())).ToList();
+                RenderEmitter.model = particleModel;
+                RenderEmitter.RenderPreparation();
+        }
 
-            foreach (var particle in particles)
+        public void DrawParticles(List<Particle> particleList)
+        {
+            particleList = particleList.OrderByDescending(p => Vector3.Dot(p.position - Camera.position, Camera.rotation.GetForwardVector())).ToList();
+
+            foreach (var particle in particleList)
             {
-
+                texture = AssetRegistry.LoadTextureFromFile(particle.texturePath);
+                
                 frameStaticMeshData.model = particleModel;
                 frameStaticMeshData.World = GetWorldForParticle(particle);
                 frameStaticMeshData.Transparency = particle.transparency;
@@ -194,7 +193,7 @@ namespace RetroEngine.Particles
             public float Scale = 0;
 
 
-            public Texture2D textureToRender = null; //do not set texture on game thread
+            public string texturePath = null; //do not set texture on game thread
 
             public Particle()
             {
