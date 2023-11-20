@@ -70,13 +70,13 @@ namespace RetroEngine
             if (shadowMap is null)
             InitShadowMap(ref shadowMap);
 
-            graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+            graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
 
             List<StaticMesh> renderList = level.GetMeshesToRender();
 
             RenderShadowMap(renderList);
 
-            graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+            graphics.GraphicsDevice.SamplerStates[0] = Graphics.TextureFiltration? (Graphics.AnisotropicFiltration? SamplerState.AnisotropicWrap : SamplerState.LinearWrap) : SamplerState.PointWrap;
             RenderUnifiedPath(renderList);
             //RenderColorPath(level);
             //RenderNormalPath(level);
@@ -94,7 +94,7 @@ namespace RetroEngine
 
 
             graphics.GraphicsDevice.SetRenderTarget(colorPath);
-            graphics.GraphicsDevice.Clear(Graphics.BackgroundColor * 0.25f);
+            graphics.GraphicsDevice.Clear(Graphics.BackgroundColor);
 
             graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
@@ -305,7 +305,7 @@ namespace RetroEngine
                 Graphics.shadowMapResolution,
                 Graphics.shadowMapResolution,
                 false, // No mipmaps
-                SurfaceFormat.Color, // Color format
+                SurfaceFormat.Bgra4444, // Color format
                 depthFormat); // Depth format
         }
 
@@ -325,7 +325,7 @@ namespace RetroEngine
                     graphics.PreferredBackBufferWidth,
                     graphics.PreferredBackBufferHeight,
                     false, // No mipmaps
-                    SurfaceFormat.Color, // Color format
+                    SurfaceFormat.Bgra4444, // Color format
                     depthFormat); // Depth format
             }
         }

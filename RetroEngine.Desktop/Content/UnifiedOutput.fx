@@ -118,9 +118,8 @@ float4 PixelShaderFunction(PixelInput input) : COLOR0
 
 	textureColor *= light;
 
-    textureColor /= 4.0f;
 
-    textureColor += tex2D(EmissiveTextureSampler, input.TexCoord).xyz / 4.0f * EmissionPower;
+    textureColor += tex2D(EmissiveTextureSampler, input.TexCoord).xyz * EmissionPower;
 
     return float4(textureColor, textureAlpha);
 }

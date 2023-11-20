@@ -23,7 +23,7 @@ namespace RetroEngine.Game.Entities
 
         public Bullet() 
         {
-            mesh.EmissionPower = 0.35f;
+            mesh.EmissionPower = 0.45f;
 
             meshes.Add(mesh);
 

@@ -21,6 +21,8 @@ namespace RetroEngine
         public static float LightDistance = 100;
 
         public static bool EnablePostPocessing = false;
+        public static bool TextureFiltration = true;
+        public static bool AnisotropicFiltration = false;
 
         public static Matrix GetLightProjection()
         {
@@ -37,7 +39,7 @@ namespace RetroEngine
         {
             Vector3 pos = Camera.position;
 
-            float step = 0.5f; 
+            float step = 0.3f; 
 
             pos*=step;
             pos.Round();

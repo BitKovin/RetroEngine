@@ -118,7 +118,7 @@ namespace RetroEngine.Game.Entities.Weapons
                         hitEnt.OnPointDamage(30, hit.HitPointWorld, Camera.rotation.GetForwardVector(), player, this);
                     }
 
-                    CreateHitParticle(hit.HitPointWorld + hit.HitNormalWorld * 0.2f);
+                    CreateHitParticle(hit.HitPointWorld + hit.HitNormalWorld * 0.1f);
 
                     hitSoundPlayer.Position = hit.HitPointWorld;
                     hitSoundPlayer.Update();

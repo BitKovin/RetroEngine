@@ -28,7 +28,6 @@ float4 PixelShaderFunction(PixelInput input) : COLOR0
 {
     float3 color = tex2D(ColorSampler, input.TexCoord).xyz;
 
-	color *= 4; // restoring color from 0 to 1 for not emissive and 0 to 4 for
     if (false)
     {
     
@@ -50,7 +49,7 @@ float4 PixelShaderFunction(PixelInput input) : COLOR0
                     continue;
 			
                 n++;
-                smpl = SamplePixelWithOffset(input.TexCoord, float2(x, y)) * float3(4.0, 4.0, 4.0) - float3(0.8, 0.8, 0.8);
+                smpl = SamplePixelWithOffset(input.TexCoord, float2(x, y)) - float3(0.8, 0.8, 0.8);
 			
                 bloom += max(smpl, 0);
             }
