@@ -30,12 +30,20 @@ namespace RetroEngine.Entities
         {
             base.LateUpdate();
 
+            List<ParticleEmitter> list = new List <ParticleEmitter>(emitters);
 
-            foreach (var emitter in emitters)
+            foreach (var emitter in list)
             {
+                if(emitter.Destroyed)
+                    emitters.Remove(emitter);
+
                 emitter.Position = Position;
                 emitter.Update();
             }
+
+            if (emitters.Count == 0)
+                Destroy();
+
         }
 
         protected override void LoadAssets()

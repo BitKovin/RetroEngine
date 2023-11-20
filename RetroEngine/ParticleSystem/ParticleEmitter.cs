@@ -24,6 +24,10 @@ namespace RetroEngine.Particles
 
         public static ParticleEmitter RenderEmitter = new ParticleEmitter();
 
+        public bool Destroyed = false;
+
+        public bool Emitting = false;
+
         public ParticleEmitter()
         {
             CastShadows = false;
@@ -49,6 +53,8 @@ namespace RetroEngine.Particles
         public virtual void Update()
         {
 
+            if (Destroyed) return;
+
             List<Particle> toRemove = new List<Particle>();
 
             int n = particles.Count;
@@ -64,8 +70,6 @@ namespace RetroEngine.Particles
                 if (particle.lifeTime >= particle.deathTime)
                 {
                     toRemove.Add(particle);
-                    particle.Scale = 0;
-                    particle.position = new Vector3(0, -1000000000, 0);
                     particles[i] = particle;
                 }
             }
@@ -80,6 +84,8 @@ namespace RetroEngine.Particles
                 particles[i] = UpdateParticle(particles[i]);
             }
 
+            if (Emitting == false && particles.Count == 0)
+                Destroyed = true;
         }
 
         public virtual Particle UpdateParticle(Particle particle)
@@ -118,13 +124,12 @@ namespace RetroEngine.Particles
         }
         public override void DrawUnified()
         {
-
+            if (Destroyed) return;
             if (particleModel == null)
             {
                 LoadFromFile("models/particle.obj");
                 particleModel = model;
             }
-
             GameMain.inst.render.particlesToDraw.AddRange(finalizedParticles);
         }
 
@@ -174,6 +179,11 @@ namespace RetroEngine.Particles
             dir *= radius;
 
             return dir;
+        }
+
+        public void Destroy()
+        {
+
         }
 
         public struct Particle
