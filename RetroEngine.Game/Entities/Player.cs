@@ -30,6 +30,7 @@ namespace RetroEngine.Entities
 
         StaticMesh cylinder = new StaticMesh();
 
+        RigidBody body;
 
         float speed = 10;
 
@@ -142,6 +143,8 @@ namespace RetroEngine.Entities
 
             body.CcdMotionThreshold = 0.000001f;
             body.CcdSweptSphereRadius = 0.3f;
+
+            bodies.Add(body);
 
             stepSoundPlayer = Level.GetCurrent().AddEntity(new SoundPlayer()) as SoundPlayer;
             stepSoundPlayer.SetSound(AssetRegistry.LoadSoundFromFile("sounds/step.wav"));
@@ -284,6 +287,8 @@ namespace RetroEngine.Entities
             cameraRoll = MathHelper.Lerp(cameraRoll, input.X * 2, Time.deltaTime * 10);
 
             Camera.roll = cameraRoll;
+
+            stepSoundPlayer.Position = Position;
 
         }
 

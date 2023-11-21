@@ -23,6 +23,8 @@ namespace RetroEngine.Game.Entities
 
         SoundPlayer soundPlayer;
 
+        RigidBody body;
+
         public BoxDynamic() : base()
         {
             Model model = GameMain.content.Load<Model>("box");
@@ -42,6 +44,8 @@ namespace RetroEngine.Game.Entities
             body.SetPosition(Position.ToNumerics());
             body.SetMassProps(scale.Length(), body.CollisionShape.CalculateLocalInertia(scale.Length()));
             mesh.Scale = scale;
+
+            bodies.Add(body);
 
             soundPlayer = Level.GetCurrent().AddEntity(new SoundPlayer()) as SoundPlayer;
 

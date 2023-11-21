@@ -21,7 +21,7 @@ namespace RetroEngine
         public List<StaticMesh> meshes = new List<StaticMesh>();
 
 
-        public RigidBody body;
+        public List<RigidBody> bodies = new List<RigidBody>();
 
         public bool UpdateWhilePaused = false;
         public bool LateUpdateWhilePaused = false;
@@ -98,7 +98,10 @@ namespace RetroEngine
                 mesh.Dispose();
             }
 
-            Physics.Remove(body);
+            foreach(RigidBody rigidBody in bodies)
+            {
+                Physics.Remove(rigidBody);
+            }
 
             GameMain.inst.curentLevel.entities.Remove(this);
             Dispose();

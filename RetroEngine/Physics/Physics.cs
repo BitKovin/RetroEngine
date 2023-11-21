@@ -17,6 +17,11 @@ namespace RetroEngine
 
         private static int steps = 1;
 
+        public class CollisionShapeData
+        {
+            public string surfaceType = "default";
+        }
+
         public static void Start()
         {
             // Create a collision configuration and dispatcher
@@ -142,6 +147,7 @@ namespace RetroEngine
 
             // Create a sphere shape
             var sphereShape = new SphereShape(radius);
+            sphereShape.UserObject = new CollisionShapeData();
             var motionState = new DefaultMotionState(Matrix4x4.CreateTranslation(0, 0, 0));
 
             Vector3 inertia = Vector3.Zero;
@@ -169,6 +175,7 @@ namespace RetroEngine
 
             // Create a sphere shape
             var sphereShape = new BoxShape(size/2);
+            sphereShape.UserObject = new CollisionShapeData();
             var motionState = new DefaultMotionState(Matrix4x4.CreateTranslation(0, 0, 0));
 
             Vector3 inertia = Vector3.Zero;
@@ -224,6 +231,7 @@ namespace RetroEngine
 
             // Create a sphere shape
             var Shape = new CapsuleShape(radius,HalfHeight);
+            Shape.UserObject = new CollisionShapeData();
             var motionState = new DefaultMotionState(Matrix4x4.CreateTranslation(0, 0, 0));
 
             Shape.Margin = 0f;
@@ -279,16 +287,23 @@ namespace RetroEngine
 
         }
 
-        public static CollisionShape CreateCollisionShapeFromModel(Model model, float scale = 1.0f)
+        public static CollisionShape CreateCollisionShapeFromModel(Model model, float scale = 1.0f, CollisionShapeData shapeData = null)
         {
+
+            if(shapeData == null)
+                shapeData = new CollisionShapeData();
+
             // Create a compound shape to hold multiple child collision shapes
             CompoundShape compoundShape = new CompoundShape();
+            compoundShape.UserObject = shapeData;
 
             // Loop through the model's meshes
             foreach (ModelMesh mesh in model.Meshes)
             {
                 // Create a convex hull shape for each mesh
                 ConvexHullShape convexShape = CreateConvexHullShape(mesh, scale);
+
+                convexShape.UserObject = shapeData;
 
                 Matrix4x4 scaling = Matrix4x4.CreateScale(scale);
 

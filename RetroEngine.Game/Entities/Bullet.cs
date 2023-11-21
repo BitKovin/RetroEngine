@@ -19,7 +19,7 @@ namespace RetroEngine.Game.Entities
 
         Delay destroyDelay =new Delay();
 
-
+        public RigidBody body;
 
         public Bullet() 
         {
@@ -36,6 +36,8 @@ namespace RetroEngine.Game.Entities
             body.CcdSweptSphereRadius = 0.01f;
             body.CcdMotionThreshold = 0.1f;
             body.Restitution = 0;
+
+            bodies.Add(body);
         }
 
         Vector3 startRotation;
@@ -66,9 +68,12 @@ namespace RetroEngine.Game.Entities
             foreach(Entity e in ignore)
             {
                 if(e is null) continue;
-                if(e.body is null) continue;
+                if(e.bodies is null) continue;
 
-                body.SetIgnoreCollisionCheck(e.body,true);
+                foreach(RigidBody body in e.bodies)
+                {
+                    body.SetIgnoreCollisionCheck(body, true);
+                }
             }
 
             collisionCallback.CollisionEvent += Hit;

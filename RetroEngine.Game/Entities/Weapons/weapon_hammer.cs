@@ -113,6 +113,8 @@ namespace RetroEngine.Game.Entities.Weapons
 
                     Entity hitEnt = hit.CollisionObject.UserObject as Entity;
 
+                    Console.WriteLine((hit.CollisionObject.CollisionShape.UserObject as Physics.CollisionShapeData).surfaceType);
+
                     if (hitEnt != null)
                     {
                         hitEnt.OnPointDamage(30, hit.HitPointWorld, Camera.rotation.GetForwardVector(), player, this);

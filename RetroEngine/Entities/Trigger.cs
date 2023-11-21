@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BulletSharp;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,9 +20,12 @@ namespace RetroEngine.Entities
         {
             base.Start();
 
-            body.CollisionFlags = BulletSharp.CollisionFlags.NoContactResponse;
-            body.UserIndex = (int)RayFlags.NoRayTest;
+            foreach (RigidBody body in bodies)
+            {
 
+                body.CollisionFlags = BulletSharp.CollisionFlags.NoContactResponse;
+                body.UserIndex = (int)RayFlags.NoRayTest;
+            }
             collisionCallback.CollisionEvent += TriggerEntered;
 
             meshes[0].Transperent = true;
@@ -44,8 +48,12 @@ namespace RetroEngine.Entities
 
             List<Entity> oldEntities = new List<Entity>(entities);
             entities.Clear();
-            Physics.PerformContactCheck(body, collisionCallback);
 
+            foreach (RigidBody body in bodies)
+            {
+
+                Physics.PerformContactCheck(body, collisionCallback);
+            }
             foreach (Entity entity in entities)
             {
                 if (entity is null) continue;

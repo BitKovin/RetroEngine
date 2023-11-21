@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using BulletSharp;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,8 @@ namespace RetroEngine.Entities
         static List<NPCBase> currentUpdateNPCs = new List<NPCBase>();
         static int currentUpdateIndex = 0;
 
+        RigidBody body;
+
         static float lastUpdateTime = 0;
 
         public override void Start()
@@ -31,6 +34,8 @@ namespace RetroEngine.Entities
             body = Physics.CreateCharacterCapsule(this, 1, 0.5f, 1);
             body.Gravity = new Vector3(0, -35, 0).ToNumerics();
             body.SetPosition(Position.ToPhysics());
+
+            bodies.Add(body);
 
             meshes.Add(mesh);
             mesh.CastShadows = false;

@@ -17,6 +17,8 @@ namespace RetroEngine.Entities
 
         public Vector3 size = Vector3.One;
 
+        RigidBody body;
+
         public Box():base()
         {
             Model model = GameMain.content.Load<Model>("box");
@@ -35,11 +37,11 @@ namespace RetroEngine.Entities
 
             body = Physics.CreateFromShape(this,Vector3.One.ToPhysics(), Physics.CreateCollisionShapeFromModel(mesh.model), collisionFlags: CollisionFlags.StaticObject);
 
-            
-
             body.SetMassProps(0, new Vector3(0,0,0).ToNumerics());
 
             body.SetPosition(Position.ToNumerics());
+
+            bodies.Add(body);
         }
 
         public override void Update()

@@ -37,37 +37,31 @@ namespace RetroEngine.Map
 
                     entity.name = ent.Classname;
 
-                    CompoundShape shape = new CompoundShape();
-
                     List<BrushFaceMesh> faces = new List<BrushFaceMesh>();
 
                     foreach (BrushData brush in ent.Brushes)
                     {
                         foreach (var face in BrushFaceMesh.GetFacesFromPath(Path.Replace(".map", ".obj"), "entity" + ent.name + "_" + "brush" + brush.Name))
                         {
-
-                            shape.AddChildShape(System.Numerics.Matrix4x4.Identity, Physics.CreateCollisionShapeFromModel(face.model));
-
+                            var shape = Physics.CreateCollisionShapeFromModel(face.model, shapeData: new Physics.CollisionShapeData { surfaceType = face.textureName });
+                            RigidBody rigidBody = Physics.CreateFromShape(entity, Vector3.One.ToPhysics(), shape, collisionFlags: BulletSharp.CollisionFlags.StaticObject);
+                            entity.bodies.Add(rigidBody);
                         }
 
                         foreach (var face in BrushFaceMesh.GetMergedFacesFromPath(Path.Replace(".map", ".obj"), "entity" + ent.name + "_" + "brush" + brush.Name))
                         {
 
-                            //face.useAvgVertexPosition = true;
-
                             faces.Add(face);
 
                         }
-
-                        
 
                     }
 
                     entity.meshes.AddRange(BrushFaceMesh.MergeFaceMeshes(faces));
 
-                    RigidBody rigidBody = Physics.CreateFromShape(entity, Vector3.One.ToPhysics(), shape, collisionFlags: BulletSharp.CollisionFlags.StaticObject);
+                    
 
-                    entity.body = rigidBody;
+                    
 
                     level.entities.Add(entity);
                     entity.FromData(ent);

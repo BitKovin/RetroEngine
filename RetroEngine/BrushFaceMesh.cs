@@ -14,10 +14,13 @@ namespace RetroEngine
     public class BrushFaceMesh : StaticMesh
     {
 
-        public BrushFaceMesh(Model model, Texture2D texture)
+        public string textureName = "";
+
+        public BrushFaceMesh(Model model, Texture2D texture, string textureName = "")
         {
             this.model = model;
             this.texture = texture;
+            this.textureName = textureName;
         }
 
         static Dictionary<string, Assimp.Scene> scenes = new Dictionary<string, Assimp.Scene>();
@@ -150,7 +153,7 @@ namespace RetroEngine
 
                 meshPart.Effect = defaultEffect;
 
-                models.Add(new BrushFaceMesh(new Model(graphicsDevice, new List<ModelBone>(), new List<ModelMesh> { modelMesh }), texture) {Transperent = transperent });
+                models.Add(new BrushFaceMesh(new Model(graphicsDevice, new List<ModelBone>(), new List<ModelMesh> { modelMesh }), texture, scene.Materials[mesh.MaterialIndex].Name) {Transperent = transperent });
             }
 
             return models;
@@ -170,7 +173,6 @@ namespace RetroEngine
             List<BrushFaceMesh> models = new List<BrushFaceMesh>();
 
             var importer = new Assimp.AssimpContext();
-
 
             Assimp.Scene scene;
             if (scenes.ContainsKey(filePath))
