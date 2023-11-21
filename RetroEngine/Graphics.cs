@@ -18,7 +18,7 @@ namespace RetroEngine
         public static int shadowMapResolution = 2048;
 
         public static Matrix LightViewProjection;
-        public static float LightDistance = 100;
+        public static float LightDistance = 110;
 
         public static bool EnablePostPocessing = false;
         public static bool TextureFiltration = true;
@@ -39,7 +39,7 @@ namespace RetroEngine
         {
             Vector3 pos = Camera.position;
 
-            float step = 0.3f; 
+            float step = 0.4f; 
 
             pos*=step;
             pos.Round();
