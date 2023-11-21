@@ -67,7 +67,7 @@ namespace RetroEngine.Entities
                     {
                         soundEffectInstance.Play();
                     }
-                    catch (Exception ex) { }
+                    catch (Exception) { }
                 }
                 
 
@@ -102,7 +102,7 @@ namespace RetroEngine.Entities
             {
                 soundEffectInstance?.Play();
             }
-            catch (Exception ex) { }
+            catch (Exception) { }
         }
 
         public void Stop()

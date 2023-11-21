@@ -25,8 +25,6 @@ namespace RetroEngine.Entities
 
         RigidBody body;
 
-        static float lastUpdateTime = 0;
-
         public override void Start()
         {
             base.Start();
