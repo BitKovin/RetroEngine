@@ -105,10 +105,12 @@ namespace RetroEngine.Game.Entities.Weapons
             if (!attack)
             {
                 bullet.body.SetPosition(Camera.position.ToPhysics() + Camera.rotation.GetForwardVector().ToPhysics() * 1.2f + Camera.rotation.GetRightVector().ToPhysics() / 4f - Camera.rotation.GetUpVector().ToPhysics() / 4f);
+                //bullet.body.SetPosition(mesh1.GetOffsetPointWorldSpace("muzzle") + Camera.rotation.GetForwardVector().ToPhysics() * 1.2f + Camera.rotation.GetRightVector().ToPhysics() / 4f - Camera.rotation.GetUpVector().ToPhysics() / 4f);
             }
             else
             {
                 bullet.body.SetPosition(Camera.position.ToPhysics() + Camera.rotation.GetForwardVector().ToPhysics() * 1.2f - Camera.rotation.GetRightVector().ToPhysics() / 4f - Camera.rotation.GetUpVector().ToPhysics() / 4f);
+                //bullet.body.SetPosition(mesh2.GetOffsetPointWorldSpace("muzzle") + Camera.rotation.GetForwardVector().ToPhysics() * 1.2f - Camera.rotation.GetRightVector().ToPhysics() / 4f - Camera.rotation.GetUpVector().ToPhysics() / 4f);
             }
 
             bullet.ignore.Add(player);

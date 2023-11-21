@@ -16,6 +16,7 @@ namespace RetroEngine
     class MeshPartData
     {
         public string textureName = "";
+        public Dictionary<string, Vector3> Points = new Dictionary<string, Vector3>();
     }
 
     public struct FrameStaticMeshData
@@ -388,13 +389,6 @@ namespace RetroEngine
 
         protected Model GetModelFromPath(string filePath)
         {
-
-            if (GameMain.IsOnRenderThread() == false)
-            {
-                Logger.Log($"THREAD ERROR:  attempted to load model from not render thread. Model: {filePath}");
-                return null;
-            }
-
             GraphicsDevice graphicsDevice = GameMain.inst.GraphicsDevice;
 
             filePath = AssetRegistry.FindPathForFile(filePath);
@@ -422,7 +416,7 @@ namespace RetroEngine
                 return null;
             }
 
-            
+            Dictionary<string, Vector3> points = new Dictionary<string, Vector3>();
 
             var meshParts = new List<ModelMeshPart>();
 
@@ -433,6 +427,14 @@ namespace RetroEngine
                 var vertices = new VertexPositionNormalTexture[mesh.VertexCount];
                 var indices = new int[mesh.FaceCount * 3];
                 int vertexIndex = 0;
+
+                if(mesh.Name.Contains("op_"))
+                {
+                    string name = mesh.Name;
+                    name = name.Replace("op_","");
+                    name = name.Replace("_Mesh", "");
+                    points.Add(name, new Vector3(-mesh.Vertices[0].X, mesh.Vertices[0].Y, mesh.Vertices[0].Z));
+                }
 
                 foreach (var face in mesh.Faces)
                 {
@@ -467,7 +469,7 @@ namespace RetroEngine
                 boundingSphere = CalculateBoundingSphere(vertices);
 
 
-                meshParts.Add(new ModelMeshPart { VertexBuffer = vertexBuffer, IndexBuffer = indexBuffer, StartIndex = 0, NumVertices = indices.Length, PrimitiveCount = primitiveCount, Tag= new MeshPartData {textureName = Path.GetFileName(scene.Materials[mesh.MaterialIndex].TextureDiffuse.FilePath) } });
+                meshParts.Add(new ModelMeshPart { VertexBuffer = vertexBuffer, IndexBuffer = indexBuffer, StartIndex = 0, NumVertices = indices.Length, PrimitiveCount = primitiveCount, Tag= new MeshPartData {textureName = Path.GetFileName(scene.Materials[mesh.MaterialIndex].TextureDiffuse.FilePath), Points = points} });
             }
 
 
@@ -612,6 +614,37 @@ namespace RetroEngine
             }
 
             return new BoundingSphere(center, radius);
+        }
+
+
+        public virtual Vector3 GetOffsetPointWorldSpace(string name)
+        {
+            return Vector3.Transform(GetOffsetPoint(name), GetWorldMatrix());
+        }
+
+        public virtual Vector3 GetOffsetPoint(string name)
+        {
+            Vector3 point = new Vector3();
+
+            if(model is not null)
+            {
+                foreach(ModelMesh mesh in  model.Meshes)
+                {
+                    foreach(ModelMeshPart part in mesh.MeshParts)
+                    {
+                        MeshPartData data = part.Tag as MeshPartData;
+                        if (data is null) continue;
+
+                        if(data.Points.TryGetValue(name, out point))
+                        {
+                            return point;
+                        }
+
+                    }
+                }
+            }
+
+            return point;
         }
 
         public void Dispose()

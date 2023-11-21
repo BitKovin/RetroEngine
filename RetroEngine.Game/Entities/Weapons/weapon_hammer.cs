@@ -102,7 +102,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
         void PerformHitCheck()
         {
-            var hit = Physics.LineTrace(Camera.position.ToPhysics(), Camera.rotation.GetForwardVector().ToPhysics() * 2f + Camera.position.ToPhysics());
+            var hit = Physics.LineTrace(Camera.position.ToPhysics(), Camera.rotation.GetForwardVector().ToPhysics() * 2f + Camera.position.ToPhysics(), new List<CollisionObject> { player.bodies[0] });
 
             if (hit.HasHit)
             {
