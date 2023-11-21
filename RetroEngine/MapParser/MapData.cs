@@ -73,7 +73,7 @@ namespace RetroEngine.Map
 
                     if (ent.Properties.ContainsKey("origin"))
                     {
-                        Vector3 position = ent.GetPropertyVector("origin");
+                        Vector3 position = ent.GetPropertyVectorPosition("origin");
                         entity.Position = position;
                     }
 
@@ -111,11 +111,30 @@ namespace RetroEngine.Map
 
         public string name { get; set; }
 
-        public Vector3 GetPropertyVector(string name)
+        public Vector3 GetPropertyVectorPosition(string name)
         {
-            string[] parts = Properties[name].Split(" ");
+            try
+            {
+                string[] parts = Properties[name].Replace(".",",").Split(" ");
 
-            return new Vector3(float.Parse(parts[0])*-1, float.Parse(parts[2]), float.Parse(parts[1])) / MapData.UnitSize;
+                return new Vector3(float.Parse(parts[0]) * -1, float.Parse(parts[2]), float.Parse(parts[1])) / MapData.UnitSize;
+            }catch(Exception)
+            {
+                return Vector3.Zero;
+            }
+        }
+
+        public Vector3 GetPropertyVector(string name, Vector3 def)
+        {
+            try
+            {
+                string[] parts = Properties[name].Replace(".", ",").Split(" ");
+
+                return new Vector3(float.Parse(parts[0]), float.Parse(parts[1]), float.Parse(parts[2]));
+            }catch(Exception)
+            {
+                return def;
+            }
         }
 
         public float GetPropertyFloat(string name, float defaultValue = 0)

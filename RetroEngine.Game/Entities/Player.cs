@@ -58,6 +58,8 @@ namespace RetroEngine.Entities
 
         Image crosshair = new Image();
 
+        float bobSpeed = 8;
+
         public Player() : base()
         {
             if (GameMain.platform == Platform.Mobile)
@@ -121,7 +123,7 @@ namespace RetroEngine.Entities
         {
             base.FromData(data);
 
-            Camera.position = Position = OldCameraPos = data.GetPropertyVector("origin");
+            Camera.position = Position = OldCameraPos = data.GetPropertyVectorPosition("origin");
 
 
 
@@ -205,8 +207,8 @@ namespace RetroEngine.Entities
 
             bob = Vector3.Zero;
 
-            bob += Camera.rotation.GetRightVector() * ((float)Math.Sin(bobProgress * 1 * 7)) * 0.2f;
-            bob += Camera.rotation.GetUpVector() * (float)(Math.Abs(Math.Sin(bobProgress * 7 * 1))) * 0.2f;
+            bob += Camera.rotation.GetForwardVector() * ((float)Math.Sin(bobProgress * 1 * bobSpeed * 1)) * 0.5f;
+            //bob += Camera.rotation.GetUpVector() * (float)(Math.Abs(Math.Sin(bobProgress * bobSpeed * 1))) * 0.2f;
         }
 
         void UpdateMovement()
@@ -246,7 +248,7 @@ namespace RetroEngine.Entities
                 if (onGround)
                 {
 
-                    if (Math.Sin(bobProgress * 14) <= 0 && Math.Sin((bobProgress + Time.deltaTime) * 14) > 0)
+                    if (Math.Sin(bobProgress * bobSpeed * 2) <= 0 && Math.Sin((bobProgress + Time.deltaTime) * bobSpeed*2) > 0)
                     {
                         stepSoundPlayer.Play(true);
                     }

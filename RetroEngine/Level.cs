@@ -153,6 +153,9 @@ namespace RetroEngine
                 }
             }
 
+            LightManager.PrepareLightSources();
+            LightManager.ClearPointLights();
+
         }
 
         public void LoadAssets()

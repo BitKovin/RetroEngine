@@ -17,9 +17,18 @@
 ]
 
 @baseclass size(-8 -8 -8, 8 8 48) color(70 70 255) = NavPoint []
+
+@PointClass base(NavPoint) = info.navpoint : "Nav Point" []
 @PointClass base(NavPoint) = info.navpoint : "Nav Point" []
 
 @SolidClass = destructible : "Destructible Brush"
 [
 	health(float) : "Health" : "30"
+]
+
+@baseclass size(-5 -5 -5, 5 5 5) color(255 200 0) = PointLight []
+@PointClass base(PointLight) = light_point : "Light" 
+[
+	light_color(Vector3) : "Color" : "1 1 1"
+	radius(float) : "Radius" : "5"
 ]

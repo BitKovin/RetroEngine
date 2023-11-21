@@ -7,18 +7,18 @@ using System.Threading.Tasks;
 
 namespace RetroEngine
 {
-     public static class Graphics
+    public static class Graphics
     {
-        public static float DirectLighting = 0.5f;
-        public static float GlobalLighting = 0.3f;
-        public static Vector3 LightDirection = new Vector3 (-1f, -1, -0.2f);
-        public static Color BackgroundColor = new Color(0.15f,0.15f,0.2f);
+        public static float DirectLighting = 0.7f;
+        public static float GlobalLighting = 0.2f;
+        public static Vector3 LightDirection = new Vector3(-1f, -1, -0.2f);
+        public static Color BackgroundColor = new Color(0.15f, 0.15f, 0.2f);
 
         public static float ShadowBias = 0.003f;
         public static int shadowMapResolution = 2048;
 
         public static Matrix LightViewProjection;
-        public static float LightDistance = 110;
+        public static float LightDistance = 100;
 
         public static bool EnablePostPocessing = false;
         public static bool TextureFiltration = true;
@@ -26,7 +26,7 @@ namespace RetroEngine
 
         public static Matrix GetLightProjection()
         {
-            
+
             return Matrix.CreateOrthographic(LightDistance, LightDistance, -30, 100);
         }
 
@@ -39,9 +39,9 @@ namespace RetroEngine
         {
             Vector3 pos = Camera.position;
 
-            float step = 0.4f; 
+            float step = 0.3f;
 
-            pos*=step;
+            pos *= step;
             pos.Round();
             pos /= step;
 

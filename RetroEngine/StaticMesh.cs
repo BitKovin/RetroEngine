@@ -158,6 +158,21 @@ namespace RetroEngine
                         }
                         effect.Parameters["EmissionPower"].SetValue(EmissionPower);
 
+                        Vector3[] LightPos = new Vector3[LightManager.MAX_POINT_LIGHTS];
+                        Vector3[] LightColor = new Vector3[LightManager.MAX_POINT_LIGHTS]; 
+                        float[] LightRadius = new float[LightManager.MAX_POINT_LIGHTS]; 
+
+                        for (int i = 0; i < LightManager.MAX_POINT_LIGHTS; i++)
+                        {
+                            LightPos[i] = LightManager.FinalPointLights[i].Position;
+                            LightColor[i] = LightManager.FinalPointLights[i].Color;
+                            LightRadius[i] = LightManager.FinalPointLights[i].Radius;
+                        }
+
+                        effect.Parameters["LightPositions"].SetValue(LightPos);
+                        effect.Parameters["LightColors"].SetValue(LightColor);
+                        effect.Parameters["LightRadiuses"].SetValue(LightRadius);
+
                         // Draw the primitives using the custom effect
                         foreach (EffectPass pass in effect.CurrentTechnique.Passes)
                         {

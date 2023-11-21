@@ -23,12 +23,16 @@ float GlobalBrightness;
 float3 LightDirection;
 
 float EmissionPower;
-
 float ShadowBias;
-
 float Transparency;
-
 matrix ShadowMapViewProjection;
+
+#define MAX_POINT_LIGHTS 10
+
+float3 LightPositions[MAX_POINT_LIGHTS];
+float3 LightColors[MAX_POINT_LIGHTS];
+float LightRadiuses[MAX_POINT_LIGHTS];
+
 
 struct VertexInput
 {
@@ -45,6 +49,7 @@ struct PixelInput
 	float3 Normal : TEXCOORD1; // Pass normal to pixel shader
     float light : TEXCOORD2;
     float4 lightPos :TEXCOORD3;
+    float3 MyPosition : TEXCOORD4;
 };
 
 float3 normalize(float3 v)
@@ -57,6 +62,7 @@ PixelInput VertexShaderFunction(VertexInput input)
     PixelInput output;
 
     output.Position = mul(input.Position, World);
+    output.MyPosition = mul(input.Position, World);
     output.Position = mul(output.Position, View);
     output.Position = mul(output.Position, Projection);
     output.TexCoord = input.TexCoord;
@@ -76,7 +82,6 @@ PixelInput VertexShaderFunction(VertexInput input)
 
 float GetShadow(float3 lightCoords)
 {
-
     float shadow = 0;
 
     float3 centerCoords = lightCoords;
@@ -92,6 +97,24 @@ float GetShadow(float3 lightCoords)
 
     return shadow;
 }
+
+float3 CalculatePointLight(int i, PixelInput PixelInput)
+{
+
+    if(LightRadiuses[i]<=0)
+    return 0;
+
+    float intense = distance(LightPositions[i], PixelInput.MyPosition) / LightRadiuses[i];
+
+    float3 dirToSurface = normalize(LightPositions[i] - PixelInput.MyPosition);
+
+    intense = 1- intense;
+    intense *= clamp(dot(PixelInput.Normal, dirToSurface)*20 + 2,0,1);
+    intense = max(intense,0);
+
+    return LightColors[i] * intense;
+}
+
 
 float4 PixelShaderFunction(PixelInput input) : COLOR0
 {
@@ -111,10 +134,18 @@ float4 PixelShaderFunction(PixelInput input) : COLOR0
 
     shadow += GetShadow(lightCoords);
     
-    float light = input.light;
+    float3 light = input.light;
 
-    light *= 1.0f - shadow;
+    light -= shadow;
+    light = max(light,0);
     light += GlobalBrightness;
+
+
+    for (int i = 0; i < MAX_POINT_LIGHTS; i++)
+    {
+        light += CalculatePointLight(i,input);
+    }
+
 
 	textureColor *= light;
 
