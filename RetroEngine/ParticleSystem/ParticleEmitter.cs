@@ -115,9 +115,9 @@ namespace RetroEngine.Particles
                 Console.WriteLine(particle.Scale);
 
             Matrix worldMatrix = Matrix.CreateScale(particle.Scale) *
+                                            Matrix.CreateRotationZ(particle.Rotation) *
                                             Matrix.CreateRotationX(Camera.rotation.X / 180 * (float)Math.PI) *
                                             Matrix.CreateRotationY(Camera.rotation.Y / 180 * (float)Math.PI) *
-                                            Matrix.CreateRotationZ(Camera.rotation.Z / 180 * (float)Math.PI) *
                                             Matrix.CreateTranslation(particle.position);
 
             return worldMatrix;
@@ -201,7 +201,8 @@ namespace RetroEngine.Particles
             public float transparency = 1;
 
             public float Scale = 0;
-
+            public float Rotation = 0;
+            public bool OrientRotationToVelocity = false;
 
             public string texturePath = null; //do not set texture on game thread
 

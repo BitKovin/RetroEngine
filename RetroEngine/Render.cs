@@ -324,7 +324,7 @@ namespace RetroEngine
                     graphics.PreferredBackBufferWidth,
                     graphics.PreferredBackBufferHeight,
                     false, // No mipmaps
-                    SurfaceFormat.Bgra5551, // Color format
+                    SurfaceFormat.Rgba64, // Color format
                     depthFormat); // Depth format
             }
         }

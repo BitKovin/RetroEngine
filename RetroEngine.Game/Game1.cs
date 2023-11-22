@@ -17,15 +17,12 @@ namespace RetroEngine.Game
         {
             base.LoadContent();
 
-            StaticMesh mesh = new StaticMesh();
-            mesh.LoadFromFile("Animations/Pistol/Fire/frame_0001.obj");
-
             Input.CenterCursor();
             CreateInputActions();
             devMenu = new GameDevMenu();
             devMenu.Init();
 
-            Level.LoadFromFile("test.map");
+            Level.LoadFromFile("test2.map");
 
             for (float i = 1; i < 0; i++)
             {
