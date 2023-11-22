@@ -33,7 +33,12 @@ namespace RetroEngine
 
             int it = 0;
 
-            List<Vector3> points = GetStartNavPoint(start).GetPathNext(new List<NavPoint>(), target, ref it);
+            NavPoint startPoint = GetStartNavPoint(start);
+
+            if (startPoint is null)
+                return new List<Vector3>();
+
+            List<Vector3> points = startPoint.GetPathNext(new List<NavPoint>(), target, ref it);
             List<Vector3> result = new List<Vector3>(points);
 
             for(int i = points.Count -1; i >=0; i--)
@@ -66,7 +71,7 @@ namespace RetroEngine
 
             Console.WriteLine("failed to find point");
 
-            return navPoints[0];
+            return null;
 
         }
 
