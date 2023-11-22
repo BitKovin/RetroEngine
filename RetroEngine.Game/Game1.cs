@@ -52,7 +52,7 @@ namespace RetroEngine.Game
             GameMain.inst.curentLevel.entities.Add(new PlayerGlobal());
 
  
-            for (int i = 1; i <= 0; i++)
+            for (int i = 1; i <= 500; i++)
             {
 
                 NPCBase npc = new NPCBase();

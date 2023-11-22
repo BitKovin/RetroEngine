@@ -189,6 +189,7 @@ namespace RetroEngine.Entities
 
             FirstTick = false;
 
+
         }
 
         void UpdateCamera()

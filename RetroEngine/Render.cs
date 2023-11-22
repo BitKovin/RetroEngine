@@ -121,8 +121,6 @@ namespace RetroEngine
 
             shadowPassRenderDelay.AddDelay(0.02f);
 
-            Graphics.LightViewProjection = Graphics.GetLightView() * Graphics.GetLightProjection();
-
             // Set up the shadow map render target with the desired resolution
             graphics.GraphicsDevice.SetRenderTarget(shadowMap);
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, Graphics.shadowMapResolution, Graphics.shadowMapResolution);
@@ -141,6 +139,7 @@ namespace RetroEngine
                 {
                     mesh.DrawShadow();
                 }
+            
             }
 
             // Reset the render target and viewport to the back buffer's dimensions
@@ -305,7 +304,7 @@ namespace RetroEngine
                 Graphics.shadowMapResolution,
                 Graphics.shadowMapResolution,
                 false, // No mipmaps
-                SurfaceFormat.Bgra4444, // Color format
+                SurfaceFormat.Color, // Color format
                 depthFormat); // Depth format
         }
 
@@ -325,7 +324,7 @@ namespace RetroEngine
                     graphics.PreferredBackBufferWidth,
                     graphics.PreferredBackBufferHeight,
                     false, // No mipmaps
-                    SurfaceFormat.Bgra4444, // Color format
+                    SurfaceFormat.Color, // Color format
                     depthFormat); // Depth format
             }
         }

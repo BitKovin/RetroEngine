@@ -36,7 +36,7 @@ namespace RetroEngine
 
         public Matrix LightView;
         public Matrix LightProjection;
-
+        public Matrix LightViewProjection;
     }
 
     public class StaticMesh : IDisposable
@@ -209,6 +209,8 @@ namespace RetroEngine
                         // Set the vertex buffer and index buffer for this mesh part
                         graphicsDevice.SetVertexBuffer(meshPart.VertexBuffer);
                         graphicsDevice.Indices = meshPart.IndexBuffer;
+
+                        Graphics.LightViewProjection = frameStaticMeshData.LightView * frameStaticMeshData.LightProjection;
 
                         // Set effect parameters
                         effect.Parameters["World"].SetValue(frameStaticMeshData.World);
@@ -586,6 +588,7 @@ namespace RetroEngine
             frameStaticMeshData.LightView = Graphics.GetLightView();
             frameStaticMeshData.LightProjection = Graphics.GetLightProjection();
             frameStaticMeshData.Transparency = Transparency;
+            frameStaticMeshData.LightViewProjection = Graphics.LightViewProjection;
         }
 
         private Vector3 CalculateAvgVertexLocation()
