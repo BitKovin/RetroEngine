@@ -242,9 +242,8 @@
 // entity 11
 {
 "classname" "static_mesh"
-"origin" "53 -43 117"
-"render_mode" "Textured"
-"path" "Animations/Hammer/Attack/frame_1.obj"
+"origin" "69 -75 101"
+"model" "models/test.obj"
 }
 // entity 12
 {

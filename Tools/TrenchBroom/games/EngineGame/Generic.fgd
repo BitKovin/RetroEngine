@@ -32,3 +32,10 @@
 	light_color(Vector3) : "Color" : "1 1 1"
 	radius(float) : "Radius" : "5"
 ]
+
+@baseclass size(-5 -5 -5, 5 5 5) color(255 0 0) model({ "path": path }) = StaticMesh []
+@PointClass base(StaticMesh) = static_mesh: "Mesh" 
+[
+	path(string) : "Path" : "models/test.obj"
+	render_mode(string) : "Render Mode" : "Textured"
+]
