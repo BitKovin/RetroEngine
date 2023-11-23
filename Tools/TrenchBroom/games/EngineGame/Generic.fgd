@@ -39,6 +39,6 @@
 	path(string) : "Path" : "models/test.obj"
 	texture(string): "Texture" : ""
 	scale(float): "Scale" : "1"
-	angles(Vector3): "Angles" : "0 0 0"
+	angle(Float): "Angle" : "0"
 	
 ]

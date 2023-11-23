@@ -22,8 +22,9 @@ namespace RetroEngine.Entities
             meshes.Add(mesh);
             texturePath = data.GetPropertyString("texture");
             mesh.Position = Position;
+            mesh.Scale = new Microsoft.Xna.Framework.Vector3(data.GetPropertyFloat("scale", 1));
 
-            mesh.Rotation = data.GetPropertyVectorRotation("angles");
+            mesh.Rotation = new Microsoft.Xna.Framework.Vector3(0, data.GetPropertyFloat("angle"),0);
             mesh.UseAlternativeRotationCalculation = true;
         }
 

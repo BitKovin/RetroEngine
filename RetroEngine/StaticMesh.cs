@@ -386,27 +386,15 @@ namespace RetroEngine
 
         protected Matrix GetWorldMatrix()
         {
-            if(UseAlternativeRotationCalculation)
-            {
-                Matrix worldMatrix = Matrix.CreateScale(Scale) *
-                                
-                                Matrix.CreateRotationY(Rotation.Y / 180 * (float)Math.PI) *
-                                Matrix.CreateRotationZ(Rotation.Z / 180 * (float)Math.PI) *
-                                Matrix.CreateRotationX(Rotation.X / 180 * (float)Math.PI) *
-                                
 
-                                Matrix.CreateTranslation(Position);
-                return worldMatrix;
-            }
-            else
-            {
-                Matrix worldMatrix = Matrix.CreateScale(Scale) *
-                                Matrix.CreateRotationX(Rotation.X / 180 * (float)Math.PI) *
-                                Matrix.CreateRotationY(Rotation.Y / 180 * (float)Math.PI) *
-                                Matrix.CreateRotationZ(Rotation.Z / 180 * (float)Math.PI) *
-                                Matrix.CreateTranslation(Position);
-                return worldMatrix;
-            }
+
+            Matrix worldMatrix = Matrix.CreateScale(Scale) *
+                            Matrix.CreateRotationX(Rotation.X / 180 * (float)Math.PI) *
+                            Matrix.CreateRotationY(Rotation.Y / 180 * (float)Math.PI) *
+                            Matrix.CreateRotationZ(Rotation.Z / 180 * (float)Math.PI) *
+                            Matrix.CreateTranslation(Position);
+            return worldMatrix;
+
         }
 
         public void LoadFromFile(string filePath)

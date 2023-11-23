@@ -245,8 +245,9 @@
 "origin" "-140.903 -7.0081 75.9635"
 "path" "models/npc_base.obj"
 "scale" "1"
+"rotation" "0 0 0"
+"angles" "90 -50 45"
 "texture" "textures/brushes/bricks.png"
-"angle" "-120"
 }
 // entity 12
 {
@@ -261,8 +262,9 @@
 "origin" "3.097 24.9919 27.9635"
 "path" "models/npc_base.obj"
 "scale" "1"
+"rotation" "0 0 0"
+"angles" "90 -50 52"
 "texture" "textures/brushes/bricks.png"
-"angle" "40"
 }
 // entity 14
 {
