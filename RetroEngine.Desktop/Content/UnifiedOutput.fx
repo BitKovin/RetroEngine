@@ -109,7 +109,7 @@ float3 CalculatePointLight(int i, PixelInput PixelInput)
     float3 dirToSurface = normalize(LightPositions[i] - PixelInput.MyPosition);
 
     intense = 1- intense;
-    intense *= clamp(dot(PixelInput.Normal, dirToSurface)*20 + 2,0,1);
+    intense *= clamp(dot(PixelInput.Normal, dirToSurface)*5 + 2,0,1);
     intense = max(intense,0);
 
     return LightColors[i] * intense;
