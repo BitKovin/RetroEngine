@@ -1,0 +1,134 @@
+﻿using BulletSharp;
+using Microsoft.Xna.Framework;
+using RetroEngine.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace RetroEngine.Game.Entities.Weapons
+{
+    public class weapon_shotgun : Weapon
+    {
+
+        AnimatedStaticMesh mesh = new AnimatedStaticMesh();
+
+        Delay attackDelay = new Delay();
+
+        SoundPlayer fireSoundPlayer;
+
+
+        public override void Start()
+        {
+            base.Start();
+
+            fireSoundPlayer = Level.GetCurrent().AddEntity(new SoundPlayer()) as SoundPlayer;
+            fireSoundPlayer.SetSound(AssetRegistry.LoadSoundFromFile("sounds/pistol_fire.wav"));
+            fireSoundPlayer.Volume = 0.1f;
+
+        }
+
+        protected override void LoadAssets()
+        {
+            base.LoadAssets();
+
+            LoadVisual();
+
+        }
+
+        public override void Update()
+        {
+            base.Update();
+
+            mesh.AddTime(Time.deltaTime);
+            mesh.Update();
+
+            if (Input.GetAction("attack").Holding())
+                Shoot();
+
+        }
+
+        public override void Destroy()
+        {
+            base.Destroy();
+
+            fireSoundPlayer.Destroy(2);
+        }
+
+        public override void LateUpdate()
+        {
+            base.LateUpdate();
+
+            mesh.Position = Position;
+            mesh.Rotation = Camera.rotation + DrawRotation;
+
+            fireSoundPlayer.Position = Camera.position;
+        }
+
+        void Shoot()
+        {
+            if (Drawing) return;
+
+            if (attackDelay.Wait()) return;
+
+            attackDelay.AddDelay(0.6f);
+
+            fireSoundPlayer.Play(true);
+
+            mesh.Play();
+            
+            
+
+
+            Bullet bullet = new Bullet();
+
+            bullet.Rotation = Camera.rotation;
+            Level.GetCurrent().AddEntity(bullet);
+
+
+            bullet.body.SetPosition(Camera.position.ToPhysics() + Camera.rotation.GetForwardVector().ToPhysics() * 1.2f + Camera.rotation.GetRightVector().ToPhysics() / 4f - Camera.rotation.GetUpVector().ToPhysics() / 4f);
+
+
+            bullet.ignore.Add(player);
+            bullet.Start();
+
+            return;
+
+            var hit = Physics.LineTrace(Camera.position.ToPhysics(), Camera.rotation.GetForwardVector().ToPhysics() * 100 + Camera.position.ToPhysics());
+
+            if (hit is not null)
+            {
+                if (hit.CollisionObject is not null)
+                {
+                    RigidBody.Upcast(hit.CollisionObject).Activate(true);
+                    RigidBody.Upcast(hit.CollisionObject).ApplyCentralImpulse(Camera.rotation.GetForwardVector().ToPhysics() * 10);
+                    Console.WriteLine("pew");
+                }
+            }
+
+        }
+
+        void LoadVisual()
+        {
+            mesh.Scale = new Vector3(0.7f);
+
+
+            for (int i = 1; i <= 30; i++)
+            {
+                mesh.AddFrame($"Animations/Shotgun/Fire/frame_{i}.obj");
+            }
+
+            mesh.frameTime = 1f / 70f;
+
+            mesh.textureSearchPaths.Add("textures/weapons/arms/");
+            mesh.textureSearchPaths.Add("textures/weapons/shotgun/");
+            mesh.CastShadows = false;
+            mesh.PreloadTextures();
+            mesh.Viewmodel = true;
+
+            meshes.Add(mesh);
+        }
+
+    }
+}

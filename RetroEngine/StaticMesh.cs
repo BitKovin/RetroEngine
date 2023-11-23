@@ -459,6 +459,8 @@ namespace RetroEngine
 
                 foreach (var face in mesh.Faces)
                 {
+                    if (face.Indices.Count != 3) continue;
+
                     for (int i = 0; i < 3; i++)
                     {
                         var vertex = mesh.Vertices[face.Indices[2 - i]];

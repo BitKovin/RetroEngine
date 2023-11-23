@@ -31,6 +31,10 @@ namespace RetroEngine.Game.Entities
             if (Input.GetAction("pause").Pressed())
             {
                 GameMain.inst.paused = !GameMain.inst.paused;
+
+                if (GameMain.inst.paused == false)
+                    Input.CenterCursor();
+
             }
 
         }

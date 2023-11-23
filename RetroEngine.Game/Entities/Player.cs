@@ -153,6 +153,7 @@ namespace RetroEngine.Entities
             stepSoundPlayer.Volume = 0.5f;
 
             weapons.Add(new WeaponData { weaponType = typeof(weapon_hammer), ammo = 1 });
+            weapons.Add(new WeaponData { weaponType = typeof(weapon_shotgun), ammo = 50 });
             weapons.Add(new WeaponData { weaponType = typeof(weapon_pistols), ammo = 50 });
 
         }
