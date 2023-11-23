@@ -1,4 +1,5 @@
-﻿using RetroEngine.Particles;
+﻿using Microsoft.Xna.Framework;
+using RetroEngine.Particles;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,5 +56,13 @@ namespace RetroEngine.Entities
                 emitter.LoadAssets();
             }
         }
+
+        public static ParticleSystem Create(string name)
+        {
+            ParticleSystem system = ParticleSystemFactory.CreateByTechnicalName(name);
+            Level.GetCurrent().AddEntity(system);
+            return system;
+        }
+
     }
 }

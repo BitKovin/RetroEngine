@@ -426,10 +426,10 @@ namespace RetroEngine
             }
 
             // Create a new vertex buffer and index buffer for the merged model
-            VertexBuffer mergedVertexBuffer = new VertexBuffer(graphicsDevice, typeof(VertexPositionNormalTexture), vertices.Count, BufferUsage.WriteOnly);
+            VertexBuffer mergedVertexBuffer = new VertexBuffer(graphicsDevice, typeof(VertexPositionNormalTexture), vertices.Count, BufferUsage.None);
             mergedVertexBuffer.SetData(vertices.ToArray());
 
-            IndexBuffer mergedIndexBuffer = new IndexBuffer(graphicsDevice, IndexElementSize.ThirtyTwoBits, indices.Count, BufferUsage.WriteOnly);
+            IndexBuffer mergedIndexBuffer = new IndexBuffer(graphicsDevice, IndexElementSize.ThirtyTwoBits, indices.Count, BufferUsage.None);
             mergedIndexBuffer.SetData(indices.ToArray());
 
             

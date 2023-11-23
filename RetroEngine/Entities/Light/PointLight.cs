@@ -12,9 +12,13 @@ namespace RetroEngine.Entities.Light
     [LevelObject("light_point")]
     public class PointLight : Entity
     {
-        public PointLight() { }
+        public PointLight() 
+        {
+            LateUpdateWhilePaused = true;
+        }
 
         LightManager.PointLightData lightData = new LightManager.PointLightData();
+
 
         public override void FromData(EntityData data)
         {
