@@ -13,6 +13,13 @@ namespace RetroEngine.Game.Entities
     public class Trigger : TriggerBase
     {
 
+        public override void Start()
+        {
+            base.Start();
+
+            meshes[0].CastShadows = false;
+        }
+
         public override void OnTriggerEnter(Entity entity)
         {
             base.OnTriggerEnter(entity);

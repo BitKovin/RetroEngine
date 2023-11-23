@@ -24,6 +24,8 @@ namespace RetroEngine
         public static float FOV = 70;
         public static float ViewmodelFOV = 46;
 
+        static Vector3 lastWorkingRotation = new Vector3();
+
         public static Vector3 velocity = new Vector3(0,0,0);
 
         public static float GetHorizontalFOV()
@@ -43,7 +45,19 @@ namespace RetroEngine
             //rotation = new Vector3(Input.MousePos.Y, Input.MousePos.X, 0);
             //position = new Vector3(0, 0, 0);
             world = Matrix.CreateTranslation(Vector3.Zero);
-            view = Matrix.CreateLookAt(position, position + rotation.GetForwardVector(), rotation.GetUpVector().RotateVector(rotation.GetForwardVector(),roll));
+
+            if(rotation.GetUpVector().RotateVector(rotation.GetForwardVector(), roll).Y > 0)
+            {
+                lastWorkingRotation = rotation;
+                
+            }
+            else
+            {
+                rotation += new Vector3(0.0001f, 0.0001f, 0);
+                Logger.Log("Wrong camera up vector detected! Trying to fix");
+            }
+
+            view = Matrix.CreateLookAt(position, position + rotation.GetForwardVector(), lastWorkingRotation.GetUpVector().RotateVector(rotation.GetForwardVector(), roll));
 
             projection = Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.ToRadians(FOV), (float)GameMain.inst.Window.ClientBounds.Width / (float)GameMain.inst.Window.ClientBounds.Height, 0.001f, 1000f);
             projectionViewmodel = Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.ToRadians(ViewmodelFOV), (float)GameMain.inst.Window.ClientBounds.Width / (float)GameMain.inst.Window.ClientBounds.Height, 0.06f, 10f);

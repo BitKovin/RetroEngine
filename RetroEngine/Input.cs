@@ -17,7 +17,7 @@ namespace RetroEngine
 
         public static bool LockCursor = true;
 
-        public static float sensitivity = 0.5f;
+        public static float sensitivity = 0.2f;
 
 
         public static void Update()

@@ -10,7 +10,7 @@ namespace RetroEngine
     public static class Graphics
     {
         public static float DirectLighting = 0.7f;
-        public static float GlobalLighting = 0.2f;
+        public static float GlobalLighting = 0.15f;
         public static Vector3 LightDirection = new Vector3(-1f, -1, -0.2f);
         public static Color BackgroundColor = new Color(0.15f, 0.15f, 0.2f);
 
@@ -21,7 +21,7 @@ namespace RetroEngine
         public static float LightDistance = 100;
 
         public static bool EnablePostPocessing = false;
-        public static bool TextureFiltration = true;
+        public static bool TextureFiltration = false;
         public static bool AnisotropicFiltration = false;
 
         public static Matrix GetLightProjection()
