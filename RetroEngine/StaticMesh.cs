@@ -70,6 +70,8 @@ namespace RetroEngine
 
         public float Transparency = 1;
 
+        public bool UseAlternativeRotationCalculation = false;
+
         protected FrameStaticMeshData frameStaticMeshData = new FrameStaticMeshData();
 
         public virtual void Draw()
@@ -384,13 +386,27 @@ namespace RetroEngine
 
         protected Matrix GetWorldMatrix()
         {
-            Matrix worldMatrix = Matrix.CreateScale(Scale) *
+            if(UseAlternativeRotationCalculation)
+            {
+                Matrix worldMatrix = Matrix.CreateScale(Scale) *
+                                
+                                Matrix.CreateRotationY(Rotation.Y / 180 * (float)Math.PI) *
+                                Matrix.CreateRotationZ(Rotation.Z / 180 * (float)Math.PI) *
+                                Matrix.CreateRotationX(Rotation.X / 180 * (float)Math.PI) *
+                                
+
+                                Matrix.CreateTranslation(Position);
+                return worldMatrix;
+            }
+            else
+            {
+                Matrix worldMatrix = Matrix.CreateScale(Scale) *
                                 Matrix.CreateRotationX(Rotation.X / 180 * (float)Math.PI) *
                                 Matrix.CreateRotationY(Rotation.Y / 180 * (float)Math.PI) *
                                 Matrix.CreateRotationZ(Rotation.Z / 180 * (float)Math.PI) *
                                 Matrix.CreateTranslation(Position);
-
-            return worldMatrix;
+                return worldMatrix;
+            }
         }
 
         public void LoadFromFile(string filePath)

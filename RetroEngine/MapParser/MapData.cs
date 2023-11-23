@@ -124,6 +124,20 @@ namespace RetroEngine.Map
             }
         }
 
+        public Vector3 GetPropertyVectorRotation(string name)
+        {
+            try
+            {
+                string[] parts = Properties[name].Replace(".", ",").Split(" ");
+
+                return new Vector3(float.Parse(parts[0]) , float.Parse(parts[1]), float.Parse(parts[2]));
+            }
+            catch (Exception)
+            {
+                return Vector3.Zero;
+            }
+        }
+
         public Vector3 GetPropertyVector(string name, Vector3 def)
         {
             try
@@ -149,6 +163,13 @@ namespace RetroEngine.Map
             {
                 return defaultValue;
             }
+        }
+
+        public string GetPropertyString(string name, string defaultValue = "")
+        {
+            if(Properties.ContainsKey(name))
+                return Properties[name];
+            return defaultValue;
         }
 
     }

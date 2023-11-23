@@ -242,12 +242,12 @@
 // entity 11
 {
 "classname" "static_mesh"
-"origin" "53 -43 21"
+"origin" "53 -55.0711 16"
 "render_mode" "Textured"
 "path" "models/npc_base.obj"
 "scale" "1"
 "rotation" "0 0 0"
-"angles" "-10 20 30"
+"angles" "45 0 0"
 }
 // entity 12
 {

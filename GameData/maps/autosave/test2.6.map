@@ -245,16 +245,13 @@
 "origin" "53 -43 21"
 "render_mode" "Textured"
 "path" "models/npc_base.obj"
-"scale" "1"
-"rotation" "0 0 0"
-"angles" "-10 20 30"
 }
 // entity 12
 {
 "classname" "light_point"
-"origin" "-245 165 203"
+"origin" "-245 117 203"
 "radius" "5"
-"light_color" "1 0 0.0156863"
+"light_color" "0.160784 0.0117647 1"
 }
 // entity 13
 {
