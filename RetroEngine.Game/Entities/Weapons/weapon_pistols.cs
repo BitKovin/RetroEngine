@@ -183,7 +183,11 @@ namespace RetroEngine.Game.Entities.Weapons
             mesh2.Viewmodel = true;
             meshes.Add(mesh2);
 
-            new Bullet().LoadAssetsIfNeeded();
+            Bullet bullet = new Bullet();
+            Level.GetCurrent().AddEntity(bullet);
+            bullet.Start();
+            bullet.body.SetPosition(new Vector3(0, 1000000000, 0));
+            bullet.LifeTime = 0.1f;
 
         }
 

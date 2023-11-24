@@ -44,8 +44,6 @@ namespace RetroEngine.Game.Entities
 
             mesh.texture = AssetRegistry.LoadTextureFromFile("models/weapons/bullet/bullet.png");
             mesh.emisssiveTexture = AssetRegistry.LoadTextureFromFile("models/weapons/bullet/bullet_em.png");
-
-            Console.WriteLine("bullet loaded");
         }
 
         public override void Start()
@@ -110,7 +108,7 @@ namespace RetroEngine.Game.Entities
 
         public override void Update()
         {
-            return;
+            
             base.Update();
 
             if(!destroyDelay.Wait())

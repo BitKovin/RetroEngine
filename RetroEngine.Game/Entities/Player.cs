@@ -362,8 +362,6 @@ namespace RetroEngine.Entities
         {
             if (slot == currentSlot) return;
 
-           
-
             if (weapons.Count > slot && slot>=0)
             {
 

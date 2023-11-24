@@ -46,7 +46,6 @@ namespace RetroEngine.Game.Entities.Weapons
 
             if (Input.GetAction("attack").Holding())
                 Shoot();
-
         }
 
         public override void Destroy()

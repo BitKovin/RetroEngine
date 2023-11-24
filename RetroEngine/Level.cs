@@ -160,7 +160,10 @@ namespace RetroEngine
 
         public void LoadAssets()
         {
-            foreach(Entity ent in entities)
+
+            List<Entity> list = new List<Entity>(entities);
+
+            foreach(Entity ent in list)
             {
                 ent.LoadAssetsIfNeeded();
             }
@@ -179,9 +182,7 @@ namespace RetroEngine
 
         public Entity AddEntity(Entity ent)
         {
-
             entities.Add(ent);
-            pendingAddEntity.Add(ent);
 
             return ent;
         }
