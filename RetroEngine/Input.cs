@@ -36,12 +36,16 @@ namespace RetroEngine
 
             MouseDelta *= sensitivity;
 
+            if(Time.deltaTimeDifference > 0)
+            MouseDelta *= (Time.deltaTimeDifference + 1f)/2f;
+
+
             Vector2 windowCenter = new Vector2(GameMain.inst.GraphicsDevice.Viewport.Width / 2, GameMain.inst.GraphicsDevice.Viewport.Height / 2);
 
             GameMain.inst.IsMouseVisible = !LockCursor;
 
             if (LockCursor)
-                if (Vector2.Distance(windowCenter, mousePos) > 1)
+                if (Vector2.Distance(windowCenter, mousePos) > 0)
                 {
                     Mouse.SetPosition((int)windowCenter.X, (int)windowCenter.Y);
                     MousePos = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);

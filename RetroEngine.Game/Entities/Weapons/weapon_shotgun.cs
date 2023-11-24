@@ -91,12 +91,14 @@ namespace RetroEngine.Game.Entities.Weapons
 
                     bullet.Rotation = bulletRotation;
 
+                    bullet.LifeTime = 0.2f;
+
                     Level.GetCurrent().AddEntity(bullet);
                     bullet.Start();
 
                     bullet.body.SetPosition(Camera.position.ToPhysics() + Camera.rotation.GetForwardVector().ToPhysics() * 0.3f + Camera.rotation.GetRightVector().ToPhysics() / 10f - Camera.rotation.GetUpVector().ToPhysics() / 4f);
 
-                    bullet.LifeTime = 0.2f;
+                    
                     bullet.Speed = 70;
 
                     bullet.ignore.Add(player);

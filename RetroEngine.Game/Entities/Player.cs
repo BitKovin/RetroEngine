@@ -237,8 +237,9 @@ namespace RetroEngine.Entities
             Vector3 forward = Camera.rotation.GetForwardVector().XZ().Normalized();
 
             // Ground movement
-            
 
+            GameMain.inst.IsFixedTimeStep = true;
+            GameMain.inst.TargetElapsedTime = TimeSpan.FromSeconds(1 / 300f);
 
             if (input.Length() > 0)
             {

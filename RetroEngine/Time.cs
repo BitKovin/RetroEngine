@@ -6,7 +6,9 @@ namespace RetroEngine
 {
     public static class Time
     {
-        public static float deltaTime = 0;
+        public static float deltaTime = 1;
+
+        public static float deltaTimeDifference = 1;
 
         public static float gameTime = 0;
 
