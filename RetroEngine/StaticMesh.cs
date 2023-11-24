@@ -675,7 +675,6 @@ namespace RetroEngine
         {
             GC.SuppressFinalize(this);
             texture = null;
-            model = null;
         }
     }
 }

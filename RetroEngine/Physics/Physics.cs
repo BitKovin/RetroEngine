@@ -46,7 +46,8 @@ namespace RetroEngine
                 if (collisionObject is null) return;
 
                 dynamicsWorld.ContactTest(collisionObject, callback);
-            }catch(Exception e) { Logger.Log(e.Message); }
+            }
+            catch(Exception e) { Logger.Log(e.Message); }
         }
 
         public static void Simulate()

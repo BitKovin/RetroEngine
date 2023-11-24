@@ -77,21 +77,32 @@ namespace RetroEngine.Game.Entities.Weapons
             fireSoundPlayer.Play(true);
 
             mesh.Play();
-            
-            
 
+            for (float y = -2; y <= 2; y += 2f)
+                for (float x = -5; x <= 5; x += 2.5f)
+                {
+                    Bullet bullet = new Bullet();
 
-            Bullet bullet = new Bullet();
+                    Vector3 bulletRotation;
 
-            bullet.Rotation = Camera.rotation;
-            Level.GetCurrent().AddEntity(bullet);
+                    Vector3 startPos = Camera.position;
+                    Vector3 endPos = Camera.position - new Vector3(0,-1,0) + Camera.rotation.GetForwardVector()*60 + Camera.rotation.GetRightVector()*x + Camera.rotation.GetUpVector()*y;
 
+                    bulletRotation = MathHelper.FindLookAtRotation(startPos, endPos);
 
-            bullet.body.SetPosition(Camera.position.ToPhysics() + Camera.rotation.GetForwardVector().ToPhysics() * 1.2f + Camera.rotation.GetRightVector().ToPhysics() / 4f - Camera.rotation.GetUpVector().ToPhysics() / 4f);
+                    bullet.Rotation = bulletRotation;
 
+                    Level.GetCurrent().AddEntity(bullet);
+                    bullet.Start();
 
-            bullet.ignore.Add(player);
-            bullet.Start();
+                    bullet.body.SetPosition(Camera.position.ToPhysics() + Camera.rotation.GetForwardVector().ToPhysics() * 0.3f + Camera.rotation.GetRightVector().ToPhysics() / 10f - Camera.rotation.GetUpVector().ToPhysics() / 4f);
+
+                    bullet.LifeTime = 0.2f;
+                    bullet.Speed = 70;
+
+                    bullet.ignore.Add(player);
+                    
+                }
 
             return;
 
@@ -128,6 +139,9 @@ namespace RetroEngine.Game.Entities.Weapons
             mesh.Viewmodel = true;
 
             meshes.Add(mesh);
+
+            new Bullet().LoadAssetsIfNeeded();
+
         }
 
     }

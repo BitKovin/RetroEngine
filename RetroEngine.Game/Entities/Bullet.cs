@@ -17,9 +17,12 @@ namespace RetroEngine.Game.Entities
 
         public List<Entity> ignore = new List<Entity>();
 
-        Delay destroyDelay =new Delay();
+        Delay destroyDelay = new Delay();
 
         public RigidBody body;
+
+        public float Speed = 60;
+        public float LifeTime = 1;
 
         public Bullet() 
         {
@@ -28,9 +31,33 @@ namespace RetroEngine.Game.Entities
 
             meshes.Add(mesh);
 
-            body = Physics.CreateBox(this, new System.Numerics.Vector3(0.05f),0.03f);
+        }
 
-            body.Gravity = new System.Numerics.Vector3(0,0,0);
+        Vector3 startRotation;
+
+        protected override void LoadAssets()
+        {
+
+            base.LoadAssets();
+
+            mesh.LoadFromFile("models/weapons/bullet/bullet.obj");
+
+            mesh.texture = AssetRegistry.LoadTextureFromFile("models/weapons/bullet/bullet.png");
+            mesh.emisssiveTexture = AssetRegistry.LoadTextureFromFile("models/weapons/bullet/bullet_em.png");
+
+            Console.WriteLine("bullet loaded");
+        }
+
+        public override void Start()
+        {
+
+            base.Start();
+
+            startRotation = Rotation;
+
+            body = Physics.CreateBox(this, new System.Numerics.Vector3(0.05f), 0.03f);
+
+            body.Gravity = new System.Numerics.Vector3(0, 0, 0);
 
             body.Friction = 1;
 
@@ -39,28 +66,9 @@ namespace RetroEngine.Game.Entities
             body.Restitution = 0;
 
             bodies.Add(body);
-        }
-
-        Vector3 startRotation;
-
-        protected override void LoadAssets()
-        {
-            base.LoadAssets();
-
-            mesh.LoadFromFile("models/weapons/bullet/bullet.obj");
-
-            mesh.texture = AssetRegistry.LoadTextureFromFile("models/weapons/bullet/bullet.png");
-            mesh.emisssiveTexture = AssetRegistry.LoadTextureFromFile("models/weapons/bullet/bullet_em.png");
-
-        }
-
-        public override void Start()
-        {
-            base.Start();
-
-            startRotation = Rotation;
 
             body.SetRotation(Physics.ToQuaternion(startRotation.ToNumerics()));
+            body.CollisionFlags = CollisionFlags.NoContactResponse;
 
 
             collisionCallback.owner = this;
@@ -79,7 +87,7 @@ namespace RetroEngine.Game.Entities
 
             collisionCallback.CollisionEvent += Hit;
 
-            destroyDelay.AddDelay(1);
+            destroyDelay.AddDelay(LifeTime);
 
         }
 
@@ -102,12 +110,13 @@ namespace RetroEngine.Game.Entities
 
         public override void Update()
         {
+            return;
             base.Update();
 
             if(!destroyDelay.Wait())
                 Destroy();
 
-            body.LinearVelocity = startRotation.GetForwardVector().ToNumerics() * 60f;
+            body.LinearVelocity = startRotation.GetForwardVector().ToNumerics() * Speed;
 
             Physics.PerformContactCheck(body, collisionCallback);
 
@@ -120,6 +129,7 @@ namespace RetroEngine.Game.Entities
 
             mesh.Position = Position;
             mesh.Rotation = Rotation;
+            mesh.Scale = new Vector3(1f-(Time.gameTime - SpawnTime) / LifeTime);
         }
 
         public override void LateUpdate()

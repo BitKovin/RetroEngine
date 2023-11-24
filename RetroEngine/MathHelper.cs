@@ -80,5 +80,20 @@ namespace RetroEngine
             return rotatedVector;
         }
 
+        public static float ToDegrees(float radians)
+        {
+            return radians * (180.0f / (float)Math.PI);
+        }
+
+        public static Vector3 FindLookAtRotation(Vector3 source, Vector3 target)
+        {
+            Vector3 direction = target - source;
+
+            float yaw = ToDegrees((float)Math.Atan2(direction.X, direction.Z));
+            float pitch = ToDegrees((float)-Math.Asin(direction.Y / direction.Length()));
+
+            return new Vector3(pitch, yaw, 0);
+        }
+
     }
 }

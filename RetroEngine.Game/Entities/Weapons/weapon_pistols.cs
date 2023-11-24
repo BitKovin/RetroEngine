@@ -100,7 +100,7 @@ namespace RetroEngine.Game.Entities.Weapons
             
             bullet.Rotation = Camera.rotation;
             Level.GetCurrent().AddEntity(bullet);
-
+            bullet.Start();
 
             if (!attack)
             {
@@ -114,7 +114,7 @@ namespace RetroEngine.Game.Entities.Weapons
             }
 
             bullet.ignore.Add(player);
-            bullet.Start();
+            
 
             attack = !attack;
 
@@ -182,6 +182,9 @@ namespace RetroEngine.Game.Entities.Weapons
 
             mesh2.Viewmodel = true;
             meshes.Add(mesh2);
+
+            new Bullet().LoadAssetsIfNeeded();
+
         }
 
     }

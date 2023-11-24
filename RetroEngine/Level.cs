@@ -179,6 +179,8 @@ namespace RetroEngine
 
         public Entity AddEntity(Entity ent)
         {
+
+            entities.Add(ent);
             pendingAddEntity.Add(ent);
 
             return ent;

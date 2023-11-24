@@ -288,7 +288,7 @@ namespace RetroEngine.Entities
             }
 
 
-            cameraRoll = MathHelper.Lerp(cameraRoll, input.X * 2, Time.deltaTime * 10);
+            cameraRoll = MathHelper.Lerp(cameraRoll, input.X * 3, Time.deltaTime * 10);
 
             Camera.roll = cameraRoll;
 
