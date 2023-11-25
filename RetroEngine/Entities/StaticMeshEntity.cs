@@ -25,7 +25,6 @@ namespace RetroEngine.Entities
             mesh.Scale = new Microsoft.Xna.Framework.Vector3(data.GetPropertyFloat("scale", 1));
 
             mesh.Rotation = new Microsoft.Xna.Framework.Vector3(0, data.GetPropertyFloat("angle"),0);
-            mesh.UseAlternativeRotationCalculation = true;
         }
 
         protected override void LoadAssets()

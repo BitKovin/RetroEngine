@@ -18,6 +18,8 @@ namespace RetroEngine
 
         string input = "";
 
+
+
         public virtual void Update()
         {
 
@@ -83,6 +85,8 @@ namespace RetroEngine
 
         public virtual void Init() 
         {
+            if (GameMain.inst.DevMenuEnabled == false) return;
+
             ImGuiIOPtr io = ImGui.GetIO();
             ImGuiStylePtr style = ImGui.GetStyle();
 

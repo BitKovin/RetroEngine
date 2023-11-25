@@ -152,6 +152,8 @@ float4 PixelShaderFunction(PixelInput input) : COLOR0
 
     textureColor += tex2D(EmissiveTextureSampler, input.TexCoord).xyz * EmissionPower;
 
+    textureColor *= Transparency;
+    
     return float4(textureColor, textureAlpha);
 }
 

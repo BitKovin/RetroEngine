@@ -12,5 +12,27 @@ namespace RetroEngine
 
         public static float gameTime = 0;
 
+        static List<float> frames = new List<float>();
+        static int framesCount = 1;
+
+        public static void AddFrameTime(float time)
+        {
+            if(frames.Count>framesCount)
+                frames.RemoveAt(0);
+
+            frames.Add(time);
+
+            float avg = 0;
+
+            foreach(float frame in frames)
+            {
+                avg += frame;
+            }
+
+            avg /= (float)frames.Count;
+
+            deltaTime = avg;
+        }
+
     }
 }

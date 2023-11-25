@@ -61,7 +61,10 @@ namespace RetroEngine
 
         public static Thread RenderThread;
 
-        bool asyncGameThread = true;
+        public static bool AsyncGameThread = true;
+
+
+        public bool DevMenuEnabled = false;
 
         public GameMain()
         {
@@ -110,10 +113,12 @@ namespace RetroEngine
 
         protected override void LoadContent()
         {
-            ImGuiRenderer = new ImGuiRenderer(this);
-            ImGuiRenderer.RebuildFontAtlas();
-            ImGui.StyleColorsDark();
-
+            if (DevMenuEnabled)
+            {
+                ImGuiRenderer = new ImGuiRenderer(this);
+                ImGuiRenderer.RebuildFontAtlas();
+                ImGui.StyleColorsDark();
+            }
             SoundManager.Init();
 
             SpriteBatch = new SpriteBatch(GraphicsDevice);
@@ -125,6 +130,7 @@ namespace RetroEngine
             curentLevel.Start();
 
             this.Exiting += Game1_Exiting;
+
         }
 
         protected override void Update(GameTime gameTime)
@@ -137,33 +143,31 @@ namespace RetroEngine
 
             time = gameTime;
 
+            Thread.CurrentThread.Priority = ThreadPriority.Highest;
+
             AssetRegistry.ClearTexturesIfNeeded();
-
-            float newDeltaTime = (float)Math.Min(gameTime.ElapsedGameTime.TotalSeconds, 0.04d);
-
-            if (newDeltaTime > 0)
-                Time.deltaTimeDifference = Time.deltaTime / newDeltaTime;
-
-            Time.deltaTime = newDeltaTime;
-
-            if(!paused)
-                Time.gameTime += Time.deltaTime;
 
             ScreenHeight = GraphicsDevice.PresentationParameters.Bounds.Height;
 
             ScreenWidth = GraphicsDevice.PresentationParameters.Bounds.Width;
 
 
-            if (asyncGameThread)
+            if (AsyncGameThread)
             {
                 if (gameTask is null)
                 {
+                    UpdateTime(gameTime);
                     GameLogic();
                 }
                 else
                 {
                     gameTask.Wait();
+                    UpdateTime(gameTime);
                 }
+            }
+            else
+            {
+                UpdateTime(gameTime);
             }
             Input.Update();
             Physics.Update();
@@ -172,7 +176,7 @@ namespace RetroEngine
             curentLevel.LoadAssets();
             curentLevel.RenderPreparation();
             bool changedLevel = Level.LoadPendingLevel();
-            if (asyncGameThread && changedLevel == false)
+            if (AsyncGameThread && changedLevel == false)
             {
                 gameTask = Task.Factory.StartNew(() => { GameLogic(); });
             }
@@ -186,9 +190,20 @@ namespace RetroEngine
 
         }
 
+        void UpdateTime(GameTime gameTime)
+        {
+            float newDeltaTime = (float)Math.Min(gameTime.ElapsedGameTime.TotalSeconds, 0.04d);
+
+            Time.deltaTime = newDeltaTime;
+
+            Time.AddFrameTime(newDeltaTime);
+
+            if (!paused)
+                Time.gameTime += Time.deltaTime;
+        }
         void GameLogic()
         {
-
+            Thread.CurrentThread.Priority = ThreadPriority.Highest;
             curentLevel.Update();
 
             curentLevel.AsyncUpdate();
@@ -223,6 +238,7 @@ namespace RetroEngine
 
         protected override void Draw(GameTime gameTime)
         {
+            Thread.CurrentThread.Priority = ThreadPriority.Highest;
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             if (pendingGraphicsUpdate)
@@ -245,17 +261,21 @@ namespace RetroEngine
 
             UiManger.Draw(gameTime,SpriteBatch);
 
+            SpriteBatch.DrawString(font, (1f / Time.deltaTime).ToString(), new Vector2(100, 100), Color.White);
+
             SpriteBatch.End();
 
+            if(DevMenuEnabled)
+                ImGuiRenderer.BeforeLayout(gameTime);
 
-            ImGuiRenderer.BeforeLayout(gameTime);
-
-
-            if(devMenu is not null)
+            if (DevMenuEnabled)
+                if (devMenu is not null)
                 devMenu.Update();
 
-            ImGuiRenderer.AfterLayout();
+            if (DevMenuEnabled)
+                ImGuiRenderer.AfterLayout();
 
+            
 
             //SetupFullViewport();
             base.Draw(gameTime);

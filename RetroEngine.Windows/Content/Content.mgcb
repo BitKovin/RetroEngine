@@ -45,12 +45,6 @@
 /processorParam:TextureFormat=Compressed
 /build:Font.spritefont
 
-#begin fxaa.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/build:fxaa.fx
-
 #begin MiscOutput.fx
 /importer:EffectImporter
 /processor:EffectProcessor
@@ -78,6 +72,6 @@
 #begin UnifiedOutput.fx
 /importer:EffectImporter
 /processor:EffectProcessor
-/processorParam:DebugMode=Auto
+/processorParam:DebugMode=Optimize
 /build:UnifiedOutput.fx
 

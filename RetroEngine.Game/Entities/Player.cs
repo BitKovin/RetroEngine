@@ -238,9 +238,6 @@ namespace RetroEngine.Entities
 
             // Ground movement
 
-            GameMain.inst.IsFixedTimeStep = true;
-            GameMain.inst.TargetElapsedTime = TimeSpan.FromSeconds(1 / 300f);
-
             if (input.Length() > 0)
             {
                 input.Normalize();

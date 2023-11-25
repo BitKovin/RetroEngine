@@ -60,7 +60,7 @@ namespace RetroEngine.Game.Entities.Weapons
             base.LateUpdate();
 
             mesh.Position = Position;
-            mesh.Rotation = Camera.rotation + DrawRotation;
+            mesh.Rotation = Rotation + DrawRotation;
 
             fireSoundPlayer.Position = Camera.position;
         }

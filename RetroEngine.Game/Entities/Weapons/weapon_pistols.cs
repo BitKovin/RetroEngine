@@ -68,10 +68,10 @@ namespace RetroEngine.Game.Entities.Weapons
             base.LateUpdate();
 
             mesh1.Position = Position;
-            mesh1.Rotation = Camera.rotation + DrawRotation;
+            mesh1.Rotation = Rotation + DrawRotation;
 
             mesh2.Position = Position;
-            mesh2.Rotation = Camera.rotation + DrawRotation;
+            mesh2.Rotation = Rotation + DrawRotation;
 
             fireSoundPlayer.Position = Camera.position;
         }
