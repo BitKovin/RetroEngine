@@ -117,7 +117,7 @@ namespace RetroEngine
         void RenderShadowMap(List<StaticMesh> renderList)
         {
 
-            if (shadowPassRenderDelay.Wait()) return;
+            //if (shadowPassRenderDelay.Wait()) return;
 
             shadowPassRenderDelay.AddDelay(0.02f);
 
