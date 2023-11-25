@@ -50,7 +50,7 @@ namespace RetroEngine
             NormalEffect = GameMain.content.Load<Effect>("NormalOutput");
             MiscEffect = GameMain.content.Load<Effect>("MiscOutput");
             UnifiedEffect = GameMain.content.Load<Effect>("UnifiedOutput");
-            //fxaaEffect = GameMain.content.Load<Effect>("fxaa");
+            fxaaEffect = GameMain.content.Load<Effect>("fxaa");
             ShadowMapEffect = GameMain.content.Load<Effect>("ShadowMap");
             PostProcessingEffect = GameMain.content.Load<Effect>("PostProcessing");
         }
@@ -84,7 +84,7 @@ namespace RetroEngine
             //PerformLighting();
 
 
-            //PerformPostProcessing();
+            PerformPostProcessing();
 
             return colorPath;
         }
@@ -165,7 +165,7 @@ namespace RetroEngine
             spriteBatch.End();
 
             outputPath = postProcessingOutput;
-            //PerformFXAA();
+            PerformFXAA();
 
             graphics.GraphicsDevice.SetRenderTarget(null);          
 

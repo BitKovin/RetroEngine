@@ -13,6 +13,9 @@ namespace RetroEngine
         public static Vector2 MousePos;
         public static Vector2 MouseDelta;
 
+        static List<Vector2> MouseDeltas = new List<Vector2>();
+        static int MaxDeltas = 2;
+
         static Dictionary<string, InputAction> actions = new Dictionary<string, InputAction>();
 
         public static bool LockCursor = true;
@@ -32,12 +35,11 @@ namespace RetroEngine
         static void UpdateMouse()
         {
             Vector2 mousePos = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
-            MouseDelta = mousePos - MousePos;
+            Vector2 delta = mousePos - MousePos;
+
+            AddMouseInput(delta);
 
             MouseDelta *= sensitivity;
-
-            if(Time.deltaTimeDifference > 0)
-            MouseDelta *= (Time.deltaTimeDifference + 1f)/2f;
 
 
             Vector2 windowCenter = new Vector2(GameMain.inst.GraphicsDevice.Viewport.Width / 2, GameMain.inst.GraphicsDevice.Viewport.Height / 2);
@@ -56,6 +58,24 @@ namespace RetroEngine
                 }
 
             
+        }
+
+        public static void AddMouseInput(Vector2 delta)
+        {
+            if (MouseDeltas.Count > MaxDeltas)
+                MouseDeltas.RemoveAt(0);
+
+            MouseDeltas.Add(delta);
+
+            Vector2 vector = new Vector2(0);
+
+            foreach(Vector2 v in MouseDeltas)
+            {
+                vector += v;
+            }
+
+            MouseDelta = vector / MouseDeltas.Count;
+
         }
 
         public static void CenterCursor()
