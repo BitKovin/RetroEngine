@@ -26,6 +26,7 @@ float EmissionPower;
 float ShadowBias;
 float Transparency;
 matrix ShadowMapViewProjection;
+float ShadowMapResolution;
 
 #define MAX_POINT_LIGHTS 10
 
@@ -88,20 +89,64 @@ PixelInput VertexShaderFunction(VertexInput input)
     return output;
 }
 
-float GetShadow(float3 lightCoords)
+float SampleShadowMap(sampler2D shadowMap, float2 coords, float compare)
+{
+    return step(compare, tex2D(shadowMap, coords).r);
+}
+
+float SampleShadowMapLinear(sampler2D shadowMap, float2 coords, float compare, float2 texelSize)
+{
+    float2 pixelPos = coords / texelSize + float2(0.5, 0.5);
+    float2 fracPart = frac(pixelPos);
+    float2 startTexel = (pixelPos - fracPart) * texelSize;
+
+    float blTexel = SampleShadowMap(shadowMap, startTexel, compare);
+    float brTexel = SampleShadowMap(shadowMap, startTexel + float2(texelSize.x, 0.0), compare);
+    float tlTexel = SampleShadowMap(shadowMap, startTexel + float2(0.0, texelSize.y), compare);
+    float trTexel = SampleShadowMap(shadowMap, startTexel + texelSize, compare);
+
+    float mixA = lerp(blTexel, tlTexel, fracPart.y);
+    float mixB = lerp(brTexel, trTexel, fracPart.y);
+
+    return lerp(mixA, mixB, fracPart.x);
+}
+
+float GetShadow(float3 lightCoords, PixelInput input)
 {
     float shadow = 0;
 
     if (lightCoords.x >= 0 && lightCoords.x <= 1 && lightCoords.y >= 0 && lightCoords.y <= 1)
     {
-        float closestDepth = tex2D(ShadowMapSampler, lightCoords.xy).r;
         float currentDepth = lightCoords.z * 2 - 1;
 
-        shadow = 1 - step(currentDepth, closestDepth + ShadowBias);
-    }
+        // Adjust these values for the size of your shadow map and desired smoothness
+        float texelSize = 1.0f / ShadowMapResolution; // Assuming ShadowMapSize is the size of your shadow map texture
 
-    return shadow;
+        int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)
+
+        float bias = ShadowBias * abs(input.Normal.z) + ShadowBias / 2.0f;
+        
+        for (int i = -numSamples; i <= numSamples; ++i)
+        {
+            for (int j = -numSamples; j <= numSamples; ++j)
+            {
+                float2 offsetCoords = lightCoords.xy + float2(i, j) * texelSize;
+                float closestDepth = SampleShadowMapLinear(ShadowMapSampler, offsetCoords, currentDepth - bias, float2(texelSize, texelSize));
+
+                shadow += closestDepth;
+
+            }
+        }
+
+        // Normalize the accumulated shadow value
+        shadow /= ((2 * numSamples + 1) * (2 * numSamples + 1));
+        
+        return 1 - shadow;
+    }
+    return 0;
+    
 }
+
 
 float3 CalculatePointLight(int i, PixelInput pixelInput)
 {
@@ -125,8 +170,6 @@ float4 PixelShaderFunction(PixelInput input) : COLOR0
 	float3 textureColor = tex2D(TextureSampler, input.TexCoord).xyz;
 	float textureAlpha = tex2D(TextureSampler, input.TexCoord).w;
 
-    textureAlpha *= Transparency;
-
     float3 lightCoords = input.lightPos.xyz / input.lightPos.w;
 
     float shadow = 0;
@@ -135,7 +178,7 @@ float4 PixelShaderFunction(PixelInput input) : COLOR0
 
     lightCoords.y = 1.0f - lightCoords.y;
 
-    shadow += GetShadow(lightCoords);
+    shadow += GetShadow(lightCoords, input);
     
     float3 light = input.light;
 
@@ -156,6 +199,7 @@ float4 PixelShaderFunction(PixelInput input) : COLOR0
     textureColor += tex2D(EmissiveTextureSampler, input.TexCoord).xyz * EmissionPower;
 
     textureColor *= Transparency;
+    textureAlpha *= Transparency;
     
     return float4(textureColor, textureAlpha);
 }

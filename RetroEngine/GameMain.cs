@@ -64,7 +64,7 @@ namespace RetroEngine
         public static bool AsyncGameThread = true;
 
 
-        public bool DevMenuEnabled = false;
+        public bool DevMenuEnabled = true;
 
         public GameMain()
         {
@@ -169,12 +169,14 @@ namespace RetroEngine
             {
                 UpdateTime(gameTime);
             }
-            Input.Update();
-            Physics.Update();
 
-            curentLevel.UpdatePending();
+            //curentLevel.UpdatePending();
             curentLevel.LoadAssets();
+
             curentLevel.RenderPreparation();
+
+            Input.Update();
+
             bool changedLevel = Level.LoadPendingLevel();
             if (AsyncGameThread && changedLevel == false)
             {
@@ -204,6 +206,9 @@ namespace RetroEngine
         void GameLogic()
         {
             Thread.CurrentThread.Priority = ThreadPriority.Highest;
+
+            Physics.Update();
+
             curentLevel.Update();
 
             curentLevel.AsyncUpdate();

@@ -22,7 +22,7 @@ namespace RetroEngine.Game
             devMenu = new GameDevMenu();
             devMenu.Init();
 
-            Level.LoadFromFile("test2.map");
+            Level.LoadFromFile("test.map");
 
             for (float i = 1; i < 0; i++)
             {

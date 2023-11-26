@@ -14,15 +14,17 @@ namespace RetroEngine
         public static Vector3 LightDirection = new Vector3(-1f, -1, -0.2f);
         public static Color BackgroundColor = new Color(0.15f, 0.15f, 0.2f);
 
-        public static float ShadowBias = 0.003f;
-        public static int shadowMapResolution = 2048;
+        public static float ShadowBias = 0.005f;
+        public static int shadowMapResolution = 2048 * 2;
 
         public static Matrix LightViewProjection;
-        public static float LightDistance = 100;
+        public static float LightDistance = 120;
 
         public static bool EnablePostPocessing = false;
         public static bool TextureFiltration = false;
         public static bool AnisotropicFiltration = false;
+
+        public static Vector3 lightlocation = new Vector3();
 
         public static Matrix GetLightProjection()
         {
@@ -32,18 +34,25 @@ namespace RetroEngine
 
         public static Matrix GetLightView()
         {
-            return Matrix.CreateLookAt(GetCameraPositionByPixelGrid(), GetCameraPositionByPixelGrid() + LightDirection, new Vector3(1, 0, 0));
+            return Matrix.CreateLookAt(GetCameraPositionByPixelGrid() - LightDirection, GetCameraPositionByPixelGrid(), LightDirection.XZ().Normalized());
         }
 
         static Vector3 GetCameraPositionByPixelGrid()
         {
-            Vector3 pos = Camera.position;
+            //Vector3 pos = Camera.position + Camera.rotation.GetForwardVector().XZ().Normalized() * (LightDistance/4f) - new Vector3(0,1,0);
+            //return pos;
 
-            float step = 0.3f;
+            Vector3 pos = Camera.position - new Vector3(0, 1, 0);
 
+            // Calculate step based on shadow map resolution and light distance
+            float step = 1f/10f;
+
+            // Adjust the position using the calculated step
             pos *= step;
-            pos.Round();
+            pos.Floor();
             pos /= step;
+
+            lightlocation = pos;
 
             return pos;
         }

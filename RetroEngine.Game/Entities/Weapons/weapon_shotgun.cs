@@ -99,7 +99,7 @@ namespace RetroEngine.Game.Entities.Weapons
                     bullet.body.SetPosition(Camera.position.ToPhysics() + Camera.rotation.GetForwardVector().ToPhysics() * 0.3f + Camera.rotation.GetRightVector().ToPhysics() / 10f - Camera.rotation.GetUpVector().ToPhysics() / 4f);
 
                     
-                    bullet.Speed = 70;
+                    bullet.Speed = 100;
 
                     bullet.ignore.Add(player);
                     
