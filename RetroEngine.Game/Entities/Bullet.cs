@@ -115,6 +115,10 @@ namespace RetroEngine.Game.Entities
                 if (ent == null) return;
 
                 ent.OnPointDamage(Damage, hit.HitPointWorld, Rotation.GetForwardVector(), this, this);
+
+                Logger.Log(ent.name);
+
+                Destroy();
             }
 
             OldPos = Position;

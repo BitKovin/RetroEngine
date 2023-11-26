@@ -43,7 +43,7 @@ namespace RetroEngine
 
         public static Matrix GetLightView()
         {
-            return Matrix.CreateLookAt(GetCameraPositionByPixelGrid() - LightDirection, GetCameraPositionByPixelGrid(), LightDirection.XZ().Normalized());
+            return Matrix.CreateLookAt(GetCameraPositionByPixelGrid() - LightDirection*20f, GetCameraPositionByPixelGrid(), LightDirection.XZ().Normalized());
         }
 
         static Vector3 GetCameraPositionByPixelGrid()

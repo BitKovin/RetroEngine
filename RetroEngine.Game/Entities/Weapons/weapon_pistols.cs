@@ -100,7 +100,7 @@ namespace RetroEngine.Game.Entities.Weapons
             
             bullet.Rotation = Camera.rotation;
             Level.GetCurrent().AddEntity(bullet);
-            bullet.Start();
+            
 
             if (!attack)
             {
@@ -114,7 +114,7 @@ namespace RetroEngine.Game.Entities.Weapons
             }
 
             bullet.ignore.Add(player);
-            
+            bullet.Start();
 
             attack = !attack;
 
@@ -188,8 +188,8 @@ namespace RetroEngine.Game.Entities.Weapons
 
             Bullet bullet = new Bullet();
             Level.GetCurrent().AddEntity(bullet);
-            bullet.Start();
             bullet.Position = new Vector3(0, 10000000, 0);
+            bullet.Start();
             bullet.LifeTime = 0.1f;
 
         }
