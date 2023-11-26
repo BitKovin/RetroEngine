@@ -53,19 +53,17 @@ namespace RetroEngine.Game.Entities
 
             startRotation = Rotation;
 
-            body = Physics.CreateBox(this, new System.Numerics.Vector3(0.05f), 0.03f);
+            body = Physics.CreateBox(this, new System.Numerics.Vector3(0.1f,0.1f,1f), 0.03f);
 
             body.Gravity = new System.Numerics.Vector3(0, 0, 0);
 
             body.Friction = 1;
 
-            body.CcdSweptSphereRadius = 0.01f;
-            body.CcdMotionThreshold = 0.1f;
             body.Restitution = 0;
 
             bodies.Add(body);
 
-            body.SetRotation(Physics.ToQuaternion(startRotation.ToNumerics()));
+            
             body.CollisionFlags = CollisionFlags.NoContactResponse;
 
 
@@ -115,7 +113,6 @@ namespace RetroEngine.Game.Entities
                 Destroy();
 
             body.LinearVelocity = startRotation.GetForwardVector().ToNumerics() * Speed;
-
             Physics.PerformContactCheck(body, collisionCallback);
 
 
@@ -126,7 +123,7 @@ namespace RetroEngine.Game.Entities
             base.AsyncUpdate();
 
             mesh.Position = Position;
-            mesh.Rotation = Rotation;
+            mesh.Rotation = startRotation;
             mesh.Scale = new Vector3(1f-(Time.gameTime - SpawnTime) / LifeTime);
         }
 

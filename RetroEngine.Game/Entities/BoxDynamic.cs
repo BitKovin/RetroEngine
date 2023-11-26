@@ -61,8 +61,8 @@ namespace RetroEngine.Game.Entities
 
             UpdateCollision();
 
-            mesh.Position = Graphics.lightlocation;
-            //mesh.Rotation = Rotation;
+            mesh.Position = Position;
+            mesh.Rotation = Rotation;
 
             soundPlayer.Position = Position;
         }
