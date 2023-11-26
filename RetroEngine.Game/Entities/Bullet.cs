@@ -17,12 +17,15 @@ namespace RetroEngine.Game.Entities
 
         public List<Entity> ignore = new List<Entity>();
 
-        Delay destroyDelay = new Delay();
+        List<CollisionObject> ignoreObjects = new List<CollisionObject>();
 
-        public RigidBody body;
+        Delay destroyDelay = new Delay();
 
         public float Speed = 60;
         public float LifeTime = 1;
+        public float Damage = 5;
+
+        Vector3 OldPos = new Vector3();
 
         public Bullet() 
         {
@@ -53,19 +56,6 @@ namespace RetroEngine.Game.Entities
 
             startRotation = Rotation;
 
-            body = Physics.CreateBox(this, new System.Numerics.Vector3(0.01f,0.01f, 0.01f), 0.03f);
-
-            body.Gravity = new System.Numerics.Vector3(0, 0, 0);
-
-            body.Friction = 1;
-
-            body.Restitution = 0;
-
-            bodies.Add(body);
-
-            
-            body.CollisionFlags = CollisionFlags.NoContactResponse;
-
 
             collisionCallback.owner = this;
             collisionCallback.ignore = ignore;
@@ -77,7 +67,7 @@ namespace RetroEngine.Game.Entities
 
                 foreach(RigidBody body in e.bodies)
                 {
-                    body.SetIgnoreCollisionCheck(body, true);
+                    ignoreObjects.Add(body);
                 }
             }
 
@@ -85,6 +75,7 @@ namespace RetroEngine.Game.Entities
 
             destroyDelay.AddDelay(LifeTime);
 
+            OldPos = Position;
         }
 
         private void Hit(BulletSharp.CollisionObjectWrapper thisObject, BulletSharp.CollisionObjectWrapper collidedObject, Entity collidedEntity, BulletSharp.ManifoldPoint contactPoint)
@@ -106,14 +97,28 @@ namespace RetroEngine.Game.Entities
 
         public override void Update()
         {
-            
             base.Update();
 
-            if(!destroyDelay.Wait())
+            if (!destroyDelay.Wait())
+            {
                 Destroy();
+                return;
+            }
 
-            body.LinearVelocity = startRotation.GetForwardVector().ToNumerics() * Speed;
-            Physics.PerformContactCheck(body, collisionCallback);
+            var hit = Physics.LineTrace(OldPos.ToNumerics(), Position.ToNumerics(), ignoreObjects);
+
+            if (hit.HasHit)
+            {
+
+                Entity ent = hit.CollisionObject.UserObject as Entity;
+
+                if (ent == null) return;
+
+                ent.OnPointDamage(Damage, hit.HitPointWorld, Rotation.GetForwardVector(), this, this);
+            }
+
+            OldPos = Position;
+            Position += Rotation.GetForwardVector() * Speed * Time.deltaTime;
 
         }
 

@@ -96,7 +96,7 @@ namespace RetroEngine.Game.Entities.Weapons
                     Level.GetCurrent().AddEntity(bullet);
                     bullet.Start();
 
-                    bullet.body.SetPosition(Camera.position.ToPhysics() + Camera.rotation.GetForwardVector().ToPhysics() * 0.5f + Camera.rotation.GetRightVector().ToPhysics() / 10f - Camera.rotation.GetUpVector().ToPhysics() / 4f);
+                    bullet.Position = (Camera.position.ToPhysics() + Camera.rotation.GetForwardVector().ToPhysics() * 0.5f + Camera.rotation.GetRightVector().ToPhysics() / 10f - Camera.rotation.GetUpVector().ToPhysics() / 4f);
 
                     
                     bullet.Speed = 100;

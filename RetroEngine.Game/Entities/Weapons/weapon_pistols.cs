@@ -104,12 +104,12 @@ namespace RetroEngine.Game.Entities.Weapons
 
             if (!attack)
             {
-                bullet.body.SetPosition(Camera.position.ToPhysics() + Camera.rotation.GetForwardVector().ToPhysics() * 1.2f + Camera.rotation.GetRightVector().ToPhysics() / 4f - Camera.rotation.GetUpVector().ToPhysics() / 4f);
+                bullet.Position = (Camera.position.ToPhysics() + Camera.rotation.GetForwardVector().ToPhysics() * 1.2f + Camera.rotation.GetRightVector().ToPhysics() / 4f - Camera.rotation.GetUpVector().ToPhysics() / 4f);
                 //bullet.body.SetPosition(mesh1.GetOffsetPointWorldSpace("muzzle") + Camera.rotation.GetForwardVector().ToPhysics() * 1.2f + Camera.rotation.GetRightVector().ToPhysics() / 4f - Camera.rotation.GetUpVector().ToPhysics() / 4f);
             }
             else
             {
-                bullet.body.SetPosition(Camera.position.ToPhysics() + Camera.rotation.GetForwardVector().ToPhysics() * 1.2f - Camera.rotation.GetRightVector().ToPhysics() / 4f - Camera.rotation.GetUpVector().ToPhysics() / 4f);
+                bullet.Position = (Camera.position.ToPhysics() + Camera.rotation.GetForwardVector().ToPhysics() * 1.2f - Camera.rotation.GetRightVector().ToPhysics() / 4f - Camera.rotation.GetUpVector().ToPhysics() / 4f);
                 //bullet.body.SetPosition(mesh2.GetOffsetPointWorldSpace("muzzle") + Camera.rotation.GetForwardVector().ToPhysics() * 1.2f - Camera.rotation.GetRightVector().ToPhysics() / 4f - Camera.rotation.GetUpVector().ToPhysics() / 4f);
             }
 
@@ -189,7 +189,7 @@ namespace RetroEngine.Game.Entities.Weapons
             Bullet bullet = new Bullet();
             Level.GetCurrent().AddEntity(bullet);
             bullet.Start();
-            bullet.body.SetPosition(new Vector3(0, 1000000000, 0));
+            bullet.Position = new Vector3(0, 10000000, 0);
             bullet.LifeTime = 0.1f;
 
         }
