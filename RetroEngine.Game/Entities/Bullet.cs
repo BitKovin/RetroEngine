@@ -53,7 +53,7 @@ namespace RetroEngine.Game.Entities
 
             startRotation = Rotation;
 
-            body = Physics.CreateBox(this, new System.Numerics.Vector3(0.1f,0.1f,1f), 0.03f);
+            body = Physics.CreateBox(this, new System.Numerics.Vector3(0.01f,0.01f, 0.01f), 0.03f);
 
             body.Gravity = new System.Numerics.Vector3(0, 0, 0);
 
@@ -114,7 +114,6 @@ namespace RetroEngine.Game.Entities
 
             body.LinearVelocity = startRotation.GetForwardVector().ToNumerics() * Speed;
             Physics.PerformContactCheck(body, collisionCallback);
-
 
         }
 

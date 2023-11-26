@@ -151,13 +151,11 @@ namespace RetroEngine
 
             ScreenWidth = GraphicsDevice.PresentationParameters.Bounds.Width;
 
-
             if (AsyncGameThread)
             {
                 if (gameTask is null)
                 {
                     UpdateTime(gameTime);
-                    GameLogic();
                 }
                 else
                 {

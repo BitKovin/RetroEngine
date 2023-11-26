@@ -21,6 +21,7 @@ namespace RetroEngine
         RenderTarget2D postProcessingOutput;
 
         public RenderTarget2D shadowMap;
+        public RenderTarget2D shadowMapClose;
 
         public Texture2D black;
 
@@ -68,7 +69,10 @@ namespace RetroEngine
             InitRenderTargetIfNeed(ref postProcessingOutput);
 
             if (shadowMap is null)
-            InitShadowMap(ref shadowMap);
+                InitShadowMap(ref shadowMap);
+
+            if (shadowMapClose is null)
+                InitCloseShadowMap(ref shadowMapClose);
 
             graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
 
@@ -126,7 +130,7 @@ namespace RetroEngine
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, Graphics.shadowMapResolution, Graphics.shadowMapResolution);
 
             // Clear the shadow map with the desired clear color (e.g., Color.White)
-            graphics.GraphicsDevice.Clear(Color.White);
+            graphics.GraphicsDevice.Clear(Color.Black);
 
             // Set depth stencil and rasterizer states
             graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
@@ -142,9 +146,34 @@ namespace RetroEngine
             
             }
 
+
+
+
+            // Set up the shadow map render target with the desired resolution
+            graphics.GraphicsDevice.SetRenderTarget(shadowMapClose);
+            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, Graphics.closeShadowMapResolution, Graphics.closeShadowMapResolution);
+
+            // Clear the shadow map with the desired clear color (e.g., Color.White)
+            graphics.GraphicsDevice.Clear(Color.Black);
+
+            // Set depth stencil and rasterizer states
+            graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+            graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
+
+            // Iterate through meshes and draw shadows
+            foreach (StaticMesh mesh in renderList)
+            {
+                if (mesh.isRendered)
+                {
+                    mesh.DrawShadow(true);
+                }
+
+            }
+
             // Reset the render target and viewport to the back buffer's dimensions
             graphics.GraphicsDevice.SetRenderTarget(null);
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
+
         }
 
         void PerformPostProcessing()
@@ -306,6 +335,21 @@ namespace RetroEngine
                 Graphics.shadowMapResolution,
                 false, // No mipmaps
                 SurfaceFormat.Color, // Color format
+                depthFormat); // Depth format
+        }
+
+        void InitCloseShadowMap(ref RenderTarget2D target)
+        {
+            // Set the depth format based on your requirements
+            DepthFormat depthFormat = DepthFormat.Depth24;
+
+            // Create the new render target with the specified depth format
+            target = new RenderTarget2D(
+                graphics.GraphicsDevice,
+                Graphics.closeShadowMapResolution,
+                Graphics.closeShadowMapResolution,
+                false, // No mipmaps
+                SurfaceFormat.Single, // Color format
                 depthFormat); // Depth format
         }
 

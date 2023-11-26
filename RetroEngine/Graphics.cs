@@ -14,11 +14,14 @@ namespace RetroEngine
         public static Vector3 LightDirection = new Vector3(-1f, -1, -0.2f);
         public static Color BackgroundColor = new Color(0.15f, 0.15f, 0.2f);
 
-        public static float ShadowBias = 0.006f;
-        public static int shadowMapResolution = 2048 * 2;
+        public static float ShadowBias = 0.01f;
+        public static int shadowMapResolution = 2048;
+        public static int closeShadowMapResolution = 2048;
 
         public static Matrix LightViewProjection;
+        public static Matrix LightViewProjectionClose;
         public static float LightDistance = 200;
+        public static float CloseLightDistance = 50;
 
         public static bool EnablePostPocessing = false;
         public static bool TextureFiltration = false;
@@ -32,6 +35,12 @@ namespace RetroEngine
             return Matrix.CreateOrthographic(LightDistance, LightDistance, -30, 100);
         }
 
+        public static Matrix GetCloseLightProjection()
+        {
+
+            return Matrix.CreateOrthographic(CloseLightDistance, CloseLightDistance, -30, 100);
+        }
+
         public static Matrix GetLightView()
         {
             return Matrix.CreateLookAt(GetCameraPositionByPixelGrid() - LightDirection, GetCameraPositionByPixelGrid(), LightDirection.XZ().Normalized());
@@ -39,13 +48,12 @@ namespace RetroEngine
 
         static Vector3 GetCameraPositionByPixelGrid()
         {
-            Vector3 pos = Camera.position + new Vector3(0,10,0);
-            
+            Vector3 pos = Camera.position + new Vector3(0,0,0);
 
             //ector3 pos = Camera.position - new Vector3(0, 1, 0);
 
             // Calculate step based on shadow map resolution and light distance
-            float step = 1f/5f;
+            float step = 1f/2f;
 
             // Adjust the position using the calculated step
             pos *= step;

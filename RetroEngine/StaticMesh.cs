@@ -36,7 +36,7 @@ namespace RetroEngine
 
         public Matrix LightView;
         public Matrix LightProjection;
-        public Matrix LightViewProjection;
+        public Matrix LightProjectionClose;
     }
 
     public class StaticMesh : IDisposable
@@ -136,9 +136,12 @@ namespace RetroEngine
                         effect.Parameters["LightDirection"].SetValue(Graphics.LightDirection);
 
                         effect.Parameters["ShadowMapViewProjection"].SetValue(Graphics.LightViewProjection);
+                        effect.Parameters["ShadowMapViewProjectionClose"].SetValue(Graphics.LightViewProjectionClose);
                         effect.Parameters["ShadowMap"].SetValue(GameMain.inst.render.shadowMap);
+                        effect.Parameters["ShadowMapClose"].SetValue(GameMain.inst.render.shadowMapClose);
                         effect.Parameters["ShadowBias"].SetValue(Graphics.ShadowBias);
                         effect.Parameters["ShadowMapResolution"].SetValue((float)Graphics.shadowMapResolution);
+                        //effect.Parameters["ShadowMapResolutionClose"].SetValue((float)Graphics.closeShadowMapResolution);
 
                         effect.Parameters["Transparency"].SetValue(frameStaticMeshData.Transparency);
 
@@ -195,7 +198,7 @@ namespace RetroEngine
             }
         }
 
-        public virtual void DrawShadow()
+        public virtual void DrawShadow(bool closeShadow = false)
         {
             if (!CastShadows) return;
 
@@ -215,12 +218,19 @@ namespace RetroEngine
                         graphicsDevice.SetVertexBuffer(meshPart.VertexBuffer);
                         graphicsDevice.Indices = meshPart.IndexBuffer;
 
-                        Graphics.LightViewProjection = frameStaticMeshData.LightView * frameStaticMeshData.LightProjection;
+                        
+                        if (closeShadow)
+                            Graphics.LightViewProjectionClose = frameStaticMeshData.LightView * frameStaticMeshData.LightProjectionClose;
+                        else
+                            Graphics.LightViewProjection = frameStaticMeshData.LightView * frameStaticMeshData.LightProjection;
 
                         // Set effect parameters
                         effect.Parameters["World"].SetValue(frameStaticMeshData.World);
                         effect.Parameters["View"].SetValue(frameStaticMeshData.LightView);
-                        effect.Parameters["Projection"].SetValue(frameStaticMeshData.LightProjection);
+                        if(closeShadow)
+                            effect.Parameters["Projection"].SetValue(frameStaticMeshData.LightProjectionClose);
+                        else
+                            effect.Parameters["Projection"].SetValue(frameStaticMeshData.LightProjection);
 
                         // Draw the primitives using the custom effect
                         foreach (EffectPass pass in effect.CurrentTechnique.Passes)
@@ -609,7 +619,7 @@ namespace RetroEngine
             frameStaticMeshData.LightView = Graphics.GetLightView();
             frameStaticMeshData.LightProjection = Graphics.GetLightProjection();
             frameStaticMeshData.Transparency = Transparency;
-            frameStaticMeshData.LightViewProjection = Graphics.LightViewProjection;
+            frameStaticMeshData.LightProjectionClose = Graphics.GetCloseLightProjection();
         }
 
         private Vector3 CalculateAvgVertexLocation()
