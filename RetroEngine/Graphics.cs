@@ -14,7 +14,7 @@ namespace RetroEngine
         public static Vector3 LightDirection = new Vector3(-1f, -1, -0.2f);
         public static Color BackgroundColor = new Color(0.15f, 0.15f, 0.2f);
 
-        public static float ShadowBias = 0.005f;
+        public static float ShadowBias = 0.0055f;
         public static int shadowMapResolution = 2048 * 2;
 
         public static Matrix LightViewProjection;
