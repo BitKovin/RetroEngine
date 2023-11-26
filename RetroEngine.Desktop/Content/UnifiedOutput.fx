@@ -33,6 +33,7 @@ float3 LightPositions[MAX_POINT_LIGHTS];
 float3 LightColors[MAX_POINT_LIGHTS];
 float LightRadiuses[MAX_POINT_LIGHTS];
 
+bool isViewmodel = false;
 
 struct VertexInput
 {
@@ -65,17 +66,24 @@ PixelInput VertexShaderFunction(VertexInput input)
     output.MyPosition = mul(input.Position, World);
     output.Position = mul(output.Position, View);
     output.Position = mul(output.Position, Projection);
+    
+    if(isViewmodel)
+    {
+        output.Position.z /= 10;
+    }
+    
     output.TexCoord = input.TexCoord;
 
 	// Pass the world space normal to the pixel shader
     output.Normal = mul(input.Normal, (float3x3)World);
     output.Normal = normalize(output.Normal);
 
-    float lightingFactor = max(-0.0, dot(output.Normal, normalize(-LightDirection))) * DirectBrightness; // Example light direction
+    float lightingFactor = max(0.0, dot(output.Normal, normalize(-LightDirection))) * DirectBrightness; // Example light direction
 
     output.light = lightingFactor;
 
     output.lightPos = mul(float4(mul(input.Position, World)),ShadowMapViewProjection);
+
 
     return output;
 }
@@ -84,35 +92,30 @@ float GetShadow(float3 lightCoords)
 {
     float shadow = 0;
 
-    float3 centerCoords = lightCoords;
-            if(lightCoords.x>=0 && lightCoords.x <=1 && lightCoords.y>=0 && lightCoords.y <=1)
-            {
+    if (lightCoords.x >= 0 && lightCoords.x <= 1 && lightCoords.y >= 0 && lightCoords.y <= 1)
+    {
+        float closestDepth = tex2D(ShadowMapSampler, lightCoords.xy).r;
+        float currentDepth = lightCoords.z * 2 - 1;
 
-                float closestDepth = tex2D(ShadowMapSampler,lightCoords.xy).r;
-                float currentDepth = lightCoords.z * 2 - 1;
-
-                if(currentDepth > closestDepth + ShadowBias)
-                    shadow +=1;
-            }
+        shadow = 1 - step(currentDepth, closestDepth + ShadowBias);
+    }
 
     return shadow;
 }
 
-float3 CalculatePointLight(int i, PixelInput PixelInput)
+float3 CalculatePointLight(int i, PixelInput pixelInput)
 {
+    if (LightRadiuses[i] <= 0)
+        return 0;
 
-    if(LightRadiuses[i]<=0)
-    return 0;
+    float3 lightVector = LightPositions[i] - pixelInput.MyPosition;
+    float distanceToLight = length(lightVector);
+    float intense = saturate(1.0 - distanceToLight / LightRadiuses[i]);
+    float3 dirToSurface = normalize(lightVector);
 
-    float intense = distance(LightPositions[i], PixelInput.MyPosition) / LightRadiuses[i];
+    intense *= saturate(dot(pixelInput.Normal, dirToSurface) * 5 + 2);
 
-    float3 dirToSurface = normalize(LightPositions[i] - PixelInput.MyPosition);
-
-    intense = 1- intense;
-    intense *= clamp(dot(PixelInput.Normal, dirToSurface)*5 + 2,0,1);
-    intense = max(intense,0);
-
-    return LightColors[i] * intense;
+    return LightColors[i] * max(intense, 0);
 }
 
 

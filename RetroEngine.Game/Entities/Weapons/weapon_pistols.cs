@@ -160,6 +160,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             meshes.Add(mesh1);
 
+            mesh1.UseAlternativeRotationCalculation = true;
 
             mesh2.Scale = new Vector3(-1, 1, 1);
 
@@ -174,6 +175,8 @@ namespace RetroEngine.Game.Entities.Weapons
             mesh2.AddFrame("Animations/Pistol/Fire/frame_0009.obj");
             mesh2.AddFrame("Animations/Pistol/Fire/frame_0010.obj");
             mesh2.frameTime = 1f / 30f;
+
+            mesh2.UseAlternativeRotationCalculation = true;
 
             mesh2.textureSearchPaths.Add("textures/weapons/arms/");
             mesh2.textureSearchPaths.Add("textures/weapons/pistol/");

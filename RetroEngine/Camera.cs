@@ -59,8 +59,8 @@ namespace RetroEngine
 
             view = Matrix.CreateLookAt(position, position + rotation.GetForwardVector(), lastWorkingRotation.GetUpVector().RotateVector(rotation.GetForwardVector(), roll));
 
-            projection = Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.ToRadians(FOV), (float)GameMain.inst.Window.ClientBounds.Width / (float)GameMain.inst.Window.ClientBounds.Height, 0.001f, 1000f);
-            projectionViewmodel = Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.ToRadians(ViewmodelFOV), (float)GameMain.inst.Window.ClientBounds.Width / (float)GameMain.inst.Window.ClientBounds.Height, 0.06f, 10f);
+            projection = Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.ToRadians(FOV), (float)GameMain.inst.Window.ClientBounds.Width / (float)GameMain.inst.Window.ClientBounds.Height, 0.3f, 5000f);
+            projectionViewmodel = Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.ToRadians(ViewmodelFOV), (float)GameMain.inst.Window.ClientBounds.Width / (float)GameMain.inst.Window.ClientBounds.Height, 0.01f, 1f);
         }
 
         public static void Follow(Entity target)

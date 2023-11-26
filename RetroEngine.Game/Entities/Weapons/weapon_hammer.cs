@@ -1,4 +1,5 @@
-﻿using BulletSharp;
+﻿using Assimp;
+using BulletSharp;
 using Microsoft.Xna.Framework;
 using RetroEngine.Entities;
 using RetroEngine.Game.Effects.Particles;
@@ -157,6 +158,7 @@ namespace RetroEngine.Game.Entities.Weapons
             mesh.CastShadows = false;
             mesh.PreloadTextures();
             mesh.Viewmodel = true;
+            mesh.UseAlternativeRotationCalculation = true;
 
             meshes.Add(mesh);
         }

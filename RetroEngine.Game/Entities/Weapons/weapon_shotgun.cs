@@ -138,6 +138,7 @@ namespace RetroEngine.Game.Entities.Weapons
             mesh.CastShadows = false;
             mesh.PreloadTextures();
             mesh.Viewmodel = true;
+            mesh.UseAlternativeRotationCalculation = true;
 
             meshes.Add(mesh);
 

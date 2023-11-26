@@ -82,7 +82,9 @@ namespace RetroEngine
         {
             Vector2 windowCenter = new Vector2(GameMain.inst.GraphicsDevice.Viewport.Width / 2, GameMain.inst.GraphicsDevice.Viewport.Height / 2);
             Mouse.SetPosition((int)windowCenter.X, (int)windowCenter.Y);
+            MousePos = windowCenter;
             MouseDelta = new Vector2();
+            MouseDeltas.Clear();
         }
 
         static void UpdateActions()

@@ -343,7 +343,7 @@ namespace RetroEngine.Entities
             if (currentWeapon is not null)
             {
                 currentWeapon.Position = Camera.position + bob * 0.05f + Camera.rotation.GetForwardVector() * Camera.rotation.X / 3000f;
-                currentWeapon.Rotation = Camera.rotation;
+                currentWeapon.Rotation = Camera.rotation + new Vector3(0,0, (float)Math.Sin(bobProgress * 1 * bobSpeed)*-1.5f);
             }
 
             cylinder.Position = Position + Camera.rotation.GetForwardVector().XZ() * 3;
