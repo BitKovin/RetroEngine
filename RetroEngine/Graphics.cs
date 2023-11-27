@@ -23,7 +23,7 @@ namespace RetroEngine
         public static float LightDistance = 200;
         public static float CloseLightDistance = 50;
 
-        public static bool EnablePostPocessing = false;
+        public static bool EnablePostPocessing = true;
         public static bool TextureFiltration = false;
         public static bool AnisotropicFiltration = false;
 

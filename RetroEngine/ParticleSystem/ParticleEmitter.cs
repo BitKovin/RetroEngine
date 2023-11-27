@@ -32,6 +32,8 @@ namespace RetroEngine.Particles
         {
             CastShadows = false;
             Transperent = true;
+            isParticle = true;
+            SimpleLight = true;
         }
 
         List<Particle> finalizedParticles;

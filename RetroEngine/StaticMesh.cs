@@ -74,6 +74,9 @@ namespace RetroEngine
 
         protected FrameStaticMeshData frameStaticMeshData = new FrameStaticMeshData();
 
+        protected bool isParticle = false;
+        public bool SimpleLight = false;
+
         public virtual void Draw()
         {
             foreach (ModelMesh mesh in model.Meshes)
@@ -133,7 +136,9 @@ namespace RetroEngine
 
                         effect.Parameters["DirectBrightness"].SetValue(Graphics.DirectLighting);
                         effect.Parameters["GlobalBrightness"].SetValue(Graphics.GlobalLighting);
-                        effect.Parameters["LightDirection"].SetValue(Graphics.LightDirection);
+                        effect.Parameters["LightDirection"].SetValue(Graphics.LightDirection.Normalized());
+
+
 
                         effect.Parameters["ShadowMapViewProjection"].SetValue(Graphics.LightViewProjection);
                         effect.Parameters["ShadowMapViewProjectionClose"].SetValue(Graphics.LightViewProjectionClose);
@@ -144,6 +149,8 @@ namespace RetroEngine
                         //effect.Parameters["ShadowMapResolutionClose"].SetValue((float)Graphics.closeShadowMapResolution);
 
                         effect.Parameters["Transparency"].SetValue(frameStaticMeshData.Transparency);
+
+                        effect.Parameters["isParticle"].SetValue(isParticle);
 
                         MeshPartData meshPartData = meshPart.Tag as MeshPartData;
 
@@ -184,14 +191,15 @@ namespace RetroEngine
                         // Draw the primitives using the custom effect
                         foreach (EffectPass pass in effect.CurrentTechnique.Passes)
                         {
+                            while (GameMain.inst.render.IsRendering()) ;
+                            GameMain.inst.render.RenderingBegin();
                             pass.Apply();
                             graphicsDevice.DrawIndexedPrimitives(
                                 PrimitiveType.TriangleList,
                                 meshPart.VertexOffset,
-                                0,
-                                meshPart.NumVertices,
                                 meshPart.StartIndex,
                                 meshPart.PrimitiveCount);
+                            GameMain.inst.render.RenderingEnd();
                         }
                     }
                 }
@@ -235,14 +243,15 @@ namespace RetroEngine
                         // Draw the primitives using the custom effect
                         foreach (EffectPass pass in effect.CurrentTechnique.Passes)
                         {
+                            while (GameMain.inst.render.IsRendering()) ;
+                            GameMain.inst.render.RenderingBegin();
                             pass.Apply();
                             graphicsDevice.DrawIndexedPrimitives(
                                 PrimitiveType.TriangleList,
                                 meshPart.VertexOffset,
-                                0,
-                                meshPart.NumVertices,
                                 meshPart.StartIndex,
                                 meshPart.PrimitiveCount);
+                            GameMain.inst.render.RenderingEnd();
                         }
                     }
                 }

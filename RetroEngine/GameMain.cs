@@ -12,6 +12,7 @@ using RetroEngine.Audio;
 using ImGuiNET;
 using System.Threading.Tasks;
 using System.Threading;
+using System.Collections.Generic;
 
 namespace RetroEngine
 {
@@ -66,6 +67,8 @@ namespace RetroEngine
 
         public bool DevMenuEnabled = true;
 
+        List<uint> renderedFrames = new List<uint>();
+        uint frameId = 0;
         public GameMain()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -74,6 +77,13 @@ namespace RetroEngine
             inst = this;
             curentLevel = new Level();
             UiElement.main = UiManger;
+
+            _graphics.PreparingDeviceSettings += new EventHandler<PreparingDeviceSettingsEventArgs> (graphics_PreparingDeviceSettings);
+        }
+
+        private void graphics_PreparingDeviceSettings(object sender, PreparingDeviceSettingsEventArgs e)
+        {
+            e.GraphicsDeviceInformation.GraphicsProfile = GraphicsProfile.HiDef;
         }
 
         protected override void Initialize()
@@ -184,10 +194,10 @@ namespace RetroEngine
             {
                 GameLogic();
             }
+
+            frameId++;
+
             base.Update(gameTime);
-
-            
-
         }
 
         void UpdateTime(GameTime gameTime)
@@ -241,6 +251,12 @@ namespace RetroEngine
 
         protected override void Draw(GameTime gameTime)
         {
+            if(renderedFrames.Contains(frameId))
+            {
+                Logger.Log("trying to render same frame twice");
+                return;
+            }
+
             Thread.CurrentThread.Priority = ThreadPriority.Highest;
             GraphicsDevice.Clear(Color.CornflowerBlue);
 

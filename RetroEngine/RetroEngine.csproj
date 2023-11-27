@@ -8,6 +8,10 @@
     <Content Remove="C:\Users\bogda\.nuget\packages\rhubulletsharp\1.0.0\contentFiles\any\netstandard2.1\runtimes\linux-x64\native\liblibbulletc.so" />
     <Content Remove="C:\Users\bogda\.nuget\packages\rhubulletsharp\1.0.0\contentFiles\any\netstandard2.1\runtimes\win-x64\native\libbulletc.dll" />
     <Content Remove="C:\Users\bogda\.nuget\packages\rhubulletsharp\1.0.0\contentFiles\any\netstandard2.1\runtimes\win10-x64\native\libbulletc.dll" />
+    <Content Remove="C:\Users\Богдан\.nuget\packages\monogame.extended\3.8.0\contentFiles\any\netstandard2.0\SharpDX.D3DCompiler.dll" />
+    <Content Remove="C:\Users\Богдан\.nuget\packages\monogame.extended\3.8.0\contentFiles\any\netstandard2.0\SharpDX.D3DCompiler.xml" />
+    <Content Remove="C:\Users\Богдан\.nuget\packages\monogame.extended\3.8.0\contentFiles\any\netstandard2.0\SharpDX.dll" />
+    <Content Remove="C:\Users\Богдан\.nuget\packages\monogame.extended\3.8.0\contentFiles\any\netstandard2.0\SharpDX.xml" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Assimp" Version="3.0.0" />
