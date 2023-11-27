@@ -4,6 +4,9 @@ map_Kd textures\__TB_empty.png
 newmtl brushes/bricks
 map_Kd textures\brushes\bricks.png
 
+newmtl brushes/grass
+map_Kd textures\brushes\grass.png
+
 newmtl cat
 map_Kd textures\cat.png
 

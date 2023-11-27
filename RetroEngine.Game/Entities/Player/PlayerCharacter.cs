@@ -7,16 +7,16 @@ using RetroEngine.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using RetroEngine;
 using RetroEngine.Game.Entities;
 using RetroEngine.Map;
 using RetroEngine.Game.Entities.Weapons;
+using RetroEngine.Entities;
 
-namespace RetroEngine.Entities
+namespace RetroEngine.Game.Entities.Player
 {
 
     [LevelObject("info_player_start")]
-    public class Player : Entity
+    public class PlayerCharacter : Entity
     {
 
         Button buttonUp = new Button();
@@ -40,8 +40,6 @@ namespace RetroEngine.Entities
 
         Vector3 bob;
 
-
-
         float cameraRoll;
 
         bool FirstTick = true;
@@ -56,11 +54,11 @@ namespace RetroEngine.Entities
         int currentSlot = -1;
         int lastSlot = -1;
 
-        Image crosshair = new Image();
-
         float bobSpeed = 8;
 
-        public Player() : base()
+        PlayerUI PlayerUI;
+
+        public PlayerCharacter() : base()
         {
             if (GameMain.platform == Platform.Mobile)
             {
@@ -81,26 +79,14 @@ namespace RetroEngine.Entities
                 buttonRotate.originH = Origin.Right;
                 UiElement.main.childs.Add(buttonRotate);
             }
-            //Camera.Follow(this);
-
-            crosshair.baseColor = new Color(0.9f, 0.8f, 0.6f) * 0.6f;
-
-            crosshair.originH = Origin.CenterH;
-            crosshair.originV = Origin.CenterV;
-            crosshair.position = new Vector2(-4);
-            crosshair.size = new Vector2(8, 8);
-            UiElement.main.childs.Add(crosshair);
-
-
-
-            //cylinder.LoadFromFile("cylinder.obj");
-            //meshes.Add(cylinder);
 
             buttonRotate.onClicked += ButtonRotate_onClicked;
 
             Tags.Add("player");
 
             Input.CenterCursor();
+
+            PlayerUI = new PlayerUI(this);
 
         }
 
@@ -113,10 +99,8 @@ namespace RetroEngine.Entities
         {
             base.LoadAssets();
 
-            crosshair.SetTexture("ui/crosshair.png");
-
             Weapon.PreloadAllWeapons();
-
+            PlayerUI.Load();
         }
 
         public override void FromData(EntityData data)
@@ -188,6 +172,8 @@ namespace RetroEngine.Entities
                 Level.LoadFromFile("test2.map");
             }
 
+            PlayerUI.Update();
+
             FirstTick = false;
 
 
@@ -209,7 +195,7 @@ namespace RetroEngine.Entities
 
             bob = Vector3.Zero;
 
-            bob += Camera.rotation.GetForwardVector() * ((float)Math.Sin(bobProgress * 1 * bobSpeed * 1)) * 0.5f;
+            bob += Camera.rotation.GetForwardVector() * (float)Math.Sin(bobProgress * 1 * bobSpeed * 1) * 0.5f;
             //bob += Camera.rotation.GetUpVector() * (float)(Math.Abs(Math.Sin(bobProgress * bobSpeed * 1))) * 0.2f;
         }
 
@@ -248,7 +234,7 @@ namespace RetroEngine.Entities
                 if (onGround)
                 {
 
-                    if (Math.Sin(bobProgress * bobSpeed * 2) <= 0 && Math.Sin((bobProgress + Time.deltaTime) * bobSpeed*2) > 0)
+                    if (Math.Sin(bobProgress * bobSpeed * 2) <= 0 && Math.Sin((bobProgress + Time.deltaTime) * bobSpeed * 2) > 0)
                     {
                         stepSoundPlayer.Play(true);
                     }
@@ -317,7 +303,7 @@ namespace RetroEngine.Entities
 
 
 
-            if (CheckGroundAtOffset(new Vector3(radius*0.77f, 0, radius * 0.77f)))
+            if (CheckGroundAtOffset(new Vector3(radius * 0.77f, 0, radius * 0.77f)))
                 onGround = true;
 
             if (CheckGroundAtOffset(new Vector3(-radius * 0.77f, 0, radius * 0.77f)))
@@ -343,7 +329,7 @@ namespace RetroEngine.Entities
             if (currentWeapon is not null)
             {
                 currentWeapon.Position = Camera.position + bob * 0.05f + Camera.rotation.GetForwardVector() * Camera.rotation.X / 3000f;
-                currentWeapon.Rotation = Camera.rotation + new Vector3(0,0, (float)Math.Sin(bobProgress * 1 * bobSpeed)*-1.5f);
+                currentWeapon.Rotation = Camera.rotation + new Vector3(0, 0, (float)Math.Sin(bobProgress * 1 * bobSpeed) * -1.5f);
             }
 
             cylinder.Position = Position + Camera.rotation.GetForwardVector().XZ() * 3;
@@ -360,7 +346,7 @@ namespace RetroEngine.Entities
         {
             if (slot == currentSlot) return;
 
-            if (weapons.Count > slot && slot>=0)
+            if (weapons.Count > slot && slot >= 0)
             {
 
                 lastSlot = currentSlot;
@@ -370,6 +356,10 @@ namespace RetroEngine.Entities
             }
         }
 
+        void DrawUI()
+        {
+
+        }
         void SwitchWeapon(WeaponData data)
         {
             if (currentWeapon is not null)

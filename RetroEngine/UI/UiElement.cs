@@ -74,12 +74,15 @@ namespace RetroEngine.UI
         public bool hovering;
         public Collision2D col = new Collision2D();
 
-        public Vector2 size;
+        public Vector2 size = new Vector2(1,1);
 
-        public Vector2 position;
+        public Vector2 position = new Vector2();
+        public float rotation = 0;
 
         public Origin originH;
         public Origin originV;
+
+        public Vector2 relativeOrigin = new Vector2();
 
         protected Vector2 origin;
 

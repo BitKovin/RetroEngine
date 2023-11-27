@@ -58,7 +58,7 @@ struct PixelInput
     float4 Position : SV_POSITION;
     float2 TexCoord : TEXCOORD0;
 	float3 Normal : TEXCOORD1; // Pass normal to pixel shader
-    float light : TEXCOORD2;
+    float3 light : TEXCOORD2;
     float4 lightPos :TEXCOORD3;
     float4 lightPosClose : TEXCOORD4;
     float3 MyPosition : TEXCOORD5;
@@ -89,7 +89,7 @@ PixelInput VertexShaderFunction(VertexInput input)
     output.Normal = mul(input.Normal, (float3x3)World);
     output.Normal = normalize(output.Normal);
 
-    float lightingFactor = max(0.0, dot(output.Normal, normalize(-LightDirection))) * DirectBrightness; // Example light direction
+    float3 lightingFactor = max(0.0, dot(output.Normal, normalize(-LightDirection))) * DirectBrightness; // Example light direction
 
     output.light = lightingFactor;
 

@@ -130,7 +130,7 @@ namespace RetroEngine
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, Graphics.shadowMapResolution, Graphics.shadowMapResolution);
 
             // Clear the shadow map with the desired clear color (e.g., Color.White)
-            graphics.GraphicsDevice.Clear(Color.Black);
+            graphics.GraphicsDevice.Clear(Color.White);
 
             // Set depth stencil and rasterizer states
             graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
@@ -154,7 +154,7 @@ namespace RetroEngine
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, Graphics.closeShadowMapResolution, Graphics.closeShadowMapResolution);
 
             // Clear the shadow map with the desired clear color (e.g., Color.White)
-            graphics.GraphicsDevice.Clear(Color.Black);
+            graphics.GraphicsDevice.Clear(Color.White);
 
             // Set depth stencil and rasterizer states
             graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;

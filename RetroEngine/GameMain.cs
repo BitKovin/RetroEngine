@@ -24,7 +24,7 @@ namespace RetroEngine
 
     public class GameMain : Game
     {
-        SpriteFont font;
+        public SpriteFont DefaultFont;
 
 
         public GraphicsDeviceManager _graphics;
@@ -125,7 +125,7 @@ namespace RetroEngine
             content = Content;
             // TODO: use this.Content to load your game content here
 
-            font = Content.Load<SpriteFont>("Font"); // Use the name of your sprite font file here instead of 'Score'.
+            DefaultFont = Content.Load<SpriteFont>("Font"); // Use the name of your sprite font file here instead of 'Score'.
 
             curentLevel.Start();
 
@@ -264,7 +264,7 @@ namespace RetroEngine
 
             UiManger.Draw(gameTime,SpriteBatch);
 
-            SpriteBatch.DrawString(font, (1f / Time.deltaTime).ToString(), new Vector2(100, 100), Color.White);
+            SpriteBatch.DrawString(DefaultFont, (1f / Time.deltaTime).ToString(), new Vector2(100, 100), Color.White);
 
             SpriteBatch.End();
 

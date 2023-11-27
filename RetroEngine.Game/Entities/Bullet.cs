@@ -23,7 +23,7 @@ namespace RetroEngine.Game.Entities
 
         public float Speed = 60;
         public float LifeTime = 1;
-        public float Damage = 5;
+        public float Damage = 15;
 
         Vector3 OldPos = new Vector3();
 

@@ -1,5 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
-using RetroEngine.Entities;
+using RetroEngine.Game.Entities.Player;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +26,7 @@ namespace RetroEngine.Game.Entities.Weapons
     {
 
         protected WeaponData data;
-        protected Player player;
+        protected PlayerCharacter player;
 
         protected float DrawTime = 0.3f;
 
@@ -35,7 +35,7 @@ namespace RetroEngine.Game.Entities.Weapons
         protected Vector3 DrawRotation = Vector3.Zero;
 
 
-        public static Weapon CreateFromData(WeaponData data, Player owner = null)
+        public static Weapon CreateFromData(WeaponData data, PlayerCharacter owner = null)
         {
             Weapon weapon = Activator.CreateInstance(data.weaponType) as Weapon;
 

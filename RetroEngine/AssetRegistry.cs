@@ -7,6 +7,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework.Content.Pipeline.Processors;
+using Microsoft.Xna.Framework.Content.Pipeline;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework;
+using MonoGame.Extended.BitmapFonts;
 
 namespace RetroEngine
 {
