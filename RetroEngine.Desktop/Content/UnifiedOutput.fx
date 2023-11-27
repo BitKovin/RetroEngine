@@ -165,7 +165,7 @@ float GetShadow(float3 lightCoords, PixelInput input, bool close = false)
         // Normalize the accumulated shadow value
         shadow /= ((2 * numSamples + 1) * (2 * numSamples + 1));
         
-        return 1 - shadow;
+        return (1 - shadow) * (1 - shadow);
     }
     return 0;
     
