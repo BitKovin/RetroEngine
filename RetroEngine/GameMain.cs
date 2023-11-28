@@ -243,7 +243,6 @@ namespace RetroEngine
 
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            Console.WriteLine(1f / Time.deltaTime);
 
             RenderTarget2D frame =  render.StartRenderLevel(curentLevel);
 

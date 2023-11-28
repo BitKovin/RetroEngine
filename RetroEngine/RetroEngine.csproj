@@ -17,7 +17,7 @@
   <ItemGroup>
     <PackageReference Include="Assimp" Version="3.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="RhuBulletSharp" Version="1.0.0" />
+    <PackageReference Include="RhuBulletSharp" Version="1.0.3" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Libs\MonoGame\MonoGame.Framework.Content.Pipeline\MonoGame.Framework.Content.Pipeline.csproj" />

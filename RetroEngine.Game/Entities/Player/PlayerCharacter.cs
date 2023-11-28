@@ -222,6 +222,8 @@ namespace RetroEngine.Game.Entities.Player
             Vector3 right = Camera.rotation.GetRightVector().XZ();
             Vector3 forward = Camera.rotation.GetForwardVector().XZ().Normalized();
 
+            body.Activate(true);
+
             // Ground movement
 
             if (input.Length() > 0)
@@ -243,8 +245,6 @@ namespace RetroEngine.Game.Entities.Player
 
                     // Apply friction
                     body.Friction = 0.0f;
-
-                    body.Activate(true);
                     body.LinearVelocity = new Vector3(motion.X, body.LinearVelocity.Y, motion.Z).ToPhysics();
 
                 }
