@@ -21,7 +21,7 @@ namespace RetroEngine.Game.Effects.Particles
         {
             particle = base.UpdateParticle(particle);
 
-            particle.transparency = 1; // Math.Max(particle.transparency -= Time.deltaTime, 0);
+            particle.transparency = Math.Max(particle.transparency -= Time.deltaTime, 0);
 
             return particle;
         }

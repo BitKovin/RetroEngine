@@ -45,11 +45,6 @@ namespace RetroEngine
 
         public List<ParticleEmitter.Particle> particlesToDraw = new List<ParticleEmitter.Particle>();
 
-        OcclusionQuery occlusionQuery;
-
-
-        bool startedRendering = false;
-
         public Render()
         {
             lightingEffect = GameMain.content.Load<Effect>("DeferredLighting");
@@ -79,7 +74,7 @@ namespace RetroEngine
             if (shadowMapClose is null)
                 InitCloseShadowMap(ref shadowMapClose);
 
-            //graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
+            graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
 
             List<StaticMesh> renderList = level.GetMeshesToRender();
 
@@ -95,11 +90,12 @@ namespace RetroEngine
 
             PerformPostProcessing();
 
-            return outputPath;
+            return colorPath;
         }
 
         void RenderUnifiedPath(List<StaticMesh> renderList)
         {
+
 
             graphics.GraphicsDevice.SetRenderTarget(colorPath);
             graphics.GraphicsDevice.Clear(Graphics.BackgroundColor);
@@ -120,22 +116,6 @@ namespace RetroEngine
             ParticleEmitter.LoadRenderEmitter();
             ParticleEmitter.RenderEmitter.DrawParticles(particlesToDraw);
 
-        }
-
-        public void RenderingBegin()
-        {
-            occlusionQuery.Begin();
-            startedRendering = true;
-        }
-
-        public void RenderingEnd()
-        {
-            occlusionQuery.End();
-        }
-
-        public bool IsRendering()
-        {
-            return occlusionQuery.IsComplete == false && startedRendering;
         }
 
         void RenderShadowMap(List<StaticMesh> renderList)
@@ -213,6 +193,7 @@ namespace RetroEngine
 
             spriteBatch.End();
 
+            outputPath = postProcessingOutput;
             PerformFXAA();
 
             graphics.GraphicsDevice.SetRenderTarget(null);          

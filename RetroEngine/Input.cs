@@ -14,7 +14,7 @@ namespace RetroEngine
         public static Vector2 MouseDelta;
 
         static List<Vector2> MouseDeltas = new List<Vector2>();
-        static int MaxDeltas = 0;
+        static int MaxDeltas = 3;
 
         static Dictionary<string, InputAction> actions = new Dictionary<string, InputAction>();
 
@@ -22,11 +22,14 @@ namespace RetroEngine
 
         public static float sensitivity = 0.2f;
 
+
         public static void Update()
         {
+
             UpdateMouse();
 
             UpdateActions();
+
         }
 
         static void UpdateMouse()
@@ -37,6 +40,7 @@ namespace RetroEngine
             AddMouseInput(delta);
 
             MouseDelta *= sensitivity;
+
 
             Vector2 windowCenter = new Vector2(GameMain.inst.GraphicsDevice.Viewport.Width / 2, GameMain.inst.GraphicsDevice.Viewport.Height / 2);
 

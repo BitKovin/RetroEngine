@@ -22,62 +22,59 @@ namespace RetroEngine
 
         public virtual void Update()
         {
-            try
+
+            //return;
+            ImGui.BeginMainMenuBar();
+            ImGui.Text("fps: " + (int)(1f / Time.deltaTime) + "    entity count: " + Level.GetCurrent().entities.Count);
+            ImGui.EndMainMenuBar();
+
+            if (!GameMain.inst.paused) return;
+
+            ImGui.Begin("lighting");
+
+            ImGui.SliderFloat("shadow bias", ref Graphics.ShadowBias, 0.002f, 0.01f);
+
+            ImGui.SliderFloat("light direction X", ref Graphics.LightDirection.X, -1, 1);
+            ImGui.SliderFloat("light direction Y", ref Graphics.LightDirection.Y, -1, 1);
+            ImGui.SliderFloat("light direction Z", ref Graphics.LightDirection.Z, -1, 1);
+
+            ImGui.End();
+
+            //string consoleContent = sb.ToString();
+
+            ImGui.Begin("Console");
+            
+
+            //ImGui.InputTextMultiline("log", ref consoleContent, uint.MaxValue, new Vector2(ImGui.GetWindowWidth(), ImGui.GetWindowHeight()-60),ImGuiInputTextFlags.ReadOnly);
+
+            ImGui.BeginChild("ScrollingRegion", new Vector2(ImGui.GetWindowWidth(), ImGui.GetWindowHeight() - 60));
+
+            foreach(var item in log)
             {
-                //return;
-                ImGui.BeginMainMenuBar();
-                ImGui.Text("fps: " + (int)(1f / Time.deltaTime) + "    entity count: " + Level.GetCurrent().entities.Count);
-                ImGui.EndMainMenuBar();
-
-                if (!GameMain.inst.paused) return;
-
-                ImGui.Begin("lighting");
-
-                ImGui.SliderFloat("shadow bias", ref Graphics.ShadowBias, 0.002f, 0.01f);
-
-                ImGui.SliderFloat("light direction X", ref Graphics.LightDirection.X, -1, 1);
-                ImGui.SliderFloat("light direction Y", ref Graphics.LightDirection.Y, -1, 1);
-                ImGui.SliderFloat("light direction Z", ref Graphics.LightDirection.Z, -1, 1);
-
-                ImGui.End();
-
-                //string consoleContent = sb.ToString();
-
-                ImGui.Begin("Console");
-
-
-                //ImGui.InputTextMultiline("log", ref consoleContent, uint.MaxValue, new Vector2(ImGui.GetWindowWidth(), ImGui.GetWindowHeight()-60),ImGuiInputTextFlags.ReadOnly);
-
-                ImGui.BeginChild("ScrollingRegion", new Vector2(ImGui.GetWindowWidth(), ImGui.GetWindowHeight() - 60));
-
-                foreach (var item in log)
+                if(ImGui.Selectable(item))
                 {
-                    if (ImGui.Selectable(item))
-                    {
-                        ImGui.SetClipboardText(item);
-                    }
+                    ImGui.SetClipboardText(item);
                 }
-
-                //ImGui.InputTextMultiline("log", ref consoleContent, uint.MaxValue, new Vector2(ImGui.GetWindowWidth(), ImGui.GetWindowHeight() - 60), ImGuiInputTextFlags.ReadOnly);
-
-                if (scrolldown)
-                {
-                    ImGui.SetScrollHereY();
-                    scrolldown = false;
-                }
-
-                ImGui.EndChild();
-
-                ImGui.PushItemWidth(ImGui.GetWindowWidth() - 75);
-                if (ImGui.InputText("", ref input, 1000000, ImGuiInputTextFlags.EnterReturnsTrue)) submitInput();
-                ImGui.PopItemWidth();
-                ImGui.SameLine();
-                if (ImGui.Button("SUBMIT")) submitInput();
-
-                ImGui.End();
             }
-            catch (Exception) { }
+
+            //ImGui.InputTextMultiline("log", ref consoleContent, uint.MaxValue, new Vector2(ImGui.GetWindowWidth(), ImGui.GetWindowHeight() - 60), ImGuiInputTextFlags.ReadOnly);
+
+            if (scrolldown)
+            {
+                ImGui.SetScrollHereY();
+                scrolldown = false;
             }
+
+            ImGui.EndChild();
+
+            ImGui.PushItemWidth(ImGui.GetWindowWidth() - 75);
+            if (ImGui.InputText("", ref input, 1000000,ImGuiInputTextFlags.EnterReturnsTrue)) submitInput();
+            ImGui.PopItemWidth();
+            ImGui.SameLine();
+            if (ImGui.Button("SUBMIT")) submitInput();
+            
+            ImGui.End();
+        }
 
         void submitInput()
         {
