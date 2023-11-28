@@ -53,7 +53,6 @@ namespace RetroEngine.Entities
 
         public override void Update()
         {
-
             UpdateNPCList();
 
             if(currentUpdateNPCs.Contains(this))

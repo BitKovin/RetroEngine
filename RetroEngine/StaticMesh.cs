@@ -134,7 +134,7 @@ namespace RetroEngine
 
                         effect.Parameters["DirectBrightness"].SetValue(Graphics.DirectLighting);
                         effect.Parameters["GlobalBrightness"].SetValue(Graphics.GlobalLighting);
-                        effect.Parameters["LightDirection"].SetValue(Graphics.LightDirection);
+                        effect.Parameters["LightDirection"].SetValue(Graphics.LightDirection.Normalized());
 
                         effect.Parameters["ShadowMapViewProjection"].SetValue(Graphics.LightViewProjection);
                         effect.Parameters["ShadowMapViewProjectionClose"].SetValue(Graphics.LightViewProjectionClose);
@@ -541,7 +541,7 @@ namespace RetroEngine
                         // Negate the x-coordinate to correct mirroring
                         vertices[vertexIndex] = new VertexPositionNormalTexture(
                             new Vector3(-vertex.X, vertex.Y, vertex.Z), // Negate x-coordinate
-                            new Vector3(normal.X, normal.Y, normal.Z),
+                            new Vector3(-normal.X, normal.Y, normal.Z),
                             new Vector2(textureCoord.X, textureCoord.Y)
                         );
 
@@ -626,33 +626,12 @@ namespace RetroEngine
         protected bool IsBoundingSphereInFrustum(BoundingSphere sphere)
         {
 
-            // Calculate the combined view-projection matrix
-            Matrix viewProjection = Camera.view * Camera.projection;
-
-            // Transform the sphere position into view space
-            Vector3 sphereCenterView = Vector3.Transform(sphere.Center, Camera.view);
-
-            // Calculate the squared radius of the bounding sphere
-            float sphereRadiusSquared = sphere.Radius * sphere.Radius;
-
-            // Check if the sphere is inside the camera frustum
-            if (sphereCenterView.Z + sphere.Radius < -sphereRadiusSquared
-                || sphereCenterView.Z - sphere.Radius > sphereRadiusSquared
-                || sphereCenterView.X + sphere.Radius < -sphereRadiusSquared
-                || sphereCenterView.X - sphere.Radius > sphereRadiusSquared
-                || sphereCenterView.Y + sphere.Radius < -sphereRadiusSquared
-                || sphereCenterView.Y - sphere.Radius > sphereRadiusSquared)
-            {
-                return false;
-            }
-
-            return true;
+            BoundingFrustum frustum = new BoundingFrustum(Camera.view * Camera.projection);
+            return frustum.Contains(sphere.Transform(GetWorldMatrix())) != ContainmentType.Disjoint;
         }
 
         public virtual void RenderPreparation()
         {
-
-            isRendered = true;
 
             frameStaticMeshData.Projection = Camera.projection;
             frameStaticMeshData.ProjectionViewmodel = Camera.projectionViewmodel;
@@ -666,6 +645,20 @@ namespace RetroEngine
             frameStaticMeshData.LightProjection = Graphics.GetLightProjection();
             frameStaticMeshData.Transparency = Transparency;
             frameStaticMeshData.LightProjectionClose = Graphics.GetCloseLightProjection();
+        }
+
+        public virtual void UpdateCulling()
+        {
+            isRendered = false;
+
+            if (model is null) return;
+            foreach (ModelMesh mesh in model.Meshes)
+                if (IsBoundingSphereInFrustum(mesh.BoundingSphere))
+                {
+                    isRendered = true;
+                    return;
+                }
+
         }
 
         private Vector3 CalculateAvgVertexLocation()
@@ -694,21 +687,15 @@ namespace RetroEngine
 
         protected static BoundingSphere CalculateBoundingSphere(VertexPositionNormalTexture[] vertices)
         {
-            Vector3 center = Vector3.Zero;
-            foreach (var vertex in vertices)
-            {
-                center += vertex.Position;
-            }
-            center /= vertices.Length;
 
-            float radius = 0f;
-            foreach (var vertex in vertices)
+            List<Vector3> points = new List<Vector3>();
+
+            foreach (VertexPositionNormalTexture vertex in vertices)
             {
-                float distance = Vector3.Distance(center, vertex.Position);
-                radius = Math.Max(radius, distance);
+                points.Add(vertex.Position);
             }
 
-            return new BoundingSphere(center, radius);
+            return BoundingSphere.CreateFromPoints(points);
         }
 
 

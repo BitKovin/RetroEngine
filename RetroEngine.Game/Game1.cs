@@ -22,16 +22,7 @@ namespace RetroEngine.Game
             devMenu = new GameDevMenu();
             devMenu.Init();
 
-            Level.LoadFromFile("test.map");
-
-            for (float i = 1; i < 0; i++)
-            {
-                BoxDynamic boxDynamic = new BoxDynamic();
-                boxDynamic.Position = new Vector3(0, i * 6, (float)Math.Sin(i * 5) * 0.4f);
-                curentLevel.entities.Add(boxDynamic);
-
-                boxDynamic.Start();
-            }
+            Level.LoadFromFile("test2.map");
 
             Window.Title = "Game";
 
@@ -49,7 +40,7 @@ namespace RetroEngine.Game
             GameMain.inst.curentLevel.entities.Add(new PlayerGlobal());
 
  
-            for (int i = 1; i <= 0; i++)
+            for (int i = 1; i <= 200; i++)
             {
 
                 NPCBase npc = new NPCBase();

@@ -127,6 +127,15 @@ namespace RetroEngine
             foreach (Entity entity in list)
                 if (entity.LateUpdateWhilePaused && GameMain.inst.paused || GameMain.inst.paused == false)
                     entity.LateUpdate();
+
+            foreach (Entity entity in list)
+                foreach(StaticMesh mesh in entity.meshes)
+                {
+                    if(mesh is null) continue;
+
+                    mesh.UpdateCulling();
+
+                }
         }
 
         public virtual void RenderPreparation()

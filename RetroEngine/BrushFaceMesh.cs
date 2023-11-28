@@ -445,6 +445,7 @@ namespace RetroEngine
             };
 
             var modelMesh = new ModelMesh(graphicsDevice, new List<ModelMeshPart> { mergedPart });
+            modelMesh.BoundingSphere = CalculateBoundingSphere(vertices.ToArray());
 
             return new Model(graphicsDevice, new List<ModelBone>(), new List<ModelMesh> { modelMesh });
         }
