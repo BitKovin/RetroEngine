@@ -13,7 +13,8 @@ namespace RetroEngine
         public static void Log(string s)
         {
             Console.WriteLine(s);
-            GameMain.inst.devMenu.log.Add(s);
+            if(GameMain.inst.devMenu is not null)
+                GameMain.inst.devMenu.log.Add(s);
         }
 
     }

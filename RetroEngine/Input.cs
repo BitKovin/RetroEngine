@@ -50,7 +50,7 @@ namespace RetroEngine
                 }
                 else
                 {
-                    MousePos = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
+                    MousePos = mousePos;
                 }
 
             

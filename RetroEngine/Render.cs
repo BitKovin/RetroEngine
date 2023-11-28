@@ -41,7 +41,7 @@ namespace RetroEngine
 
         public Effect PostProcessingEffect;
 
-        Delay shadowPassRenderDelay = new Delay();
+        public Delay shadowPassRenderDelay = new Delay();
 
         public List<ParticleEmitter.Particle> particlesToDraw = new List<ParticleEmitter.Particle>();
 
@@ -59,7 +59,6 @@ namespace RetroEngine
             fxaaEffect = GameMain.content.Load<Effect>("fxaa");
             ShadowMapEffect = GameMain.content.Load<Effect>("ShadowMap");
             PostProcessingEffect = GameMain.content.Load<Effect>("PostProcessing");
-            occlusionQuery = new OcclusionQuery(GameMain.inst.GraphicsDevice);
         }
 
         public RenderTarget2D StartRenderLevel(Level level)
@@ -142,7 +141,7 @@ namespace RetroEngine
         void RenderShadowMap(List<StaticMesh> renderList)
         {
 
-            //if (shadowPassRenderDelay.Wait()) return;
+            if (shadowPassRenderDelay.Wait()) return;
 
             shadowPassRenderDelay.AddDelay(0.02f);
 

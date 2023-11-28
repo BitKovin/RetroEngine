@@ -191,15 +191,12 @@ namespace RetroEngine
                         // Draw the primitives using the custom effect
                         foreach (EffectPass pass in effect.CurrentTechnique.Passes)
                         {
-                            while (GameMain.inst.render.IsRendering()) ;
-                            GameMain.inst.render.RenderingBegin();
                             pass.Apply();
                             graphicsDevice.DrawIndexedPrimitives(
                                 PrimitiveType.TriangleList,
                                 meshPart.VertexOffset,
                                 meshPart.StartIndex,
                                 meshPart.PrimitiveCount);
-                            GameMain.inst.render.RenderingEnd();
                         }
                     }
                 }
@@ -243,15 +240,12 @@ namespace RetroEngine
                         // Draw the primitives using the custom effect
                         foreach (EffectPass pass in effect.CurrentTechnique.Passes)
                         {
-                            while (GameMain.inst.render.IsRendering()) ;
-                            GameMain.inst.render.RenderingBegin();
                             pass.Apply();
                             graphicsDevice.DrawIndexedPrimitives(
                                 PrimitiveType.TriangleList,
                                 meshPart.VertexOffset,
                                 meshPart.StartIndex,
                                 meshPart.PrimitiveCount);
-                            GameMain.inst.render.RenderingEnd();
                         }
                     }
                 }
