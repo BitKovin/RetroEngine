@@ -41,7 +41,7 @@ namespace RetroEngine
         {
             if (pendingLevelChange != null)
             {
-                LoadFromFile(pendingLevelChange);
+                LoadFromFile(pendingLevelChange, true);
 
                 pendingLevelChange = null;
                 return true;
@@ -49,10 +49,10 @@ namespace RetroEngine
             return false;
         }
 
-        public static void LoadFromFile(string name)
+        public static void LoadFromFile(string name, bool force = false)
         {
 
-            if(GameMain.RenderThread != Thread.CurrentThread)
+            if(force == false)
             {
                 pendingLevelChange = name;
                 return;

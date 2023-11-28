@@ -107,7 +107,6 @@ namespace RetroEngine
             particlesToDraw.Clear();
 
             foreach (StaticMesh mesh in renderList)
-                if (mesh.isRendered)
                 {
                     mesh.DrawUnified();
                 }
@@ -150,10 +149,8 @@ namespace RetroEngine
             // Iterate through meshes and draw shadows
             foreach (StaticMesh mesh in renderList)
             {
-                if (mesh.isRendered)
-                {
+
                     mesh.DrawShadow();
-                }
             
             }
             return;

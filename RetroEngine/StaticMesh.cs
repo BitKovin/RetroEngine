@@ -25,6 +25,7 @@ namespace RetroEngine
         public float EmissionPower;
         public bool Transperent;
         public bool Viewmodel;
+        public bool IsRendered;
 
         public float Transparency;
 
@@ -109,10 +110,13 @@ namespace RetroEngine
 
         public virtual void DrawUnified()
         {
+            if (frameStaticMeshData.IsRendered == false) return;
+
             GraphicsDevice graphicsDevice = GameMain.inst._graphics.GraphicsDevice;
             // Load the custom effect
             Effect effect = GameMain.inst.render.UnifiedEffect;
 
+            
 
             if (frameStaticMeshData.model is not null)
             {
@@ -645,6 +649,7 @@ namespace RetroEngine
             frameStaticMeshData.LightProjection = Graphics.GetLightProjection();
             frameStaticMeshData.Transparency = Transparency;
             frameStaticMeshData.LightProjectionClose = Graphics.GetCloseLightProjection();
+            frameStaticMeshData.IsRendered = isRendered;
         }
 
         public virtual void UpdateCulling()
