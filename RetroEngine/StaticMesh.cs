@@ -74,6 +74,8 @@ namespace RetroEngine
 
         protected FrameStaticMeshData frameStaticMeshData = new FrameStaticMeshData();
 
+        protected bool isParticle = false;
+
         public virtual void Draw()
         {
             foreach (ModelMesh mesh in model.Meshes)
@@ -138,12 +140,16 @@ namespace RetroEngine
                         effect.Parameters["ShadowMapViewProjection"].SetValue(Graphics.LightViewProjection);
                         effect.Parameters["ShadowMapViewProjectionClose"].SetValue(Graphics.LightViewProjectionClose);
                         effect.Parameters["ShadowMap"].SetValue(GameMain.inst.render.shadowMap);
-                        effect.Parameters["ShadowMapClose"].SetValue(GameMain.inst.render.shadowMapClose);
+                        //effect.Parameters["ShadowMapClose"].SetValue(GameMain.inst.render.shadowMapClose);
                         effect.Parameters["ShadowBias"].SetValue(Graphics.ShadowBias);
                         effect.Parameters["ShadowMapResolution"].SetValue((float)Graphics.shadowMapResolution);
                         //effect.Parameters["ShadowMapResolutionClose"].SetValue((float)Graphics.closeShadowMapResolution);
 
+                        //effect.Parameters["DepthMap"].SetValue(GameMain.inst.render.DepthOutput);
+
                         effect.Parameters["Transparency"].SetValue(frameStaticMeshData.Transparency);
+
+                        effect.Parameters["isParticle"].SetValue(isParticle);
 
                         MeshPartData meshPartData = meshPart.Tag as MeshPartData;
 
@@ -188,8 +194,6 @@ namespace RetroEngine
                             graphicsDevice.DrawIndexedPrimitives(
                                 PrimitiveType.TriangleList,
                                 meshPart.VertexOffset,
-                                0,
-                                meshPart.NumVertices,
                                 meshPart.StartIndex,
                                 meshPart.PrimitiveCount);
                         }
@@ -239,8 +243,55 @@ namespace RetroEngine
                             graphicsDevice.DrawIndexedPrimitives(
                                 PrimitiveType.TriangleList,
                                 meshPart.VertexOffset,
-                                0,
-                                meshPart.NumVertices,
+                                meshPart.StartIndex,
+                                meshPart.PrimitiveCount);
+                        }
+                    }
+                }
+            }
+        }
+
+        public virtual void DrawDepth(bool closeShadow = false)
+        {
+            if (Transperent) return;
+
+            GraphicsDevice graphicsDevice = GameMain.inst._graphics.GraphicsDevice;
+            // Load the custom effect
+            Effect effect = GameMain.inst.render.ShadowMapEffect;
+
+
+            if (model is not null)
+            {
+                foreach (ModelMesh mesh in frameStaticMeshData.model.Meshes)
+                {
+                    foreach (ModelMeshPart meshPart in mesh.MeshParts)
+                    {
+
+                        // Set the vertex buffer and index buffer for this mesh part
+                        graphicsDevice.SetVertexBuffer(meshPart.VertexBuffer);
+                        graphicsDevice.Indices = meshPart.IndexBuffer;
+
+
+                        if (closeShadow)
+                            Graphics.LightViewProjectionClose = frameStaticMeshData.LightView * frameStaticMeshData.LightProjectionClose;
+                        else
+                            Graphics.LightViewProjection = frameStaticMeshData.LightView * frameStaticMeshData.LightProjection;
+
+                        // Set effect parameters
+                        effect.Parameters["World"].SetValue(frameStaticMeshData.World);
+                        effect.Parameters["View"].SetValue(frameStaticMeshData.View);
+                        if (frameStaticMeshData.Viewmodel)
+                            effect.Parameters["Projection"].SetValue(frameStaticMeshData.ProjectionViewmodel);
+                        else
+                            effect.Parameters["Projection"].SetValue(frameStaticMeshData.Projection);
+
+                        // Draw the primitives using the custom effect
+                        foreach (EffectPass pass in effect.CurrentTechnique.Passes)
+                        {
+                            pass.Apply();
+                            graphicsDevice.DrawIndexedPrimitives(
+                                PrimitiveType.TriangleList,
+                                meshPart.VertexOffset,
                                 meshPart.StartIndex,
                                 meshPart.PrimitiveCount);
                         }
@@ -347,8 +398,6 @@ namespace RetroEngine
                             graphicsDevice.DrawIndexedPrimitives(
                                 PrimitiveType.TriangleList,
                                 meshPart.VertexOffset,
-                                0,
-                                meshPart.NumVertices,
                                 meshPart.StartIndex,
                                 meshPart.PrimitiveCount);
                         }
@@ -387,8 +436,6 @@ namespace RetroEngine
                             graphicsDevice.DrawIndexedPrimitives(
                                 PrimitiveType.TriangleList,
                                 meshPart.VertexOffset,
-                                0,
-                                meshPart.NumVertices,
                                 meshPart.StartIndex,
                                 meshPart.PrimitiveCount);
                         }

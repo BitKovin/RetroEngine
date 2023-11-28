@@ -1,21 +1,17 @@
-﻿using RetroEngine.Test;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
-namespace RetroEngine
+namespace RetroEngine.Test
 {
     internal class TestProgram
     {
         public static void Main()
         {
-
-            new TestGame().Run();
-
-
+            TestGame game = new TestGame();
+            game.Run();
         }
     }
 }

@@ -14,7 +14,7 @@ namespace RetroEngine
         public static Vector2 MouseDelta;
 
         static List<Vector2> MouseDeltas = new List<Vector2>();
-        static int MaxDeltas = 3;
+        static int MaxDeltas = 0;
 
         static Dictionary<string, InputAction> actions = new Dictionary<string, InputAction>();
 

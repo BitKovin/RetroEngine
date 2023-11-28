@@ -14,7 +14,7 @@ namespace RetroEngine
         public static Vector3 LightDirection = new Vector3(-1f, -1, -0.2f);
         public static Color BackgroundColor = new Color(0.15f, 0.15f, 0.2f);
 
-        public static float ShadowBias = 0.01f;
+        public static float ShadowBias = 0.005f;
         public static int shadowMapResolution = 2048;
         public static int closeShadowMapResolution = 2048;
 
@@ -23,7 +23,7 @@ namespace RetroEngine
         public static float LightDistance = 200;
         public static float CloseLightDistance = 50;
 
-        public static bool EnablePostPocessing = false;
+        public static bool EnablePostPocessing = true;
         public static bool TextureFiltration = false;
         public static bool AnisotropicFiltration = false;
 

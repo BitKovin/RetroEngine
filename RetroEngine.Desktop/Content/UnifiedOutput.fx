@@ -24,6 +24,13 @@ sampler ShadowMapCloseSampler = sampler_state
     texture = <ShadowMapClose>;
 };
 
+texture DepthMap;
+sampler DepthMapSampler = sampler_state
+{
+    texture = <DepthMap>;
+};
+
+
 float DirectBrightness;
 float GlobalBrightness;
 float3 LightDirection;
@@ -37,13 +44,14 @@ float ShadowMapResolution;
 matrix ShadowMapViewProjectionClose;
 float ShadowMapResolutionClose;
 
-#define MAX_POINT_LIGHTS 10
+#define MAX_POINT_LIGHTS 5
 
 float3 LightPositions[MAX_POINT_LIGHTS];
 float3 LightColors[MAX_POINT_LIGHTS];
 float LightRadiuses[MAX_POINT_LIGHTS];
 
 bool isViewmodel = false;
+bool isParticle = false;
 
 struct VertexInput
 {
@@ -62,6 +70,7 @@ struct PixelInput
     float4 lightPos :TEXCOORD3;
     float4 lightPosClose : TEXCOORD4;
     float3 MyPosition : TEXCOORD5;
+    float3 MyPixelPosition : TEXCOORD6;
 };
 
 float3 normalize(float3 v)
@@ -77,6 +86,7 @@ PixelInput VertexShaderFunction(VertexInput input)
     output.MyPosition = mul(input.Position, World);
     output.Position = mul(output.Position, View);
     output.Position = mul(output.Position, Projection);
+    output.MyPixelPosition = output.Position;
     
     if(isViewmodel)
     {
@@ -91,7 +101,10 @@ PixelInput VertexShaderFunction(VertexInput input)
 
     float3 lightingFactor = max(0.0, dot(output.Normal, normalize(-LightDirection))) * DirectBrightness; // Example light direction
 
-    output.light = lightingFactor;
+    if (isParticle)
+        lightingFactor = float3(1,1,1);
+    
+        output.light = lightingFactor;
 
     output.lightPos = mul(float4(mul(input.Position, World)),ShadowMapViewProjection);
     output.lightPosClose = mul(float4(mul(input.Position, World)), ShadowMapViewProjectionClose);
@@ -174,14 +187,15 @@ float GetShadow(float3 lightCoords, PixelInput input, bool close = false)
 
 float3 CalculatePointLight(int i, PixelInput pixelInput)
 {
-    if (LightRadiuses[i] <= 0)
-        return 0;
 
     float3 lightVector = LightPositions[i] - pixelInput.MyPosition;
     float distanceToLight = length(lightVector);
     float intense = saturate(1.0 - distanceToLight / LightRadiuses[i]);
     float3 dirToSurface = normalize(lightVector);
 
+    if (isParticle)
+        dirToSurface = pixelInput.Normal;
+    
     intense *= saturate(dot(pixelInput.Normal, dirToSurface) * 5 + 2);
 
     return LightColors[i] * max(intense, 0);
@@ -190,8 +204,7 @@ float3 CalculatePointLight(int i, PixelInput pixelInput)
 
 float4 PixelShaderFunction(PixelInput input) : COLOR0
 {
-
-	float3 textureColor = tex2D(TextureSampler, input.TexCoord).xyz;
+    float3 textureColor = tex2D(TextureSampler, input.TexCoord).xyz;
 	float textureAlpha = tex2D(TextureSampler, input.TexCoord).w;
 
     float3 lightCoords = input.lightPos.xyz / input.lightPos.w;
@@ -206,14 +219,12 @@ float4 PixelShaderFunction(PixelInput input) : COLOR0
     lightCoordsClose = (lightCoordsClose + 1.0f) / 2.0f;
     lightCoordsClose.y = 1.0f - lightCoordsClose.y;
 
-    if (lightCoordsClose.x >= 0.01f && lightCoordsClose.x <= 0.99f && lightCoordsClose.y >= 0.01f && lightCoordsClose.y <= 0.99f)
+    if (lightCoordsClose.x >= 0.01f && lightCoordsClose.x <= 0.99f && lightCoordsClose.y >= 0.01f && lightCoordsClose.y <= 0.99f && false)
     {
         shadow += GetShadow(lightCoordsClose, input, true);
     }
     else
-    {
         shadow += GetShadow(lightCoords, input, false);
-    }
     
     
     float3 light = input.light;

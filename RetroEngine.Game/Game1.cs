@@ -39,7 +39,7 @@ namespace RetroEngine.Game
 
         public override void GameInitialized()
         {
-            MakeFullscreen();
+            //MakeFullscreen();
         }
 
         public override void OnLevelChanged()

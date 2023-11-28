@@ -61,10 +61,10 @@ namespace RetroEngine
 
         public static Thread RenderThread;
 
-        public static bool AsyncGameThread = true;
+        public static bool AsyncGameThread = false;
 
 
-        public bool DevMenuEnabled = true;
+        public bool DevMenuEnabled = false;
 
         public GameMain()
         {
@@ -84,7 +84,7 @@ namespace RetroEngine
 
             Window.ClientSizeChanged += Window_ClientSizeChanged;
 
-            render = new Render();
+            
 
             this.Window.AllowUserResizing = true;
             if (platform == Platform.Desktop)
@@ -98,11 +98,11 @@ namespace RetroEngine
             _graphics.SynchronizeWithVerticalRetrace = false;
 
             //if (platform == Platform.Mobile)
-                //_graphics.IsFullScreen = true;
+            //_graphics.IsFullScreen = true;
             _graphics.ApplyChanges();
 
             RenderThread = Thread.CurrentThread;
-            
+            render = new Render();
 
         }
 
@@ -244,9 +244,6 @@ namespace RetroEngine
             Thread.CurrentThread.Priority = ThreadPriority.Highest;
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            if (pendingGraphicsUpdate)
-                _graphics.ApplyChanges();
-
             RenderTarget2D frame =  render.StartRenderLevel(curentLevel);
 
             GraphicsDevice.SetRenderTarget(null);
@@ -289,6 +286,9 @@ namespace RetroEngine
                 pendingGraphicsUpdate = true;
             }
 
+            if (pendingGraphicsUpdate)
+                _graphics.ApplyChanges();
+
         }
 
         public object GetView(System.Type type)
@@ -328,7 +328,9 @@ namespace RetroEngine
             _graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
             _graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
 
-            _graphics.ApplyChanges();
+            //_graphics.ApplyChanges();
+
+            pendingGraphicsUpdate = true;
 
             Fullscreen = true;
         }
