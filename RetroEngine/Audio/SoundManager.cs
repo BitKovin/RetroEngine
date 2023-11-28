@@ -69,8 +69,14 @@ namespace RetroEngine.Audio
 
             pan /= 15;
 
+            pan = Math.Clamp(pan, -1.0f, 1.0f);
+
+            if (float.IsNaN(pan))
+                pan = 0f;
+
+
             soundEffectInstance.Volume = Math.Clamp(volume,0,1);
-            soundEffectInstance.Pan = Math.Clamp(pan, -1.0f, 1.0f);
+            soundEffectInstance.Pan = pan;
             //soundEffectInstance.Apply3D(listener, emitter);
         }
 

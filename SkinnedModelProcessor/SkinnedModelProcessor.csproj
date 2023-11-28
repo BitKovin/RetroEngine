@@ -11,7 +11,4 @@
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MGSkinnedModel\MGSkinnedModel.csproj" />
-  </ItemGroup>
 </Project>

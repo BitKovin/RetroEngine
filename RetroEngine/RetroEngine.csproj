@@ -16,15 +16,12 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Assimp" Version="3.0.0" />
-    <PackageReference Include="MonoGame.Extended" Version="3.8.0" />
-    <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.1.303">
-      <PrivateAssets>All</PrivateAssets>
-    </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="RhuBulletSharp" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MGSkinnedModel\MGSkinnedModel.csproj" />
+    <ProjectReference Include="..\Libs\MonoGame\MonoGame.Framework.Content.Pipeline\MonoGame.Framework.Content.Pipeline.csproj" />
+    <ProjectReference Include="..\Libs\MonoGame\MonoGame.Framework\MonoGame.Framework.DesktopGL.csproj" />
     <ProjectReference Include="..\MonoGame.ImGuiNet\Monogame.ImGuiNet.csproj" />
   </ItemGroup>
 </Project>

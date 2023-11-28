@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
-using SkinnedModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,14 +11,13 @@ namespace RetroEngine
 {
     public class SkeletalMesh : StaticMesh
     {
-        AnimationPlayer animationPlayer;
+        //AnimationPlayer animationPlayer;
 
         public override void Draw()
         {
 
             Matrix[] bones = null;
-            if (animationPlayer is not null)
-                bones = animationPlayer.GetSkinTransforms();
+
 
             // Render the skinned mesh.
             foreach (ModelMesh mesh in model.Meshes)
@@ -45,8 +43,7 @@ namespace RetroEngine
             Effect effect = GameMain.content.Load<Effect>("NormalOutput");
 
             Matrix[] bones = null;
-            if (animationPlayer is not null)
-                bones = animationPlayer.GetSkinTransforms();
+
 
             if (model is not null)
             {

@@ -61,7 +61,7 @@ namespace RetroEngine
 
         public static Thread RenderThread;
 
-        public static bool AsyncGameThread = true;
+        public static bool AsyncGameThread = false;
 
 
         public bool DevMenuEnabled = false;
@@ -131,6 +131,7 @@ namespace RetroEngine
 
             this.Exiting += Game1_Exiting;
 
+            
         }
 
         protected override void Update(GameTime gameTime)
@@ -203,8 +204,6 @@ namespace RetroEngine
         }
         void GameLogic()
         {
-            Thread.CurrentThread.Priority = ThreadPriority.Highest;
-
             Physics.Update();
 
             curentLevel.Update();
@@ -241,8 +240,10 @@ namespace RetroEngine
 
         protected override void Draw(GameTime gameTime)
         {
-            Thread.CurrentThread.Priority = ThreadPriority.Highest;
+
             GraphicsDevice.Clear(Color.CornflowerBlue);
+
+            Console.WriteLine(1f / Time.deltaTime);
 
             RenderTarget2D frame =  render.StartRenderLevel(curentLevel);
 
@@ -256,16 +257,19 @@ namespace RetroEngine
 
             SpriteBatch.End();
 
-
             SpriteBatch.Begin(transformMatrix: Camera.UiMatrix, blendState: BlendState.AlphaBlend);
 
-            UiManger.Draw(gameTime,SpriteBatch);
+            UiManger.Draw(gameTime, SpriteBatch);
 
             SpriteBatch.DrawString(DefaultFont, (1f / Time.deltaTime).ToString(), new Vector2(100, 100), Color.White);
 
             SpriteBatch.End();
 
-            if(DevMenuEnabled)
+
+           
+
+
+            if (DevMenuEnabled)
                 ImGuiRenderer.BeforeLayout(gameTime);
 
             if (DevMenuEnabled)
@@ -275,12 +279,12 @@ namespace RetroEngine
             if (DevMenuEnabled)
                 ImGuiRenderer.AfterLayout();
 
-            
-
-            //SetupFullViewport();
             base.Draw(gameTime);
 
-            if(_graphics.IsFullScreen != Fullscreen)
+            //SetupFullViewport();
+
+
+            if (_graphics.IsFullScreen != Fullscreen)
             {
                 _graphics.IsFullScreen = Fullscreen;
                 pendingGraphicsUpdate = true;

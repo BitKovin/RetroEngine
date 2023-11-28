@@ -34,9 +34,9 @@ namespace RetroEngine.Game.Entities.Weapons
 
             hitSoundPlayer = Level.GetCurrent().AddEntity(new SoundPlayer()) as SoundPlayer;
             hitSoundPlayer.SetSound(AssetRegistry.LoadSoundFromFile("sounds/weapons/hammer/hit.wav"));
-            hitSoundPlayer.Volume = 0.15f;
+            hitSoundPlayer.Volume = 0.1f;
             hitSoundPlayer.MaxDistance = 60;
-            hitSoundPlayer.MinDistance = 0.5f;
+            hitSoundPlayer.MinDistance = 1f;
 
         }
 

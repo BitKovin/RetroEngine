@@ -75,6 +75,8 @@ namespace RetroEngine
             if (shadowMapClose is null)
                 InitCloseShadowMap(ref shadowMapClose);
 
+            graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+            graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 
             List<StaticMesh> renderList = level.GetMeshesToRender();
 
@@ -90,18 +92,15 @@ namespace RetroEngine
             //PerformLighting();
 
 
-            PerformPostProcessing();
+            //PerformPostProcessing();
 
-            return outputPath;
+            return colorPath;
         }
 
         void RenderUnifiedPath(List<StaticMesh> renderList)
         {
             graphics.GraphicsDevice.SetRenderTarget(colorPath);
             graphics.GraphicsDevice.Clear(Graphics.BackgroundColor);
-
-            graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-            graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
 
@@ -122,9 +121,6 @@ namespace RetroEngine
         {
             graphics.GraphicsDevice.SetRenderTarget(DepthOutput);
             graphics.GraphicsDevice.Clear(Color.White);
-
-            graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-            graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
 
@@ -150,10 +146,6 @@ namespace RetroEngine
 
             // Clear the shadow map with the desired clear color (e.g., Color.White)
             graphics.GraphicsDevice.Clear(Color.White);
-
-            // Set depth stencil and rasterizer states
-            graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-            graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 
             // Iterate through meshes and draw shadows
             foreach (StaticMesh mesh in renderList)
