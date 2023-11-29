@@ -72,11 +72,13 @@ namespace RetroEngine.Entities.Brushes
 
             avgLocation /= n;
 
-            for(int i = 0; i < particleLocations.Count; i++)
+            Random rand = new Random();
+
+            for (int i = 0; i < particleLocations.Count; i++)
             {
                 Vector3 location = particleLocations[i];
 
-                particleLocations[i] = (location + avgLocation) / 2f;
+                particleLocations[i] = Vector3.Lerp(location, avgLocation, (float)rand.NextDouble());
             }
 
             particleLocations.Add(avgLocation);

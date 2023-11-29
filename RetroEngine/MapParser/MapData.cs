@@ -17,6 +17,8 @@ namespace RetroEngine.Map
         public string Format { get; set; }
         public List<EntityData> Entities { get; set; } = new List<EntityData>();
 
+        public bool MergeBrushes = true;
+
         public static float UnitSize = 32;
 
         public Level GetLevel()
@@ -56,11 +58,11 @@ namespace RetroEngine.Map
 
                     }
 
-                    entity.meshes.AddRange(BrushFaceMesh.MergeFaceMeshes(faces));
+                    if(MergeBrushes)
+                        entity.meshes.AddRange(BrushFaceMesh.MergeFaceMeshes(faces));
+                    else
+                        entity.meshes.AddRange(faces);
 
-                    
-
-                    
 
                     level.entities.Add(entity);
                     entity.FromData(ent);

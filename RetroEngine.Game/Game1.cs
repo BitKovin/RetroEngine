@@ -22,7 +22,7 @@ namespace RetroEngine.Game
             devMenu = new GameDevMenu();
             devMenu.Init();
 
-            Level.LoadFromFile("test2.map");
+            Level.LoadFromFile("test.map");
 
             Window.Title = "Game";
 
@@ -39,15 +39,15 @@ namespace RetroEngine.Game
 
             GameMain.inst.curentLevel.entities.Add(new PlayerGlobal());
 
- 
-            for (int i = 1; i <= 200; i++)
-            {
 
+            for (int i = 1; i <= 10; i++)
+            {
                 NPCBase npc = new NPCBase();
                 npc.Position = new Vector3(0, 10, 0);
                 Level.GetCurrent().AddEntity(npc);
                 npc.Start();
             }
+
         }
 
         void CreateInputActions()

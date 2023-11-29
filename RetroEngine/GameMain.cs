@@ -64,7 +64,7 @@ namespace RetroEngine
         public static bool AsyncGameThread = true;
 
 
-        public bool DevMenuEnabled = false;
+        public bool DevMenuEnabled = true;
 
         public GameMain()
         {
