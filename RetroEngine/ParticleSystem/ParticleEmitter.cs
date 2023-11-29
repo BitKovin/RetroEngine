@@ -14,13 +14,15 @@ namespace RetroEngine.Particles
     {
         List<Particle> particles = new List<Particle>();
 
-        public static Model particleModel = null;
+        static Model particleModel = null;
 
         protected Random random = new Random();
 
         protected int InitialSpawnCount = 1;
 
         protected string TexturePath = null;
+
+        protected string ModelPath = null;
 
         public static ParticleEmitter RenderEmitter = new ParticleEmitter();
 
@@ -111,17 +113,25 @@ namespace RetroEngine.Particles
 
         Matrix GetWorldForParticle(Particle particle)
         {
+            if (particle.useGlobalRotation == false)
+            {
+                Matrix worldMatrix = Matrix.CreateScale(particle.Scale) *
+                                                Matrix.CreateRotationZ(particle.Rotation) *
+                                                Matrix.CreateRotationX(Camera.rotation.X / 180 * (float)Math.PI) *
+                                                Matrix.CreateRotationY(Camera.rotation.Y / 180 * (float)Math.PI) *
+                                                Matrix.CreateTranslation(particle.position);
 
-            if (particle.Scale > 0.5f)
-                Console.WriteLine(particle.Scale);
+                return worldMatrix;
+            }else
+            {
+                Matrix worldMatrix = Matrix.CreateScale(particle.Scale) *
+                                Matrix.CreateRotationX(particle.globalRotation.X / 180 * (float)Math.PI) *
+                                Matrix.CreateRotationY(particle.globalRotation.Y / 180 * (float)Math.PI) *
+                                Matrix.CreateRotationZ(particle.globalRotation.Z / 180 * (float)Math.PI) *
+                                Matrix.CreateTranslation(particle.position);
 
-            Matrix worldMatrix = Matrix.CreateScale(particle.Scale) *
-                                            Matrix.CreateRotationZ(particle.Rotation) *
-                                            Matrix.CreateRotationX(Camera.rotation.X / 180 * (float)Math.PI) *
-                                            Matrix.CreateRotationY(Camera.rotation.Y / 180 * (float)Math.PI) *
-                                            Matrix.CreateTranslation(particle.position);
-
-            return worldMatrix;
+                return worldMatrix;
+            }
         }
         public override void DrawUnified()
         {
@@ -148,7 +158,7 @@ namespace RetroEngine.Particles
             {
                 texture = AssetRegistry.LoadTextureFromFile(particle.texturePath);
                 
-                frameStaticMeshData.model = particleModel;
+                frameStaticMeshData.model = (particle.customModelPath == null) ? particleModel : GetModelFromPath(particle.customModelPath);
                 frameStaticMeshData.World = GetWorldForParticle(particle);
                 frameStaticMeshData.Transparency = particle.transparency;
 
@@ -192,6 +202,11 @@ namespace RetroEngine.Particles
             public Vector3 position = new Vector3();
             public Vector3 velocity = new Vector3();
 
+            public Vector3 globalRotation = new Vector3();
+            public bool useGlobalRotation = false;
+
+            public string customModelPath = null;
+
             public int seed = 0;
 
             public int id = 0;
@@ -205,7 +220,7 @@ namespace RetroEngine.Particles
             public float Rotation = 0;
             public bool OrientRotationToVelocity = false;
 
-            public string texturePath = null; //do not set texture on game thread
+            public string texturePath = null;
 
             public Particle()
             {

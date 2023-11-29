@@ -32,7 +32,7 @@ namespace RetroEngine.Entities.Brushes
             {
                 foreach (Vector3 location in particleLocations)
                 {
-                    ParticleSystem system = ParticleSystem.Create("hitSmoke");
+                    ParticleSystem system = ParticleSystem.Create("destructionWood");
                     system.Position = location;
                     system.Start();
                 }
@@ -78,7 +78,7 @@ namespace RetroEngine.Entities.Brushes
             {
                 Vector3 location = particleLocations[i];
 
-                particleLocations[i] = Vector3.Lerp(location, avgLocation, (float)rand.NextDouble());
+                particleLocations[i] = Vector3.Lerp(location, avgLocation, Math.Min((float)rand.NextDouble() + 0.2f,1));
             }
 
             particleLocations.Add(avgLocation);

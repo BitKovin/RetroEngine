@@ -80,7 +80,6 @@ namespace RetroEngine
         {
             log.Add(input);
             scrolldown = true;
-            //input = "";
         }
 
         public virtual void Init() 

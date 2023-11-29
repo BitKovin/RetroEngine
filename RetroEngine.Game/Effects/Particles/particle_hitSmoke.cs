@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using RetroEngine.Entities;
 using RetroEngine.Particles;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,17 @@ using System.Threading.Tasks;
 
 namespace RetroEngine.Game.Effects.Particles
 {
+
+    [ParticleSystem("hitSmoke")]
+    public class particle_system_hitSmoke : ParticleSystem
+    {
+
+        public particle_system_hitSmoke()
+        {
+            emitters.Add(new particle_hitSmoke());
+        }
+
+    }
     public class particle_hitSmoke : ParticleEmitter
     {
         public particle_hitSmoke()

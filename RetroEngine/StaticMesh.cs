@@ -516,6 +516,7 @@ namespace RetroEngine
 
             var meshParts = new List<ModelMeshPart>();
 
+
             List<ModelMesh> modelMesh = new List<ModelMesh>();
             BoundingSphere boundingSphere = new BoundingSphere(Vector3.Zero, 100);
             foreach (var mesh in scene.Meshes)
