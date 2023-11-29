@@ -630,8 +630,7 @@ namespace RetroEngine
         protected bool IsBoundingSphereInFrustum(BoundingSphere sphere)
         {
 
-            BoundingFrustum frustum = new BoundingFrustum(Camera.view * Camera.projection);
-            return frustum.Contains(sphere.Transform(GetWorldMatrix())) != ContainmentType.Disjoint;
+            return Camera.frustum.Contains(sphere.Transform(GetWorldMatrix())) != ContainmentType.Disjoint;
         }
 
         public virtual void RenderPreparation()

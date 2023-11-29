@@ -20,6 +20,8 @@ namespace RetroEngine
         public static Matrix projection;
         public static Matrix projectionViewmodel;
 
+        public static BoundingFrustum frustum = new BoundingFrustum(new Matrix());
+
         public static float roll = 0;
         public static float FOV = 70;
         public static float ViewmodelFOV = 46;
@@ -61,6 +63,9 @@ namespace RetroEngine
 
             projection = Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.ToRadians(FOV), (float)GameMain.inst.Window.ClientBounds.Width / (float)GameMain.inst.Window.ClientBounds.Height, 0.3f, 5000f);
             projectionViewmodel = Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.ToRadians(ViewmodelFOV), (float)GameMain.inst.Window.ClientBounds.Width / (float)GameMain.inst.Window.ClientBounds.Height, 0.01f, 5f);
+
+            frustum.Matrix = view * projection;
+
         }
 
         public static void Follow(Entity target)
