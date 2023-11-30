@@ -11,6 +11,7 @@ matrix World;
 matrix View;
 matrix Projection;
 
+float DepthScale;
 
 struct VertexShaderInput
 {
@@ -34,11 +35,14 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
     output.Position = mul(input.Position, World);
     output.Position = mul(output.Position, View);
     output.Position = mul(output.Position, Projection);
+    output.Position.z *= DepthScale;
     output.Color = input.Color;
 
     // Pass the world space normal to the pixel shader
     output.Normal = mul(input.Normal, (float3x3)World);
 
+    output.Normal = normalize(output.Normal);
+    
     return output;
 }
 

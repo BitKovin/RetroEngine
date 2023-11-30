@@ -144,6 +144,17 @@ namespace RetroEngine.Particles
             GameMain.inst.render.particlesToDraw.AddRange(finalizedParticles);
         }
 
+        public override void Draw()
+        {
+            if (Destroyed) return;
+            if (particleModel == null)
+            {
+                LoadFromFile("models/particle.obj");
+                particleModel = model;
+            }
+            GameMain.inst.render.particlesToDraw.AddRange(finalizedParticles);
+        }
+
         public static void LoadRenderEmitter()
         {
                 RenderEmitter.model = particleModel;
@@ -157,12 +168,82 @@ namespace RetroEngine.Particles
             foreach (var particle in particleList)
             {
                 texture = AssetRegistry.LoadTextureFromFile(particle.texturePath);
-                
+
                 frameStaticMeshData.model = (particle.customModelPath == null) ? particleModel : GetModelFromPath(particle.customModelPath);
                 frameStaticMeshData.World = GetWorldForParticle(particle);
                 frameStaticMeshData.Transparency = particle.transparency;
 
                 base.DrawUnified();
+            }
+        }
+
+        public void DrawParticlesColor(List<Particle> particleList)
+        {
+            particleList = particleList.OrderByDescending(p => Vector3.Dot(p.position - Camera.position, Camera.rotation.GetForwardVector())).ToList();
+
+            foreach (var particle in particleList)
+            {
+                texture = AssetRegistry.LoadTextureFromFile(particle.texturePath);
+                
+                frameStaticMeshData.model = (particle.customModelPath == null) ? particleModel : GetModelFromPath(particle.customModelPath);
+                frameStaticMeshData.World = GetWorldForParticle(particle);
+                frameStaticMeshData.Transparency = particle.transparency;
+
+                DrawColor();
+            }
+        }
+
+        public void DrawColor()
+        {
+            GraphicsDevice graphicsDevice = GameMain.inst._graphics.GraphicsDevice;
+            // Load the custom effect
+            Effect effect = GameMain.inst.render.ParticleColorEffect;
+
+            if (model is not null)
+            {
+                foreach (ModelMesh mesh in frameStaticMeshData.model.Meshes)
+                {
+                    foreach (ModelMeshPart meshPart in mesh.MeshParts)
+                    {
+
+                        // Set the vertex buffer and index buffer for this mesh part
+                        graphicsDevice.SetVertexBuffer(meshPart.VertexBuffer);
+                        graphicsDevice.Indices = meshPart.IndexBuffer;
+
+                        effect.Parameters["Texture"].SetValue(texture);
+
+                        effect.Parameters["WorldViewProjection"].SetValue(frameStaticMeshData.World * frameStaticMeshData.View * frameStaticMeshData.Projection);
+
+                        effect.Parameters["Transparency"].SetValue(frameStaticMeshData.Transparency);
+
+                        // Draw the primitives using the custom effect
+                        foreach (EffectPass pass in effect.CurrentTechnique.Passes)
+                        {
+                            pass.Apply();
+                            graphicsDevice.DrawIndexedPrimitives(
+                                PrimitiveType.TriangleList,
+                                meshPart.VertexOffset,
+                                meshPart.StartIndex,
+                                meshPart.PrimitiveCount);
+                        }
+                    }
+                }
+            }
+        }
+
+        public void DrawParticlesNormal(List<Particle> particleList)
+        {
+            particleList = particleList.OrderByDescending(p => Vector3.Dot(p.position - Camera.position, Camera.rotation.GetForwardVector())).ToList();
+
+            foreach (var particle in particleList)
+            {
+                texture = AssetRegistry.LoadTextureFromFile(particle.texturePath);
+
+                frameStaticMeshData.model = (particle.customModelPath == null) ? particleModel : GetModelFromPath(particle.customModelPath);
+                frameStaticMeshData.World = GetWorldForParticle(particle);
+                frameStaticMeshData.Transparency = particle.transparency;
+
+                base.DrawNormals();
             }
         }
 

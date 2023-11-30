@@ -51,6 +51,7 @@ namespace RetroEngine
 
             foreach(var item in log)
             {
+                if(item is not null)
                 if(ImGui.Selectable(item))
                 {
                     ImGui.SetClipboardText(item);

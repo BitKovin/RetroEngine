@@ -23,6 +23,8 @@ struct VertexShaderOutput
     float4 myPosition : TEXCOORD1;
 };
 
+float DepthScale = 1;
+
 VertexShaderOutput MainVS(in VertexShaderInput input)
 {
     VertexShaderOutput output;
@@ -32,6 +34,7 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
     output.Position = mul(output.Position, View);
     output.Position = mul(output.Position, Projection);
     output.myPosition = output.Position;
+    //output.Position.z *= DepthScale;
 
     return output;
 }

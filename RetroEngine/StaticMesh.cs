@@ -78,19 +78,54 @@ namespace RetroEngine
 
         public virtual void Draw()
         {
-            foreach (ModelMesh mesh in model.Meshes)
+            GraphicsDevice graphicsDevice = GameMain.inst._graphics.GraphicsDevice;
+            // Load the custom effect
+            Effect effect = GameMain.inst.render.ColorEffect;
+
+            if (model is not null)
             {
-                foreach (BasicEffect effect in mesh.Effects)
+                foreach (ModelMesh mesh in frameStaticMeshData.model.Meshes)
                 {
-                    effect.World = GetWorldMatrix();
-                    effect.View = Camera.view;
-                    effect.Projection = Camera.projection;
-                    effect.Texture = texture;
-                    effect.TextureEnabled = texture is not null;
+                    foreach (ModelMeshPart meshPart in mesh.MeshParts)
+                    {
 
+                        // Set the vertex buffer and index buffer for this mesh part
+                        graphicsDevice.SetVertexBuffer(meshPart.VertexBuffer);
+                        graphicsDevice.Indices = meshPart.IndexBuffer;
+
+                        MeshPartData meshPartData = meshPart.Tag as MeshPartData;
+                        if (meshPartData is not null)
+                        {
+                            effect.Parameters["Texture"].SetValue(FindTexture(meshPartData.textureName));
+                        }
+                        else
+                        {
+                            effect.Parameters["Texture"].SetValue(texture);
+                        }
+
+                        effect.Parameters["DepthScale"].SetValue(frameStaticMeshData.Viewmodel ? 0.1f : 1);
+
+                        Matrix projection;
+
+                        if (frameStaticMeshData.Viewmodel)
+                            projection = frameStaticMeshData.ProjectionViewmodel;
+                        else
+                            projection = frameStaticMeshData.Projection;
+
+                        effect.Parameters["WorldViewProjection"].SetValue(frameStaticMeshData.World * frameStaticMeshData.View * projection);
+
+                        // Draw the primitives using the custom effect
+                        foreach (EffectPass pass in effect.CurrentTechnique.Passes)
+                        {
+                            pass.Apply();
+                            graphicsDevice.DrawIndexedPrimitives(
+                                PrimitiveType.TriangleList,
+                                meshPart.VertexOffset,
+                                meshPart.StartIndex,
+                                meshPart.PrimitiveCount);
+                        }
+                    }
                 }
-
-                mesh.Draw();
             }
         }
 
@@ -274,12 +309,6 @@ namespace RetroEngine
                         graphicsDevice.SetVertexBuffer(meshPart.VertexBuffer);
                         graphicsDevice.Indices = meshPart.IndexBuffer;
 
-
-                        if (closeShadow)
-                            Graphics.LightViewProjectionClose = frameStaticMeshData.LightView * frameStaticMeshData.LightProjectionClose;
-                        else
-                            Graphics.LightViewProjection = frameStaticMeshData.LightView * frameStaticMeshData.LightProjection;
-
                         // Set effect parameters
                         effect.Parameters["World"].SetValue(frameStaticMeshData.World);
                         effect.Parameters["View"].SetValue(frameStaticMeshData.View);
@@ -287,6 +316,8 @@ namespace RetroEngine
                             effect.Parameters["Projection"].SetValue(frameStaticMeshData.ProjectionViewmodel);
                         else
                             effect.Parameters["Projection"].SetValue(frameStaticMeshData.Projection);
+
+                        effect.Parameters["DepthScale"].SetValue(frameStaticMeshData.Viewmodel ? 0.01f : 1);
 
                         // Draw the primitives using the custom effect
                         foreach (EffectPass pass in effect.CurrentTechnique.Passes)
@@ -374,6 +405,9 @@ namespace RetroEngine
 
         public virtual void DrawNormals()
         {
+
+            if (Transperent) return;
+
             GraphicsDevice graphicsDevice = GameMain.inst._graphics.GraphicsDevice;
             // Load the custom effect
             Effect effect = GameMain.inst.render.NormalEffect;
@@ -390,9 +424,11 @@ namespace RetroEngine
                         graphicsDevice.Indices = meshPart.IndexBuffer;
 
                         // Set effect parameters
-                        effect.Parameters["World"].SetValue(GetWorldMatrix());
-                        effect.Parameters["View"].SetValue(Camera.view);
-                        effect.Parameters["Projection"].SetValue(Camera.projection);
+                        effect.Parameters["World"].SetValue(frameStaticMeshData.World);
+                        effect.Parameters["View"].SetValue(frameStaticMeshData.View);
+                        effect.Parameters["Projection"].SetValue(frameStaticMeshData.Viewmodel? frameStaticMeshData.ProjectionViewmodel: frameStaticMeshData.Projection);
+
+                        effect.Parameters["DepthScale"].SetValue(frameStaticMeshData.Viewmodel ? 0.01f : 1);
 
                         // Draw the primitives using the custom effect
                         foreach (EffectPass pass in effect.CurrentTechnique.Passes)
