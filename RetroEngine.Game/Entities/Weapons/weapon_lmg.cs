@@ -71,7 +71,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             if (attackDelay.Wait()) return;
 
-            attackDelay.AddDelay(0.12f);
+            attackDelay.AddDelay(0.11f);
 
             fireSoundPlayer.Play(true);
 
@@ -98,7 +98,7 @@ namespace RetroEngine.Game.Entities.Weapons
             Level.GetCurrent().AddEntity(bullet);
 
 
-            bullet.Position = (Camera.position.ToPhysics() + Camera.rotation.GetForwardVector().ToPhysics() * 0.5f + Camera.rotation.GetRightVector().ToPhysics() / 10f - Camera.rotation.GetUpVector().ToPhysics() / 4f);
+            bullet.Position = (Camera.position.ToPhysics() + Camera.rotation.GetForwardVector().ToPhysics() * 0.4f + Camera.rotation.GetRightVector().ToPhysics() / 20f - Camera.rotation.GetUpVector().ToPhysics() / 8f);
 
             bullet.Start();
             bullet.Speed = 100;

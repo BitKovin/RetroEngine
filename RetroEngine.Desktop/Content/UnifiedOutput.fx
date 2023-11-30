@@ -150,11 +150,6 @@ float GetShadow(float3 lightCoords, PixelInput input, bool close = false)
 
         float bias = ShadowBias * abs(input.Normal.z) + ShadowBias / 2.0f;
         resolution = ShadowMapResolution;
-        if (close)
-        {
-            bias /= 3.0f;
-            resolution /= 1.0f;
-        }
             
         
         float texelSize = 1.0f / resolution; // Assuming ShadowMapSize is the size of your shadow map texture
@@ -165,9 +160,6 @@ float GetShadow(float3 lightCoords, PixelInput input, bool close = false)
             {
                 float2 offsetCoords = lightCoords.xy + float2(i, j) * texelSize;
                 float closestDepth;
-                if (close)
-                    closestDepth = SampleShadowMapLinear(ShadowMapCloseSampler, offsetCoords, currentDepth - bias, float2(texelSize, texelSize));
-                else
                     closestDepth = SampleShadowMapLinear(ShadowMapSampler, offsetCoords, currentDepth - bias, float2(texelSize, texelSize));
 
                 shadow += closestDepth;
