@@ -139,13 +139,15 @@ namespace RetroEngine
 
                     if(meshPartData != null)
                         FindTexture(meshPartData.textureName);
+                    if (meshPartData != null)
+                        FindEmissiveTexture(meshPartData.textureName);
                 }
             }
         }
 
         public virtual void DrawUnified()
         {
-            if (frameStaticMeshData.IsRendered == false) return;
+            if (frameStaticMeshData.IsRendered == false && frameStaticMeshData.Viewmodel == false) return;
 
             GraphicsDevice graphicsDevice = GameMain.inst._graphics.GraphicsDevice;
             // Load the custom effect
