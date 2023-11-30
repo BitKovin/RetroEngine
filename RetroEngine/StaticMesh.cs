@@ -171,7 +171,7 @@ namespace RetroEngine
                         effect.Parameters["View"].SetValue(frameStaticMeshData.View);
                         effect.Parameters["Projection"].SetValue(frameStaticMeshData.Viewmodel? frameStaticMeshData.ProjectionViewmodel : frameStaticMeshData.Projection);
 
-                        effect.Parameters["isViewmodel"].SetValue(frameStaticMeshData.Viewmodel);
+                        effect.Parameters["depthScale"].SetValue(frameStaticMeshData.Viewmodel? 0.04f : 1);
 
                         effect.Parameters["DirectBrightness"].SetValue(Graphics.DirectLighting);
                         effect.Parameters["GlobalBrightness"].SetValue(Graphics.GlobalLighting);

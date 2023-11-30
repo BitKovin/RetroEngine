@@ -136,9 +136,11 @@ namespace RetroEngine.Game.Entities.Weapons
 
             mesh.textureSearchPaths.Add("textures/weapons/arms/");
             mesh.textureSearchPaths.Add("textures/weapons/shotgun/");
+            mesh.textureSearchPaths.Add("textures/weapons/general/");
             mesh.CastShadows = false;
             mesh.PreloadTextures();
             mesh.Viewmodel = true;
+            mesh.Transperent = true;
             mesh.UseAlternativeRotationCalculation = true;
 
             meshes.Add(mesh);

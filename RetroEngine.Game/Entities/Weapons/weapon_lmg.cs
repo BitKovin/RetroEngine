@@ -83,11 +83,11 @@ namespace RetroEngine.Game.Entities.Weapons
 
             Vector3 bulletRotation;
 
-            float x = ((float)random.NextDouble() - 0.5f) * 2f;
-            float y = ((float)random.NextDouble() - 0.5f) * 2f;
+            float x = ((float)random.NextDouble() - 0.5f) * 4f;
+            float y = ((float)random.NextDouble() - 0.5f) * 4f;
 
             Vector3 startPos = Camera.position;
-            Vector3 endPos = Camera.position + Camera.rotation.GetForwardVector() * 60 + Camera.rotation.GetRightVector() * x + Camera.rotation.GetUpVector() * y;
+            Vector3 endPos = Camera.position + Camera.rotation.GetForwardVector() * 100 + Camera.rotation.GetRightVector() * x + Camera.rotation.GetUpVector() * y;
 
             bulletRotation = MathHelper.FindLookAtRotation(startPos, endPos);
 
@@ -102,7 +102,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             bullet.Start();
             bullet.Speed = 100;
-            bullet.Damage = 8;
+            bullet.Damage = 16;
 
             bullet.ignore.Add(player);
 
@@ -129,12 +129,12 @@ namespace RetroEngine.Game.Entities.Weapons
             mesh.Scale = new Vector3(0.7f);
 
 
-            for (int i = 1; i <= 10; i++)
+            for (int i = 1; i <= 30; i++)
             {
                 mesh.AddFrame($"Animations/LMG/Fire/frame_{i}.obj");
             }
 
-            mesh.frameTime = 1f / 61f;
+            mesh.frameTime = 1f / 62f;
 
             mesh.textureSearchPaths.Add("textures/weapons/arms/");
             mesh.textureSearchPaths.Add("textures/weapons/LMG/");

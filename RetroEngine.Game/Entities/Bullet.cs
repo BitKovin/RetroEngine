@@ -114,6 +114,9 @@ namespace RetroEngine.Game.Entities
 
                 if (ent == null) return;
 
+                hit.CollisionObject?.Activate();
+                RigidBody.Upcast(hit.CollisionObject)?.ApplyCentralImpulse(startRotation.GetForwardVector().ToNumerics() * Damage / 2f);
+
                 ent.OnPointDamage(Damage, hit.HitPointWorld, Rotation.GetForwardVector(), this, this);
 
                 Logger.Log(ent.name);

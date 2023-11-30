@@ -103,9 +103,9 @@ namespace RetroEngine
             //PerformLighting();
 
             graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearClamp;
-            //PerformPostProcessing();
+            PerformPostProcessing();
 
-            return colorPath;
+            return outputPath;
         }
 
         void RenderUnifiedPath(List<StaticMesh> renderList)
@@ -191,8 +191,8 @@ namespace RetroEngine
 
         void PerformPostProcessing()
         {
-            PerformSSAO();
-            //PerformFXAA();
+            //PerformSSAO();
+            PerformFXAA();
             return;
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
 
@@ -239,7 +239,11 @@ namespace RetroEngine
         }
         void PerformFXAA()
         {
-
+            if(Graphics.EnableAntiAliasing == false)
+            {
+                outputPath = colorPath;
+                return;
+            }
             // Set the render target to the output path
             graphics.GraphicsDevice.SetRenderTarget(outputPath);
 
@@ -255,14 +259,14 @@ namespace RetroEngine
 
             fxaaEffect.Parameters["invViewportWidth"].SetValue(1f / graphics.PreferredBackBufferWidth);
             fxaaEffect.Parameters["invViewportHeight"].SetValue(1f / graphics.PreferredBackBufferHeight);
-            fxaaEffect.Parameters["screenColor"].SetValue(ssaoOutput);
+            fxaaEffect.Parameters["screenColor"].SetValue(colorPath);
 
             // Begin drawing with SpriteBatch
             SpriteBatch spriteBatch = GameMain.inst.SpriteBatch;
             spriteBatch.Begin(effect: fxaaEffect);
 
             // Draw a full-screen quad to apply the lighting
-            DrawFullScreenQuad(spriteBatch, ssaoOutput);
+            DrawFullScreenQuad(spriteBatch, colorPath);
 
             // End the SpriteBatch
             spriteBatch.End();

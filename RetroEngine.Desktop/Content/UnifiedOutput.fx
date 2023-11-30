@@ -50,8 +50,9 @@ float3 LightPositions[MAX_POINT_LIGHTS];
 float3 LightColors[MAX_POINT_LIGHTS];
 float LightRadiuses[MAX_POINT_LIGHTS];
 
-bool isViewmodel = false;
 bool isParticle = false;
+
+float depthScale = 1.0f;
 
 struct VertexInput
 {
@@ -88,10 +89,7 @@ PixelInput VertexShaderFunction(VertexInput input)
     output.Position = mul(output.Position, Projection);
     output.MyPixelPosition = output.Position;
     
-    if(isViewmodel)
-    {
-        output.Position.z /= 10;
-    }
+    output.Position.z *= depthScale;
     
     output.TexCoord = input.TexCoord;
 
@@ -235,10 +233,12 @@ float4 PixelShaderFunction(PixelInput input) : COLOR0
 	textureColor *= light;
 
 
-    textureColor += tex2D(EmissiveTextureSampler, input.TexCoord).xyz * EmissionPower;
+    textureColor += tex2D(EmissiveTextureSampler, input.TexCoord).rgb * EmissionPower * tex2D(EmissiveTextureSampler, input.TexCoord).a;
 
+    textureColor = saturate(textureColor);
+    
     textureColor *= Transparency;
-    textureAlpha *= Transparency;
+    //textureAlpha *= Transparency * tex2D(EmissiveTextureSampler, input.TexCoord).a;
     
     return float4(textureColor, textureAlpha);
 }

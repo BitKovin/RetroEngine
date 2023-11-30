@@ -26,6 +26,7 @@ namespace RetroEngine
         public static bool EnablePostPocessing = true;
         public static bool TextureFiltration = false;
         public static bool AnisotropicFiltration = false;
+        public static bool EnableAntiAliasing = false;
 
         public static Vector3 lightlocation = new Vector3();
 
