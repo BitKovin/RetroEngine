@@ -22,16 +22,6 @@ float LightRadiuses[MAX_POINT_LIGHTS];
 
 
 
-//shadow map
-matrix ShadowMapViewProjection;
-float ShadowMapResolution;
-texture ShadowMap;
-sampler ShadowMapSampler = sampler_state
-{
-    texture = <ShadowMap>;
-};
-
-
 //buffers
 texture ColorTexture;
 sampler ColorTextureSampler = sampler_state
@@ -56,6 +46,16 @@ sampler PositionTextureSampler = sampler_state
 {
     texture = <PositionTexture>;
 };
+
+//shadow map
+matrix ShadowMapViewProjection;
+float ShadowMapResolution;
+texture ShadowMap;
+sampler ShadowMapSampler = sampler_state
+{
+    texture = <ShadowMap>;
+};
+float ShadowBias = 0.05f;
 
 
 struct PixelShaderInput
@@ -85,6 +85,47 @@ float SampleShadowMapLinear(sampler2D shadowMap, float2 coords, float compare, f
     return lerp(mixA, mixB, fracPart.x);
 }
 
+float GetShadow(float3 lightCoords, float3 position, float3 normal)
+{
+    float shadow = 0;
+
+    if (lightCoords.x >= 0 && lightCoords.x <= 1 && lightCoords.y >= 0 && lightCoords.y <= 1)
+    {
+        float currentDepth = lightCoords.z * 2 - 1;
+
+        float resolution = 1;
+        
+
+        int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)
+
+        float bias = ShadowBias * abs(normal.z) + ShadowBias / 2.0f;
+        resolution = ShadowMapResolution;
+            
+        
+        float texelSize = 1.0f / resolution; // Assuming ShadowMapSize is the size of your shadow map texture
+        
+        for (int i = -numSamples; i <= numSamples; ++i)
+        {
+            for (int j = -numSamples; j <= numSamples; ++j)
+            {
+                float2 offsetCoords = lightCoords.xy + float2(i, j) * texelSize;
+                float closestDepth;
+                closestDepth = SampleShadowMapLinear(ShadowMapSampler, offsetCoords, currentDepth - bias, float2(texelSize, texelSize));
+
+                shadow += closestDepth;
+
+            }
+        }
+
+        // Normalize the accumulated shadow value
+        shadow /= ((2 * numSamples + 1) * (2 * numSamples + 1));
+        
+        return (1 - shadow) * (1 - shadow);
+    }
+    return 0;
+    
+}
+
 float3 SolvePointLight(int i, float3 position, float3 normal)
 {
 
@@ -101,7 +142,6 @@ float3 SolvePointLight(int i, float3 position, float3 normal)
 float3 SolveDirectionalLight(float3 normal)
 {
     float light = max(dot(normal, LightDirection * -1.0f),0) * DirectBrightness;
-    light += GlobalBrightness;
     return float3(light,light,light);
 
 }
@@ -109,9 +149,24 @@ float3 SolveDirectionalLight(float3 normal)
 float3 CalculateLight(float3 position, float3 normal)
 {
     float3 light = float3(0, 0, 0);
-	
-    light += SolveDirectionalLight(normal);
+    
+    float4 lightPos = mul(float4(position,1), ShadowMapViewProjection);
+    
+    float3 lightCoords = lightPos.xyz / lightPos.w;
 
+    float shadow = 0;
+    
+    lightCoords = (lightCoords + 1.0f) / 2.0f;
+
+    lightCoords.y = 1.0f - lightCoords.y;
+    
+    shadow += GetShadow(lightCoords, position, normal);
+    light -= shadow;
+    
+    light += SolveDirectionalLight(normal);
+    light = max(light, 0);
+    light += GlobalBrightness;
+    
     for (int i = 0; i < MAX_POINT_LIGHTS; i++)
     {
         light += SolvePointLight(i, position, normal);

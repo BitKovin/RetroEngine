@@ -180,10 +180,9 @@ namespace RetroEngine
                         effect.Parameters["ShadowMapViewProjection"].SetValue(Graphics.LightViewProjection);
                         effect.Parameters["ShadowMapViewProjectionClose"].SetValue(Graphics.LightViewProjectionClose);
                         effect.Parameters["ShadowMap"].SetValue(GameMain.inst.render.shadowMap);
-                        //effect.Parameters["ShadowMapClose"].SetValue(GameMain.inst.render.shadowMapClose);
+
                         effect.Parameters["ShadowBias"].SetValue(Graphics.ShadowBias);
                         effect.Parameters["ShadowMapResolution"].SetValue((float)Graphics.shadowMapResolution);
-                        //effect.Parameters["ShadowMapResolutionClose"].SetValue((float)Graphics.closeShadowMapResolution);
 
                         //effect.Parameters["DepthMap"].SetValue(GameMain.inst.render.DepthOutput);
 
@@ -599,6 +598,12 @@ namespace RetroEngine
             {
                 scene = importer.ImportFile(filePath, Assimp.PostProcessSteps.MakeLeftHanded | Assimp.PostProcessSteps.FlipUVs);
                 loadedScenes.Add(filePath, scene);
+            }
+
+            while (loadedScenes.Keys.Count > 2)
+            {
+                loadedScenes.Remove(loadedScenes.Keys.First());
+                importer = new Assimp.AssimpContext();
             }
 
             if (scene == null)

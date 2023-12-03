@@ -65,11 +65,18 @@ PixelShaderOutput MainPS(VertexShaderOutput input)
 	
     PixelShaderOutput output = (PixelShaderOutput) 0;
 	
-    output.Color = float4(tex2D(ColorTextureSampler, input.TexCoord).rgb,1);
-    output.Emissive = float4(tex2D(EmissiveTextureSampler, input.TexCoord).rgb, 1);
-    output.Normal = float4(input.Normal / 2.0f + 0.5f,1);
-    output.Position = float4(input.WorldPosition, 1);
-	
+    if (tex2D(ColorTextureSampler, input.TexCoord).a >= 0.5f)
+    {
+        output.Color = float4(tex2D(ColorTextureSampler, input.TexCoord).rgb, 1);
+        output.Emissive = float4(tex2D(EmissiveTextureSampler, input.TexCoord).rgb, 1);
+        output.Normal = float4(input.Normal / 2.0f + 0.5f, 1);
+        output.Position = float4(input.WorldPosition, 1);
+    }
+    else
+    {
+        output.Color = output.Emissive = output.Normal = output.Position = float4(0, 0, 0, 0);
+
+    }
 	return output;
 }
 

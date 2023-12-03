@@ -193,6 +193,12 @@ namespace RetroEngine
             DeferredEffect.Parameters["LightColors"].SetValue(LightColor);
             DeferredEffect.Parameters["LightRadiuses"].SetValue(LightRadius);
 
+
+            DeferredEffect.Parameters["ShadowMapViewProjection"].SetValue(Graphics.LightViewProjection);
+            DeferredEffect.Parameters["ShadowMap"].SetValue(shadowMap);
+            DeferredEffect.Parameters["ShadowBias"].SetValue(Graphics.ShadowBias);
+            DeferredEffect.Parameters["ShadowMapResolution"].SetValue((float)Graphics.shadowMapResolution);
+
             SpriteBatch spriteBatch = GameMain.inst.SpriteBatch;
 
             spriteBatch.Begin(effect: DeferredEffect);
@@ -223,7 +229,7 @@ namespace RetroEngine
 
             if (shadowPassRenderDelay.Wait()) return;
 
-            shadowPassRenderDelay.AddDelay(0.02f);
+            //shadowPassRenderDelay.AddDelay(0.01f);
 
             // Set up the shadow map render target with the desired resolution
             graphics.GraphicsDevice.SetRenderTarget(shadowMap);

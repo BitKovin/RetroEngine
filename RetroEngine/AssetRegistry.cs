@@ -29,7 +29,7 @@ namespace RetroEngine
 
         const string ROOT_PATH = "../../../../";
 
-        const int MaxTexturesInMemory = 50;
+        const int MaxTexturesInMemory = 70;
 
         public static Texture2D LoadTextureFromFile(string path, bool ignoreErrors = false)
         {
