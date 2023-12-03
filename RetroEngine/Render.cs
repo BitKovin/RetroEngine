@@ -16,7 +16,12 @@ namespace RetroEngine
     {
 
         RenderTarget2D colorPath;
+        RenderTarget2D emissivePath;
         RenderTarget2D normalPath;
+        RenderTarget2D positionPath;
+
+        RenderTarget2D DeferredOutput;
+
         RenderTarget2D miscPath;
         RenderTarget2D postProcessingOutput;
         public RenderTarget2D DepthOutput;
@@ -33,11 +38,14 @@ namespace RetroEngine
 
         Effect lightingEffect;
 
+        public Effect UnifiedEffect;
+        public Effect BuffersEffect;
+        public Effect DeferredEffect;
+
         public Effect ColorEffect;
         public Effect ParticleColorEffect;
         public Effect NormalEffect;
         public Effect MiscEffect;
-        public Effect UnifiedEffect;
 
         public Effect ShadowMapEffect;
 
@@ -63,6 +71,9 @@ namespace RetroEngine
             ColorEffect = GameMain.content.Load<Effect>("ColorOutput");
             ParticleColorEffect = GameMain.content.Load<Effect>("ParticleColorOutput");
             SSAOEffect = GameMain.content.Load<Effect>("SSAO");
+            BuffersEffect = GameMain.content.Load<Effect>("GPathesOutput");
+
+            DeferredEffect = GameMain.content.Load<Effect>("DeferredShading");
         }
 
         public RenderTarget2D StartRenderLevel(Level level)
@@ -72,8 +83,12 @@ namespace RetroEngine
             CreateBlackTexture();
 
             InitRenderTargetIfNeed(ref colorPath);
-            InitRenderTargetIfNeed(ref DepthOutput);
+            InitRenderTargetIfNeed(ref emissivePath);
             InitRenderTargetIfNeed(ref normalPath);
+            InitRenderTargetVectorIfNeed(ref positionPath);
+
+            InitRenderTargetIfNeed(ref DeferredOutput);
+
             InitRenderTargetIfNeed(ref outputPath);
             InitRenderTargetIfNeed(ref ssaoOutput);
             //InitRenderTargetIfNeed(ref miscPath);
@@ -98,14 +113,16 @@ namespace RetroEngine
             RenderShadowMap(renderList);
 
 
-            RenderUnifiedPath(renderList);
+            //RenderUnifiedPath(renderList);
+            DrawPathes(renderList);
+            PerformDifferedShading();
             //RenderColorPath(renderList);
             //PerformLighting();
 
             graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearClamp;
-            PerformPostProcessing();
+            //PerformPostProcessing();
 
-            return outputPath;
+            return DeferredOutput;
         }
 
         void RenderUnifiedPath(List<StaticMesh> renderList)
@@ -125,6 +142,64 @@ namespace RetroEngine
             ParticleEmitter.LoadRenderEmitter();
             ParticleEmitter.RenderEmitter.DrawParticles(particlesToDraw);
 
+        }
+
+        void DrawPathes(List<StaticMesh> renderList)
+        {
+            graphics.GraphicsDevice.SetRenderTargets(colorPath,emissivePath,normalPath,positionPath);
+            graphics.GraphicsDevice.Clear(Color.Black);
+
+            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
+
+            particlesToDraw.Clear();
+
+            foreach (StaticMesh mesh in renderList)
+            {
+                mesh.DrawPathes();
+            }
+
+            ParticleEmitter.LoadRenderEmitter();
+            ParticleEmitter.RenderEmitter.DrawParticlesPathes(particlesToDraw);
+        }
+
+        void PerformDifferedShading()
+        {
+            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
+
+            graphics.GraphicsDevice.SetRenderTarget(DeferredOutput);
+
+            DeferredEffect.Parameters["ColorTexture"].SetValue(colorPath);
+            DeferredEffect.Parameters["EmissiveTexture"].SetValue(emissivePath);
+            DeferredEffect.Parameters["NormalTexture"].SetValue(normalPath);
+            DeferredEffect.Parameters["PositionTexture"].SetValue(positionPath);
+
+            DeferredEffect.Parameters["DirectBrightness"].SetValue(Graphics.DirectLighting);
+            DeferredEffect.Parameters["GlobalBrightness"].SetValue(Graphics.GlobalLighting);
+            DeferredEffect.Parameters["LightDirection"].SetValue(Graphics.LightDirection);
+
+
+            Vector3[] LightPos = new Vector3[LightManager.MAX_POINT_LIGHTS];
+            Vector3[] LightColor = new Vector3[LightManager.MAX_POINT_LIGHTS];
+            float[] LightRadius = new float[LightManager.MAX_POINT_LIGHTS];
+
+            for (int i = 0; i < LightManager.MAX_POINT_LIGHTS; i++)
+            {
+                LightPos[i] = LightManager.FinalPointLights[i].Position;
+                LightColor[i] = LightManager.FinalPointLights[i].Color;
+                LightRadius[i] = LightManager.FinalPointLights[i].Radius;
+            }
+
+            DeferredEffect.Parameters["LightPositions"].SetValue(LightPos);
+            DeferredEffect.Parameters["LightColors"].SetValue(LightColor);
+            DeferredEffect.Parameters["LightRadiuses"].SetValue(LightRadius);
+
+            SpriteBatch spriteBatch = GameMain.inst.SpriteBatch;
+
+            spriteBatch.Begin(effect: DeferredEffect);
+
+            DrawFullScreenQuad(spriteBatch, colorPath);
+
+            spriteBatch.End();
         }
 
         void RenderDepthPath(List<StaticMesh> renderList)
@@ -288,7 +363,7 @@ namespace RetroEngine
             }
 
             ParticleEmitter.LoadRenderEmitter();
-            ParticleEmitter.RenderEmitter.DrawParticlesColor(particlesToDraw);
+            ParticleEmitter.RenderEmitter.DrawParticlesPathes(particlesToDraw);
 
         }
 
@@ -305,7 +380,7 @@ namespace RetroEngine
             }
 
             ParticleEmitter.LoadRenderEmitter();
-            ParticleEmitter.RenderEmitter.DrawParticlesColor(particlesToDraw);
+            ParticleEmitter.RenderEmitter.DrawParticlesPathes(particlesToDraw);
             
         }
 
@@ -409,6 +484,27 @@ namespace RetroEngine
                     graphics.PreferredBackBufferHeight,
                     false, // No mipmaps
                     SurfaceFormat.Rgba64, // Color format
+                    depthFormat); // Depth format
+            }
+        }
+
+        void InitRenderTargetVectorIfNeed(ref RenderTarget2D target)
+        {
+            if (target is null || target.Width != graphics.PreferredBackBufferWidth || target.Height != graphics.PreferredBackBufferHeight)
+            {
+                // Dispose of the old render target if it exists
+                target?.Dispose();
+
+                // Set the depth format based on your requirements
+                DepthFormat depthFormat = DepthFormat.Depth24;
+
+                // Create the new render target with the specified depth format
+                target = new RenderTarget2D(
+                    graphics.GraphicsDevice,
+                    graphics.PreferredBackBufferWidth,
+                    graphics.PreferredBackBufferHeight,
+                    false, // No mipmaps
+                    SurfaceFormat.HalfVector4, // Color format
                     depthFormat); // Depth format
             }
         }

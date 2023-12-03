@@ -177,7 +177,7 @@ namespace RetroEngine.Particles
             }
         }
 
-        public void DrawParticlesColor(List<Particle> particleList)
+        public void DrawParticlesPathes(List<Particle> particleList)
         {
             particleList = particleList.OrderByDescending(p => Vector3.Dot(p.position - Camera.position, Camera.rotation.GetForwardVector())).ToList();
 

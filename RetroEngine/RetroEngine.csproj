@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Platforms>AnyCPU;x86;x64</Platforms>
-    <OutputType>Library</OutputType>
+    <OutputType>Exe</OutputType>
   </PropertyGroup>
   <ItemGroup>
     <Content Remove="C:\Users\bogda\.nuget\packages\rhubulletsharp\1.0.0\contentFiles\any\netstandard2.1\runtimes\linux-arm64\native\liblibbulletc.so" />

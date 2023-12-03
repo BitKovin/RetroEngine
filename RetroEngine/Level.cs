@@ -70,6 +70,7 @@ namespace RetroEngine
 
             Navigation.ClearNavData();
             NPCBase.ResetStaticData();
+            //StaticMesh.ClearCache();
 
             GameMain.inst.curentLevel = MapParser.MapParser.ParseMap(AssetRegistry.FindPathForFile(name)).GetLevel();
             GameMain.inst.curentLevel.StartEnities();

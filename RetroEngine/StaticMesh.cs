@@ -336,6 +336,63 @@ namespace RetroEngine
             }
         }
 
+        public virtual void DrawPathes()
+        {
+            GraphicsDevice graphicsDevice = GameMain.inst._graphics.GraphicsDevice;
+            // Load the custom effect
+            Effect effect = GameMain.inst.render.BuffersEffect;
+
+            if (model is not null)
+            {
+                foreach (ModelMesh mesh in frameStaticMeshData.model.Meshes)
+                {
+                    foreach (ModelMeshPart meshPart in mesh.MeshParts)
+                    {
+
+                        // Set the vertex buffer and index buffer for this mesh part
+                        graphicsDevice.SetVertexBuffer(meshPart.VertexBuffer);
+                        graphicsDevice.Indices = meshPart.IndexBuffer;
+
+                        MeshPartData meshPartData = meshPart.Tag as MeshPartData;
+                        if (meshPartData is not null)
+                        {
+                            effect.Parameters["ColorTexture"].SetValue(FindTexture(meshPartData.textureName));
+                            effect.Parameters["EmissiveTexture"].SetValue(FindEmissiveTexture(meshPartData.textureName));
+                        }
+                        else
+                        {
+                            effect.Parameters["ColorTexture"].SetValue(texture);
+                            effect.Parameters["EmissiveTexture"].SetValue(GameMain.inst.render.black);
+                        }
+
+                        effect.Parameters["DepthScale"].SetValue(frameStaticMeshData.Viewmodel ? 0.02f : 1);
+
+                        Matrix projection;
+
+                        if (frameStaticMeshData.Viewmodel)
+                            projection = frameStaticMeshData.ProjectionViewmodel;
+                        else
+                            projection = frameStaticMeshData.Projection;
+
+                        effect.Parameters["WorldViewProjection"].SetValue(frameStaticMeshData.World * frameStaticMeshData.View * projection);
+                        effect.Parameters["World"].SetValue(frameStaticMeshData.World);
+
+
+                        // Draw the primitives using the custom effect
+                        foreach (EffectPass pass in effect.CurrentTechnique.Passes)
+                        {
+                            pass.Apply();
+                            graphicsDevice.DrawIndexedPrimitives(
+                                PrimitiveType.TriangleList,
+                                meshPart.VertexOffset,
+                                meshPart.StartIndex,
+                                meshPart.PrimitiveCount);
+                        }
+                    }
+                }
+            }
+        }
+
         Texture2D FindTexture(string name)
         {
             if (name == null)
@@ -517,9 +574,9 @@ namespace RetroEngine
             avgVertexPosition = CalculateAvgVertexLocation();
         }
 
-        static Dictionary<string, Assimp.Scene> loadedScenes = new Dictionary<string, Assimp.Scene>();
-        static Dictionary<string, Model> loadedModels = new Dictionary<string, Model>();
-        static Assimp.AssimpContext importer = new Assimp.AssimpContext();
+        protected static Dictionary<string, Assimp.Scene> loadedScenes = new Dictionary<string, Assimp.Scene>();
+        protected static Dictionary<string, Model> loadedModels = new Dictionary<string, Model>();
+        protected static Assimp.AssimpContext importer = new Assimp.AssimpContext();
 
         protected Model GetModelFromPath(string filePath)
         {
@@ -619,6 +676,12 @@ namespace RetroEngine
             return model;
         }
 
+
+        public static void ClearCache()
+        {
+            loadedModels.Clear();
+            loadedScenes.Clear();
+        }
         public virtual void PreloadTextures()
         {
             LoadCurrentTextures();
