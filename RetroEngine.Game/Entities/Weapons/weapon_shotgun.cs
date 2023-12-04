@@ -127,12 +127,12 @@ namespace RetroEngine.Game.Entities.Weapons
             mesh.Scale = new Vector3(0.7f);
 
 
-            for (int i = 1; i <= 30; i++)
+            for (int i = 1; i <= 30; i+=2)
             {
                 mesh.AddFrame($"Animations/Shotgun/Fire/frame_{i}.obj");
             }
 
-            mesh.frameTime = 1f / 7f;
+            mesh.frameTime = 1f / 45f;
 
             mesh.textureSearchPaths.Add("textures/weapons/arms/");
             mesh.textureSearchPaths.Add("textures/weapons/shotgun/");

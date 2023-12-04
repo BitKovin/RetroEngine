@@ -146,12 +146,12 @@ namespace RetroEngine.Game.Entities.Weapons
         {
             mesh.Scale = new Vector3(0.4f);
 
-            for (int i = 1; i <= 50; i++)
+            for (int i = 1; i <= 50; i+=3)
             {
                 mesh.AddFrame($"Animations/Hammer/Attack/frame_{i}.obj");
             }
 
-            mesh.frameTime = 1f / 85f;
+            mesh.frameTime = 1f / 30f;
             //mesh.texture = AssetRegistry.LoadTextureFromFile("usp.png");
             mesh.textureSearchPaths.Add("textures/weapons/arms/");
             mesh.textureSearchPaths.Add("textures/weapons/hammer/");

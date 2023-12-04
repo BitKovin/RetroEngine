@@ -236,7 +236,7 @@ namespace RetroEngine
             {
                 resultData[i].Position = Vector3.Lerp(data1[i].Position, data2[i].Position, amount);
                 resultData[i].Normal = Vector3.Lerp(data1[i].Normal, data2[i].Normal, amount);
-                resultData[i].TextureCoordinate = Vector2.Lerp(data1[i].TextureCoordinate, data2[i].TextureCoordinate, amount);
+                resultData[i].TextureCoordinate = data1[i].TextureCoordinate;
             }
 
             // Set the interpolated data to the result buffer
