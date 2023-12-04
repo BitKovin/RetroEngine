@@ -1,13 +1,5 @@
 # Blender MTL File: 'lmg.blend'
-# Material Count: 9
-
-newmtl None
-Ns 500
-Ka 0.8 0.8 0.8
-Kd 0.8 0.8 0.8
-Ks 0.8 0.8 0.8
-d 1
-illum 2
+# Material Count: 8
 
 newmtl bits_m
 Ns 199.999995

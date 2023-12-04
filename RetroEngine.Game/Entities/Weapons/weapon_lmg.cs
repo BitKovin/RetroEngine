@@ -134,7 +134,7 @@ namespace RetroEngine.Game.Entities.Weapons
                 mesh.AddFrame($"Animations/LMG/Fire/frame_{i}.obj");
             }
 
-            mesh.frameTime = 1f / 62f;
+            mesh.frameTime = 1f / 2f;
 
             mesh.textureSearchPaths.Add("textures/weapons/arms/");
             mesh.textureSearchPaths.Add("textures/weapons/LMG/");

@@ -21,6 +21,7 @@ namespace RetroEngine
     public struct FrameStaticMeshData
     {
         public Model model;
+        public Model model2;
 
         public float EmissionPower;
         public bool Transperent;
@@ -165,6 +166,7 @@ namespace RetroEngine
                         // Set the vertex buffer and index buffer for this mesh part
                         graphicsDevice.SetVertexBuffer(meshPart.VertexBuffer);
                         graphicsDevice.Indices = meshPart.IndexBuffer;
+
 
                         // Set effect parameters
                         effect.Parameters["World"].SetValue(frameStaticMeshData.World);
@@ -392,7 +394,7 @@ namespace RetroEngine
             }
         }
 
-        Texture2D FindTexture(string name)
+        protected Texture2D FindTexture(string name)
         {
             if (name == null)
                 return texture;
@@ -418,7 +420,7 @@ namespace RetroEngine
             
         }
 
-        Texture2D FindEmissiveTexture(string name)
+        protected Texture2D FindEmissiveTexture(string name)
         {
 
             if (name == null)
@@ -577,7 +579,7 @@ namespace RetroEngine
         protected static Dictionary<string, Model> loadedModels = new Dictionary<string, Model>();
         protected static Assimp.AssimpContext importer = new Assimp.AssimpContext();
 
-        protected Model GetModelFromPath(string filePath)
+        protected Model GetModelFromPath(string filePath,bool dynamicBuffer = false)
         {
             GraphicsDevice graphicsDevice = GameMain.inst.GraphicsDevice;
 
@@ -596,7 +598,7 @@ namespace RetroEngine
             }
             else
             {
-                scene = importer.ImportFile(filePath, Assimp.PostProcessSteps.MakeLeftHanded | Assimp.PostProcessSteps.FlipUVs | Assimp.PostProcessSteps.OptimizeMeshes);
+                scene = importer.ImportFile(filePath, Assimp.PostProcessSteps.MakeLeftHanded | Assimp.PostProcessSteps.FlipUVs);
                 //loadedScenes.Add(filePath, scene);
             }
 
@@ -620,6 +622,7 @@ namespace RetroEngine
             BoundingSphere boundingSphere = new BoundingSphere(Vector3.Zero, 100);
             foreach (var mesh in scene.Meshes)
             {
+
                 var vertices = new VertexPositionNormalTexture[mesh.VertexCount];
                 var indices = new int[mesh.FaceCount * 3];
                 int vertexIndex = 0;
@@ -655,7 +658,15 @@ namespace RetroEngine
                 }
 
 
-                var vertexBuffer = new VertexBuffer(graphicsDevice, typeof(VertexPositionNormalTexture), vertices.Length, BufferUsage.None);
+                VertexBuffer vertexBuffer;
+                if (dynamicBuffer)
+                {
+                    vertexBuffer = new DynamicVertexBuffer(graphicsDevice, typeof(VertexPositionNormalTexture), vertices.Length, BufferUsage.None);
+                }
+                else
+                {
+                    vertexBuffer = new VertexBuffer(graphicsDevice, typeof(VertexPositionNormalTexture), vertices.Length, BufferUsage.None);
+                }
                 vertexBuffer.SetData(vertices);
                 var indexBuffer = new IndexBuffer(graphicsDevice, IndexElementSize.ThirtyTwoBits, indices.Length, BufferUsage.None);
                 indexBuffer.SetData(indices);

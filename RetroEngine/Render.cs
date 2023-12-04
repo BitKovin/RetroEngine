@@ -113,9 +113,9 @@ namespace RetroEngine
             RenderShadowMap(renderList);
 
 
-            //RenderUnifiedPath(renderList);
-            DrawPathes(renderList);
-            PerformDifferedShading();
+            RenderUnifiedPath(renderList);
+            //DrawPathes(renderList);
+            //PerformDifferedShading();
             //RenderColorPath(renderList);
             //PerformLighting();
 
@@ -127,7 +127,7 @@ namespace RetroEngine
 
         void RenderUnifiedPath(List<StaticMesh> renderList)
         {
-            graphics.GraphicsDevice.SetRenderTarget(colorPath);
+            graphics.GraphicsDevice.SetRenderTarget(DeferredOutput);
             graphics.GraphicsDevice.Clear(Graphics.BackgroundColor);
 
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);

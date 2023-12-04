@@ -22,7 +22,8 @@ namespace RetroEngine.Game
             devMenu = new GameDevMenu();
             devMenu.Init();
 
-            Level.LoadFromFile("test.map");
+
+            Level.LoadFromFile("test2.map");
 
             Window.Title = "Game";
 
