@@ -596,14 +596,13 @@ namespace RetroEngine
             }
             else
             {
-                scene = importer.ImportFile(filePath, Assimp.PostProcessSteps.MakeLeftHanded | Assimp.PostProcessSteps.FlipUVs);
-                loadedScenes.Add(filePath, scene);
+                scene = importer.ImportFile(filePath, Assimp.PostProcessSteps.MakeLeftHanded | Assimp.PostProcessSteps.FlipUVs | Assimp.PostProcessSteps.OptimizeMeshes);
+                //loadedScenes.Add(filePath, scene);
             }
 
             while (loadedScenes.Keys.Count > 2)
             {
                 loadedScenes.Remove(loadedScenes.Keys.First());
-                importer = new Assimp.AssimpContext();
             }
 
             if (scene == null)

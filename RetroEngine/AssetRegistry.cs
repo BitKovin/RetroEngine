@@ -19,8 +19,6 @@ namespace RetroEngine
 
         static Dictionary<string, Texture2D> textures = new Dictionary<string, Texture2D>();
 
-        static List<string> pendingLoadTextures = new List<string>();
-
         static Dictionary<string, SoundEffect> sounds = new Dictionary<string, SoundEffect>();
 
         static List<string> texturesHistory = new List<string>();

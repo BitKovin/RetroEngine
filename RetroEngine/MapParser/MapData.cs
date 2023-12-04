@@ -177,11 +177,6 @@ namespace RetroEngine.Map
 
     public class BrushData
     {
-        public List<Vector3> Vertices { get; set; } = new List<Vector3>();
-        public List<Vector3> Points { get; set; } = new List<Vector3>();
-
-        public List<Vector3[]> faces { get; set; } = new List<Vector3[]>();
-
         public string Texture { get; set; }
 
         public float TextureScale = 1;

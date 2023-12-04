@@ -61,16 +61,16 @@ namespace RetroEngine
 
         public Render()
         {
-            lightingEffect = GameMain.content.Load<Effect>("DeferredLighting");
-            NormalEffect = GameMain.content.Load<Effect>("NormalOutput");
-            MiscEffect = GameMain.content.Load<Effect>("MiscOutput");
+            //lightingEffect = GameMain.content.Load<Effect>("DeferredLighting");
+            //NormalEffect = GameMain.content.Load<Effect>("NormalOutput");
+            //MiscEffect = GameMain.content.Load<Effect>("MiscOutput");
             UnifiedEffect = GameMain.content.Load<Effect>("UnifiedOutput");
             fxaaEffect = GameMain.content.Load<Effect>("fxaa");
             ShadowMapEffect = GameMain.content.Load<Effect>("ShadowMap");
             PostProcessingEffect = GameMain.content.Load<Effect>("PostProcessing");
-            ColorEffect = GameMain.content.Load<Effect>("ColorOutput");
-            ParticleColorEffect = GameMain.content.Load<Effect>("ParticleColorOutput");
-            SSAOEffect = GameMain.content.Load<Effect>("SSAO");
+            //ColorEffect = GameMain.content.Load<Effect>("ColorOutput");
+            //ParticleColorEffect = GameMain.content.Load<Effect>("ParticleColorOutput");
+            //SSAOEffect = GameMain.content.Load<Effect>("SSAO");
             BuffersEffect = GameMain.content.Load<Effect>("GPathesOutput");
 
             DeferredEffect = GameMain.content.Load<Effect>("DeferredShading");
@@ -120,9 +120,9 @@ namespace RetroEngine
             //PerformLighting();
 
             graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearClamp;
-            //PerformPostProcessing();
+            PerformPostProcessing();
 
-            return DeferredOutput;
+            return outputPath;
         }
 
         void RenderUnifiedPath(List<StaticMesh> renderList)
@@ -159,7 +159,7 @@ namespace RetroEngine
             }
 
             ParticleEmitter.LoadRenderEmitter();
-            ParticleEmitter.RenderEmitter.DrawParticlesPathes(particlesToDraw);
+            ParticleEmitter.RenderEmitter.DrawParticles(particlesToDraw);
         }
 
         void PerformDifferedShading()
@@ -322,7 +322,7 @@ namespace RetroEngine
         {
             if(Graphics.EnableAntiAliasing == false)
             {
-                outputPath = colorPath;
+                outputPath = DeferredOutput;
                 return;
             }
             // Set the render target to the output path
@@ -340,14 +340,14 @@ namespace RetroEngine
 
             fxaaEffect.Parameters["invViewportWidth"].SetValue(1f / graphics.PreferredBackBufferWidth);
             fxaaEffect.Parameters["invViewportHeight"].SetValue(1f / graphics.PreferredBackBufferHeight);
-            fxaaEffect.Parameters["screenColor"].SetValue(colorPath);
+            fxaaEffect.Parameters["screenColor"].SetValue(DeferredOutput);
 
             // Begin drawing with SpriteBatch
             SpriteBatch spriteBatch = GameMain.inst.SpriteBatch;
             spriteBatch.Begin(effect: fxaaEffect);
 
             // Draw a full-screen quad to apply the lighting
-            DrawFullScreenQuad(spriteBatch, colorPath);
+            DrawFullScreenQuad(spriteBatch, DeferredOutput);
 
             // End the SpriteBatch
             spriteBatch.End();

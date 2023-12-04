@@ -36,8 +36,6 @@ namespace RetroEngine
 
             List<BrushFaceMesh> models = new List<BrushFaceMesh>();
 
-            var importer = new Assimp.AssimpContext();
-
             Assimp.Scene scene;
             if (loadedScenes.ContainsKey(filePath))
                 scene = loadedScenes[filePath];
@@ -46,13 +44,6 @@ namespace RetroEngine
                 scene = importer.ImportFile(filePath, Assimp.PostProcessSteps.MakeLeftHanded | Assimp.PostProcessSteps.FlipUVs);
                 loadedScenes.Add(filePath, scene);
             }
-
-            if (scene == null)
-            {
-                // Error handling for failed file import
-                return null;
-            }
-
 
             if (scene == null)
             {
@@ -180,13 +171,6 @@ namespace RetroEngine
                 scene = importer.ImportFile(filePath, Assimp.PostProcessSteps.MakeLeftHanded | Assimp.PostProcessSteps.FlipUVs);
                 loadedScenes.Add(filePath, scene);
             }
-
-            if (scene == null)
-            {
-                // Error handling for failed file import
-                return null;
-            }
-
 
             if (scene == null)
             {

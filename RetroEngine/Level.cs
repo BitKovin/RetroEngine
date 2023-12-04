@@ -73,7 +73,6 @@ namespace RetroEngine
             
 
             GameMain.inst.curentLevel = MapParser.MapParser.ParseMap(AssetRegistry.FindPathForFile(name)).GetLevel();
-            //StaticMesh.ClearCache();
             GameMain.inst.curentLevel.StartEnities();
             Navigation.RebuildConnectionsData();
 

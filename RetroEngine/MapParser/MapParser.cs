@@ -58,17 +58,6 @@ namespace RetroEngine.MapParser
                     }
                     else if (line.StartsWith("("))
                     {
-                        // Create a CultureInfo with a dot as the decimal separator
-                        CultureInfo cultureInfo = new CultureInfo("en-US");
-
-                        // Parse the vertices
-                        Vector3 p1 = new Vector3(float.Parse(parts[1].Replace(".", ",")), float.Parse(parts[3].Replace(".", ",")), float.Parse(parts[2].Replace(".", ",")));
-                        Vector3 p2 = new Vector3(float.Parse(parts[6].Replace(".", ",")), float.Parse(parts[8].Replace(".", ",")), float.Parse(parts[7].Replace(".", ",")));
-                        Vector3 p3 = new Vector3(float.Parse(parts[11].Replace(".", ",")), float.Parse(parts[13].Replace(".", ",")), float.Parse(parts[12].Replace(".", ",")));
-
-                        currentBrush.Points.Add(p1);
-                        currentBrush.Points.Add(p2);
-                        currentBrush.Points.Add(p3);
 
                     }
                     else if (line.StartsWith("}"))
