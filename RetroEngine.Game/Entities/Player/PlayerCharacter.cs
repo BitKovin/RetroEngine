@@ -30,9 +30,15 @@ namespace RetroEngine.Game.Entities.Player
 
         StaticMesh cylinder = new StaticMesh();
 
-        RigidBody body;
+        public RigidBody body;
 
-        float speed = 10;
+        float maxSpeed = 10;
+        float maxSpeedAir = 2;
+        float acceleration = 90;
+        float airAcceleration = 40;
+        bool tryLimit = false;
+
+        Vector3 velocity = new Vector3();
 
         float bobProgress = 0;
 
@@ -57,6 +63,7 @@ namespace RetroEngine.Game.Entities.Player
         float bobSpeed = 8;
 
         PlayerUI PlayerUI;
+
 
         public PlayerCharacter() : base()
         {
@@ -152,7 +159,7 @@ namespace RetroEngine.Game.Entities.Player
 
             UpdateCamera();
 
-            if (Input.GetAction("jump").Pressed())
+            if (Input.GetAction("jump").Holding())
                 Jump();
 
             if (Input.GetAction("slot1").Pressed())
@@ -226,16 +233,16 @@ namespace RetroEngine.Game.Entities.Player
 
             // Ground movement
 
-            if (input.Length() > 0)
+            if (input.Length() > 0.1f)
             {
                 input.Normalize();
 
-                motion += right * input.X * speed;
-                motion += forward * input.Y * speed;
+                motion += right * input.X;
+                motion += forward * input.Y;
 
                 if (onGround)
                 {
-
+                    
                     if (Math.Sin(bobProgress * bobSpeed * 2) <= 0 && Math.Sin((bobProgress + Time.deltaTime) * bobSpeed * 2) > 0)
                     {
                         stepSoundPlayer.Play(true);
@@ -243,14 +250,18 @@ namespace RetroEngine.Game.Entities.Player
 
                     bobProgress += Time.deltaTime;
 
+
                     // Apply friction
                     body.Friction = 0.0f;
-                    body.LinearVelocity = new Vector3(motion.X, body.LinearVelocity.Y, motion.Z).ToPhysics();
+
+                    velocity = UpdateGroundVelocity(motion, velocity);
+
+                    body.LinearVelocity = new Vector3(velocity.X, body.LinearVelocity.Y, velocity.Z).ToPhysics();
 
                 }
                 else
                 {
-
+                    /*
                     float airControlPower = Vector3.Dot(motion, ((Vector3)body.LinearVelocity).XZ());
 
                     airControlPower /= 100;
@@ -261,14 +272,30 @@ namespace RetroEngine.Game.Entities.Player
                     airControlPower = 1 - airControlPower;
 
                     body.ApplyCentralForce(motion.ToNumerics() * 12 * airControlPower);
+                    */
+
+                    velocity = UpdateAirVelocity(motion, velocity);
+
+                    body.LinearVelocity = new Vector3(velocity.X, body.LinearVelocity.Y, velocity.Z).ToPhysics();
 
                     body.Friction = 0.0f;
                 }
             }
             else
             {
+
+                if (onGround)
+                {
+                    velocity = Friction(velocity);
+                    body.LinearVelocity = new Vector3(velocity.X, body.LinearVelocity.Y, velocity.Z).ToPhysics();
+                }
+                else
+                {
+                    velocity = UpdateAirVelocity(new Vector3(), velocity);
+                    body.LinearVelocity = new Vector3(velocity.X, body.LinearVelocity.Y, velocity.Z).ToPhysics();
+                }
                 // No input, apply friction
-                body.Friction = 3f;
+                body.Friction = 0f;
             }
 
 
@@ -315,6 +342,9 @@ namespace RetroEngine.Game.Entities.Player
             if (CheckGroundAtOffset(new Vector3(-radius * 0.77f, 0, -radius * 0.77f)))
                 onGround = true;
 
+            if(jumpDelay.Wait())
+                onGround = false;
+
         }
 
         bool CheckGroundAtOffset(Vector3 offset)
@@ -335,11 +365,80 @@ namespace RetroEngine.Game.Entities.Player
             cylinder.Position = Position + Camera.rotation.GetForwardVector().XZ() * 3;
         }
 
+        Delay jumpDelay = new Delay();
+
         void Jump()
         {
+            if (jumpDelay.Wait()) return;
             if (onGround)
-
+            {
                 body.ApplyCentralImpulse(new Vector3(0, 25, 0).ToNumerics());
+                jumpDelay.AddDelay(0.1f);
+            }
+        }
+
+        Vector3 UpdateGroundVelocity(Vector3 withDir, Vector3 vel)
+        {
+            vel = vel.XZ();
+            vel = Friction(vel);
+
+            float currentSpeed = Vector3.Dot(vel, withDir);
+            float addSpeed = Math.Clamp(maxSpeed - currentSpeed, 0, acceleration*Time.deltaTime);
+    
+            if(tryLimit)
+            if(currentSpeed + addSpeed > maxSpeed)
+                addSpeed = maxSpeed - currentSpeed;
+
+            return vel + addSpeed * withDir;
+        }
+        Vector3 UpdateAirVelocity(Vector3 wishdir, Vector3 vel)
+        {
+            vel = vel.XZ();
+
+            float currentSpeed = Vector3.Dot(vel, wishdir);
+
+            float wishspeed = maxSpeedAir;
+
+            float addSpeed = wishspeed - currentSpeed;
+
+            if (addSpeed <= 0f)
+            {
+                return vel;
+            }
+
+            float accelspeed = airAcceleration * Time.deltaTime * wishspeed;
+
+            if (accelspeed > addSpeed)
+            {
+                accelspeed = addSpeed;
+            }
+
+            return vel + accelspeed * wishdir;
+        }
+
+
+        Vector3 Friction(Vector3 vel, float factor = 50f)
+        {
+
+            if (FirstTick)
+                return new Vector3();
+
+            vel = vel.XZ();
+
+            float length = vel.Length();
+
+            vel.Normalize();
+
+            length -= factor * Time.deltaTime;
+
+            length = Math.Max(0, length);
+
+            vel = vel * length;
+
+            if (float.IsNaN(vel.X))
+                return new Vector3();
+
+            return vel;
         }
 
         void SwitchToSlot(int slot)
@@ -356,10 +455,6 @@ namespace RetroEngine.Game.Entities.Player
             }
         }
 
-        void DrawUI()
-        {
-
-        }
         void SwitchWeapon(WeaponData data)
         {
             if (currentWeapon is not null)

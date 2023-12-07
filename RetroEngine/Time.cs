@@ -13,7 +13,7 @@ namespace RetroEngine
         public static float gameTime = 0;
 
         static List<float> frames = new List<float>();
-        static int framesCount = 0;
+        static int framesCount = 2;
 
         public static void AddFrameTime(float time)
         {

@@ -45,7 +45,7 @@ namespace RetroEngine.Game.Entities.Player
         {
             if (loaded == false) return;
 
-            health.text = Time.gameTime.ToString();
+            health.text = ((Vector3)player.body.LinearVelocity).XZ().Length().ToString();
 
         }
 

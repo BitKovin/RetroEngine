@@ -31,7 +31,7 @@ namespace RetroEngine
         {
             if (loop)
             {
-                while (frames.Count * frameTime <= animationTime)
+                while (frames.Count * frameTime < animationTime)
                 {
                     animationTime -= frames.Count * frameTime;
                 }
