@@ -111,9 +111,12 @@ namespace RetroEngine
         public virtual void AsyncUpdate()
         {
 
+            ParallelOptions options = new ParallelOptions();
+            options.MaxDegreeOfParallelism = Environment.ProcessorCount/2;
+
             Entity[] list = entities.ToArray();
 
-            Parallel.ForEach(list, entity =>
+            Parallel.ForEach(list,options, entity =>
             {
                 if (entity.UpdateWhilePaused && GameMain.inst.paused || GameMain.inst.paused == false)
                     entity.AsyncUpdate();

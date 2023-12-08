@@ -386,8 +386,8 @@ namespace RetroEngine.Game.Entities.Player
             float addSpeed = Math.Clamp(maxSpeed - currentSpeed, 0, acceleration*Time.deltaTime);
     
             if(tryLimit)
-            if(currentSpeed + addSpeed > maxSpeed)
-                addSpeed = maxSpeed - currentSpeed;
+                if(currentSpeed + addSpeed > maxSpeed)
+                    addSpeed = maxSpeed - currentSpeed;
 
             return vel + addSpeed * withDir;
         }

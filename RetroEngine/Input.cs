@@ -18,7 +18,7 @@ namespace RetroEngine
 
         static Dictionary<string, InputAction> actions = new Dictionary<string, InputAction>();
 
-        public static bool LockCursor = true;
+        public static bool LockCursor = false;
 
         public static float sensitivity = 0.2f;
 
@@ -49,14 +49,15 @@ namespace RetroEngine
             if (LockCursor)
                 if (Vector2.Distance(windowCenter, mousePos) > 0)
                 {
+
                     Mouse.SetPosition((int)windowCenter.X, (int)windowCenter.Y);
-                    MousePos = windowCenter;
+                    MousePos = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
                 }
                 else
                 {
-                    MousePos = mousePos;
+                    MousePos = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
                 }
-
+            else { MousePos = new Vector2(Mouse.GetState().X, Mouse.GetState().Y); }
             
         }
 

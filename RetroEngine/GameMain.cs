@@ -12,6 +12,7 @@ using RetroEngine.Audio;
 using ImGuiNET;
 using System.Threading.Tasks;
 using System.Threading;
+using System.Diagnostics;
 
 namespace RetroEngine
 {
@@ -66,6 +67,9 @@ namespace RetroEngine
 
         public bool DevMenuEnabled = false;
 
+        Stopwatch stopwatch = new Stopwatch();
+        public bool LimitFPS = false;
+
         public GameMain()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -84,7 +88,7 @@ namespace RetroEngine
 
             Window.ClientSizeChanged += Window_ClientSizeChanged;
 
-            
+            stopwatch.Start();
 
             this.Window.AllowUserResizing = true;
             if (platform == Platform.Desktop)
@@ -142,6 +146,8 @@ namespace RetroEngine
             if (tick == 100)
                 GameInitialized();
 
+            LimitFrameRate();
+
             time = gameTime;
 
             Thread.CurrentThread.Priority = ThreadPriority.Highest;
@@ -168,6 +174,8 @@ namespace RetroEngine
             {
                 UpdateTime(gameTime);
             }
+
+            Thread.Sleep(2);
 
             //curentLevel.UpdatePending();
             curentLevel.LoadAssets();
@@ -342,6 +350,22 @@ namespace RetroEngine
         {
 
         }
+
+        private void LimitFrameRate()
+        {
+            if (LimitFPS == false) return;
+
+            double elapsedSeconds = stopwatch.Elapsed.TotalSeconds;
+
+            while(elapsedSeconds < 1f/100f)
+            {
+                elapsedSeconds = stopwatch.Elapsed.TotalSeconds;
+            }
+            Console.WriteLine(elapsedSeconds.ToString());
+
+            stopwatch.Restart();
+        }
+
 
         public virtual void OnLevelChanged()
         {
