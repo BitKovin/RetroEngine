@@ -372,7 +372,7 @@ namespace RetroEngine.Game.Entities.Player
             if (jumpDelay.Wait()) return;
             if (onGround)
             {
-                body.ApplyCentralImpulse(new Vector3(0, 25, 0).ToNumerics());
+                body.LinearVelocity = new Vector3(body.LinearVelocity.X, 12, body.LinearVelocity.Z).ToNumerics();
                 jumpDelay.AddDelay(0.1f);
             }
         }

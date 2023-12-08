@@ -175,8 +175,6 @@ namespace RetroEngine
                 UpdateTime(gameTime);
             }
 
-            Thread.Sleep(2);
-
             //curentLevel.UpdatePending();
             curentLevel.LoadAssets();
 
@@ -193,10 +191,10 @@ namespace RetroEngine
             {
                 GameLogic();
             }
+
+            Thread.Sleep(4);
+
             base.Update(gameTime);
-
-            
-
         }
 
         void UpdateTime(GameTime gameTime)

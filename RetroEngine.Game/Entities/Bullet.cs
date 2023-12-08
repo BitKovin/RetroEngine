@@ -85,6 +85,7 @@ namespace RetroEngine.Game.Entities
 
             if(hitBody != null)
             {
+                if (ignoreObjects.Contains(collidedObject.CollisionObject)) return;
                 hitBody.Activate();
                 hitBody.ApplyCentralImpulse(startRotation.GetForwardVector().ToNumerics() * 10f);
 

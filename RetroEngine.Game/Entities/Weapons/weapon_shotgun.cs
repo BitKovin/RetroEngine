@@ -82,6 +82,8 @@ namespace RetroEngine.Game.Entities.Weapons
                 {
                     Bullet bullet = new Bullet();
 
+                    bullet.ignore.Add(player);
+
                     Vector3 bulletRotation;
 
                     Vector3 startPos = Camera.position;
