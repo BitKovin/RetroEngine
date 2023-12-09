@@ -106,6 +106,8 @@ namespace RetroEngine.Game.Entities.Player
         {
             base.LoadAssets();
 
+            Console.WriteLine("loaded player");
+
             Weapon.PreloadAllWeapons();
             PlayerUI.Load();
         }

@@ -198,7 +198,7 @@ namespace RetroEngine
         }
 
         bool addedFrames = false;
-        void AddFrameVertexData()
+        public void AddFrameVertexData()
         {
             if (addedFrames == true) return;
             for (int f = 0; f < frames.Count; f++)
@@ -206,9 +206,11 @@ namespace RetroEngine
                 {
                     for (int i = 0; i < frames[f].Meshes[j].MeshParts.Count; i++)
                     {
+
                         int vertexCount = frames[f].Meshes[j].MeshParts[i].VertexBuffer.VertexCount;
                         VertexPositionNormalTexture[] data = new VertexPositionNormalTexture[vertexCount];
-                        frames[f].Meshes[j].MeshParts[i].VertexBuffer.GetData(data);
+                        //frames[f].Meshes[j].MeshParts[i].VertexBuffer.GetData(data);
+                        data = (frames[f].Meshes[j].MeshParts[i].Tag as MeshPartData).Vertices;
                         frameVertexData.TryAdd(frames[f].Meshes[j].MeshParts[i].VertexBuffer, data);
                     }
                 }

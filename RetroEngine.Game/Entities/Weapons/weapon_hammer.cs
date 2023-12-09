@@ -159,6 +159,9 @@ namespace RetroEngine.Game.Entities.Weapons
             mesh.PreloadTextures();
             mesh.Viewmodel = true;
             mesh.UseAlternativeRotationCalculation = true;
+            mesh.AddFrameVertexData();
+
+            new particle_hitSmoke().LoadAssets();
 
             meshes.Add(mesh);
         }

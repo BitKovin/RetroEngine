@@ -16,6 +16,7 @@ namespace RetroEngine
     {
         public string textureName = "";
         public Dictionary<string, Vector3> Points = new Dictionary<string, Vector3>();
+        public VertexPositionNormalTexture[] Vertices;
     }
 
     public struct FrameStaticMeshData
@@ -678,7 +679,7 @@ namespace RetroEngine
                 boundingSphere = CalculateBoundingSphere(vertices);
 
 
-                meshParts.Add(new ModelMeshPart { VertexBuffer = vertexBuffer, IndexBuffer = indexBuffer, StartIndex = 0, NumVertices = indices.Length, PrimitiveCount = primitiveCount, Tag= new MeshPartData {textureName = Path.GetFileName(scene.Materials[mesh.MaterialIndex].TextureDiffuse.FilePath), Points = points} });
+                meshParts.Add(new ModelMeshPart { VertexBuffer = vertexBuffer, IndexBuffer = indexBuffer, StartIndex = 0, NumVertices = indices.Length, PrimitiveCount = primitiveCount, Tag= new MeshPartData {textureName = Path.GetFileName(scene.Materials[mesh.MaterialIndex].TextureDiffuse.FilePath), Points = points,Vertices = vertices} });
             }
 
 

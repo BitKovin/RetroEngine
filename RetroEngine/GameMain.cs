@@ -70,6 +70,8 @@ namespace RetroEngine
         Stopwatch stopwatch = new Stopwatch();
         public bool LimitFPS = false;
 
+        float reservedTaskMinTime = 0.004f;
+
         public GameMain()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -176,7 +178,8 @@ namespace RetroEngine
             }
 
             //curentLevel.UpdatePending();
-            curentLevel.LoadAssets();
+
+            PerformReservedTimeTasks();
 
             curentLevel.RenderPreparation();
 
@@ -191,8 +194,6 @@ namespace RetroEngine
             {
                 GameLogic();
             }
-
-            Thread.Sleep(4);
 
             base.Update(gameTime);
         }
@@ -230,6 +231,22 @@ namespace RetroEngine
 
             tick++;
         }
+
+        void PerformReservedTimeTasks()
+        {
+            Stopwatch sw = Stopwatch.StartNew();
+            ReservedTimeTasks();
+            while(sw.Elapsed.TotalSeconds<reservedTaskMinTime)
+            {
+            }
+        }
+
+        void ReservedTimeTasks()
+        {
+            curentLevel?.LoadAssets();
+            curentLevel?.RenderPreparation();
+        }
+
         private void Game1_Exiting(object sender, System.EventArgs e)
         {
             Environment.Exit(0);

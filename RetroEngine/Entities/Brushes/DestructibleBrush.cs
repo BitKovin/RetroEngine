@@ -15,6 +15,8 @@ namespace RetroEngine.Entities.Brushes
 
         List<Vector3> particleLocations = new List<Vector3>();
 
+        string systemName = "destructionWood";
+
         public override void FromData(EntityData data)
         {
             base.FromData(data);
@@ -22,6 +24,9 @@ namespace RetroEngine.Entities.Brushes
             Health = data.GetPropertyFloat("health",30);
             CalculateParticleSpawnLocations();
 
+            systemName = data.GetPropertyString("paricleSystem", "destructionWood");
+
+            ParticleSystem.Create(systemName).LoadAssetsIfNeeded();
         }
 
         public override void OnDamaged(float damage, Entity causer = null, Entity weapon = null)
@@ -32,7 +37,7 @@ namespace RetroEngine.Entities.Brushes
             {
                 foreach (Vector3 location in particleLocations)
                 {
-                    ParticleSystem system = ParticleSystem.Create("destructionWood");
+                    ParticleSystem system = ParticleSystem.Create(systemName);
                     system.Position = location;
                     system.Start();
                 }

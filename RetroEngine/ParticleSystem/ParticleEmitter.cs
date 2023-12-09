@@ -255,6 +255,8 @@ namespace RetroEngine.Particles
         public void LoadAssets()
         {
             texture = AssetRegistry.LoadTextureFromFile(TexturePath);
+            if(ModelPath is not null)
+                GetModelFromPath(ModelPath);
         }
 
         protected Vector3 RandomPosition(float radius)

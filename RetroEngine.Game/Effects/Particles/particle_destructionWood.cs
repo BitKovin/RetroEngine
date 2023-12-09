@@ -27,6 +27,8 @@ namespace RetroEngine.Game.Effects.Particles
         {
             TexturePath = "textures/particles/wood.png";
 
+            ModelPath = "models/particles/wood.obj";
+
             InitialSpawnCount = 1;
         }
 

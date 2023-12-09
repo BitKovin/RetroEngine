@@ -127,7 +127,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
         void LoadVisual()
         {
-            mesh.Scale = new Vector3(0.7f);
+            mesh.Scale = new Vector3(1f);
 
 
             for (int i = 1; i <= 30; i += 2)
@@ -145,6 +145,9 @@ namespace RetroEngine.Game.Entities.Weapons
             mesh.Viewmodel = true;
             mesh.UseAlternativeRotationCalculation = true;
             mesh.Transperent = true;
+            mesh.AddFrameVertexData();
+
+            Console.WriteLine("loaded lmg");
 
             meshes.Add(mesh);
 

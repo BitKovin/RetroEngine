@@ -144,6 +144,7 @@ namespace RetroEngine.Game.Entities.Weapons
             mesh.Viewmodel = true;
             mesh.Transperent = true;
             mesh.UseAlternativeRotationCalculation = true;
+            mesh.AddFrameVertexData();
 
             meshes.Add(mesh);
 
