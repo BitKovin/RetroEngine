@@ -19,14 +19,22 @@ namespace RetroEngine
         }
     }
 
-    public class ParticleSystemFactory
+    public static class ParticleSystemFactory
     {
+        private static Dictionary<string, Type> TypeCache = new Dictionary<string, Type>();
+
         public static ParticleSystem CreateByTechnicalName(string technicalName)
         {
-            Type objectType = GetObjectTypeByTechnicalName(technicalName);
+            if (TypeCache.TryGetValue(technicalName, out var objectType))
+            {
+                return Activator.CreateInstance(objectType) as ParticleSystem;
+            }
+
+            objectType = GetObjectTypeByTechnicalName(technicalName);
 
             if (objectType != null)
             {
+                TypeCache[technicalName] = objectType; // Cache the result
                 return Activator.CreateInstance(objectType) as ParticleSystem;
             }
             else
@@ -51,5 +59,22 @@ namespace RetroEngine
 
             return null; // Class with the specified TechnicalName not found
         }
+
+        public static void InitializeTypeCache()
+        {
+            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                foreach (Type type in assembly.GetTypes())
+                {
+                    var attribute = type.GetCustomAttribute<ParticleSystemAttribute>();
+                    if (attribute != null)
+                    {
+                        TypeCache[attribute.TechnicalName] = type;
+                    }
+                }
+            }
+        }
+
     }
+
 }

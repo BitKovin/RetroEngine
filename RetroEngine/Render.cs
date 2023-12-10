@@ -71,9 +71,9 @@ namespace RetroEngine
             //ColorEffect = GameMain.content.Load<Effect>("ColorOutput");
             //ParticleColorEffect = GameMain.content.Load<Effect>("ParticleColorOutput");
             //SSAOEffect = GameMain.content.Load<Effect>("SSAO");
-            BuffersEffect = GameMain.content.Load<Effect>("GPathesOutput");
+            //BuffersEffect = GameMain.content.Load<Effect>("GPathesOutput");
 
-            DeferredEffect = GameMain.content.Load<Effect>("DeferredShading");
+            //DeferredEffect = GameMain.content.Load<Effect>("DeferredShading");
         }
 
         public RenderTarget2D StartRenderLevel(Level level)
@@ -243,6 +243,12 @@ namespace RetroEngine
             {
                 mesh.DrawShadow();
             }
+
+            UnifiedEffect.Parameters["ShadowMap"].SetValue(GameMain.inst.render.shadowMap);
+
+            UnifiedEffect.Parameters["ShadowBias"].SetValue(Graphics.ShadowBias);
+            UnifiedEffect.Parameters["ShadowMapResolution"].SetValue((float)Graphics.shadowMapResolution);
+
             return;
             // Set up the shadow map render target with the desired resolution
             graphics.GraphicsDevice.SetRenderTarget(shadowMapClose);

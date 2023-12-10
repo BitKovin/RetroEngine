@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RetroEngine.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -20,13 +21,22 @@ namespace RetroEngine
 
     public class LevelObjectFactory
     {
-        public static object CreateByTechnicalName(string technicalName)
+
+        private static Dictionary<string, Type> TypeCache = new Dictionary<string, Type>();
+
+        public static Entity CreateByTechnicalName(string technicalName)
         {
-            Type objectType = GetObjectTypeByTechnicalName(technicalName);
+            if (TypeCache.TryGetValue(technicalName, out var objectType))
+            {
+                return Activator.CreateInstance(objectType) as Entity;
+            }
+
+            objectType = GetObjectTypeByTechnicalName(technicalName);
 
             if (objectType != null)
             {
-                return Activator.CreateInstance(objectType);
+                TypeCache[technicalName] = objectType; // Cache the result
+                return Activator.CreateInstance(objectType) as Entity;
             }
             else
             {
@@ -49,6 +59,21 @@ namespace RetroEngine
             }
 
             return null; // Class with the specified TechnicalName not found
+        }
+
+        public static void InitializeTypeCache()
+        {
+            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                foreach (Type type in assembly.GetTypes())
+                {
+                    var attribute = type.GetCustomAttribute<LevelObjectAttribute>();
+                    if (attribute != null)
+                    {
+                        TypeCache[attribute.TechnicalName] = type;
+                    }
+                }
+            }
         }
     }
 }

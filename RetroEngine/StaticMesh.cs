@@ -182,7 +182,6 @@ namespace RetroEngine
 
                         effect.Parameters["ShadowMapViewProjection"].SetValue(Graphics.LightViewProjection);
                         effect.Parameters["ShadowMapViewProjectionClose"].SetValue(Graphics.LightViewProjectionClose);
-                        effect.Parameters["ShadowMap"].SetValue(GameMain.inst.render.shadowMap);
 
                         effect.Parameters["ShadowBias"].SetValue(Graphics.ShadowBias);
                         effect.Parameters["ShadowMapResolution"].SetValue((float)Graphics.shadowMapResolution);

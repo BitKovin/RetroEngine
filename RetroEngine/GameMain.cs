@@ -23,7 +23,7 @@ namespace RetroEngine
         Mobile
     }
 
-    public class GameMain : Game
+    public class GameMain : Microsoft.Xna.Framework.Game
     {
         public SpriteFont DefaultFont;
 
@@ -62,7 +62,7 @@ namespace RetroEngine
 
         public static Thread RenderThread;
 
-        public static bool AsyncGameThread = true;
+        public static bool AsyncGameThread = false;
 
 
         public bool DevMenuEnabled = false;
@@ -91,6 +91,9 @@ namespace RetroEngine
             Window.ClientSizeChanged += Window_ClientSizeChanged;
 
             stopwatch.Start();
+
+            LevelObjectFactory.InitializeTypeCache();
+            ParticleSystemFactory.InitializeTypeCache();
 
             this.Window.AllowUserResizing = true;
             if (platform == Platform.Desktop)
@@ -238,6 +241,8 @@ namespace RetroEngine
             ReservedTimeTasks();
             while(sw.Elapsed.TotalSeconds<reservedTaskMinTime)
             {
+                if(sw.Elapsed.TotalSeconds>0.002f)
+                    Thread.Sleep(1);
             }
         }
 
