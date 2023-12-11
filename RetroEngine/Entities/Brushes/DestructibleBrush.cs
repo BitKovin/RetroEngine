@@ -26,8 +26,6 @@ namespace RetroEngine.Entities.Brushes
 
             systemName = data.GetPropertyString("paricleSystem", "testSystem");
 
-            delay.AddDelay(3);
-
             ParticleSystem.Create(systemName)?.LoadAssetsIfNeeded();
         }
 
@@ -39,12 +37,10 @@ namespace RetroEngine.Entities.Brushes
             {
                 foreach (Vector3 location in particleLocations)
                 {
-                    for (int i = 0; i < 100; i++)
-                    {
-                        ParticleSystem system = ParticleSystem.Create(systemName);
-                        system.Position = location;
-                        system.Start();
-                    }
+                    ParticleSystem system = ParticleSystem.Create(systemName);
+                    system.Position = location;
+                    system.Start();
+
                 }
 
                 Destroy();
@@ -53,16 +49,6 @@ namespace RetroEngine.Entities.Brushes
 
         }
 
-        Delay delay = new Delay();
-
-        public override void Update()
-        {
-            base.Update();
-
-            if (delay.Wait()) return;
-            OnDamaged(100000);
-
-        }
 
         void CalculateParticleSpawnLocations()
         {

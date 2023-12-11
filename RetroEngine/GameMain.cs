@@ -140,7 +140,6 @@ namespace RetroEngine
 
             this.Exiting += Game1_Exiting;
 
-            
         }
 
         protected override void Update(GameTime gameTime)
