@@ -55,7 +55,7 @@ namespace RetroEngine.Game
         {
             Input.AddAction("pause").AddKeyboardKey(Keys.Escape);
 
-            Input.AddAction("jump").AddKeyboardKey(Keys.Space);
+            Input.AddAction("jump").AddKeyboardKey(Keys.Space).AddButton(Buttons.A);
             Input.AddAction("attack").LMB = true;
 
             Input.AddAction("moveForward").AddKeyboardKey(Keys.W).AddButton(Buttons.LeftThumbstickUp);
