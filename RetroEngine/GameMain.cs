@@ -62,7 +62,7 @@ namespace RetroEngine
 
         public static Thread RenderThread;
 
-        public static bool AsyncGameThread = false;
+        public static bool AsyncGameThread = true;
 
 
         public bool DevMenuEnabled = false;
@@ -70,7 +70,7 @@ namespace RetroEngine
         Stopwatch stopwatch = new Stopwatch();
         public bool LimitFPS = false;
 
-        float reservedTaskMinTime = 0.004f;
+        float reservedTaskMinTime = 0.0025f;
 
         public GameMain()
         {
@@ -91,9 +91,6 @@ namespace RetroEngine
             Window.ClientSizeChanged += Window_ClientSizeChanged;
 
             stopwatch.Start();
-
-            LevelObjectFactory.InitializeTypeCache();
-            ParticleSystemFactory.InitializeTypeCache();
 
             this.Window.AllowUserResizing = true;
             if (platform == Platform.Desktop)
@@ -183,7 +180,7 @@ namespace RetroEngine
 
             PerformReservedTimeTasks();
 
-            curentLevel.RenderPreparation();
+            //curentLevel.RenderPreparation();
 
             Input.Update();
 

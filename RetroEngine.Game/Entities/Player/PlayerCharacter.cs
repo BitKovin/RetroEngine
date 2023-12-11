@@ -313,7 +313,7 @@ namespace RetroEngine.Game.Entities.Player
         {
             onGround = false;
 
-            float radius = 0.495f;
+            float radius = 0.4f;
 
             if (CheckGroundAtOffset(new Vector3(0, 0, 0)))
                 onGround = true;
