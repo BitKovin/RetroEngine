@@ -58,10 +58,10 @@ namespace RetroEngine.Game
             Input.AddAction("jump").AddKeyboardKey(Keys.Space);
             Input.AddAction("attack").LMB = true;
 
-            Input.AddAction("moveForward").AddKeyboardKey(Keys.W).AddButton(Buttons.DPadUp);
-            Input.AddAction("moveBackward").AddKeyboardKey(Keys.S).AddButton(Buttons.DPadDown);
-            Input.AddAction("moveLeft").AddKeyboardKey(Keys.A).AddButton(Buttons.DPadLeft);
-            Input.AddAction("moveRight").AddKeyboardKey(Keys.D).AddButton(Buttons.DPadRight);
+            Input.AddAction("moveForward").AddKeyboardKey(Keys.W).AddButton(Buttons.LeftThumbstickUp);
+            Input.AddAction("moveBackward").AddKeyboardKey(Keys.S).AddButton(Buttons.LeftThumbstickDown);
+            Input.AddAction("moveLeft").AddKeyboardKey(Keys.A).AddButton(Buttons.LeftThumbstickLeft);
+            Input.AddAction("moveRight").AddKeyboardKey(Keys.D).AddButton(Buttons.LeftThumbstickRight);
 
             Input.AddAction("slot1").AddKeyboardKey(Keys.D1);
             Input.AddAction("slot2").AddKeyboardKey(Keys.D2);
