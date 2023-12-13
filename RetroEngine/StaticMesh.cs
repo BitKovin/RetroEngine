@@ -641,9 +641,9 @@ namespace RetroEngine
 
                     for (int i = 0; i < 3; i++)
                     {
-                        var vertex = mesh.Vertices[face.Indices[2 - i]];
-                        var normal = mesh.Normals[face.Indices[2 - i]];
-                        var textureCoord = mesh.HasTextureCoords(0) ? mesh.TextureCoordinateChannels[0][face.Indices[2 - i]] : new Assimp.Vector3D(0, 0, 0);
+                        var vertex = mesh.Vertices[face.Indices[i]];
+                        var normal = mesh.Normals[face.Indices[i]];
+                        var textureCoord = mesh.HasTextureCoords(0) ? mesh.TextureCoordinateChannels[0][face.Indices[i]] : new Assimp.Vector3D(0, 0, 0);
 
                         // Negate the x-coordinate to correct mirroring
                         vertices[vertexIndex] = new VertexPositionNormalTexture(

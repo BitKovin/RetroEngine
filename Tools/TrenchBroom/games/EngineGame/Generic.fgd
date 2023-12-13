@@ -1,4 +1,13 @@
-@SolidClass = worldspawn : "World entity" []
+@SolidClass = worldspawn : "World entity" 
+[
+	skyColor(Vector3) : "Color": "0.15 0.15 0.2"
+
+	globalLightColor(Vector3) : "Color": "1 1 1"
+	globalLightBrightness(float) : "Global Light Brightness": "0.15"
+
+	globalLightDirection(Vector3) : "Direct Light Direction": "-1 -1 -0.2"
+	directLightBrightness(float) : "Direct Light Brightness": "0.7"
+]
 
 @baseclass size(-16 -16 -24, 16 16 32) color(0 255 0) = PlayerClass []
 

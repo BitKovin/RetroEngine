@@ -54,6 +54,8 @@ namespace RetroEngine
                     textures.Add(path, Texture2D.FromStream(GameMain.inst.GraphicsDevice, stream));
                     texturesHistory.Add(path);
 
+                    Console.WriteLine($"loaded texture. Current texture cache: {texturesHistory.Count}");
+
                     return textures[path];
                 }
             }

@@ -176,11 +176,7 @@ namespace RetroEngine
                 UpdateTime(gameTime);
             }
 
-            //curentLevel.UpdatePending();
-
             PerformReservedTimeTasks();
-
-            //curentLevel.RenderPreparation();
 
             Input.Update();
 

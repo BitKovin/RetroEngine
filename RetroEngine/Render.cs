@@ -132,6 +132,8 @@ namespace RetroEngine
 
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
 
+            UnifiedEffect.Parameters["GlobalLightColor"].SetValue(Graphics.LightColor);
+
             particlesToDraw.Clear();
 
             foreach (StaticMesh mesh in renderList)
@@ -229,7 +231,7 @@ namespace RetroEngine
 
             if (shadowPassRenderDelay.Wait()) return;
 
-            //shadowPassRenderDelay.AddDelay(0.01f);
+            shadowPassRenderDelay.AddDelay(0.03f);
 
             // Set up the shadow map render target with the desired resolution
             graphics.GraphicsDevice.SetRenderTarget(shadowMap);

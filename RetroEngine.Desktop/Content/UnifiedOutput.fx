@@ -34,6 +34,7 @@ sampler DepthMapSampler = sampler_state
 float DirectBrightness;
 float GlobalBrightness;
 float3 LightDirection;
+float3 GlobalLightColor;
 
 float EmissionPower;
 float ShadowBias;
@@ -97,7 +98,7 @@ PixelInput VertexShaderFunction(VertexInput input)
     output.Normal = mul(input.Normal, (float3x3)World);
     output.Normal = normalize(output.Normal);
 
-    float3 lightingFactor = max(0.0, dot(output.Normal, normalize(-LightDirection))) * DirectBrightness; // Example light direction
+    float3 lightingFactor = max(0.0, dot(output.Normal, normalize(-LightDirection))) * DirectBrightness * GlobalLightColor; // Example light direction
 
     if (isParticle)
         lightingFactor = float3(1,1,1);
