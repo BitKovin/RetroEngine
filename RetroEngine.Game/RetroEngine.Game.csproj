@@ -4,7 +4,6 @@
     <Platforms>AnyCPU;x86;x64</Platforms>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Libs\MonoGame\MonoGame.Framework\MonoGame.Framework.DesktopGL.csproj" />
     <ProjectReference Include="..\RetroEngine\RetroEngine.csproj" />
   </ItemGroup>
 </Project>

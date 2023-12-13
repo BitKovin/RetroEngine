@@ -67,7 +67,7 @@ namespace RetroEngine
             UnifiedEffect = GameMain.content.Load<Effect>("UnifiedOutput");
             fxaaEffect = GameMain.content.Load<Effect>("fxaa");
             ShadowMapEffect = GameMain.content.Load<Effect>("ShadowMap");
-            PostProcessingEffect = GameMain.content.Load<Effect>("PostProcessing");
+            //PostProcessingEffect = GameMain.content.Load<Effect>("PostProcessing");
             //ColorEffect = GameMain.content.Load<Effect>("ColorOutput");
             //ParticleColorEffect = GameMain.content.Load<Effect>("ParticleColorOutput");
             //SSAOEffect = GameMain.content.Load<Effect>("SSAO");

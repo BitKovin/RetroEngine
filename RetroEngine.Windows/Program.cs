@@ -1,7 +1,12 @@
-﻿
-using RetroEngine;
+﻿using RetroEngine;
+using SharpDX.DirectInput;
 
-LightManager.MAX_POINT_LIGHTS = 2;
-//GameMain.AsyncGameThread = false;
-using var game = new RetroEngine.Game.Game();
-game.Run();
+internal class Program
+{
+    private static void Main(string[] args)
+    {
+        LightManager.MAX_POINT_LIGHTS = 5;
+        using var game = new RetroEngine.Game.Game();
+        game.Run();
+    }
+}

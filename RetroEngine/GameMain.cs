@@ -70,7 +70,7 @@ namespace RetroEngine
         Stopwatch stopwatch = new Stopwatch();
         public bool LimitFPS = false;
 
-        float reservedTaskMinTime = 0.0025f;
+        public static float ReservedTaskMinTime = 0.0000f;
 
         public GameMain()
         {
@@ -231,10 +231,8 @@ namespace RetroEngine
         {
             Stopwatch sw = Stopwatch.StartNew();
             ReservedTimeTasks();
-            while(sw.Elapsed.TotalSeconds<reservedTaskMinTime)
+            while(sw.Elapsed.TotalSeconds<ReservedTaskMinTime)
             {
-                if(sw.Elapsed.TotalSeconds>0.002f)
-                    Thread.Sleep(1);
             }
         }
 
@@ -264,7 +262,7 @@ namespace RetroEngine
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
 
-            RenderTarget2D frame =  render.StartRenderLevel(curentLevel);
+            RenderTarget2D frame = render.StartRenderLevel(curentLevel);
 
             GraphicsDevice.SetRenderTarget(null);
 
