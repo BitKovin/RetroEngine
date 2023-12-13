@@ -5,6 +5,7 @@
 "classname" "worldspawn"
 "_tb_textures" "textures/brushes"
 "globalLightColor" "1 0.4 0.4"
+"skyColor" "0.2 0.15 0.15"
 // brush 0
 {
 ( -352 -480 304 ) ( -352 528 16 ) ( -352 528 304 ) brushes/bricks 0 0 0 0.75 0.75
