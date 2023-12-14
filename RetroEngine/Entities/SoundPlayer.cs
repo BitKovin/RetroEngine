@@ -100,6 +100,9 @@ namespace RetroEngine.Entities
             }
             try
             {
+
+                Console.WriteLine(soundEffectInstance.State);
+
                 soundEffectInstance?.Play();
             }
             catch (Exception) { }

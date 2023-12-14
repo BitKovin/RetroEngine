@@ -48,6 +48,9 @@ namespace RetroEngine
         {
             foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
+
+                if (assembly.FullName.Contains("RetroEngine") == false) continue;
+
                 foreach (Type type in assembly.GetTypes())
                 {
                     var attribute = type.GetCustomAttribute<LevelObjectAttribute>();

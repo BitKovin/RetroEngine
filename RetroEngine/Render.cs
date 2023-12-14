@@ -64,9 +64,11 @@ namespace RetroEngine
             //lightingEffect = GameMain.content.Load<Effect>("DeferredLighting");
             //NormalEffect = GameMain.content.Load<Effect>("NormalOutput");
             //MiscEffect = GameMain.content.Load<Effect>("MiscOutput");
+            
+            
+            ShadowMapEffect = GameMain.content.Load<Effect>("ShadowMap");
             UnifiedEffect = GameMain.content.Load<Effect>("UnifiedOutput");
             fxaaEffect = GameMain.content.Load<Effect>("fxaa");
-            ShadowMapEffect = GameMain.content.Load<Effect>("ShadowMap");
             //PostProcessingEffect = GameMain.content.Load<Effect>("PostProcessing");
             //ColorEffect = GameMain.content.Load<Effect>("ColorOutput");
             //ParticleColorEffect = GameMain.content.Load<Effect>("ParticleColorOutput");
@@ -120,9 +122,9 @@ namespace RetroEngine
             //PerformLighting();
 
             graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearClamp;
-            PerformPostProcessing();
+            //PerformPostProcessing();
 
-            return outputPath;
+            return DeferredOutput;
         }
 
         void RenderUnifiedPath(List<StaticMesh> renderList)

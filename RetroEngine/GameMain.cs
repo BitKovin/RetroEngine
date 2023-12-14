@@ -80,6 +80,7 @@ namespace RetroEngine
             inst = this;
             curentLevel = new Level();
             UiElement.main = UiManger;
+            _graphics.GraphicsProfile = GraphicsProfile.HiDef;
         }
 
         protected override void Initialize()
@@ -177,7 +178,11 @@ namespace RetroEngine
             }
 
             PerformReservedTimeTasks();
+            
+            foreach (UiElement elem in UiElement.main.childs)
+                elem.Update();
 
+            Camera.ViewportUpdate();
             Input.Update();
 
             bool changedLevel = Level.LoadPendingLevel();
@@ -218,11 +223,7 @@ namespace RetroEngine
 
             Camera.Update();
 
-
             SoundManager.Update();
-
-            foreach (UiElement elem in UiElement.main.childs)
-                elem.Update();
 
             tick++;
         }
@@ -287,14 +288,14 @@ namespace RetroEngine
 
 
             if (DevMenuEnabled)
-                ImGuiRenderer.BeforeLayout(gameTime);
+                ImGuiRenderer.BeginLayout(gameTime);
 
             if (DevMenuEnabled)
                 if (devMenu is not null)
                 devMenu.Update();
 
             if (DevMenuEnabled)
-                ImGuiRenderer.AfterLayout();
+                ImGuiRenderer.EndLayout();
 
             base.Draw(gameTime);
 
