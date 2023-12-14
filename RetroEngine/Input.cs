@@ -25,6 +25,9 @@ namespace RetroEngine
         static Vector2 windowCenter;
 
         static bool pendingCenterCursor = false;
+
+        public static MouseMoveCalculator MouseMoveCalculatorObject;
+
         public static void Update()
         {
 
@@ -41,6 +44,16 @@ namespace RetroEngine
                 CenterCursor();
 
             Vector2 mousePos = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
+            GameMain.inst.IsMouseVisible = !LockCursor;
+
+            if (MouseMoveCalculatorObject != null)
+            {
+
+                MouseDelta = MouseMoveCalculatorObject.GetMouseDelta() * sensitivity;
+
+                return;
+            }
+
             Vector2 delta = mousePos - MousePos;
 
             AddMouseInput(delta);
@@ -50,7 +63,7 @@ namespace RetroEngine
 
             windowCenter = new Vector2(GameMain.inst.GraphicsDevice.Viewport.Width / 2, GameMain.inst.GraphicsDevice.Viewport.Height / 2);
 
-            GameMain.inst.IsMouseVisible = !LockCursor;
+            
 
             if (LockCursor)
                 if (Vector2.Distance(windowCenter, mousePos) > 0)
@@ -130,6 +143,14 @@ namespace RetroEngine
             else
             {
                 return actions[actionName];
+            }
+        }
+
+        public class MouseMoveCalculator
+        {
+            public virtual Vector2 GetMouseDelta()
+            {
+                return new Vector2();
             }
         }
     }

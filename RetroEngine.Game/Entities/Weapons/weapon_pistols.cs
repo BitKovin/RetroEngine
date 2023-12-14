@@ -136,6 +136,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
         void LoadVisual()
         {
+            return;
             mesh1.Scale = new Vector3(1, 1, 1);
 
             mesh1.AddFrame("Animations/Pistol/Fire/frame_0001.obj");

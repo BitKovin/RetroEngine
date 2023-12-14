@@ -70,7 +70,7 @@ namespace RetroEngine
         Stopwatch stopwatch = new Stopwatch();
         public bool LimitFPS = false;
 
-        public static float ReservedTaskMinTime = 0.0000f;
+        public static float ReservedTaskMinTime = 0.001f;
 
         public GameMain()
         {
