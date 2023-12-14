@@ -115,14 +115,14 @@ namespace RetroEngine
             RenderShadowMap(renderList);
 
 
-            //RenderUnifiedPath(renderList);
-            DrawPathes(renderList);
-            PerformDifferedShading();
+            RenderUnifiedPath(renderList);
+            //DrawPathes(renderList);
+            //PerformDifferedShading();
             //RenderColorPath(renderList);
             //PerformLighting();
 
             graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearClamp;
-            //PerformPostProcessing();
+            PerformPostProcessing();
 
             return DeferredOutput;
         }
