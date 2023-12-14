@@ -31,6 +31,8 @@ namespace RetroEngine.Entities
         bool pendingPlay = false;
         Delay pendingPlayDelay = new Delay();
 
+        SoundEffect _sound;
+
         public override void LateUpdate()
         {
             base.LateUpdate();
@@ -82,6 +84,7 @@ namespace RetroEngine.Entities
             {
                 soundEffectInstance = sound.CreateInstance();
                 soundEffectInstance.IsLooped = IsLooped;
+                _sound = sound;
             }
         }
 
@@ -100,9 +103,8 @@ namespace RetroEngine.Entities
             }
             try
             {
-
-                Console.WriteLine(soundEffectInstance.State);
-
+                SetSound(_sound);
+                LateUpdate();
                 soundEffectInstance?.Play();
             }
             catch (Exception) { }

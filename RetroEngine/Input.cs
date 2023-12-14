@@ -22,7 +22,9 @@ namespace RetroEngine
 
         public static float sensitivity = 0.2f;
 
+        static Vector2 windowCenter;
 
+        static bool pendingCenterCursor = false;
         public static void Update()
         {
 
@@ -34,6 +36,10 @@ namespace RetroEngine
 
         static void UpdateMouse()
         {
+
+            if (pendingCenterCursor)
+                CenterCursor();
+
             Vector2 mousePos = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
             Vector2 delta = mousePos - MousePos;
 
@@ -42,7 +48,7 @@ namespace RetroEngine
             MouseDelta *= sensitivity;
 
 
-            Vector2 windowCenter = new Vector2(GameMain.inst.GraphicsDevice.Viewport.Width / 2, GameMain.inst.GraphicsDevice.Viewport.Height / 2);
+            windowCenter = new Vector2(GameMain.inst.GraphicsDevice.Viewport.Width / 2, GameMain.inst.GraphicsDevice.Viewport.Height / 2);
 
             GameMain.inst.IsMouseVisible = !LockCursor;
 
@@ -81,11 +87,17 @@ namespace RetroEngine
 
         public static void CenterCursor()
         {
-            Vector2 windowCenter = new Vector2(GameMain.inst.GraphicsDevice.Viewport.Width / 2, GameMain.inst.GraphicsDevice.Viewport.Height / 2);
-            Mouse.SetPosition((int)windowCenter.X, (int)windowCenter.Y);
-            MousePos = windowCenter;
-            MouseDelta = new Vector2();
-            MouseDeltas.Clear();
+            if(GameMain.IsOnRenderThread())
+            {
+                Mouse.SetPosition((int)windowCenter.X, (int)windowCenter.Y);
+                MousePos = windowCenter;
+                MouseDelta = new Vector2();
+                MouseDeltas.Clear();
+                pendingCenterCursor = false;
+            }else
+            {
+                pendingCenterCursor = true;
+            }
         }
 
         static void UpdateActions()
