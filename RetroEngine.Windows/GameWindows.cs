@@ -51,7 +51,7 @@ namespace RetroEngine.Windows
 
             if(Input.LockCursor)
             {
-                Cursor.Position = new System.Drawing.Point((int)Input.windowCenter.X, (int)Input.windowCenter.Y);
+                Microsoft.Xna.Framework.Input.Mouse.SetPosition((int)Input.windowCenter.X, (int)Input.windowCenter.Y);
             }
 
             MouseState state = mouse.GetCurrentState();
