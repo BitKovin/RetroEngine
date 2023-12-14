@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace RetroEngine.Windows
 {
@@ -20,7 +21,9 @@ namespace RetroEngine.Windows
             var calc = new WindowsInputCalculator();
 
             Input.MouseMoveCalculatorObject = calc;
-            
+
+            Window.Title = Window.Title + "   Direct X";
+
         }
 
     }
@@ -45,6 +48,11 @@ namespace RetroEngine.Windows
         public override Vector2 GetMouseDelta()
         {
             mouse.Poll();
+
+            if(Input.LockCursor)
+            {
+                Cursor.Position = new System.Drawing.Point((int)Input.windowCenter.X, (int)Input.windowCenter.Y);
+            }
 
             MouseState state = mouse.GetCurrentState();
 
