@@ -32,6 +32,12 @@
 /processorParam:TextureFormat=Compressed
 /build:box.fbx
 
+#begin DeferredShading.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:DeferredShading.fx
+
 #begin Font.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
@@ -44,6 +50,12 @@
 /processor:EffectProcessor
 /processorParam:DebugMode=Auto
 /build:fxaa.fx
+
+#begin GPathesOutput.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:GPathesOutput.fx
 
 #begin ShadowMap.fx
 /importer:EffectImporter

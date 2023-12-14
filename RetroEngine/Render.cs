@@ -73,9 +73,9 @@ namespace RetroEngine
             //ColorEffect = GameMain.content.Load<Effect>("ColorOutput");
             //ParticleColorEffect = GameMain.content.Load<Effect>("ParticleColorOutput");
             //SSAOEffect = GameMain.content.Load<Effect>("SSAO");
-            //BuffersEffect = GameMain.content.Load<Effect>("GPathesOutput");
+            BuffersEffect = GameMain.content.Load<Effect>("GPathesOutput");
 
-            //DeferredEffect = GameMain.content.Load<Effect>("DeferredShading");
+            DeferredEffect = GameMain.content.Load<Effect>("DeferredShading");
         }
 
         public RenderTarget2D StartRenderLevel(Level level)
@@ -115,9 +115,9 @@ namespace RetroEngine
             RenderShadowMap(renderList);
 
 
-            RenderUnifiedPath(renderList);
-            //DrawPathes(renderList);
-            //PerformDifferedShading();
+            //RenderUnifiedPath(renderList);
+            DrawPathes(renderList);
+            PerformDifferedShading();
             //RenderColorPath(renderList);
             //PerformLighting();
 
@@ -151,7 +151,7 @@ namespace RetroEngine
         void DrawPathes(List<StaticMesh> renderList)
         {
             graphics.GraphicsDevice.SetRenderTargets(colorPath,emissivePath,normalPath,positionPath);
-            graphics.GraphicsDevice.Clear(Color.Black);
+            graphics.GraphicsDevice.Clear(Color.Transparent);
 
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
 
@@ -171,6 +171,8 @@ namespace RetroEngine
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
 
             graphics.GraphicsDevice.SetRenderTarget(DeferredOutput);
+
+            graphics.GraphicsDevice.Clear(Graphics.BackgroundColor);
 
             DeferredEffect.Parameters["ColorTexture"].SetValue(colorPath);
             DeferredEffect.Parameters["EmissiveTexture"].SetValue(emissivePath);
@@ -203,6 +205,8 @@ namespace RetroEngine
             DeferredEffect.Parameters["ShadowBias"].SetValue(Graphics.ShadowBias);
             DeferredEffect.Parameters["ShadowMapResolution"].SetValue((float)Graphics.shadowMapResolution);
 
+            DeferredEffect.Parameters["GlobalLightColor"].SetValue(Graphics.LightColor);
+
             SpriteBatch spriteBatch = GameMain.inst.SpriteBatch;
 
             spriteBatch.Begin(effect: DeferredEffect);
@@ -210,6 +214,7 @@ namespace RetroEngine
             DrawFullScreenQuad(spriteBatch, colorPath);
 
             spriteBatch.End();
+            graphics.GraphicsDevice.SetRenderTarget(null);
         }
 
         void RenderDepthPath(List<StaticMesh> renderList)
@@ -499,7 +504,7 @@ namespace RetroEngine
                     graphics.PreferredBackBufferWidth,
                     graphics.PreferredBackBufferHeight,
                     false, // No mipmaps
-                    SurfaceFormat.Rgba64, // Color format
+                    SurfaceFormat.Color, // Color format
                     depthFormat); // Depth format
             }
         }

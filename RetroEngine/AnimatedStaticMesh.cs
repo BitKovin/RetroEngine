@@ -186,6 +186,71 @@ namespace RetroEngine
             }
         }
 
+        public override void DrawPathes()
+        {
+            AddFrameVertexData();
+
+            GraphicsDevice graphicsDevice = GameMain.inst._graphics.GraphicsDevice;
+
+            Effect effect = GameMain.inst.render.BuffersEffect;
+
+            if (frameStaticMeshData.model is not null)
+            {
+                for (int j = 0; j < model.Meshes.Count; j++)
+                {
+                    for (int i = 0; i < model.Meshes[j].MeshParts.Count; i++)
+                    {
+                        ModelMeshPart meshPart1 = frameStaticMeshData.model.Meshes[j].MeshParts[i];
+                        ModelMeshPart meshPart2 = frameStaticMeshData.model2.Meshes[j].MeshParts[i];
+
+                        VertexBuffer result = CreateVertexBufferIfNeeded($"m_{j}_p_{i}", meshPart1.VertexBuffer, graphicsDevice);
+
+                        LerpVertexBuffers(graphicsDevice, result, meshPart1.VertexBuffer, meshPart2.VertexBuffer, finalAnimationTime / frameTime - (float)Math.Truncate((double)(finalAnimationTime / frameTime)));
+
+                        // Set the vertex buffer and index buffer for this mesh part
+                        graphicsDevice.SetVertexBuffer(result);
+                        graphicsDevice.Indices = meshPart1.IndexBuffer;
+
+                        MeshPartData meshPartData = meshPart1.Tag as MeshPartData;
+                        if (meshPartData is not null)
+                        {
+                            effect.Parameters["ColorTexture"].SetValue(FindTexture(meshPartData.textureName));
+                            effect.Parameters["EmissiveTexture"].SetValue(FindEmissiveTexture(meshPartData.textureName));
+                        }
+                        else
+                        {
+                            effect.Parameters["ColorTexture"].SetValue(texture);
+                            effect.Parameters["EmissiveTexture"].SetValue(GameMain.inst.render.black);
+                        }
+
+                        effect.Parameters["DepthScale"].SetValue(frameStaticMeshData.Viewmodel ? 0.02f : 1);
+
+                        Matrix projection;
+
+                        if (frameStaticMeshData.Viewmodel)
+                            projection = frameStaticMeshData.ProjectionViewmodel;
+                        else
+                            projection = frameStaticMeshData.Projection;
+
+                        effect.Parameters["WorldViewProjection"].SetValue(frameStaticMeshData.World * frameStaticMeshData.View * projection);
+                        effect.Parameters["World"].SetValue(frameStaticMeshData.World);
+
+
+                        // Draw the primitives using the custom effect
+                        foreach (EffectPass pass in effect.CurrentTechnique.Passes)
+                        {
+                            pass.Apply();
+                            graphicsDevice.DrawIndexedPrimitives(
+                                PrimitiveType.TriangleList,
+                                meshPart1.VertexOffset,
+                                meshPart1.StartIndex,
+                                meshPart1.PrimitiveCount);
+                        }
+                    }
+                }
+            }
+        }
+
         VertexBuffer CreateVertexBufferIfNeeded(string name, VertexBuffer def, GraphicsDevice graphicsDevice)
         {
             if (vertexBuffers.ContainsKey(name))
