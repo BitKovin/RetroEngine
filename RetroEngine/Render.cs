@@ -124,7 +124,7 @@ namespace RetroEngine
             graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearClamp;
             PerformPostProcessing();
 
-            return DeferredOutput;
+            return outputPath;
         }
 
         void RenderUnifiedPath(List<StaticMesh> renderList)
