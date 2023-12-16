@@ -29,7 +29,7 @@ namespace RetroEngine
 
         const int MaxTexturesInMemory = 70;
 
-        public static Texture2D LoadTextureFromFile(string path, bool ignoreErrors = false)
+        public static Texture2D LoadTextureFromFile(string path, bool ignoreErrors = false, bool generateMipMaps = true)
         {
 
             if (textures.ContainsKey(path))
@@ -50,11 +50,18 @@ namespace RetroEngine
             {
                 using (FileStream stream = new FileStream(filePpath, FileMode.Open))
                 {
+                    if (generateMipMaps)
+                    {
+                        Texture2D tex = Texture2D.FromStream(GameMain.inst.GraphicsDevice, stream);
 
-                    textures.Add(path, Texture2D.FromStream(GameMain.inst.GraphicsDevice, stream));
+                        textures.Add(path, GenerateMipMaps(tex));
+                    }else
+                    {
+                        textures.Add(path, Texture2D.FromStream(GameMain.inst.GraphicsDevice, stream));
+                    }
                     texturesHistory.Add(path);
 
-                    Console.WriteLine($"loaded texture. Current texture cache: {texturesHistory.Count}");
+                    Console.WriteLine($"loaded texture. Current texture cache: {textures.Count}");
 
                     return textures[path];
                 }
@@ -67,6 +74,31 @@ namespace RetroEngine
                 return null;
             }
 
+        }
+
+        static Texture2D GenerateMipMaps(Texture2D intermediateTexture)
+        {
+
+            GraphicsDevice graphicsDevice = GameMain.inst.GraphicsDevice;
+
+            Texture2D texture = null;
+            RenderTarget2D renderTarget = new RenderTarget2D(graphicsDevice, intermediateTexture.Width, intermediateTexture.Height, mipMap: true, preferredFormat: SurfaceFormat.Color, preferredDepthFormat: DepthFormat.None);
+
+            BlendState blendState = BlendState.Opaque;
+
+            graphicsDevice.SetRenderTarget(renderTarget);
+            using (SpriteBatch sprite = new SpriteBatch(graphicsDevice))
+            {
+                sprite.Begin(SpriteSortMode.Immediate, blendState,SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone,
+                effect: null);
+                sprite.Draw(intermediateTexture, new Vector2(0, 0), Color.White);
+                sprite.End();
+            }
+
+            texture = (Texture2D)renderTarget;
+            graphicsDevice.SetRenderTarget(null);
+            intermediateTexture.Dispose();
+            return texture;
         }
 
         public static SoundEffect LoadSoundFromFile(string path)

@@ -3,8 +3,8 @@
     #define VS_SHADERMODEL vs_3_0
     #define PS_SHADERMODEL ps_3_0
 #else
-    #define VS_SHADERMODEL vs_4_0_level_9_1
-    #define PS_SHADERMODEL ps_4_0_level_9_1
+    #define VS_SHADERMODEL vs_5_0
+    #define PS_SHADERMODEL ps_5_0
 #endif
 
 matrix World;
@@ -85,10 +85,10 @@ PixelInput VertexShaderFunction(VertexInput input)
     PixelInput output;
 
     output.Position = mul(input.Position, World);
-    output.MyPosition = mul(input.Position, World);
+    output.MyPosition = mul(input.Position, World).xyz;
     output.Position = mul(output.Position, View);
     output.Position = mul(output.Position, Projection);
-    output.MyPixelPosition = output.Position;
+    output.MyPixelPosition = output.Position.xyz;
     
     output.Position.z *= depthScale;
     
@@ -145,13 +145,13 @@ float GetShadow(float3 lightCoords, PixelInput input, bool close = false)
         float resolution = 1;
         
 
-        int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)
+        int numSamples = 2; // Number of samples in each direction (total samples = numSamples^2)
 
         float bias = ShadowBias * abs(input.Normal.z) + ShadowBias / 2.0f;
         resolution = ShadowMapResolution;
             
         
-        float texelSize = 1.0f / resolution; // Assuming ShadowMapSize is the size of your shadow map texture
+        float texelSize = 2.0f / resolution; // Assuming ShadowMapSize is the size of your shadow map texture
         
         for (int i = -numSamples; i <= numSamples; ++i)
         {

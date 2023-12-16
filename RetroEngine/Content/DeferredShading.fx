@@ -3,15 +3,41 @@
 	#define VS_SHADERMODEL vs_3_0
 	#define PS_SHADERMODEL ps_3_0
 #else
-	#define VS_SHADERMODEL vs_4_0_level_9_1
-	#define PS_SHADERMODEL ps_4_0_level_9_1
+	#define VS_SHADERMODEL vs_4_0
+	#define PS_SHADERMODEL ps_4_0
 #endif
+
+//buffers
+Texture2D ColorTexture;
+sampler ColorTextureSampler = sampler_state
+{
+    texture = <ColorTexture>;
+};
+
+Texture2D EmissiveTexture;
+sampler EmissiveTextureSampler = sampler_state
+{
+    texture = <EmissiveTexture>;
+};
+
+Texture2D NormalTexture;
+sampler NormalTextureSampler = sampler_state
+{
+    texture = <NormalTexture>;
+};
+
+Texture2D PositionTexture;
+sampler PositionTextureSampler = sampler_state
+{
+    texture = <PositionTexture>;
+};
+
 
 //directional light
 float DirectBrightness;
 float GlobalBrightness;
 float3 LightDirection;
-
+float3 GlobalLightColor;
 
 //point lights
 #define MAX_POINT_LIGHTS 5
@@ -19,33 +45,6 @@ float3 LightDirection;
 float3 LightPositions[MAX_POINT_LIGHTS];
 float3 LightColors[MAX_POINT_LIGHTS];
 float LightRadiuses[MAX_POINT_LIGHTS];
-
-
-
-//buffers
-texture ColorTexture;
-sampler ColorTextureSampler = sampler_state
-{
-    texture = <ColorTexture>;
-};
-
-texture EmissiveTexture;
-sampler EmissiveTextureSampler = sampler_state
-{
-    texture = <EmissiveTexture>;
-};
-
-texture NormalTexture;
-sampler NormalTextureSampler = sampler_state
-{
-    texture = <NormalTexture>;
-};
-
-texture PositionTexture;
-sampler PositionTextureSampler = sampler_state
-{
-    texture = <PositionTexture>;
-};
 
 //shadow map
 matrix ShadowMapViewProjection;
@@ -58,9 +57,11 @@ sampler ShadowMapSampler = sampler_state
 float ShadowBias = 0.05f;
 
 
-struct PixelShaderInput
+struct VertexShaderOutput
 {
-    float2 TexCoord : TEXCOORD0;
+    float4 Position : SV_POSITION;
+    float4 Color : COLOR0;
+    float2 TextureCoordinates : TEXCOORD0;
 };
 
 float SampleShadowMap(sampler2D shadowMap, float2 coords, float compare)
@@ -142,7 +143,7 @@ float3 SolvePointLight(int i, float3 position, float3 normal)
 float3 SolveDirectionalLight(float3 normal)
 {
     float light = max(dot(normal, LightDirection * -1.0f),0) * DirectBrightness;
-    return float3(light,light,light);
+    return float3(light, light, light) * GlobalLightColor;
 
 }
 
@@ -175,22 +176,22 @@ float3 CalculateLight(float3 position, float3 normal)
     return light;
 }
 
-float4 MainPS(PixelShaderInput input) : COLOR
+float4 MainPS(VertexShaderOutput input) : COLOR
 {
 	
-    float3 color = tex2D(ColorTextureSampler, input.TexCoord).xyz;
-    float3 emissive = tex2D(EmissiveTextureSampler, input.TexCoord).xyz;
-    float3 normal = tex2D(NormalTextureSampler, input.TexCoord).xyz * 2.0f - 1.0f;
-    float3 position = tex2D(PositionTextureSampler, input.TexCoord).xyz;
+    float4 color = tex2D(ColorTextureSampler, input.TextureCoordinates);
+    float3 emissive = tex2D(EmissiveTextureSampler, input.TextureCoordinates).xyz;
+    float3 normal = tex2D(NormalTextureSampler, input.TextureCoordinates).xyz * 2.0f - 1.0f;
+    float3 position = tex2D(PositionTextureSampler, input.TextureCoordinates).xyz;
 	
-    color *= CalculateLight(position, normal);
+    color *= float4(CalculateLight(position, normal),1);
 
-    color += emissive;
+    color += float4(emissive, 0);
     
-    return float4(color,1);
+    return float4(color.rgb,color.a);
 }
 
-technique DefferedShading
+technique SpriteDrawing
 {
 	pass P0
 	{

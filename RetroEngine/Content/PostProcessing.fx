@@ -1,14 +1,17 @@
 ﻿#if OPENGL
-	#define SV_POSITION POSITION
-	#define VS_SHADERMODEL vs_3_0
-	#define PS_SHADERMODEL ps_3_0
+#define SV_POSITION POSITION
+#define VS_SHADERMODEL vs_3_0
+#define PS_SHADERMODEL ps_3_0
 #else
-	#define VS_SHADERMODEL vs_4_0_level_9_1
-	#define PS_SHADERMODEL ps_4_0_level_9_1
+#define VS_SHADERMODEL vs_4_0_level_9_1
+#define PS_SHADERMODEL ps_4_0_level_9_1
 #endif
 
 texture ColorTexture;
-sampler ColorSampler = sampler_state { texture = <ColorTexture>; };
+sampler ColorSampler = sampler_state
+{
+    texture = <ColorTexture>;
+};
 
 bool Enabled;
 
@@ -19,9 +22,9 @@ struct PixelInput
 
 float3 SamplePixelWithOffset(float2 TexCoord, float2 Offset)
 {
-	TexCoord.x = clamp(TexCoord.x + Offset.x, 0,1);
-	TexCoord.y = clamp(TexCoord.y + Offset.y, 0,1);
-	return tex2D(ColorSampler, TexCoord).xyz;
+    TexCoord.x = clamp(TexCoord.x + Offset.x, 0, 1);
+    TexCoord.y = clamp(TexCoord.y + Offset.y, 0, 1);
+    return tex2D(ColorSampler, TexCoord).xyz;
 }
 
 float4 PixelShaderFunction(PixelInput input) : COLOR0
@@ -60,7 +63,7 @@ float4 PixelShaderFunction(PixelInput input) : COLOR0
 
         color += bloom;
     }
-    return float4(color.xyz,1);
+    return float4(color.xyz, 1);
 }
 
 technique PostProcessingTechnique

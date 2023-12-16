@@ -59,13 +59,16 @@ namespace RetroEngine
 
         public List<ParticleEmitter.Particle> particlesToDraw = new List<ParticleEmitter.Particle>();
 
+        SamplerState samplerState = new SamplerState();
         public Render()
         {
+            graphics = GameMain.inst._graphics;
+
             //lightingEffect = GameMain.content.Load<Effect>("DeferredLighting");
             //NormalEffect = GameMain.content.Load<Effect>("NormalOutput");
             //MiscEffect = GameMain.content.Load<Effect>("MiscOutput");
-            
-            
+
+
             ShadowMapEffect = GameMain.content.Load<Effect>("ShadowMap");
             UnifiedEffect = GameMain.content.Load<Effect>("UnifiedOutput");
             fxaaEffect = GameMain.content.Load<Effect>("fxaa");
@@ -76,11 +79,13 @@ namespace RetroEngine
             BuffersEffect = GameMain.content.Load<Effect>("GPathesOutput");
 
             DeferredEffect = GameMain.content.Load<Effect>("DeferredShading");
+
+            InitSampler();
         }
 
         public RenderTarget2D StartRenderLevel(Level level)
         {
-            graphics = GameMain.inst._graphics;
+            
 
             CreateBlackTexture();
 
@@ -107,8 +112,6 @@ namespace RetroEngine
 
             List<StaticMesh> renderList = level.GetMeshesToRender();
 
-            graphics.GraphicsDevice.SamplerStates[0] = Graphics.TextureFiltration ? (Graphics.AnisotropicFiltration ? SamplerState.AnisotropicWrap : SamplerState.LinearWrap) : SamplerState.PointWrap;
-
             //RenderDepthPath(renderList);
             //RenderNormalPath(renderList);
 
@@ -127,6 +130,21 @@ namespace RetroEngine
             return outputPath;
         }
 
+        public void InitSampler()
+        {
+            samplerState = new SamplerState();
+
+            samplerState.Filter = Graphics.TextureFiltration ? (Graphics.AnisotropicFiltration ? TextureFilter.Anisotropic : TextureFilter.Linear) : TextureFilter.PointMipLinear;
+
+            samplerState.AddressU = TextureAddressMode.Wrap;
+            samplerState.AddressV = TextureAddressMode.Wrap;
+            samplerState.AddressW = TextureAddressMode.Wrap;
+
+            samplerState.MipMapLevelOfDetailBias = -2;
+
+            graphics.GraphicsDevice.SamplerStates[0] = samplerState;
+        }
+
         void RenderUnifiedPath(List<StaticMesh> renderList)
         {
             graphics.GraphicsDevice.SetRenderTarget(DeferredOutput);
@@ -137,6 +155,8 @@ namespace RetroEngine
             UnifiedEffect.Parameters["GlobalLightColor"].SetValue(Graphics.LightColor);
 
             particlesToDraw.Clear();
+
+            InitSampler();
 
             foreach (StaticMesh mesh in renderList)
                 {
@@ -490,6 +510,8 @@ namespace RetroEngine
 
         void InitRenderTargetIfNeed(ref RenderTarget2D target)
         {
+            if(graphics.PreferredBackBufferWidth>0 && graphics.PreferredBackBufferHeight>0)
+
             if (target is null || target.Width != graphics.PreferredBackBufferWidth || target.Height != graphics.PreferredBackBufferHeight)
             {
                 // Dispose of the old render target if it exists

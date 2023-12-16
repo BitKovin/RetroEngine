@@ -11,8 +11,6 @@
     <PackageReference Include="RhuBulletSharp" Version="1.0.3" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Content\bin\DesktopGL\Content\" />
-    <Folder Include="Content\bin\Windows\Content\" />
     <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
   <ItemGroup>

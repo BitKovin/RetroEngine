@@ -3,8 +3,8 @@
 	#define VS_SHADERMODEL vs_3_0
 	#define PS_SHADERMODEL ps_3_0
 #else
-	#define VS_SHADERMODEL vs_4_0_level_9_1
-	#define PS_SHADERMODEL ps_4_0_level_9_1
+	#define VS_SHADERMODEL vs_5_0
+	#define PS_SHADERMODEL ps_5_0
 #endif
 
 // LightingEffect.fx
@@ -51,6 +51,6 @@ technique LightingTechnique
 {
     pass Pass1
     {
-        PixelShader = compile ps_3_0 PixelShaderFunction();
+        PixelShader = compile PS_SHADERMODEL PixelShaderFunction();
     }
 }
