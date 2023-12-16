@@ -45,7 +45,7 @@ float ShadowMapResolution;
 matrix ShadowMapViewProjectionClose;
 float ShadowMapResolutionClose;
 
-#define MAX_POINT_LIGHTS 5
+#define MAX_POINT_LIGHTS 15
 
 float3 LightPositions[MAX_POINT_LIGHTS];
 float3 LightColors[MAX_POINT_LIGHTS];

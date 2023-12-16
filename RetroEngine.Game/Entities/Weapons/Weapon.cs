@@ -28,7 +28,7 @@ namespace RetroEngine.Game.Entities.Weapons
         protected WeaponData data;
         protected PlayerCharacter player;
 
-        protected float DrawTime = 0.3f;
+        protected float DrawTime = 0.35f;
 
         protected bool Drawing = true;
 
@@ -78,7 +78,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             float progress = Math.Clamp((Time.gameTime - SpawnTime)/DrawTime, 0, 1);
 
-            DrawRotation = new Vector3((1 - progress) * 20, (1 - progress) * -10, 0);
+            DrawRotation = new Vector3((1 - progress) * 20, (1 - progress) * 20, (1 - progress) * 30);
 
         }
 
