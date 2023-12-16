@@ -145,13 +145,13 @@ float GetShadow(float3 lightCoords, PixelInput input, bool close = false)
         float resolution = 1;
         
 
-        int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)
+        int numSamples = 2; // Number of samples in each direction (total samples = numSamples^2)
 
         float bias = ShadowBias * abs(input.Normal.z) + ShadowBias / 2.0f;
         resolution = ShadowMapResolution;
             
         
-        float texelSize = 1.0f / resolution; // Assuming ShadowMapSize is the size of your shadow map texture
+        float texelSize = 2.0f / resolution; // Assuming ShadowMapSize is the size of your shadow map texture
         
         for (int i = -numSamples; i <= numSamples; ++i)
         {

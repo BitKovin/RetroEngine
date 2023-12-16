@@ -21,7 +21,7 @@ namespace RetroEngine
 
         public static Matrix LightViewProjection;
         public static Matrix LightViewProjectionClose;
-        public static float LightDistance = 200;
+        public static float LightDistance = 70;
         public static float CloseLightDistance = 50;
 
         public static bool EnablePostPocessing = true;
@@ -50,7 +50,7 @@ namespace RetroEngine
 
         static Vector3 GetCameraPositionByPixelGrid()
         {
-            Vector3 pos = Camera.position + new Vector3(0,0,0);
+            Vector3 pos = Camera.position + Camera.rotation.GetForwardVector().XZ().Normalized() * LightDistance/5;
 
             //ector3 pos = Camera.position - new Vector3(0, 1, 0);
 

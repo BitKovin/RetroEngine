@@ -238,7 +238,7 @@ namespace RetroEngine
 
             if (shadowPassRenderDelay.Wait()) return;
 
-            shadowPassRenderDelay.AddDelay(1.00f);
+            shadowPassRenderDelay.AddDelay(0.05f);
 
             // Set up the shadow map render target with the desired resolution
             graphics.GraphicsDevice.SetRenderTarget(shadowMap);
@@ -504,7 +504,7 @@ namespace RetroEngine
                     graphics.PreferredBackBufferWidth,
                     graphics.PreferredBackBufferHeight,
                     false, // No mipmaps
-                    SurfaceFormat.Color, // Color format
+                    SurfaceFormat.Rgba64, // Color format
                     depthFormat); // Depth format
             }
         }
