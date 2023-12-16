@@ -238,7 +238,7 @@ namespace RetroEngine
 
             if (shadowPassRenderDelay.Wait()) return;
 
-            shadowPassRenderDelay.AddDelay(0.03f);
+            shadowPassRenderDelay.AddDelay(1.00f);
 
             // Set up the shadow map render target with the desired resolution
             graphics.GraphicsDevice.SetRenderTarget(shadowMap);

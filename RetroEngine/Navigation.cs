@@ -81,6 +81,7 @@ namespace RetroEngine
             {
                 point.BuildConnectionsData();
             }
+            Logger.Log("Built Nav Data");
         }
 
         public static List<NavPoint> GetNavPoints() { return navPoints; }

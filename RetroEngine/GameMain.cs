@@ -65,7 +65,7 @@ namespace RetroEngine
         public static bool AsyncGameThread = true;
 
 
-        public bool DevMenuEnabled = false;
+        public bool DevMenuEnabled = true;
 
         Stopwatch stopwatch = new Stopwatch();
         public bool LimitFPS = false;
@@ -125,6 +125,7 @@ namespace RetroEngine
                 ImGuiRenderer = new ImGuiRenderer(this);
                 ImGuiRenderer.RebuildFontAtlas();
                 ImGui.StyleColorsDark();
+                ImGui.GetIO().ConfigFlags |= ImGuiConfigFlags.DockingEnable;
             }
             SoundManager.Init();
 
@@ -145,7 +146,7 @@ namespace RetroEngine
 
             checkAppRegainedFocus();
 
-            if (tick == 100)
+            if (tick == 10)
                 GameInitialized();
 
             LimitFrameRate();

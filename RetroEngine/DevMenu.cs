@@ -23,7 +23,12 @@ namespace RetroEngine
         public virtual void Update()
         {
 
-            //return;
+            // Inside your rendering loop or where you handle ImGui rendering
+            ImGui.PushStyleColor(ImGuiCol.DockingEmptyBg, new Vector4(0));
+            ImGui.PushStyleColor(ImGuiCol.WindowBg, new Vector4(0));
+            ImGui.DockSpaceOverViewport();
+            ImGui.PopStyleColor(2);
+
             ImGui.BeginMainMenuBar();
             ImGui.Text("fps: " + (int)(1f / Time.deltaTime) + "    entity count: " + Level.GetCurrent().entities.Count);
             ImGui.EndMainMenuBar();
