@@ -33,7 +33,7 @@ namespace RetroEngine
             ImGui.Text("fps: " + (int)(1f / Time.deltaTime) + "    entity count: " + Level.GetCurrent().entities.Count);
             ImGui.EndMainMenuBar();
 
-            if (!GameMain.inst.paused) return;
+            if (!GameMain.Instance.paused) return;
 
             ImGui.Begin("lighting");
 
@@ -90,7 +90,7 @@ namespace RetroEngine
 
         public virtual void Init() 
         {
-            if (GameMain.inst.DevMenuEnabled == false) return;
+            if (GameMain.Instance.DevMenuEnabled == false) return;
 
             ImGuiIOPtr io = ImGui.GetIO();
             ImGuiStylePtr style = ImGui.GetStyle();

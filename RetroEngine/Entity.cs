@@ -103,7 +103,7 @@ namespace RetroEngine
                 Physics.Remove(rigidBody);
             }
 
-            GameMain.inst.curentLevel.entities.Remove(this);
+            GameMain.Instance.curentLevel.entities.Remove(this);
             Dispose();
         }
 

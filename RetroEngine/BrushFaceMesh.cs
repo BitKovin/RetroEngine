@@ -32,7 +32,7 @@ namespace RetroEngine
                 return null;
             }
 
-            GraphicsDevice graphicsDevice = GameMain.inst.GraphicsDevice;
+            GraphicsDevice graphicsDevice = GameMain.Instance.GraphicsDevice;
 
             List<BrushFaceMesh> models = new List<BrushFaceMesh>();
 
@@ -157,7 +157,7 @@ namespace RetroEngine
                 return null;
             }
 
-            GraphicsDevice graphicsDevice = GameMain.inst.GraphicsDevice;
+            GraphicsDevice graphicsDevice = GameMain.Instance.GraphicsDevice;
 
             List<BrushFaceMesh> models = new List<BrushFaceMesh>();
 
@@ -339,7 +339,7 @@ namespace RetroEngine
             var numVertices = Indices.Count;
             var primitiveCount = numVertices / 3;  // Each triangle has 3 vertices
 
-            GraphicsDevice graphicsDevice = GameMain.inst.GraphicsDevice;
+            GraphicsDevice graphicsDevice = GameMain.Instance.GraphicsDevice;
 
             var vertexBuffer = new VertexBuffer(graphicsDevice, typeof(VertexPositionNormalTexture), Vertices.Count, BufferUsage.None);
             vertexBuffer.SetData(Vertices.ToArray());
@@ -364,7 +364,7 @@ namespace RetroEngine
         public static Model MergeModels(List<Model> models)
         {
 
-            GraphicsDevice graphicsDevice = GameMain.inst.GraphicsDevice;
+            GraphicsDevice graphicsDevice = GameMain.Instance.GraphicsDevice;
 
             // Create lists to store combined vertex and index data
             List<VertexPositionNormalTexture> vertices = new List<VertexPositionNormalTexture>();
@@ -434,7 +434,7 @@ namespace RetroEngine
 
         public static Model GetCollisionModel(string filePath, string objectName, float unitSize = 32)
         {
-            GraphicsDevice graphicsDevice = GameMain.inst.GraphicsDevice;
+            GraphicsDevice graphicsDevice = GameMain.Instance.GraphicsDevice;
 
 
             var importer = new Assimp.AssimpContext();

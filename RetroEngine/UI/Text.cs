@@ -18,7 +18,7 @@ namespace RetroEngine.UI
 
         public Text() : base()
         {
-            Font = GameMain.inst.DefaultFont;
+            Font = GameMain.Instance.DefaultFont;
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)

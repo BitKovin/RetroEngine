@@ -52,7 +52,7 @@ namespace RetroEngine
 
         public static void Simulate()
         {
-            if (GameMain.inst.paused == false)
+            if (GameMain.Instance.paused == false)
                 dynamicsWorld.StepSimulation(RetroEngine.Time.deltaTime, steps, Math.Max(1 / 100f, Time.deltaTime));
         }
 

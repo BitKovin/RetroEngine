@@ -31,7 +31,7 @@ namespace RetroEngine
         public GraphicsDeviceManager _graphics;
         public SpriteBatch SpriteBatch;
         public static ContentManager content;
-        static public GameMain inst;
+        static public GameMain Instance;
 
         public Level curentLevel;
 
@@ -40,7 +40,7 @@ namespace RetroEngine
 
         public static Platform platform;
 
-        public UiElement UiManger = new UiElement();
+        public static UiElement UIManger = new UiElement();
 
         public static GameTime time;
 
@@ -70,16 +70,16 @@ namespace RetroEngine
         Stopwatch stopwatch = new Stopwatch();
         public bool LimitFPS = false;
 
-        public static float ReservedTaskMinTime = 0.001f;
+        public static float ReservedTaskMinTime = 0.000f;
 
         public GameMain()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-            inst = this;
+            Instance = this;
             curentLevel = new Level();
-            UiElement.main = UiManger;
+            UiElement.main = UIManger;
             _graphics.GraphicsProfile = GraphicsProfile.HiDef;
         }
 
@@ -278,7 +278,7 @@ namespace RetroEngine
 
             SpriteBatch.Begin(transformMatrix: Camera.UiMatrix, blendState: BlendState.AlphaBlend);
 
-            UiManger.Draw(gameTime, SpriteBatch);
+            UIManger.Draw(gameTime, SpriteBatch);
 
             SpriteBatch.DrawString(DefaultFont, (1f / Time.deltaTime).ToString(), new Vector2(100, 100), Color.White);
 

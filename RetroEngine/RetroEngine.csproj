@@ -16,4 +16,9 @@
   <ItemGroup>
     <ProjectReference Include="..\Libs\MonoGame.ImGuiNet\Monogame.ImGuiNet.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Update="libbulletc.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>

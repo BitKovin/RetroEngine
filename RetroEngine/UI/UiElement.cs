@@ -92,8 +92,8 @@ namespace RetroEngine.UI
 
         public virtual void Update()
         {
-            float ScaleY = GameMain.inst.Window.ClientBounds.Height / Constants.ResoultionY;
-            float HtV = ((float)GameMain.inst.Window.ClientBounds.Width) / ((float)GameMain.inst.Window.ClientBounds.Height);
+            float ScaleY = GameMain.Instance.Window.ClientBounds.Height / Constants.ResoultionY;
+            float HtV = ((float)GameMain.Instance.Window.ClientBounds.Width) / ((float)GameMain.Instance.Window.ClientBounds.Height);
             Origins.Right = new Vector2(Constants.ResoultionY * HtV, 0);
 
 

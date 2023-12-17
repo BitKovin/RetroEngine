@@ -64,9 +64,9 @@ namespace RetroEngine
 
         public static void ViewportUpdate()
         {
-            HtW = (float)GameMain.inst.Window.ClientBounds.Width / (float)GameMain.inst.Window.ClientBounds.Height;
+            HtW = (float)GameMain.Instance.Window.ClientBounds.Width / (float)GameMain.Instance.Window.ClientBounds.Height;
 
-            float ScaleY = (float)GameMain.inst.Window.ClientBounds.Height / Constants.ResoultionY;
+            float ScaleY = (float)GameMain.Instance.Window.ClientBounds.Height / Constants.ResoultionY;
 
             var scale = Matrix.CreateScale(ScaleY, ScaleY, 1);
 

@@ -41,7 +41,7 @@ namespace RetroEngine
             if (GameMain.IsOnRenderThread() == false) 
             {
                 Logger.Log($"THREAD ERROR:  attempted to load texture from not render thread. Texture: {path}");
-                return GameMain.inst.render.black;
+                return GameMain.Instance.render.black;
             }
 
             string filePpath = FindPathForFile(path);
@@ -52,12 +52,12 @@ namespace RetroEngine
                 {
                     if (generateMipMaps)
                     {
-                        Texture2D tex = Texture2D.FromStream(GameMain.inst.GraphicsDevice, stream);
+                        Texture2D tex = Texture2D.FromStream(GameMain.Instance.GraphicsDevice, stream);
 
                         textures.Add(path, GenerateMipMaps(tex));
                     }else
                     {
-                        textures.Add(path, Texture2D.FromStream(GameMain.inst.GraphicsDevice, stream));
+                        textures.Add(path, Texture2D.FromStream(GameMain.Instance.GraphicsDevice, stream));
                     }
                     texturesHistory.Add(path);
 
@@ -79,7 +79,7 @@ namespace RetroEngine
         static Texture2D GenerateMipMaps(Texture2D intermediateTexture)
         {
 
-            GraphicsDevice graphicsDevice = GameMain.inst.GraphicsDevice;
+            GraphicsDevice graphicsDevice = GameMain.Instance.GraphicsDevice;
 
             Texture2D texture = null;
             RenderTarget2D renderTarget = new RenderTarget2D(graphicsDevice, intermediateTexture.Width, intermediateTexture.Height, mipMap: true, preferredFormat: SurfaceFormat.Color, preferredDepthFormat: DepthFormat.None);

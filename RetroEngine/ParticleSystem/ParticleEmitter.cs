@@ -141,7 +141,7 @@ namespace RetroEngine.Particles
                 LoadFromFile("models/particle.obj");
                 particleModel = model;
             }
-            GameMain.inst.render.particlesToDraw.AddRange(finalizedParticles);
+            GameMain.Instance.render.particlesToDraw.AddRange(finalizedParticles);
         }
 
         public override void Draw()
@@ -152,7 +152,7 @@ namespace RetroEngine.Particles
                 LoadFromFile("models/particle.obj");
                 particleModel = model;
             }
-            GameMain.inst.render.particlesToDraw.AddRange(finalizedParticles);
+            GameMain.Instance.render.particlesToDraw.AddRange(finalizedParticles);
         }
 
         public static void LoadRenderEmitter()
@@ -195,9 +195,9 @@ namespace RetroEngine.Particles
 
         public void DrawColor()
         {
-            GraphicsDevice graphicsDevice = GameMain.inst._graphics.GraphicsDevice;
+            GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
             // Load the custom effect
-            Effect effect = GameMain.inst.render.ParticleColorEffect;
+            Effect effect = GameMain.Instance.render.ParticleColorEffect;
 
             if (model is not null)
             {

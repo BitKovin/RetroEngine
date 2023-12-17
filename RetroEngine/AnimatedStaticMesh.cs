@@ -88,9 +88,9 @@ namespace RetroEngine
         {
             if (frameStaticMeshData.IsRendered == false && frameStaticMeshData.Viewmodel == false) return;
 
-            GraphicsDevice graphicsDevice = GameMain.inst._graphics.GraphicsDevice;
+            GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
             // Load the custom effect
-            Effect effect = GameMain.inst.render.UnifiedEffect;
+            Effect effect = GameMain.Instance.render.UnifiedEffect;
 
             AddFrameVertexData();
 
@@ -152,7 +152,7 @@ namespace RetroEngine
                         }
                         else
                         {
-                            effect.Parameters["EmissiveTexture"].SetValue(GameMain.inst.render.black);
+                            effect.Parameters["EmissiveTexture"].SetValue(GameMain.Instance.render.black);
                         }
                         effect.Parameters["EmissionPower"].SetValue(EmissionPower);
 
@@ -190,9 +190,9 @@ namespace RetroEngine
         {
             AddFrameVertexData();
 
-            GraphicsDevice graphicsDevice = GameMain.inst._graphics.GraphicsDevice;
+            GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
 
-            Effect effect = GameMain.inst.render.BuffersEffect;
+            Effect effect = GameMain.Instance.render.BuffersEffect;
 
             if (frameStaticMeshData.model is not null)
             {
@@ -220,7 +220,7 @@ namespace RetroEngine
                         else
                         {
                             effect.Parameters["ColorTexture"].SetValue(texture);
-                            effect.Parameters["EmissiveTexture"].SetValue(GameMain.inst.render.black);
+                            effect.Parameters["EmissiveTexture"].SetValue(GameMain.Instance.render.black);
                         }
 
                         effect.Parameters["DepthScale"].SetValue(frameStaticMeshData.Viewmodel ? 0.02f : 1);

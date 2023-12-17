@@ -44,9 +44,9 @@ namespace RetroEngine
                 CenterCursor();
 
             Vector2 mousePos = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
-            GameMain.inst.IsMouseVisible = !LockCursor;
+            GameMain.Instance.IsMouseVisible = !LockCursor;
 
-            windowCenter = new Vector2(GameMain.inst.GraphicsDevice.Viewport.Width / 2, GameMain.inst.GraphicsDevice.Viewport.Height / 2);
+            windowCenter = new Vector2(GameMain.Instance.GraphicsDevice.Viewport.Width / 2, GameMain.Instance.GraphicsDevice.Viewport.Height / 2);
 
             if (MouseMoveCalculatorObject != null)
             {

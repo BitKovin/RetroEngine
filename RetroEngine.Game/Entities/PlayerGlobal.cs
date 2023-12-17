@@ -20,7 +20,7 @@ namespace RetroEngine.Game.Entities
         {
             base.Update();
 
-            Input.LockCursor = !GameMain.inst.paused;
+            Input.LockCursor = !GameMain.Instance.paused;
 
         }
 
@@ -30,9 +30,9 @@ namespace RetroEngine.Game.Entities
 
             if (Input.GetAction("pause").Pressed())
             {
-                GameMain.inst.paused = !GameMain.inst.paused;
+                GameMain.Instance.paused = !GameMain.Instance.paused;
 
-                if (GameMain.inst.paused == false)
+                if (GameMain.Instance.paused == false)
                     Input.CenterCursor();
 
             }

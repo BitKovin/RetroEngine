@@ -80,9 +80,9 @@ namespace RetroEngine
 
         public virtual void Draw()
         {
-            GraphicsDevice graphicsDevice = GameMain.inst._graphics.GraphicsDevice;
+            GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
             // Load the custom effect
-            Effect effect = GameMain.inst.render.ColorEffect;
+            Effect effect = GameMain.Instance.render.ColorEffect;
 
             if (model is not null)
             {
@@ -151,9 +151,9 @@ namespace RetroEngine
         {
             if (frameStaticMeshData.IsRendered == false && frameStaticMeshData.Viewmodel == false) return;
 
-            GraphicsDevice graphicsDevice = GameMain.inst._graphics.GraphicsDevice;
+            GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
             // Load the custom effect
-            Effect effect = GameMain.inst.render.UnifiedEffect;
+            Effect effect = GameMain.Instance.render.UnifiedEffect;
 
             
 
@@ -209,7 +209,7 @@ namespace RetroEngine
                         }
                         else
                         {
-                            effect.Parameters["EmissiveTexture"].SetValue(GameMain.inst.render.black);
+                            effect.Parameters["EmissiveTexture"].SetValue(GameMain.Instance.render.black);
                         }
                         effect.Parameters["EmissionPower"].SetValue(EmissionPower);
 
@@ -247,9 +247,9 @@ namespace RetroEngine
         {
             if (!CastShadows) return;
 
-            GraphicsDevice graphicsDevice = GameMain.inst._graphics.GraphicsDevice;
+            GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
             // Load the custom effect
-            Effect effect = GameMain.inst.render.ShadowMapEffect;
+            Effect effect = GameMain.Instance.render.ShadowMapEffect;
 
 
             if (model is not null)
@@ -296,9 +296,9 @@ namespace RetroEngine
         {
             if (Transperent) return;
 
-            GraphicsDevice graphicsDevice = GameMain.inst._graphics.GraphicsDevice;
+            GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
             // Load the custom effect
-            Effect effect = GameMain.inst.render.ShadowMapEffect;
+            Effect effect = GameMain.Instance.render.ShadowMapEffect;
 
 
             if (model is not null)
@@ -339,9 +339,9 @@ namespace RetroEngine
 
         public virtual void DrawPathes()
         {
-            GraphicsDevice graphicsDevice = GameMain.inst._graphics.GraphicsDevice;
+            GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
             // Load the custom effect
-            Effect effect = GameMain.inst.render.BuffersEffect;
+            Effect effect = GameMain.Instance.render.BuffersEffect;
 
             if (model is not null)
             {
@@ -363,7 +363,7 @@ namespace RetroEngine
                         else
                         {
                             effect.Parameters["ColorTexture"].SetValue(texture);
-                            effect.Parameters["EmissiveTexture"].SetValue(GameMain.inst.render.black);
+                            effect.Parameters["EmissiveTexture"].SetValue(GameMain.Instance.render.black);
                         }
 
                         effect.Parameters["DepthScale"].SetValue(frameStaticMeshData.Viewmodel ? 0.02f : 1);
@@ -426,7 +426,7 @@ namespace RetroEngine
             if (name == null)
                 if (emisssiveTexture == null)
                 {
-                    return GameMain.inst.render.black;
+                    return GameMain.Instance.render.black;
                 }else
                 {
                     return emisssiveTexture;
@@ -454,7 +454,7 @@ namespace RetroEngine
             }
             if (emisssiveTexture == null)
             {
-                return GameMain.inst.render.black;
+                return GameMain.Instance.render.black;
             }
             else
             {
@@ -468,9 +468,9 @@ namespace RetroEngine
 
             if (Transperent) return;
 
-            GraphicsDevice graphicsDevice = GameMain.inst._graphics.GraphicsDevice;
+            GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
             // Load the custom effect
-            Effect effect = GameMain.inst.render.NormalEffect;
+            Effect effect = GameMain.Instance.render.NormalEffect;
 
 
             if (model is not null)
@@ -507,9 +507,9 @@ namespace RetroEngine
 
         public virtual void DrawMisc()
         {
-            GraphicsDevice graphicsDevice = GameMain.inst._graphics.GraphicsDevice;
+            GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
             // Load the custom effect
-            Effect effect = GameMain.inst.render.MiscEffect;
+            Effect effect = GameMain.Instance.render.MiscEffect;
 
 
             if (model is not null)
@@ -581,7 +581,7 @@ namespace RetroEngine
 
         protected Model GetModelFromPath(string filePath,bool dynamicBuffer = false)
         {
-            GraphicsDevice graphicsDevice = GameMain.inst.GraphicsDevice;
+            GraphicsDevice graphicsDevice = GameMain.Instance.GraphicsDevice;
 
             filePath = AssetRegistry.FindPathForFile(filePath);
 
@@ -711,7 +711,7 @@ namespace RetroEngine
                 return null;
             }
 
-            GraphicsDevice graphicsDevice = GameMain.inst.GraphicsDevice;
+            GraphicsDevice graphicsDevice = GameMain.Instance.GraphicsDevice;
 
             List<ModelMeshPart> meshParts = new List<ModelMeshPart>();
 

@@ -62,7 +62,7 @@ namespace RetroEngine
         SamplerState samplerState = new SamplerState();
         public Render()
         {
-            graphics = GameMain.inst._graphics;
+            graphics = GameMain.Instance._graphics;
 
             //lightingEffect = GameMain.content.Load<Effect>("DeferredLighting");
             //NormalEffect = GameMain.content.Load<Effect>("NormalOutput");
@@ -227,7 +227,7 @@ namespace RetroEngine
 
             DeferredEffect.Parameters["GlobalLightColor"].SetValue(Graphics.LightColor);
 
-            SpriteBatch spriteBatch = GameMain.inst.SpriteBatch;
+            SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
 
             spriteBatch.Begin(effect: DeferredEffect);
 
@@ -273,7 +273,7 @@ namespace RetroEngine
                 mesh.DrawShadow();
             }
 
-            UnifiedEffect.Parameters["ShadowMap"].SetValue(GameMain.inst.render.shadowMap);
+            UnifiedEffect.Parameters["ShadowMap"].SetValue(GameMain.Instance.render.shadowMap);
 
             UnifiedEffect.Parameters["ShadowBias"].SetValue(Graphics.ShadowBias);
             UnifiedEffect.Parameters["ShadowMapResolution"].SetValue((float)Graphics.shadowMapResolution);
@@ -317,7 +317,7 @@ namespace RetroEngine
             PostProcessingEffect.Parameters["ColorTexture"].SetValue(colorPath);
             //PostProcessingEffect.Parameters["Enabled"].SetValue(Graphics.EnablePostPocessing);
 
-            SpriteBatch spriteBatch = GameMain.inst.SpriteBatch;
+            SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
 
             spriteBatch.Begin(effect: PostProcessingEffect);
 
@@ -345,7 +345,7 @@ namespace RetroEngine
             SSAOEffect.Parameters["ssaoIntensity"].SetValue(0.6f);
 
 
-            SpriteBatch spriteBatch = GameMain.inst.SpriteBatch;
+            SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
 
             spriteBatch.Begin(effect: SSAOEffect);
 
@@ -378,7 +378,7 @@ namespace RetroEngine
             fxaaEffect.Parameters["screenColor"].SetValue(DeferredOutput);
 
             // Begin drawing with SpriteBatch
-            SpriteBatch spriteBatch = GameMain.inst.SpriteBatch;
+            SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
             spriteBatch.Begin(effect: fxaaEffect);
 
             // Draw a full-screen quad to apply the lighting
@@ -459,7 +459,7 @@ namespace RetroEngine
             lightingEffect.Parameters["MiscTexture"].SetValue(miscPath);
 
             // Begin drawing with SpriteBatch
-            SpriteBatch spriteBatch = GameMain.inst.SpriteBatch;
+            SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
             spriteBatch.Begin(effect: lightingEffect);
 
             // Draw a full-screen quad to apply the lighting

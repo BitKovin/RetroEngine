@@ -38,7 +38,7 @@ namespace RetroEngine
 
         public virtual void DrawNormals()
         {
-            GraphicsDevice graphicsDevice = GameMain.inst._graphics.GraphicsDevice;
+            GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
             // Load the custom effect
             Effect effect = GameMain.content.Load<Effect>("NormalOutput");
 

@@ -34,7 +34,7 @@ namespace RetroEngine
 
         public static Level GetCurrent()
         {
-            return GameMain.inst.curentLevel;
+            return GameMain.Instance.curentLevel;
         }
 
         public static bool LoadPendingLevel()
@@ -59,7 +59,7 @@ namespace RetroEngine
             }
 
             List<Entity> list = new List<Entity>();
-            list.AddRange(GameMain.inst.curentLevel.entities);
+            list.AddRange(GameMain.Instance.curentLevel.entities);
 
             foreach (Entity entity in list)
             {
@@ -72,11 +72,11 @@ namespace RetroEngine
             NPCBase.ResetStaticData();
             
 
-            GameMain.inst.curentLevel = MapParser.MapParser.ParseMap(AssetRegistry.FindPathForFile(name)).GetLevel();
-            GameMain.inst.curentLevel.StartEnities();
+            GameMain.Instance.curentLevel = MapParser.MapParser.ParseMap(AssetRegistry.FindPathForFile(name)).GetLevel();
+            GameMain.Instance.curentLevel.StartEnities();
             Navigation.RebuildConnectionsData();
 
-            GameMain.inst.OnLevelChanged();
+            GameMain.Instance.OnLevelChanged();
         }
 
         public void UpdatePending()
@@ -104,7 +104,7 @@ namespace RetroEngine
             Entity[] list = entities.ToArray();
 
             foreach (Entity entity in list)
-                if(entity.UpdateWhilePaused&&GameMain.inst.paused|| GameMain.inst.paused == false)
+                if(entity.UpdateWhilePaused&&GameMain.Instance.paused|| GameMain.Instance.paused == false)
                     entity.Update();
         }
 
@@ -118,7 +118,7 @@ namespace RetroEngine
 
             Parallel.ForEach(list,options, entity =>
             {
-                if (entity.UpdateWhilePaused && GameMain.inst.paused || GameMain.inst.paused == false)
+                if (entity.UpdateWhilePaused && GameMain.Instance.paused || GameMain.Instance.paused == false)
                     entity.AsyncUpdate();
             });
         }
@@ -129,7 +129,7 @@ namespace RetroEngine
             Entity[] list = entities.ToArray();
 
             foreach (Entity entity in list)
-                if (entity.LateUpdateWhilePaused && GameMain.inst.paused || GameMain.inst.paused == false)
+                if (entity.LateUpdateWhilePaused && GameMain.Instance.paused || GameMain.Instance.paused == false)
                     entity.LateUpdate();
 
             foreach (Entity entity in list)

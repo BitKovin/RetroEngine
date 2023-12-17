@@ -28,7 +28,7 @@ namespace RetroEngine.UI
 
         public Button() : base()
         {
-            tex = new Texture2D(GameMain.inst.GraphicsDevice, 1, 1);
+            tex = new Texture2D(GameMain.Instance.GraphicsDevice, 1, 1);
             tex.SetData(new Color[] { Color.White });
         }
 
