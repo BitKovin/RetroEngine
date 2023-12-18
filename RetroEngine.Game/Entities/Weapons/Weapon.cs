@@ -60,6 +60,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
         public static void PreloadAllWeapons()
         {
+            return;
             Type[] types = Assembly.GetAssembly(typeof(Weapon)).GetTypes().Where(t => t.IsSubclassOf(typeof(Weapon))).ToArray();
 
             foreach (Type type in types) 

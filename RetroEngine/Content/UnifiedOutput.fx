@@ -72,7 +72,13 @@ struct PixelInput
     float4 lightPos :TEXCOORD3;
     float4 lightPosClose : TEXCOORD4;
     float3 MyPosition : TEXCOORD5;
-    float3 MyPixelPosition : TEXCOORD6;
+    float4 MyPixelPosition : TEXCOORD6;
+};
+
+struct PixelOutput
+{
+    float4 Color : COLOR0;
+    float Depth : COLOR1;
 };
 
 float3 normalize(float3 v)
@@ -88,9 +94,11 @@ PixelInput VertexShaderFunction(VertexInput input)
     output.MyPosition = mul(input.Position, World).xyz;
     output.Position = mul(output.Position, View);
     output.Position = mul(output.Position, Projection);
-    output.MyPixelPosition = output.Position.xyz;
+    
     
     output.Position.z *= depthScale;
+    
+    output.MyPixelPosition = output.Position;
     
     output.TexCoord = input.TexCoord;
 
@@ -195,6 +203,28 @@ float3 CalculatePointLight(int i, PixelInput pixelInput)
 
 float4 PixelShaderFunction(PixelInput input) : COLOR0
 {
+    
+    float2 screenCoords = input.MyPixelPosition.xy / input.MyPixelPosition.w;
+    
+    screenCoords /= 2.0f;
+
+    screenCoords -= float2(0.5f, 0.5f);
+    screenCoords *= float2(1, -1);
+    
+    
+    float deferredDepth = tex2D(DepthMapSampler, screenCoords).r;
+    float depth = input.MyPixelPosition.z / input.MyPixelPosition.w;
+    
+    if (deferredDepth==0)
+        deferredDepth = 1;
+    
+    if (deferredDepth <= depth)
+    {
+        return float4(0, 0, 0, 0);
+    }
+    
+    
+    
     float3 textureColor = tex2D(TextureSampler, input.TexCoord).xyz;
 	float textureAlpha = tex2D(TextureSampler, input.TexCoord).w;
 
@@ -236,9 +266,9 @@ float4 PixelShaderFunction(PixelInput input) : COLOR0
 
     textureColor += tex2D(EmissiveTextureSampler, input.TexCoord).rgb * EmissionPower * tex2D(EmissiveTextureSampler, input.TexCoord).a;
 
-    //textureColor = saturate(textureColor);
+    textureColor = saturate(textureColor);
     
-    textureColor *= Transparency;
+    //textureColor *= Transparency;
     textureAlpha *= Transparency;
     
     return float4(textureColor, textureAlpha);

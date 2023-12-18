@@ -19,6 +19,11 @@ namespace RetroEngine
         string input = "";
 
 
+        public virtual void Log(string text)
+        {
+            log.Add(text);
+            scrolldown = true;
+        }
 
         public virtual void Update()
         {
@@ -67,7 +72,7 @@ namespace RetroEngine
 
             if (scrolldown)
             {
-                ImGui.SetScrollHereY();
+                ImGui.SetScrollHereY(0);
                 scrolldown = false;
             }
 
@@ -84,8 +89,7 @@ namespace RetroEngine
 
         void submitInput()
         {
-            log.Add(input);
-            scrolldown = true;
+            Log(input);
         }
 
         public virtual void Init() 

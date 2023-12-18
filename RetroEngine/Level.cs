@@ -1,4 +1,5 @@
-﻿using RetroEngine;
+﻿using Microsoft.Xna.Framework;
+using RetroEngine;
 using RetroEngine.Entities;
 using RetroEngine.UI;
 using System;
@@ -158,6 +159,8 @@ namespace RetroEngine
 
             renderList = new List<StaticMesh>();
 
+            List<StaticMesh> transperentMeshes = new List<StaticMesh>();
+
             foreach (Entity ent in entities)
             {
                 if (ent.loadedAssets == false) continue;
@@ -166,12 +169,16 @@ namespace RetroEngine
                     foreach (StaticMesh mesh in ent.meshes)
                     {
                         if (mesh.Transperent)
-                            renderList.Add(mesh);
+                            transperentMeshes.Add(mesh);
                         else
-                            renderList.Insert(0, mesh);
+                            renderList.Add(mesh);
                     }
                 }
             }
+
+            transperentMeshes.OrderByDescending(m => Vector3.Distance(m.useAvgVertexPosition? m.avgVertexPosition : m.Position, Camera.position)).ToList();
+
+            renderList.AddRange(transperentMeshes);
 
             LightManager.PrepareLightSources();
             LightManager.ClearPointLights();

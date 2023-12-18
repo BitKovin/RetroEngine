@@ -144,7 +144,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
         void LoadVisual()
         {
-            return;
+            //return;
             mesh.Scale = new Vector3(0.4f);
 
             for (int i = 1; i <= 50; i+=3)
@@ -160,6 +160,7 @@ namespace RetroEngine.Game.Entities.Weapons
             mesh.PreloadTextures();
             mesh.Viewmodel = true;
             mesh.UseAlternativeRotationCalculation = true;
+            mesh.isLoaded = true;
             mesh.AddFrameVertexData();
 
             new particle_hitSmoke().LoadAssets();

@@ -33,6 +33,8 @@ namespace RetroEngine.Game.Entities
             mesh.model = model;
 
             mesh.texture = AssetRegistry.LoadTextureFromFile("cat.png");
+            mesh.Transperent = true;
+            mesh.Transparency = 1f;
         }
 
 

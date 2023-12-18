@@ -172,6 +172,7 @@ namespace RetroEngine.Particles
                 frameStaticMeshData.model = (particle.customModelPath == null) ? particleModel : GetModelFromPath(particle.customModelPath);
                 frameStaticMeshData.World = GetWorldForParticle(particle);
                 frameStaticMeshData.Transparency = particle.transparency;
+                frameStaticMeshData.Transperent = true;
 
                 base.DrawUnified();
             }

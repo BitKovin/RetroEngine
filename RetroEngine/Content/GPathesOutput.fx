@@ -3,8 +3,8 @@
 	#define VS_SHADERMODEL vs_3_0
 	#define PS_SHADERMODEL ps_3_0
 #else
-	#define VS_SHADERMODEL vs_4_0_level_9_1
-	#define PS_SHADERMODEL ps_4_0_level_9_1
+	#define VS_SHADERMODEL vs_5_0
+	#define PS_SHADERMODEL ps_5_0
 #endif
 
 matrix WorldViewProjection;
@@ -34,8 +34,9 @@ struct VertexShaderInput
 struct VertexShaderOutput
 {
 	float4 Position : SV_POSITION;
+    float4 PixelPosition : TEXCOORD0;
 	float3 Normal : COLOR0;
-    float2 TexCoord : TEXCOORD0;
+    float2 TexCoord : TEXCOORD1;
     float3 WorldPosition : COLOR1;
 };
 
@@ -45,6 +46,7 @@ struct PixelShaderOutput
     float4 Emissive : COLOR1;
     float4 Normal : COLOR2;
     float4 Position : COLOR3;
+    float4 Depth : COLOR4;
 };
 
 VertexShaderOutput MainVS(in VertexShaderInput input)
@@ -53,10 +55,11 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 
 	output.Position = mul(input.Position, WorldViewProjection);
     output.Position.z *= DepthScale;
+    output.PixelPosition = output.Position;
     output.Normal = normalize(mul(input.Normal, (float3x3) World));
     output.TexCoord = input.TexCoord;
     output.WorldPosition = mul(input.Position, World).xyz;
-
+    
 	return output;
 }
 
@@ -71,10 +74,11 @@ PixelShaderOutput MainPS(VertexShaderOutput input)
         output.Emissive = float4(tex2D(EmissiveTextureSampler, input.TexCoord).rgb, 1);
         output.Normal = float4(input.Normal / 2.0f + 0.5f, 1);
         output.Position = float4(input.WorldPosition, 1);
+        output.Depth = float4(input.PixelPosition.z / input.PixelPosition.w,0,0,1);
     }
     else
     {
-        output.Color = output.Emissive = output.Normal = output.Position = float4(0, 0, 0, 0);
+        output.Color = output.Emissive = output.Normal = output.Position = output.Depth = float4(0, 0, 0, 0);
 
     }
 	return output;

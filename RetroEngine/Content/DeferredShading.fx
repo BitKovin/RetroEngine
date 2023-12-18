@@ -32,6 +32,11 @@ sampler PositionTextureSampler = sampler_state
     texture = <PositionTexture>;
 };
 
+Texture2D ForwardTexture;
+sampler ForwardTextureSampler = sampler_state
+{
+    texture = <ForwardTexture>;
+};
 
 //directional light
 float DirectBrightness;
@@ -40,7 +45,7 @@ float3 LightDirection;
 float3 GlobalLightColor;
 
 //point lights
-#define MAX_POINT_LIGHTS 5
+#define MAX_POINT_LIGHTS 15
 
 float3 LightPositions[MAX_POINT_LIGHTS];
 float3 LightColors[MAX_POINT_LIGHTS];
@@ -176,6 +181,13 @@ float3 CalculateLight(float3 position, float3 normal)
     return light;
 }
 
+float4 AddTransperency(float4 transperency,float4 color)
+{
+    float3 output = lerp(color.rgb, transperency.rgb, transperency.a);
+    return float4(output, 1);
+
+}
+
 float4 MainPS(VertexShaderOutput input) : COLOR
 {
 	
@@ -183,10 +195,13 @@ float4 MainPS(VertexShaderOutput input) : COLOR
     float3 emissive = tex2D(EmissiveTextureSampler, input.TextureCoordinates).xyz;
     float3 normal = tex2D(NormalTextureSampler, input.TextureCoordinates).xyz * 2.0f - 1.0f;
     float3 position = tex2D(PositionTextureSampler, input.TextureCoordinates).xyz;
+    float4 transperency = tex2D(ForwardTextureSampler, input.TextureCoordinates);
 	
     color *= float4(CalculateLight(position, normal),1);
 
     color += float4(emissive, 0);
+    
+    color = AddTransperency(transperency, color);
     
     return float4(color.rgb,color.a);
 }

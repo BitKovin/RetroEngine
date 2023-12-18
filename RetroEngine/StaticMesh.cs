@@ -60,7 +60,7 @@ namespace RetroEngine
 
         public bool useAvgVertexPosition;
 
-        protected Vector3 avgVertexPosition;
+        public Vector3 avgVertexPosition;
 
         public bool Transperent = false;
 

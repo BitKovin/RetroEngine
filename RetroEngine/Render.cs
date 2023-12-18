@@ -19,8 +19,12 @@ namespace RetroEngine
         RenderTarget2D emissivePath;
         RenderTarget2D normalPath;
         RenderTarget2D positionPath;
+        RenderTarget2D depthPath;
 
         RenderTarget2D DeferredOutput;
+
+        RenderTarget2D ForwardOutput;
+        RenderTarget2D ForwardDepth;
 
         RenderTarget2D miscPath;
         RenderTarget2D postProcessingOutput;
@@ -92,9 +96,13 @@ namespace RetroEngine
             InitRenderTargetIfNeed(ref colorPath);
             InitRenderTargetIfNeed(ref emissivePath);
             InitRenderTargetIfNeed(ref normalPath);
+            InitRenderTargetVectorIfNeed(ref depthPath);
             InitRenderTargetVectorIfNeed(ref positionPath);
 
             InitRenderTargetIfNeed(ref DeferredOutput);
+
+            InitRenderTargetIfNeed(ref ForwardOutput);
+            InitRenderTargetIfNeed(ref ForwardDepth);
 
             InitRenderTargetIfNeed(ref outputPath);
             InitRenderTargetIfNeed(ref ssaoOutput);
@@ -112,22 +120,22 @@ namespace RetroEngine
 
             List<StaticMesh> renderList = level.GetMeshesToRender();
 
-            //RenderDepthPath(renderList);
-            //RenderNormalPath(renderList);
-
             RenderShadowMap(renderList);
 
 
-            RenderUnifiedPath(renderList);
-            //DrawPathes(renderList);
-            //PerformDifferedShading();
-            //RenderColorPath(renderList);
-            //PerformLighting();
+           
+            DrawPathes(renderList);
+
+            RenderTransperentPath(renderList);
+
+            PerformDeferredShading();
+
+            //RenderUnifiedPath(renderList);
 
             graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearClamp;
             PerformPostProcessing();
 
-            return outputPath;
+            return ForwardOutput;
         }
 
         public void InitSampler()
@@ -145,10 +153,10 @@ namespace RetroEngine
             graphics.GraphicsDevice.SamplerStates[0] = samplerState;
         }
 
-        void RenderUnifiedPath(List<StaticMesh> renderList)
+        void RenderUnifiedPath(List<StaticMesh> renderList, bool onlyTransperent = false)
         {
             graphics.GraphicsDevice.SetRenderTarget(DeferredOutput);
-            graphics.GraphicsDevice.Clear(Graphics.BackgroundColor);
+            //graphics.GraphicsDevice.Clear(Graphics.BackgroundColor);
 
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
 
@@ -160,6 +168,7 @@ namespace RetroEngine
 
             foreach (StaticMesh mesh in renderList)
                 {
+                    if(mesh.Transperent|| onlyTransperent == false)
                     mesh.DrawUnified();
                 }
 
@@ -168,10 +177,57 @@ namespace RetroEngine
 
         }
 
+        void RenderTransperentPath(List<StaticMesh> renderList, bool onlyTransperent = true)
+        {
+            graphics.GraphicsDevice.SetRenderTargets(ForwardOutput);
+            graphics.GraphicsDevice.Clear(Color.Black);
+
+            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
+
+            UnifiedEffect.Parameters["GlobalLightColor"].SetValue(Graphics.LightColor);
+            UnifiedEffect.Parameters["DepthMap"].SetValue(depthPath);
+
+            particlesToDraw.Clear();
+
+            InitSampler();
+
+            foreach (StaticMesh mesh in renderList)
+            {
+                if (mesh.Transperent || onlyTransperent == false)
+                    mesh.DrawUnified();
+            }
+            graphics.GraphicsDevice.Clear(Color.Transparent);
+
+            ParticleEmitter.LoadRenderEmitter();
+            ParticleEmitter.RenderEmitter.DrawParticles(particlesToDraw);
+
+            foreach (StaticMesh mesh in renderList)
+            {
+                if (mesh.Transperent || onlyTransperent == false)
+                    mesh.DrawUnified();
+            }
+
+        }
+
         void DrawPathes(List<StaticMesh> renderList)
         {
-            graphics.GraphicsDevice.SetRenderTargets(colorPath,emissivePath,normalPath,positionPath);
+
+            InitSampler();
+
+
+
+            graphics.GraphicsDevice.SetRenderTargets(colorPath,emissivePath,normalPath,positionPath, depthPath);
             graphics.GraphicsDevice.Clear(Color.Transparent);
+
+            graphics.GraphicsDevice.SetRenderTarget(colorPath);
+            graphics.GraphicsDevice.Clear(Graphics.BackgroundColor);
+
+
+            graphics.GraphicsDevice.SetRenderTarget(depthPath);
+            graphics.GraphicsDevice.Clear(Color.White);
+
+
+            graphics.GraphicsDevice.SetRenderTargets(colorPath, emissivePath, normalPath, positionPath, depthPath);
 
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
 
@@ -179,18 +235,21 @@ namespace RetroEngine
 
             foreach (StaticMesh mesh in renderList)
             {
-                mesh.DrawPathes();
+                if(mesh.Transperent==false)
+
+                    mesh.DrawPathes();
             }
 
             ParticleEmitter.LoadRenderEmitter();
             ParticleEmitter.RenderEmitter.DrawParticles(particlesToDraw);
         }
 
-        void PerformDifferedShading()
+        void PerformDeferredShading()
         {
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
 
             graphics.GraphicsDevice.SetRenderTarget(DeferredOutput);
+
 
             graphics.GraphicsDevice.Clear(Graphics.BackgroundColor);
 
@@ -198,6 +257,7 @@ namespace RetroEngine
             DeferredEffect.Parameters["EmissiveTexture"].SetValue(emissivePath);
             DeferredEffect.Parameters["NormalTexture"].SetValue(normalPath);
             DeferredEffect.Parameters["PositionTexture"].SetValue(positionPath);
+            DeferredEffect.Parameters["ForwardTexture"].SetValue(ForwardOutput);
 
             DeferredEffect.Parameters["DirectBrightness"].SetValue(Graphics.DirectLighting);
             DeferredEffect.Parameters["GlobalBrightness"].SetValue(Graphics.GlobalLighting);
@@ -533,6 +593,7 @@ namespace RetroEngine
 
         void InitRenderTargetVectorIfNeed(ref RenderTarget2D target)
         {
+            if(graphics.PreferredBackBufferWidth>0 && graphics.PreferredBackBufferHeight > 0)
             if (target is null || target.Width != graphics.PreferredBackBufferWidth || target.Height != graphics.PreferredBackBufferHeight)
             {
                 // Dispose of the old render target if it exists

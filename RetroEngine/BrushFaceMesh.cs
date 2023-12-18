@@ -74,7 +74,7 @@ namespace RetroEngine
                     break;
 
                 List<ModelMesh> modelMeshes = new List<ModelMesh>();
-                Texture2D texture = AssetRegistry.LoadTextureFromFile(scene.Materials[mesh.MaterialIndex].Name + ".png");
+                Texture2D texture = AssetRegistry.LoadTextureFromFile(scene.Materials[mesh.MaterialIndex].Name + ".png",generateMipMaps: true);
 
                 if (scene.Materials[mesh.MaterialIndex].Name.Contains("_tranperent"))
                     transperent = true;
@@ -201,7 +201,7 @@ namespace RetroEngine
                     break;
 
                 List<ModelMesh> modelMeshes = new List<ModelMesh>();
-                Texture2D texture = AssetRegistry.LoadTextureFromFile(scene.Materials[mesh.MaterialIndex].Name + ".png");
+                Texture2D texture = AssetRegistry.LoadTextureFromFile(scene.Materials[mesh.MaterialIndex].Name + ".png", generateMipMaps: true);
 
                 if (scene.Materials[mesh.MaterialIndex].Name.Contains("_tranperent"))
                     transperent = true;
