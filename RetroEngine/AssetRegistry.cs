@@ -29,6 +29,8 @@ namespace RetroEngine
 
         const int MaxTexturesInMemory = 10;
 
+        public static List<object> ConstantCache = new List<object>();
+
         public static Texture2D LoadTextureFromFile(string path, bool ignoreErrors = false, bool generateMipMaps = false)
         {
 

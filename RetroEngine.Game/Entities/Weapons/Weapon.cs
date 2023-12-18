@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using RetroEngine.Game.Entities.Player;
 using System;
 using System.Collections.Generic;
@@ -59,7 +60,6 @@ namespace RetroEngine.Game.Entities.Weapons
 
         public static void PreloadAllWeapons()
         {
-            return;
             Type[] types = Assembly.GetAssembly(typeof(Weapon)).GetTypes().Where(t => t.IsSubclassOf(typeof(Weapon))).ToArray();
 
             foreach (Type type in types) 
@@ -67,6 +67,10 @@ namespace RetroEngine.Game.Entities.Weapons
                 Weapon weapon = Activator.CreateInstance(type) as Weapon;
                 weapon.data = new WeaponData();
                 weapon.LoadAssetsIfNeeded();
+                foreach(object model in weapon.meshes)
+                {
+                    AssetRegistry.ConstantCache.Add(model); 
+                }
             }
 
             types = null;
