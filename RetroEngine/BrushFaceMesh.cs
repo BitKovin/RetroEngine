@@ -21,6 +21,7 @@ namespace RetroEngine
             this.model = model;
             this.texture = texture;
             this.textureName = textureName;
+            useAvgVertexPosition = true;
         }
 
         public static List<BrushFaceMesh> GetFacesFromPath(string filePath, string objectName, float unitSize = 32)

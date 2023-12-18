@@ -135,7 +135,7 @@ namespace RetroEngine
             graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearClamp;
             PerformPostProcessing();
 
-            return ForwardOutput;
+            return outputPath;
         }
 
         public void InitSampler()
