@@ -22,6 +22,8 @@ namespace RetroEngine
 
         static string pendingLevelChange = null;
 
+        public static bool ChangingLevel = true;
+
         public Level()
         {
             entities = new List<Entity>();
@@ -55,6 +57,7 @@ namespace RetroEngine
             if(force == false)
             {
                 pendingLevelChange = name;
+                ChangingLevel = true;
                 return;
             }
 
@@ -77,6 +80,7 @@ namespace RetroEngine
             Navigation.RebuildConnectionsData();
 
             GameMain.Instance.OnLevelChanged();
+            ChangingLevel = false;
         }
 
         public void UpdatePending()
@@ -154,6 +158,7 @@ namespace RetroEngine
 
             foreach (Entity ent in entities)
             {
+                if (ent.loadedAssets == false) continue;
                 if (ent.meshes != null)
                 {
                     foreach (StaticMesh mesh in ent.meshes)
@@ -176,8 +181,9 @@ namespace RetroEngine
 
             List<Entity> list = new List<Entity>(entities);
 
-            foreach(Entity ent in list)
+            foreach (Entity ent in list)
             {
+                if(ent is not null)
                 ent.LoadAssetsIfNeeded();
             }
         }

@@ -27,8 +27,12 @@ namespace RetroEngine
 
         Dictionary<VertexBuffer, VertexPositionNormalTexture[]> frameVertexData = new Dictionary<VertexBuffer, VertexPositionNormalTexture[]>();
 
+        public bool isLoaded = false;
+
         public void Update()
         {
+            if(isLoaded==false) return;
+
             if (loop)
             {
                 while (frames.Count * frameTime < animationTime)

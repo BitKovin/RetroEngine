@@ -577,7 +577,6 @@ namespace RetroEngine
 
         protected static Dictionary<string, Assimp.Scene> loadedScenes = new Dictionary<string, Assimp.Scene>();
         protected static Dictionary<string, Model> loadedModels = new Dictionary<string, Model>();
-        protected static Assimp.AssimpContext importer = new Assimp.AssimpContext();
 
         protected Model GetModelFromPath(string filePath,bool dynamicBuffer = false)
         {
@@ -591,7 +590,7 @@ namespace RetroEngine
             }
 
             Assimp.Scene scene;
-
+            Assimp.AssimpContext importer = new Assimp.AssimpContext();
             if (loadedScenes.ContainsKey(filePath))
             {
                 scene = loadedScenes[filePath];
@@ -705,7 +704,7 @@ namespace RetroEngine
         public static Model CreateModelFromVertices(List<Vector3> vertexPositions)
         {
 
-            if (GameMain.IsOnRenderThread() == false)
+            if (GameMain.CanLoadAssetsOnThisThread() == false)
             {
                 Logger.Log($"THREAD ERROR:  attempted to create model from not render thread.");
                 return null;

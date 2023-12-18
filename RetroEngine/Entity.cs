@@ -122,9 +122,12 @@ namespace RetroEngine
         {
             if(loadedAssets) return;
 
+            if (GameMain.CanLoadAssetsOnThisThread() == false)
+                return;
+
             LoadAssets();
 
-            loadedAssets =true;
+            loadedAssets = true;
 
         }
 

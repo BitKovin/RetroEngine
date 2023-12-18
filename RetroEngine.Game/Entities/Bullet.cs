@@ -43,6 +43,8 @@ namespace RetroEngine.Game.Entities
 
             base.LoadAssets();
 
+            Console.WriteLine("loaded bullet");
+
             mesh.LoadFromFile("models/weapons/bullet/bullet.obj");
 
             mesh.texture = AssetRegistry.LoadTextureFromFile("models/weapons/bullet/bullet.png");

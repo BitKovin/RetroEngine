@@ -14,6 +14,12 @@ namespace RetroEngine.Windows
     internal class GameWindows : RetroEngine.Game.Game
     {
 
+        public GameWindows() 
+        {
+            AllowAsyncAssetLoading = true;
+        }
+
+
         public override void GameInitialized()
         {
             base.GameInitialized();

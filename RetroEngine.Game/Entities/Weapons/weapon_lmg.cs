@@ -151,7 +151,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             meshes.Add(mesh);
 
-            new Bullet().LoadAssetsIfNeeded();
+            mesh.isLoaded = true;
 
         }
     }

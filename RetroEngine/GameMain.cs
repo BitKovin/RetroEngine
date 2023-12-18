@@ -62,8 +62,9 @@ namespace RetroEngine
 
         public static Thread RenderThread;
 
-        public static bool AsyncGameThread = true;
+        public static bool AsyncGameThread = false;
 
+        public static bool AllowAsyncAssetLoading = false;
 
         public bool DevMenuEnabled = true;
 
@@ -111,10 +112,15 @@ namespace RetroEngine
             RenderThread = Thread.CurrentThread;
             render = new Render();
 
+            if(AllowAsyncAssetLoading)
+                AssetRegistry.StartAsyncAssetLoader();
         }
 
-        public static bool IsOnRenderThread()
+        public static bool CanLoadAssetsOnThisThread()
         {
+            if(AllowAsyncAssetLoading)
+                return true;
+
             return RenderThread == Thread.CurrentThread;
         }
 
@@ -240,7 +246,9 @@ namespace RetroEngine
 
         void ReservedTimeTasks()
         {
-            curentLevel?.LoadAssets();
+            if(AllowAsyncAssetLoading == false)
+                curentLevel?.LoadAssets();
+
             curentLevel?.RenderPreparation();
         }
 

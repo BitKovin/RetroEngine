@@ -27,9 +27,9 @@ namespace RetroEngine
 
         const string ROOT_PATH = "../../../../";
 
-        const int MaxTexturesInMemory = 70;
+        const int MaxTexturesInMemory = 10;
 
-        public static Texture2D LoadTextureFromFile(string path, bool ignoreErrors = false, bool generateMipMaps = true)
+        public static Texture2D LoadTextureFromFile(string path, bool ignoreErrors = false, bool generateMipMaps = false)
         {
 
             if (textures.ContainsKey(path))
@@ -38,7 +38,7 @@ namespace RetroEngine
             if(nullTextures.Contains(path))
                 return null;
 
-            if (GameMain.IsOnRenderThread() == false) 
+            if (GameMain.CanLoadAssetsOnThisThread() == false) 
             {
                 Logger.Log($"THREAD ERROR:  attempted to load texture from not render thread. Texture: {path}");
                 return GameMain.Instance.render.black;
@@ -164,5 +164,25 @@ namespace RetroEngine
             return path;
         }
 
+        public static void StartAsyncAssetLoader()
+        {
+            Task.Run(() => { AsyncAssetLoaderLoop(); });
+        }
+
+        static void AsyncAssetLoaderLoop()
+        {
+            while (true)
+            {
+                try
+                {
+                    if (Level.ChangingLevel == false)
+                        GameMain.Instance.curentLevel.LoadAssets();
+                }catch (Exception e) {}
+            }
+        }
+
     }
+
+    
+
 }

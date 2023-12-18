@@ -101,7 +101,7 @@ namespace RetroEngine
 
         public static void CenterCursor()
         {
-            if(GameMain.IsOnRenderThread())
+            if(GameMain.CanLoadAssetsOnThisThread())
             {
                 Mouse.SetPosition((int)windowCenter.X, (int)windowCenter.Y);
                 MousePos = windowCenter;

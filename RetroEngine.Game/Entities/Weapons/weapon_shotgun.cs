@@ -147,8 +147,8 @@ namespace RetroEngine.Game.Entities.Weapons
             mesh.AddFrameVertexData();
 
             meshes.Add(mesh);
-
-            new Bullet().LoadAssetsIfNeeded();
+            mesh.isLoaded = true;
+            //new Bullet().LoadAssetsIfNeeded();
 
         }
 

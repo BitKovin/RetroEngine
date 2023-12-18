@@ -104,6 +104,7 @@ namespace RetroEngine.Game.Entities.Weapons
             bullet.Start();
             bullet.Speed = 100;
             bullet.Damage = 50;
+            bullet.LoadAssetsIfNeeded();
 
             bullet.ignore.Add(player);
 
@@ -150,8 +151,8 @@ namespace RetroEngine.Game.Entities.Weapons
             Console.WriteLine("loaded revolver");
 
             meshes.Add(mesh);
-
-            new Bullet().LoadAssetsIfNeeded();
+            mesh.isLoaded = true;
+            //new Bullet().LoadAssetsIfNeeded();
 
         }
     }
