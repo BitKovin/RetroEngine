@@ -112,6 +112,9 @@ namespace RetroEngine
             RenderThread = Thread.CurrentThread;
             render = new Render();
 
+            LevelObjectFactory.InitializeTypeCache();
+            ParticleSystemFactory.InitializeTypeCache();
+
             if(AllowAsyncAssetLoading)
                 AssetRegistry.StartAsyncAssetLoader();
         }
