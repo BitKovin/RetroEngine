@@ -77,8 +77,10 @@ namespace RetroEngine
 
             GameMain.Instance.curentLevel = MapParser.MapParser.ParseMap(AssetRegistry.FindPathForFile(name)).GetLevel();
             GameMain.Instance.curentLevel.StartEnities();
-            Navigation.RebuildConnectionsData();
 
+            GameMain.Instance.curentLevel.LoadAssets();
+
+            Navigation.RebuildConnectionsData();
             GameMain.Instance.OnLevelChanged();
             ChangingLevel = false;
         }
