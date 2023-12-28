@@ -176,7 +176,9 @@ namespace RetroEngine
                 }
             }
 
-            transperentMeshes.OrderByDescending(m => Vector3.Distance(m.useAvgVertexPosition? m.avgVertexPosition : m.Position, Camera.position)).ToList();
+            renderList = renderList.OrderBy(m => Vector3.Distance(m.useAvgVertexPosition ? m.avgVertexPosition : m.Position, Camera.position)).ToList();
+
+            transperentMeshes = transperentMeshes.OrderByDescending(m => Vector3.Distance(m.useAvgVertexPosition? m.avgVertexPosition : m.Position, Camera.position)).ToList();
 
             renderList.AddRange(transperentMeshes);
 

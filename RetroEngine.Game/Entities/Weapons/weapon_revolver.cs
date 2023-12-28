@@ -145,6 +145,7 @@ namespace RetroEngine.Game.Entities.Weapons
             mesh.Viewmodel = true;
             mesh.UseAlternativeRotationCalculation = true;
             mesh.AddFrameVertexData();
+            mesh.Transperent = true;
 
             Console.WriteLine("loaded revolver");
 

@@ -94,19 +94,20 @@ namespace RetroEngine
             CreateBlackTexture();
 
             InitRenderTargetIfNeed(ref colorPath);
-            InitRenderTargetIfNeed(ref emissivePath);
+
             InitRenderTargetIfNeed(ref normalPath);
-            InitRenderTargetVectorIfNeed(ref depthPath);
-            InitRenderTargetVectorIfNeed(ref positionPath);
+
+            InitRenderTargetIfNeed(ref DepthOutput);
+
 
             InitRenderTargetIfNeed(ref DeferredOutput);
 
-            InitRenderTargetIfNeed(ref ForwardOutput);
             InitRenderTargetIfNeed(ref ForwardDepth);
 
             InitRenderTargetIfNeed(ref outputPath);
+
             InitRenderTargetIfNeed(ref ssaoOutput);
-            //InitRenderTargetIfNeed(ref miscPath);
+
             InitRenderTargetIfNeed(ref postProcessingOutput);
 
             if (shadowMap is null)
@@ -124,18 +125,18 @@ namespace RetroEngine
 
 
            
-            DrawPathes(renderList);
+            //DrawPathes(renderList);
 
-            RenderTransperentPath(renderList);
+            //RenderTransperentPath(renderList);
 
-            PerformDeferredShading();
+            //PerformDeferredShading();
 
-            //RenderUnifiedPath(renderList);
+            RenderUnifiedPath(renderList);
 
             graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearClamp;
-            PerformPostProcessing();
+            //PerformPostProcessing();
 
-            return outputPath;
+            return DeferredOutput;
         }
 
         public void InitSampler()
@@ -155,8 +156,14 @@ namespace RetroEngine
 
         void RenderUnifiedPath(List<StaticMesh> renderList, bool onlyTransperent = false)
         {
+
+            graphics.GraphicsDevice.SetRenderTarget(DepthOutput);
+            graphics.GraphicsDevice.Clear(Color.White);
+
             graphics.GraphicsDevice.SetRenderTarget(DeferredOutput);
-            //graphics.GraphicsDevice.Clear(Graphics.BackgroundColor);
+            graphics.GraphicsDevice.Clear(Graphics.BackgroundColor);
+
+            graphics.GraphicsDevice.SetRenderTargets(DeferredOutput,DepthOutput);
 
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
 
@@ -167,14 +174,17 @@ namespace RetroEngine
             InitSampler();
 
             foreach (StaticMesh mesh in renderList)
+            {
+                if (mesh.Transperent || onlyTransperent == false)
                 {
-                    if(mesh.Transperent|| onlyTransperent == false)
                     mesh.DrawUnified();
                 }
+            }
 
             ParticleEmitter.LoadRenderEmitter();
             ParticleEmitter.RenderEmitter.DrawParticles(particlesToDraw);
 
+            
         }
 
         void RenderTransperentPath(List<StaticMesh> renderList, bool onlyTransperent = true)

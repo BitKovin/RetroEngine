@@ -31,6 +31,8 @@ sampler DepthMapSampler = sampler_state
 };
 
 
+float FarPlane;
+
 float DirectBrightness;
 float GlobalBrightness;
 float3 LightDirection;
@@ -78,7 +80,7 @@ struct PixelInput
 struct PixelOutput
 {
     float4 Color : COLOR0;
-    float Depth : COLOR1;
+    float4 Depth : COLOR1;
 };
 
 float3 normalize(float3 v)
@@ -201,29 +203,15 @@ float3 CalculatePointLight(int i, PixelInput pixelInput)
 }
 
 
-float4 PixelShaderFunction(PixelInput input) : COLOR0
+PixelOutput PixelShaderFunction(PixelInput input)
 {
     
-    float2 screenCoords = input.MyPixelPosition.xy / input.MyPixelPosition.w;
+    PixelOutput output = (PixelOutput)0;
     
-    screenCoords /= 2.0f;
+    float Depth = input.MyPixelPosition.z;
+    
+    output.Depth = float4(Depth, 0, 0, 1);
 
-    screenCoords -= float2(0.5f, 0.5f);
-    screenCoords *= float2(1, -1);
-    
-    
-    float deferredDepth = tex2D(DepthMapSampler, screenCoords).r;
-    float depth = input.MyPixelPosition.z / input.MyPixelPosition.w;
-    
-    if (deferredDepth==0)
-        deferredDepth = 1;
-    
-    if (deferredDepth <= depth)
-    {
-        return float4(0, 0, 0, 0);
-    }
-    
-    
     
     float3 textureColor = tex2D(TextureSampler, input.TexCoord).xyz;
 	float textureAlpha = tex2D(TextureSampler, input.TexCoord).w;
@@ -267,11 +255,12 @@ float4 PixelShaderFunction(PixelInput input) : COLOR0
     textureColor += tex2D(EmissiveTextureSampler, input.TexCoord).rgb * EmissionPower * tex2D(EmissiveTextureSampler, input.TexCoord).a;
 
     textureColor = saturate(textureColor);
-    
-    //textureColor *= Transparency;
+
     textureAlpha *= Transparency;
     
-    return float4(textureColor, textureAlpha);
+    output.Color = float4(textureColor, textureAlpha);
+    
+    return output;
 }
 
 

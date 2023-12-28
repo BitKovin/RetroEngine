@@ -26,6 +26,8 @@ namespace RetroEngine
         public static float FOV = 70;
         public static float ViewmodelFOV = 46;
 
+        public static float FarPlane = 5000;
+
         static Vector3 lastWorkingRotation = new Vector3();
 
         public static Vector3 velocity = new Vector3(0,0,0);
@@ -55,8 +57,8 @@ namespace RetroEngine
 
             view = Matrix.CreateLookAt(position, position + rotation.GetForwardVector(), lastWorkingRotation.GetUpVector().RotateVector(rotation.GetForwardVector(), roll));
 
-            projection = Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.ToRadians(FOV),HtW, 0.3f, 5000f);
-            projectionViewmodel = Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.ToRadians(ViewmodelFOV), HtW, 0.01f, 5f);
+            projection = Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.ToRadians(FOV),HtW, 0.3f, 50f);
+            projectionViewmodel = Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.ToRadians(ViewmodelFOV), HtW, 0.01f, FarPlane);
 
             frustum.Matrix = view * projection;
 

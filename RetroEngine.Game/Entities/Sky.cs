@@ -18,7 +18,7 @@ namespace RetroEngine.Game.Entities
             mesh.LoadFromFile("models/sky.obj");
             mesh.emisssiveTexture = AssetRegistry.LoadTextureFromFile("textures/sky/sky.png");
             mesh.texture = AssetRegistry.LoadTextureFromFile("textures/sky/sky.png");
-            meshes.Add(mesh);
+            //meshes.Add(mesh);
             mesh.Position = Position;
         }
     }
