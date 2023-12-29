@@ -105,7 +105,7 @@ namespace RetroEngine.Entities
             {
                 SetSound(_sound);
                 LateUpdate();
-                soundEffectInstance?.Play();
+                pendingPlay = true;
             }
             catch (Exception) { }
         }
@@ -129,6 +129,8 @@ namespace RetroEngine.Entities
             soundEffectInstance?.Stop(true);
             soundEffectInstance?.Dispose();
             soundEffectInstance = null;
+            _sound = null;
+            GC.SuppressFinalize(this);
 
         }
 

@@ -127,6 +127,11 @@ namespace RetroEngine
             return RenderThread == Thread.CurrentThread;
         }
 
+        protected override void UnloadContent()
+        {
+            content.Unload();
+        }
+
         protected override void LoadContent()
         {
             if (DevMenuEnabled)

@@ -151,10 +151,14 @@ namespace RetroEngine
 
         public virtual void RenderPreparation()
         {
+
             Parallel.ForEach(entities, entity =>
             {
                 foreach (StaticMesh mesh in entity.meshes)
-                    mesh.RenderPreparation();
+                    if(entity is not null)
+
+                    if(mesh is not null)
+                        mesh.RenderPreparation();
             });
 
             renderList = new List<StaticMesh>();

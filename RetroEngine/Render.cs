@@ -156,14 +156,8 @@ namespace RetroEngine
 
         void RenderUnifiedPath(List<StaticMesh> renderList, bool onlyTransperent = false)
         {
-
-            graphics.GraphicsDevice.SetRenderTarget(DepthOutput);
-            graphics.GraphicsDevice.Clear(Color.White);
-
-            graphics.GraphicsDevice.SetRenderTarget(DeferredOutput);
-            graphics.GraphicsDevice.Clear(Graphics.BackgroundColor);
-
             graphics.GraphicsDevice.SetRenderTargets(DeferredOutput,DepthOutput);
+            graphics.GraphicsDevice.Clear(ClearOptions.DepthBuffer, Color.Black, 1.0f, 0);
 
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
 

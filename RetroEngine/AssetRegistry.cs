@@ -115,7 +115,11 @@ namespace RetroEngine
                 using (FileStream stream = new FileStream(filePpath, FileMode.Open))
                 {
 
-                    sounds.Add(path, SoundEffect.FromStream(stream));
+                    SoundEffect soundEffect = SoundEffect.FromStream(stream);
+
+                    Console.WriteLine($"sound duration: {soundEffect.Duration}");
+
+                    sounds.Add(path, soundEffect);
 
                     return sounds[path];
                 }

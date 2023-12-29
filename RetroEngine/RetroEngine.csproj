@@ -11,6 +11,7 @@
     <PackageReference Include="RhuBulletSharp" Version="1.0.3" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Content\ShaderLib\" />
     <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
   <ItemGroup>

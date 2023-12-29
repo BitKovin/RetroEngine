@@ -46,7 +46,6 @@ struct PixelShaderOutput
     float4 Emissive : COLOR1;
     float4 Normal : COLOR2;
     float4 Position : COLOR3;
-    float4 Depth : COLOR4;
 };
 
 VertexShaderOutput MainVS(in VertexShaderInput input)
@@ -74,11 +73,11 @@ PixelShaderOutput MainPS(VertexShaderOutput input)
         output.Emissive = float4(tex2D(EmissiveTextureSampler, input.TexCoord).rgb, 1);
         output.Normal = float4(input.Normal / 2.0f + 0.5f, 1);
         output.Position = float4(input.WorldPosition, 1);
-        output.Depth = float4(input.PixelPosition.z / input.PixelPosition.w,0,0,1);
+        //output.Depth = float4(input.PixelPosition.z / input.PixelPosition.w,0,0,1);
     }
     else
     {
-        output.Color = output.Emissive = output.Normal = output.Position = output.Depth = float4(0, 0, 0, 0);
+        output.Color = output.Emissive = output.Normal = output.Position = float4(0, 0, 0, 0);
 
     }
 	return output;

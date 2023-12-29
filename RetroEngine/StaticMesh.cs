@@ -78,6 +78,8 @@ namespace RetroEngine
 
         protected bool isParticle = false;
 
+        protected bool _disposed = false;
+
         public virtual void Draw()
         {
             GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
@@ -252,7 +254,7 @@ namespace RetroEngine
             Effect effect = GameMain.Instance.render.ShadowMapEffect;
 
 
-            if (model is not null)
+            if (frameStaticMeshData.model is not null)
             {
                 foreach (ModelMesh mesh in frameStaticMeshData.model.Meshes)
                 {
@@ -586,6 +588,7 @@ namespace RetroEngine
 
             if(loadedModels.ContainsKey(filePath))
             {
+                Console.WriteLine("model is loaded");
                 return loadedModels[filePath];
             }
 
@@ -677,7 +680,7 @@ namespace RetroEngine
                 boundingSphere = CalculateBoundingSphere(vertices);
 
 
-                meshParts.Add(new ModelMeshPart { VertexBuffer = vertexBuffer, IndexBuffer = indexBuffer, StartIndex = 0, NumVertices = indices.Length, PrimitiveCount = primitiveCount, Tag= new MeshPartData {textureName = Path.GetFileName(scene.Materials[mesh.MaterialIndex].TextureDiffuse.FilePath), Points = points,Vertices = vertices} });
+                meshParts.Add(new ModelMeshPart { VertexBuffer = vertexBuffer, IndexBuffer = indexBuffer, StartIndex = 0, NumVertices = indices.Length, PrimitiveCount = primitiveCount, Tag= new MeshPartData {textureName = Path.GetFileName(scene.Materials[mesh.MaterialIndex].TextureDiffuse.FilePath), Points = points, Vertices = vertices} });
             }
 
 
@@ -849,10 +852,31 @@ namespace RetroEngine
             return point;
         }
 
+        protected virtual void Unload()
+        {
+
+        }
+
         public void Dispose()
         {
+            Unload();
+
             GC.SuppressFinalize(this);
             texture = null;
+            _disposed = true;
         }
+
+        public static void UnloadModel(Model model)
+        {
+            foreach(var mesh in model.Meshes)
+                foreach(var part in mesh.MeshParts)
+                {
+                    part.VertexBuffer?.Dispose();
+                    part.IndexBuffer?.Dispose();
+                    part.Effect?.Dispose();
+                    part.Tag= null;
+                }
+        }
+
     }
 }

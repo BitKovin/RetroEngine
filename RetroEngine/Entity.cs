@@ -93,10 +93,6 @@ namespace RetroEngine
 
         public virtual void Destroy()
         {
-            foreach(StaticMesh mesh in meshes)
-            {
-                mesh.Dispose();
-            }
 
             foreach(RigidBody rigidBody in bodies)
             {

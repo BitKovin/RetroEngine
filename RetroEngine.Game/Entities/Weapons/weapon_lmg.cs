@@ -24,8 +24,8 @@ namespace RetroEngine.Game.Entities.Weapons
             base.Start();
 
             fireSoundPlayer = Level.GetCurrent().AddEntity(new SoundPlayer()) as SoundPlayer;
-            fireSoundPlayer.SetSound(AssetRegistry.LoadSoundFromFile("sounds/pistol_fire.wav"));
             fireSoundPlayer.Volume = 0.1f;
+            fireSoundPlayer.SetSound(AssetRegistry.LoadSoundFromFile("sounds/pistol_fire.wav"));
 
         }
 
@@ -35,11 +35,15 @@ namespace RetroEngine.Game.Entities.Weapons
 
             LoadVisual();
 
+            
+
         }
 
         public override void Update()
         {
             base.Update();
+
+            if (loadedAssets == false) return;
 
             mesh.AddTime(Time.deltaTime);
             mesh.Update();
@@ -53,6 +57,7 @@ namespace RetroEngine.Game.Entities.Weapons
             base.Destroy();
 
             fireSoundPlayer.Destroy(2);
+            mesh.Dispose();
         }
 
         public override void LateUpdate()
@@ -74,6 +79,8 @@ namespace RetroEngine.Game.Entities.Weapons
             attackDelay.AddDelay(0.11f);
 
             fireSoundPlayer.Play(true);
+
+            Console.WriteLine($"playing shot sound {Time.gameTime}");
 
             mesh.Play();
 
@@ -148,6 +155,7 @@ namespace RetroEngine.Game.Entities.Weapons
             mesh.AddFrameVertexData();
 
             Console.WriteLine("loaded lmg");
+
 
             meshes.Add(mesh);
 
