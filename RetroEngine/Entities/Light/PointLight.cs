@@ -12,6 +12,9 @@ namespace RetroEngine.Entities.Light
     [LevelObject("light_point")]
     public class PointLight : Entity
     {
+
+        BoundingSphere lightSphere = new BoundingSphere();
+
         public PointLight() 
         {
             LateUpdateWhilePaused = true;
@@ -31,7 +34,24 @@ namespace RetroEngine.Entities.Light
         public override void LateUpdate()
         {
             lightData.Position = Position;
-            LightManager.AddPointLight(lightData);
+
+            
+            lightSphere.Radius = lightData.Radius;
+
+            if (IsBoundingSphereInFrustum(lightSphere))
+                LightManager.AddPointLight(lightData);
         }
+
+        protected Matrix GetWorldMatrix()
+        {
+            Matrix worldMatrix = Matrix.CreateTranslation(lightData.Position);
+            return worldMatrix;
+        }
+
+        protected bool IsBoundingSphereInFrustum(BoundingSphere sphere)
+        {
+            return Camera.frustum.Contains(sphere.Transform(GetWorldMatrix())) != ContainmentType.Disjoint;
+        }
+
     }
 }

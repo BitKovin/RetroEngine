@@ -23,6 +23,7 @@ namespace RetroEngine
         
         public static void ClearPointLights()
         {
+
             pointLights.Clear();
         }
 

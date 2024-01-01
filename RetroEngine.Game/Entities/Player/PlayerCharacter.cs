@@ -145,7 +145,7 @@ namespace RetroEngine.Game.Entities.Player
             stepSoundPlayer.SetSound(AssetRegistry.LoadSoundFromFile("sounds/step.wav"));
             stepSoundPlayer.Volume = 0.5f;
 
-            weapons.Add(new WeaponData { weaponType = typeof(weapon_lmg), ammo = 1 });
+            weapons.Add(new WeaponData { weaponType = typeof(weapon_hammer), ammo = 1 });
             weapons.Add(new WeaponData { weaponType = typeof(weapon_shotgun), ammo = 50 });
             weapons.Add(new WeaponData { weaponType = typeof(weapon_lmg), ammo = 50 });
 
@@ -236,6 +236,8 @@ namespace RetroEngine.Game.Entities.Player
             body.Activate(true);
 
             // Ground movement
+
+            velocity = body.LinearVelocity;
 
             if (input.Length() > 0.1f)
             {
