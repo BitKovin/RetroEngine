@@ -58,8 +58,14 @@ namespace RetroEngine.Map
 
                     }
 
-                    if(MergeBrushes)
+                    if (MergeBrushes)
+                    {
                         entity.meshes.AddRange(BrushFaceMesh.MergeFaceMeshes(faces));
+
+                        foreach (BrushFaceMesh brushFaceMesh in faces)
+                            StaticMesh.UnloadModel(brushFaceMesh.model);
+
+                    }
                     else
                         entity.meshes.AddRange(faces);
 
@@ -159,7 +165,7 @@ namespace RetroEngine.Map
 
                 string[] parts = Properties[name].Split(" ");
 
-                return float.Parse(parts[0]);
+                return float.Parse(parts[0].Replace(".",","));
             }catch (Exception)
             {
                 return defaultValue;

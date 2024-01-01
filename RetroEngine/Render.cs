@@ -131,7 +131,7 @@ namespace RetroEngine
 
             //PerformDeferredShading();
 
-            RenderUnifiedPath(renderList);
+            RenderForwardPath(renderList);
 
             graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearClamp;
             //PerformPostProcessing();
@@ -149,19 +149,21 @@ namespace RetroEngine
             samplerState.AddressV = TextureAddressMode.Wrap;
             samplerState.AddressW = TextureAddressMode.Wrap;
 
-            samplerState.MipMapLevelOfDetailBias = -2;
+            samplerState.MipMapLevelOfDetailBias = -1;
 
             graphics.GraphicsDevice.SamplerStates[0] = samplerState;
         }
 
-        void RenderUnifiedPath(List<StaticMesh> renderList, bool onlyTransperent = false)
+        void RenderForwardPath(List<StaticMesh> renderList, bool onlyTransperent = false)
         {
             graphics.GraphicsDevice.SetRenderTargets(DeferredOutput,DepthOutput);
             graphics.GraphicsDevice.Clear(ClearOptions.DepthBuffer, Color.Black, 1.0f, 0);
+            graphics.GraphicsDevice.Clear(Graphics.BackgroundColor);
 
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
 
-            UnifiedEffect.Parameters["GlobalLightColor"].SetValue(Graphics.LightColor);
+            UnifiedEffect.Parameters["GlobalLightColor"]?.SetValue(Graphics.LightColor);
+
 
             particlesToDraw.Clear();
 

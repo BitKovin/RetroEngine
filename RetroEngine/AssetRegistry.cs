@@ -31,7 +31,9 @@ namespace RetroEngine
 
         public static List<object> ConstantCache = new List<object>();
 
-        public static Texture2D LoadTextureFromFile(string path, bool ignoreErrors = false, bool generateMipMaps = false)
+        public static bool AllowGeneratingMipMaps = false;
+
+        public static Texture2D LoadTextureFromFile(string path, bool ignoreErrors = false, bool generateMipMaps = true)
         {
 
             if (textures.ContainsKey(path))
@@ -52,7 +54,7 @@ namespace RetroEngine
             {
                 using (FileStream stream = new FileStream(filePpath, FileMode.Open))
                 {
-                    if (generateMipMaps)
+                    if (generateMipMaps && AllowGeneratingMipMaps)
                     {
                         Texture2D tex = Texture2D.FromStream(GameMain.Instance.GraphicsDevice, stream);
 

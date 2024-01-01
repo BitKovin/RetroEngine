@@ -21,6 +21,7 @@ namespace RetroEngine.Entities
 
             Graphics.LightColor = data.GetPropertyVector("globalLightColor", new Vector3(1, 1, 1));
             Graphics.GlobalLighting = data.GetPropertyFloat("globalLightBrightness", 0.15f);
+
             Graphics.DirectLighting = data.GetPropertyFloat("directLightBrightness", 0.7f);
 
             Graphics.LightDirection = data.GetPropertyVector("globalLightDirection", new Vector3(-1f, -1, -0.2f));

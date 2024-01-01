@@ -172,46 +172,46 @@ namespace RetroEngine
 
 
                         // Set effect parameters
-                        effect.Parameters["World"].SetValue(frameStaticMeshData.World);
-                        effect.Parameters["View"].SetValue(frameStaticMeshData.View);
-                        effect.Parameters["Projection"].SetValue(frameStaticMeshData.Viewmodel? frameStaticMeshData.ProjectionViewmodel : frameStaticMeshData.Projection);
+                        effect.Parameters["World"]?.SetValue(frameStaticMeshData.World);
+                        effect.Parameters["View"]?.SetValue(frameStaticMeshData.View);
+                        effect.Parameters["Projection"]?.SetValue(frameStaticMeshData.Viewmodel? frameStaticMeshData.ProjectionViewmodel : frameStaticMeshData.Projection);
 
-                        effect.Parameters["depthScale"].SetValue(frameStaticMeshData.Viewmodel? 0.04f : 1);
+                        effect.Parameters["depthScale"]?.SetValue(frameStaticMeshData.Viewmodel ? 0.04f : 1);
 
-                        effect.Parameters["DirectBrightness"].SetValue(Graphics.DirectLighting);
-                        effect.Parameters["GlobalBrightness"].SetValue(Graphics.GlobalLighting);
-                        effect.Parameters["LightDirection"].SetValue(Graphics.LightDirection.Normalized());
+                        effect.Parameters["DirectBrightness"]?.SetValue(Graphics.DirectLighting);
+                        effect.Parameters["GlobalBrightness"]?.SetValue(Graphics.GlobalLighting);
+                        effect.Parameters["LightDirection"]?.SetValue(Graphics.LightDirection.Normalized());
 
-                        effect.Parameters["ShadowMapViewProjection"].SetValue(Graphics.LightViewProjection);
-                        effect.Parameters["ShadowMapViewProjectionClose"].SetValue(Graphics.LightViewProjectionClose);
+                        effect.Parameters["ShadowMapViewProjection"]?.SetValue(Graphics.LightViewProjection);
+                        effect.Parameters["ShadowMapViewProjectionClose"]?.SetValue(Graphics.LightViewProjectionClose);
 
-                        effect.Parameters["ShadowBias"].SetValue(Graphics.ShadowBias);
-                        effect.Parameters["ShadowMapResolution"].SetValue((float)Graphics.shadowMapResolution);
+                        effect.Parameters["ShadowBias"]?.SetValue(Graphics.ShadowBias);
+                        effect.Parameters["ShadowMapResolution"]?.SetValue((float)Graphics.shadowMapResolution);
 
                         //effect.Parameters["DepthMap"].SetValue(GameMain.inst.render.DepthOutput);
 
-                        effect.Parameters["Transparency"].SetValue(frameStaticMeshData.Transparency);
+                        effect.Parameters["Transparency"]?.SetValue(frameStaticMeshData.Transparency);
 
-                        effect.Parameters["isParticle"].SetValue(isParticle);
+                        effect.Parameters["isParticle"]?.SetValue(isParticle);
 
                         MeshPartData meshPartData = meshPart.Tag as MeshPartData;
 
                         if (meshPartData is not null)
                         {
-                            effect.Parameters["Texture"].SetValue(FindTexture(meshPartData.textureName));
+                            effect.Parameters["Texture"]?.SetValue(FindTexture(meshPartData.textureName));
                         }
                         else
                         {
-                            effect.Parameters["Texture"].SetValue(texture);
+                            effect.Parameters["Texture"]?.SetValue(texture);
                         }
 
                         if (meshPartData is not null)
                         {
-                            effect.Parameters["EmissiveTexture"].SetValue(FindEmissiveTexture(meshPartData.textureName));
+                            effect.Parameters["EmissiveTexture"]?.SetValue(FindEmissiveTexture(meshPartData.textureName));
                         }
                         else
                         {
-                            effect.Parameters["EmissiveTexture"].SetValue(GameMain.Instance.render.black);
+                            effect.Parameters["EmissiveTexture"]?.SetValue(GameMain.Instance.render.black);
                         }
                         effect.Parameters["EmissionPower"].SetValue(EmissionPower);
 
@@ -226,9 +226,9 @@ namespace RetroEngine
                             LightRadius[i] = LightManager.FinalPointLights[i].Radius;
                         }
 
-                        effect.Parameters["LightPositions"].SetValue(LightPos);
-                        effect.Parameters["LightColors"].SetValue(LightColor);
-                        effect.Parameters["LightRadiuses"].SetValue(LightRadius);
+                        effect.Parameters["LightPositions"]?.SetValue(LightPos);
+                        effect.Parameters["LightColors"]?.SetValue(LightColor);
+                        effect.Parameters["LightRadiuses"]?.SetValue(LightRadius);
 
                         // Draw the primitives using the custom effect
                         foreach (EffectPass pass in effect.CurrentTechnique.Passes)
@@ -874,7 +874,7 @@ namespace RetroEngine
                     part.VertexBuffer?.Dispose();
                     part.IndexBuffer?.Dispose();
                     part.Effect?.Dispose();
-                    part.Tag= null;
+                    part.Tag = null;
                 }
         }
 

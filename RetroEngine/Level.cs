@@ -75,8 +75,10 @@ namespace RetroEngine
             Navigation.ClearNavData();
             NPCBase.ResetStaticData();
             
+            AssetRegistry.AllowGeneratingMipMaps = true;
 
             GameMain.Instance.curentLevel = MapParser.MapParser.ParseMap(AssetRegistry.FindPathForFile(name)).GetLevel();
+
             GameMain.Instance.curentLevel.StartEnities();
 
             GameMain.Instance.curentLevel.LoadAssets();
@@ -84,6 +86,9 @@ namespace RetroEngine
             Navigation.RebuildConnectionsData();
             GameMain.Instance.OnLevelChanged();
             ChangingLevel = false;
+
+            AssetRegistry.AllowGeneratingMipMaps = false;
+
         }
 
         public void UpdatePending()
