@@ -323,7 +323,7 @@ namespace RetroEngine
         public static ConvexHullShape CreateConvexHullShape(ModelMesh mesh, float scale)
         {
             // Get the vertices from the model's mesh part
-            VertexPositionNormalTexture[] vertices = new VertexPositionNormalTexture[mesh.MeshParts[0].VertexBuffer.VertexCount];
+            VertexData[] vertices = new VertexData[mesh.MeshParts[0].VertexBuffer.VertexCount];
             mesh.MeshParts[0].VertexBuffer.GetData(vertices);
 
             // Extract the positions and scale them if necessary

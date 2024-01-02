@@ -60,10 +60,10 @@ namespace RetroEngine.Entities.Brushes
                 {
                     foreach(ModelMeshPart part in mesh.MeshParts)
                     {
-                        VertexPositionNormalTexture[] vertices = new VertexPositionNormalTexture[part.VertexBuffer.VertexCount];
+                        VertexData[] vertices = new VertexData[part.VertexBuffer.VertexCount];
                         part.VertexBuffer.GetData(vertices);
 
-                        foreach(VertexPositionNormalTexture vertex in vertices)
+                        foreach(VertexData vertex in vertices)
                         {
                             if(particleLocations.Contains(vertex.Position) == false)
                                 particleLocations.Add(vertex.Position);

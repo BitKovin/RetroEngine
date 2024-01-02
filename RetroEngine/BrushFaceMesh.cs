@@ -42,9 +42,10 @@ namespace RetroEngine
                 scene = loadedScenes[filePath];
             else
             {
-                scene = importer.ImportFile(filePath, Assimp.PostProcessSteps.MakeLeftHanded | Assimp.PostProcessSteps.FlipUVs);
+                scene = importer.ImportFile(filePath, Assimp.PostProcessSteps.MakeLeftHanded | Assimp.PostProcessSteps.FlipUVs | Assimp.PostProcessSteps.CalculateTangentSpace) ;
                 loadedScenes.Add(filePath, scene);
             }
+
 
             if (scene == null)
             {
@@ -80,7 +81,7 @@ namespace RetroEngine
                 if (scene.Materials[mesh.MaterialIndex].Name.Contains("_tranperent"))
                     transperent = true;
 
-                var vertices = new List<VertexPositionNormalTexture>();
+                var vertices = new List<VertexData>();
                 var indices = new List<int>();
 
 
@@ -105,17 +106,19 @@ namespace RetroEngine
                 {
                     var vertex = mesh.Vertices[i];
                     var normal = mesh.Normals[i];
+                    var tangent = mesh.Tangents[i];
                     var textureCoord = mesh.HasTextureCoords(0) ? mesh.TextureCoordinateChannels[0][i] : new Assimp.Vector3D(0, 0, 0);
 
                     // Negate the x-coordinate to correct mirroring
-                    vertices.Add(new VertexPositionNormalTexture(
+                    vertices.Add(new VertexData(
                         new Vector3(-vertex.X / unitSize, vertex.Y / unitSize, vertex.Z / unitSize), // Negate x-coordinate
                         new Vector3(normal.X, normal.Y, normal.Z),
-                        new Vector2(textureCoord.X, textureCoord.Y)
+                        new Vector2(textureCoord.X, textureCoord.Y),
+                        new Vector3(-tangent.X, tangent.Y, tangent.Z)
                     ));
                 }
 
-                var vertexBuffer = new VertexBuffer(graphicsDevice, typeof(VertexPositionNormalTexture), vertices.Count, BufferUsage.None);
+                var vertexBuffer = new VertexBuffer(graphicsDevice, typeof(VertexData), vertices.Count, BufferUsage.None);
                 vertexBuffer.SetData(vertices.ToArray());
                 var indexBuffer = new IndexBuffer(graphicsDevice, IndexElementSize.ThirtyTwoBits, indices.Count, BufferUsage.None);
                 indexBuffer.SetData(indices.ToArray());
@@ -207,7 +210,7 @@ namespace RetroEngine
                 if (scene.Materials[mesh.MaterialIndex].Name.Contains("_tranperent"))
                     transperent = true;
 
-                var vertices = new List<VertexPositionNormalTexture>();
+                var vertices = new List<VertexData>();
                 var indices = new List<int>();
 
 
@@ -232,17 +235,19 @@ namespace RetroEngine
                 {
                     var vertex = mesh.Vertices[i];
                     var normal = mesh.Normals[i];
+                    var tangent = mesh.Tangents[i];
                     var textureCoord = mesh.HasTextureCoords(0) ? mesh.TextureCoordinateChannels[0][i] : new Assimp.Vector3D(0, 0, 0);
 
                     // Negate the x-coordinate to correct mirroring
-                    vertices.Add(new VertexPositionNormalTexture(
+                    vertices.Add(new VertexData(
                         new Vector3(-vertex.X / unitSize, vertex.Y / unitSize, vertex.Z / unitSize), // Negate x-coordinate
                         new Vector3(-normal.X, normal.Y, normal.Z),
-                        new Vector2(textureCoord.X, textureCoord.Y)
+                        new Vector2(textureCoord.X, textureCoord.Y),
+                        new Vector3(-tangent.X, tangent.Y, tangent.Z)
                     ));
                 }
 
-                var vertexBuffer = new VertexBuffer(graphicsDevice, typeof(VertexPositionNormalTexture), vertices.Count, BufferUsage.None);
+                var vertexBuffer = new VertexBuffer(graphicsDevice, typeof(VertexData), vertices.Count, BufferUsage.None);
                 vertexBuffer.SetData(vertices.ToArray());
                 var indexBuffer = new IndexBuffer(graphicsDevice, IndexElementSize.ThirtyTwoBits, indices.Count, BufferUsage.None);
                 indexBuffer.SetData(indices.ToArray());
@@ -315,7 +320,7 @@ namespace RetroEngine
 
         static Model MergeModelsO(List<Model> models)
         {
-            List<VertexPositionNormalTexture> Vertices = new List<VertexPositionNormalTexture>();
+            List<VertexData> Vertices = new List<VertexData>();
             List<int> Indices = new List<int>();
 
             foreach (Model model in models)
@@ -324,7 +329,7 @@ namespace RetroEngine
                 {
                     foreach (ModelMeshPart part in mesh.MeshParts)
                     {
-                        VertexPositionNormalTexture[] newVertices = new VertexPositionNormalTexture[part.VertexBuffer.VertexCount];
+                        VertexData[] newVertices = new VertexData[part.VertexBuffer.VertexCount];
                         part.VertexBuffer.GetData(newVertices);
 
                         int[] newIndeces = new int[part.VertexBuffer.VertexCount];
@@ -342,7 +347,7 @@ namespace RetroEngine
 
             GraphicsDevice graphicsDevice = GameMain.Instance.GraphicsDevice;
 
-            var vertexBuffer = new VertexBuffer(graphicsDevice, typeof(VertexPositionNormalTexture), Vertices.Count, BufferUsage.None);
+            var vertexBuffer = new VertexBuffer(graphicsDevice, typeof(VertexData), Vertices.Count, BufferUsage.None);
             vertexBuffer.SetData(Vertices.ToArray());
             var indexBuffer = new IndexBuffer(graphicsDevice, IndexElementSize.ThirtyTwoBits, Indices.Count, BufferUsage.None);
             indexBuffer.SetData(Indices.ToArray());
@@ -368,7 +373,7 @@ namespace RetroEngine
             GraphicsDevice graphicsDevice = GameMain.Instance.GraphicsDevice;
 
             // Create lists to store combined vertex and index data
-            List<VertexPositionNormalTexture> vertices = new List<VertexPositionNormalTexture>();
+            List<VertexData> vertices = new List<VertexData>();
             List<int> indices = new List<int>();
 
             // Offset to keep track of the current vertex index
@@ -384,7 +389,7 @@ namespace RetroEngine
                     foreach (var meshPart in mesh.MeshParts)
                     {
                         // Get the vertex and index data
-                        VertexPositionNormalTexture[] meshVertices = new VertexPositionNormalTexture[meshPart.VertexBuffer.VertexCount];
+                        VertexData[] meshVertices = new VertexData[meshPart.VertexBuffer.VertexCount];
                         int[] meshIndices = new int[meshPart.PrimitiveCount * 3];
 
                         meshPart.VertexBuffer.GetData(meshVertices);
@@ -409,7 +414,7 @@ namespace RetroEngine
             }
 
             // Create a new vertex buffer and index buffer for the merged model
-            VertexBuffer mergedVertexBuffer = new VertexBuffer(graphicsDevice, typeof(VertexPositionNormalTexture), vertices.Count, BufferUsage.None);
+            VertexBuffer mergedVertexBuffer = new VertexBuffer(graphicsDevice, typeof(VertexData), vertices.Count, BufferUsage.None);
             mergedVertexBuffer.SetData(vertices.ToArray());
 
             IndexBuffer mergedIndexBuffer = new IndexBuffer(graphicsDevice, IndexElementSize.ThirtyTwoBits, indices.Count, BufferUsage.None);
@@ -473,7 +478,7 @@ namespace RetroEngine
                     break;
 
 
-                var vertices = new VertexPositionNormalTexture[mesh.VertexCount];
+                var vertices = new VertexData[mesh.VertexCount];
                 var indices = new int[mesh.FaceCount * 3];
                 int vertexIndex = 0;
 
@@ -483,16 +488,18 @@ namespace RetroEngine
                     {
                         var vertex = mesh.Vertices[face.Indices[2 - i]];
                         var normal = mesh.Normals[face.Indices[2 - i]];
+                        var tangent = mesh.Tangents[i];
                         var textureCoord = mesh.HasTextureCoords(0) ? mesh.TextureCoordinateChannels[0][face.Indices[2 - i]] : new Assimp.Vector3D(0, 0, 0);
 
                         if (vertexIndex >= vertices.Length)
                             break;
 
                         // Negate the x-coordinate to correct mirroring
-                        vertices[vertexIndex] = new VertexPositionNormalTexture(
+                        vertices[vertexIndex] = new VertexData(
                             new Vector3(-vertex.X/MapData.UnitSize, vertex.Y / MapData.UnitSize, vertex.Z / MapData.UnitSize), // Negate x-coordinate
                             new Vector3(normal.X, normal.Y, normal.Z),
-                            new Vector2(textureCoord.X, textureCoord.Y)
+                            new Vector2(textureCoord.X, textureCoord.Y),
+                            new Vector3(-tangent.X, tangent.Y, tangent.Z)
                         );
 
                         indices[vertexIndex] = vertexIndex;
@@ -501,7 +508,7 @@ namespace RetroEngine
                 }
 
 
-                var vertexBuffer = new VertexBuffer(graphicsDevice, typeof(VertexPositionNormalTexture), vertices.Length, BufferUsage.None);
+                var vertexBuffer = new VertexBuffer(graphicsDevice, typeof(VertexData), vertices.Length, BufferUsage.None);
                 vertexBuffer.SetData(vertices);
                 var indexBuffer = new IndexBuffer(graphicsDevice, IndexElementSize.ThirtyTwoBits, indices.Length, BufferUsage.None);
                 indexBuffer.SetData(indices);

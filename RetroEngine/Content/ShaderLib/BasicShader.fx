@@ -12,16 +12,6 @@
 matrix World;
 matrix View;
 matrix Projection;
-texture Texture;
-sampler TextureSampler = sampler_state
-{
-    texture = <Texture>;
-};
-texture EmissiveTexture;
-sampler EmissiveTextureSampler = sampler_state
-{
-    texture = <EmissiveTexture>;
-};
 
 texture ShadowMap;
 sampler ShadowMapSampler = sampler_state
@@ -43,6 +33,7 @@ sampler DepthMapSampler = sampler_state
 
 
 float FarPlane;
+float3 viewDir;
 
 float DirectBrightness;
 float GlobalBrightness;
@@ -70,10 +61,10 @@ float depthScale = 1.0f;
 
 struct VertexInput
 {
-    float4 Position : POSITION0;
+    float4 Position : SV_POSITION;
     float3 Normal : NORMAL0; // Add normal input
     float2 TexCoord : TEXCOORD0;
-	
+    float3 Tangent : TANGENT0;
 };
 
 struct PixelInput
@@ -86,6 +77,7 @@ struct PixelInput
     float4 lightPosClose : TEXCOORD4;
     float3 MyPosition : TEXCOORD5;
     float4 MyPixelPosition : TEXCOORD6;
+    matrix RotationMatrix : TEXCOORD7;
 };
 
 struct PBRData
@@ -105,6 +97,7 @@ float3 normalize(float3 v)
 {
     return rsqrt(dot(v, v)) * v;
 }
+
 
 PixelInput DefaultVertexShaderFunction(VertexInput input)
 {
@@ -136,10 +129,26 @@ PixelInput DefaultVertexShaderFunction(VertexInput input)
     output.lightPos = mul(float4(mul(input.Position, World)), ShadowMapViewProjection);
     output.lightPosClose = mul(float4(mul(input.Position, World)), ShadowMapViewProjectionClose);
     
+    
     return output;
 }
 
-PBRData CalculatePBR(float3 normal, float3 viewDir, float roughness, float metallic, float3 albedo, float3 worldPos)
+float3 ApplyNormalTexture(float3 sampledColor, float3 normal)
+{
+    // Choose arbitrary tangent and binormal vectors
+    float3 tangent = normalize(float3(normal.y, -normal.x, 0.0f));
+    float3 binormal = cross(normal, tangent);
+
+    // Convert the RGB values of the normal map texture to a tangent space normal map
+    float3 normalMap = normalize(2.0 * sampledColor - 1.0);
+
+    // Transform the tangent space normal map back to world space
+    float3 resultNormal = normalize(normalMap.x * tangent + normalMap.y * binormal + normalMap.z * normal);
+
+    return resultNormal;
+}
+
+PBRData CalculatePBR(float3 albedo, float3 normal, float roughness, float metallic, float3 worldPos)
 {
     // Normalize input vectors
     normal = normalize(normal);

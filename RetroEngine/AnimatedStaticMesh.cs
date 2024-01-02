@@ -25,7 +25,7 @@ namespace RetroEngine
 
         Dictionary<string, VertexBuffer> vertexBuffers = new Dictionary<string, VertexBuffer>();
 
-        Dictionary<int, VertexPositionNormalTexture[]> frameVertexData = new Dictionary<int, VertexPositionNormalTexture[]>();
+        Dictionary<int, VertexData[]> frameVertexData = new Dictionary<int, VertexData[]>();
 
         public bool isLoaded = false;
 
@@ -122,38 +122,38 @@ namespace RetroEngine
 
 
                         // Set effect parameters
-                        effect.Parameters["World"].SetValue(frameStaticMeshData.World);
-                        effect.Parameters["View"].SetValue(frameStaticMeshData.View);
-                        effect.Parameters["Projection"].SetValue(frameStaticMeshData.Viewmodel ? frameStaticMeshData.ProjectionViewmodel : frameStaticMeshData.Projection);
+                        effect.Parameters["World"]?.SetValue(frameStaticMeshData.World);
+                        effect.Parameters["View"]?.SetValue(frameStaticMeshData.View);
+                        effect.Parameters["Projection"]?.SetValue(frameStaticMeshData.Viewmodel ? frameStaticMeshData.ProjectionViewmodel : frameStaticMeshData.Projection);
 
-                        effect.Parameters["depthScale"].SetValue(frameStaticMeshData.Viewmodel ? 0.04f : 1);
+                        effect.Parameters["depthScale"]?.SetValue(frameStaticMeshData.Viewmodel ? 0.04f : 1);
 
-                        effect.Parameters["DirectBrightness"].SetValue(Graphics.DirectLighting);
-                        effect.Parameters["GlobalBrightness"].SetValue(Graphics.GlobalLighting);
-                        effect.Parameters["LightDirection"].SetValue(Graphics.LightDirection.Normalized());
+                        effect.Parameters["DirectBrightness"]?.SetValue(Graphics.DirectLighting);
+                        effect.Parameters["GlobalBrightness"]?.SetValue(Graphics.GlobalLighting);
+                        effect.Parameters["LightDirection"]?.SetValue(Graphics.LightDirection.Normalized());
 
-                        effect.Parameters["ShadowMapViewProjection"].SetValue(Graphics.LightViewProjection);
-                        effect.Parameters["ShadowMapViewProjectionClose"].SetValue(Graphics.LightViewProjectionClose);
+                        effect.Parameters["ShadowMapViewProjection"]?.SetValue(Graphics.LightViewProjection);
+                        effect.Parameters["ShadowMapViewProjectionClose"]?.SetValue(Graphics.LightViewProjectionClose);
 
-                        effect.Parameters["ShadowBias"].SetValue(Graphics.ShadowBias);
-                        effect.Parameters["ShadowMapResolution"].SetValue((float)Graphics.shadowMapResolution);
+                        effect.Parameters["ShadowBias"]?.SetValue(Graphics.ShadowBias);
+                        effect.Parameters["ShadowMapResolution"]?.SetValue((float)Graphics.shadowMapResolution);
 
-                        //effect.Parameters["DepthMap"].SetValue(GameMain.inst.render.DepthOutput);
+                        //effect.Parameters["DepthMap"]?.SetValue(GameMain.inst.render.DepthOutput);
 
-                        effect.Parameters["Transparency"].SetValue(frameStaticMeshData.Transparency);
+                        effect.Parameters["Transparency"]?.SetValue(frameStaticMeshData.Transparency);
 
-                        effect.Parameters["isParticle"].SetValue(isParticle);
+                        effect.Parameters["isParticle"]?.SetValue(isParticle);
 
                         MeshPartData meshPartData = meshPart1.Tag as MeshPartData;
 
                         if(meshPartData is not null)
-                        effect.Parameters["Texture"].SetValue(FindTexture(meshPartData.textureName));
+                        effect.Parameters["Texture"]?.SetValue(FindTexture(meshPartData.textureName));
 
 
                         if (meshPartData is not null)
-                            effect.Parameters["EmissiveTexture"].SetValue(FindEmissiveTexture(meshPartData.textureName));
+                            effect.Parameters["EmissiveTexture"]?.SetValue(FindTextureWithSufix(meshPartData.textureName));
                         
-                        effect.Parameters["EmissionPower"].SetValue(EmissionPower);
+                        effect.Parameters["EmissionPower"]?.SetValue(EmissionPower);
 
                         Vector3[] LightPos = new Vector3[LightManager.MAX_POINT_LIGHTS];
                         Vector3[] LightColor = new Vector3[LightManager.MAX_POINT_LIGHTS];
@@ -166,9 +166,9 @@ namespace RetroEngine
                             LightRadius[l] = LightManager.FinalPointLights[l].Radius;
                         }
 
-                        effect.Parameters["LightPositions"].SetValue(LightPos);
-                        effect.Parameters["LightColors"].SetValue(LightColor);
-                        effect.Parameters["LightRadiuses"].SetValue(LightRadius);
+                        effect.Parameters["LightPositions"]?.SetValue(LightPos);
+                        effect.Parameters["LightColors"]?.SetValue(LightColor);
+                        effect.Parameters["LightRadiuses"]?.SetValue(LightRadius);
 
                         if (_disposed) return;
                         
@@ -216,7 +216,7 @@ namespace RetroEngine
                         MeshPartData meshPartData = (MeshPartData)meshPart1.Tag;
 
                         effect.Parameters["ColorTexture"].SetValue(FindTexture(meshPartData.textureName));
-                        effect.Parameters["EmissiveTexture"].SetValue(FindEmissiveTexture(meshPartData.textureName));
+                        effect.Parameters["EmissiveTexture"].SetValue(FindTextureWithSufix(meshPartData.textureName));
 
 
                         effect.Parameters["DepthScale"].SetValue(frameStaticMeshData.Viewmodel ? 0.02f : 1);
@@ -271,7 +271,7 @@ namespace RetroEngine
                         int vertexCount = frames[f].Meshes[j].MeshParts[i].VertexBuffer.VertexCount;
                         //VertexPositionNormalTexture[] data = new VertexPositionNormalTexture[vertexCount];
 
-                        VertexPositionNormalTexture[] data = ((MeshPartData)frames[f].Meshes[j].MeshParts[i].Tag).Vertices;
+                        VertexData[] data = ((MeshPartData)frames[f].Meshes[j].MeshParts[i].Tag).Vertices;
                         frameVertexData.TryAdd(frames[f].Meshes[j].MeshParts[i].VertexBuffer.GetHashCode(), data);
                     }
                 }
@@ -290,13 +290,13 @@ namespace RetroEngine
             
 
             // Get the data from the vertex buffers
-            VertexPositionNormalTexture[] data1 = frameVertexData[buffer1.GetHashCode()];
-            VertexPositionNormalTexture[] data2 = frameVertexData[buffer2.GetHashCode()];
+            VertexData[] data1 = frameVertexData[buffer1.GetHashCode()];
+            VertexData[] data2 = frameVertexData[buffer2.GetHashCode()];
 
             if (data1 is null) return;
             int vertexCount = data1.Length;
 
-            VertexPositionNormalTexture[] resultData = new VertexPositionNormalTexture[vertexCount];
+            VertexData[] resultData = new VertexData[vertexCount];
 
             // Interpolate positions and normals
             for (int i = 0; i < vertexCount; i++)

@@ -339,10 +339,10 @@ namespace RetroEngine
                 mesh.DrawShadow();
             }
 
-            UnifiedEffect.Parameters["ShadowMap"].SetValue(GameMain.Instance.render.shadowMap);
+            UnifiedEffect.Parameters["ShadowMap"]?.SetValue(GameMain.Instance.render.shadowMap);
 
-            UnifiedEffect.Parameters["ShadowBias"].SetValue(Graphics.ShadowBias);
-            UnifiedEffect.Parameters["ShadowMapResolution"].SetValue((float)Graphics.shadowMapResolution);
+            UnifiedEffect.Parameters["ShadowBias"]?.SetValue(Graphics.ShadowBias);
+            UnifiedEffect.Parameters["ShadowMapResolution"]?.SetValue((float)Graphics.shadowMapResolution);
 
             return;
             // Set up the shadow map render target with the desired resolution

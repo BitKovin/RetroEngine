@@ -27,12 +27,13 @@ namespace RetroEngine.Game.Entities
 
         public BoxDynamic() : base()
         {
-            Model model = GameMain.content.Load<Model>("box");
             meshes.Add(mesh);
 
-            mesh.model = model;
+            mesh.LoadFromFile("models/cube.obj");
 
-            mesh.texture = AssetRegistry.LoadTextureFromFile("cat.png");
+            mesh.texture = AssetRegistry.LoadTextureFromFile("textures/foil.png");
+            mesh.normalTexture = AssetRegistry.LoadTextureFromFile("textures/foil_n.png");
+            mesh.ormTexture = AssetRegistry.LoadTextureFromFile("textures/foil_orm.png");
             //mesh.Transperent = true;
             mesh.Transparency = 1f;
         }

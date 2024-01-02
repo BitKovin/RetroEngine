@@ -16,7 +16,7 @@ namespace RetroEngine
     {
         public string textureName = "";
         public Dictionary<string, Vector3> Points = new Dictionary<string, Vector3>();
-        public VertexPositionNormalTexture[] Vertices;
+        public VertexData[] Vertices;
     }
 
     public struct FrameStaticMeshData
@@ -51,6 +51,8 @@ namespace RetroEngine
 
         public Texture2D texture;
         public Texture2D emisssiveTexture;
+        public Texture2D normalTexture;
+        public Texture2D ormTexture;
         public List<string> textureSearchPaths = new List<string>();
         public float EmissionPower = 1;
 
@@ -118,6 +120,8 @@ namespace RetroEngine
 
                         effect.Parameters["WorldViewProjection"].SetValue(frameStaticMeshData.World * frameStaticMeshData.View * projection);
 
+                        
+
                         // Draw the primitives using the custom effect
                         foreach (EffectPass pass in effect.CurrentTechnique.Passes)
                         {
@@ -141,10 +145,12 @@ namespace RetroEngine
                 {
                     MeshPartData meshPartData = meshPart.Tag as MeshPartData;
 
-                    if(meshPartData != null)
-                        FindTexture(meshPartData.textureName);
-                    if (meshPartData != null)
-                        FindEmissiveTexture(meshPartData.textureName);
+                    if (meshPartData == null) continue;
+
+                    FindTexture(meshPartData.textureName);
+                    FindTextureWithSufix(meshPartData.textureName);
+                    FindTextureWithSufix(meshPartData.textureName, "_n");
+                    FindTextureWithSufix(meshPartData.textureName, "_orm");
                 }
             }
         }
@@ -199,19 +205,16 @@ namespace RetroEngine
                         if (meshPartData is not null)
                         {
                             effect.Parameters["Texture"]?.SetValue(FindTexture(meshPartData.textureName));
+                            effect.Parameters["EmissiveTexture"]?.SetValue(FindTextureWithSufix(meshPartData.textureName));
+                            effect.Parameters["NormalTexture"]?.SetValue(FindTextureWithSufix(meshPartData.textureName, "_n"));
+                            effect.Parameters["ORMTexture"]?.SetValue(FindTextureWithSufix(meshPartData.textureName, "_orm"));
                         }
                         else
                         {
                             effect.Parameters["Texture"]?.SetValue(texture);
-                        }
-
-                        if (meshPartData is not null)
-                        {
-                            effect.Parameters["EmissiveTexture"]?.SetValue(FindEmissiveTexture(meshPartData.textureName));
-                        }
-                        else
-                        {
                             effect.Parameters["EmissiveTexture"]?.SetValue(GameMain.Instance.render.black);
+                            effect.Parameters["NormalTexture"]?.SetValue(normalTexture);
+                            effect.Parameters["ORMTexture"]?.SetValue(ormTexture);
                         }
                         effect.Parameters["EmissionPower"].SetValue(EmissionPower);
 
@@ -360,7 +363,7 @@ namespace RetroEngine
                         if (meshPartData is not null)
                         {
                             effect.Parameters["ColorTexture"].SetValue(FindTexture(meshPartData.textureName));
-                            effect.Parameters["EmissiveTexture"].SetValue(FindEmissiveTexture(meshPartData.textureName));
+                            effect.Parameters["EmissiveTexture"].SetValue(FindTextureWithSufix(meshPartData.textureName));
                         }
                         else
                         {
@@ -422,7 +425,7 @@ namespace RetroEngine
             
         }
 
-        protected Texture2D FindEmissiveTexture(string name)
+        protected Texture2D FindTextureWithSufix(string name, string sufix = "_em")
         {
 
             if (name == null)
@@ -435,7 +438,7 @@ namespace RetroEngine
                 }
 
             name = name.ToLower();
-            name = name.Replace(".png", "_em.png");
+            name = name.Replace(".png", $"{sufix}.png");
 
             if (textures.ContainsKey(name))
                 return textures[name];
@@ -600,7 +603,7 @@ namespace RetroEngine
             }
             else
             {
-                scene = importer.ImportFile(filePath, Assimp.PostProcessSteps.MakeLeftHanded | Assimp.PostProcessSteps.FlipUVs);
+                scene = importer.ImportFile(filePath, Assimp.PostProcessSteps.MakeLeftHanded | Assimp.PostProcessSteps.FlipUVs | Assimp.PostProcessSteps.CalculateTangentSpace);
                 //loadedScenes.Add(filePath, scene);
             }
 
@@ -625,7 +628,7 @@ namespace RetroEngine
             foreach (var mesh in scene.Meshes)
             {
 
-                var vertices = new VertexPositionNormalTexture[mesh.VertexCount];
+                var vertices = new VertexData[mesh.VertexCount];
                 var indices = new int[mesh.FaceCount * 3];
                 int vertexIndex = 0;
 
@@ -645,13 +648,15 @@ namespace RetroEngine
                     {
                         var vertex = mesh.Vertices[face.Indices[i]];
                         var normal = mesh.Normals[face.Indices[i]];
+                        var tangent = mesh.Tangents[face.Indices[i]];
                         var textureCoord = mesh.HasTextureCoords(0) ? mesh.TextureCoordinateChannels[0][face.Indices[i]] : new Assimp.Vector3D(0, 0, 0);
 
                         // Negate the x-coordinate to correct mirroring
-                        vertices[vertexIndex] = new VertexPositionNormalTexture(
+                        vertices[vertexIndex] = new VertexData(
                             new Vector3(-vertex.X, vertex.Y, vertex.Z), // Negate x-coordinate
                             new Vector3(-normal.X, normal.Y, normal.Z),
-                            new Vector2(textureCoord.X, textureCoord.Y)
+                            new Vector2(textureCoord.X, textureCoord.Y),
+                            new Vector3(-tangent.X, tangent.Y, tangent.Z)
                         );
 
                         indices[vertexIndex] = vertexIndex;
@@ -663,11 +668,11 @@ namespace RetroEngine
                 VertexBuffer vertexBuffer;
                 if (dynamicBuffer)
                 {
-                    vertexBuffer = new DynamicVertexBuffer(graphicsDevice, typeof(VertexPositionNormalTexture), vertices.Length, BufferUsage.None);
+                    vertexBuffer = new DynamicVertexBuffer(graphicsDevice, typeof(VertexData), vertices.Length, BufferUsage.None);
                 }
                 else
                 {
-                    vertexBuffer = new VertexBuffer(graphicsDevice, typeof(VertexPositionNormalTexture), vertices.Length, BufferUsage.None);
+                    vertexBuffer = new VertexBuffer(graphicsDevice, typeof(VertexData), vertices.Length, BufferUsage.None);
                 }
                 vertexBuffer.SetData(vertices);
                 var indexBuffer = new IndexBuffer(graphicsDevice, IndexElementSize.ThirtyTwoBits, indices.Length, BufferUsage.None);
@@ -717,19 +722,19 @@ namespace RetroEngine
 
             List<ModelMeshPart> meshParts = new List<ModelMeshPart>();
 
-            VertexPositionNormalTexture[] vertices = new VertexPositionNormalTexture[vertexPositions.Count];
+            VertexData[] vertices = new VertexData[vertexPositions.Count];
             int[] indices = new int[vertexPositions.Count];
 
             for (int i = 0; i < vertexPositions.Count; i++)
             {
-                vertices[i] = new VertexPositionNormalTexture(vertexPositions[i], Vector3.Zero, Vector2.Zero);
+                vertices[i] = new VertexData(vertexPositions[i], Vector3.Zero, Vector2.Zero, Vector3.Zero);
                 indices[i] = i;
             }
 
             // Ensure there are at least 3 vertices to form a triangle
             if (vertices.Length >= 3)
             {
-                var vertexBuffer = new VertexBuffer(graphicsDevice, typeof(VertexPositionNormalTexture), vertices.Length, BufferUsage.None);
+                var vertexBuffer = new VertexBuffer(graphicsDevice, typeof(VertexData), vertices.Length, BufferUsage.None);
                 vertexBuffer.SetData(vertices);
 
                 var indexBuffer = new IndexBuffer(graphicsDevice, IndexElementSize.ThirtyTwoBits, indices.Length, BufferUsage.None);
@@ -794,7 +799,7 @@ namespace RetroEngine
             {
 
                 // Get the vertices from the model's mesh part
-                VertexPositionNormalTexture[] vertices = new VertexPositionNormalTexture[mesh.MeshParts[0].VertexBuffer.VertexCount];
+                VertexData[] vertices = new VertexData[mesh.MeshParts[0].VertexBuffer.VertexCount];
                 mesh.MeshParts[0].VertexBuffer.GetData(vertices);
                 // Extract the positions and scale them if necessary
                 Vector3[] positions = new Vector3[vertices.Length];
@@ -808,12 +813,12 @@ namespace RetroEngine
             return vector/n;
         }
 
-        protected static BoundingSphere CalculateBoundingSphere(VertexPositionNormalTexture[] vertices)
+        protected static BoundingSphere CalculateBoundingSphere(VertexData[] vertices)
         {
 
             List<Vector3> points = new List<Vector3>();
 
-            foreach (VertexPositionNormalTexture vertex in vertices)
+            foreach (VertexData vertex in vertices)
             {
                 points.Add(vertex.Position);
             }
