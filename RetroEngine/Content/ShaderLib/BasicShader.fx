@@ -34,6 +34,7 @@ sampler DepthMapSampler = sampler_state
 
 float FarPlane;
 float3 viewDir;
+float3 viewPos;
 
 float DirectBrightness;
 float GlobalBrightness;
@@ -77,7 +78,7 @@ struct PixelInput
     float4 lightPosClose : TEXCOORD4;
     float3 MyPosition : TEXCOORD5;
     float4 MyPixelPosition : TEXCOORD6;
-    matrix RotationMatrix : TEXCOORD7;
+    float3 Tangent : TEXCOORD7;
 };
 
 struct PBRData
@@ -118,98 +119,104 @@ PixelInput DefaultVertexShaderFunction(VertexInput input)
 	// Pass the world space normal to the pixel shader
     output.Normal = mul(input.Normal, (float3x3) World);
     output.Normal = normalize(output.Normal);
-
-    float3 lightingFactor = max(0.0, dot(output.Normal, normalize(-LightDirection))) * DirectBrightness * GlobalLightColor; // Example light direction
-
-    if (isParticle)
-        lightingFactor = float3(1, 1, 1);
     
-    output.light = lightingFactor;
+    output.Tangent = mul(input.Tangent, (float3x3) World);
+    output.Tangent = normalize(output.Tangent);
+
+    
+    output.light = 0;
 
     output.lightPos = mul(float4(mul(input.Position, World)), ShadowMapViewProjection);
     output.lightPosClose = mul(float4(mul(input.Position, World)), ShadowMapViewProjectionClose);
     
+    output.TexCoord = input.TexCoord;
     
     return output;
 }
 
-float3 ApplyNormalTexture(float3 sampledColor, float3 normal)
+float3 ApplyNormalTexture(float3 sampledNormalColor, float3 worldNormal, float3 worldTangent)
 {
-    // Choose arbitrary tangent and binormal vectors
-    float3 tangent = normalize(float3(normal.y, -normal.x, 0.0f));
-    float3 binormal = cross(normal, tangent);
+    
+    if (length(sampledNormalColor) < 0.001f)
+        return worldNormal;
+    
+    float3 normalMapSample = sampledNormalColor * 2.0 - 1.0;
+    
+    
+    
+    // Create the tangent space matrix as before
+    float3 bitangent = cross(worldNormal, worldTangent);
+    float3x3 tangentToWorld = float3x3(worldTangent, bitangent, worldNormal);
 
-    // Convert the RGB values of the normal map texture to a tangent space normal map
-    float3 normalMap = normalize(2.0 * sampledColor - 1.0);
+    // Transform the normal from tangent space to world space
+    float3 worldNormalFromTexture = mul(normalMapSample, tangentToWorld);
 
-    // Transform the tangent space normal map back to world space
-    float3 resultNormal = normalize(normalMap.x * tangent + normalMap.y * binormal + normalMap.z * normal);
+    // Normalize the final normal
+    worldNormalFromTexture = normalize(worldNormalFromTexture);
 
-    return resultNormal;
+    return worldNormalFromTexture;
 }
 
-PBRData CalculatePBR(float3 albedo, float3 normal, float roughness, float metallic, float3 worldPos)
+
+
+// Helper functions used in CookTorranceSpecular
+float GGXTerm(float NdotH, float roughnessSquared)
 {
-    // Normalize input vectors
-    normal = normalize(normal);
-    viewDir = normalize(viewDir);
+    float a = roughnessSquared * roughnessSquared;
+    float numerator = a;
+    float denominator = (NdotH * NdotH * (a - 1) + 1) * (NdotH * NdotH * (a - 1) + 1);
+    return numerator / denominator;
+}
 
-    // Calculate intermediate values
-    float3 halfDir = normalize(LightDirection + viewDir);
-    float NdotL = saturate(dot(normal, LightDirection));
-    float NdotV = saturate(dot(normal, viewDir));
-    float NdotH = saturate(dot(normal, halfDir));
-    float LdotH = saturate(dot(LightDirection, halfDir));
+float SmithGGX(float NdotV, float NdotL, float roughnessSquared)
+{
+    float k = roughnessSquared / 2;
+    float Gv = NdotV / (NdotV * (1 - k) + k);
+    float Gl = NdotL / (NdotL * (1 - k) + k);
+    return Gv * Gl;
+}
 
-    // Fresnel term (Schlick approximation)
-    float3 F0 = 0.04f; // Base reflectivity for non-metals
-    F0 = lerp(F0, albedo, metallic); // Metallic surfaces use albedo as F0
-    float fresnel = pow(1.0 - LdotH, 5.0);
-    fresnel = fresnel * (1.0 - metallic) + metallic; // Blend between non-metal and metal fresnel
+float SchlickFresnel(float metallic, float cosTheta)
+{
+    float base = 1.0 - cosTheta;
+    return base * (1.0 - metallic) + metallic;
+}
 
-    // Normal distribution function (GGX)
-    float alpha = roughness * roughness;
-    float a2 = alpha * alpha;
-    float NDF = a2 / (PI * pow(NdotH * NdotH * (a2 - 1.0) + 1.0, 2.0));
+float3 CookTorranceSpecular(float3 worldPos, float3 viewDir, float3 lightPos, float3 normal, float roughness, float metallic)
+{
+    float3 lightDir = normalize(lightPos - worldPos);
+    float3 halfway = normalize(viewDir + lightDir);
 
-    // Geometry function (Smith-Schlick)
-    float k = (a2 + 1.0) * (a2 + 1.0) / 8.0;
-    float GGX = NdotV / (NdotV * (1.0 - k) + k);
-    float G = GGX * NdotL;
+    float NdotH = max(0, dot(normal, halfway));
+    float NdotV = max(0, dot(normal, viewDir));
+    float NdotL = max(0, dot(normal, lightDir));
 
-    // Calculate reflectiveness based on fresnel and roughness
-    float reflectiveness = fresnel * GGX;
+    float roughnessSquared = roughness * roughness;
 
-    // Calculate lighting components
-    float3 diffuse = albedo / PI;
-    float3 specular = NDF * G * fresnel;
+    float D = GGXTerm(NdotH, roughnessSquared);
+    float G = SmithGGX(NdotV, NdotL, roughnessSquared);
+    float F = SchlickFresnel(metallic, NdotH);
 
-    // Calculate directional light contribution
-    float3 directLighting = (diffuse + specular) * GlobalLightColor * NdotL * DirectBrightness * GlobalBrightness;
+    float3 specular = (D * G * F) / (4 * NdotV * NdotL);
 
-    // Calculate point light contributions
-    float3 pointLighting = float3(0.0, 0.0, 0.0);
-    for (int i = 0; i < MAX_POINT_LIGHTS; ++i)
-    {
-        float3 lightToFrag = normalize(LightPositions[i] - worldPos); // Assuming worldPos is available
-        float distance = length(LightPositions[i] - worldPos);
-        float attenuation = 1.0 / (distance * distance);
+    return specular;
+}
 
-        float3 pointNdotL = saturate(dot(normal, lightToFrag));
-        float3 pointLightingContrib = (diffuse + specular) * LightColors[i] * pointNdotL * attenuation;
-        pointLighting += pointLightingContrib;
-    }
-
-    // Combine lighting and return results
-    float3 totalLighting = directLighting + pointLighting;
-
-    PBRData data = (PBRData) 0;
+PBRData CalculatePBR(float3 normal, float roughness, float metallic, float3 worldPos)
+{
+    PBRData output;
     
-    data.specular = specular;
-    data.lighting = totalLighting;
-    data.reflectiveness = reflectiveness;
+    float3 reflectDir = reflect(normalize(viewPos - worldPos), normal);
     
-    return data;
+    float specular = pow(max(dot(LightDirection, reflectDir), 0.0), 32);
+
+    output.reflectiveness = metallic * roughness;
+    
+    output.specular = specular * output.reflectiveness;
+    
+    
+    return output;
+
 }
 
 float SampleShadowMap(sampler2D shadowMap, float2 coords, float compare)
@@ -276,7 +283,7 @@ float GetShadow(float3 lightCoords, PixelInput input, bool close = false)
 }
 
 
-float3 CalculatePointLight(int i, PixelInput pixelInput)
+float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal)
 {
 
     float3 lightVector = LightPositions[i] - pixelInput.MyPosition;
@@ -285,14 +292,14 @@ float3 CalculatePointLight(int i, PixelInput pixelInput)
     float3 dirToSurface = normalize(lightVector);
 
     if (isParticle)
-        dirToSurface = pixelInput.Normal;
+        dirToSurface = normal;
     
-    intense *= saturate(dot(pixelInput.Normal, dirToSurface) * 5 + 2);
+    intense *= saturate(dot(normal, dirToSurface) * 5 + 2);
 
     return LightColors[i] * max(intense, 0);
 }
 
-float3 CalculateLight(PixelInput input)
+float3 CalculateLight(PixelInput input, float3 normal)
 {
     float3 lightCoords = input.lightPos.xyz / input.lightPos.w;
 
@@ -314,7 +321,7 @@ float3 CalculateLight(PixelInput input)
         shadow += GetShadow(lightCoords, input, false);
     
     
-    float3 light = input.light;
+    float3 light = max(0.0, dot(normal, normalize(-LightDirection))) * DirectBrightness * GlobalLightColor; // Example light direction;
 
     light -= shadow;
     light = max(light, 0);
@@ -323,7 +330,7 @@ float3 CalculateLight(PixelInput input)
 
     for (int i = 0; i < MAX_POINT_LIGHTS; i++)
     {
-        light += CalculatePointLight(i, input);
+        light += CalculatePointLight(i, input, normal);
     }
     
     return light;

@@ -32,9 +32,6 @@ namespace RetroEngine.Game.Entities
             {
                 GameMain.Instance.paused = !GameMain.Instance.paused;
 
-                if (GameMain.Instance.paused == false)
-                    Input.CenterCursor();
-
             }
 
         }

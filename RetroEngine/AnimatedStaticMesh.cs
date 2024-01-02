@@ -120,6 +120,8 @@ namespace RetroEngine
                         graphicsDevice.SetVertexBuffer(result);
                         graphicsDevice.Indices = meshPart1.IndexBuffer;
 
+                        effect.Parameters["viewDir"]?.SetValue(Camera.rotation.GetForwardVector());
+                        effect.Parameters["viewPos"]?.SetValue(Camera.position);
 
                         // Set effect parameters
                         effect.Parameters["World"]?.SetValue(frameStaticMeshData.World);
@@ -303,8 +305,11 @@ namespace RetroEngine
             {
                 resultData[i].Position = Vector3.Lerp(data1[i].Position, data2[i].Position, amount);
                 resultData[i].Normal = Vector3.Lerp(data1[i].Normal, data2[i].Normal, amount);
+                resultData[i].Tangent = Vector3.Lerp(data1[i].Tangent, data2[i].Tangent, amount);
                 resultData[i].TextureCoordinate = data1[i].TextureCoordinate;
             }
+
+            if (_disposed) return;
 
             // Set the interpolated data to the result buffer
             resultBuffer.SetData(resultData);

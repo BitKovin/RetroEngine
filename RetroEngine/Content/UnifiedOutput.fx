@@ -46,22 +46,23 @@ PixelOutput PixelShaderFunction(PixelInput input)
     float3 textureColor = tex2D(TextureSampler, input.TexCoord).xyz;
 	float textureAlpha = tex2D(TextureSampler, input.TexCoord).w;
 
-    float3 light = CalculateLight(input);
-
-    float3 pixelNormal = ApplyNormalTexture(textureNormal, input.Normal);
     
-    PBRData pbrData = CalculatePBR(textureColor, pixelNormal, roughness, metalic, input.MyPosition);
+    float3 pixelNormal = ApplyNormalTexture(textureNormal, input.Normal, input.Tangent);
+    
+    
+    PBRData pbrData = CalculatePBR(pixelNormal, roughness, metalic, input.MyPosition);
 
+    float3 light = CalculateLight(input, pixelNormal) + pbrData.specular*10;
+    
 	textureColor *= light;
-
-    textureColor += pbrData.specular;
+    
     
     textureColor += tex2D(EmissiveTextureSampler, input.TexCoord).rgb * EmissionPower * tex2D(EmissiveTextureSampler, input.TexCoord).a;
 
 
     textureAlpha *= Transparency;
     
-    output.Color = float4(pixelNormal, textureAlpha);
+    output.Color = float4(textureColor, textureAlpha);
     
     return output;
 }

@@ -30,6 +30,8 @@ namespace RetroEngine.Windows
 
             Window.Title = Window.Title + "   Direct X";
 
+            AsyncGameThread = true;
+
         }
 
     }

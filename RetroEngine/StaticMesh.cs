@@ -176,6 +176,8 @@ namespace RetroEngine
                         graphicsDevice.SetVertexBuffer(meshPart.VertexBuffer);
                         graphicsDevice.Indices = meshPart.IndexBuffer;
 
+                        effect.Parameters["viewDir"]?.SetValue(Camera.rotation.GetForwardVector());
+                        effect.Parameters["viewPos"]?.SetValue(Camera.position);
 
                         // Set effect parameters
                         effect.Parameters["World"]?.SetValue(frameStaticMeshData.World);
@@ -202,12 +204,12 @@ namespace RetroEngine
 
                         MeshPartData meshPartData = meshPart.Tag as MeshPartData;
 
-                        if (meshPartData is not null)
+                        if (meshPartData is not null && textureSearchPaths.Count>0)
                         {
                             effect.Parameters["Texture"]?.SetValue(FindTexture(meshPartData.textureName));
-                            effect.Parameters["EmissiveTexture"]?.SetValue(FindTextureWithSufix(meshPartData.textureName));
-                            effect.Parameters["NormalTexture"]?.SetValue(FindTextureWithSufix(meshPartData.textureName, "_n"));
-                            effect.Parameters["ORMTexture"]?.SetValue(FindTextureWithSufix(meshPartData.textureName, "_orm"));
+                            effect.Parameters["EmissiveTexture"]?.SetValue(FindTextureWithSufix(meshPartData.textureName, def: emisssiveTexture));
+                            effect.Parameters["NormalTexture"]?.SetValue(FindTextureWithSufix(meshPartData.textureName, "_n", normalTexture));
+                            effect.Parameters["ORMTexture"]?.SetValue(FindTextureWithSufix(meshPartData.textureName, "_orm", ormTexture));
                         }
                         else
                         {
@@ -425,7 +427,7 @@ namespace RetroEngine
             
         }
 
-        protected Texture2D FindTextureWithSufix(string name, string sufix = "_em")
+        protected Texture2D FindTextureWithSufix(string name, string sufix = "_em", Texture2D def = null)
         {
 
             if (name == null)
@@ -443,9 +445,12 @@ namespace RetroEngine
             if (textures.ContainsKey(name))
                 return textures[name];
 
-            Texture2D output;
+            
             if (textureSearchPaths.Count > 0)
             {
+
+                Texture2D output;
+
                 foreach (string item in textureSearchPaths)
                 {
                     output = AssetRegistry.LoadTextureFromFile(item + name, true);
@@ -457,13 +462,13 @@ namespace RetroEngine
                 }
 
             }
-            if (emisssiveTexture == null)
+            if (def == null)
             {
                 return GameMain.Instance.render.black;
             }
             else
             {
-                return emisssiveTexture;
+                return def;
             }
 
         }
