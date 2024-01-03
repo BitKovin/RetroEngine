@@ -148,13 +148,22 @@ namespace RetroEngine
 
                         MeshPartData meshPartData = meshPart1.Tag as MeshPartData;
 
-                        if(meshPartData is not null)
-                        effect.Parameters["Texture"]?.SetValue(FindTexture(meshPartData.textureName));
+                        if (meshPartData is not null && textureSearchPaths.Count > 0)
+                        {
+                            effect.Parameters["Texture"]?.SetValue(FindTexture(meshPartData.textureName));
+                            effect.Parameters["EmissiveTexture"]?.SetValue(FindTextureWithSufix(meshPartData.textureName, def: emisssiveTexture));
+                            effect.Parameters["NormalTexture"]?.SetValue(FindTextureWithSufix(meshPartData.textureName, "_n", normalTexture));
+                            effect.Parameters["ORMTexture"]?.SetValue(FindTextureWithSufix(meshPartData.textureName, "_orm", ormTexture));
+                        }
+                        else
+                        {
+                            effect.Parameters["Texture"]?.SetValue(texture);
+                            effect.Parameters["EmissiveTexture"]?.SetValue(GameMain.Instance.render.black);
+                            effect.Parameters["NormalTexture"]?.SetValue(normalTexture);
+                            effect.Parameters["ORMTexture"]?.SetValue(ormTexture);
+                        }
+                        effect.Parameters["EmissionPower"].SetValue(EmissionPower);
 
-
-                        if (meshPartData is not null)
-                            effect.Parameters["EmissiveTexture"]?.SetValue(FindTextureWithSufix(meshPartData.textureName));
-                        
                         effect.Parameters["EmissionPower"]?.SetValue(EmissionPower);
 
                         Vector3[] LightPos = new Vector3[LightManager.MAX_POINT_LIGHTS];

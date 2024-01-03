@@ -43,7 +43,7 @@ namespace RetroEngine.Game.Entities
         {
             base.Start();
 
-            body = Physics.CreateBox(this, scale.ToPhysics());
+            body = Physics.CreateSphere(this, radius: 0.5f);
             body.SetPosition(Position.ToNumerics());
             body.SetMassProps(scale.Length(), body.CollisionShape.CalculateLocalInertia(scale.Length()));
             mesh.Scale = scale;
