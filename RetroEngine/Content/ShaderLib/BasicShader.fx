@@ -208,11 +208,11 @@ PBRData CalculatePBR(float3 normal, float roughness, float metallic, float3 worl
     
     float3 reflectDir = reflect(normalize(viewPos - worldPos), normal);
     
-    float specular = pow(max(dot(LightDirection, reflectDir), 0.0), 32);
+    float specular = saturate(pow(max(dot(LightDirection, reflectDir), 0.0), 32) * roughness);
 
     output.reflectiveness = metallic * roughness;
     
-    output.specular = specular * output.reflectiveness;
+    output.specular = specular * GlobalLightColor;
     
     
     return output;
