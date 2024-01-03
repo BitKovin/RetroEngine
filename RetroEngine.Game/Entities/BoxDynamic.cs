@@ -21,7 +21,6 @@ namespace RetroEngine.Game.Entities
 
         public Vector3 scale = new Vector3(1);
 
-        SoundPlayer soundPlayer;
 
         RigidBody body;
 
@@ -43,18 +42,12 @@ namespace RetroEngine.Game.Entities
         {
             base.Start();
 
-            body = Physics.CreateSphere(this, radius: 0.5f);
+            body = Physics.CreateBox(this, scale.ToNumerics());
             body.SetPosition(Position.ToNumerics());
             body.SetMassProps(scale.Length(), body.CollisionShape.CalculateLocalInertia(scale.Length()));
             mesh.Scale = scale;
 
             bodies.Add(body);
-
-            soundPlayer = Level.GetCurrent().AddEntity(new SoundPlayer()) as SoundPlayer;
-
-            soundPlayer.SetSound(AssetRegistry.LoadSoundFromFile("Sounds/test.wav"));
-            soundPlayer.IsLooped = true;
-            //soundPlayer.Play();
 
         }
 
@@ -67,7 +60,6 @@ namespace RetroEngine.Game.Entities
             mesh.Position = Position;
             mesh.Rotation = Rotation;
 
-            soundPlayer.Position = Position;
         }
     }
 }

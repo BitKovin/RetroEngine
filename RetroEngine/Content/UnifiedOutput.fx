@@ -74,5 +74,6 @@ technique BasicTechnique
     {
         VertexShader = compile VS_SHADERMODEL VertexShaderFunction();
         PixelShader = compile PS_SHADERMODEL PixelShaderFunction();
+
     }
 }

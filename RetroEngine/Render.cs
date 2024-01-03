@@ -117,7 +117,7 @@ namespace RetroEngine
                 InitCloseShadowMap(ref shadowMapClose);
 
             graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-            graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
+            graphics.GraphicsDevice.RasterizerState = RasterizerState.CullClockwise;
 
             List<StaticMesh> renderList = level.GetMeshesToRender();
 
@@ -149,7 +149,7 @@ namespace RetroEngine
             samplerState.AddressV = TextureAddressMode.Wrap;
             samplerState.AddressW = TextureAddressMode.Wrap;
 
-            samplerState.MipMapLevelOfDetailBias = -1;
+            samplerState.MipMapLevelOfDetailBias = -2;
 
             graphics.GraphicsDevice.SamplerStates[0] = samplerState;
         }
