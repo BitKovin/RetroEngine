@@ -157,59 +157,36 @@ float3 ApplyNormalTexture(float3 sampledNormalColor, float3 worldNormal, float3 
     return worldNormalFromTexture;
 }
 
-
-
-// Helper functions used in CookTorranceSpecular
-float GGXTerm(float NdotH, float roughnessSquared)
+float DistributionGGX(float3 N, float3 H, float a)
 {
-    float a = roughnessSquared * roughnessSquared;
-    float numerator = a;
-    float denominator = (NdotH * NdotH * (a - 1) + 1) * (NdotH * NdotH * (a - 1) + 1);
-    return numerator / denominator;
-}
-
-float SmithGGX(float NdotV, float NdotL, float roughnessSquared)
-{
-    float k = roughnessSquared / 2;
-    float Gv = NdotV / (NdotV * (1 - k) + k);
-    float Gl = NdotL / (NdotL * (1 - k) + k);
-    return Gv * Gl;
-}
-
-float SchlickFresnel(float metallic, float cosTheta)
-{
-    float base = 1.0 - cosTheta;
-    return base * (1.0 - metallic) + metallic;
-}
-
-float3 CookTorranceSpecular(float3 worldPos, float3 viewDir, float3 lightPos, float3 normal, float roughness, float metallic)
-{
-    float3 lightDir = normalize(lightPos - worldPos);
-    float3 halfway = normalize(viewDir + lightDir);
-
-    float NdotH = max(0, dot(normal, halfway));
-    float NdotV = max(0, dot(normal, viewDir));
-    float NdotL = max(0, dot(normal, lightDir));
-
-    float roughnessSquared = roughness * roughness;
-
-    float D = GGXTerm(NdotH, roughnessSquared);
-    float G = SmithGGX(NdotV, NdotL, roughnessSquared);
-    float F = SchlickFresnel(metallic, NdotH);
-
-    float3 specular = (D * G * F) / (4 * NdotV * NdotL);
-
-    return specular;
+    float a2 = a * a;
+    float NdotH = max(dot(N, H), 0.0);
+    float NdotH2 = NdotH * NdotH;
+	
+    float nom = a2;
+    float denom = (NdotH2 * (a2 - 1.0) + 1.0);
+    denom = PI * denom * denom;
+	
+    return nom / denom;
 }
 
 PBRData CalculatePBR(float3 normal, float roughness, float metallic, float3 worldPos)
 {
     PBRData output;
     
+    roughness = clamp(roughness, 0.05f, 1);
+    
     float3 reflectDir = reflect(normalize(viewPos - worldPos), normal);
     
-    float specular = saturate(pow(max(dot(LightDirection, reflectDir), 0.0), 32) * roughness);
+    float3 viewDir = normalize(viewPos - worldPos);
+    float3 halfwayDir = normalize(-LightDirection + viewDir);
+    
+    halfwayDir *= DistributionGGX(normal, halfwayDir, roughness);
+    
+    //float specular = saturate(pow(max(dot(halfwayDir, normal), 0.0), 32));
 
+    float specular = pow(max(dot(normal, halfwayDir), 0.0), 1);
+    
     output.reflectiveness = metallic * roughness;
     
     output.specular = specular * GlobalLightColor;
