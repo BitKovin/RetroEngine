@@ -27,7 +27,7 @@ namespace RetroEngine
 
         const string ROOT_PATH = "../../../../";
 
-        const int MaxTexturesInMemory = 1000;
+        const int MaxTexturesInMemory = 5000;
 
         public static List<object> ConstantCache = new List<object>();
 
@@ -143,7 +143,10 @@ namespace RetroEngine
 
                 for (int i = 0; i < numToRemove; i++)
                 {
-                    textures.Remove(texturesHistory[0]);
+
+                    textures[texturesHistory[0]]?.Dispose();
+
+
                     texturesHistory.RemoveAt(0);
                     
                 }

@@ -242,7 +242,7 @@ float GetShadow(float3 lightCoords, PixelInput input, bool close = false)
         resolution = ShadowMapResolution;
             
         
-        float texelSize = 2.0f / resolution; // Assuming ShadowMapSize is the size of your shadow map texture
+        float texelSize = 1.0f / resolution; // Assuming ShadowMapSize is the size of your shadow map texture
         
         for (int i = -numSamples; i <= numSamples; ++i)
         {
@@ -307,7 +307,9 @@ float3 CalculateLight(PixelInput input, float3 normal)
     
     float3 light = max(0.0, dot(normal, normalize(-LightDirection))) * DirectBrightness * GlobalLightColor; // Example light direction;
 
-    light -= shadow;
+    if (abs(dot(input.Normal, normalize(-LightDirection)))>0.01f)
+        light -= shadow;
+    
     light = max(light, 0);
     light += GlobalBrightness;
 
