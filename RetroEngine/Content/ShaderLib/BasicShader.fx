@@ -189,7 +189,7 @@ PBRData CalculatePBR(float3 normal, float roughness, float metallic, float3 worl
     
     //float specular = saturate(pow(max(dot(halfwayDir, normal), 0.0), 32));
 
-    float specular = pow(max(dot(normal, halfwayDir), 0.0), 2) / 8;
+    float specular = pow(max(dot(normal, halfwayDir), 0.0), 1.5) / 4;
     
     float fresnelReflectance = metallic + (1.0 - metallic) * pow(1.0 - roughness, 5.0);
     float reflectionAmount = fresnelReflectance * pow(roughness, 4.0);

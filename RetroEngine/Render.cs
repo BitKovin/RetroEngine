@@ -93,16 +93,12 @@ namespace RetroEngine
 
             CreateBlackTexture();
 
-            InitRenderTargetIfNeed(ref colorPath);
-
-            InitRenderTargetIfNeed(ref normalPath);
 
             InitRenderTargetIfNeed(ref DepthOutput);
 
 
-            InitRenderTargetIfNeed(ref DeferredOutput);
+            InitVectorRenderTargetIfNeed(ref DeferredOutput);
 
-            InitRenderTargetIfNeed(ref ForwardDepth);
 
             InitRenderTargetIfNeed(ref outputPath);
 
@@ -114,9 +110,6 @@ namespace RetroEngine
             if (shadowMap is null)
                 InitShadowMap(ref shadowMap);
 
-            if (shadowMapClose is null)
-                InitCloseShadowMap(ref shadowMapClose);
-
             graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             
 
@@ -124,19 +117,15 @@ namespace RetroEngine
 
 
             graphics.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
+
             RenderShadowMap(renderList);
 
             graphics.GraphicsDevice.RasterizerState = RasterizerState.CullClockwise;
 
-            //DrawPathes(renderList);
-
-            //RenderTransperentPath(renderList);
-
-            //PerformDeferredShading();
 
             RenderForwardPath(renderList);
 
-            graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearClamp;
+            graphics.GraphicsDevice.SamplerStates[0] = SamplerState.AnisotropicClamp;
             PerformPostProcessing();
 
             return outputPath;
@@ -596,9 +585,32 @@ namespace RetroEngine
                     graphics.PreferredBackBufferWidth,
                     graphics.PreferredBackBufferHeight,
                     false, // No mipmaps
-                    SurfaceFormat.HalfVector4, // Color format
+                    SurfaceFormat.ColorSRgb, // Color format
                     depthFormat); // Depth format
             }
+        }
+
+        void InitVectorRenderTargetIfNeed(ref RenderTarget2D target)
+        {
+            if (graphics.PreferredBackBufferWidth > 0 && graphics.PreferredBackBufferHeight > 0)
+
+                if (target is null || target.Width != graphics.PreferredBackBufferWidth || target.Height != graphics.PreferredBackBufferHeight)
+                {
+                    // Dispose of the old render target if it exists
+                    target?.Dispose();
+
+                    // Set the depth format based on your requirements
+                    DepthFormat depthFormat = DepthFormat.Depth24;
+
+                    // Create the new render target with the specified depth format
+                    target = new RenderTarget2D(
+                        graphics.GraphicsDevice,
+                        graphics.PreferredBackBufferWidth,
+                        graphics.PreferredBackBufferHeight,
+                        false, // No mipmaps
+                        SurfaceFormat.HalfVector4, // Color format
+                        depthFormat); // Depth format
+                }
         }
 
         void InitRenderTargetVectorIfNeed(ref RenderTarget2D target)
