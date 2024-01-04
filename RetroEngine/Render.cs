@@ -110,6 +110,7 @@ namespace RetroEngine
 
             InitRenderTargetIfNeed(ref postProcessingOutput);
 
+
             if (shadowMap is null)
                 InitShadowMap(ref shadowMap);
 
@@ -117,14 +118,16 @@ namespace RetroEngine
                 InitCloseShadowMap(ref shadowMapClose);
 
             graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-            graphics.GraphicsDevice.RasterizerState = RasterizerState.CullClockwise;
+            
 
             List<StaticMesh> renderList = level.GetMeshesToRender();
 
+
+            graphics.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
             RenderShadowMap(renderList);
 
+            graphics.GraphicsDevice.RasterizerState = RasterizerState.CullClockwise;
 
-           
             //DrawPathes(renderList);
 
             //RenderTransperentPath(renderList);
@@ -134,9 +137,9 @@ namespace RetroEngine
             RenderForwardPath(renderList);
 
             graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearClamp;
-            //PerformPostProcessing();
+            PerformPostProcessing();
 
-            return DeferredOutput;
+            return outputPath;
         }
 
         public void InitSampler()
@@ -156,11 +159,12 @@ namespace RetroEngine
 
         void RenderForwardPath(List<StaticMesh> renderList, bool onlyTransperent = false)
         {
+            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
+
             graphics.GraphicsDevice.SetRenderTargets(DeferredOutput,DepthOutput);
             graphics.GraphicsDevice.Clear(ClearOptions.DepthBuffer, Color.Black, 1.0f, 0);
             graphics.GraphicsDevice.Clear(Graphics.BackgroundColor);
 
-            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
 
             UnifiedEffect.Parameters["GlobalLightColor"]?.SetValue(Graphics.LightColor);
 
@@ -322,7 +326,7 @@ namespace RetroEngine
         void RenderShadowMap(List<StaticMesh> renderList)
         {
 
-            if (shadowPassRenderDelay.Wait()) return;
+            //if (shadowPassRenderDelay.Wait()) return;
 
             shadowPassRenderDelay.AddDelay(0.05f);
 
@@ -555,7 +559,7 @@ namespace RetroEngine
                 Graphics.shadowMapResolution,
                 Graphics.shadowMapResolution,
                 false, // No mipmaps
-                SurfaceFormat.Single, // Color format
+                SurfaceFormat.HalfSingle, // Color format
                 depthFormat); // Depth format
         }
 
@@ -592,7 +596,7 @@ namespace RetroEngine
                     graphics.PreferredBackBufferWidth,
                     graphics.PreferredBackBufferHeight,
                     false, // No mipmaps
-                    SurfaceFormat.Rgba64, // Color format
+                    SurfaceFormat.HalfVector4, // Color format
                     depthFormat); // Depth format
             }
         }

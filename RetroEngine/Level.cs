@@ -72,6 +72,7 @@ namespace RetroEngine
 
             UiElement.main.childs.Clear();
 
+
             Navigation.ClearNavData();
             NPCBase.ResetStaticData();
             

@@ -140,9 +140,13 @@ float3 ApplyNormalTexture(float3 sampledNormalColor, float3 worldNormal, float3 
     if (length(sampledNormalColor) < 0.001f)
         sampledNormalColor = float3(0.5, 0.5, 1);
     
+    sampledNormalColor *= float3(1, 1, 0.8f);
+    
+    sampledNormalColor = normalize(sampledNormalColor);
+    
     float3 normalMapSample = sampledNormalColor * 2.0 - 1.0;
     
-    
+    normalMapSample*=10;
     
     // Create the tangent space matrix as before
     float3 bitangent = cross(worldNormal, worldTangent);
@@ -174,7 +178,7 @@ PBRData CalculatePBR(float3 normal, float roughness, float metallic, float3 worl
 {
     PBRData output;
     
-    roughness = clamp(roughness, 0.05f, 1);
+    roughness = clamp(roughness, 0.001f, 1);
     
     float3 reflectDir = reflect(normalize(viewPos - worldPos), normal);
     
@@ -185,9 +189,12 @@ PBRData CalculatePBR(float3 normal, float roughness, float metallic, float3 worl
     
     //float specular = saturate(pow(max(dot(halfwayDir, normal), 0.0), 32));
 
-    float specular = pow(max(dot(normal, halfwayDir), 0.0), 1);
+    float specular = pow(max(dot(normal, halfwayDir), 0.0), 2) / 8;
     
-    output.reflectiveness = metallic * roughness;
+    float fresnelReflectance = metallic + (1.0 - metallic) * pow(1.0 - roughness, 5.0);
+    float reflectionAmount = fresnelReflectance * pow(roughness, 4.0);
+    
+    output.reflectiveness = reflectionAmount;
     
     output.specular = specular * GlobalLightColor;
     

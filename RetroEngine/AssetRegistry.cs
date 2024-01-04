@@ -27,7 +27,7 @@ namespace RetroEngine
 
         const string ROOT_PATH = "../../../../";
 
-        const int MaxTexturesInMemory = 10;
+        const int MaxTexturesInMemory = 1000;
 
         public static List<object> ConstantCache = new List<object>();
 

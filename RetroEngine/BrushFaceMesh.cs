@@ -134,7 +134,8 @@ namespace RetroEngine
                     IndexBuffer = indexBuffer,
                     StartIndex = 0,
                     NumVertices = numVertices,
-                    PrimitiveCount = primitiveCount
+                    PrimitiveCount = primitiveCount,
+                    Tag = new MeshPartData {textureName = scene.Materials[mesh.MaterialIndex].Name }
                 };
 
                 var modelMesh = new ModelMesh(graphicsDevice, new List<ModelMeshPart> { meshPart })
@@ -276,7 +277,7 @@ namespace RetroEngine
 
                 meshPart.Effect = defaultEffect;
 
-                models.Add(new BrushFaceMesh(new Model(graphicsDevice, new List<ModelBone>(), new List<ModelMesh> { modelMesh }), texture) { Transperent = transperent });
+                models.Add(new BrushFaceMesh(new Model(graphicsDevice, new List<ModelBone>(), new List<ModelMesh> { modelMesh }), texture, scene.Materials[mesh.MaterialIndex].Name) { Transperent = transperent });
             }
 
             return models;
@@ -311,7 +312,12 @@ namespace RetroEngine
                     models.Add(mesh.model);
                 }
 
-                merged.Add(new BrushFaceMesh (MergeModels(models), texture));
+                BrushFaceMesh brushFaceMesh = new BrushFaceMesh(MergeModels(models), texture);
+
+                brushFaceMesh.textureSearchPaths.Add("textures/brushes");
+                brushFaceMesh.textureSearchPaths.Add("textures/");
+
+                merged.Add(brushFaceMesh);
 
             }
 

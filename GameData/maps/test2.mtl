@@ -1,13 +1,14 @@
-newmtl __TB_empty
-
 newmtl brushes/__TB_empty
 map_Kd textures\brushes\__TB_empty.png
+
+newmtl brushes/brickPBR
+map_Kd textures\brushes\brickPBR.png
 
 newmtl brushes/bricks
 map_Kd textures\brushes\bricks.png
 
-newmtl brushes/grass
-map_Kd textures\brushes\grass.png
+newmtl brushes/ground_pbr
+map_Kd textures\brushes\ground_pbr.png
 
 newmtl brushes/trigger
 map_Kd textures\brushes\trigger.png

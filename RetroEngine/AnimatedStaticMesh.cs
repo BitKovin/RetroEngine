@@ -63,7 +63,7 @@ namespace RetroEngine
         public void AddFrame(string name)
         {
             if (_disposed) return;
-            frames.Add(GetModelFromPath(name));
+            frames.Add(GetModelFromPath(name,true));
         }
 
         public void Play(float time = 0)

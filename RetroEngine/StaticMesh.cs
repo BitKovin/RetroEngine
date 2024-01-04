@@ -456,7 +456,7 @@ namespace RetroEngine
                     output = AssetRegistry.LoadTextureFromFile(item + name, true);
                     if (output != null)
                     {
-                        textures.Add(name, output);
+                        textures.TryAdd(name, output);
                         return output;
                     }
                 }
@@ -588,7 +588,7 @@ namespace RetroEngine
         protected static Dictionary<string, Assimp.Scene> loadedScenes = new Dictionary<string, Assimp.Scene>();
         protected static Dictionary<string, Model> loadedModels = new Dictionary<string, Model>();
 
-        protected Model GetModelFromPath(string filePath,bool dynamicBuffer = false)
+        protected virtual Model GetModelFromPath(string filePath,bool dynamicBuffer = false)
         {
             GraphicsDevice graphicsDevice = GameMain.Instance.GraphicsDevice;
 
@@ -671,14 +671,9 @@ namespace RetroEngine
 
 
                 VertexBuffer vertexBuffer;
-                if (dynamicBuffer)
-                {
-                    vertexBuffer = new DynamicVertexBuffer(graphicsDevice, typeof(VertexData), vertices.Length, BufferUsage.None);
-                }
-                else
-                {
-                    vertexBuffer = new VertexBuffer(graphicsDevice, typeof(VertexData), vertices.Length, BufferUsage.None);
-                }
+
+                vertexBuffer = new VertexBuffer(graphicsDevice, typeof(VertexData), vertices.Length, BufferUsage.None);
+                
                 vertexBuffer.SetData(vertices);
                 var indexBuffer = new IndexBuffer(graphicsDevice, IndexElementSize.ThirtyTwoBits, indices.Length, BufferUsage.None);
                 indexBuffer.SetData(indices);
@@ -690,7 +685,7 @@ namespace RetroEngine
                 boundingSphere = CalculateBoundingSphere(vertices);
 
 
-                meshParts.Add(new ModelMeshPart { VertexBuffer = vertexBuffer, IndexBuffer = indexBuffer, StartIndex = 0, NumVertices = indices.Length, PrimitiveCount = primitiveCount, Tag= new MeshPartData {textureName = Path.GetFileName(scene.Materials[mesh.MaterialIndex].TextureDiffuse.FilePath), Points = points, Vertices = vertices} });
+                meshParts.Add(new ModelMeshPart { VertexBuffer = vertexBuffer, IndexBuffer = indexBuffer, StartIndex = 0, NumVertices = indices.Length, PrimitiveCount = primitiveCount, Tag= new MeshPartData {textureName = Path.GetFileName(scene.Materials[mesh.MaterialIndex].TextureDiffuse.FilePath), Points = points, Vertices = dynamicBuffer? vertices : null} });
             }
 
 

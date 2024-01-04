@@ -43,7 +43,7 @@ namespace RetroEngine
             ImGui.Begin("lighting");
 
 
-            ImGui.SliderFloat("shadow bias", ref Graphics.ShadowBias, 0.002f, 0.01f);
+            ImGui.SliderFloat("shadow bias", ref Graphics.ShadowBias, -0.005f, 0.005f);
 
             ImGui.SliderFloat("light direction X", ref Graphics.LightDirection.X, -1, 1);
             ImGui.SliderFloat("light direction Y", ref Graphics.LightDirection.Y, -1, 1);
