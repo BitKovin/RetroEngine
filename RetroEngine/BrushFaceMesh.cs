@@ -542,5 +542,15 @@ namespace RetroEngine
             return new Model(graphicsDevice, new List<ModelBone>(), modelMesh);
 
         }
+
+        public override void PreloadTextures()
+        {
+
+            textureSearchPaths.Add("textures/");
+            textureSearchPaths.Add("textures/brushes/");
+
+            base.PreloadTextures();
+        }
+
     }
 }

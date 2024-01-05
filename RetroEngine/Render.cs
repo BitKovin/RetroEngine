@@ -84,7 +84,7 @@ namespace RetroEngine
 
             DeferredEffect = GameMain.content.Load<Effect>("DeferredShading");
 
-            InitSampler();
+            //InitSampler();
         }
 
         public RenderTarget2D StartRenderLevel(Level level)
@@ -97,7 +97,7 @@ namespace RetroEngine
             InitRenderTargetIfNeed(ref DepthOutput);
 
 
-            InitVectorRenderTargetIfNeed(ref DeferredOutput);
+            InitRenderTargetVectorIfNeed(ref DeferredOutput);
 
 
             InitRenderTargetIfNeed(ref outputPath);
@@ -125,10 +125,10 @@ namespace RetroEngine
 
             RenderForwardPath(renderList);
 
-            graphics.GraphicsDevice.SamplerStates[0] = SamplerState.AnisotropicClamp;
-            PerformPostProcessing();
+            //graphics.GraphicsDevice.SamplerStates[0] = SamplerState.AnisotropicClamp;
+            //PerformPostProcessing();
 
-            return outputPath;
+            return DeferredOutput;
         }
 
         public void InitSampler()
@@ -143,11 +143,28 @@ namespace RetroEngine
 
             samplerState.MipMapLevelOfDetailBias = -2;
 
-            graphics.GraphicsDevice.SamplerStates[0] = samplerState;
+
+            int i = 0;
+            while (true)
+            {
+                try
+                {
+                    graphics.GraphicsDevice.SamplerStates[i] = samplerState;
+                    i++;
+
+                    if (i > 15) break;
+
+                }catch(Exception e) { break; }
+            }
+                
+
         }
 
         void RenderForwardPath(List<StaticMesh> renderList, bool onlyTransperent = false)
         {
+
+            InitSampler();
+
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
 
             graphics.GraphicsDevice.SetRenderTargets(DeferredOutput,DepthOutput);
@@ -160,7 +177,6 @@ namespace RetroEngine
 
             particlesToDraw.Clear();
 
-            InitSampler();
 
             foreach (StaticMesh mesh in renderList)
             {
@@ -585,7 +601,7 @@ namespace RetroEngine
                     graphics.PreferredBackBufferWidth,
                     graphics.PreferredBackBufferHeight,
                     false, // No mipmaps
-                    SurfaceFormat.ColorSRgb, // Color format
+                    SurfaceFormat.Rgba64, // Color format
                     depthFormat); // Depth format
             }
         }

@@ -88,6 +88,8 @@ namespace RetroEngine
             GameMain.Instance.OnLevelChanged();
             ChangingLevel = false;
 
+            AssetRegistry.WaitForAssetsToLoad();
+
             AssetRegistry.AllowGeneratingMipMaps = false;
 
         }
@@ -197,16 +199,20 @@ namespace RetroEngine
 
         }
 
-        public void LoadAssets()
+        public bool LoadAssets()
         {
+
+            bool loaded = false;
 
             List<Entity> list = new List<Entity>(entities);
 
             foreach (Entity ent in list)
             {
                 if(ent is not null)
-                ent.LoadAssetsIfNeeded();
+                if(ent.LoadAssetsIfNeeded())
+                        loaded = true;
             }
+            return loaded;
         }
 
         public virtual List<StaticMesh> GetMeshesToRender()

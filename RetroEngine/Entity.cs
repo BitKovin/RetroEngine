@@ -114,17 +114,18 @@ namespace RetroEngine
             GC.SuppressFinalize(this);
         }
 
-        public void LoadAssetsIfNeeded()
+        public bool LoadAssetsIfNeeded()
         {
-            if(loadedAssets) return;
+            if(loadedAssets) return false;
 
             if (GameMain.CanLoadAssetsOnThisThread() == false)
-                return;
+                return false;
 
             LoadAssets();
 
             loadedAssets = true;
 
+            return true;
         }
 
         protected virtual void LoadAssets()

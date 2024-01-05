@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework.Content.Pipeline.Processors;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
+using System.Threading;
 
 namespace RetroEngine
 {
@@ -32,6 +33,8 @@ namespace RetroEngine
         public static List<object> ConstantCache = new List<object>();
 
         public static bool AllowGeneratingMipMaps = false;
+
+        static bool loadingAssets = false;
 
         public static Texture2D LoadTextureFromFile(string path, bool ignoreErrors = false, bool generateMipMaps = true)
         {
@@ -180,16 +183,46 @@ namespace RetroEngine
             Task.Run(() => { AsyncAssetLoaderLoop(); });
         }
 
+        public static void WaitForAssetsToLoad()
+        {
+            while (loadingAssets)
+            {
+                Thread.Sleep(1);
+            }
+        }
+
         static void AsyncAssetLoaderLoop()
         {
+
+            
+            int ticksWithoutLoading = 0;
             while (true)
             {
+                bool loading = false;
+
                 try
                 {
                     if (Level.ChangingLevel == false)
-                        GameMain.Instance.curentLevel.LoadAssets();
+                        if(GameMain.Instance.curentLevel.LoadAssets())
+                        {
+                            loading = true;
+                        }
                 }catch (Exception e) {}
+
+                if(loading)
+                {
+                    ticksWithoutLoading=0;
+                }else
+                {
+                    ticksWithoutLoading++;
+                }
+
+                if (ticksWithoutLoading > 10)
+                    loadingAssets = false;
+                else
+                    loadingAssets = true;
             }
+
         }
 
     }

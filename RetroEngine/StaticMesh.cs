@@ -139,6 +139,9 @@ namespace RetroEngine
 
         protected void LoadCurrentTextures()
         {
+
+            if (model == null) return;
+
             foreach (ModelMesh mesh in model.Meshes)
             {
                 foreach (ModelMeshPart meshPart in mesh.MeshParts)

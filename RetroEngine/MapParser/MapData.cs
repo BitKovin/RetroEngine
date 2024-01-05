@@ -53,7 +53,7 @@ namespace RetroEngine.Map
                         foreach (var face in BrushFaceMesh.GetMergedFacesFromPath(Path.Replace(".map", ".obj"), "entity" + ent.name + "_" + "brush" + brush.Name))
                         {
                             faces.Add(face);
-
+                            face.PreloadTextures();
                         }
 
                     }
