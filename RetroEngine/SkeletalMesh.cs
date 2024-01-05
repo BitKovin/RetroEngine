@@ -81,6 +81,7 @@ namespace RetroEngine
                         var tangent = mesh.Tangents[face.Indices[i]];
                         var textureCoord = mesh.HasTextureCoords(0) ? mesh.TextureCoordinateChannels[0][face.Indices[i]] : new Assimp.Vector3D(0, 0, 0);
 
+
                         // Negate the x-coordinate to correct mirroring
                         vertices[vertexIndex] = new VertexData(
                             new Vector3(-vertex.X, vertex.Y, vertex.Z), // Negate x-coordinate

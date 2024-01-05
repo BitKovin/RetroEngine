@@ -84,7 +84,7 @@ namespace RetroEngine
 
             DeferredEffect = GameMain.content.Load<Effect>("DeferredShading");
 
-            //InitSampler();
+            InitSampler();
         }
 
         public RenderTarget2D StartRenderLevel(Level level)
@@ -93,9 +93,7 @@ namespace RetroEngine
 
             CreateBlackTexture();
 
-
             InitRenderTargetIfNeed(ref DepthOutput);
-
 
             InitRenderTargetVectorIfNeed(ref DeferredOutput);
 
@@ -162,7 +160,7 @@ namespace RetroEngine
         void RenderForwardPath(List<StaticMesh> renderList, bool onlyTransperent = false)
         {
 
-            InitSampler();
+            //InitSampler();
 
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
 
@@ -186,6 +184,8 @@ namespace RetroEngine
             }
 
             ParticleEmitter.LoadRenderEmitter();
+
+            graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
             ParticleEmitter.RenderEmitter.DrawParticles(particlesToDraw);
 
             

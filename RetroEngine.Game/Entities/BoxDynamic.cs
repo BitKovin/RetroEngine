@@ -41,7 +41,7 @@ namespace RetroEngine.Game.Entities
         public override void Start()
         {
             base.Start();
-
+            return;
 
             body = Physics.CreateBox(this, scale.ToNumerics());
             body.SetPosition(Position.ToNumerics());

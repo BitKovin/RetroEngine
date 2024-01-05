@@ -25,9 +25,9 @@ namespace RetroEngine
         public static float CloseLightDistance = 50;
 
         public static bool EnablePostPocessing = true;
-        public static bool TextureFiltration = false;
+        public static bool TextureFiltration = true;
         public static bool AnisotropicFiltration = true;
-        public static bool EnableAntiAliasing = false;
+        public static bool EnableAntiAliasing = true;
 
         public static Vector3 lightlocation = new Vector3();
 

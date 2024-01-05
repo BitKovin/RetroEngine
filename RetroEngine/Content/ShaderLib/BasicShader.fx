@@ -56,6 +56,10 @@ float3 LightPositions[MAX_POINT_LIGHTS];
 float3 LightColors[MAX_POINT_LIGHTS];
 float LightRadiuses[MAX_POINT_LIGHTS];
 
+#define BONE_NUM 256
+
+matrix BoneTransforms[BONE_NUM];
+
 bool isParticle = false;
 
 float depthScale = 1.0f;
@@ -66,6 +70,11 @@ struct VertexInput
     float3 Normal : NORMAL0; // Add normal input
     float2 TexCoord : TEXCOORD0;
     float3 Tangent : TANGENT0;
+    
+    float2 Bone1 : POSITION1;
+    float2 Bone2 : POSITION2;
+    float2 Bone3 : POSITION3;
+    float2 Bone4 : POSITION4;
 };
 
 struct PixelInput
@@ -99,13 +108,26 @@ float3 normalize(float3 v)
     return rsqrt(dot(v, v)) * v;
 }
 
+float4 ApplyBoneTransformations(VertexInput input)
+{
+    float4 position = input.Position;
+    
+    position = lerp(position, mul(position, BoneTransforms[input.Bone1.x]), input.Bone1.y);
+    position = lerp(position, mul(position, BoneTransforms[input.Bone2.x]), input.Bone2.y);
+    position = lerp(position, mul(position, BoneTransforms[input.Bone3.x]), input.Bone3.y);
+    position = lerp(position, mul(position, BoneTransforms[input.Bone4.x]), input.Bone4.y);
+    
+    return position;
+}
 
 PixelInput DefaultVertexShaderFunction(VertexInput input)
 {
     PixelInput output;
 
-    output.Position = mul(input.Position, World);
-    output.MyPosition = mul(input.Position, World).xyz;
+    float4 vertexPos = ApplyBoneTransformations(input);
+    
+    output.Position = mul(vertexPos, World);
+    output.MyPosition = mul(vertexPos, World).xyz;
     output.Position = mul(output.Position, View);
     output.Position = mul(output.Position, Projection);
     

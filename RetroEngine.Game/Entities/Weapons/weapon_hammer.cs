@@ -134,9 +134,7 @@ namespace RetroEngine.Game.Entities.Weapons
         void CreateHitParticle(Vector3 pos)
         {
 
-            ParticleSystem system = new ParticleSystem();
-            Level.GetCurrent().AddEntity(system);
-            system.emitters.Add(new particle_hitSmoke());
+            ParticleSystem system = ParticleSystem.Create("hitSmoke");
             system.Position = pos;
             system.Start();
 
@@ -163,7 +161,7 @@ namespace RetroEngine.Game.Entities.Weapons
             mesh.isLoaded = true;
             mesh.AddFrameVertexData();
 
-            new particle_hitSmoke().LoadAssets();
+            //new particle_hitSmoke().LoadAssets();
 
             meshes.Add(mesh);
         }
