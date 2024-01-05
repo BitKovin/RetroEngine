@@ -116,7 +116,6 @@ namespace RetroEngine
             List<StaticMesh> renderList = level.GetMeshesToRender();
 
 
-            graphics.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
 
             RenderShadowMap(renderList);
 
