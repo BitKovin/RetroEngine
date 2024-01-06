@@ -56,7 +56,7 @@ float3 LightPositions[MAX_POINT_LIGHTS];
 float3 LightColors[MAX_POINT_LIGHTS];
 float LightRadiuses[MAX_POINT_LIGHTS];
 
-#define BONE_NUM 256
+#define BONE_NUM 128
 
 matrix BoneTransforms[BONE_NUM];
 
@@ -66,7 +66,7 @@ float depthScale = 1.0f;
 
 struct VertexInput
 {
-    float4 Position : SV_POSITION;
+    float4 Position : SV_POSITION0;
     float3 Normal : NORMAL0; // Add normal input
     float2 TexCoord : TEXCOORD0;
     float3 Tangent : TANGENT0;
@@ -326,6 +326,9 @@ float3 CalculateLight(PixelInput input, float3 normal)
     else
         shadow += GetShadow(lightCoords, input, false);
     
+    
+    if(isParticle)
+        normal = -LightDirection;
     
     float3 light = max(0.0, dot(normal, normalize(-LightDirection))) * DirectBrightness * GlobalLightColor; // Example light direction;
 

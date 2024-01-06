@@ -174,6 +174,8 @@ namespace RetroEngine.Particles
                 frameStaticMeshData.Transparency = particle.transparency;
                 frameStaticMeshData.Transperent = true;
 
+                isParticle = particle.customModelPath == null;
+
                 base.DrawUnified();
             }
         }
