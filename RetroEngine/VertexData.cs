@@ -20,10 +20,10 @@ namespace RetroEngine
 
         public Vector3 Tangent;
 
-        public Vector2 bone1 = new Vector2();
-        public Vector2 bone2 = new Vector2();
-        public Vector2 bone3 = new Vector2();
-        public Vector2 bone4 = new Vector2();
+        public Vector2 bone1 = new Vector2(0);
+        public Vector2 bone2 = new Vector2(0);
+        public Vector2 bone3 = new Vector2(0);
+        public Vector2 bone4 = new Vector2(0);
 
         public static readonly VertexDeclaration VertexDeclaration;
 
@@ -93,10 +93,10 @@ namespace RetroEngine
                 new VertexElement(12, VertexElementFormat.Vector3, VertexElementUsage.Normal, 0), 
                 new VertexElement(24, VertexElementFormat.Vector2, VertexElementUsage.TextureCoordinate, 0), 
                 new VertexElement(32, VertexElementFormat.Vector3, VertexElementUsage.Tangent, 0), 
-                new VertexElement(44, VertexElementFormat.Vector2, VertexElementUsage.Position, 1), 
-                new VertexElement(52, VertexElementFormat.Vector2, VertexElementUsage.Position, 2), 
-                new VertexElement(60, VertexElementFormat.Vector2, VertexElementUsage.Position, 3), 
-                new VertexElement(68, VertexElementFormat.Vector2, VertexElementUsage.Position, 4));
+                new VertexElement(44, VertexElementFormat.Vector2, VertexElementUsage.BlendWeight, 0), 
+                new VertexElement(52, VertexElementFormat.Vector2, VertexElementUsage.BlendWeight, 1), 
+                new VertexElement(60, VertexElementFormat.Vector2, VertexElementUsage.BlendWeight, 2), 
+                new VertexElement(68, VertexElementFormat.Vector2, VertexElementUsage.BlendWeight, 3));
         }
     }
 }

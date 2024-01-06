@@ -7,11 +7,16 @@ using System.Text;
 using System.Threading.Tasks;
 using RetroEngine;
 using System.IO;
+using Assimp;
 
 namespace RetroEngine
 {
     public class SkeletalMesh : StaticMesh
     {
+
+        Dictionary<string, int> boneNamesToId = new Dictionary<string, int>();
+
+        SkeletalBone rootBone = null;
 
         protected override Model GetModelFromPath(string filePath, bool dynamicBuffer = false)
         {
@@ -19,11 +24,6 @@ namespace RetroEngine
 
             filePath = AssetRegistry.FindPathForFile(filePath);
 
-            if (loadedModels.ContainsKey(filePath))
-            {
-                Console.WriteLine("model is loaded");
-                return loadedModels[filePath];
-            }
 
             Assimp.Scene scene;
             Assimp.AssimpContext importer = new Assimp.AssimpContext();
@@ -81,6 +81,22 @@ namespace RetroEngine
                         var tangent = mesh.Tangents[face.Indices[i]];
                         var textureCoord = mesh.HasTextureCoords(0) ? mesh.TextureCoordinateChannels[0][face.Indices[i]] : new Assimp.Vector3D(0, 0, 0);
 
+                        List<VertexWeight> weights = new List<VertexWeight>();
+                        List<Bone> bones = new List<Bone>();
+
+                        foreach(var bone in mesh.Bones)
+                        {
+                            boneNamesToId.TryAdd(bone.Name, boneNamesToId.Count);
+
+                            foreach (VertexWeight weight in bone.VertexWeights)
+                            {
+                                if (weight.VertexID == vertexIndex)
+                                {
+                                    weights.Add(weight);
+                                    bones.Add(bone);
+                                }
+                            }
+                        }
 
                         // Negate the x-coordinate to correct mirroring
                         vertices[vertexIndex] = new VertexData(
@@ -89,6 +105,32 @@ namespace RetroEngine
                             new Vector2(textureCoord.X, textureCoord.Y),
                             new Vector3(-tangent.X, tangent.Y, tangent.Z)
                         );
+
+                        for (int b = 0; b < bones.Count; b++)
+                        {
+                            int boneId = boneNamesToId[bones[b].Name];
+                            float weight = weights[b].Weight;
+
+                            if(weight > 0.9999f)
+                            {
+                                weight = 0.9999f;
+                            }
+
+                            switch (b)
+                            {
+
+                                case 0:
+                                    vertices[vertexIndex].bone1 = new Vector2(boneId, weight); break;
+                                case 1:
+                                    vertices[vertexIndex].bone2 = new Vector2(boneId, weight); break;
+                                case 2:
+                                    vertices[vertexIndex].bone3 = new Vector2(boneId, weight); break;
+                                case 3:
+                                    vertices[vertexIndex].bone4 = new Vector2(boneId, weight); break;
+                            }
+
+
+                        }
 
                         indices[vertexIndex] = vertexIndex;
                         vertexIndex++;
@@ -124,9 +166,69 @@ namespace RetroEngine
 
             Model model = new Model(graphicsDevice, new List<ModelBone>(), modelMesh);
 
-            loadedModels.TryAdd(filePath, model);
+            ConstructSkeletonTree(scene);
 
             return model;
+        }
+
+        void ConstructSkeletonTree(Scene scene)
+        {
+            rootBone = ProcessBoneNode(scene.RootNode);
+        }
+
+        SkeletalBone ProcessBoneNode(Node node)
+        {
+            SkeletalBone bone = new SkeletalBone();
+            bone.name = node.Name;
+            bone.relativeTransform = FromAssimpMatrix(node.Transform);
+
+            if(boneNamesToId.ContainsKey(node.Name))
+            {
+                bone.id = boneNamesToId[node.Name];
+                bone.name = node.Name;
+            }
+
+            foreach (var child in node.Children)
+            {
+                 bone.child.Add(ProcessBoneNode(child));
+            }
+            return bone;
+        }
+
+        class SkeletalBone
+        {
+            public int id = -1;
+            public string name;
+            public List<SkeletalBone> child = new List<SkeletalBone>();
+            public Matrix relativeTransform;
+
+        }
+
+        Matrix FromAssimpMatrix(Matrix4x4 matrix)
+        {
+            Matrix output = Matrix.Identity;
+
+            output.M11 = matrix.A1;
+            output.M12 = matrix.A2;
+            output.M13 = matrix.A3;
+            output.M14 = matrix.A4;
+
+            output.M21 = matrix.B1;
+            output.M22 = matrix.B2;
+            output.M23 = matrix.B3;
+            output.M24 = matrix.B4;
+
+            output.M31 = matrix.C1;
+            output.M32 = matrix.C2;
+            output.M33 = matrix.C3;
+            output.M34 = matrix.C4;
+
+            output.M41 = matrix.D1;
+            output.M42 = matrix.D2;
+            output.M43 = matrix.D3;
+            output.M44 = matrix.D4;
+
+            return output;
         }
 
     }

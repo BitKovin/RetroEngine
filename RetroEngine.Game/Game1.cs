@@ -42,7 +42,7 @@ namespace RetroEngine.Game
 
             //Level.GetCurrent().AddEntity(new Sky());
 
-            for (int i = 1; i <= 1000; i++)
+            for (int i = 1; i <= 0; i++)
             {
                 Entity npc = new BoxDynamic();
                 npc.Position = new Vector3(0, i*0.002f + 2, 0);

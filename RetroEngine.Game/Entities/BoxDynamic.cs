@@ -26,21 +26,31 @@ namespace RetroEngine.Game.Entities
 
         public BoxDynamic() : base()
         {
-            meshes.Add(mesh);
+            
 
             mesh.LoadFromFile("models/cube.obj");
+
+            
+
+            SkeletalMesh skeletalMesh = new SkeletalMesh();
+            skeletalMesh.LoadFromFile("models/skeletal_test.fbx");
+
+            mesh = skeletalMesh;
 
             mesh.texture = AssetRegistry.LoadTextureFromFile("textures/foil.png");
             mesh.normalTexture = AssetRegistry.LoadTextureFromFile("textures/foil_n.png");
             mesh.ormTexture = AssetRegistry.LoadTextureFromFile("textures/foil_orm.png");
             //mesh.Transperent = true;
-            mesh.Transparency = 1f;
+            //mesh.Transparency = 1f;
+
+            meshes.Add(mesh);
         }
 
 
         public override void Start()
         {
             base.Start();
+
             return;
 
             body = Physics.CreateBox(this, scale.ToNumerics());
