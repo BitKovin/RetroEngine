@@ -21,12 +21,15 @@ namespace RetroEngine.Entities
 
         public Box():base()
         {
-            Model model = GameMain.content.Load<Model>("box");
-            meshes.Add(mesh);
 
-            mesh.model = model;
+            mesh.LoadFromFile("models/cube.obj");
+
 
             mesh.texture = AssetRegistry.LoadTextureFromFile("cat.png");
+
+            mesh.Viewmodel = true;
+
+            meshes.Add(mesh);
 
         }
 
@@ -35,13 +38,6 @@ namespace RetroEngine.Entities
         {
             base.Start();
 
-            body = Physics.CreateFromShape(this,Vector3.One.ToPhysics(), Physics.CreateCollisionShapeFromModel(mesh.model), collisionFlags: CollisionFlags.StaticObject);
-
-            body.SetMassProps(0, new Vector3(0,0,0).ToNumerics());
-
-            body.SetPosition(Position.ToNumerics());
-
-            bodies.Add(body);
         }
 
         public override void Update()

@@ -19,6 +19,8 @@ namespace RetroEngine.Game.Entities
     {
         StaticMesh mesh = new StaticMesh();
 
+        SkeletalMesh skeletalMesh = new SkeletalMesh();
+
         public Vector3 scale = new Vector3(1);
 
 
@@ -32,7 +34,7 @@ namespace RetroEngine.Game.Entities
 
             
 
-            SkeletalMesh skeletalMesh = new SkeletalMesh();
+            
             skeletalMesh.LoadFromFile("models/skeletal_test.fbx");
 
             mesh = skeletalMesh;
@@ -62,6 +64,8 @@ namespace RetroEngine.Game.Entities
 
         }
 
+        Delay delay = new Delay();
+
         public override void Update()
         {
             base.Update();
@@ -71,6 +75,29 @@ namespace RetroEngine.Game.Entities
             mesh.Position = Position;
             mesh.Rotation = Rotation;
 
+            if (delay.Wait()) return;
+
+            delay.AddDelay(1);
+
+            //DrawBone(skeletalMesh.rootBone);
+
         }
+
+        void DrawBone(SkeletalMesh.SkeletalBone skeletalBone)
+        {
+            foreach (var bone in skeletalBone.child)
+            {
+                Vector3 pos = bone.meshTransform.Translation;
+
+                Box box = new Box();
+                box.Position = pos;
+                Level.GetCurrent().AddEntity(box);
+                box.Start();
+
+                DrawBone(bone);
+
+            }
+        }
+
     }
 }

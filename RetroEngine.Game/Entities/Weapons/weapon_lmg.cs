@@ -137,7 +137,7 @@ namespace RetroEngine.Game.Entities.Weapons
             mesh.Scale = new Vector3(1f);
 
 
-            for (int i = 1; i <= 30; i += 2)
+            for (int i = 1; i <= 30; i += 1)
             {
                 mesh.AddFrame($"Animations/LMG/Fire/frame_{i}.obj");
             }

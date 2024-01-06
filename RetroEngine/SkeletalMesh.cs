@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using RetroEngine;
 using System.IO;
 using Assimp;
+using BulletSharp;
 
 namespace RetroEngine
 {
@@ -16,8 +17,12 @@ namespace RetroEngine
 
         Dictionary<string, int> boneNamesToId = new Dictionary<string, int>();
 
-        SkeletalBone rootBone = null;
+        public SkeletalBone rootBone = null;
 
+        List<SkeletalBone> bones = new List<SkeletalBone>();
+
+
+        //loads model. Has a lot of junk code
         protected override Model GetModelFromPath(string filePath, bool dynamicBuffer = false)
         {
             GraphicsDevice graphicsDevice = GameMain.Instance.GraphicsDevice;
@@ -111,11 +116,6 @@ namespace RetroEngine
                             int boneId = boneNamesToId[bones[b].Name];
                             float weight = weights[b].Weight;
 
-                            if(weight > 0.9999f)
-                            {
-                                weight = 0.9999f;
-                            }
-
                             switch (b)
                             {
 
@@ -174,15 +174,17 @@ namespace RetroEngine
         void ConstructSkeletonTree(Scene scene)
         {
             rootBone = ProcessBoneNode(scene.RootNode);
+            rootBone.UpdateRefMatrix(new BoneTransform());
         }
 
         SkeletalBone ProcessBoneNode(Node node)
         {
             SkeletalBone bone = new SkeletalBone();
             bone.name = node.Name;
-            bone.relativeTransform = FromAssimpMatrix(node.Transform);
+            bone.relativeTransform = BoneTransformFromAssimpMatrix(node.Transform);
+            
 
-            if(boneNamesToId.ContainsKey(node.Name))
+            if (boneNamesToId.ContainsKey(node.Name))
             {
                 bone.id = boneNamesToId[node.Name];
                 bone.name = node.Name;
@@ -190,23 +192,114 @@ namespace RetroEngine
 
             foreach (var child in node.Children)
             {
-                 bone.child.Add(ProcessBoneNode(child));
+
+                SkeletalBone childBone = ProcessBoneNode(child);
+                bone.child.Add(childBone);
+                bones.Add(childBone);
             }
             return bone;
         }
 
-        class SkeletalBone
+        public struct BoneTransform
+        {
+            public Vector3 position = new Vector3();
+            public Microsoft.Xna.Framework.Quaternion rotation = new Microsoft.Xna.Framework.Quaternion();
+            public Vector3 scale = new Vector3(1f);
+
+            public BoneTransform()
+            {
+            }
+
+            public static BoneTransform operator +(BoneTransform v1, BoneTransform v2) // should add process v2 transforms as it's v1's child bone
+            {
+                BoneTransform result = new BoneTransform();
+
+                result.rotation = v1.rotation * v2.rotation;
+                result.scale = v1.scale * v2.scale;
+                result.position = v1.position + Vector3.Transform(v2.position * result.scale, Matrix.CreateFromQuaternion(result.rotation));
+                
+
+                return result;
+            }
+        }
+
+        public class SkeletalBone
         {
             public int id = -1;
             public string name;
             public List<SkeletalBone> child = new List<SkeletalBone>();
-            public Matrix relativeTransform;
+
+            public BoneTransform relativeTransform; //relative bone tranform
+
+            public Matrix referenceMatrix; //mesh space matrix of reference pose
+
+            public Matrix meshTransform; //mesh space matrix of bone. Should be applied to vertices
+
+
+            public void UpdateTransforms(BoneTransform parrent)
+            {
+
+                BoneTransform resultTransform;
+
+                resultTransform = parrent + relativeTransform;
+
+                foreach(var bone in child)
+                {
+                    bone.UpdateTransforms(resultTransform);
+                }
+                
+                meshTransform = Matrix.CreateScale(resultTransform.scale) *
+                            Matrix.CreateFromQuaternion(resultTransform.rotation)*
+                            Matrix.CreateTranslation(resultTransform.position);
+
+            }
+
+            //should create reference matrix, but reference matrix isn't used yet. Copy of UpdateTransforms 
+            public void UpdateRefMatrix(BoneTransform parrent)
+            {
+
+                BoneTransform resultTransform = relativeTransform + parrent;
+
+                foreach (var bone in child)
+                {
+                    bone.UpdateRefMatrix(resultTransform);
+                }
+
+                referenceMatrix = Matrix.CreateScale(resultTransform.scale) *
+                            Matrix.CreateFromQuaternion(resultTransform.rotation) *
+                            Matrix.CreateTranslation(resultTransform.position);
+
+            }
+            public override string ToString()
+            {
+                return name;
+            }
 
         }
 
+        
+        BoneTransform BoneTransformFromAssimpMatrix(Matrix4x4 matrix)
+        {
+            BoneTransform boneTransform = new BoneTransform();
+
+            Vector3D scaling = new Vector3D();
+            Vector3D position = new Vector3D();
+            Assimp.Quaternion rotation = new Assimp.Quaternion();
+
+            matrix.Decompose(out scaling, out rotation, out position);
+
+            boneTransform.position = new Vector3(position.X, position.Y, position.Z);
+            boneTransform.scale = new Vector3(scaling.X, scaling.Y, scaling.Z);
+            boneTransform.rotation = new Microsoft.Xna.Framework.Quaternion(rotation.X, rotation.Y, rotation.Z, rotation.W);
+
+            return boneTransform;
+        }
+
+        //translating from assimp to XNA
         Matrix FromAssimpMatrix(Matrix4x4 matrix)
         {
             Matrix output = Matrix.Identity;
+
 
             output.M11 = matrix.A1;
             output.M12 = matrix.A2;
@@ -229,6 +322,28 @@ namespace RetroEngine
             output.M44 = matrix.D4;
 
             return output;
+        }
+
+        //forward rendering
+        public override void DrawUnified()
+        {
+
+            rootBone.UpdateTransforms(new BoneTransform());
+
+            Effect effect = GameMain.Instance.render.UnifiedEffect;
+
+            Matrix[] boneTransforms = new Matrix[128];
+
+            foreach(SkeletalBone bone in bones) 
+            {
+                if (bone.id < 0) continue;
+
+                boneTransforms[bone.id] = bone.meshTransform;
+            }
+
+            effect.Parameters["BoneTransforms"].SetValue(boneTransforms);
+
+            base.DrawUnified();
         }
 
     }
