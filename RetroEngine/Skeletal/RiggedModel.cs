@@ -161,6 +161,11 @@ namespace RetroEngine.Skeletal
             UpdateMeshTransforms();
         }
 
+        public void UpdatePose()
+        {
+            IterateUpdate(rootNodeOfTree);
+        }
+
         /// <summary>
         /// Gets the animation frame corresponding to the elapsed time for all the nodes and loads them into the model node transforms.
         /// </summary>

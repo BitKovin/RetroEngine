@@ -785,6 +785,7 @@ namespace RetroEngine.Skeletal
                         nodeAnim.scaleTime.Add(keyList.Time / assimpAnim.TicksPerSecond);
                         nodeAnim.scale.Add(oas);
                     }
+
                     // Place this populated node into this model animation,  model.origAnim
                     modelAnim.animatedNodes.Add(nodeAnim);
                 }

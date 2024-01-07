@@ -5,6 +5,7 @@ using System;
 using System.Xml.Linq;
 using System.Collections.Generic;
 using Assimp;
+using BulletSharp.SoftBody;
 
 namespace RetroEngine
 {
@@ -55,9 +56,11 @@ namespace RetroEngine
 
             Dictionary<string, Matrix> boneNamesToTransforms = new Dictionary<string, Matrix>();
 
+            RiggedModel.UpdatePose();
+
             foreach(var bone in RiggedModel.flatListToAllNodes)
             {
-                boneNamesToTransforms.TryAdd(bone.name, bone.OffsetMatrixMg * bone.CombinedTransformMg);
+                boneNamesToTransforms.TryAdd(bone.name, bone.CombinedTransformMg);
             }
 
             return boneNamesToTransforms;
@@ -67,12 +70,20 @@ namespace RetroEngine
         {
             if (RiggedModel == null) return;
 
-            foreach (var bone in RiggedModel.flatListToBoneNodes)
+            GetBoneMatrix("");
+
+            foreach(string key in pose.Keys)
             {
-                if(pose.ContainsKey(bone.name))
+                if (namesToBones.ContainsKey(key) == false) continue;
+
+                var node = namesToBones[key];
+
+                if(node.isThisARealBone)
                 {
-                    RiggedModel.globalShaderMatrixs[bone.boneShaderFinalTransformIndex] = pose[bone.name];
+                    RiggedModel.globalShaderMatrixs[node.boneShaderFinalTransformIndex] = node.OffsetMatrixMg *  pose[key];
                 }
+
+
             }
 
         }
@@ -98,7 +109,7 @@ namespace RetroEngine
         {
             if (RiggedModel == null) return Matrix.Identity;
 
-            foreach (var bone in RiggedModel.flatListToBoneNodes)
+            foreach (var bone in RiggedModel.flatListToAllNodes)
             {
                 if (bone.boneShaderFinalTransformIndex == id)
                     return bone.CombinedTransformMg * GetWorldMatrix();
@@ -117,13 +128,13 @@ namespace RetroEngine
             if(namesToBones.ContainsKey(name))
                 return namesToBones[name].CombinedTransformMg* GetWorldMatrix();
 
-            foreach (var bone in RiggedModel.flatListToBoneNodes)
+            foreach (var bone in RiggedModel.flatListToAllNodes)
             {
+                namesToBones.TryAdd(bone.name, bone);
+
+
                 if (bone.name == name)
                 {
-
-                    namesToBones.TryAdd(bone.name, bone);
-
                     return bone.CombinedTransformMg * GetWorldMatrix();
                 }
             }

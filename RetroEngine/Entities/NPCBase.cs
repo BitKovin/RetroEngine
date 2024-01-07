@@ -54,14 +54,14 @@ namespace RetroEngine.Entities
         {
             base.LoadAssets();
 
-            mesh.LoadFromFile("models/skeletal_test.fbx");
+            mesh.LoadFromFile("models/skeletal_test2.fbx");
 
             mesh.texture = AssetRegistry.LoadTextureFromFile("textures/brushes/__TB_empty.png");
 
             sm.LoadFromFile("models/cube.obj");
             sm.texture = AssetRegistry.LoadTextureFromFile("cat.png");
 
-            mesh2.LoadFromFile("models/skeletal_test2.fbx");
+            mesh2.LoadFromFile("models/skeletal_test.fbx");
 
             mesh2.texture = AssetRegistry.LoadTextureFromFile("cat.png");
 
