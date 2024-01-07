@@ -67,7 +67,7 @@ namespace RetroEngine.Entities
 
             sm.Transperent = false;
 
-            sm.Scale =new Vector3(0.1f);
+            sm.Scale =new Vector3(0.2f);
 
             headBoneId = mesh.GetBoneId("hand_r");
 
@@ -80,8 +80,9 @@ namespace RetroEngine.Entities
             if(loadedAssets)
                 mesh.Update(Time.deltaTime);
 
-            sm.Position = mesh.GetBoneMatrix(headBoneId).Translation;
-            Console.WriteLine(sm.Position);
+            sm.Position = mesh.GetBoneMatrix(headBoneId).DecomposeMatrix().Position;
+            sm.Rotation = mesh.GetBoneMatrix(headBoneId).DecomposeMatrix().Rotation;
+            Console.WriteLine(sm.Rotation);
 
             if(currentUpdateNPCs.Contains(this))
                 UpdateMovementDirection();
