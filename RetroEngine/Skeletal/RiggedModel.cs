@@ -76,7 +76,7 @@ namespace RetroEngine.Skeletal
         int currentAnimation = 0;
         public int currentFrame = 0;
         public bool animationRunning = false;
-        bool loopAnimation = true;
+        public bool loopAnimation = true;
         float timeStart = 0f;
         public float currentAnimationFrameTime = 0;
 

@@ -15,7 +15,7 @@ namespace RetroEngine.Entities
 
         SkeletalMesh mesh = new SkeletalMesh();
 
-        float speed = 5;
+        float speed = 0.5f;
 
         static Delay updateDelay = new Delay();
 
@@ -24,6 +24,8 @@ namespace RetroEngine.Entities
         static int currentUpdateIndex = 0;
 
         RigidBody body;
+
+        StaticMesh sm = new StaticMesh();
 
         public override void Start()
         {
@@ -40,7 +42,12 @@ namespace RetroEngine.Entities
 
             npcList.Add(this);
 
+
+
+
         }
+
+        int headBoneId;
 
         protected override void LoadAssets()
         {
@@ -50,9 +57,20 @@ namespace RetroEngine.Entities
 
             mesh.texture = AssetRegistry.LoadTextureFromFile("cat.png");
 
+            sm.LoadFromFile("models/cube.obj");
+            sm.texture = AssetRegistry.LoadTextureFromFile("cat.png");
 
+            mesh.PlayAnimation(0);
 
             meshes.Add(mesh);
+            meshes.Add(sm);
+
+            sm.Transperent = false;
+
+            sm.Scale =new Vector3(0.1f);
+
+            headBoneId = mesh.GetBoneId("hand_r");
+
         }
 
         public override void Update()
@@ -61,6 +79,9 @@ namespace RetroEngine.Entities
 
             if(loadedAssets)
                 mesh.Update(Time.deltaTime);
+
+            sm.Position = mesh.GetBoneMatrix(headBoneId).Translation;
+            Console.WriteLine(sm.Position);
 
             if(currentUpdateNPCs.Contains(this))
                 UpdateMovementDirection();

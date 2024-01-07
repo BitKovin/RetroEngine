@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework;
 using RetroEngine.Skeletal;
 using static RetroEngine.Skeletal.RiggedModel;
+using System;
+using System.Xml.Linq;
 
 namespace RetroEngine
 {
@@ -18,15 +20,45 @@ namespace RetroEngine
             RiggedModel.CreateBuffers();
 
             RiggedModel.overrideAnimationFrameTime = -1;
-
-            RiggedModel.BeginAnimation(0);
-
         }
 
         public void Update(float deltaTime)
         {
-            RiggedModel.Update(deltaTime);
+            RiggedModel?.Update(deltaTime);
         }
+
+        public void PlayAnimation(int id = 0)
+        {
+            RiggedModel.BeginAnimation(id);
+        }
+
+        public Matrix GetBoneMatrix(int id)
+        {
+            if (RiggedModel == null) return Matrix.Identity;
+
+            foreach (var bone in RiggedModel.flatListToBoneNodes)
+            {
+                if (bone.boneShaderFinalTransformIndex == id)
+                    return bone.CombinedTransformMg * GetWorldMatrix();
+            }
+
+            return Matrix.Identity;
+
+        }
+
+        public int GetBoneId(string name)
+        {
+            if (RiggedModel == null) return -1;
+
+            foreach(var bone in RiggedModel.flatListToBoneNodes)
+            {
+                if (bone.name.ToLower() == name.ToLower())
+                    return bone.boneShaderFinalTransformIndex;
+            }
+
+            return -1;
+        }
+
 
         protected override Matrix GetWorldMatrix()
         {
