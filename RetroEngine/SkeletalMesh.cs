@@ -55,7 +55,7 @@ namespace RetroEngine
 
             Dictionary<string, Matrix> boneNamesToTransforms = new Dictionary<string, Matrix>();
 
-            foreach(var bone in RiggedModel.flatListToBoneNodes)
+            foreach(var bone in RiggedModel.flatListToAllNodes)
             {
                 boneNamesToTransforms.TryAdd(bone.name, bone.OffsetMatrixMg * bone.CombinedTransformMg);
             }
