@@ -183,7 +183,8 @@ namespace RetroEngine
                         if (mesh.Transperent)
                             transperentMeshes.Add(mesh);
                         else
-                            renderList.Add(mesh);
+                            if(mesh.isRendered)
+                                renderList.Add(mesh);
                     }
                 }
             }
@@ -193,6 +194,8 @@ namespace RetroEngine
             transperentMeshes = transperentMeshes.OrderByDescending(m => Vector3.Distance(m.useAvgVertexPosition? m.avgVertexPosition : m.Position, Camera.position)).ToList();
 
             renderList.AddRange(transperentMeshes);
+
+            Console.WriteLine(renderList.Count);
 
             LightManager.PrepareLightSources();
             LightManager.ClearPointLights();

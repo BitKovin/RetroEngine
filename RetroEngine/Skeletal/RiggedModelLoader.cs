@@ -74,10 +74,10 @@ namespace RetroEngine.Skeletal
         public float AddedLoopingDuration = .5f;
 
         public bool startupConsoleinfo = true;
-        public bool startupMinimalConsoleinfo = true;
-        public bool startUpMatrixInfo = true;
+        public bool startupMinimalConsoleinfo = false;
+        public bool startUpMatrixInfo = false;
         public bool startupAnimationConsoleInfo = false;
-        public bool startupMaterialConsoleInfo = true;
+        public bool startupMaterialConsoleInfo = false;
         public bool startupFlatBoneConsoleInfo = true;
         public bool startupNodeTreeConsoleInfo = true;
         public string targetNodeConsoleName = ""; //"L_Hand";
@@ -138,15 +138,8 @@ namespace RetroEngine.Skeletal
                                           PostProcessSteps.FlipUVs                   // So far appears necessary
                                         | PostProcessSteps.JoinIdenticalVertices
                                         | PostProcessSteps.Triangulate
-                                        | PostProcessSteps.FindInvalidData
                                         | PostProcessSteps.ImproveCacheLocality
-                                        | PostProcessSteps.FindDegenerates
-                                        | PostProcessSteps.SortByPrimitiveType
-                                        | PostProcessSteps.OptimizeMeshes
-                                        | PostProcessSteps.OptimizeGraph // normal
-                                                                         //| PostProcessSteps.FlipWindingOrder
                                         | PostProcessSteps.FixInFacingNormals
-                                        | PostProcessSteps.ValidateDataStructure
                                         | PostProcessSteps.CalculateTangentSpace
                                         //| PostProcessSteps.GlobalScale
                                         //| PostProcessSteps.RemoveRedundantMaterials // sketchy

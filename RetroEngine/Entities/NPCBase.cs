@@ -15,7 +15,9 @@ namespace RetroEngine.Entities
 
         SkeletalMesh mesh = new SkeletalMesh();
 
-        float speed = 0.5f;
+        SkeletalMesh mesh2 = new SkeletalMesh();
+
+        float speed = 2f;
 
         static Delay updateDelay = new Delay();
 
@@ -47,7 +49,6 @@ namespace RetroEngine.Entities
 
         }
 
-        int headBoneId;
 
         protected override void LoadAssets()
         {
@@ -55,21 +56,24 @@ namespace RetroEngine.Entities
 
             mesh.LoadFromFile("models/skeletal_test.fbx");
 
-            mesh.texture = AssetRegistry.LoadTextureFromFile("cat.png");
+            mesh.texture = AssetRegistry.LoadTextureFromFile("textures/brushes/__TB_empty.png");
 
             sm.LoadFromFile("models/cube.obj");
             sm.texture = AssetRegistry.LoadTextureFromFile("cat.png");
 
+            mesh2.LoadFromFile("models/skeletal_test2.fbx");
+
+            mesh2.texture = AssetRegistry.LoadTextureFromFile("cat.png");
+
             mesh.PlayAnimation(0);
 
             meshes.Add(mesh);
-            meshes.Add(sm);
+            meshes.Add(mesh2);
 
             sm.Transperent = false;
 
             sm.Scale =new Vector3(0.2f);
 
-            headBoneId = mesh.GetBoneId("hand_r");
 
         }
 
@@ -80,9 +84,9 @@ namespace RetroEngine.Entities
             if(loadedAssets)
                 mesh.Update(Time.deltaTime);
 
-            sm.Position = mesh.GetBoneMatrix(headBoneId).DecomposeMatrix().Position;
-            sm.Rotation = mesh.GetBoneMatrix(headBoneId).DecomposeMatrix().Rotation;
-            Console.WriteLine(sm.Rotation);
+            //sm.Position = mesh.GetBoneMatrix("hand_r").DecomposeMatrix().Position;
+            //sm.Rotation = mesh.GetBoneMatrix("hand_r").DecomposeMatrix().Rotation;
+
 
             if(currentUpdateNPCs.Contains(this))
                 UpdateMovementDirection();
@@ -108,6 +112,12 @@ namespace RetroEngine.Entities
         public override void LateUpdate()
         {
             base.LateUpdate();
+
+            mesh2.Position = mesh.Position;
+            mesh2.Rotation = mesh.Rotation;
+
+            mesh2.PastePose(mesh.CopyPose());
+
         }
 
         public override void Destroy()

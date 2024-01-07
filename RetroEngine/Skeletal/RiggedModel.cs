@@ -85,10 +85,12 @@ namespace RetroEngine.Skeletal
         /// <summary>
         /// Uses static animation frames instead of interpolated frames.
         /// </summary>
-        public bool UseStaticGeneratedFrames = false;
+        public bool UseStaticGeneratedFrames = true;
 
         // mainly for testing to step thru each frame.
         public float overrideAnimationFrameTime = -1;
+
+        public bool UpdateVisual = true;
 
         #endregion
 
@@ -153,6 +155,8 @@ namespace RetroEngine.Skeletal
         {
             if (animationRunning)
                 UpdateModelAnimations(time);
+
+            if (UpdateVisual == false) return;
             IterateUpdate(rootNodeOfTree);
             UpdateMeshTransforms();
         }
@@ -181,6 +185,8 @@ namespace RetroEngine.Skeletal
                     if (overrideAnimationFrameTime > animationTotalDuration)
                         overrideAnimationFrameTime = 0f;
                 }
+
+                if (UpdateVisual == false) return;
 
                 // if we are using static frames.
                 currentFrame = (int)(currentAnimationFrameTime / originalAnimations[currentAnimation].SecondsPerFrame);

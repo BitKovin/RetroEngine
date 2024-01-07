@@ -70,7 +70,7 @@ namespace RetroEngine
 
         static Dictionary<string, Texture2D> textures = new Dictionary<string, Texture2D>();
 
-        public bool CastShadows = true;
+        public bool CastShadows = false;
 
         public float Transparency = 1;
 
@@ -757,7 +757,6 @@ namespace RetroEngine
 
         protected bool IsBoundingSphereInFrustum(BoundingSphere sphere)
         {
-
             return Camera.frustum.Contains(sphere.Transform(GetWorldMatrix())) != ContainmentType.Disjoint;
         }
 

@@ -11,7 +11,7 @@ namespace RetroEngine.Game.Entities.Weapons
 {
     internal class weapon_revolver : Weapon
     {
-        SkeletalMesh mesh = new SkeletalMesh();
+        AnimatedStaticMesh mesh = new AnimatedStaticMesh();
 
         Delay attackDelay = new Delay();
 
@@ -41,7 +41,8 @@ namespace RetroEngine.Game.Entities.Weapons
         {
             base.Update();
 
-            mesh.Update(Time.deltaTime);
+            mesh.AddTime(Time.deltaTime);
+            mesh.Update();
 
             if (Input.GetAction("attack").Holding())
                 Shoot();
@@ -59,7 +60,7 @@ namespace RetroEngine.Game.Entities.Weapons
             base.LateUpdate();
 
             mesh.Position = Position;
-            //mesh.Rotation = Rotation + DrawRotation;
+            mesh.Rotation = Rotation + DrawRotation;
 
             fireSoundPlayer.Position = Camera.position;
         }
@@ -74,6 +75,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             fireSoundPlayer.Play(true);
 
+            mesh.Play();
 
 
 
@@ -128,7 +130,12 @@ namespace RetroEngine.Game.Entities.Weapons
             mesh.Scale = new Vector3(1f);
 
 
-            mesh.LoadFromFile("models/weapons/revolver.fbx");
+            for (int i = 1; i <= 14; i += 1)
+            {
+                mesh.AddFrame($"Animations/Revolver/Fire/frame_{i}.obj");
+            }
+
+            mesh.frameTime = 1f / 30f;
 
             mesh.textureSearchPaths.Add("textures/weapons/arms/");
             mesh.textureSearchPaths.Add("textures/weapons/Revolver/");
@@ -137,13 +144,13 @@ namespace RetroEngine.Game.Entities.Weapons
             mesh.PreloadTextures();
             mesh.Viewmodel = true;
             mesh.UseAlternativeRotationCalculation = true;
+            mesh.AddFrameVertexData();
             mesh.Transperent = true;
-
-            mesh.PlayAnimation(5);
 
             Console.WriteLine("loaded revolver");
 
             meshes.Add(mesh);
+            mesh.isLoaded = true;
             //new Bullet().LoadAssetsIfNeeded();
 
         }

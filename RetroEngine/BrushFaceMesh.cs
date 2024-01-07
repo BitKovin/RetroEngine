@@ -22,6 +22,8 @@ namespace RetroEngine
             this.texture = texture;
             this.textureName = textureName;
             useAvgVertexPosition = true;
+
+            CastShadows = true;
         }
 
         public static List<BrushFaceMesh> GetFacesFromPath(string filePath, string objectName, float unitSize = 32)

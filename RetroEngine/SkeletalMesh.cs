@@ -1,9 +1,10 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using RetroEngine.Skeletal;
-using static RetroEngine.Skeletal.RiggedModel;
 using System;
 using System.Xml.Linq;
+using System.Collections.Generic;
+using Assimp;
 
 namespace RetroEngine
 {
@@ -13,23 +14,84 @@ namespace RetroEngine
 
         static RiggedModelLoader modelReader = new RiggedModelLoader(GameMain.content, null);
 
+        BoundingSphere boundingSphere = new BoundingSphere();
+
         public override void LoadFromFile(string filePath)
         {
             RiggedModel = modelReader.LoadAsset(AssetRegistry.FindPathForFile(filePath),30);
 
             RiggedModel.CreateBuffers();
 
+            RiggedModel.Update(0);
+
+            CalculateBoundingSphere();
+
             RiggedModel.overrideAnimationFrameTime = -1;
+            RiggedModel.UseStaticGeneratedFrames = true;
+        }
+
+        void CalculateBoundingSphere()
+        {
+            List<Vector3> points = new List<Vector3>();
+
+            if (RiggedModel != null)
+            {
+                foreach (var b in RiggedModel.flatListToBoneNodes)
+                {
+                    points.Add(b.CombinedTransformMg.Translation/100);
+                }
+            }
+
+            boundingSphere = BoundingSphere.CreateFromPoints(points);
+
+            boundingSphere.Radius *= 1.5f;
+
+        }
+
+        public Dictionary<string, Matrix> CopyPose()
+        {
+
+            if(RiggedModel ==null) return null;
+
+            Dictionary<string, Matrix> boneNamesToTransforms = new Dictionary<string, Matrix>();
+
+            foreach(var bone in RiggedModel.flatListToBoneNodes)
+            {
+                boneNamesToTransforms.TryAdd(bone.name, bone.OffsetMatrixMg * bone.CombinedTransformMg);
+            }
+
+            return boneNamesToTransforms;
+        }
+
+        public void PastePose(Dictionary<string, Matrix> pose)
+        {
+            if (RiggedModel == null) return;
+
+            foreach (var bone in RiggedModel.flatListToBoneNodes)
+            {
+                if(pose.ContainsKey(bone.name))
+                {
+                    RiggedModel.globalShaderMatrixs[bone.boneShaderFinalTransformIndex] = pose[bone.name];
+                }
+            }
+
         }
 
         public void Update(float deltaTime)
         {
-            RiggedModel?.Update(deltaTime);
+            if (RiggedModel is null) return;
+
+            RiggedModel.UpdateVisual = isRendered;
+            RiggedModel.Update(deltaTime);
+            
         }
 
-        public void PlayAnimation(int id = 0)
+
+
+        public void PlayAnimation(int id = 0, bool looped = true)
         {
             RiggedModel.BeginAnimation(id);
+            RiggedModel.loopAnimation = looped;
         }
 
         public Matrix GetBoneMatrix(int id)
@@ -40,6 +102,30 @@ namespace RetroEngine
             {
                 if (bone.boneShaderFinalTransformIndex == id)
                     return bone.CombinedTransformMg * GetWorldMatrix();
+            }
+
+            return Matrix.Identity;
+
+        }
+
+        Dictionary<string, RiggedModel.RiggedModelNode> namesToBones = new Dictionary<string, RiggedModel.RiggedModelNode> ();
+
+        public Matrix GetBoneMatrix(string name)
+        {
+            if (RiggedModel == null) return Matrix.Identity;
+
+            if(namesToBones.ContainsKey(name))
+                return namesToBones[name].CombinedTransformMg* GetWorldMatrix();
+
+            foreach (var bone in RiggedModel.flatListToBoneNodes)
+            {
+                if (bone.name == name)
+                {
+
+                    namesToBones.TryAdd(bone.name, bone);
+
+                    return bone.CombinedTransformMg * GetWorldMatrix();
+                }
             }
 
             return Matrix.Identity;
@@ -76,7 +162,7 @@ namespace RetroEngine
             effect.Parameters["Bones"].SetValue(RiggedModel.globalShaderMatrixs);
             if (RiggedModel != null)
             {
-                foreach (RiggedModelMesh meshPart in RiggedModel.meshes)
+                foreach (RiggedModel.RiggedModelMesh meshPart in RiggedModel.meshes)
                 {
 
                     // Set the vertex buffer and index buffer for this mesh part
@@ -153,6 +239,11 @@ namespace RetroEngine
                 }
 
             }
+        }
+
+        public override void UpdateCulling()
+        {
+            isRendered = Camera.frustum.Contains(boundingSphere.Transform(base.GetWorldMatrix())) != ContainmentType.Disjoint;
         }
     }
 }
