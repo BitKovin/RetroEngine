@@ -48,9 +48,8 @@ namespace RetroEngine.Entities
 
             mesh.LoadFromFile("models/skeletal_test.fbx");
 
-            mesh.texture = AssetRegistry.LoadTextureFromFile("textures/foil.png");
-            mesh.normalTexture = AssetRegistry.LoadTextureFromFile("textures/foil_n.png");
-            mesh.ormTexture = AssetRegistry.LoadTextureFromFile("textures/foil_orm.png");
+            mesh.texture = AssetRegistry.LoadTextureFromFile("cat.png");
+
 
 
             meshes.Add(mesh);

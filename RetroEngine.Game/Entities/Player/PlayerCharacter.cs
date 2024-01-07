@@ -32,7 +32,7 @@ namespace RetroEngine.Game.Entities.Player
 
         public RigidBody body;
 
-        float maxSpeed = 30;
+        float maxSpeed = 10;
         float maxSpeedAir = 2;
         float acceleration = 90;
         float airAcceleration = 40;
@@ -315,7 +315,7 @@ namespace RetroEngine.Game.Entities.Player
 
         void CheckGround()
         {
-            onGround = true;
+            onGround = false;
 
             float radius = 0.4f;
 
@@ -349,7 +349,7 @@ namespace RetroEngine.Game.Entities.Player
                 onGround = true;
 
             if(jumpDelay.Wait())
-                onGround = true;
+                onGround = false;
 
         }
 
