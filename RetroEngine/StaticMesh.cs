@@ -12,7 +12,7 @@ using System.IO;
 namespace RetroEngine
 {
 
-    class MeshPartData
+    public class MeshPartData
     {
         public string textureName = "";
         public Dictionary<string, Vector3> Points = new Dictionary<string, Vector3>();
@@ -556,7 +556,7 @@ namespace RetroEngine
             }
         }
 
-        protected Matrix GetWorldMatrix()
+        protected virtual Matrix GetWorldMatrix()
         {
 
             if (UseAlternativeRotationCalculation)
@@ -581,7 +581,7 @@ namespace RetroEngine
             }
         }
 
-        public void LoadFromFile(string filePath)
+        public virtual void LoadFromFile(string filePath)
         {
             model = GetModelFromPath(filePath);
 
@@ -660,12 +660,13 @@ namespace RetroEngine
                         var textureCoord = mesh.HasTextureCoords(0) ? mesh.TextureCoordinateChannels[0][face.Indices[i]] : new Assimp.Vector3D(0, 0, 0);
 
                         // Negate the x-coordinate to correct mirroring
-                        vertices[vertexIndex] = new VertexData(
-                            new Vector3(-vertex.X, vertex.Y, vertex.Z), // Negate x-coordinate
-                            new Vector3(-normal.X, normal.Y, normal.Z),
-                            new Vector2(textureCoord.X, textureCoord.Y),
-                            new Vector3(-tangent.X, tangent.Y, tangent.Z)
-                        );
+                        vertices[vertexIndex] = new VertexData
+                        {
+                            Position = new Vector3(-vertex.X, vertex.Y, vertex.Z), // Negate x-coordinate
+                            Normal = new Vector3(-normal.X, normal.Y, normal.Z),
+                            TextureCoordinate = new Vector2(textureCoord.X, textureCoord.Y),
+                            Tangent = new Vector3(-tangent.X, tangent.Y, tangent.Z)
+                        };
 
                         indices[vertexIndex] = vertexIndex;
                         vertexIndex++;
@@ -730,7 +731,7 @@ namespace RetroEngine
 
             for (int i = 0; i < vertexPositions.Count; i++)
             {
-                vertices[i] = new VertexData(vertexPositions[i], Vector3.Zero, Vector2.Zero, Vector3.Zero);
+                vertices[i] = new VertexData();
                 indices[i] = i;
             }
 

@@ -40,7 +40,12 @@ namespace RetroEngine.Game
 
             GameMain.Instance.curentLevel.entities.Add(new PlayerGlobal());
 
-            //Level.GetCurrent().AddEntity(new Sky());
+            NPCBase n = new NPCBase();
+
+            n.Position = new Vector3(0, 10, 0);
+
+            Level.GetCurrent().AddEntity(n);
+            n.Start();
 
             for (int i = 1; i <= 0; i++)
             {

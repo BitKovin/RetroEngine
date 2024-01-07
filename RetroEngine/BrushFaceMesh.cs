@@ -110,12 +110,13 @@ namespace RetroEngine
                     var textureCoord = mesh.HasTextureCoords(0) ? mesh.TextureCoordinateChannels[0][i] : new Assimp.Vector3D(0, 0, 0);
 
                     // Negate the x-coordinate to correct mirroring
-                    vertices.Add(new VertexData(
-                        new Vector3(-vertex.X / unitSize, vertex.Y / unitSize, vertex.Z / unitSize), // Negate x-coordinate
-                        new Vector3(normal.X, normal.Y, normal.Z),
-                        new Vector2(textureCoord.X, textureCoord.Y),
-                        new Vector3(-tangent.X, tangent.Y, tangent.Z)
-                    ));
+                    vertices.Add(new VertexData
+                    {
+                        Position = new Vector3(-vertex.X / unitSize, vertex.Y / unitSize, vertex.Z / unitSize), // Negate x-coordinate
+                        Normal = new Vector3(-normal.X, normal.Y, normal.Z),
+                        TextureCoordinate = new Vector2(textureCoord.X, textureCoord.Y),
+                        Tangent = new Vector3(-tangent.X, tangent.Y, tangent.Z)
+                    });
                 }
 
                 var vertexBuffer = new VertexBuffer(graphicsDevice, typeof(VertexData), vertices.Count, BufferUsage.None);
@@ -240,12 +241,12 @@ namespace RetroEngine
                     var textureCoord = mesh.HasTextureCoords(0) ? mesh.TextureCoordinateChannels[0][i] : new Assimp.Vector3D(0, 0, 0);
 
                     // Negate the x-coordinate to correct mirroring
-                    vertices.Add(new VertexData(
-                        new Vector3(-vertex.X / unitSize, vertex.Y / unitSize, vertex.Z / unitSize), // Negate x-coordinate
-                        new Vector3(-normal.X, normal.Y, normal.Z),
-                        new Vector2(textureCoord.X, textureCoord.Y),
-                        new Vector3(-tangent.X, tangent.Y, tangent.Z)
-                    ));
+                    vertices.Add(new VertexData {
+                        Position = new Vector3(-vertex.X / unitSize, vertex.Y / unitSize, vertex.Z / unitSize), // Negate x-coordinate
+                        Normal = new Vector3(-normal.X, normal.Y, normal.Z),
+                        TextureCoordinate = new Vector2(textureCoord.X, textureCoord.Y),
+                        Tangent = new Vector3(-tangent.X, tangent.Y, tangent.Z)
+                    });
                 }
 
                 var vertexBuffer = new VertexBuffer(graphicsDevice, typeof(VertexData), vertices.Count, BufferUsage.None);
@@ -501,12 +502,13 @@ namespace RetroEngine
                             break;
 
                         // Negate the x-coordinate to correct mirroring
-                        vertices[vertexIndex] = new VertexData(
-                            new Vector3(-vertex.X/MapData.UnitSize, vertex.Y / MapData.UnitSize, vertex.Z / MapData.UnitSize), // Negate x-coordinate
-                            new Vector3(normal.X, normal.Y, normal.Z),
-                            new Vector2(textureCoord.X, textureCoord.Y),
-                            new Vector3(-tangent.X, tangent.Y, tangent.Z)
-                        );
+                        vertices[vertexIndex] = new VertexData
+                        {
+                            Position = new Vector3(-vertex.X / unitSize, vertex.Y / unitSize, vertex.Z / unitSize), // Negate x-coordinate
+                            Normal = new Vector3(-normal.X, normal.Y, normal.Z),
+                            TextureCoordinate = new Vector2(textureCoord.X, textureCoord.Y),
+                            Tangent = new Vector3(-tangent.X, tangent.Y, tangent.Z)
+                        };
 
                         indices[vertexIndex] = vertexIndex;
                         vertexIndex++;

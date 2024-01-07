@@ -33,8 +33,6 @@ namespace RetroEngine.Game.Entities
             mesh.LoadFromFile("models/cube.obj");
 
             
-
-            
             skeletalMesh.LoadFromFile("models/skeletal_test.fbx");
 
             mesh = skeletalMesh;
@@ -53,7 +51,6 @@ namespace RetroEngine.Game.Entities
         {
             base.Start();
 
-            return;
 
             body = Physics.CreateBox(this, scale.ToNumerics());
             body.SetPosition(Position.ToNumerics());
@@ -72,31 +69,11 @@ namespace RetroEngine.Game.Entities
 
             UpdateCollision();
 
-            mesh.Position = Position;
+            //skeletalMesh.Update(Time.deltaTime);
+
+            mesh.Position = Position - new Vector3(0,1,0);
             mesh.Rotation = Rotation;
 
-            if (delay.Wait()) return;
-
-            delay.AddDelay(1);
-
-            //DrawBone(skeletalMesh.rootBone);
-
-        }
-
-        void DrawBone(SkeletalMesh.SkeletalBone skeletalBone)
-        {
-            foreach (var bone in skeletalBone.child)
-            {
-                Vector3 pos = bone.meshTransform.Translation;
-
-                Box box = new Box();
-                box.Position = pos;
-                Level.GetCurrent().AddEntity(box);
-                box.Start();
-
-                DrawBone(bone);
-
-            }
         }
 
     }

@@ -13,7 +13,7 @@ namespace RetroEngine.Entities
 
         Vector3 MoveDirection = Vector3.Zero;
 
-        StaticMesh mesh = new StaticMesh();
+        SkeletalMesh mesh = new SkeletalMesh();
 
         float speed = 5;
 
@@ -35,7 +35,7 @@ namespace RetroEngine.Entities
 
             bodies.Add(body);
 
-            meshes.Add(mesh);
+            
             mesh.CastShadows = false;
 
             npcList.Add(this);
@@ -46,14 +46,22 @@ namespace RetroEngine.Entities
         {
             base.LoadAssets();
 
-            mesh.LoadFromFile("models/npc_base.obj");
-            mesh.texture = AssetRegistry.LoadTextureFromFile("cat.png");
+            mesh.LoadFromFile("models/skeletal_test.fbx");
 
+            mesh.texture = AssetRegistry.LoadTextureFromFile("textures/foil.png");
+            mesh.normalTexture = AssetRegistry.LoadTextureFromFile("textures/foil_n.png");
+            mesh.ormTexture = AssetRegistry.LoadTextureFromFile("textures/foil_orm.png");
+
+
+            meshes.Add(mesh);
         }
 
         public override void Update()
         {
             UpdateNPCList();
+
+            if(loadedAssets)
+                mesh.Update(Time.deltaTime);
 
             if(currentUpdateNPCs.Contains(this))
                 UpdateMovementDirection();
@@ -72,6 +80,9 @@ namespace RetroEngine.Entities
             body.LinearVelocity = new System.Numerics.Vector3(MoveDirection.X * speed, body.LinearVelocity.Y, MoveDirection.Z * speed);
 
             mesh.Position = Position - new Vector3(0, 1, 0);
+
+            mesh.Rotation = new Vector3(0,MathHelper.FindLookAtRotation(Vector3.Zero, MoveDirection).Y, 0);
+
         }
         public override void LateUpdate()
         {

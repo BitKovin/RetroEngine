@@ -58,7 +58,7 @@ float LightRadiuses[MAX_POINT_LIGHTS];
 
 #define BONE_NUM 128
 
-matrix BoneTransforms[BONE_NUM];
+matrix Bones[BONE_NUM];
 
 bool isParticle = false;
 
@@ -71,10 +71,8 @@ struct VertexInput
     float2 TexCoord : TEXCOORD0;
     float3 Tangent : TANGENT0;
     
-    float2 Bone1 : POSITION1;
-    float2 Bone2 : POSITION2;
-    float2 Bone3 : POSITION3;
-    float2 Bone4 : POSITION4;
+    float4 BlendIndices : BLENDINDICES0;
+    float4 BlendWeights : BLENDWEIGHT0;
 };
 
 struct PixelInput
@@ -108,34 +106,38 @@ float3 normalize(float3 v)
     return rsqrt(dot(v, v)) * v;
 }
 
-float4 ApplyBoneTransformations(VertexInput input)
+float4x4 GetBoneTransforms(VertexInput input)
 {
-    float4 position = input.Position;
     
-    float sum = input.Bone1.y + input.Bone2.y + input.Bone3.y + input.Bone4.y;
+    float4x4 identity = float4x4(
+    1.0, 0.0, 0.0, 0.0,
+    0.0, 1.0, 0.0, 0.0,
+    0.0, 0.0, 1.0, 0.0,
+    0.0, 0.0, 0.0, 1.0);
     
-    if (sum<0.1)
-        return position;
+    float sum = input.BlendWeights.x + input.BlendWeights.y + input.BlendWeights.z + input.BlendWeights.w;
     
-    float4x4 mbones =
-    BoneTransforms[input.Bone1.x] * (float) input.Bone1.y / sum +
-    BoneTransforms[input.Bone2.x] * (float) input.Bone2.y / sum +
-    BoneTransforms[input.Bone3.x] * (float) input.Bone3.y / sum +
-    BoneTransforms[input.Bone4.x] * (float) input.Bone4.y / sum;
+    if (sum<0.05f)
+        return identity;
     
-    position = mul(position, mbones);
+        float4x4 mbones =
+    Bones[input.BlendIndices.x] * (float) input.BlendWeights.x / sum +
+    Bones[input.BlendIndices.y] * (float) input.BlendWeights.y / sum +
+    Bones[input.BlendIndices.z] * (float) input.BlendWeights.z / sum +
+    Bones[input.BlendIndices.w] * (float) input.BlendWeights.w / sum;
     
-    return position;
+    return mbones;
 }
 
 PixelInput DefaultVertexShaderFunction(VertexInput input)
 {
     PixelInput output;
 
-    float4 vertexPos = ApplyBoneTransformations(input);
+    float4x4 boneTrans = GetBoneTransforms(input);
     
-    output.Position = mul(vertexPos, World);
-    output.MyPosition = mul(vertexPos, World).xyz;
+
+    output.Position = mul(mul(input.Position,boneTrans), World);
+    output.MyPosition = output.Position.xyz;
     output.Position = mul(output.Position, View);
     output.Position = mul(output.Position, Projection);
     
@@ -147,10 +149,10 @@ PixelInput DefaultVertexShaderFunction(VertexInput input)
     output.TexCoord = input.TexCoord;
 
 	// Pass the world space normal to the pixel shader
-    output.Normal = mul(input.Normal, (float3x3) World);
+    output.Normal = mul(mul(input.Normal,boneTrans), (float3x3) World);
     output.Normal = normalize(output.Normal);
     
-    output.Tangent = mul(input.Tangent, (float3x3) World);
+    output.Tangent = mul(mul(input.Tangent,boneTrans), (float3x3) World);
     output.Tangent = normalize(output.Tangent);
 
     

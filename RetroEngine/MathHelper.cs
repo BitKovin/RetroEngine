@@ -85,6 +85,11 @@ namespace RetroEngine
             return radians * (180.0f / (float)Math.PI);
         }
 
+        public static float ToRadians(float degrees)
+        {
+            return (float)((double)degrees * (Math.PI / 180.0));
+        }
+
         public static Vector3 FindLookAtRotation(Vector3 source, Vector3 target)
         {
             Vector3 direction = target - source;
