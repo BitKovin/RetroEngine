@@ -60,6 +60,7 @@ namespace RetroEngine.Entities
 
             mesh.texture = AssetRegistry.LoadTextureFromFile("textures/brushes/__TB_empty.png");
 
+
             sm.LoadFromFile("models/cube.obj");
             sm.texture = AssetRegistry.LoadTextureFromFile("cat.png");
 

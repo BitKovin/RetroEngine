@@ -4,7 +4,6 @@ using RetroEngine.Skeletal;
 using System;
 using System.Xml.Linq;
 using System.Collections.Generic;
-using Assimp;
 using BulletSharp.SoftBody;
 using static RetroEngine.Skeletal.RiggedModel;
 
@@ -21,6 +20,10 @@ namespace RetroEngine
 
         static Dictionary<string, RiggedModel> LoadedRigModels = new Dictionary<string, RiggedModel>();
 
+        public SkeletalMesh()
+        {
+            CastShadows = false;
+        }
 
         public override void LoadFromFile(string filePath)
         {
@@ -200,6 +203,52 @@ namespace RetroEngine
 
         }
 
+        public override void DrawShadow(bool closeShadow = false)
+        {
+            if (!CastShadows) return;
+
+            GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
+
+            Effect effect = GameMain.Instance.render.ShadowMapEffect;
+
+            effect.Parameters["Bones"].SetValue(finalizedBones);
+
+            if (RiggedModel != null)
+            {
+                foreach (RiggedModel.RiggedModelMesh meshPart in RiggedModel.meshes)
+                {
+                    // Set the vertex buffer and index buffer for this mesh part
+                    graphicsDevice.SetVertexBuffer(meshPart.VertexBuffer);
+                    graphicsDevice.Indices = meshPart.IndexBuffer;
+
+
+                    if (closeShadow)
+                        Graphics.LightViewProjectionClose = frameStaticMeshData.LightView * frameStaticMeshData.LightProjectionClose;
+                    else
+                        Graphics.LightViewProjection = frameStaticMeshData.LightView * frameStaticMeshData.LightProjection;
+
+                    // Set effect parameters
+                    effect.Parameters["World"].SetValue(frameStaticMeshData.World);
+                    effect.Parameters["View"].SetValue(frameStaticMeshData.LightView);
+                    if (closeShadow)
+                        effect.Parameters["Projection"].SetValue(frameStaticMeshData.LightProjectionClose);
+                    else
+                        effect.Parameters["Projection"].SetValue(frameStaticMeshData.LightProjection);
+
+                    // Draw the primitives using the custom effect
+                    foreach (EffectPass pass in effect.CurrentTechnique.Passes)
+                    {
+                        pass.Apply();
+                        graphicsDevice.DrawIndexedPrimitives(
+                            PrimitiveType.TriangleList,
+                            meshPart.VertexOffset,
+                            meshPart.StartIndex,
+                            meshPart.PrimitiveCount);
+                    }
+                }
+            }
+
+        }
 
         public override void DrawUnified()
         {
