@@ -56,6 +56,8 @@ namespace RetroEngine.Entities
 
             mesh.LoadFromFile("models/skeletal_test2.fbx");
 
+            mesh.SetInterpolationEnabled(false);
+
             mesh.texture = AssetRegistry.LoadTextureFromFile("textures/brushes/__TB_empty.png");
 
             sm.LoadFromFile("models/cube.obj");
@@ -108,15 +110,16 @@ namespace RetroEngine.Entities
 
             mesh.Rotation = new Vector3(0,MathHelper.FindLookAtRotation(Vector3.Zero, MoveDirection).Y, 0);
 
+            mesh2.Position = mesh.Position;
+            mesh2.Rotation = mesh.Rotation;
+
+            mesh2.PastePose(mesh.CopyPose());
         }
         public override void LateUpdate()
         {
             base.LateUpdate();
 
-            mesh2.Position = mesh.Position;
-            mesh2.Rotation = mesh.Rotation;
-
-            mesh2.PastePose(mesh.CopyPose());
+            
 
         }
 

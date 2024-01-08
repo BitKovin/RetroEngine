@@ -50,9 +50,8 @@ PixelOutput PixelShaderFunction(PixelInput input)
     float3 pixelNormal = ApplyNormalTexture(textureNormal, input.Normal, input.Tangent);
     
     
-    PBRData pbrData = CalculatePBR(pixelNormal, roughness, metalic, input.MyPosition);
 
-    float3 light = CalculateLight(input, pixelNormal) + pbrData.specular;
+    float3 light = CalculateLight(input, pixelNormal, roughness);
     
 	textureColor *= light;
     

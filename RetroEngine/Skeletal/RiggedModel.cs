@@ -355,7 +355,7 @@ namespace RetroEngine.Skeletal
             copy.numberOfBonesInUse = numberOfBonesInUse;
             copy.numberOfNodesInUse = numberOfNodesInUse;
             copy.maxGlobalBones = maxGlobalBones;
-            copy.globalShaderMatrixs = globalShaderMatrixs;
+            copy.globalShaderMatrixs = new Matrix[128];
             copy.meshes = meshes;
             copy.currentAnimation = currentAnimation;
             copy.currentFrame = currentFrame;

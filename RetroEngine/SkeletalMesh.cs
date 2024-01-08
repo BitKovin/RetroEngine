@@ -48,7 +48,6 @@ namespace RetroEngine
             CalculateBoundingSphere();
 
             RiggedModel.overrideAnimationFrameTime = -1;
-            RiggedModel.UseStaticGeneratedFrames = false;
         }
 
         void CalculateBoundingSphere()
@@ -114,12 +113,14 @@ namespace RetroEngine
 
             RiggedModel.UpdateVisual = isRendered;
             RiggedModel.Update(deltaTime);
-
-            Console.WriteLine(RiggedModel.id);
-            Console.WriteLine(isRendered);
         }
 
+        public void SetInterpolationEnabled(bool enabled)
+        {
+            if (RiggedModel is null) return;
 
+            RiggedModel.UseStaticGeneratedFrames = !enabled;
+        }
 
         public void PlayAnimation(int id = 0, bool looped = true)
         {

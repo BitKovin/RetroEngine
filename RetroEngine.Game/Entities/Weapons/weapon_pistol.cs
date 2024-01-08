@@ -137,7 +137,7 @@ namespace RetroEngine.Game.Entities.Weapons
             mesh.UseAlternativeRotationCalculation = true;
             mesh.Transperent = true;
 
-
+            mesh.SetInterpolationEnabled(true);
             
 
             Console.WriteLine("loaded pistol");

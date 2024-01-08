@@ -235,6 +235,25 @@ PBRData CalculatePBR(float3 normal, float roughness, float metallic, float3 worl
 
 }
 
+float3 CalculateSpecular(float roughness, float3 worldPos, float3 normal, float3 lightDir)
+{
+    
+    roughness = clamp(roughness, 0.001f, 1);
+    
+    float3 reflectDir = reflect(normalize(viewPos - worldPos), normal);
+    
+    float3 viewDir = normalize(viewPos - worldPos);
+    float3 halfwayDir = normalize(lightDir + viewDir);
+    
+    halfwayDir *= DistributionGGX(normal, halfwayDir, roughness);
+    
+
+    float specular = pow(max(dot(normal, halfwayDir), 0.0), 1.5) / 4;
+    
+    
+    return specular * GlobalLightColor;
+}
+
 float SampleShadowMap(sampler2D shadowMap, float2 coords, float compare)
 {
     return step(compare, tex2D(shadowMap, coords).r);
@@ -315,7 +334,25 @@ float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal)
     return LightColors[i] * max(intense, 0);
 }
 
-float3 CalculateLight(PixelInput input, float3 normal)
+float3 CalculatePointLightSpeculars(int i, PixelInput pixelInput, float3 normal, float roughness)
+{
+
+    float3 lightVector = LightPositions[i] - pixelInput.MyPosition;
+    float distanceToLight = length(lightVector);
+    float intense = saturate(1.0 - distanceToLight / LightRadiuses[i]);
+    float3 dirToSurface = normalize(lightVector);
+
+    if (isParticle)
+        dirToSurface = normal;
+    
+    intense *= 1;
+
+    float3 specular = CalculateSpecular(roughness, pixelInput.MyPosition, normal, dirToSurface);
+    
+    return LightColors[i] * max(intense, 0) * specular;
+}
+
+float3 CalculateLight(PixelInput input, float3 normal, float roughness)
 {
     float3 lightCoords = input.lightPos.xyz / input.lightPos.w;
 
@@ -336,6 +373,15 @@ float3 CalculateLight(PixelInput input, float3 normal)
     else
         shadow += GetShadow(lightCoords, input, false);
     
+    float3 specular = 0;
+    if (!isParticle)
+    {
+        specular = CalculateSpecular(roughness, input.MyPosition, normal, -LightDirection);
+    
+        specular *= 1 - shadow;
+    }
+    
+        
     
     if(isParticle)
         normal = -LightDirection;
@@ -345,16 +391,20 @@ float3 CalculateLight(PixelInput input, float3 normal)
     if (abs(dot(input.Normal, normalize(-LightDirection)))>0.01f)
         light -= shadow;
     
-    float globalLight = GlobalBrightness * GlobalLightColor * lerp(min(dot(normal, float3(0, 1, 0)),0), 1, 0.7);
+    float globalLight = GlobalBrightness * GlobalLightColor * lerp(max(dot(normal, float3(0, 1, 0)),-1), 1, 0.85);
     
     light = max(light, 0);
     light += globalLight;
-
+    
 
     for (int i = 0; i < MAX_POINT_LIGHTS; i++)
     {
         light += CalculatePointLight(i, input, normal);
+        specular += CalculatePointLightSpeculars(i, input, normal, roughness);
+
     }
+    
+    light += specular;
     
     return light;
     

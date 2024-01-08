@@ -82,6 +82,12 @@ namespace RetroEngine
 
         protected bool _disposed = false;
 
+        public StaticMesh()
+        {
+
+            ormTexture = AssetRegistry.LoadTextureFromFile("engine/textures/defaultORM.png");
+        }
+
         public virtual void Draw()
         {
             GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;

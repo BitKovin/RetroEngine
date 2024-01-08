@@ -40,14 +40,9 @@ namespace RetroEngine.Game
 
             GameMain.Instance.curentLevel.entities.Add(new PlayerGlobal());
 
-            NPCBase n = new NPCBase();
+            
 
-            n.Position = new Vector3(0, 10, 0);
-
-            Level.GetCurrent().AddEntity(n);
-            n.Start();
-
-            for (int i = 1; i <= 100; i++)
+            for (int i = 1; i <= 0; i++)
             {
                 Entity npc = new NPCBase();
                 npc.Position = new Vector3(0, i*0.002f + 2, 0);

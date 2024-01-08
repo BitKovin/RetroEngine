@@ -127,7 +127,7 @@ namespace RetroEngine
         {
 
             ParallelOptions options = new ParallelOptions();
-            options.MaxDegreeOfParallelism = Environment.ProcessorCount/2;
+            options.MaxDegreeOfParallelism = Environment.ProcessorCount*2;
 
             Entity[] list = entities.ToArray();
 
