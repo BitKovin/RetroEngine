@@ -28,7 +28,7 @@ namespace RetroEngine
             CalculateBoundingSphere();
 
             RiggedModel.overrideAnimationFrameTime = -1;
-            RiggedModel.UseStaticGeneratedFrames = true;
+            RiggedModel.UseStaticGeneratedFrames = false;
         }
 
         void CalculateBoundingSphere()

@@ -417,7 +417,7 @@ namespace RetroEngine
             {
                 foreach (string item in textureSearchPaths)
                 {
-                    output = AssetRegistry.LoadTextureFromFile(item + name, true);
+                    output = AssetRegistry.LoadTextureFromFile(item + name, false);
                     if (output != null)
                     {
                         textures.Add(name, output);
@@ -426,6 +426,9 @@ namespace RetroEngine
                 }
                 
             }
+
+            Console.WriteLine($"failed to find texture {name}");
+
             return texture;
             
         }

@@ -195,7 +195,6 @@ namespace RetroEngine
 
             renderList.AddRange(transperentMeshes);
 
-            Console.WriteLine(renderList.Count);
 
             LightManager.PrepareLightSources();
             LightManager.ClearPointLights();

@@ -135,12 +135,11 @@ namespace RetroEngine.Skeletal
                 scene = importer.ImportFile
                                        (
                                         filepathorname,
-                                          PostProcessSteps.FlipUVs                   // So far appears necessary
-                                        | PostProcessSteps.JoinIdenticalVertices
+                                          PostProcessSteps.CalculateTangentSpace                   // So far appears necessary
+                                        //| PostProcessSteps.JoinIdenticalVertices
                                         | PostProcessSteps.Triangulate
-                                        | PostProcessSteps.ImproveCacheLocality
-                                        | PostProcessSteps.FixInFacingNormals
-                                        | PostProcessSteps.CalculateTangentSpace
+                                        //| PostProcessSteps.ImproveCacheLocality
+                                        //| PostProcessSteps.FixInFacingNormals
                                         //| PostProcessSteps.GlobalScale
                                         //| PostProcessSteps.RemoveRedundantMaterials // sketchy
                                         //| PostProcessSteps.PreTransformVertices
@@ -274,7 +273,7 @@ namespace RetroEngine.Skeletal
                         var material = scene.Materials[i];
                         var t = material.GetAllMaterialTextures();
 
-                        m.Tag = new MeshPartData { textureName = material.TextureDiffuse.FilePath };
+                        m.Tag = new MeshPartData { textureName = Path.GetFileName(material.TextureDiffuse.FilePath) };
 
                         for (int j = 0; j < t.Length; j++)
                         {

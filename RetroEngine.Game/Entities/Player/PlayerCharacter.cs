@@ -112,6 +112,8 @@ namespace RetroEngine.Game.Entities.Player
             PlayerUI.Load();
         }
 
+
+
         public override void FromData(EntityData data)
         {
             base.FromData(data);
@@ -145,7 +147,7 @@ namespace RetroEngine.Game.Entities.Player
             stepSoundPlayer.SetSound(AssetRegistry.LoadSoundFromFile("sounds/step.wav"));
             stepSoundPlayer.Volume = 0.5f;
 
-            weapons.Add(new WeaponData { weaponType = typeof(weapon_revolver), ammo = 1 });
+            weapons.Add(new WeaponData { weaponType = typeof(weapon_pistol), ammo = 1 });
             weapons.Add(new WeaponData { weaponType = typeof(weapon_shotgun), ammo = 50 });
             weapons.Add(new WeaponData { weaponType = typeof(weapon_lmg), ammo = 50 });
 
