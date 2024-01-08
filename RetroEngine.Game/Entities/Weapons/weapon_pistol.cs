@@ -55,7 +55,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
         public override void LateUpdate()
         {
-            //base.LateUpdate();
+            base.LateUpdate();
 
             mesh.Position = Position;
             mesh.Rotation = Rotation + DrawRotation;

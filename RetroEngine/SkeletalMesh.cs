@@ -6,6 +6,8 @@ using System.Xml.Linq;
 using System.Collections.Generic;
 using Assimp;
 using BulletSharp.SoftBody;
+using static RetroEngine.Skeletal.RiggedModel;
+
 
 namespace RetroEngine
 {
@@ -17,11 +19,29 @@ namespace RetroEngine
 
         BoundingSphere boundingSphere = new BoundingSphere();
 
+        static Dictionary<string, RiggedModel> LoadedRigModels = new Dictionary<string, RiggedModel>();
+
+
         public override void LoadFromFile(string filePath)
         {
-            RiggedModel = modelReader.LoadAsset(AssetRegistry.FindPathForFile(filePath),30);
 
-            RiggedModel.CreateBuffers();
+            string path = AssetRegistry.FindPathForFile(filePath);
+
+            if (LoadedRigModels.ContainsKey(path))
+            {
+                RiggedModel = (RiggedModel)LoadedRigModels[path].Clone();
+            }
+            else
+            {
+                RiggedModel = modelReader.LoadAsset(path, 30);
+                RiggedModel.CreateBuffers();
+
+
+                LoadedRigModels.TryAdd(path, RiggedModel);
+            }
+
+            RiggedModel = (RiggedModel)LoadedRigModels[path].Clone();
+
 
             RiggedModel.Update(0);
 

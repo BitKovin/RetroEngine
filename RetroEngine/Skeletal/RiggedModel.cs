@@ -53,11 +53,11 @@ namespace RetroEngine.Skeletal
     /// After i make a content reader and writer for the model class there will be no need for the loader except to change over new models.
     /// However you don't really have to have it in xnb form at all you could use it as is but it does a lot of processing so... meh...
     /// </summary>
-    public class RiggedModel
+    public class RiggedModel : ICloneable
     {
         #region members
 
-        public bool consoleDebug = true;
+        public bool consoleDebug = false;
 
         public Effect effect;
         public int numberOfBonesInUse = 0;
@@ -340,6 +340,33 @@ namespace RetroEngine.Skeletal
             animationRunning = false;
         }
 
+        public object Clone()
+        {
+            RiggedModel copy = new RiggedModel();
+
+            copy.numberOfBonesInUse = numberOfBonesInUse;
+            copy.numberOfNodesInUse = numberOfNodesInUse;
+            copy.maxGlobalBones = maxGlobalBones;
+            copy.globalShaderMatrixs = globalShaderMatrixs;
+            copy.flatListToAllNodes = flatListToAllNodes;
+            copy.flatListToBoneNodes = flatListToBoneNodes;
+            copy.meshes = meshes;
+            copy.rootNodeOfTree = rootNodeOfTree;
+            copy.firstRealBoneInTree = firstRealBoneInTree;
+            copy.originalAnimations = originalAnimations;
+            copy.currentAnimation = currentAnimation;
+            copy.currentFrame = currentFrame;
+            copy.animationRunning = animationRunning;
+            copy.loopAnimation = loopAnimation;
+            copy.timeStart = timeStart;
+            copy.currentAnimationFrameTime = currentAnimationFrameTime;
+            copy.AnimationTime = AnimationTime;
+            copy.UseStaticGeneratedFrames = UseStaticGeneratedFrames;
+            copy.overrideAnimationFrameTime = overrideAnimationFrameTime;
+
+            return copy;
+        }
+
         #endregion
 
 
@@ -388,6 +415,7 @@ namespace RetroEngine.Skeletal
 
             public void CreateBuffers()
             {
+
                 VertexBuffer = new VertexBuffer(GameMain.Instance.GraphicsDevice, typeof(VertexData), vertices.Length, BufferUsage.None);
                 VertexBuffer.SetData(vertices);
                 IndexBuffer = new IndexBuffer(GameMain.Instance.GraphicsDevice, IndexElementSize.ThirtyTwoBits, indices.Count(), BufferUsage.None);

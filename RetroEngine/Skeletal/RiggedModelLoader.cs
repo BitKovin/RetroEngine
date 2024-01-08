@@ -73,13 +73,13 @@ namespace RetroEngine.Skeletal
         /// </summary>
         public float AddedLoopingDuration = .5f;
 
-        public bool startupConsoleinfo = true;
+        public bool startupConsoleinfo = false;
         public bool startupMinimalConsoleinfo = false;
         public bool startUpMatrixInfo = false;
         public bool startupAnimationConsoleInfo = false;
         public bool startupMaterialConsoleInfo = false;
-        public bool startupFlatBoneConsoleInfo = true;
-        public bool startupNodeTreeConsoleInfo = true;
+        public bool startupFlatBoneConsoleInfo = false;
+        public bool startupNodeTreeConsoleInfo = false;
         public string targetNodeConsoleName = ""; //"L_Hand";
 
 
@@ -117,6 +117,10 @@ namespace RetroEngine.Skeletal
         /// If that fails it will look to see if the filepath is actually the full path to the file.
         /// The texture itself is expected to be loaded and then attached to the effect atm.
         /// </summary>
+        /// 
+
+        static Dictionary<string, Scene> loadedScenes = new Dictionary<string, Scene>();
+
         public RiggedModel LoadAsset(string filePathorFileName, int defaultAnimatedFramesPerSecondLod)
         {
             this.defaultAnimatedFramesPerSecondLod = defaultAnimatedFramesPerSecondLod;
@@ -125,33 +129,42 @@ namespace RetroEngine.Skeletal
             //
             // load the file at path to the scene
             //
-            var importer = new AssimpContext();
-            try
-            {
-                //Console.WriteLine("(not sure this works) Model scale: " + importer.Scale);
-                //importer.Scale = 1f / importer.Scale;
-                //Console.WriteLine("(not sure this works) Model scale: " + importer.Scale);
 
-                scene = importer.ImportFile
-                                       (
-                                        filepathorname,
-                                          PostProcessSteps.CalculateTangentSpace   
-                                        | PostProcessSteps.Triangulate
-                                        | PostProcessSteps.ImproveCacheLocality
-                                        | PostProcessSteps.FlipUVs
-                                        //| PostProcessSteps.GlobalScale
-                                        //| PostProcessSteps.RemoveRedundantMaterials // sketchy
-                                        //| PostProcessSteps.PreTransformVertices
-                                        // PostProcessSteps.ValidateDataStructure
-                                        );
-            }
-            catch (Exception e)
+            if (loadedScenes.ContainsKey(filePathorFileName))
             {
-                Console.WriteLine(e.Message);
-                Debug.Assert(false, filePathorFileName + "\n\n" + "A problem loading the model occured: \n " + filePathorFileName + " \n" + e.Message);
-                scene = null;
+                scene = loadedScenes[filePathorFileName];
             }
+            else
+            {
 
+                scene = new Scene();
+                var importer = new AssimpContext();
+                try
+                {
+                    //Console.WriteLine("(not sure this works) Model scale: " + importer.Scale);
+                    //importer.Scale = 1f / importer.Scale;
+                    //Console.WriteLine("(not sure this works) Model scale: " + importer.Scale);
+
+                    scene = importer.ImportFile
+                                           (
+                                            filepathorname,
+                                              PostProcessSteps.CalculateTangentSpace
+                                            | PostProcessSteps.Triangulate
+                                            | PostProcessSteps.ImproveCacheLocality
+                                            | PostProcessSteps.FlipUVs
+                                            //| PostProcessSteps.GlobalScale
+                                            //| PostProcessSteps.RemoveRedundantMaterials // sketchy
+                                            //| PostProcessSteps.PreTransformVertices
+                                            // PostProcessSteps.ValidateDataStructure
+                                            );
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    Debug.Assert(false, filePathorFileName + "\n\n" + "A problem loading the model occured: \n " + filePathorFileName + " \n" + e.Message);
+                    scene = null;
+                }
+            }
             return CreateModel(filepathorname);
         }
 
@@ -167,34 +180,30 @@ namespace RetroEngine.Skeletal
                 model.effect = effectToUse;
 
             // prep to build a models tree.
-            Console.WriteLine("\n@@@CreateRootNode   prep to build a models tree. Set Up the Models RootNode");
             CreateRootNode(model, scene);
 
             // create the models meshes
-            Console.WriteLine("\n@@@CreateModelMeshesSetUpMeshMaterialsAndTextures");
             CreateModelMeshesSetUpMeshMaterialsAndTextures(model, scene, 0);
 
             // set up a dummy bone.
-            Console.WriteLine("\n@@@CreateDummyFlatListNodeZero");
             CreateDummyFlatListNodeZero(model);
 
             // recursively search and add the nodes to our model from the scene.
-            Console.WriteLine("\n@@@CreateModelNodeTreeTransformsRecursively");
             CreateModelNodeTreeTransformsRecursively(model, model.rootNodeOfTree, scene.RootNode, 0);
 
             // find the actual and real first bone with a offset.
-            Console.WriteLine("\n@@@FindFirstBoneInModel");
             FindFirstBoneInModel(model, scene.RootNode);
 
             // get the animations in the file into each nodes animations framelist
-            Console.WriteLine("\n@@@CreateOriginalAnimations\n");
             CreateOriginalAnimations(model, scene);
 
             // this is the last thing we will do because we need the nodes set up first.
 
+            Stopwatch sw = Stopwatch.StartNew();
+
             // get the vertice data from the meshes.
-            Console.WriteLine("\n@@@CreateVerticeIndiceData");
             CreateVerticeIndiceData(model, scene, 0);
+
 
             // this calls the models function to create the interpolated animtion frames.
             // for a full set of callable time stamped orientations per frame so indexing and dirty flags can be used when running.
@@ -202,23 +211,19 @@ namespace RetroEngine.Skeletal
             // this way is a lot more memory but saves speed. 
             // the other way is a lot less memory but requires a lot more cpu calculations and twice as many look ups.
             //
-            Console.WriteLine("\n@@@model.CreateStaticAnimationLookUpFrames");
             model.CreateStaticAnimationLookUpFrames(defaultAnimatedFramesPerSecondLod, AddAdditionalLoopingTime);
 
-            Console.WriteLine("\n@@@InfoFlatBones");
-            InfoFlatBones(model);
+            //InfoFlatBones(model);
 
             //// take a look at material information.
             if (startupMaterialConsoleInfo)
             {
-                Console.WriteLine("\n@@@InfoForMaterials");
                 InfoForMaterials(model, scene);
             }
 
             // if we want to see the original animation data all this console crap is for debuging.
             if (startupAnimationConsoleInfo)
             {
-                Console.WriteLine("\n@@@InfoForAnimData");
                 InfoForAnimData(scene);
             }
 
@@ -470,6 +475,7 @@ namespace RetroEngine.Skeletal
                     );
                     Console.WriteLine("  mesh.UVComponentCount.Length: " + mesh.UVComponentCount.Length);
                 }
+
                 for (int i = 0; i < mesh.UVComponentCount.Length; i++)
                 {
                     int val = mesh.UVComponentCount[i];
