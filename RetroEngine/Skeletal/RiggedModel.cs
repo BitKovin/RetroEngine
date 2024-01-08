@@ -53,7 +53,7 @@ namespace RetroEngine.Skeletal
     /// After i make a content reader and writer for the model class there will be no need for the loader except to change over new models.
     /// However you don't really have to have it in xnb form at all you could use it as is but it does a lot of processing so... meh...
     /// </summary>
-    public class RiggedModel : ICloneable
+    public class RiggedModel
     {
         #region members
 
@@ -94,7 +94,7 @@ namespace RetroEngine.Skeletal
 
         #endregion
 
-        
+       
 
         #region methods
 
@@ -340,20 +340,23 @@ namespace RetroEngine.Skeletal
             animationRunning = false;
         }
 
-        public object Clone()
+        public int id = 0;
+
+        static int copyId = 0;
+
+        public RiggedModel MakeCopy()
         {
             RiggedModel copy = new RiggedModel();
+
+            copy.id = copyId;
+
+            copyId++;
 
             copy.numberOfBonesInUse = numberOfBonesInUse;
             copy.numberOfNodesInUse = numberOfNodesInUse;
             copy.maxGlobalBones = maxGlobalBones;
             copy.globalShaderMatrixs = globalShaderMatrixs;
-            copy.flatListToAllNodes = flatListToAllNodes;
-            copy.flatListToBoneNodes = flatListToBoneNodes;
             copy.meshes = meshes;
-            copy.rootNodeOfTree = rootNodeOfTree;
-            copy.firstRealBoneInTree = firstRealBoneInTree;
-            copy.originalAnimations = originalAnimations;
             copy.currentAnimation = currentAnimation;
             copy.currentFrame = currentFrame;
             copy.animationRunning = animationRunning;
@@ -363,6 +366,49 @@ namespace RetroEngine.Skeletal
             copy.AnimationTime = AnimationTime;
             copy.UseStaticGeneratedFrames = UseStaticGeneratedFrames;
             copy.overrideAnimationFrameTime = overrideAnimationFrameTime;
+
+            Dictionary<RiggedModelNode, RiggedModelNode> cloneNodesMap;
+
+            cloneNodesMap = new Dictionary<RiggedModelNode, RiggedModelNode>();
+
+
+            foreach (var node in flatListToAllNodes)
+            {
+                cloneNodesMap.Add(node, new RiggedModelNode());
+            }
+
+            foreach (var node in flatListToBoneNodes)
+            {
+                cloneNodesMap.TryAdd(node, new RiggedModelNode());
+            }
+
+            foreach(var key in cloneNodesMap.Keys)
+            {
+                cloneNodesMap[key] = key.MakeCopy(cloneNodesMap, cloneNodesMap[key]);
+            }
+
+            copy.flatListToAllNodes = new List<RiggedModelNode>();
+
+            foreach (var node in flatListToAllNodes)
+            {
+                copy.flatListToAllNodes.Add(cloneNodesMap[node]);
+            }
+
+            copy.flatListToBoneNodes = new List<RiggedModelNode>();
+            foreach (var node in flatListToBoneNodes)
+            {
+                copy.flatListToBoneNodes.Add(cloneNodesMap[node]);
+            }
+
+            copy.rootNodeOfTree = cloneNodesMap[rootNodeOfTree];
+            copy.firstRealBoneInTree = cloneNodesMap[firstRealBoneInTree];
+
+            copy.originalAnimations = new List<RiggedAnimation>();
+
+            foreach (var animation in originalAnimations)
+            {
+                copy.originalAnimations.Add(animation.MakeCopy(cloneNodesMap));
+            }
 
             return copy;
         }
@@ -482,6 +528,40 @@ namespace RetroEngine.Skeletal
             /// This is a world space transformation. Basically the final world space transform that can be uploaded to the shader after all nodes are processed.
             /// </summary>
             public Matrix CombinedTransformMg { get; set; }
+
+            public RiggedModelNode MakeCopy(Dictionary<RiggedModelNode, RiggedModelNode> keyValuePairs, RiggedModelNode copy)
+            {
+
+                copy.name = name;
+                copy.boneShaderFinalTransformIndex=boneShaderFinalTransformIndex;
+
+                if(parent is not null)
+                copy.parent = keyValuePairs[parent];
+                
+                copy.isTheRootNode = isTheRootNode;
+                copy.isTheGlobalPreTransformNode=isTheGlobalPreTransformNode;
+                copy.isTheFirstBone = isTheFirstBone;
+                copy.isThisARealBone = isThisARealBone;
+                copy.isANodeAlongTheBoneRoute = isANodeAlongTheBoneRoute;
+                copy.isThisNodeTransformNecessary=isThisNodeTransformNecessary;
+                copy.isThisAMeshNode=isThisAMeshNode;
+                copy.isThisTheFirstMeshNode= isThisTheFirstMeshNode;
+
+                copy.InvOffsetMatrixMg = InvOffsetMatrixMg;
+                copy.OffsetMatrixMg = OffsetMatrixMg;
+                copy.LocalTransformMg = LocalTransformMg;
+                copy.CombinedTransformMg = CombinedTransformMg;
+
+                copy.children = new List<RiggedModelNode>();
+
+                foreach(var child in children)
+                {
+                    copy.children.Add(keyValuePairs[child]);
+                }
+
+                return copy;
+
+            }
         }
 
         /// <summary>
@@ -505,8 +585,35 @@ namespace RetroEngine.Skeletal
             //public int MeshAnimationNodeCount;
             public bool HasMeshAnimations = false;
             public bool HasNodeAnimations = false;
+
             public List<RiggedAnimationNodes> animatedNodes;
 
+            public RiggedAnimation MakeCopy(Dictionary<RiggedModelNode, RiggedModelNode> keyValuePairs)
+            {
+                RiggedAnimation copy = new RiggedAnimation();
+
+                copy.targetNodeConsoleName = targetNodeConsoleName;
+                copy.animationName = animationName;
+                copy.DurationInTicks= DurationInTicks;
+                copy.DurationInSeconds = DurationInSeconds;
+                copy.DurationInSecondsLooping = DurationInSecondsLooping;
+                copy.TicksPerSecond = TicksPerSecond;
+                copy.SecondsPerFrame = SecondsPerFrame;
+                copy.TicksPerFramePerSecond = TicksPerFramePerSecond;
+                copy.TotalFrames = TotalFrames;
+                copy.fps = fps;
+                copy.HasMeshAnimations = HasMeshAnimations;
+                copy.HasNodeAnimations = HasNodeAnimations;
+
+                copy.animatedNodes= new List<RiggedAnimationNodes> ();
+
+                foreach(var node in animatedNodes)
+                {
+                    copy.animatedNodes.Add(node.MakeCopy(keyValuePairs));
+                }
+
+                return copy;
+            }
 
             public void SetAnimationFpsCreateFrames(int animationFramesPerSecond, RiggedModel model, bool loopAnimation)
             {
@@ -757,6 +864,7 @@ namespace RetroEngine.Skeletal
                 return (val - s) / (e - s);
             }
 
+            
         }
 
         /// <summary>
@@ -780,6 +888,25 @@ namespace RetroEngine.Skeletal
             // the actual calculated interpolation orientation matrice based on time.
             public double[] frameOrientationTimes;
             public Matrix[] frameOrientations;
+
+            public RiggedAnimationNodes MakeCopy(Dictionary<RiggedModelNode, RiggedModelNode> keyValuePairs)
+            {
+                RiggedAnimationNodes copy = new RiggedAnimationNodes();
+
+                copy.nodeRef = keyValuePairs[nodeRef];
+                copy.nodeName = nodeName;
+                copy.positionTime = positionTime;
+                copy.scaleTime = scaleTime;
+                copy.qrotTime = qrotTime;
+                copy.position = position;
+                copy.scale = scale;
+                copy.qrot = qrot;
+                copy.frameOrientationTimes = frameOrientationTimes;
+                copy.frameOrientations = frameOrientations;
+
+                return copy;
+            }
+
         }
 
     }

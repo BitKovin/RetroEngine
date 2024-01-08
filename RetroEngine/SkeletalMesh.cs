@@ -29,7 +29,7 @@ namespace RetroEngine
 
             if (LoadedRigModels.ContainsKey(path))
             {
-                RiggedModel = (RiggedModel)LoadedRigModels[path].Clone();
+                RiggedModel = LoadedRigModels[path].MakeCopy();
             }
             else
             {
@@ -37,10 +37,10 @@ namespace RetroEngine
                 RiggedModel.CreateBuffers();
 
 
-                LoadedRigModels.TryAdd(path, RiggedModel);
+                LoadedRigModels.Add(path, RiggedModel);
             }
 
-            RiggedModel = (RiggedModel)LoadedRigModels[path].Clone();
+            RiggedModel = LoadedRigModels[path].MakeCopy();
 
 
             RiggedModel.Update(0);
@@ -114,7 +114,9 @@ namespace RetroEngine
 
             RiggedModel.UpdateVisual = isRendered;
             RiggedModel.Update(deltaTime);
-            
+
+            Console.WriteLine(RiggedModel.id);
+            Console.WriteLine(isRendered);
         }
 
 
@@ -185,6 +187,19 @@ namespace RetroEngine
             return Matrix.CreateScale(0.01f) * base.GetWorldMatrix();
         }
 
+        Matrix[] finalizedBones = new Matrix[128];
+
+        public override void RenderPreparation()
+        {
+            base.RenderPreparation();
+
+            if (RiggedModel is null) return;
+
+            finalizedBones = RiggedModel.globalShaderMatrixs;
+
+        }
+
+
         public override void DrawUnified()
         {
 
@@ -193,7 +208,7 @@ namespace RetroEngine
             Effect effect = GameMain.Instance.render.UnifiedEffect;
 
 
-            effect.Parameters["Bones"].SetValue(RiggedModel.globalShaderMatrixs);
+            effect.Parameters["Bones"].SetValue(finalizedBones);
             if (RiggedModel != null)
             {
                 foreach (RiggedModel.RiggedModelMesh meshPart in RiggedModel.meshes)
