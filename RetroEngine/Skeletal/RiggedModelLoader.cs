@@ -135,15 +135,13 @@ namespace RetroEngine.Skeletal
                 scene = importer.ImportFile
                                        (
                                         filepathorname,
-                                          PostProcessSteps.CalculateTangentSpace                   // So far appears necessary
-                                        //| PostProcessSteps.JoinIdenticalVertices
+                                          PostProcessSteps.CalculateTangentSpace   
                                         | PostProcessSteps.Triangulate
-                                        //| PostProcessSteps.ImproveCacheLocality
-                                        //| PostProcessSteps.FixInFacingNormals
+                                        | PostProcessSteps.ImproveCacheLocality
+                                        | PostProcessSteps.FlipUVs
                                         //| PostProcessSteps.GlobalScale
                                         //| PostProcessSteps.RemoveRedundantMaterials // sketchy
                                         //| PostProcessSteps.PreTransformVertices
-                                        //| PostProcessSteps.GenerateUVCoords
                                         // PostProcessSteps.ValidateDataStructure
                                         );
             }
@@ -781,6 +779,9 @@ namespace RetroEngine.Skeletal
                     foreach (var keyList in nodeAnimLists.ScalingKeys)
                     {
                         var oas = keyList.Value.ToMg();
+
+                        oas = new Vector3(oas.X, oas.Z, oas.Y);
+
                         nodeAnim.scaleTime.Add(keyList.Time / assimpAnim.TicksPerSecond);
                         nodeAnim.scale.Add(oas);
                     }

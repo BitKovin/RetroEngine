@@ -40,7 +40,7 @@ namespace RetroEngine.Game.Entities.Weapons
         {
             base.Update();
 
-            mesh.Update(Time.deltaTime);
+            mesh.Update(Time.deltaTime*1.2f);
 
             if (Input.GetAction("attack").Holding())
                 Shoot();
@@ -126,7 +126,6 @@ namespace RetroEngine.Game.Entities.Weapons
         {
             mesh.Scale = new Vector3(1f);
 
-
             mesh.LoadFromFile("models/weapons/pistol.fbx");
 
             mesh.textureSearchPaths.Add("textures/weapons/arms/");
@@ -136,10 +135,12 @@ namespace RetroEngine.Game.Entities.Weapons
             mesh.PreloadTextures();
             mesh.Viewmodel = true;
             mesh.UseAlternativeRotationCalculation = true;
-            //mesh.Transperent = true;
+            mesh.Transperent = true;
 
 
-            Console.WriteLine("loaded revolver");
+            
+
+            Console.WriteLine("loaded pistol");
 
             meshes.Add(mesh);
             //new Bullet().LoadAssetsIfNeeded();

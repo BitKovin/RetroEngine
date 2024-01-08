@@ -345,8 +345,10 @@ float3 CalculateLight(PixelInput input, float3 normal)
     if (abs(dot(input.Normal, normalize(-LightDirection)))>0.01f)
         light -= shadow;
     
+    float globalLight = GlobalBrightness * GlobalLightColor * lerp(min(dot(normal, float3(0, 1, 0)),0), 1, 0.7);
+    
     light = max(light, 0);
-    light += GlobalBrightness;
+    light += globalLight;
 
 
     for (int i = 0; i < MAX_POINT_LIGHTS; i++)

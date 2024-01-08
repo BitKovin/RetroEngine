@@ -19,8 +19,6 @@ namespace RetroEngine.Game.Entities
     {
         StaticMesh mesh = new StaticMesh();
 
-        SkeletalMesh skeletalMesh = new SkeletalMesh();
-
         public Vector3 scale = new Vector3(1);
 
 
@@ -32,10 +30,6 @@ namespace RetroEngine.Game.Entities
 
             mesh.LoadFromFile("models/cube.obj");
 
-            
-            skeletalMesh.LoadFromFile("models/skeletal_test.fbx");
-
-            mesh = skeletalMesh;
 
             mesh.texture = AssetRegistry.LoadTextureFromFile("textures/foil.png");
             mesh.normalTexture = AssetRegistry.LoadTextureFromFile("textures/foil_n.png");
@@ -71,7 +65,7 @@ namespace RetroEngine.Game.Entities
 
             //skeletalMesh.Update(Time.deltaTime);
 
-            mesh.Position = Position - new Vector3(0,1,0);
+            mesh.Position = Position;
             mesh.Rotation = Rotation;
 
         }

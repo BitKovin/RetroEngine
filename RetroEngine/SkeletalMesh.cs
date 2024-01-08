@@ -101,6 +101,9 @@ namespace RetroEngine
 
         public void PlayAnimation(int id = 0, bool looped = true)
         {
+
+            if (RiggedModel is null) return;
+
             RiggedModel.BeginAnimation(id);
             RiggedModel.loopAnimation = looped;
         }
@@ -210,7 +213,10 @@ namespace RetroEngine
 
                     if (meshPartData is not null && textureSearchPaths.Count > 0)
                     {
-                        effect.Parameters["Texture"]?.SetValue(FindTexture(meshPartData.textureName));
+
+                        Texture2D texture = FindTexture(meshPartData.textureName);
+
+                        effect.Parameters["Texture"]?.SetValue(texture);
                         effect.Parameters["EmissiveTexture"]?.SetValue(FindTextureWithSufix(meshPartData.textureName, def: emisssiveTexture));
                         effect.Parameters["NormalTexture"]?.SetValue(FindTextureWithSufix(meshPartData.textureName, "_n", normalTexture));
                         effect.Parameters["ORMTexture"]?.SetValue(FindTextureWithSufix(meshPartData.textureName, "_orm", ormTexture));
@@ -249,6 +255,28 @@ namespace RetroEngine
                     }
                 }
 
+            }
+        }
+
+
+        public override void PreloadTextures()
+        {
+            if (RiggedModel != null)
+            {
+                foreach (RiggedModel.RiggedModelMesh meshPart in RiggedModel.meshes)
+                {
+
+                    MeshPartData meshPartData = meshPart.Tag as MeshPartData;
+
+                    if (meshPartData is not null && textureSearchPaths.Count > 0)
+                    {
+                        FindTexture(meshPartData.textureName);
+
+                        FindTextureWithSufix(meshPartData.textureName, def: emisssiveTexture);
+                        FindTextureWithSufix(meshPartData.textureName, "_n", normalTexture);
+                        FindTextureWithSufix(meshPartData.textureName, "_orm", ormTexture);
+                    }
+                }
             }
         }
 
