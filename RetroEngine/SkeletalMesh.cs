@@ -22,7 +22,7 @@ namespace RetroEngine
 
         public SkeletalMesh()
         {
-            CastShadows = false;
+            CastShadows = true;
         }
 
         public override void LoadFromFile(string filePath)

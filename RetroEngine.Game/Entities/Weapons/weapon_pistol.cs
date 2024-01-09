@@ -13,6 +13,8 @@ namespace RetroEngine.Game.Entities.Weapons
     {
         SkeletalMesh mesh = new SkeletalMesh();
 
+        SkeletalMesh arms = new SkeletalMesh();
+
         Delay attackDelay = new Delay();
 
         SoundPlayer fireSoundPlayer;
@@ -59,6 +61,11 @@ namespace RetroEngine.Game.Entities.Weapons
 
             mesh.Position = Position;
             mesh.Rotation = Rotation + DrawRotation;
+
+            arms.Position = mesh.Position;
+            arms.Rotation = mesh.Rotation;
+
+            arms.PastePose(mesh.CopyPose());
 
             fireSoundPlayer.Position = Camera.position;
         }
@@ -128,14 +135,25 @@ namespace RetroEngine.Game.Entities.Weapons
 
             mesh.LoadFromFile("models/weapons/pistol.fbx");
 
+            arms.LoadFromFile("models/weapons/arms.fbx");
+            arms.textureSearchPaths.Add("textures/weapons/arms/");
+
             mesh.textureSearchPaths.Add("textures/weapons/arms/");
             mesh.textureSearchPaths.Add("textures/weapons/pistol/");
             mesh.textureSearchPaths.Add("textures/weapons/general/");
+
+
             mesh.CastShadows = false;
             mesh.PreloadTextures();
             mesh.Viewmodel = true;
             mesh.UseAlternativeRotationCalculation = true;
             mesh.Transperent = true;
+
+            arms.CastShadows = false;
+            arms.PreloadTextures();
+            arms.Viewmodel = true;
+            arms.UseAlternativeRotationCalculation = true;
+
 
             mesh.SetInterpolationEnabled(true);
             
@@ -143,6 +161,7 @@ namespace RetroEngine.Game.Entities.Weapons
             Console.WriteLine("loaded pistol");
 
             meshes.Add(mesh);
+            meshes.Add(arms);
             //new Bullet().LoadAssetsIfNeeded();
 
         }

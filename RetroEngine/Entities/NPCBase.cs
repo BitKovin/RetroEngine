@@ -40,7 +40,7 @@ namespace RetroEngine.Entities
             bodies.Add(body);
 
             
-            mesh.CastShadows = false;
+            //mesh.CastShadows = false;
 
             npcList.Add(this);
 

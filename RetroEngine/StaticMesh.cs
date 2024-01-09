@@ -86,6 +86,8 @@ namespace RetroEngine
         {
 
             ormTexture = AssetRegistry.LoadTextureFromFile("engine/textures/defaultORM.png");
+
+
         }
 
         public virtual void Draw()
