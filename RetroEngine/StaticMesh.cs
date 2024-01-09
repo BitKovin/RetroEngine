@@ -428,7 +428,7 @@ namespace RetroEngine
                     output = AssetRegistry.LoadTextureFromFile(item + name, false);
                     if (output != null)
                     {
-                        textures.Add(name, output);
+                        textures.TryAdd(name, output);
                         return output;
                     }
                 }

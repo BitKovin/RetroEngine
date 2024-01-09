@@ -74,7 +74,7 @@ float4 MainPS(VertexShaderOutput input) : SV_TARGET
 {
 
     // Retrieve the depth value from the depth buffer
-    float depthValue = input.myPosition.z / input.myPosition.w;
+    float depthValue = input.myPosition.z;
 
 	//depthValue /= 20;
 

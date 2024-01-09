@@ -169,7 +169,7 @@ PixelInput DefaultVertexShaderFunction(VertexInput input)
 float3 ApplyNormalTexture(float3 sampledNormalColor, float3 worldNormal, float3 worldTangent)
 {
     
-    if (length(sampledNormalColor) < 0.001f)
+    if (length(sampledNormalColor) < 0.1f)
         sampledNormalColor = float3(0.5, 0.5, 1);
     
     sampledNormalColor *= float3(1, 1, 0.8f);
@@ -387,9 +387,8 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness)
         normal = -LightDirection;
     
     float3 light = max(0.0, dot(normal, normalize(-LightDirection))) * DirectBrightness * GlobalLightColor; // Example light direction;
-
-    if (abs(dot(input.Normal, normalize(-LightDirection)))>0.01f)
-        light -= shadow;
+    
+    light -= shadow;
     
     float globalLight = GlobalBrightness * GlobalLightColor * lerp(max(dot(normal, float3(0, 1, 0)),-1), 1, 0.85);
     
