@@ -13,6 +13,12 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin BloomSampler.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:BloomSampler.fx
+
 #begin box.fbx
 /importer:FbxImporter
 /processor:ModelProcessor
@@ -32,11 +38,23 @@
 /processorParam:TextureFormat=Compressed
 /build:box.fbx
 
+#begin ComposedColor.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:ComposedColor.fx
+
 #begin DeferredShading.fx
 /importer:EffectImporter
 /processor:EffectProcessor
 /processorParam:DebugMode=Auto
 /build:DeferredShading.fx
+
+#begin File.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:File.fx
 
 #begin Font.spritefont
 /importer:FontDescriptionImporter
@@ -62,6 +80,12 @@
 /processor:EffectProcessor
 /processorParam:DebugMode=Auto
 /build:ShadowMap.fx
+
+#begin ssao.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:ssao.fx
 
 #begin UnifiedOutput.fx
 /importer:EffectImporter

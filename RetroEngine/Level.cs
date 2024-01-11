@@ -183,7 +183,7 @@ namespace RetroEngine
                         if (mesh.Transperent)
                             transperentMeshes.Add(mesh);
                         else
-                            if(mesh.isRendered)
+                            if(mesh.isRendered || mesh.CastShadows)
                                 renderList.Add(mesh);
                     }
                 }

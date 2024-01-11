@@ -23,7 +23,7 @@ namespace RetroEngine.Game
             devMenu.Init();
 
 
-            Level.LoadFromFile("test2.map");
+            Level.LoadFromFile("test.map");
 
             Window.Title = "Game";
 

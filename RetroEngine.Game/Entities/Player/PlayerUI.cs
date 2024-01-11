@@ -23,13 +23,13 @@ namespace RetroEngine.Game.Entities.Player
 
         public void Load()
         {
-            crosshair.baseColor = new Color(0.9f, 0.8f, 0.6f) * 0.6f;
+            crosshair.baseColor = new Color(1f, 1f, 1f) * 2f;
             crosshair.SetTexture("ui/crosshair.png");
 
             crosshair.originH = Origin.CenterH;
             crosshair.originV = Origin.CenterV;
-            crosshair.position = new Vector2(-4);
-            crosshair.size = new Vector2(8, 8);
+            crosshair.size = new Vector2(4, 4);
+            crosshair.position = -crosshair.size/2;
             UiElement.main.childs.Add(crosshair);
 
             health.originH = Origin.Left;

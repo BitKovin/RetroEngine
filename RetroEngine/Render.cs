@@ -36,7 +36,13 @@ namespace RetroEngine
         public Texture2D black;
 
         RenderTarget2D ssaoOutput;
+        RenderTarget2D ComposedOutput;
+
+        RenderTarget2D bloomSample;
+        RenderTarget2D bloomSample2;
+
         RenderTarget2D outputPath;
+
 
         GraphicsDeviceManager graphics;
 
@@ -59,6 +65,10 @@ namespace RetroEngine
 
         public Effect SSAOEffect;
 
+        public Effect BloomEffect;
+
+        public Effect ComposeEffect;
+
         public Delay shadowPassRenderDelay = new Delay();
 
         public List<ParticleEmitter.Particle> particlesToDraw = new List<ParticleEmitter.Particle>();
@@ -79,10 +89,14 @@ namespace RetroEngine
             //PostProcessingEffect = GameMain.content.Load<Effect>("PostProcessing");
             //ColorEffect = GameMain.content.Load<Effect>("ColorOutput");
             //ParticleColorEffect = GameMain.content.Load<Effect>("ParticleColorOutput");
-            //SSAOEffect = GameMain.content.Load<Effect>("SSAO");
+            SSAOEffect = GameMain.content.Load<Effect>("ssao");
             BuffersEffect = GameMain.content.Load<Effect>("GPathesOutput");
 
             DeferredEffect = GameMain.content.Load<Effect>("DeferredShading");
+
+            ComposeEffect = GameMain.content.Load<Effect>("ComposedColor");
+
+            BloomEffect = GameMain.content.Load<Effect>("BloomSampler");
 
             InitSampler();
         }
@@ -97,10 +111,16 @@ namespace RetroEngine
 
             InitRenderTargetVectorIfNeed(ref DeferredOutput);
 
+            InitRenderTargetIfNeed(ref normalPath);
+
+            InitRenderTargetIfNeed(ref ComposedOutput);
 
             InitRenderTargetIfNeed(ref outputPath);
 
-            InitRenderTargetIfNeed(ref ssaoOutput);
+            InitSizedRenderTargetIfNeed(ref ssaoOutput, 480);
+
+            InitSizedRenderTargetIfNeed(ref bloomSample, 128);
+            InitSizedRenderTargetIfNeed(ref bloomSample2, 16);
 
             InitRenderTargetIfNeed(ref postProcessingOutput);
 
@@ -122,13 +142,16 @@ namespace RetroEngine
 
             RenderForwardPath(renderList);
 
-            //graphics.GraphicsDevice.SamplerStates[0] = SamplerState.AnisotropicClamp;
-            //PerformPostProcessing();
+            graphics.GraphicsDevice.SamplerStates[0] = SamplerState.AnisotropicClamp;
+            graphics.GraphicsDevice.SamplerStates[1] = SamplerState.AnisotropicClamp;
+            graphics.GraphicsDevice.SamplerStates[1] = SamplerState.AnisotropicClamp;
 
-            return DeferredOutput;
+            PerformPostProcessing();
+
+            return ComposedOutput;
         }
 
-        public void InitSampler()
+        public void InitSampler(int max = 10)
         {
             samplerState = new SamplerState();
 
@@ -149,7 +172,7 @@ namespace RetroEngine
                     graphics.GraphicsDevice.SamplerStates[i] = samplerState;
                     i++;
 
-                    if (i > 15) break;
+                    if (i > 10) break;
 
                 }catch(Exception e) { break; }
             }
@@ -160,11 +183,11 @@ namespace RetroEngine
         void RenderForwardPath(List<StaticMesh> renderList, bool onlyTransperent = false)
         {
 
-            //InitSampler();
+            InitSampler(3);
 
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
 
-            graphics.GraphicsDevice.SetRenderTargets(DeferredOutput,DepthOutput);
+            graphics.GraphicsDevice.SetRenderTargets(DeferredOutput,DepthOutput, normalPath);
             graphics.GraphicsDevice.Clear(ClearOptions.DepthBuffer, Color.Black, 1.0f, 0);
             graphics.GraphicsDevice.Clear(Graphics.BackgroundColor);
 
@@ -189,142 +212,6 @@ namespace RetroEngine
             ParticleEmitter.RenderEmitter.DrawParticles(particlesToDraw);
 
             
-        }
-
-        void RenderTransperentPath(List<StaticMesh> renderList, bool onlyTransperent = true)
-        {
-            graphics.GraphicsDevice.SetRenderTargets(ForwardOutput);
-            graphics.GraphicsDevice.Clear(Color.Black);
-
-            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
-
-            UnifiedEffect.Parameters["GlobalLightColor"].SetValue(Graphics.LightColor);
-            UnifiedEffect.Parameters["DepthMap"].SetValue(depthPath);
-
-            particlesToDraw.Clear();
-
-            InitSampler();
-
-            foreach (StaticMesh mesh in renderList)
-            {
-                if (mesh.Transperent || onlyTransperent == false)
-                    mesh.DrawUnified();
-            }
-            graphics.GraphicsDevice.Clear(Color.Transparent);
-
-            ParticleEmitter.LoadRenderEmitter();
-            ParticleEmitter.RenderEmitter.DrawParticles(particlesToDraw);
-
-            foreach (StaticMesh mesh in renderList)
-            {
-                if (mesh.Transperent || onlyTransperent == false)
-                    mesh.DrawUnified();
-            }
-
-        }
-
-        void DrawPathes(List<StaticMesh> renderList)
-        {
-
-            InitSampler();
-
-
-
-            graphics.GraphicsDevice.SetRenderTargets(colorPath,emissivePath,normalPath,positionPath, depthPath);
-            graphics.GraphicsDevice.Clear(Color.Transparent);
-
-            graphics.GraphicsDevice.SetRenderTarget(colorPath);
-            graphics.GraphicsDevice.Clear(Graphics.BackgroundColor);
-
-
-            graphics.GraphicsDevice.SetRenderTarget(depthPath);
-            graphics.GraphicsDevice.Clear(Color.White);
-
-
-            graphics.GraphicsDevice.SetRenderTargets(colorPath, emissivePath, normalPath, positionPath, depthPath);
-
-            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
-
-            particlesToDraw.Clear();
-
-            foreach (StaticMesh mesh in renderList)
-            {
-                if(mesh.Transperent==false)
-
-                    mesh.DrawPathes();
-            }
-
-            ParticleEmitter.LoadRenderEmitter();
-            ParticleEmitter.RenderEmitter.DrawParticles(particlesToDraw);
-        }
-
-        void PerformDeferredShading()
-        {
-            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
-
-            graphics.GraphicsDevice.SetRenderTarget(DeferredOutput);
-
-
-            graphics.GraphicsDevice.Clear(Graphics.BackgroundColor);
-
-            DeferredEffect.Parameters["ColorTexture"].SetValue(colorPath);
-            DeferredEffect.Parameters["EmissiveTexture"].SetValue(emissivePath);
-            DeferredEffect.Parameters["NormalTexture"].SetValue(normalPath);
-            DeferredEffect.Parameters["PositionTexture"].SetValue(positionPath);
-            DeferredEffect.Parameters["ForwardTexture"].SetValue(ForwardOutput);
-
-            DeferredEffect.Parameters["DirectBrightness"].SetValue(Graphics.DirectLighting);
-            DeferredEffect.Parameters["GlobalBrightness"].SetValue(Graphics.GlobalLighting);
-            DeferredEffect.Parameters["LightDirection"].SetValue(Graphics.LightDirection);
-
-
-            Vector3[] LightPos = new Vector3[LightManager.MAX_POINT_LIGHTS];
-            Vector3[] LightColor = new Vector3[LightManager.MAX_POINT_LIGHTS];
-            float[] LightRadius = new float[LightManager.MAX_POINT_LIGHTS];
-
-            for (int i = 0; i < LightManager.MAX_POINT_LIGHTS; i++)
-            {
-                LightPos[i] = LightManager.FinalPointLights[i].Position;
-                LightColor[i] = LightManager.FinalPointLights[i].Color;
-                LightRadius[i] = LightManager.FinalPointLights[i].Radius;
-            }
-
-            DeferredEffect.Parameters["LightPositions"].SetValue(LightPos);
-            DeferredEffect.Parameters["LightColors"].SetValue(LightColor);
-            DeferredEffect.Parameters["LightRadiuses"].SetValue(LightRadius);
-
-
-            DeferredEffect.Parameters["ShadowMapViewProjection"].SetValue(Graphics.LightViewProjection);
-            DeferredEffect.Parameters["ShadowMap"].SetValue(shadowMap);
-            DeferredEffect.Parameters["ShadowBias"].SetValue(Graphics.ShadowBias);
-            DeferredEffect.Parameters["ShadowMapResolution"].SetValue((float)Graphics.shadowMapResolution);
-
-            DeferredEffect.Parameters["GlobalLightColor"].SetValue(Graphics.LightColor);
-
-            SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
-
-            spriteBatch.Begin(effect: DeferredEffect);
-
-            DrawFullScreenQuad(spriteBatch, colorPath);
-
-            spriteBatch.End();
-            graphics.GraphicsDevice.SetRenderTarget(null);
-        }
-
-        void RenderDepthPath(List<StaticMesh> renderList)
-        {
-            graphics.GraphicsDevice.SetRenderTarget(DepthOutput);
-            graphics.GraphicsDevice.Clear(Color.Red);
-
-            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
-
-
-            foreach (StaticMesh mesh in renderList)
-                if (mesh.isRendered)
-                {
-                    mesh.DrawDepth();
-                }
-
         }
 
         void RenderShadowMap(List<StaticMesh> renderList)
@@ -382,6 +269,11 @@ namespace RetroEngine
         void PerformPostProcessing()
         {
             //PerformSSAO();
+
+            CalculateBloom();
+
+            PerformCompose();
+
             PerformFXAA();
             return;
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
@@ -405,33 +297,34 @@ namespace RetroEngine
 
         void PerformSSAO()
         {
-            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
+            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, ssaoOutput.Width, ssaoOutput.Height);
 
             graphics.GraphicsDevice.SetRenderTarget(ssaoOutput);
 
-            SSAOEffect.Parameters["ColorTexture"].SetValue(colorPath);
+            SSAOEffect.Parameters["ColorTexture"].SetValue(DeferredOutput);
             SSAOEffect.Parameters["NormalTexture"].SetValue(normalPath);
             SSAOEffect.Parameters["DepthTexture"].SetValue(DepthOutput);
-            SSAOEffect.Parameters["screenWidth"].SetValue(1280/3);
-            SSAOEffect.Parameters["screenHeight"].SetValue(720/3);
-            SSAOEffect.Parameters["ssaoRadius"].SetValue(20);
+            SSAOEffect.Parameters["screenWidth"].SetValue(ssaoOutput.Width/2);
+            SSAOEffect.Parameters["screenHeight"].SetValue(ssaoOutput.Height/2);
+            SSAOEffect.Parameters["ssaoRadius"].SetValue(1f);
             //SSAOEffect.Parameters["ssaoBias"].SetValue(0.000001f);
-            SSAOEffect.Parameters["ssaoIntensity"].SetValue(0.6f);
+            SSAOEffect.Parameters["ssaoIntensity"].SetValue(10f);
 
 
             SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
 
             spriteBatch.Begin(effect: SSAOEffect);
 
-            DrawFullScreenQuad(spriteBatch, colorPath);
+            DrawFullScreenQuad(spriteBatch, DeferredOutput);
 
             spriteBatch.End();
         }
+
         void PerformFXAA()
         {
             if(Graphics.EnableAntiAliasing == false)
             {
-                outputPath = DeferredOutput;
+                outputPath = ComposedOutput;
                 return;
             }
             // Set the render target to the output path
@@ -449,104 +342,79 @@ namespace RetroEngine
 
             fxaaEffect.Parameters["invViewportWidth"].SetValue(1f / graphics.PreferredBackBufferWidth);
             fxaaEffect.Parameters["invViewportHeight"].SetValue(1f / graphics.PreferredBackBufferHeight);
-            fxaaEffect.Parameters["screenColor"].SetValue(DeferredOutput);
+            fxaaEffect.Parameters["screenColor"].SetValue(ComposedOutput);
 
             // Begin drawing with SpriteBatch
             SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
             spriteBatch.Begin(effect: fxaaEffect);
 
             // Draw a full-screen quad to apply the lighting
+            DrawFullScreenQuad(spriteBatch, ComposedOutput);
+
+            // End the SpriteBatch
+            spriteBatch.End();
+
+        }
+
+        void PerformCompose()
+        {
+            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
+
+            graphics.GraphicsDevice.SetRenderTarget(ComposedOutput);
+
+            ComposeEffect.Parameters["ColorTexture"].SetValue(DeferredOutput);
+            ComposeEffect.Parameters["SSAOTexture"]?.SetValue(ssaoOutput);
+            ComposeEffect.Parameters["BloomTexture"].SetValue(bloomSample);
+            ComposeEffect.Parameters["Bloom2Texture"].SetValue(bloomSample2);
+
+            SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
+
+            spriteBatch.Begin(effect: ComposeEffect);
+
             DrawFullScreenQuad(spriteBatch, DeferredOutput);
 
-            // End the SpriteBatch
             spriteBatch.End();
-
         }
 
-        void RenderColorPath(List<StaticMesh> renderList)
+        void CalculateBloom()
         {
-            graphics.GraphicsDevice.SetRenderTarget(colorPath);
-            graphics.GraphicsDevice.Clear(Graphics.BackgroundColor);
+            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, bloomSample.Width, bloomSample.Height);
+            graphics.GraphicsDevice.SetRenderTarget(bloomSample);
 
-            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
+            BloomEffect.Parameters["screenWidth"].SetValue(bloomSample.Width);
+            BloomEffect.Parameters["screenHeight"].SetValue(bloomSample.Height);
 
-            particlesToDraw.Clear();
-
-            foreach (StaticMesh mesh in renderList)
-            {
-                mesh.Draw();
-            }
-
-            ParticleEmitter.LoadRenderEmitter();
-            ParticleEmitter.RenderEmitter.DrawParticlesPathes(particlesToDraw);
-
-        }
-
-        void RenderNormalPath(List<StaticMesh> renderList)
-        {
-            graphics.GraphicsDevice.SetRenderTarget(normalPath);
-            graphics.GraphicsDevice.Clear(new Color(0,0,0,0));
-
-            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
-
-            foreach (StaticMesh mesh in renderList)
-            {
-                mesh.DrawNormals();
-            }
-
-            ParticleEmitter.LoadRenderEmitter();
-            ParticleEmitter.RenderEmitter.DrawParticlesPathes(particlesToDraw);
-            
-        }
-
-        void RenderMiscPath(Level level)
-        {
-            graphics.GraphicsDevice.SetRenderTarget(miscPath);
-
-            graphics.GraphicsDevice.Clear(Color.White);
-
-
-            foreach (Entity ent in level.entities)
-            {
-
-                if (ent.meshes is not null)
-                    foreach (StaticMesh mesh in ent.meshes)
-                        mesh.DrawMisc();
-            }
-        }
-
-
-
-        void PerformLighting()
-        {
-
-
-            // Set the render target to the output path
-            graphics.GraphicsDevice.SetRenderTarget(outputPath);
-
-            // Clear the render target
-            //graphics.GraphicsDevice.Clear(Color.Transparent);
-
-            // Set the necessary parameters for the lighting effect
-            lightingEffect.Parameters["ColorTexture"].SetValue(colorPath);
-            lightingEffect.Parameters["NormalTexture"].SetValue(normalPath);
-            lightingEffect.Parameters["MiscTexture"].SetValue(miscPath);
-
-            // Begin drawing with SpriteBatch
             SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
-            spriteBatch.Begin(effect: lightingEffect);
 
-            // Draw a full-screen quad to apply the lighting
-            DrawFullScreenQuad(spriteBatch, colorPath);
+            spriteBatch.Begin(effect: BloomEffect);
 
-            // End the SpriteBatch
+            DrawFullScreenQuad(spriteBatch, DeferredOutput);
+
             spriteBatch.End();
+
+            DownsampleToTexture(bloomSample, bloomSample2);
+
+        }
+
+        void DownsampleToTexture(Texture2D source, RenderTarget2D target)
+        {
+            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, target.Width, target.Height);
+            graphics.GraphicsDevice.SetRenderTarget(target);
+
+            SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
+
+            spriteBatch.Begin();
+
+            DrawFullScreenQuad(spriteBatch, source);
+
+            spriteBatch.End();
+
         }
 
         void DrawFullScreenQuad(SpriteBatch spriteBatch, Texture2D inputTexture)
         {
             // Create a rectangle covering the entire screen
-            Rectangle screenRectangle = new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
+            Rectangle screenRectangle = new Rectangle(0, 0, graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height);
 
             // Draw the full-screen quad using SpriteBatch
             spriteBatch.Draw(inputTexture, screenRectangle, Color.White);
@@ -603,6 +471,34 @@ namespace RetroEngine
                     SurfaceFormat.Rgba64, // Color format
                     depthFormat); // Depth format
             }
+        }
+
+        void InitSizedRenderTargetIfNeed(ref RenderTarget2D target, float height)
+        {
+
+            float ratio = ((float)graphics.PreferredBackBufferWidth) / ((float)graphics.PreferredBackBufferHeight);
+
+            int width = (int)(height * ratio);
+
+            if (width > 0 && height > 0)
+
+                if (target is null || target.Width != width || target.Height != height)
+                {
+                    // Dispose of the old render target if it exists
+                    target?.Dispose();
+
+                    // Set the depth format based on your requirements
+                    DepthFormat depthFormat = DepthFormat.Depth24;
+
+                    // Create the new render target with the specified depth format
+                    target = new RenderTarget2D(
+                        graphics.GraphicsDevice,
+                        width,
+                        (int)height,
+                        false, // No mipmaps
+                        SurfaceFormat.Rgba64, // Color format
+                        depthFormat); // Depth format
+                }
         }
 
         void InitVectorRenderTargetIfNeed(ref RenderTarget2D target)

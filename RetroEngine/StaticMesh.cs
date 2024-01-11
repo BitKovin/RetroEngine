@@ -225,7 +225,7 @@ namespace RetroEngine
                         else
                         {
                             effect.Parameters["Texture"]?.SetValue(texture);
-                            effect.Parameters["EmissiveTexture"]?.SetValue(GameMain.Instance.render.black);
+                            effect.Parameters["EmissiveTexture"]?.SetValue(emisssiveTexture);
                             effect.Parameters["NormalTexture"]?.SetValue(normalTexture);
                             effect.Parameters["ORMTexture"]?.SetValue(ormTexture);
                         }

@@ -99,6 +99,7 @@ struct PixelOutput
 {
     float4 Color : COLOR0;
     float4 Depth : COLOR1;
+    float4 Normal : COLOR2;
 };
 
 float3 normalize(float3 v)
@@ -289,7 +290,7 @@ float GetShadow(float3 lightCoords, PixelInput input, bool close = false)
 
         int numSamples = 2; // Number of samples in each direction (total samples = numSamples^2)
 
-        float bias = ShadowBias * abs(input.Normal.z) + ShadowBias / 2.0f;
+        float bias = ShadowBias * (1 - saturate(dot(input.Normal, -LightDirection))) + ShadowBias / 2.0f;
         resolution = ShadowMapResolution;
             
         
@@ -390,7 +391,7 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness)
     
     light -= shadow;
     
-    float globalLight = GlobalBrightness * GlobalLightColor * lerp(max(dot(normal, float3(0, 1, 0)),-1), 1, 0.85);
+    float globalLight = GlobalBrightness * GlobalLightColor * lerp(max(dot(normal, float3(0, 1, 0)),-1), 1, 0.8);
     
     light = max(light, 0);
     light += globalLight;

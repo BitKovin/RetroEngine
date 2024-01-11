@@ -63,6 +63,8 @@ PixelOutput PixelShaderFunction(PixelInput input)
     
     output.Color = float4(textureColor, textureAlpha);
     
+    output.Normal = float4((pixelNormal + 1) / 2,1);
+    
     return output;
 }
 
