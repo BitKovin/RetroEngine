@@ -36,6 +36,10 @@
 	paricleSystem(string) : "Paricle System" : "destructionWood"
 ]
 
+@SolidClass = groupBrush : "Group Brush"
+[
+]
+
 @baseclass size(-5 -5 -5, 5 5 5) color(255 200 0) model({ "path": "models/tools/radius.obj", "scale": radius}) = PointLight []
 @PointClass base(PointLight) = light_point : "Light" 
 [

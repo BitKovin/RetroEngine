@@ -31,6 +31,13 @@ namespace RetroEngine
 
         public static Vector3 lightlocation = new Vector3();
 
+        public static BoundingFrustum DirectionalLightFrustrum = new BoundingFrustum(Matrix.Identity);
+
+        public static void UpdateDirectionalLight()
+        {
+            DirectionalLightFrustrum.Matrix = GetLightView() * GetLightProjection();
+        }
+
         public static Matrix GetLightProjection()
         {
 

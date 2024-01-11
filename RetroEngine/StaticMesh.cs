@@ -28,6 +28,7 @@ namespace RetroEngine
         public bool Transperent;
         public bool Viewmodel;
         public bool IsRendered;
+        public bool IsRenderedShadow;
 
         public float Transparency;
 
@@ -59,6 +60,8 @@ namespace RetroEngine
         public float CalculatedCameraDistance = 0;
 
         public bool isRendered = true;
+
+        public bool isRenderedShadow = true;
 
         public bool useAvgVertexPosition;
 
@@ -263,7 +266,7 @@ namespace RetroEngine
 
         public virtual void DrawShadow(bool closeShadow = false)
         {
-            if (!CastShadows) return;
+            if (!CastShadows || !isRenderedShadow) return;
 
             GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
             // Load the custom effect
@@ -771,6 +774,11 @@ namespace RetroEngine
             return Camera.frustum.Contains(sphere.Transform(GetWorldMatrix())) != ContainmentType.Disjoint;
         }
 
+        protected bool IsBoundingSphereInShadowFrustum(BoundingSphere sphere)
+        {
+            return Graphics.DirectionalLightFrustrum.Contains(sphere.Transform(GetWorldMatrix())) != ContainmentType.Disjoint;
+        }
+
         public virtual void RenderPreparation()
         {
 
@@ -787,19 +795,30 @@ namespace RetroEngine
             frameStaticMeshData.Transparency = Transparency;
             frameStaticMeshData.LightProjectionClose = Graphics.GetCloseLightProjection();
             frameStaticMeshData.IsRendered = isRendered;
+            frameStaticMeshData.IsRenderedShadow = isRenderedShadow;
         }
 
         public virtual void UpdateCulling()
         {
             isRendered = false;
+            isRenderedShadow = false;
 
             if (model is null) return;
             foreach (ModelMesh mesh in model.Meshes)
+            {
                 if (IsBoundingSphereInFrustum(mesh.BoundingSphere))
                 {
                     isRendered = true;
-                    return;
+
                 }
+
+                if (IsBoundingSphereInShadowFrustum(mesh.BoundingSphere))
+                {
+                    isRenderedShadow = true;
+
+                }
+
+            }
 
         }
 

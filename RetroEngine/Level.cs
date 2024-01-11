@@ -160,6 +160,8 @@ namespace RetroEngine
         public virtual void RenderPreparation()
         {
 
+            Graphics.UpdateDirectionalLight();
+
             Parallel.ForEach(entities, entity =>
             {
                 foreach (StaticMesh mesh in entity.meshes)
@@ -183,8 +185,7 @@ namespace RetroEngine
                         if (mesh.Transperent)
                             transperentMeshes.Add(mesh);
                         else
-                            if(mesh.isRendered || mesh.CastShadows)
-                                renderList.Add(mesh);
+                            renderList.Add(mesh);
                     }
                 }
             }
