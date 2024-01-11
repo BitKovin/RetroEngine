@@ -40,6 +40,7 @@ namespace RetroEngine
 
         RenderTarget2D bloomSample;
         RenderTarget2D bloomSample2;
+        RenderTarget2D bloomSample3;
 
         RenderTarget2D outputPath;
 
@@ -120,7 +121,8 @@ namespace RetroEngine
             InitSizedRenderTargetIfNeed(ref ssaoOutput, 480);
 
             InitSizedRenderTargetIfNeed(ref bloomSample, 128);
-            InitSizedRenderTargetIfNeed(ref bloomSample2, 16);
+            InitSizedRenderTargetIfNeed(ref bloomSample2, 64);
+            InitSizedRenderTargetIfNeed(ref bloomSample3, 16);
 
             InitRenderTargetIfNeed(ref postProcessingOutput);
 
@@ -366,6 +368,7 @@ namespace RetroEngine
             ComposeEffect.Parameters["SSAOTexture"]?.SetValue(ssaoOutput);
             ComposeEffect.Parameters["BloomTexture"].SetValue(bloomSample);
             ComposeEffect.Parameters["Bloom2Texture"].SetValue(bloomSample2);
+            ComposeEffect.Parameters["Bloom3Texture"].SetValue(bloomSample3);
 
             SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
 
@@ -393,6 +396,7 @@ namespace RetroEngine
             spriteBatch.End();
 
             DownsampleToTexture(bloomSample, bloomSample2);
+            DownsampleToTexture(bloomSample, bloomSample3);
 
         }
 
