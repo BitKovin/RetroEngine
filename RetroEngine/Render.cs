@@ -167,7 +167,7 @@ namespace RetroEngine
 
 
             int i = 0;
-            while (true)
+            while (i<=max)
             {
                 try
                 {
@@ -272,7 +272,11 @@ namespace RetroEngine
         {
             //PerformSSAO();
 
+            Stopwatch sw = Stopwatch.StartNew();
+            
             CalculateBloom();
+
+            Console.WriteLine(sw.Elapsed.TotalMilliseconds);
 
             PerformCompose();
 
