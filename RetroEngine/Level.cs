@@ -70,7 +70,7 @@ namespace RetroEngine
                 entity.Destroy();
             }
 
-            UiElement.main.childs.Clear();
+            UiElement.Viewport.childs.Clear();
 
 
             Navigation.ClearNavData();

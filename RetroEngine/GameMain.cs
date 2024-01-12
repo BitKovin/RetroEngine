@@ -80,7 +80,7 @@ namespace RetroEngine
             IsMouseVisible = true;
             Instance = this;
             curentLevel = new Level();
-            UiElement.main = UIManger;
+            UiElement.Viewport = UIManger;
             _graphics.GraphicsProfile = GraphicsProfile.HiDef;
         }
 
@@ -194,7 +194,7 @@ namespace RetroEngine
 
             PerformReservedTimeTasks();
             
-            foreach (UiElement elem in UiElement.main.childs)
+            foreach (UiElement elem in UiElement.Viewport.childs)
                 elem.Update();
 
             Camera.ViewportUpdate();

@@ -69,7 +69,7 @@ namespace RetroEngine.UI
     {
         public List<UiElement> childs = new List<UiElement>();
 
-        public static UiElement main;
+        public static UiElement Viewport;
 
         public bool hovering;
         public Collision2D col = new Collision2D();

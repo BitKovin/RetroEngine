@@ -30,14 +30,14 @@ namespace RetroEngine.Game.Entities.Player
             crosshair.originV = Origin.CenterV;
             crosshair.size = new Vector2(4, 4);
             crosshair.position = -crosshair.size/2;
-            UiElement.main.childs.Add(crosshair);
+            UiElement.Viewport.childs.Add(crosshair);
 
             health.originH = Origin.Left;
             health.originV = Origin.Bottom;
             health.position = new Vector2(10,-50);
             health.FontSize = 24;
             health.AlignProgress = new Vector2(0.0f, 0.5f);
-            UiElement.main.childs.Add(health);
+            UiElement.Viewport.childs.Add(health);
 
             loaded = true;
         }

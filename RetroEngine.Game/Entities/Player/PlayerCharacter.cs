@@ -73,18 +73,18 @@ namespace RetroEngine.Game.Entities.Player
                 buttonLeft = new Button();
                 buttonLeft.position = new Vector2(59, 601);
                 buttonLeft.size = new Vector2(100, 100);
-                UiElement.main.childs.Add(buttonLeft);
+                UiElement.Viewport.childs.Add(buttonLeft);
 
                 buttonRight = new Button();
                 buttonRight.position = new Vector2(112 + 50, 601);
                 buttonRight.size = new Vector2(100, 100);
-                UiElement.main.childs.Add(buttonRight);
+                UiElement.Viewport.childs.Add(buttonRight);
 
                 buttonRotate = new Button();
                 buttonRotate.position = new Vector2(-200, 601);
                 buttonRotate.size = new Vector2(100, 100);
                 buttonRotate.originH = Origin.Right;
-                UiElement.main.childs.Add(buttonRotate);
+                UiElement.Viewport.childs.Add(buttonRotate);
             }
 
             buttonRotate.onClicked += ButtonRotate_onClicked;
