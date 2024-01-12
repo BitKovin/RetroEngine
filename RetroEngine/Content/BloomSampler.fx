@@ -44,10 +44,10 @@ float4 MainPS(VertexShaderOutput input) : COLOR
             
             float2 TextureOffset = float2(x, y);
             
-            //if (length(TextureOffset) > sampleRadius)
-                //continue;
+            if (length(TextureOffset) > sampleRadius)
+                continue;
 			
-            float2 offsetCoords = TextureOffset / float2(screenWidth * 2, screenHeight * 2);
+            float2 offsetCoords = TextureOffset / float2(screenWidth * 5, screenHeight * 5);
 			
             color += saturate(tex2D(SpriteTextureSampler, input.TextureCoordinates + offsetCoords).rgb - offset) / (length(TextureOffset) + 1);
         }

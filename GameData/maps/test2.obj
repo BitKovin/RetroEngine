@@ -724,7 +724,7 @@ f  146/196/18  139/197/18  142/198/18  145/199/18
 usemtl brushes/__TB_empty
 f  143/200/6  144/201/6  146/202/6  145/203/6
 
-o entity15_brush0
+o entity14_brush0
 usemtl brushes/bricks
 f  147/204/1  148/205/1  149/206/1  150/207/1
 usemtl brushes/bricks
@@ -738,7 +738,7 @@ f  153/205/5  147/209/5  150/208/5  154/206/5
 usemtl brushes/bricks
 f  154/207/6  151/206/6  152/205/6  153/204/6
 
-o entity15_brush1
+o entity14_brush1
 usemtl brushes/bricks
 f  155/214/1  156/215/1  157/216/1  158/217/1
 usemtl brushes/bricks
@@ -752,7 +752,7 @@ f  161/221/5  155/220/5  158/219/5  162/218/5
 usemtl brushes/bricks
 f  162/217/6  159/216/6  160/215/6  161/214/6
 
-o entity15_brush2
+o entity14_brush2
 usemtl brushes/bricks
 f  163/226/1  164/214/1  165/227/1  166/228/1
 usemtl brushes/bricks
@@ -766,7 +766,7 @@ f  169/221/5  163/8/5  166/5/5  170/229/5
 usemtl brushes/bricks
 f  170/228/6  167/227/6  168/214/6  169/226/6
 
-o entity15_brush3
+o entity14_brush3
 usemtl brushes/bricks
 f  171/235/1  172/221/1  173/218/1  174/236/1
 usemtl brushes/bricks
@@ -780,7 +780,7 @@ f  177/221/5  171/220/5  174/219/5  178/218/5
 usemtl brushes/bricks
 f  178/236/6  175/218/6  176/221/6  177/235/6
 
-o entity15_brush4
+o entity14_brush4
 usemtl brushes/bricks
 f  179/241/1  180/242/1  181/236/1  182/216/1
 usemtl brushes/bricks
@@ -794,7 +794,7 @@ f  185/244/5  179/243/5  182/219/5  186/218/5
 usemtl brushes/bricks
 f  186/216/6  183/236/6  184/242/6  185/241/6
 
-o entity15_brush5
+o entity14_brush5
 usemtl brushes/bricks
 f  187/221/1  188/245/1  189/246/1  190/229/1
 usemtl brushes/bricks

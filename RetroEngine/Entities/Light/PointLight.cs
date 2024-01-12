@@ -27,7 +27,7 @@ namespace RetroEngine.Entities.Light
         {
             base.FromData(data);
 
-            lightData.Color = data.GetPropertyVector("light_color", new Vector3(1,1,1));
+            lightData.Color = data.GetPropertyVector("light_color", new Vector3(1,1,1)) * data.GetPropertyFloat("intensity",1);
             lightData.Radius = data.GetPropertyFloat("radius", 5);
         }
 

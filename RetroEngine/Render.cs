@@ -37,6 +37,7 @@ namespace RetroEngine
 
         RenderTarget2D ssaoOutput;
         RenderTarget2D ComposedOutput;
+        RenderTarget2D FxaaOutput;
 
         RenderTarget2D bloomSample;
         RenderTarget2D bloomSample2;
@@ -116,6 +117,8 @@ namespace RetroEngine
 
             InitRenderTargetIfNeed(ref ComposedOutput);
 
+            InitRenderTargetIfNeed(ref FxaaOutput);
+
             InitRenderTargetIfNeed(ref outputPath);
 
             InitSizedRenderTargetIfNeed(ref ssaoOutput, 480);
@@ -146,7 +149,9 @@ namespace RetroEngine
 
             graphics.GraphicsDevice.SamplerStates[0] = SamplerState.AnisotropicClamp;
             graphics.GraphicsDevice.SamplerStates[1] = SamplerState.AnisotropicClamp;
-            graphics.GraphicsDevice.SamplerStates[1] = SamplerState.AnisotropicClamp;
+            graphics.GraphicsDevice.SamplerStates[2] = SamplerState.AnisotropicClamp;
+            graphics.GraphicsDevice.SamplerStates[3] = SamplerState.AnisotropicClamp;
+            graphics.GraphicsDevice.SamplerStates[4] = SamplerState.AnisotropicClamp;
 
             PerformPostProcessing();
 
@@ -185,7 +190,7 @@ namespace RetroEngine
         void RenderForwardPath(List<StaticMesh> renderList, bool onlyTransperent = false)
         {
 
-            InitSampler(3);
+            InitSampler(5);
 
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
 
@@ -279,6 +284,8 @@ namespace RetroEngine
             PerformCompose();
 
             PerformFXAA();
+
+
             return;
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
 
@@ -326,13 +333,21 @@ namespace RetroEngine
 
         void PerformFXAA()
         {
-            if(Graphics.EnableAntiAliasing == false)
+
+            if (Graphics.EnableAntiAliasing == false)
             {
                 outputPath = ComposedOutput;
+
+                Console.WriteLine("AA disabled");
+
                 return;
             }
+
+            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, FxaaOutput.Width, FxaaOutput.Height);
+
             // Set the render target to the output path
-            graphics.GraphicsDevice.SetRenderTarget(outputPath);
+            graphics.GraphicsDevice.SetRenderTarget(FxaaOutput);
+            
 
             float fxaaQualitySubpix = 0.75f;
             float fxaaQualityEdgeThreshold = 0.166f;
@@ -357,6 +372,8 @@ namespace RetroEngine
 
             // End the SpriteBatch
             spriteBatch.End();
+
+            outputPath = FxaaOutput;
 
         }
 

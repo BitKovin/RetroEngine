@@ -15,8 +15,8 @@ namespace RetroEngine
         public static Color BackgroundColor = new Color(0.15f, 0.15f, 0.2f);
         public static Vector3 LightColor = new Vector3(1,1,1);
 
-        public static float ShadowBias = 0.0015f;
-        public static int shadowMapResolution = 2048*2;
+        public static float ShadowBias = 0.002f;
+        public static int shadowMapResolution = 2048*8;
         public static int closeShadowMapResolution = 2048;
 
         public static Matrix LightViewProjection;
@@ -52,7 +52,7 @@ namespace RetroEngine
 
         public static Matrix GetLightView()
         {
-            return Matrix.CreateLookAt(GetCameraPositionByPixelGrid() - LightDirection*20f, GetCameraPositionByPixelGrid(), LightDirection.XZ().Normalized());
+            return Matrix.CreateLookAt(GetCameraPositionByPixelGrid() - LightDirection * 20f, GetCameraPositionByPixelGrid(), MathHelper.FindLookAtRotation(new Vector3(), LightDirection).GetUpVector());
         }
 
         static Vector3 GetCameraPositionByPixelGrid()

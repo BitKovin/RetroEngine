@@ -7,6 +7,7 @@
 "globalLightColor" "1 0.3 0.3"
 "skyColor" "0.2 0.1 0.1"
 "globalLightBrightness" "0.25"
+"directLightBrightness" "0.75"
 // brush 0
 {
 ( -352 -480 304 ) ( -352 528 16 ) ( -352 528 304 ) brushes/bricks 0 0 0 0.75 0.75
@@ -220,9 +221,10 @@
 // entity 10
 {
 "classname" "light_point"
-"origin" "-245 5 171"
-"radius" "6"
+"origin" "-277 -27 155"
+"radius" "7"
 "light_color" "0.160784 0.0117647 1"
+"intensity" "1"
 }
 // entity 11
 {
@@ -235,13 +237,6 @@
 }
 // entity 12
 {
-"classname" "light_point"
-"origin" "-245 117 171"
-"radius" "6"
-"light_color" "1 0 0.0156863"
-}
-// entity 13
-{
 "classname" "static_mesh"
 "origin" "-114.765 -55.1453 27.9635"
 "path" "models/npc_base.obj"
@@ -249,14 +244,14 @@
 "texture" "textures/brushes/bricks.png"
 "angle" "355"
 }
-// entity 14
+// entity 13
 {
 "classname" "light_point"
 "origin" "-747 581 165"
 "light_color" "1 0.933333 0"
 "radius" "7"
 }
-// entity 15
+// entity 14
 {
 "classname" "groupBrush"
 // brush 0
@@ -314,7 +309,31 @@
 ( -144 -144 304 ) ( -144 -192 16 ) ( -144 -192 304 ) brushes/bricks 0 0 0 0.75 0.75
 }
 }
+// entity 15
+{
+"classname" "light_point"
+"origin" "-197 149 155"
+"radius" "7"
+"light_color" "1 0 0.0156863"
+"intensity" "1"
+}
 // entity 16
+{
+"classname" "light_point"
+"origin" "-197 -27 155"
+"radius" "7"
+"light_color" "0.160784 0.0117647 1"
+"intensity" "1"
+}
+// entity 17
+{
+"classname" "light_point"
+"origin" "-277 149 155"
+"radius" "7"
+"light_color" "1 0 0.0156863"
+"intensity" "1"
+}
+// entity 18
 {
 "classname" "func_group"
 "_tb_type" "_tb_layer"
@@ -323,85 +342,85 @@
 "_tb_layer_sort_index" "0"
 "_tb_layer_hidden" "1"
 }
-// entity 17
+// entity 19
 {
 "classname" "info.navpoint"
 "origin" "216 -584 24"
 "_tb_layer" "1"
 }
-// entity 18
+// entity 20
 {
 "classname" "info.navpoint"
 "origin" "-600 -840 24"
 "_tb_layer" "1"
 }
-// entity 19
+// entity 21
 {
 "classname" "info.navpoint"
 "origin" "840 -168 24"
 "_tb_layer" "1"
 }
-// entity 20
+// entity 22
 {
 "classname" "info.navpoint"
 "origin" "280 216 24"
 "_tb_layer" "1"
 }
-// entity 21
+// entity 23
 {
 "classname" "info.navpoint"
 "origin" "-184 456 24"
 "_tb_layer" "1"
 }
-// entity 22
+// entity 24
 {
 "classname" "info.navpoint"
 "origin" "648 744 24"
 "_tb_layer" "1"
 }
-// entity 23
+// entity 25
 {
 "classname" "info.navpoint"
 "origin" "856 -824 24"
 "_tb_layer" "1"
 }
-// entity 24
+// entity 26
 {
 "classname" "info.navpoint"
 "origin" "-184 -584 24"
 "_tb_layer" "1"
 }
-// entity 25
+// entity 27
 {
 "classname" "info.navpoint"
 "origin" "776 -520 24"
 "_tb_layer" "1"
 }
-// entity 26
+// entity 28
 {
 "classname" "info.navpoint"
 "origin" "-488 536 24"
 "_tb_layer" "1"
 }
-// entity 27
+// entity 29
 {
 "classname" "info.navpoint"
 "origin" "-632 -184 24"
 "_tb_layer" "1"
 }
-// entity 28
+// entity 30
 {
 "classname" "info.navpoint"
 "origin" "-808 -504 24"
 "_tb_layer" "1"
 }
-// entity 29
+// entity 31
 {
 "classname" "info.navpoint"
 "origin" "-88 72 24"
 "_tb_layer" "1"
 }
-// entity 30
+// entity 32
 {
 "classname" "info.navpoint"
 "origin" "-264 72 24"

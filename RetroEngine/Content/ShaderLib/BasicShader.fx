@@ -249,7 +249,7 @@ float3 CalculateSpecular(float roughness, float3 worldPos, float3 normal, float3
     halfwayDir *= DistributionGGX(normal, halfwayDir, roughness);
     
 
-    float specular = pow(max(dot(normal, halfwayDir), 0.0), 1.5) / 4;
+    float specular = pow(max(dot(normal, halfwayDir), 0.0), 2) / 5;
     
     
     return specular * GlobalLightColor;
@@ -330,7 +330,7 @@ float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal)
     if (isParticle)
         dirToSurface = normal;
     
-    intense *= saturate(dot(normal, dirToSurface) * 5 + 2);
+    intense *= saturate(dot(normal, dirToSurface) * 1.1 + 0.4);
 
     return LightColors[i] * max(intense, 0);
 }

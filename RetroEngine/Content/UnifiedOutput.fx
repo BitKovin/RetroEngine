@@ -55,6 +55,9 @@ PixelOutput PixelShaderFunction(PixelInput input)
     
 	textureColor *= light;
     
+    light -= 0.5;
+    light = saturate(light/4);
+    textureColor += light;
     
     textureColor += tex2D(EmissiveTextureSampler, input.TexCoord).rgb * EmissionPower * tex2D(EmissiveTextureSampler, input.TexCoord).a;
 
