@@ -55,7 +55,7 @@ PixelOutput PixelShaderFunction(PixelInput input)
     
 	textureColor *= light;
     
-    light -= 0.5;
+    light -= 1.1;
     light = saturate(light/4);
     textureColor += light;
     

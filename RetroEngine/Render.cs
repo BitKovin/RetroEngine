@@ -121,7 +121,7 @@ namespace RetroEngine
 
             InitRenderTargetIfNeed(ref outputPath);
 
-            InitSizedRenderTargetIfNeed(ref ssaoOutput, 480);
+            InitSizedRenderTargetIfNeed(ref ssaoOutput, 256);
 
             InitSizedRenderTargetIfNeed(ref bloomSample, 128);
             InitSizedRenderTargetIfNeed(ref bloomSample2, 64);
@@ -147,7 +147,7 @@ namespace RetroEngine
 
             RenderForwardPath(renderList);
 
-            graphics.GraphicsDevice.SamplerStates[0] = SamplerState.AnisotropicClamp;
+            //graphics.GraphicsDevice.SamplerStates[0] = SamplerState.AnisotropicClamp;
             graphics.GraphicsDevice.SamplerStates[1] = SamplerState.AnisotropicClamp;
             graphics.GraphicsDevice.SamplerStates[2] = SamplerState.AnisotropicClamp;
             graphics.GraphicsDevice.SamplerStates[3] = SamplerState.AnisotropicClamp;

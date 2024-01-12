@@ -29,7 +29,6 @@ namespace RetroEngine.Game.Entities
             base.LateUpdate();
 
 
-            Console.WriteLine(Graphics.EnableAntiAliasing);
 
             if (Input.GetAction("pause").Pressed())
             {
