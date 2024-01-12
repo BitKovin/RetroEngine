@@ -16,7 +16,7 @@ namespace RetroEngine
         public static Vector3 LightColor = new Vector3(1,1,1);
 
         public static float ShadowBias = 0.002f;
-        public static int shadowMapResolution = 2048*8;
+        public static int shadowMapResolution = 2048*2;
         public static int closeShadowMapResolution = 2048;
 
         public static Matrix LightViewProjection;
@@ -28,6 +28,8 @@ namespace RetroEngine
         public static bool TextureFiltration = true;
         public static bool AnisotropicFiltration = true;
         public static bool EnableAntiAliasing = true;
+
+        public static bool EnableBloom = true;
 
         public static Vector3 lightlocation = new Vector3();
 

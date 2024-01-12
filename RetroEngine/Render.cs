@@ -226,7 +226,7 @@ namespace RetroEngine
 
             if (shadowPassRenderDelay.Wait()) return;
 
-            shadowPassRenderDelay.AddDelay(0.05f);
+            shadowPassRenderDelay.AddDelay(10000.05f);
 
             // Set up the shadow map render target with the desired resolution
             graphics.GraphicsDevice.SetRenderTarget(shadowMap);
@@ -400,6 +400,9 @@ namespace RetroEngine
 
         void CalculateBloom()
         {
+
+            if (Graphics.EnableBloom == false) return;
+
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, bloomSample.Width, bloomSample.Height);
             graphics.GraphicsDevice.SetRenderTarget(bloomSample);
 
