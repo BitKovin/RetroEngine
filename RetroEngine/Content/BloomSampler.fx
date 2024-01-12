@@ -35,7 +35,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR
     color += saturate(tex2D(SpriteTextureSampler, input.TextureCoordinates).rgb - offset);
 	
 	
-    float sampleRadius = 5;
+    float sampleRadius = 10;
 	
 	
     for (int x = -1 * sampleRadius; x <= sampleRadius; x ++)
@@ -47,12 +47,12 @@ float4 MainPS(VertexShaderOutput input) : COLOR
             if (length(TextureOffset) > sampleRadius)
                 continue;
 			
-            float2 offsetCoords = TextureOffset / float2(screenWidth * 2, screenHeight * 2);
+            float2 offsetCoords = TextureOffset / float2(screenWidth * 3, screenHeight * 3);
 			
             color += saturate(tex2D(SpriteTextureSampler, input.TextureCoordinates + offsetCoords).rgb - offset) / (length(TextureOffset) + 1);
         }
 	
-    return float4(color/80.0f,1);
+    return float4(color/40.0f,1);
 }
 
 technique SpriteDrawing

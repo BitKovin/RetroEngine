@@ -29,7 +29,7 @@ namespace RetroEngine
         public static bool AnisotropicFiltration = true;
         public static bool EnableAntiAliasing = true;
 
-        public static bool EnableBloom = false;
+        public static bool EnableBloom = true;
 
         public static Vector3 lightlocation = new Vector3();
 

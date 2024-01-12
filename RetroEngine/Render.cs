@@ -123,8 +123,8 @@ namespace RetroEngine
 
             InitSizedRenderTargetIfNeed(ref ssaoOutput, 256);
 
-            InitSizedRenderTargetIfNeed(ref bloomSample, 128);
-            InitSizedRenderTargetIfNeed(ref bloomSample2, 64);
+            InitSizedRenderTargetIfNeed(ref bloomSample, 64);
+            InitSizedRenderTargetIfNeed(ref bloomSample2, 32);
             InitSizedRenderTargetIfNeed(ref bloomSample3, 16);
 
             InitRenderTargetIfNeed(ref postProcessingOutput);
@@ -226,7 +226,7 @@ namespace RetroEngine
 
             if (shadowPassRenderDelay.Wait()) return;
 
-            shadowPassRenderDelay.AddDelay(10000.05f);
+            shadowPassRenderDelay.AddDelay(0.05f);
 
             // Set up the shadow map render target with the desired resolution
             graphics.GraphicsDevice.SetRenderTarget(shadowMap);
