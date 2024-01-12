@@ -14,6 +14,10 @@ namespace RetroEngine.UI
         public SpriteFont Font;
         public string text = "";
 
+        public float FontSize = 24f;
+
+        public Vector2 AlignProgress = new Vector2();
+
         public Color baseColor = Color.White;
 
         public Text() : base()
@@ -25,7 +29,9 @@ namespace RetroEngine.UI
         {
             Vector2 pos = new Vector2(position.X + origin.X, position.Y + origin.Y);
 
-            spriteBatch.DrawString(Font, text, pos, baseColor, rotation,relativeOrigin,size,SpriteEffects.None,0);
+            Vector2 textSize = Font.MeasureString(text) * AlignProgress;
+
+            spriteBatch.DrawString(Font, text, pos - textSize / 72 * FontSize, baseColor, rotation,relativeOrigin,size/72*FontSize,SpriteEffects.None,0);
 
             base.Draw(gameTime, spriteBatch);
 

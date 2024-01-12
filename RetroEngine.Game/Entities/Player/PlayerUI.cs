@@ -35,7 +35,8 @@ namespace RetroEngine.Game.Entities.Player
             health.originH = Origin.Left;
             health.originV = Origin.Bottom;
             health.position = new Vector2(10,-50);
-            health.size = new Vector2(2);
+            health.FontSize = 24;
+            health.AlignProgress = new Vector2(0.0f, 0.5f);
             UiElement.main.childs.Add(health);
 
             loaded = true;

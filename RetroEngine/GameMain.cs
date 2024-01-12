@@ -296,7 +296,6 @@ namespace RetroEngine
 
             UIManger.Draw(gameTime, SpriteBatch);
 
-            SpriteBatch.DrawString(DefaultFont, (1f / Time.deltaTime).ToString(), new Vector2(100, 100), Color.White);
 
             SpriteBatch.End();
 
