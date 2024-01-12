@@ -150,7 +150,7 @@ namespace RetroEngine
 
             PerformPostProcessing();
 
-            return ComposedOutput;
+            return outputPath;
         }
 
         public void InitSampler(int max = 10)
@@ -272,11 +272,9 @@ namespace RetroEngine
         {
             //PerformSSAO();
 
-            Stopwatch sw = Stopwatch.StartNew();
             
             CalculateBloom();
 
-            Console.WriteLine(sw.Elapsed.TotalMilliseconds);
 
             PerformCompose();
 
@@ -390,6 +388,8 @@ namespace RetroEngine
 
             BloomEffect.Parameters["screenWidth"].SetValue(bloomSample.Width);
             BloomEffect.Parameters["screenHeight"].SetValue(bloomSample.Height);
+            BloomEffect.Parameters["offset"].SetValue(0.75f);
+
 
             SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
 
@@ -476,7 +476,7 @@ namespace RetroEngine
                     graphics.PreferredBackBufferWidth,
                     graphics.PreferredBackBufferHeight,
                     false, // No mipmaps
-                    SurfaceFormat.Rgba64, // Color format
+                    SurfaceFormat.Vector4, // Color format
                     depthFormat); // Depth format
             }
         }
@@ -504,7 +504,7 @@ namespace RetroEngine
                         width,
                         (int)height,
                         false, // No mipmaps
-                        SurfaceFormat.Rgba64, // Color format
+                        SurfaceFormat.Vector4, // Color format
                         depthFormat); // Depth format
                 }
         }
@@ -549,7 +549,7 @@ namespace RetroEngine
                     graphics.PreferredBackBufferWidth,
                     graphics.PreferredBackBufferHeight,
                     false, // No mipmaps
-                    SurfaceFormat.HalfVector4, // Color format
+                    SurfaceFormat.Vector4, // Color format
                     depthFormat); // Depth format
             }
         }

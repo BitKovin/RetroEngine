@@ -14,7 +14,7 @@ sampler2D SpriteTextureSampler = sampler_state
 	Texture = <SpriteTexture>;
 };
 
-float offset = 0.85f;
+float offset = 0.8f;
 
 float screenWidth = 1280; // Change to your actual screen width
 float screenHeight = 720; // Change to your actual screen height
@@ -34,7 +34,8 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 
     color += saturate(tex2D(SpriteTextureSampler, input.TextureCoordinates).rgb - offset);
 	
-    float sampleRadius = 20;
+	
+    float sampleRadius = 10;
 	
 	
     for (int x = -1 * sampleRadius; x <= sampleRadius; x ++)
@@ -46,7 +47,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR
             //if (length(TextureOffset) > sampleRadius)
                 //continue;
 			
-            float2 offsetCoords = TextureOffset / float2(screenWidth * 5, screenHeight * 5);
+            float2 offsetCoords = TextureOffset / float2(screenWidth * 2, screenHeight * 2);
 			
             color += saturate(tex2D(SpriteTextureSampler, input.TextureCoordinates + offsetCoords).rgb - offset) / (length(TextureOffset) + 1);
         }
