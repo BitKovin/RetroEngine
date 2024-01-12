@@ -50,6 +50,8 @@ namespace RetroEngine
 
             CalculateBoundingSphere();
 
+            GetBoneMatrix("");
+
             RiggedModel.overrideAnimationFrameTime = -1;
         }
 
@@ -82,7 +84,7 @@ namespace RetroEngine
 
             foreach(var bone in RiggedModel.flatListToAllNodes)
             {
-                boneNamesToTransforms.TryAdd(bone.name, bone.CombinedTransformMg);
+                boneNamesToTransforms.TryAdd(bone.name, bone.LocalTransformMg);
             }
 
             return boneNamesToTransforms;
@@ -92,8 +94,6 @@ namespace RetroEngine
         {
             if (RiggedModel == null) return;
 
-            GetBoneMatrix("");
-
             foreach(string key in pose.Keys)
             {
                 if (namesToBones.ContainsKey(key) == false) continue;
@@ -102,11 +102,15 @@ namespace RetroEngine
 
                 if(node.isThisARealBone)
                 {
-                    RiggedModel.globalShaderMatrixs[node.boneShaderFinalTransformIndex] = node.OffsetMatrixMg *  pose[key];
+
+                    node.LocalTransformMg = pose[key];
+
+                    //RiggedModel.globalShaderMatrixs[node.boneShaderFinalTransformIndex] = node.OffsetMatrixMg *  pose[key];
                 }
 
 
             }
+            RiggedModel.UpdatePose();
 
         }
 

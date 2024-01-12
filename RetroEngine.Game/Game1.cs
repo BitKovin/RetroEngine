@@ -42,7 +42,7 @@ namespace RetroEngine.Game
 
             
 
-            for (int i = 1; i <= 1; i++)
+            for (int i = 1; i <= 0; i++)
             {
                 Entity npc = new NPCBase();
                 npc.Position = new Vector3(0, i*0.002f + 2, 0);
