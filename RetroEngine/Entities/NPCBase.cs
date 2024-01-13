@@ -73,6 +73,8 @@ namespace RetroEngine.Entities
             meshes.Add(mesh);
             meshes.Add(mesh2);
 
+            mesh.SetInterpolationEnabled(false);
+
             sm.Transperent = false;
 
             sm.Scale =new Vector3(0.2f);

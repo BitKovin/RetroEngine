@@ -291,6 +291,7 @@ namespace RetroEngine
 
         protected override void Draw(GameTime gameTime)
         {
+            WaitForFramePresent();
 
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
@@ -341,12 +342,47 @@ namespace RetroEngine
             if (pendingGraphicsUpdate)
                 _graphics.ApplyChanges();
 
-            GraphicsDevice.Present();
-            Stats.StopRecord("Render");
 
+            if (AllowAsyncAssetLoading)
+            {
+                presentingFrame = true;
+                presentFrameTask = Task.Factory.StartNew(() => { PresentFrame(); });
+            }else
+            {
+                PresentFrame();
+            }
+
+
+            
             Stats.StartRecord("frame change");
 
             
+
+        }
+
+        Task presentFrameTask;
+
+        bool presentingFrame = false;
+
+        void PresentFrame()
+        {
+
+            GraphicsDevice.Present();
+            presentingFrame = false;
+            Stats.StopRecord("Render");
+        }
+
+        public void WaitForFramePresent()
+        {
+            if (presentingFrame == false) return;
+
+            while (presentingFrame) 
+            {
+                if (presentFrameTask == null) return;
+                if (presentFrameTask.IsCompletedSuccessfully) return;
+                if (presentFrameTask.IsCanceled) return;
+                if (presentFrameTask.IsFaulted) return;
+            }
 
         }
 

@@ -44,6 +44,9 @@ namespace RetroEngine
         {
             if (pendingLevelChange != null)
             {
+
+                GameMain.Instance.WaitForFramePresent();
+
                 LoadFromFile(pendingLevelChange, true);
 
                 pendingLevelChange = null;

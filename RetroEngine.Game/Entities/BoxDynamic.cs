@@ -37,6 +37,8 @@ namespace RetroEngine.Game.Entities
             //mesh.Transperent = true;
             //mesh.Transparency = 1f;
 
+            mesh.CastShadows = true;
+
             meshes.Add(mesh);
         }
 

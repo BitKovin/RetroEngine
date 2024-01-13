@@ -482,7 +482,7 @@ namespace RetroEngine
                 depthFormat); // Depth format
         }
 
-        void InitRenderTargetIfNeed(ref RenderTarget2D target)
+        void InitRenderTargetIfNeed(ref RenderTarget2D target, DepthFormat depthFormat = DepthFormat.None)
         {
             if(graphics.PreferredBackBufferWidth>0 && graphics.PreferredBackBufferHeight>0)
 
@@ -491,8 +491,6 @@ namespace RetroEngine
                 // Dispose of the old render target if it exists
                 target?.Dispose();
 
-                // Set the depth format based on your requirements
-                DepthFormat depthFormat = DepthFormat.Depth16;
 
                 // Create the new render target with the specified depth format
                 target = new RenderTarget2D(
@@ -505,7 +503,7 @@ namespace RetroEngine
             }
         }
 
-        void InitSizedRenderTargetIfNeed(ref RenderTarget2D target, float height)
+        void InitSizedRenderTargetIfNeed(ref RenderTarget2D target, float height, DepthFormat depthFormat = DepthFormat.None)
         {
 
             float ratio = ((float)graphics.PreferredBackBufferWidth) / ((float)graphics.PreferredBackBufferHeight);
@@ -519,8 +517,6 @@ namespace RetroEngine
                     // Dispose of the old render target if it exists
                     target?.Dispose();
 
-                    // Set the depth format based on your requirements
-                    DepthFormat depthFormat = DepthFormat.Depth16;
 
                     // Create the new render target with the specified depth format
                     target = new RenderTarget2D(

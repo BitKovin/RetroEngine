@@ -26,7 +26,7 @@ namespace RetroEngine
         public static float FOV = 70;
         public static float ViewmodelFOV = 46;
 
-        public static float FarPlane = 5000;
+        public static float FarPlane = 1000;
 
         static Vector3 lastWorkingRotation = new Vector3();
 
