@@ -67,7 +67,7 @@ namespace RetroEngine.Audio
 
             float pan = Vector3.Dot(toEmitter, right);
 
-            pan /= 2;
+            pan /= 1.5f;
 
             pan = Math.Clamp(pan, -1.0f, 1.0f);
 

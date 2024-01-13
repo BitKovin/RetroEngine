@@ -116,13 +116,12 @@ namespace RetroEngine.Entities
             mesh2.Position = mesh.Position;
             mesh2.Rotation = mesh.Rotation;
 
-            mesh2.PastePose(mesh.CopyPose());
+            if(mesh.isRendered)
+                mesh2.PastePose(mesh.CopyPose());
         }
         public override void LateUpdate()
         {
             base.LateUpdate();
-
-            
 
         }
 
