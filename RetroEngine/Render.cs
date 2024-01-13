@@ -191,6 +191,8 @@ namespace RetroEngine
         void RenderForwardPath(List<StaticMesh> renderList, bool onlyTransperent = false)
         {
 
+            Stats.RenderedMehses = 0;
+
             InitSampler(5);
 
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);

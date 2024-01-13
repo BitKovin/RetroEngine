@@ -182,7 +182,8 @@ namespace RetroEngine
                         effect.Parameters["LightRadiuses"]?.SetValue(LightRadius);
 
                         if (_disposed) return;
-                        
+
+                        Stats.RenderedMehses++;
 
                         // Draw the primitives using the custom effect
                         foreach (EffectPass pass in effect.CurrentTechnique.Passes)

@@ -26,6 +26,7 @@ namespace RetroEngine
             scrolldown = true;
         }
 
+
         public virtual void Update()
         {
 
@@ -114,6 +115,8 @@ namespace RetroEngine
             var statsResults = Stats.GetResults();
 
             ImGui.Begin("Stats");
+
+            ImGui.Text($"{Stats.RenderedMehses} meshes were rendered");
 
             foreach(var item in statsResults.Keys)
             {

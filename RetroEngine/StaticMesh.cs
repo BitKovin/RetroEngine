@@ -177,7 +177,6 @@ namespace RetroEngine
             // Load the custom effect
             Effect effect = GameMain.Instance.render.UnifiedEffect;
 
-            
 
             if (frameStaticMeshData.model is not null)
             {
@@ -248,6 +247,8 @@ namespace RetroEngine
                         effect.Parameters["LightPositions"]?.SetValue(LightPos);
                         effect.Parameters["LightColors"]?.SetValue(LightColor);
                         effect.Parameters["LightRadiuses"]?.SetValue(LightRadius);
+
+                        Stats.RenderedMehses++;
 
                         // Draw the primitives using the custom effect
                         foreach (EffectPass pass in effect.CurrentTechnique.Passes)

@@ -239,6 +239,8 @@ namespace RetroEngine
                     else
                         effect.Parameters["Projection"].SetValue(frameStaticMeshData.LightProjection);
 
+                    
+
                     // Draw the primitives using the custom effect
                     foreach (EffectPass pass in effect.CurrentTechnique.Passes)
                     {
@@ -256,6 +258,8 @@ namespace RetroEngine
 
         public override void DrawUnified()
         {
+
+            if(frameStaticMeshData.IsRendered == false) { return; }
 
             GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
             // Load the custom effect
@@ -333,6 +337,8 @@ namespace RetroEngine
                     effect.Parameters["LightPositions"]?.SetValue(LightPos);
                     effect.Parameters["LightColors"]?.SetValue(LightColor);
                     effect.Parameters["LightRadiuses"]?.SetValue(LightRadius);
+
+                    Stats.RenderedMehses++;
 
                     // Draw the primitives using the custom effect
                     foreach (EffectPass pass in effect.CurrentTechnique.Passes)

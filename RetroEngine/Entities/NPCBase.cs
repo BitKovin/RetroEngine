@@ -86,9 +86,6 @@ namespace RetroEngine.Entities
         {
             UpdateNPCList();
 
-            if(loadedAssets)
-                mesh.Update(Time.deltaTime);
-
             //sm.Position = mesh.GetBoneMatrix("hand_r").DecomposeMatrix().Position;
             //sm.Rotation = mesh.GetBoneMatrix("hand_r").DecomposeMatrix().Rotation;
 
@@ -108,6 +105,9 @@ namespace RetroEngine.Entities
         public override void AsyncUpdate()
         {
             body.LinearVelocity = new System.Numerics.Vector3(MoveDirection.X * speed, body.LinearVelocity.Y, MoveDirection.Z * speed);
+
+            if (loadedAssets)
+                mesh.Update(Time.deltaTime);
 
             mesh.Position = Position - new Vector3(0, 1.1f, 0);
 
@@ -153,7 +153,7 @@ namespace RetroEngine.Entities
             if (updateDelay.Wait())
                 return;
 
-            updateDelay.AddDelay(0.001f);
+            updateDelay.AddDelay(0.01f);
 
             currentUpdateNPCs.Clear();
 

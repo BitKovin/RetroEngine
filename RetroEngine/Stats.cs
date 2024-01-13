@@ -16,6 +16,9 @@ namespace RetroEngine
 
         public static bool Enabled = true;
 
+
+        public static int RenderedMehses = 0;
+
         public static void StartRecord(string name)
         {
             if (!Enabled) return;
