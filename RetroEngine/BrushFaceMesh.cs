@@ -23,6 +23,7 @@ namespace RetroEngine
             this.textureName = textureName;
             useAvgVertexPosition = true;
 
+            Static = true;
             CastShadows = true;
         }
 
@@ -150,7 +151,11 @@ namespace RetroEngine
 
                 meshPart.Effect = defaultEffect;
 
-                models.Add(new BrushFaceMesh(new Model(graphicsDevice, new List<ModelBone>(), new List<ModelMesh> { modelMesh }), texture, scene.Materials[mesh.MaterialIndex].Name) {Transperent = transperent });
+                BrushFaceMesh brushFaceMesh = new BrushFaceMesh(new Model(graphicsDevice, new List<ModelBone>(), new List<ModelMesh> { modelMesh }), texture, scene.Materials[mesh.MaterialIndex].Name) { Transperent = transperent };
+
+                brushFaceMesh.avgVertexPosition = brushFaceMesh.CalculateAvgVertexLocation();
+
+                models.Add(brushFaceMesh);
             }
 
             return models;
@@ -280,7 +285,11 @@ namespace RetroEngine
 
                 meshPart.Effect = defaultEffect;
 
-                models.Add(new BrushFaceMesh(new Model(graphicsDevice, new List<ModelBone>(), new List<ModelMesh> { modelMesh }), texture, scene.Materials[mesh.MaterialIndex].Name) { Transperent = transperent });
+                BrushFaceMesh brushFaceMesh = new BrushFaceMesh(new Model(graphicsDevice, new List<ModelBone>(), new List<ModelMesh> { modelMesh }), texture, scene.Materials[mesh.MaterialIndex].Name) { Transperent = transperent };
+
+                brushFaceMesh.avgVertexPosition = brushFaceMesh.CalculateAvgVertexLocation();
+
+                models.Add(brushFaceMesh);
             }
 
             return models;
@@ -319,6 +328,8 @@ namespace RetroEngine
 
                 brushFaceMesh.textureSearchPaths.Add("textures/brushes");
                 brushFaceMesh.textureSearchPaths.Add("textures/");
+
+                brushFaceMesh.avgVertexPosition = brushFaceMesh.CalculateAvgVertexLocation();
 
                 merged.Add(brushFaceMesh);
 

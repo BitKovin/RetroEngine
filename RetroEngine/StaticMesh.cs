@@ -85,6 +85,11 @@ namespace RetroEngine
 
         protected bool _disposed = false;
 
+        public bool Static = false;
+
+        protected bool occluded = false;
+        protected bool inFrustrum = false;
+
         public StaticMesh()
         {
 
@@ -316,17 +321,17 @@ namespace RetroEngine
 
         public virtual void DrawDepth(bool closeShadow = false)
         {
-            if (Transperent) return;
 
             GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
             // Load the custom effect
             Effect effect = GameMain.Instance.render.ShadowMapEffect;
 
-
-            if (model is not null)
+            if (frameStaticMeshData.model is not null)
             {
-                foreach (ModelMesh mesh in frameStaticMeshData.model.Meshes)
+                if (frameStaticMeshData.model.Meshes is not null)
+                    foreach (ModelMesh mesh in frameStaticMeshData.model.Meshes)
                 {
+                    
                     foreach (ModelMeshPart meshPart in mesh.MeshParts)
                     {
 
@@ -342,7 +347,7 @@ namespace RetroEngine
                         else
                             effect.Parameters["Projection"].SetValue(frameStaticMeshData.Projection);
 
-                        effect.Parameters["DepthScale"].SetValue(frameStaticMeshData.Viewmodel ? 0.01f : 1);
+                        effect.Parameters["DepthScale"]?.SetValue(frameStaticMeshData.Viewmodel ? 0.01f : 1);
 
                         // Draw the primitives using the custom effect
                         foreach (EffectPass pass in effect.CurrentTechnique.Passes)
@@ -803,13 +808,14 @@ namespace RetroEngine
             isRendered = false;
             isRenderedShadow = false;
 
+            inFrustrum = false;
+
             if (model is null) return;
             foreach (ModelMesh mesh in model.Meshes)
             {
-                if (IsBoundingSphereInFrustum(mesh.BoundingSphere))
+                if (IsBoundingSphereInFrustum(mesh.BoundingSphere) || Viewmodel)
                 {
-                    isRendered = true;
-
+                    inFrustrum = true;
                 }
 
                 if (IsBoundingSphereInShadowFrustum(mesh.BoundingSphere))
@@ -819,10 +825,38 @@ namespace RetroEngine
                 }
 
             }
-
+            isRendered = inFrustrum && !occluded;
+            frameStaticMeshData.IsRendered = isRendered;
         }
 
-        private Vector3 CalculateAvgVertexLocation()
+        public virtual void OcclusionCulling()
+        {
+            
+            if (model is null) return;
+
+            if (inFrustrum == false) return;
+
+            if (Static && false)
+            {
+                DrawDepth();
+                return;
+            }
+            occluded = true;
+
+            Render.occlusionQuery.Begin();
+
+            DrawDepth();
+
+            Render.occlusionQuery.End();
+
+            while (Render.occlusionQuery.IsComplete == false) { }
+
+            
+            occluded = Render.occlusionQuery.PixelCount < 10;
+            
+        }
+
+        protected Vector3 CalculateAvgVertexLocation()
         {
             float n = 0;
 

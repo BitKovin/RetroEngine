@@ -377,7 +377,25 @@ namespace RetroEngine
 
         public override void UpdateCulling()
         {
-            isRendered = Camera.frustum.Contains(boundingSphere.Transform(base.GetWorldMatrix())) != ContainmentType.Disjoint;
+            //isRendered = Camera.frustum.Contains(boundingSphere.Transform(base.GetWorldMatrix())) != ContainmentType.Disjoint;
+            isRendered = false;
+            isRenderedShadow = false;
+
+            inFrustrum = false;
+
+
+            if (Camera.frustum.Contains(boundingSphere.Transform(base.GetWorldMatrix())) != ContainmentType.Disjoint)
+            {
+                inFrustrum = true;
+            }
+
+            if (Graphics.DirectionalLightFrustrum.Contains(boundingSphere.Transform(base.GetWorldMatrix())) != ContainmentType.Disjoint)
+            {
+                isRenderedShadow = true;
+
+            }
+
+            isRendered = inFrustrum && !occluded || Viewmodel;
         }
     }
 }

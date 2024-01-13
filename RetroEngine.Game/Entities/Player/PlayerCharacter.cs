@@ -60,7 +60,7 @@ namespace RetroEngine.Game.Entities.Player
         int currentSlot = -1;
         int lastSlot = -1;
 
-        float bobSpeed = 8;
+        float bobSpeed = 0;
 
         PlayerUI PlayerUI;
 

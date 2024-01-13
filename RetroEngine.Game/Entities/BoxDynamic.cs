@@ -67,6 +67,7 @@ namespace RetroEngine.Game.Entities
 
             //skeletalMesh.Update(Time.deltaTime);
 
+
             mesh.Position = Position;
             mesh.Rotation = Rotation;
 

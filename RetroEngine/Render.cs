@@ -45,6 +45,7 @@ namespace RetroEngine
 
         RenderTarget2D outputPath;
 
+        RenderTarget2D occlusionTestPath;
 
         GraphicsDeviceManager graphics;
 
@@ -76,6 +77,9 @@ namespace RetroEngine
         public List<ParticleEmitter.Particle> particlesToDraw = new List<ParticleEmitter.Particle>();
 
         SamplerState samplerState = new SamplerState();
+
+        public static OcclusionQuery occlusionQuery;
+
         public Render()
         {
             graphics = GameMain.Instance._graphics;
@@ -99,6 +103,8 @@ namespace RetroEngine
             ComposeEffect = GameMain.content.Load<Effect>("ComposedColor");
 
             BloomEffect = GameMain.content.Load<Effect>("BloomSampler");
+
+            occlusionQuery = new OcclusionQuery(GameMain.Instance.GraphicsDevice);
 
             InitSampler();
         }
@@ -426,6 +432,30 @@ namespace RetroEngine
             DownsampleToTexture(bloomSample, bloomSample3);
 
         }
+        public static bool performingOcclusionTest = false;
+        public void PerformOcclusionTest(List<StaticMesh> meshes)
+        {
+            performingOcclusionTest = true;
+            Stats.StartRecord("occlusion test");
+
+
+            InitOcclusionMap(ref occlusionTestPath);
+
+            graphics.GraphicsDevice.SetRenderTarget(occlusionTestPath);
+            graphics.GraphicsDevice.Clear(ClearOptions.DepthBuffer, Color.Black, 1.0f, 0);
+            graphics.GraphicsDevice.Clear(Color.Black);
+
+            graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+            graphics.GraphicsDevice.RasterizerState = RasterizerState.CullClockwise;
+
+            foreach (StaticMesh mesh in meshes)
+            {
+                mesh.OcclusionCulling();
+            }
+
+            Stats.StopRecord("occlusion test");
+            performingOcclusionTest = false;
+        }
 
         void DownsampleToTexture(Texture2D source, RenderTarget2D target)
         {
@@ -453,7 +483,6 @@ namespace RetroEngine
 
         void InitShadowMap(ref RenderTarget2D target)
         {
-
             if (shadowMap is not null && shadowMap.Height == Graphics.shadowMapResolution) return;
 
             // Set the depth format based on your requirements
@@ -464,6 +493,23 @@ namespace RetroEngine
                 graphics.GraphicsDevice,
                 Graphics.shadowMapResolution,
                 Graphics.shadowMapResolution,
+                false, // No mipmaps
+                SurfaceFormat.HalfSingle, // Color format
+                depthFormat); // Depth format
+        }
+
+        void InitOcclusionMap(ref RenderTarget2D target)
+        {
+            if (target is not null) return;
+
+            // Set the depth format based on your requirements
+            DepthFormat depthFormat = DepthFormat.Depth16;
+
+            // Create the new render target with the specified depth format
+            target = new RenderTarget2D(
+                graphics.GraphicsDevice,
+                1280,
+                720,
                 false, // No mipmaps
                 SurfaceFormat.HalfSingle, // Color format
                 depthFormat); // Depth format

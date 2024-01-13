@@ -126,7 +126,7 @@ namespace RetroEngine
                 ImGui.InputFloat(item,ref value);
                 
 
-                value /= 3000;
+                value /= 10000;
 
                 
                 ImGui.ProgressBar(value, new Vector2(200,20));

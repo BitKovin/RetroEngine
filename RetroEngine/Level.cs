@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using RetroEngine;
 using RetroEngine.Entities;
 using RetroEngine.UI;
@@ -24,6 +25,8 @@ namespace RetroEngine
         static string pendingLevelChange = null;
 
         public static bool ChangingLevel = true;
+
+        public bool OcclusionCullingEnabled = false;
 
         public Level()
         {
@@ -150,14 +153,16 @@ namespace RetroEngine
                 if (entity.LateUpdateWhilePaused && GameMain.Instance.paused || GameMain.Instance.paused == false)
                     entity.LateUpdate();
 
-            foreach (Entity entity in list)
-                foreach(StaticMesh mesh in entity.meshes)
-                {
-                    if(mesh is null) continue;
 
+            foreach (Entity entity in list)
+                foreach (StaticMesh mesh in entity.meshes)
+                {
+                    if (mesh is null) continue;
                     mesh.UpdateCulling();
 
                 }
+
+
         }
 
         public virtual void RenderPreparation()
@@ -165,12 +170,17 @@ namespace RetroEngine
 
             Graphics.UpdateDirectionalLight();
 
+            Entity[] list = entities.ToArray();
+
+            
+
+
             Parallel.ForEach(entities, entity =>
             {
                 foreach (StaticMesh mesh in entity.meshes)
                     if(entity is not null)
 
-                    if(mesh is not null)
+                    if(mesh is not null) 
                         mesh.RenderPreparation();
             });
 
@@ -199,10 +209,20 @@ namespace RetroEngine
 
             renderList.AddRange(transperentMeshes);
 
-
             LightManager.PrepareLightSources();
             LightManager.ClearPointLights();
 
+        }
+
+        public void PerformOcclusionCheck()
+        {
+            if(OcclusionCullingEnabled)
+                OcclusionCulling();
+        }
+
+        void OcclusionCulling()
+        {
+            GameMain.Instance.render.PerformOcclusionTest(renderList);
         }
 
         public bool LoadAssets()

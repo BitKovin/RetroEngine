@@ -191,7 +191,7 @@ namespace RetroEngine.Skeletal
                         overrideAnimationFrameTime = 0f;
                 }
 
-                if (UpdateVisual == false) return;
+                
 
                 // if we are using static frames.
                 currentFrame = (int)(currentAnimationFrameTime / originalAnimations[currentAnimation].SecondsPerFrame);
@@ -209,7 +209,9 @@ namespace RetroEngine.Skeletal
                     {
                         currentFrame = 0;
                         timeStart = 0;
+                        AnimationTime = 0;
                         animationRunning = false;
+                        currentAnimationFrameTime = 0.0001f;
                     }
                 }
 

@@ -293,12 +293,11 @@ namespace RetroEngine
         {
             WaitForFramePresent();
 
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
+            Level.GetCurrent().PerformOcclusionCheck();
 
             Stats.StartRecord("Render");
             RenderTarget2D frame = render.StartRenderLevel(curentLevel);
-            
+
 
             GraphicsDevice.SetRenderTarget(null);
 
@@ -352,8 +351,8 @@ namespace RetroEngine
                 PresentFrame();
             }
 
-
             
+
             Stats.StartRecord("frame change");
 
             
@@ -366,7 +365,7 @@ namespace RetroEngine
 
         void PresentFrame()
         {
-
+            GraphicsDevice.SetRenderTarget(null);
             GraphicsDevice.Present();
             presentingFrame = false;
             Stats.StopRecord("Render");
@@ -446,11 +445,10 @@ namespace RetroEngine
 
             double elapsedSeconds = stopwatch.Elapsed.TotalSeconds;
 
-            while(elapsedSeconds < 1f/100f)
+            while(elapsedSeconds < 1f/10f)
             {
                 elapsedSeconds = stopwatch.Elapsed.TotalSeconds;
             }
-            Console.WriteLine(elapsedSeconds.ToString());
 
             stopwatch.Restart();
         }
