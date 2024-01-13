@@ -157,6 +157,9 @@ namespace RetroEngine
 
         protected override void Update(GameTime gameTime)
         {
+            Stats.StopRecord("frame change");
+            Stats.StopRecord("frame total");
+            Stats.StartRecord("frame total");
 
             checkAppRegainedFocus();
 
@@ -167,7 +170,6 @@ namespace RetroEngine
 
             time = gameTime;
 
-            Thread.CurrentThread.Priority = ThreadPriority.Highest;
 
             AssetRegistry.ClearTexturesIfNeeded();
 
@@ -183,7 +185,9 @@ namespace RetroEngine
                 }
                 else
                 {
+                    Stats.StartRecord("waiting game task");
                     gameTask.Wait();
+                    Stats.StopRecord("waiting game task");
                     UpdateTime(gameTime);
                 }
             }
@@ -203,7 +207,9 @@ namespace RetroEngine
             bool changedLevel = Level.LoadPendingLevel();
             if (AsyncGameThread && changedLevel == false)
             {
+                Stats.StartRecord("starting game task");
                 gameTask = Task.Factory.StartNew(() => { GameLogic(); });
+                Stats.StopRecord("starting game task");
             }
             else
             {
@@ -226,6 +232,9 @@ namespace RetroEngine
         }
         void GameLogic()
         {
+
+            Stats.StartRecord("GameLogic");
+
             Physics.Update();
 
             curentLevel.Update();
@@ -241,12 +250,16 @@ namespace RetroEngine
             SoundManager.Update();
 
             tick++;
+
+            Stats.StopRecord("GameLogic");
+
         }
 
         void PerformReservedTimeTasks()
         {
             Stopwatch sw = Stopwatch.StartNew();
             ReservedTimeTasks();
+            if(ReservedTaskMinTime > 0)
             while(sw.Elapsed.TotalSeconds<ReservedTaskMinTime)
             {
             }
@@ -257,7 +270,9 @@ namespace RetroEngine
             if(AllowAsyncAssetLoading == false)
                 curentLevel?.LoadAssets();
 
+            Stats.StartRecord("render preparation");
             curentLevel?.RenderPreparation();
+            Stats.StopRecord("render preparation");
         }
 
         private void Game1_Exiting(object sender, System.EventArgs e)
@@ -280,7 +295,9 @@ namespace RetroEngine
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
 
+            Stats.StartRecord("Render");
             RenderTarget2D frame = render.StartRenderLevel(curentLevel);
+            
 
             GraphicsDevice.SetRenderTarget(null);
 
@@ -300,9 +317,6 @@ namespace RetroEngine
             SpriteBatch.End();
 
 
-           
-
-
             if (DevMenuEnabled)
                 ImGuiRenderer.BeginLayout(gameTime);
 
@@ -313,7 +327,7 @@ namespace RetroEngine
             if (DevMenuEnabled)
                 ImGuiRenderer.EndLayout();
 
-            base.Draw(gameTime);
+            //base.Draw(gameTime);
 
             //SetupFullViewport();
 
@@ -327,6 +341,18 @@ namespace RetroEngine
             if (pendingGraphicsUpdate)
                 _graphics.ApplyChanges();
 
+            GraphicsDevice.Present();
+            Stats.StopRecord("Render");
+
+            Stats.StartRecord("frame change");
+
+            
+
+        }
+
+        protected override void EndDraw()
+        {
+            
         }
 
         public object GetView(System.Type type)

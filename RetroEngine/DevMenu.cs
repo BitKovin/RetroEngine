@@ -1,4 +1,5 @@
 ﻿using ImGuiNET;
+using RetroEngine.Map;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,11 +29,15 @@ namespace RetroEngine
         public virtual void Update()
         {
 
+            
+
             // Inside your rendering loop or where you handle ImGui rendering
             ImGui.PushStyleColor(ImGuiCol.DockingEmptyBg, new Vector4(0));
             ImGui.PushStyleColor(ImGuiCol.WindowBg, new Vector4(0));
             ImGui.DockSpaceOverViewport();
             ImGui.PopStyleColor(2);
+
+            DrawStats();
 
             ImGui.BeginMainMenuBar();
             ImGui.Text("fps: " + (int)(1f / Time.deltaTime) + "    entity count: " + Level.GetCurrent().entities.Count);
@@ -42,7 +47,6 @@ namespace RetroEngine
 
             ImGui.Begin("lighting");
 
-
             ImGui.SliderFloat("shadow bias", ref Graphics.ShadowBias, -0.005f, 0.005f);
 
             ImGui.SliderFloat("light direction X", ref Graphics.LightDirection.X, -1, 1);
@@ -50,6 +54,22 @@ namespace RetroEngine
             ImGui.SliderFloat("light direction Z", ref Graphics.LightDirection.Z, -1, 1);
 
             ImGui.End();
+
+            ImGui.Begin("Graphics");
+
+            ImGui.Checkbox("fxaa", ref Graphics.EnableAntiAliasing);
+
+            ImGui.Checkbox("bloom", ref Graphics.EnableBloom);
+
+            ImGui.Checkbox("merge meshes", ref MapData.MergeBrushes);
+
+            ImGui.InputInt("shadowmap size", ref Graphics.shadowMapResolution);
+
+
+            ImGui.Checkbox("dev menu", ref GameMain.Instance.DevMenuEnabled);
+
+            ImGui.End();
+
 
             //string consoleContent = sb.ToString();
 
@@ -85,6 +105,33 @@ namespace RetroEngine
             ImGui.SameLine();
             if (ImGui.Button("SUBMIT")) submitInput();
             
+            ImGui.End();
+        }
+
+        protected virtual void DrawStats()
+        {
+
+            var statsResults = Stats.GetResults();
+
+            ImGui.Begin("Stats");
+
+            foreach(var item in statsResults.Keys)
+            {
+
+                float value = statsResults[item];
+
+                ImGui.InputFloat(item,ref value);
+                
+
+                value /= 3000;
+
+                
+                ImGui.ProgressBar(value, new Vector2(200,20));
+
+                ImGui.Text("\n");
+
+            }
+
             ImGui.End();
         }
 

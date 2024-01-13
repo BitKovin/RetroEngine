@@ -121,7 +121,7 @@ namespace RetroEngine
 
             InitRenderTargetIfNeed(ref outputPath);
 
-            InitSizedRenderTargetIfNeed(ref ssaoOutput, 256);
+            InitSizedRenderTargetIfNeed(ref ssaoOutput, 128);
 
             InitSizedRenderTargetIfNeed(ref bloomSample, 64);
             InitSizedRenderTargetIfNeed(ref bloomSample2, 32);
@@ -130,8 +130,7 @@ namespace RetroEngine
             InitRenderTargetIfNeed(ref postProcessingOutput);
 
 
-            if (shadowMap is null)
-                InitShadowMap(ref shadowMap);
+            InitShadowMap(ref shadowMap);
 
             graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             
@@ -160,6 +159,8 @@ namespace RetroEngine
 
         public void InitSampler(int max = 10)
         {
+
+
             samplerState = new SamplerState();
 
             samplerState.Filter = Graphics.TextureFiltration ? (Graphics.AnisotropicFiltration ? TextureFilter.Anisotropic : TextureFilter.Linear) : TextureFilter.PointMipLinear;
@@ -450,8 +451,11 @@ namespace RetroEngine
 
         void InitShadowMap(ref RenderTarget2D target)
         {
+
+            if (shadowMap is not null && shadowMap.Height == Graphics.shadowMapResolution) return;
+
             // Set the depth format based on your requirements
-            DepthFormat depthFormat = DepthFormat.Depth24;
+            DepthFormat depthFormat = DepthFormat.Depth16;
 
             // Create the new render target with the specified depth format
             target = new RenderTarget2D(
@@ -466,7 +470,7 @@ namespace RetroEngine
         void InitCloseShadowMap(ref RenderTarget2D target)
         {
             // Set the depth format based on your requirements
-            DepthFormat depthFormat = DepthFormat.Depth24;
+            DepthFormat depthFormat = DepthFormat.Depth16;
 
             // Create the new render target with the specified depth format
             target = new RenderTarget2D(
@@ -488,7 +492,7 @@ namespace RetroEngine
                 target?.Dispose();
 
                 // Set the depth format based on your requirements
-                DepthFormat depthFormat = DepthFormat.Depth24;
+                DepthFormat depthFormat = DepthFormat.Depth16;
 
                 // Create the new render target with the specified depth format
                 target = new RenderTarget2D(
@@ -496,7 +500,7 @@ namespace RetroEngine
                     graphics.PreferredBackBufferWidth,
                     graphics.PreferredBackBufferHeight,
                     false, // No mipmaps
-                    SurfaceFormat.Vector4, // Color format
+                    SurfaceFormat.Rgba64, // Color format
                     depthFormat); // Depth format
             }
         }
@@ -516,7 +520,7 @@ namespace RetroEngine
                     target?.Dispose();
 
                     // Set the depth format based on your requirements
-                    DepthFormat depthFormat = DepthFormat.Depth24;
+                    DepthFormat depthFormat = DepthFormat.Depth16;
 
                     // Create the new render target with the specified depth format
                     target = new RenderTarget2D(
@@ -524,7 +528,7 @@ namespace RetroEngine
                         width,
                         (int)height,
                         false, // No mipmaps
-                        SurfaceFormat.Vector4, // Color format
+                        SurfaceFormat.Rgba64, // Color format
                         depthFormat); // Depth format
                 }
         }
@@ -539,7 +543,7 @@ namespace RetroEngine
                     target?.Dispose();
 
                     // Set the depth format based on your requirements
-                    DepthFormat depthFormat = DepthFormat.Depth24;
+                    DepthFormat depthFormat = DepthFormat.Depth16;
 
                     // Create the new render target with the specified depth format
                     target = new RenderTarget2D(
@@ -569,7 +573,7 @@ namespace RetroEngine
                     graphics.PreferredBackBufferWidth,
                     graphics.PreferredBackBufferHeight,
                     false, // No mipmaps
-                    SurfaceFormat.Vector4, // Color format
+                    SurfaceFormat.HalfVector4, // Color format
                     depthFormat); // Depth format
             }
         }

@@ -14,8 +14,9 @@ namespace RetroEngine.Test
 
             Level.LoadFromFile("test2.map");
             Input.LockCursor = false;
-
+            Camera.position = new Microsoft.Xna.Framework.Vector3(5, 5, 5);
             InactiveSleepTime = TimeSpan.Zero;
+
 
         }
     }

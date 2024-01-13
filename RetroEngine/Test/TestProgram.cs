@@ -11,6 +11,7 @@ namespace RetroEngine.Test
         public static void Main()
         {
             TestGame game = new TestGame();
+            game.devMenu = new DevMenu();
             game.Run();
         }
     }

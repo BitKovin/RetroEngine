@@ -17,7 +17,7 @@ namespace RetroEngine.Game.Entities.Player
 
         Image crosshair = new Image();
         Text health = new Text();
-
+        Text fps = new Text();
 
         bool loaded = false;
 
@@ -39,6 +39,13 @@ namespace RetroEngine.Game.Entities.Player
             health.AlignProgress = new Vector2(0.0f, 0.5f);
             UiElement.Viewport.childs.Add(health);
 
+            fps.originH = Origin.Left;
+            fps.originV = Origin.Top;
+            fps.position = new Vector2(10, 50);
+            fps.FontSize = 24;
+            fps.AlignProgress = new Vector2(0.0f, 0.5f);
+            UiElement.Viewport.childs.Add(fps);
+
             loaded = true;
         }
 
@@ -47,6 +54,8 @@ namespace RetroEngine.Game.Entities.Player
             if (loaded == false) return;
 
             health.text = ((Vector3)player.body.LinearVelocity).XZ().Length().ToString();
+
+            fps.text = ((int)(1f / Time.deltaTime)).ToString();
 
         }
 

@@ -613,7 +613,6 @@ namespace RetroEngine
 
             if(loadedModels.ContainsKey(filePath))
             {
-                Console.WriteLine("model is loaded");
                 return loadedModels[filePath];
             }
 

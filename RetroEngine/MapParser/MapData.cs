@@ -17,7 +17,7 @@ namespace RetroEngine.Map
         public string Format { get; set; }
         public List<EntityData> Entities { get; set; } = new List<EntityData>();
 
-        public bool MergeBrushes = true;
+        public static bool MergeBrushes = true;
 
         public static float UnitSize = 32;
 
