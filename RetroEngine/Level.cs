@@ -26,7 +26,7 @@ namespace RetroEngine
 
         public static bool ChangingLevel = true;
 
-        public bool OcclusionCullingEnabled = false;
+        public bool OcclusionCullingEnabled = true;
 
         public Level()
         {

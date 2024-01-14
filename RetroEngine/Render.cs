@@ -254,9 +254,7 @@ namespace RetroEngine
 
             particlesToDraw.Clear();
 
-            foreach (EffectPass pass in UnifiedEffect.CurrentTechnique.Passes)
-            {
-                pass.Apply();
+
 
                 foreach (StaticMesh mesh in renderList)
                 {
@@ -265,7 +263,7 @@ namespace RetroEngine
                         mesh.DrawUnified();
                     }
                 }
-            }
+            
             ParticleEmitter.LoadRenderEmitter();
 
             graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
