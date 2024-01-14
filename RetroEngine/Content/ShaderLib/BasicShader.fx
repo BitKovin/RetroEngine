@@ -294,7 +294,7 @@ float GetShadow(float3 lightCoords, PixelInput input, bool close = false)
         float resolution = 1;
         
 
-        int numSamples = 2; // Number of samples in each direction (total samples = numSamples^2)
+        int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)
 
         float bias = ShadowBias * (1 - saturate(dot(input.Normal, -LightDirection))) + ShadowBias / 2.0f;
         resolution = ShadowMapResolution;
