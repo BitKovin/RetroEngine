@@ -120,25 +120,12 @@ namespace RetroEngine
                         graphicsDevice.SetVertexBuffer(result);
                         graphicsDevice.Indices = meshPart1.IndexBuffer;
 
-                        effect.Parameters["viewDir"]?.SetValue(Camera.rotation.GetForwardVector());
-                        effect.Parameters["viewPos"]?.SetValue(Camera.position);
-
-                        // Set effect parameters
                         effect.Parameters["World"]?.SetValue(frameStaticMeshData.World);
-                        effect.Parameters["View"]?.SetValue(frameStaticMeshData.View);
-                        effect.Parameters["Projection"]?.SetValue(frameStaticMeshData.Viewmodel ? frameStaticMeshData.ProjectionViewmodel : frameStaticMeshData.Projection);
 
-                        effect.Parameters["depthScale"]?.SetValue(frameStaticMeshData.Viewmodel ? 0.04f : 1);
+                        effect.Parameters["Transparency"]?.SetValue(frameStaticMeshData.Transparency);
 
-                        effect.Parameters["DirectBrightness"]?.SetValue(Graphics.DirectLighting);
-                        effect.Parameters["GlobalBrightness"]?.SetValue(Graphics.GlobalLighting);
-                        effect.Parameters["LightDirection"]?.SetValue(Graphics.LightDirection.Normalized());
-
-                        effect.Parameters["ShadowMapViewProjection"]?.SetValue(Graphics.LightViewProjection);
-                        effect.Parameters["ShadowMapViewProjectionClose"]?.SetValue(Graphics.LightViewProjectionClose);
-
-                        effect.Parameters["ShadowBias"]?.SetValue(Graphics.ShadowBias);
-                        effect.Parameters["ShadowMapResolution"]?.SetValue((float)Graphics.shadowMapResolution);
+                        effect.Parameters["isParticle"]?.SetValue(isParticle);
+                        effect.Parameters["Viewmodel"]?.SetValue(frameStaticMeshData.Viewmodel);
 
                         //effect.Parameters["DepthMap"]?.SetValue(GameMain.inst.render.DepthOutput);
 

@@ -95,7 +95,7 @@ namespace RetroEngine
 
             ormTexture = AssetRegistry.LoadTextureFromFile("engine/textures/defaultORM.png");
 
-
+            OcclusionQuery = new OcclusionQuery(GameMain.Instance.GraphicsDevice);
         }
 
         public virtual void Draw()
@@ -194,31 +194,12 @@ namespace RetroEngine
                         graphicsDevice.SetVertexBuffer(meshPart.VertexBuffer);
                         graphicsDevice.Indices = meshPart.IndexBuffer;
 
-                        effect.Parameters["viewDir"]?.SetValue(Camera.rotation.GetForwardVector());
-                        effect.Parameters["viewPos"]?.SetValue(Camera.position);
-
-                        // Set effect parameters
                         effect.Parameters["World"]?.SetValue(frameStaticMeshData.World);
-                        effect.Parameters["View"]?.SetValue(frameStaticMeshData.View);
-                        effect.Parameters["Projection"]?.SetValue(frameStaticMeshData.Viewmodel? frameStaticMeshData.ProjectionViewmodel : frameStaticMeshData.Projection);
-
-                        effect.Parameters["depthScale"]?.SetValue(frameStaticMeshData.Viewmodel ? 0.04f : 1);
-
-                        effect.Parameters["DirectBrightness"]?.SetValue(Graphics.DirectLighting);
-                        effect.Parameters["GlobalBrightness"]?.SetValue(Graphics.GlobalLighting);
-                        effect.Parameters["LightDirection"]?.SetValue(Graphics.LightDirection.Normalized());
-
-                        effect.Parameters["ShadowMapViewProjection"]?.SetValue(Graphics.LightViewProjection);
-                        effect.Parameters["ShadowMapViewProjectionClose"]?.SetValue(Graphics.LightViewProjectionClose);
-
-                        effect.Parameters["ShadowBias"]?.SetValue(Graphics.ShadowBias);
-                        effect.Parameters["ShadowMapResolution"]?.SetValue((float)Graphics.shadowMapResolution);
-
-                        //effect.Parameters["DepthMap"].SetValue(GameMain.inst.render.DepthOutput);
 
                         effect.Parameters["Transparency"]?.SetValue(frameStaticMeshData.Transparency);
 
                         effect.Parameters["isParticle"]?.SetValue(isParticle);
+                        effect.Parameters["Viewmodel"]?.SetValue(frameStaticMeshData.Viewmodel);
 
                         MeshPartData meshPartData = meshPart.Tag as MeshPartData;
 
@@ -238,20 +219,7 @@ namespace RetroEngine
                         }
                         effect.Parameters["EmissionPower"].SetValue(EmissionPower);
 
-                        Vector3[] LightPos = new Vector3[LightManager.MAX_POINT_LIGHTS];
-                        Vector3[] LightColor = new Vector3[LightManager.MAX_POINT_LIGHTS]; 
-                        float[] LightRadius = new float[LightManager.MAX_POINT_LIGHTS]; 
-
-                        for (int i = 0; i < LightManager.MAX_POINT_LIGHTS; i++)
-                        {
-                            LightPos[i] = LightManager.FinalPointLights[i].Position;
-                            LightColor[i] = LightManager.FinalPointLights[i].Color;
-                            LightRadius[i] = LightManager.FinalPointLights[i].Radius;
-                        }
-
-                        effect.Parameters["LightPositions"]?.SetValue(LightPos);
-                        effect.Parameters["LightColors"]?.SetValue(LightColor);
-                        effect.Parameters["LightRadiuses"]?.SetValue(LightRadius);
+                        
 
                         Stats.RenderedMehses++;
 
@@ -347,7 +315,6 @@ namespace RetroEngine
                         else
                             effect.Parameters["Projection"].SetValue(frameStaticMeshData.Projection);
 
-                        effect.Parameters["DepthScale"]?.SetValue(frameStaticMeshData.Viewmodel ? 0.01f : 1);
 
                         // Draw the primitives using the custom effect
                         foreach (EffectPass pass in effect.CurrentTechnique.Passes)
@@ -419,6 +386,38 @@ namespace RetroEngine
                     }
                 }
             }
+        }
+
+        OcclusionQuery OcclusionQuery;
+
+        bool oclusionCulling = false;
+
+        public void StartOcclusionTest()
+        {
+
+            if (inFrustrum == false) return;
+
+            oclusionCulling = true;
+
+            OcclusionQuery.Begin();
+
+            DrawDepth();
+
+            OcclusionQuery.End();
+        }
+
+        public void EndOcclusionTest() 
+        {
+
+            if (oclusionCulling == false) return;
+
+            while (OcclusionQuery.IsComplete == false)
+            {
+
+            }
+
+            occluded = OcclusionQuery.PixelCount < 2;
+            oclusionCulling = false;
         }
 
         protected Texture2D FindTexture(string name)
@@ -829,32 +828,6 @@ namespace RetroEngine
             frameStaticMeshData.IsRendered = isRendered;
         }
 
-        public virtual void OcclusionCulling()
-        {
-            
-            if (model is null) return;
-
-            if (inFrustrum == false) return;
-
-            if (Static && false)
-            {
-                DrawDepth();
-                return;
-            }
-            occluded = true;
-
-            Render.occlusionQuery.Begin();
-
-            DrawDepth();
-
-            Render.occlusionQuery.End();
-
-            while (Render.occlusionQuery.IsComplete == false) { }
-
-            
-            occluded = Render.occlusionQuery.PixelCount < 10;
-            
-        }
 
         protected Vector3 CalculateAvgVertexLocation()
         {

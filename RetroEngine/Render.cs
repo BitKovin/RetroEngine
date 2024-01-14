@@ -109,6 +109,45 @@ namespace RetroEngine
             InitSampler();
         }
 
+        public void UpdateShaderFrameData()
+        {
+
+            Effect effect = UnifiedEffect;
+
+            effect.Parameters["viewDir"]?.SetValue(Camera.rotation.GetForwardVector());
+            effect.Parameters["viewPos"]?.SetValue(Camera.position);
+
+            effect.Parameters["DirectBrightness"]?.SetValue(Graphics.DirectLighting);
+            effect.Parameters["GlobalBrightness"]?.SetValue(Graphics.GlobalLighting);
+            effect.Parameters["LightDirection"]?.SetValue(Graphics.LightDirection.Normalized());
+
+            effect.Parameters["ShadowMapViewProjection"]?.SetValue(Graphics.LightViewProjection);
+            effect.Parameters["ShadowMapViewProjectionClose"]?.SetValue(Graphics.LightViewProjectionClose);
+
+            effect.Parameters["ShadowBias"]?.SetValue(Graphics.ShadowBias);
+            effect.Parameters["ShadowMapResolution"]?.SetValue((float)Graphics.shadowMapResolution);
+
+
+            effect.Parameters["View"]?.SetValue(Camera.finalizedView);
+            effect.Parameters["Projection"]?.SetValue(Camera.finalizedProjection);
+            effect.Parameters["ProjectionViewmodel"]?.SetValue(Camera.finalizedProjectionViewmodel);
+
+
+            Vector3[] LightPos = new Vector3[LightManager.MAX_POINT_LIGHTS];
+            Vector3[] LightColor = new Vector3[LightManager.MAX_POINT_LIGHTS];
+            float[] LightRadius = new float[LightManager.MAX_POINT_LIGHTS];
+
+            for (int i = 0; i < LightManager.MAX_POINT_LIGHTS; i++)
+            {
+                LightPos[i] = LightManager.FinalPointLights[i].Position;
+                LightColor[i] = LightManager.FinalPointLights[i].Color;
+                LightRadius[i] = LightManager.FinalPointLights[i].Radius;
+            }
+
+            effect.Parameters["LightPositions"]?.SetValue(LightPos);
+            effect.Parameters["LightColors"]?.SetValue(LightColor);
+            effect.Parameters["LightRadiuses"]?.SetValue(LightRadius);
+        }
         public RenderTarget2D StartRenderLevel(Level level)
         {
             
@@ -201,6 +240,8 @@ namespace RetroEngine
 
             InitSampler(5);
 
+            UpdateShaderFrameData();
+
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
 
             graphics.GraphicsDevice.SetRenderTargets(DeferredOutput,DepthOutput, normalPath);
@@ -235,7 +276,7 @@ namespace RetroEngine
 
             if (shadowPassRenderDelay.Wait()) return;
 
-            shadowPassRenderDelay.AddDelay(0.05f);
+            shadowPassRenderDelay.AddDelay(1000.05f);
 
             // Set up the shadow map render target with the desired resolution
             graphics.GraphicsDevice.SetRenderTarget(shadowMap);
@@ -450,7 +491,12 @@ namespace RetroEngine
 
             foreach (StaticMesh mesh in meshes)
             {
-                mesh.OcclusionCulling();
+                mesh.StartOcclusionTest();
+            }
+
+            foreach (StaticMesh mesh in meshes)
+            {
+                mesh.EndOcclusionTest();
             }
 
             Stats.StopRecord("occlusion test");

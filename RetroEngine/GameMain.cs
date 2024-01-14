@@ -296,6 +296,7 @@ namespace RetroEngine
             Level.GetCurrent().PerformOcclusionCheck();
 
             Stats.StartRecord("Render");
+
             RenderTarget2D frame = render.StartRenderLevel(curentLevel);
 
 

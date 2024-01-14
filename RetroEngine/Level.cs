@@ -26,7 +26,7 @@ namespace RetroEngine
 
         public static bool ChangingLevel = true;
 
-        public bool OcclusionCullingEnabled = false;
+        public bool OcclusionCullingEnabled = true;
 
         public Level()
         {
@@ -172,8 +172,10 @@ namespace RetroEngine
 
             Entity[] list = entities.ToArray();
 
-            
 
+            Camera.finalizedView = Camera.view;
+            Camera.finalizedProjection = Camera.projection;
+            Camera.finalizedProjectionViewmodel = Camera.projectionViewmodel;
 
             Parallel.ForEach(entities, entity =>
             {

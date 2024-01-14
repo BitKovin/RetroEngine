@@ -20,6 +20,10 @@ namespace RetroEngine
         public static Matrix projection;
         public static Matrix projectionViewmodel;
 
+        public static Matrix finalizedView;
+        public static Matrix finalizedProjection;
+        public static Matrix finalizedProjectionViewmodel;
+
         public static BoundingFrustum frustum = new BoundingFrustum(new Matrix());
 
         public static float roll = 0;

@@ -12,6 +12,7 @@
 matrix World;
 matrix View;
 matrix Projection;
+matrix ProjectionViewmodel;
 
 texture ShadowMap;
 sampler ShadowMapSampler = sampler_state
@@ -46,6 +47,8 @@ float ShadowBias;
 float Transparency;
 matrix ShadowMapViewProjection;
 float ShadowMapResolution;
+
+bool Viewmodel;
 
 matrix ShadowMapViewProjectionClose;
 float ShadowMapResolutionClose;
@@ -136,14 +139,17 @@ PixelInput DefaultVertexShaderFunction(VertexInput input)
 
     float4x4 boneTrans = GetBoneTransforms(input);
     
+    float4x4 proj = Projection;
+    if (Viewmodel)
+        proj = ProjectionViewmodel;
 
-    output.Position = mul(mul(input.Position,boneTrans), World);
+    output.Position = mul(mul(input.Position, boneTrans), World);
     output.MyPosition = output.Position.xyz;
     output.Position = mul(output.Position, View);
-    output.Position = mul(output.Position, Projection);
+    output.Position = mul(output.Position, proj);
     
-    
-    output.Position.z *= depthScale;
+    if (Viewmodel)
+        output.Position.z *= 0.04;
     
     output.MyPixelPosition = output.Position;
     
