@@ -48,7 +48,7 @@ float Transparency;
 matrix ShadowMapViewProjection;
 float ShadowMapResolution;
 
-bool Viewmodel;
+bool Viewmodel = false;
 
 matrix ShadowMapViewProjectionClose;
 float ShadowMapResolutionClose;
@@ -139,27 +139,35 @@ PixelInput DefaultVertexShaderFunction(VertexInput input)
 
     float4x4 boneTrans = GetBoneTransforms(input);
     
-    float4x4 proj = Projection;
-    if (Viewmodel)
-        proj = ProjectionViewmodel;
+    
 
     output.Position = mul(mul(input.Position, boneTrans), World);
     output.MyPosition = output.Position.xyz;
     output.Position = mul(output.Position, View);
-    output.Position = mul(output.Position, proj);
+    
+    if (Viewmodel)
+    {
+        output.Position = mul(output.Position, ProjectionViewmodel);
+    }
+    else
+    {
+        output.Position = mul(output.Position, Projection);
+    }
+        
+    
+    
+    output.MyPixelPosition = output.Position;
     
     if (Viewmodel)
         output.Position.z *= 0.04;
     
-    output.MyPixelPosition = output.Position;
-    
     output.TexCoord = input.TexCoord;
 
 	// Pass the world space normal to the pixel shader
-    output.Normal = mul(mul(input.Normal,boneTrans), (float3x3) World);
+    output.Normal = mul(mul(input.Normal, (float3x3) boneTrans), (float3x3) World);
     output.Normal = normalize(output.Normal);
     
-    output.Tangent = mul(mul(input.Tangent,boneTrans), (float3x3) World);
+    output.Tangent = mul(mul(input.Tangent, (float3x3) boneTrans), (float3x3) World);
     output.Tangent = normalize(output.Tangent);
 
     
@@ -400,7 +408,7 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness)
     
     light -= shadow;
     
-    float globalLight = GlobalBrightness * GlobalLightColor * lerp(max(dot(normal, float3(0, 1, 0)),-1), 1, 0.7);
+    float3 globalLight = GlobalBrightness * GlobalLightColor * lerp(max(dot(normal, float3(0, 1, 0)),-1), 1, 0.7);
     
     light = max(light, 0);
     light += globalLight;
@@ -412,9 +420,9 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness)
 
     }
     
-    for (int i = 0; i < MAX_POINT_LIGHTS / 2; i++)
+    for (int s = 0; s < MAX_POINT_LIGHTS / 2; s++)
     {
-        specular += CalculatePointLightSpeculars(i, input, normal, roughness);
+        specular += CalculatePointLightSpeculars(s, input, normal, roughness);
 
     }
     

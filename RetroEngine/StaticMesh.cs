@@ -205,17 +205,18 @@ namespace RetroEngine
 
                         if (meshPartData is not null && textureSearchPaths.Count>0)
                         {
-                            effect.Parameters["Texture"]?.SetValue(FindTexture(meshPartData.textureName));
-                            effect.Parameters["EmissiveTexture"]?.SetValue(FindTextureWithSufix(meshPartData.textureName, def: emisssiveTexture));
-                            effect.Parameters["NormalTexture"]?.SetValue(FindTextureWithSufix(meshPartData.textureName, "_n", normalTexture));
-                            effect.Parameters["ORMTexture"]?.SetValue(FindTextureWithSufix(meshPartData.textureName, "_orm", ormTexture));
+
+                            UpdateTextureParamIfNeeded(effect, "Texture", FindTexture(meshPartData.textureName));
+                            UpdateTextureParamIfNeeded(effect, "EmissiveTexture", FindTextureWithSufix(meshPartData.textureName, def: emisssiveTexture));
+                            UpdateTextureParamIfNeeded(effect, "NormalTexture", FindTextureWithSufix(meshPartData.textureName, "_n", normalTexture));
+                            UpdateTextureParamIfNeeded(effect, "ORMTexture", FindTextureWithSufix(meshPartData.textureName, "_orm", ormTexture));
                         }
                         else
                         {
-                            effect.Parameters["Texture"]?.SetValue(texture);
-                            effect.Parameters["EmissiveTexture"]?.SetValue(emisssiveTexture);
-                            effect.Parameters["NormalTexture"]?.SetValue(normalTexture);
-                            effect.Parameters["ORMTexture"]?.SetValue(ormTexture);
+                            UpdateTextureParamIfNeeded(effect, "Texture", texture);
+                            UpdateTextureParamIfNeeded(effect, "EmissiveTexture", emisssiveTexture);
+                            UpdateTextureParamIfNeeded(effect, "NormalTexture", normalTexture);
+                            UpdateTextureParamIfNeeded(effect, "ORMTexture", ormTexture);
                         }
                         effect.Parameters["EmissionPower"].SetValue(EmissionPower);
 
@@ -236,6 +237,19 @@ namespace RetroEngine
                     }
                 }
             }
+        }
+
+        protected void UpdateTextureParamIfNeeded(Effect effect,string name, Texture2D value)
+        {
+            Texture2D current = effect.Parameters[name]?.GetValueTexture2D();
+
+            if (current == value) 
+            { 
+                return; 
+            }
+
+            effect.Parameters[name]?.SetValue(value);
+
         }
 
         public virtual void DrawShadow(bool closeShadow = false)
@@ -360,7 +374,6 @@ namespace RetroEngine
                             effect.Parameters["EmissiveTexture"].SetValue(GameMain.Instance.render.black);
                         }
 
-                        effect.Parameters["DepthScale"].SetValue(frameStaticMeshData.Viewmodel ? 0.02f : 1);
 
                         Matrix projection;
 
@@ -374,15 +387,13 @@ namespace RetroEngine
 
 
                         // Draw the primitives using the custom effect
-                        foreach (EffectPass pass in effect.CurrentTechnique.Passes)
-                        {
-                            pass.Apply();
+                        
                             graphicsDevice.DrawIndexedPrimitives(
                                 PrimitiveType.TriangleList,
                                 meshPart.VertexOffset,
                                 meshPart.StartIndex,
                                 meshPart.PrimitiveCount);
-                        }
+                        
                     }
                 }
             }

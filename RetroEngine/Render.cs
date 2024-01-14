@@ -132,6 +132,7 @@ namespace RetroEngine
             effect.Parameters["Projection"]?.SetValue(Camera.finalizedProjection);
             effect.Parameters["ProjectionViewmodel"]?.SetValue(Camera.finalizedProjectionViewmodel);
 
+            effect.Parameters["GlobalLightColor"]?.SetValue(Graphics.LightColor);
 
             Vector3[] LightPos = new Vector3[LightManager.MAX_POINT_LIGHTS];
             Vector3[] LightColor = new Vector3[LightManager.MAX_POINT_LIGHTS];
@@ -249,20 +250,22 @@ namespace RetroEngine
             graphics.GraphicsDevice.Clear(Graphics.BackgroundColor);
 
 
-            UnifiedEffect.Parameters["GlobalLightColor"]?.SetValue(Graphics.LightColor);
 
 
             particlesToDraw.Clear();
 
-
-            foreach (StaticMesh mesh in renderList)
+            foreach (EffectPass pass in UnifiedEffect.CurrentTechnique.Passes)
             {
-                if (mesh.Transperent || onlyTransperent == false)
+                pass.Apply();
+
+                foreach (StaticMesh mesh in renderList)
                 {
-                    mesh.DrawUnified();
+                    if (mesh.Transperent || onlyTransperent == false)
+                    {
+                        mesh.DrawUnified();
+                    }
                 }
             }
-
             ParticleEmitter.LoadRenderEmitter();
 
             graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
@@ -276,7 +279,7 @@ namespace RetroEngine
 
             if (shadowPassRenderDelay.Wait()) return;
 
-            shadowPassRenderDelay.AddDelay(1000.05f);
+            shadowPassRenderDelay.AddDelay(0.05f);
 
             // Set up the shadow map render target with the desired resolution
             graphics.GraphicsDevice.SetRenderTarget(shadowMap);

@@ -27,7 +27,7 @@ namespace RetroEngine
         public static BoundingFrustum frustum = new BoundingFrustum(new Matrix());
 
         public static float roll = 0;
-        public static float FOV = 70;
+        public static float FOV = 80;
         public static float ViewmodelFOV = 46;
 
         public static float FarPlane = 1000;

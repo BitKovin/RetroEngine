@@ -296,19 +296,17 @@ namespace RetroEngine
                     if (meshPartData is not null && textureSearchPaths.Count > 0)
                     {
 
-                        Texture2D texture = FindTexture(meshPartData.textureName);
-
-                        effect.Parameters["Texture"]?.SetValue(texture);
-                        effect.Parameters["EmissiveTexture"]?.SetValue(FindTextureWithSufix(meshPartData.textureName, def: emisssiveTexture));
-                        effect.Parameters["NormalTexture"]?.SetValue(FindTextureWithSufix(meshPartData.textureName, "_n", normalTexture));
-                        effect.Parameters["ORMTexture"]?.SetValue(FindTextureWithSufix(meshPartData.textureName, "_orm", ormTexture));
+                        UpdateTextureParamIfNeeded(effect, "Texture", FindTexture(meshPartData.textureName));
+                        UpdateTextureParamIfNeeded(effect, "EmissiveTexture", FindTextureWithSufix(meshPartData.textureName, def: emisssiveTexture));
+                        UpdateTextureParamIfNeeded(effect, "NormalTexture", FindTextureWithSufix(meshPartData.textureName, "_n", normalTexture));
+                        UpdateTextureParamIfNeeded(effect, "ORMTexture", FindTextureWithSufix(meshPartData.textureName, "_orm", ormTexture));
                     }
                     else
                     {
-                        effect.Parameters["Texture"]?.SetValue(texture);
-                        effect.Parameters["EmissiveTexture"]?.SetValue(GameMain.Instance.render.black);
-                        effect.Parameters["NormalTexture"]?.SetValue(normalTexture);
-                        effect.Parameters["ORMTexture"]?.SetValue(ormTexture);
+                        UpdateTextureParamIfNeeded(effect, "Texture", texture);
+                        UpdateTextureParamIfNeeded(effect, "EmissiveTexture", emisssiveTexture);
+                        UpdateTextureParamIfNeeded(effect, "NormalTexture", normalTexture);
+                        UpdateTextureParamIfNeeded(effect, "ORMTexture", ormTexture);
                     }
                     effect.Parameters["EmissionPower"].SetValue(EmissionPower);
 
