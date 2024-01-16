@@ -79,7 +79,7 @@ namespace RetroEngine
 
             //ImGui.InputTextMultiline("log", ref consoleContent, uint.MaxValue, new Vector2(ImGui.GetWindowWidth(), ImGui.GetWindowHeight()-60),ImGuiInputTextFlags.ReadOnly);
 
-            ImGui.BeginChild("ScrollingRegion", new Vector2(ImGui.GetWindowWidth(), ImGui.GetWindowHeight() - 60));
+            ImGui.BeginChild("ScrollingRegion", new Vector2(ImGui.GetWindowWidth(), ImGui.GetWindowHeight() - 70));
 
             foreach(var item in log)
             {
@@ -100,7 +100,7 @@ namespace RetroEngine
 
             ImGui.EndChild();
 
-            ImGui.PushItemWidth(ImGui.GetWindowWidth() - 75);
+            ImGui.PushItemWidth(ImGui.GetWindowWidth() - 100);
             if (ImGui.InputText("", ref input, 1000000,ImGuiInputTextFlags.EnterReturnsTrue)) submitInput();
             ImGui.PopItemWidth();
             ImGui.SameLine();

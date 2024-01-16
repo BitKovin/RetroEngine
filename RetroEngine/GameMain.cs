@@ -71,6 +71,8 @@ namespace RetroEngine
         Stopwatch stopwatch = new Stopwatch();
         public bool LimitFPS = false;
 
+        ImFontPtr font;
+
         public static float ReservedTaskMinTime = 0.000f;
 
         public GameMain()
@@ -137,6 +139,8 @@ namespace RetroEngine
             if (DevMenuEnabled)
             {
                 ImGuiRenderer = new ImGuiRenderer(this);
+                ImGui.GetIO().Fonts.AddFontDefault();
+                font = ImGui.GetIO().Fonts.AddFontFromFileTTF("calibri.ttf", 16);
                 ImGuiRenderer.RebuildFontAtlas();
                 ImGui.StyleColorsDark();
                 ImGui.GetIO().ConfigFlags |= ImGuiConfigFlags.DockingEnable;
@@ -319,15 +323,16 @@ namespace RetroEngine
 
 
             if (DevMenuEnabled)
+            {
                 ImGuiRenderer.BeginLayout(gameTime);
 
-            if (DevMenuEnabled)
+                ImGui.PushFont(font);
+
                 if (devMenu is not null)
-                devMenu.Update();
+                    devMenu.Update();
 
-            if (DevMenuEnabled)
                 ImGuiRenderer.EndLayout();
-
+            }
             //base.Draw(gameTime);
 
             //SetupFullViewport();

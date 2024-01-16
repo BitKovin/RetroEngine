@@ -19,6 +19,9 @@
     <ProjectReference Include="..\Libs\MonoGame.ImGuiNet\Monogame.ImGuiNet.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <None Update="calibri.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="libbulletc.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
