@@ -28,8 +28,6 @@ namespace RetroEngine.Game.Entities
         {
             base.LateUpdate();
 
-            if (Input.GetAction("test2").Pressed())
-                Level.LoadFromFile("test.map");
 
             if (Input.GetAction("pause").Pressed())
             {

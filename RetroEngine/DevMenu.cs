@@ -141,6 +141,7 @@ namespace RetroEngine
         void submitInput()
         {
             Log(input);
+            ConsoleCommands.ProcessCommand(input);
         }
 
         public virtual void Init() 

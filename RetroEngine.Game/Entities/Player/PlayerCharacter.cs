@@ -179,10 +179,6 @@ namespace RetroEngine.Game.Entities.Player
             if (Input.GetAction("lastSlot").Pressed())
                 SwitchToSlot(lastSlot);
 
-            if (Input.GetAction("test").Released())
-            {
-                Level.LoadFromFile("test2.map");
-            }
 
             PlayerUI.Update();
 

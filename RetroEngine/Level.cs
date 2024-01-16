@@ -126,6 +126,7 @@ namespace RetroEngine
 
         }
 
+        
         public void SetLayerVisibility(string name,bool value)
         {
 
@@ -135,6 +136,7 @@ namespace RetroEngine
             
         }
 
+        
         public void SetLayerVisibility(int id, bool value)
         {
             if (value)
@@ -320,5 +322,12 @@ namespace RetroEngine
             entities.Clear();
             entities = null;
         }
+
+        [ConsoleCommand("level.setLayerVisible")]
+        public static void SetLayerVisible(int id, bool visible)
+        {
+            Level.GetCurrent().SetLayerVisibility(id, visible);
+        }
+
     }
 }

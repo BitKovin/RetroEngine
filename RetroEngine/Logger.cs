@@ -10,11 +10,11 @@ namespace RetroEngine
     public static class Logger
     {
 
-        public static void Log(string s)
+        public static void Log(object s)
         {
             Console.WriteLine(s);
             if(GameMain.Instance.devMenu is not null)
-                GameMain.Instance.devMenu.Log(s);
+                GameMain.Instance.devMenu.Log(s.ToString());
         }
 
     }

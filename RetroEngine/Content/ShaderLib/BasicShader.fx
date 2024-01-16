@@ -381,12 +381,15 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness)
     lightCoordsClose = (lightCoordsClose + 1.0f) / 2.0f;
     lightCoordsClose.y = 1.0f - lightCoordsClose.y;
 
-    if (lightCoordsClose.x >= 0.01f && lightCoordsClose.x <= 0.99f && lightCoordsClose.y >= 0.01f && lightCoordsClose.y <= 0.99f && false)
+    
+    if (dot(input.Normal, LightDirection) < 0.0f)
     {
-        shadow += GetShadow(lightCoordsClose, input, true);
-    }
-    else
+    
         shadow += GetShadow(lightCoords, input, false);
+    }else
+    {
+        shadow += 1;
+    }
     
     float3 specular = 0;
     
