@@ -5,6 +5,7 @@ using RetroEngine.Entities;
 using RetroEngine.UI;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -65,6 +66,7 @@ namespace RetroEngine
             return false;
         }
 
+
         public static void LoadFromFile(string name, bool force = false)
         {
 
@@ -72,6 +74,15 @@ namespace RetroEngine
             {
                 pendingLevelChange = name;
                 ChangingLevel = true;
+                return;
+            }
+
+            string path = AssetRegistry.FindPathForFile(name);
+
+            if (File.Exists(path) == false)
+            {
+                Logger.Log($"failed to find level {path}");
+                pendingLevelChange = null;
                 return;
             }
 
@@ -91,7 +102,9 @@ namespace RetroEngine
             
             AssetRegistry.AllowGeneratingMipMaps = true;
 
-            GameMain.Instance.curentLevel = MapParser.MapParser.ParseMap(AssetRegistry.FindPathForFile(name)).GetLevel();
+            
+
+            GameMain.Instance.curentLevel = MapParser.MapParser.ParseMap(path).GetLevel();
 
             GameMain.Instance.curentLevel.StartEnities();
 
@@ -323,10 +336,17 @@ namespace RetroEngine
             entities = null;
         }
 
-        [ConsoleCommand("level.setLayerVisible")]
+        [ConsoleCommand("level.layer.visible")]
         public static void SetLayerVisible(int id, bool visible)
         {
             Level.GetCurrent().SetLayerVisibility(id, visible);
+            Logger.Log($"Changed layer {id} visibility to {visible}");
+        }
+
+        [ConsoleCommand("level.load")]
+        public static void LoadLevelFromFile(string name)
+        {
+            LoadFromFile(name);
         }
 
     }

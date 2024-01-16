@@ -142,6 +142,8 @@ namespace RetroEngine
         {
             Log(input);
             ConsoleCommands.ProcessCommand(input);
+
+            input = "";
         }
 
         public virtual void Init() 

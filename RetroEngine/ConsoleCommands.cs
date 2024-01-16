@@ -71,5 +71,67 @@ namespace RetroEngine
 
             Logger.Log("Command not found");
         }
+
+        [ConsoleCommand("help")]
+        public static void Help()
+        {
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            Type[] types = assembly.GetTypes();
+
+            List<string> commands = new List<string>();
+
+            Logger.Log("list of all console commands:");
+
+            foreach (var type in types)
+            {
+                var methods = type.GetMethods();
+
+
+
+                foreach (var method in methods)
+                {
+                    var attribute = (ConsoleCommandAttribute)Attribute.GetCustomAttribute(method, typeof(ConsoleCommandAttribute));
+
+                    if (attribute is null) continue;
+
+                    string command = attribute.Command;
+
+                    if (method.GetParameters().Length > 0)
+                        command += "[";
+
+                    bool first = true;
+
+
+
+                    foreach (var parameter in method.GetParameters())
+                    {
+                        if (first)
+                        {
+
+                            first = false;
+                        }
+                        else
+                        {
+                            command += " ";
+                        }
+                        command += parameter.Name;
+                    }
+                    if (method.GetParameters().Length > 0)
+                        command += "]";
+
+                    commands.Add(command);
+
+                }
+            }
+
+            commands.Sort();
+
+            foreach (var command in commands)
+            {
+                Logger.Log(command);
+            }
+
+        }
+
     }
 }
