@@ -27,12 +27,16 @@ namespace RetroEngine.Map
 
             level.Start();
 
+            GameMain.Instance.curentLevel = level;
 
-            foreach(EntityData ent in Entities)
+            foreach (EntityData ent in Entities)
             {
+
+                Entity entity = LevelObjectFactory.CreateByTechnicalName(ent.Classname);
+
                 if (ent.Brushes.Count > 0)
                 {
-                    Entity entity = LevelObjectFactory.CreateByTechnicalName(ent.Classname) as Entity;
+                    
 
                     if (entity is null)
                         entity = new Entity();
@@ -75,7 +79,6 @@ namespace RetroEngine.Map
                 }
                 else
                 {
-                    Entity entity = LevelObjectFactory.CreateByTechnicalName(ent.Classname) as Entity;
                     if (entity is null) continue;
 
                     if (ent.Properties.ContainsKey("origin"))

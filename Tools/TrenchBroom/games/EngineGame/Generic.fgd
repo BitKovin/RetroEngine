@@ -1,5 +1,6 @@
 @SolidClass = worldspawn : "World entity" 
 [
+	visibleLayers(string) : "Visible Layers": "Default Layer, "
 	skyColor(Vector3) : "Color": "0.15 0.15 0.2"
 
 	globalLightColor(Vector3) : "Color": "1 1 1"

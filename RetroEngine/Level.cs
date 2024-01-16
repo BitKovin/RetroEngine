@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using static Assimp.Metadata;
 
 namespace RetroEngine
 {
@@ -26,11 +27,17 @@ namespace RetroEngine
 
         public static bool ChangingLevel = true;
 
-        public bool OcclusionCullingEnabled = true;
+        public bool OcclusionCullingEnabled = false;
+
+        Dictionary<string, int> LayerIds = new Dictionary<string, int>();
+
+        List<int> renderLayers = new List<int>();
 
         public Level()
         {
+
             entities = new List<Entity>();
+
         }
 
         public virtual void Start()
@@ -98,6 +105,46 @@ namespace RetroEngine
 
             AssetRegistry.AllowGeneratingMipMaps = false;
 
+        }
+
+        public bool TryAddLayerName(string name, int id)
+        {
+            return LayerIds.TryAdd(name, id);
+        }
+
+        public int TryGetLayerId(string name)
+        {
+
+            int id = 0;
+
+            if(LayerIds.TryGetValue(name, out id))
+            {
+                return id;
+            }
+            
+            return -1;
+
+        }
+
+        public void SetLayerVisibility(string name,bool value)
+        {
+
+            int id = TryGetLayerId(name);
+
+            SetLayerVisibility(id, value);
+            
+        }
+
+        public void SetLayerVisibility(int id, bool value)
+        {
+            if (value)
+            {
+                renderLayers.Add(id);
+            }
+            else
+            {
+                renderLayers.Remove(id);
+            }
         }
 
         public void UpdatePending()
@@ -179,6 +226,9 @@ namespace RetroEngine
 
             Parallel.ForEach(entities, entity =>
             {
+
+                if (renderLayers.Contains(entity.Layer))
+
                 foreach (StaticMesh mesh in entity.meshes)
                     if(entity is not null)
 
@@ -192,6 +242,7 @@ namespace RetroEngine
 
             foreach (Entity ent in entities)
             {
+                if (renderLayers.Contains(ent.Layer) == false) continue;
                 if (ent.loadedAssets == false) continue;
                 if (ent.meshes != null)
                 {

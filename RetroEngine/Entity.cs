@@ -42,6 +42,8 @@ namespace RetroEngine
 
         public bool loadedAssets = false;
 
+        public int Layer = 0;
+
         public Entity()
         {
 
@@ -63,7 +65,7 @@ namespace RetroEngine
 
         public virtual void FromData(EntityData data)
         {
-
+            Layer = (int)data.GetPropertyFloat("_tb_layer");
         }
 
         public virtual void AsyncUpdate()

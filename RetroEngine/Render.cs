@@ -401,7 +401,7 @@ namespace RetroEngine
             
 
             float fxaaQualitySubpix = 0.75f;
-            float fxaaQualityEdgeThreshold = 0.166f;
+            float fxaaQualityEdgeThreshold = 0.066f;
             float fxaaQualityEdgeThresholdMin = 0.0833f;
 
             fxaaEffect.CurrentTechnique = fxaaEffect.Techniques["ppfxaa_PC"];

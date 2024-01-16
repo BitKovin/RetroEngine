@@ -13,6 +13,8 @@ namespace RetroEngine.Entities
     {
         public WorldSpawn() {  }
 
+        List<string> visibleLayers = new List<string>();
+
         public override void FromData(EntityData data)
         {
             base.FromData(data);
@@ -29,6 +31,35 @@ namespace RetroEngine.Entities
             Vector3 skyColor = data.GetPropertyVector("skyColor", new Vector3(0.15f, 0.15f, 0.2f));
 
             Graphics.BackgroundColor = new Color(skyColor.X, skyColor.Y, skyColor.Z);
+
+
+            Level.GetCurrent().TryAddLayerName("Default Layer", 0);
+
+            string listOfLayers = data.GetPropertyString("visibleLayers", "Default Layer, ");
+
+            List<string> layers = new List<string>();
+
+            listOfLayers = listOfLayers.Replace(", ",",");
+            layers = listOfLayers.Split(',').ToList();
+
+            foreach (string layer in layers)
+            {
+                if(layer!=null)
+                if(layer.Length>1)
+                    visibleLayers.Add(layer);
+            }
+
+
+        }
+
+        public override void Start()
+        {
+            base.Start();
+
+            foreach(string layer in visibleLayers)
+            {
+                Level.GetCurrent().SetLayerVisibility(layer, true);
+            }
 
         }
 
