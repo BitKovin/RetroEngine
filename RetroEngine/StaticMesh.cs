@@ -40,6 +40,7 @@ namespace RetroEngine
         public Matrix LightView;
         public Matrix LightProjection;
         public Matrix LightProjectionClose;
+
     }
 
     public class StaticMesh : IDisposable
@@ -90,12 +91,17 @@ namespace RetroEngine
         protected bool occluded = false;
         protected bool inFrustrum = false;
 
+        public Effect Shader;
+
         public StaticMesh()
         {
 
             ormTexture = AssetRegistry.LoadTextureFromFile("engine/textures/defaultORM.png");
 
             OcclusionQuery = new OcclusionQuery(GameMain.Instance.GraphicsDevice);
+
+            Shader = AssetRegistry.GetShaderFromName("UnifiedOutput");
+
         }
 
         public virtual void Draw()
@@ -174,13 +180,42 @@ namespace RetroEngine
             }
         }
 
+        protected void ApplyShaderParams(Effect effect, MeshPartData meshPartData)
+        {
+            effect.Parameters["World"]?.SetValue(frameStaticMeshData.World);
+
+            effect.Parameters["Transparency"]?.SetValue(frameStaticMeshData.Transparency);
+
+            effect.Parameters["isParticle"]?.SetValue(isParticle);
+            effect.Parameters["Viewmodel"]?.SetValue(frameStaticMeshData.Viewmodel);
+
+            
+
+            if (meshPartData is not null && textureSearchPaths.Count > 0)
+            {
+
+                UpdateTextureParamIfNeeded(effect, "Texture", FindTexture(meshPartData.textureName));
+                UpdateTextureParamIfNeeded(effect, "EmissiveTexture", FindTextureWithSufix(meshPartData.textureName, def: emisssiveTexture));
+                UpdateTextureParamIfNeeded(effect, "NormalTexture", FindTextureWithSufix(meshPartData.textureName, "_n", normalTexture));
+                UpdateTextureParamIfNeeded(effect, "ORMTexture", FindTextureWithSufix(meshPartData.textureName, "_orm", ormTexture));
+            }
+            else
+            {
+                UpdateTextureParamIfNeeded(effect, "Texture", texture);
+                UpdateTextureParamIfNeeded(effect, "EmissiveTexture", emisssiveTexture);
+                UpdateTextureParamIfNeeded(effect, "NormalTexture", normalTexture);
+                UpdateTextureParamIfNeeded(effect, "ORMTexture", ormTexture);
+            }
+            effect.Parameters["EmissionPower"].SetValue(EmissionPower);
+        }
+
         public virtual void DrawUnified()
         {
             if (frameStaticMeshData.IsRendered == false && frameStaticMeshData.Viewmodel == false) return;
 
             GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
             // Load the custom effect
-            Effect effect = GameMain.Instance.render.UnifiedEffect;
+            Effect effect = Shader;
 
 
             if (frameStaticMeshData.model is not null)
@@ -194,33 +229,10 @@ namespace RetroEngine
                         graphicsDevice.SetVertexBuffer(meshPart.VertexBuffer);
                         graphicsDevice.Indices = meshPart.IndexBuffer;
 
-                        effect.Parameters["World"]?.SetValue(frameStaticMeshData.World);
-
-                        effect.Parameters["Transparency"]?.SetValue(frameStaticMeshData.Transparency);
-
-                        effect.Parameters["isParticle"]?.SetValue(isParticle);
-                        effect.Parameters["Viewmodel"]?.SetValue(frameStaticMeshData.Viewmodel);
 
                         MeshPartData meshPartData = meshPart.Tag as MeshPartData;
-
-                        if (meshPartData is not null && textureSearchPaths.Count>0)
-                        {
-
-                            UpdateTextureParamIfNeeded(effect, "Texture", FindTexture(meshPartData.textureName));
-                            UpdateTextureParamIfNeeded(effect, "EmissiveTexture", FindTextureWithSufix(meshPartData.textureName, def: emisssiveTexture));
-                            UpdateTextureParamIfNeeded(effect, "NormalTexture", FindTextureWithSufix(meshPartData.textureName, "_n", normalTexture));
-                            UpdateTextureParamIfNeeded(effect, "ORMTexture", FindTextureWithSufix(meshPartData.textureName, "_orm", ormTexture));
-                        }
-                        else
-                        {
-                            UpdateTextureParamIfNeeded(effect, "Texture", texture);
-                            UpdateTextureParamIfNeeded(effect, "EmissiveTexture", emisssiveTexture);
-                            UpdateTextureParamIfNeeded(effect, "NormalTexture", normalTexture);
-                            UpdateTextureParamIfNeeded(effect, "ORMTexture", ormTexture);
-                        }
-                        effect.Parameters["EmissionPower"].SetValue(EmissionPower);
-
                         
+                        ApplyShaderParams(effect, meshPartData);
 
                         Stats.RenderedMehses++;
 

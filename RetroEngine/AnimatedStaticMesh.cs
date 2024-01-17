@@ -99,7 +99,7 @@ namespace RetroEngine
 
             GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
             // Load the custom effect
-            Effect effect = GameMain.Instance.render.UnifiedEffect;
+            Effect effect = Shader;
             
             AddFrameVertexData();
 
@@ -120,53 +120,10 @@ namespace RetroEngine
                         graphicsDevice.SetVertexBuffer(result);
                         graphicsDevice.Indices = meshPart1.IndexBuffer;
 
-                        effect.Parameters["World"]?.SetValue(frameStaticMeshData.World);
-
-                        effect.Parameters["Transparency"]?.SetValue(frameStaticMeshData.Transparency);
-
-                        effect.Parameters["isParticle"]?.SetValue(isParticle);
-                        effect.Parameters["Viewmodel"]?.SetValue(frameStaticMeshData.Viewmodel);
-
-                        //effect.Parameters["DepthMap"]?.SetValue(GameMain.inst.render.DepthOutput);
-
-                        effect.Parameters["Transparency"]?.SetValue(frameStaticMeshData.Transparency);
-
-                        effect.Parameters["isParticle"]?.SetValue(isParticle);
 
                         MeshPartData meshPartData = meshPart1.Tag as MeshPartData;
 
-                        if (meshPartData is not null && textureSearchPaths.Count > 0)
-                        {
-                            effect.Parameters["Texture"]?.SetValue(FindTexture(meshPartData.textureName));
-                            effect.Parameters["EmissiveTexture"]?.SetValue(FindTextureWithSufix(meshPartData.textureName, def: emisssiveTexture));
-                            effect.Parameters["NormalTexture"]?.SetValue(FindTextureWithSufix(meshPartData.textureName, "_n", normalTexture));
-                            effect.Parameters["ORMTexture"]?.SetValue(FindTextureWithSufix(meshPartData.textureName, "_orm", ormTexture));
-                        }
-                        else
-                        {
-                            effect.Parameters["Texture"]?.SetValue(texture);
-                            effect.Parameters["EmissiveTexture"]?.SetValue(GameMain.Instance.render.black);
-                            effect.Parameters["NormalTexture"]?.SetValue(normalTexture);
-                            effect.Parameters["ORMTexture"]?.SetValue(ormTexture);
-                        }
-                        effect.Parameters["EmissionPower"].SetValue(EmissionPower);
-
-                        effect.Parameters["EmissionPower"]?.SetValue(EmissionPower);
-
-                        Vector3[] LightPos = new Vector3[LightManager.MAX_POINT_LIGHTS];
-                        Vector3[] LightColor = new Vector3[LightManager.MAX_POINT_LIGHTS];
-                        float[] LightRadius = new float[LightManager.MAX_POINT_LIGHTS];
-
-                        for (int l = 0; l < LightManager.MAX_POINT_LIGHTS; l++)
-                        {
-                            LightPos[l] = LightManager.FinalPointLights[l].Position;
-                            LightColor[l] = LightManager.FinalPointLights[l].Color;
-                            LightRadius[l] = LightManager.FinalPointLights[l].Radius;
-                        }
-
-                        effect.Parameters["LightPositions"]?.SetValue(LightPos);
-                        effect.Parameters["LightColors"]?.SetValue(LightColor);
-                        effect.Parameters["LightRadiuses"]?.SetValue(LightRadius);
+                        ApplyShaderParams(effect, meshPartData);
 
                         if (_disposed) return;
 

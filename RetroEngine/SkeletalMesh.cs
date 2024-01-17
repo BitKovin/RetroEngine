@@ -263,7 +263,7 @@ namespace RetroEngine
 
             GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
             // Load the custom effect
-            Effect effect = GameMain.Instance.render.UnifiedEffect;
+            Effect effect = Shader;
 
 
             effect.Parameters["Bones"].SetValue(finalizedBones);
@@ -276,39 +276,9 @@ namespace RetroEngine
                     graphicsDevice.SetVertexBuffer(meshPart.VertexBuffer);
                     graphicsDevice.Indices = meshPart.IndexBuffer;
 
-                    effect.Parameters["World"]?.SetValue(frameStaticMeshData.World);
-
-                    effect.Parameters["Transparency"]?.SetValue(frameStaticMeshData.Transparency);
-
-                    effect.Parameters["isParticle"]?.SetValue(isParticle);
-                    effect.Parameters["Viewmodel"]?.SetValue(frameStaticMeshData.Viewmodel);
-
-
-
-                    //effect.Parameters["DepthMap"].SetValue(GameMain.inst.render.DepthOutput);
-
-                    effect.Parameters["Transparency"]?.SetValue(frameStaticMeshData.Transparency);
-
-                    effect.Parameters["isParticle"]?.SetValue(isParticle);
-
                     MeshPartData meshPartData = meshPart.Tag as MeshPartData;
 
-                    if (meshPartData is not null && textureSearchPaths.Count > 0)
-                    {
-
-                        UpdateTextureParamIfNeeded(effect, "Texture", FindTexture(meshPartData.textureName));
-                        UpdateTextureParamIfNeeded(effect, "EmissiveTexture", FindTextureWithSufix(meshPartData.textureName, def: emisssiveTexture));
-                        UpdateTextureParamIfNeeded(effect, "NormalTexture", FindTextureWithSufix(meshPartData.textureName, "_n", normalTexture));
-                        UpdateTextureParamIfNeeded(effect, "ORMTexture", FindTextureWithSufix(meshPartData.textureName, "_orm", ormTexture));
-                    }
-                    else
-                    {
-                        UpdateTextureParamIfNeeded(effect, "Texture", texture);
-                        UpdateTextureParamIfNeeded(effect, "EmissiveTexture", emisssiveTexture);
-                        UpdateTextureParamIfNeeded(effect, "NormalTexture", normalTexture);
-                        UpdateTextureParamIfNeeded(effect, "ORMTexture", ormTexture);
-                    }
-                    effect.Parameters["EmissionPower"].SetValue(EmissionPower);
+                    ApplyShaderParams(effect, meshPartData);
 
                     Stats.RenderedMehses++;
 

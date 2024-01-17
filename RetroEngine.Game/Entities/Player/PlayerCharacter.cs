@@ -32,7 +32,7 @@ namespace RetroEngine.Game.Entities.Player
 
         public RigidBody body;
 
-        float maxSpeed = 10;
+        float maxSpeed = 6;
         float maxSpeedAir = 2;
         float acceleration = 90;
         float airAcceleration = 40;
@@ -60,7 +60,7 @@ namespace RetroEngine.Game.Entities.Player
         int currentSlot = -1;
         int lastSlot = -1;
 
-        float bobSpeed = 8;
+        float bobSpeed = 7;
 
         PlayerUI PlayerUI;
 

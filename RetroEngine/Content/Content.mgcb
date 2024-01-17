@@ -38,6 +38,12 @@
 /processorParam:TextureFormat=Compressed
 /build:box.fbx
 
+#begin ColorOutput.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:ColorOutput.fx;UnlitOutput.fx
+
 #begin ComposedColor.fx
 /importer:EffectImporter
 /processor:EffectProcessor

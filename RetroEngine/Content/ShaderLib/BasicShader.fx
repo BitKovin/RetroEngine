@@ -89,6 +89,7 @@ struct PixelInput
     float3 MyPosition : TEXCOORD5;
     float4 MyPixelPosition : TEXCOORD6;
     float3 Tangent : TEXCOORD7;
+    float3 TangentNormal : TEXCOORD8;
 };
 
 struct PBRData
@@ -133,6 +134,25 @@ float4x4 GetBoneTransforms(VertexInput input)
     return mbones;
 }
 
+float3 GetTangentNormal(float3 worldNormal, float3 worldTangent)
+{
+    
+    float3 normalMapSample = float3(0,0,1);
+    
+    
+    // Create the tangent space matrix as before
+    float3 bitangent = cross(worldNormal, worldTangent);
+    float3x3 tangentToWorld = float3x3(worldTangent, bitangent, worldNormal);
+
+    // Transform the normal from tangent space to world space
+    float3 worldNormalFromTexture = mul(normalMapSample, tangentToWorld);
+
+    // Normalize the final normal
+    worldNormalFromTexture = normalize(worldNormalFromTexture);
+
+    return worldNormalFromTexture;
+}
+
 PixelInput DefaultVertexShaderFunction(VertexInput input)
 {
     PixelInput output;
@@ -170,6 +190,7 @@ PixelInput DefaultVertexShaderFunction(VertexInput input)
     output.Tangent = mul(mul(input.Tangent, (float3x3) boneTrans), (float3x3) World);
     output.Tangent = normalize(output.Tangent);
 
+    output.TangentNormal = GetTangentNormal(output.Normal, output.Tangent);
     
     output.light = 0;
 
@@ -382,11 +403,12 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness)
     lightCoordsClose.y = 1.0f - lightCoordsClose.y;
 
     
-    if (dot(input.Normal, LightDirection) < 0.0f)
+    if (dot(input.TangentNormal, LightDirection) < 0.0f)
     {
     
         shadow += GetShadow(lightCoords, input, false);
-    }else
+    }
+    else if (Viewmodel == false)
     {
         shadow += 1;
     }
