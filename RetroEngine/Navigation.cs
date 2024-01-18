@@ -27,9 +27,7 @@ namespace RetroEngine
         public static List<Vector3> FindPath(Vector3 start, Vector3 target)
         {
 
-            target = Physics.LineTraceForStatic(target.ToNumerics(), (target - new Vector3(0, 100, 0)).ToNumerics()).HitPointWorld;
-
-            target += new Vector3(0, 0.25f, 0);
+            target = Navigation.ProjectToGround(target);
 
             int it = 0;
 
@@ -43,7 +41,7 @@ namespace RetroEngine
 
             for(int i = points.Count -1; i >=0; i--)
             {
-                var hit = Physics.LineTraceForStatic(start.ToNumerics(), points[i].ToNumerics());
+                var hit = Physics.SphereTraceForStatic(start.ToNumerics(), points[i].ToNumerics());
 
                 if(hit.HasHit == false)
                 {
@@ -63,7 +61,7 @@ namespace RetroEngine
             var hit = Physics.LineTraceForStatic(point.ToNumerics(), (point - new Vector3(0, 10, 0)).ToNumerics());
 
             Position = hit.HitPointWorld;
-            Position += new Vector3(0, 0.25f, 0);
+            Position += new Vector3(0, 1.25f, 0);
 
             return Position;
         }
@@ -74,7 +72,7 @@ namespace RetroEngine
 
             foreach (var point in navPoints)
             {
-               var hit = Physics.LineTraceForStatic(start.ToNumerics(), point.Position.ToNumerics());
+               var hit = Physics.SphereTraceForStatic(start.ToNumerics(), point.Position.ToNumerics());
                 
                 if(hit.HasHit == false)
                     return point;

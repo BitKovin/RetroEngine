@@ -17,7 +17,7 @@ namespace RetroEngine.Entities
 
         SkeletalMesh mesh2 = new SkeletalMesh();
 
-        float speed = 2f;
+        float speed = 3f;
 
         static Delay updateDelay = new Delay();
 
@@ -31,6 +31,8 @@ namespace RetroEngine.Entities
 
         StaticMesh sm = new StaticMesh();
 
+        static List<Vector3> directionsLUT = new List<Vector3>();
+
         public override void Start()
         {
             base.Start();
@@ -41,16 +43,31 @@ namespace RetroEngine.Entities
 
             bodies.Add(body);
 
-            
-            //mesh.CastShadows = false;
 
             npcList.Add(this);
 
-
-
-
+            InitDirectionsLUT();
         }
 
+        void InitDirectionsLUT()
+        {
+
+            if (directionsLUT.Count > 0) return;
+
+            directionsLUT.Add(new Vector3(0, 0, 0));
+
+            directionsLUT.Add(new Vector3(1, 0, 0));
+            directionsLUT.Add(new Vector3(0, 0, 1));
+            directionsLUT.Add(new Vector3(-1, 0, 0));
+            directionsLUT.Add(new Vector3(0, 0, -1));
+
+            float diagonalL = 0.7777f;
+
+            directionsLUT.Add(new Vector3(diagonalL, 0, diagonalL));
+            directionsLUT.Add(new Vector3(-diagonalL, 0, diagonalL));
+            directionsLUT.Add(new Vector3(diagonalL, 0, -diagonalL));
+            directionsLUT.Add(new Vector3(-diagonalL, 0, -diagonalL));
+        }
 
         protected override void LoadAssets()
         {
@@ -139,22 +156,40 @@ namespace RetroEngine.Entities
         void UpdateMovementDirection()
         {
             body.Activate();
-            List<Vector3> path = Navigation.FindPath(Position, targetLocation);
+
+            List<Vector3> locations = new List<Vector3>();
 
             Vector3 moveLocation = new Vector3();
 
-            if (path.Count > 0)
-                moveLocation = path[0];
+            foreach (Vector3 dir in directionsLUT)
+            {
+
+                List<Vector3> path = Navigation.FindPath(Position, targetLocation + dir);
+
+                if (path.Count > 0)
+                    locations.Add(path[0]);
+            }
+            locations = locations.OrderBy(x => Vector3.Distance(targetLocation, x)).ToList();
+
+            if(locations.Count > 0)
+            {
+                moveLocation = locations[0];
+            }
 
             Vector3 newMoveDirection = moveLocation - Position;
 
+            if(false)
             if ((moveLocation - Navigation.ProjectToGround(targetLocation)).Length() < 0.2f)
             {
-                var hit = Physics.SphereTraceForStatic(Position.ToNumerics(), targetLocation.ToNumerics(), 0.4f);
 
-                if (hit.HasHit)
+                if (Physics.SphereTraceForStatic(Position.ToNumerics(), targetLocation.ToNumerics(), 0.4f).HasHit)
                 {
-                    return;
+
+                    var hit = Physics.SphereTraceForStatic(Position.ToNumerics(), targetLocation.ToNumerics(), 0.4f);
+
+                    moveLocation += hit.HitNormalWorld * (moveLocation - Navigation.ProjectToGround(targetLocation)).Length();
+
+                    newMoveDirection = moveLocation - Position;
                 }
             }
 
