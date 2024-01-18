@@ -12,6 +12,7 @@ namespace RetroEngine.Entities
     {
 
         Vector3 MoveDirection = Vector3.Zero;
+        Vector3 DesiredMoveDirection = Vector3.Zero;
 
         SkeletalMesh mesh = new SkeletalMesh();
 
@@ -105,8 +106,6 @@ namespace RetroEngine.Entities
         {
             UpdateNPCList();
 
-            //sm.Position = mesh.GetBoneMatrix("hand_r").DecomposeMatrix().Position;
-            //sm.Rotation = mesh.GetBoneMatrix("hand_r").DecomposeMatrix().Rotation;
 
             targetLocation = Camera.position;
 
@@ -125,6 +124,8 @@ namespace RetroEngine.Entities
         public override void AsyncUpdate()
         {
             body.LinearVelocity = new System.Numerics.Vector3(MoveDirection.X * speed, body.LinearVelocity.Y, MoveDirection.Z * speed);
+
+            MoveDirection = Vector3.Lerp(MoveDirection, DesiredMoveDirection, Time.deltaTime*5);
 
             if (loadedAssets)
                 mesh.Update(Time.deltaTime);
@@ -164,7 +165,7 @@ namespace RetroEngine.Entities
             foreach (Vector3 dir in directionsLUT)
             {
 
-                List<Vector3> path = Navigation.FindPath(Position, targetLocation + dir);
+                List<Vector3> path = Navigation.FindPath(Position, targetLocation + dir * 0.5f);
 
                 if (path.Count > 0)
                     locations.Add(path[0]);
@@ -193,9 +194,9 @@ namespace RetroEngine.Entities
                 }
             }
 
-            MoveDirection = newMoveDirection;
+            DesiredMoveDirection = newMoveDirection;
 
-            MoveDirection.Normalize();
+            DesiredMoveDirection.Normalize();
         }
 
         static void UpdateNPCList()
