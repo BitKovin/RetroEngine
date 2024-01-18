@@ -27,10 +27,7 @@ namespace RetroEngine.Entities.Navigaion
 
         public void SnapToGround()
         {
-            var hit = Physics.LineTraceForStatic(Position.ToNumerics(), (Position - new Vector3(0, 10, 0)).ToNumerics());
-
-            Position = hit.HitPointWorld;
-            Position += new Vector3(0, 0.25f, 0);
+            Position = Navigation.ProjectToGround(Position);
         }
 
         public void BuildConnectionsData()

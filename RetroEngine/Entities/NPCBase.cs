@@ -25,6 +25,8 @@ namespace RetroEngine.Entities
         static List<NPCBase> currentUpdateNPCs = new List<NPCBase>();
         static int currentUpdateIndex = 0;
 
+        Vector3 targetLocation = Vector3.Zero;
+
         RigidBody body;
 
         StaticMesh sm = new StaticMesh();
@@ -89,6 +91,7 @@ namespace RetroEngine.Entities
             //sm.Position = mesh.GetBoneMatrix("hand_r").DecomposeMatrix().Position;
             //sm.Rotation = mesh.GetBoneMatrix("hand_r").DecomposeMatrix().Rotation;
 
+            targetLocation = Camera.position;
 
             if(currentUpdateNPCs.Contains(this))
                 UpdateMovementDirection();
@@ -136,14 +139,27 @@ namespace RetroEngine.Entities
         void UpdateMovementDirection()
         {
             body.Activate();
-            List<Vector3> path = Navigation.FindPath(Position, Camera.position);
+            List<Vector3> path = Navigation.FindPath(Position, targetLocation);
 
-            Vector3 targetLocation = new Vector3();
+            Vector3 moveLocation = new Vector3();
 
             if (path.Count > 0)
-                targetLocation = path[0];
+                moveLocation = path[0];
 
-            MoveDirection = targetLocation - Position;
+            Vector3 newMoveDirection = moveLocation - Position;
+
+            if ((moveLocation - Navigation.ProjectToGround(targetLocation)).Length() < 0.2f)
+            {
+                var hit = Physics.SphereTraceForStatic(Position.ToNumerics(), targetLocation.ToNumerics(), 0.4f);
+
+                if (hit.HasHit)
+                {
+                    return;
+                }
+            }
+
+            MoveDirection = newMoveDirection;
+
             MoveDirection.Normalize();
         }
 

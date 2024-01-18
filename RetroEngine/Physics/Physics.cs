@@ -272,6 +272,31 @@ namespace RetroEngine
 
         }
 
+        public static MyClosestConvexResultCallback SphereTraceForStatic(Vector3 rayStart, Vector3 rayEnd, float radius = 0.5f)
+        {
+            CollisionWorld world = dynamicsWorld;
+
+            // Create a sphere shape with the specified radius
+            SphereShape sphereShape = new SphereShape(radius);
+
+            Matrix4x4 start = Matrix4x4.CreateTranslation(rayStart);
+            Matrix4x4 end = Matrix4x4.CreateTranslation(rayEnd);
+
+
+            MyClosestConvexResultCallback convResultCallback = new MyClosestConvexResultCallback(ref rayStart, ref rayEnd);
+
+            // Set the callback to respond only to static objects
+            convResultCallback.FlagToRespond = CollisionFlags.StaticObject;
+
+            // Perform the sphere sweep
+            world.ConvexSweepTest(sphereShape, start, end, convResultCallback);
+
+            // Dispose of the sphere shape to release resources
+            sphereShape.Dispose();
+
+            return convResultCallback;
+        }
+
         public static MyClosestRayResultCallback LineTraceForStatic(Vector3 rayStart, Vector3 rayEnd)
         {
             CollisionWorld world = dynamicsWorld;
@@ -287,6 +312,7 @@ namespace RetroEngine
 
 
         }
+
 
         public static CollisionShape CreateCollisionShapeFromModel(Model model, float scale = 1.0f, CollisionShapeData shapeData = null)
         {

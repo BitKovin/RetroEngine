@@ -56,6 +56,18 @@ namespace RetroEngine
 
         }
 
+        public static Vector3 ProjectToGround(Vector3 point)
+        {
+            Vector3 Position;
+
+            var hit = Physics.LineTraceForStatic(point.ToNumerics(), (point - new Vector3(0, 10, 0)).ToNumerics());
+
+            Position = hit.HitPointWorld;
+            Position += new Vector3(0, 0.25f, 0);
+
+            return Position;
+        }
+
         static NavPoint GetStartNavPoint(Vector3 start)
         {
             navPoints = navPoints.OrderBy(point => Vector3.Distance(start, point.Position)).ToList();

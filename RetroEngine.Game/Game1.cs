@@ -23,7 +23,7 @@ namespace RetroEngine.Game
             devMenu.Init();
 
 
-            Level.LoadFromFile("test3.map");
+            Level.LoadFromFile("test2.map");
 
             Window.Title = "Game";
 
@@ -42,7 +42,7 @@ namespace RetroEngine.Game
 
             
 
-            for (int i = 1; i <= 0; i++)
+            for (int i = 1; i <= 1; i++)
             {
                 Entity npc = new NPCBase();
                 npc.Position = new Vector3(0, i*0.002f + 2, 0);

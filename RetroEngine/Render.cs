@@ -51,7 +51,6 @@ namespace RetroEngine
 
         Effect lightingEffect;
 
-        public Effect UnifiedEffect;
         public Effect BuffersEffect;
         public Effect DeferredEffect;
 
@@ -90,7 +89,6 @@ namespace RetroEngine
 
 
             ShadowMapEffect = GameMain.content.Load<Effect>("ShadowMap");
-            UnifiedEffect = GameMain.content.Load<Effect>("UnifiedOutput");
             fxaaEffect = GameMain.content.Load<Effect>("fxaa");
             //PostProcessingEffect = GameMain.content.Load<Effect>("PostProcessing");
             //ColorEffect = GameMain.content.Load<Effect>("ColorOutput");
@@ -128,6 +126,8 @@ namespace RetroEngine
 
                 effect.Parameters["ShadowBias"]?.SetValue(Graphics.ShadowBias);
                 effect.Parameters["ShadowMapResolution"]?.SetValue((float)Graphics.shadowMapResolution);
+
+                effect.Parameters["ShadowMap"]?.SetValue(GameMain.Instance.render.shadowMap);
 
 
                 effect.Parameters["View"]?.SetValue(Camera.finalizedView);
@@ -294,11 +294,6 @@ namespace RetroEngine
             {
                 mesh.DrawShadow();
             }
-
-            UnifiedEffect.Parameters["ShadowMap"]?.SetValue(GameMain.Instance.render.shadowMap);
-
-            UnifiedEffect.Parameters["ShadowBias"]?.SetValue(Graphics.ShadowBias);
-            UnifiedEffect.Parameters["ShadowMapResolution"]?.SetValue((float)Graphics.shadowMapResolution);
 
             return;
             // Set up the shadow map render target with the desired resolution

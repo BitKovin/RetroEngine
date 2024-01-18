@@ -14,7 +14,7 @@ namespace RetroEngine
         {
             Console.WriteLine(s);
             if(GameMain.Instance.devMenu is not null)
-                GameMain.Instance.devMenu.Log(s.ToString());
+                GameMain.Instance.devMenu.Log(s==null? "null" : s.ToString());
         }
 
     }
