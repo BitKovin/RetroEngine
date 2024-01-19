@@ -54,6 +54,8 @@ namespace RetroEngine
         public Effect BuffersEffect;
         public Effect DeferredEffect;
 
+        public Effect OcclusionEffect;
+
         public Effect ColorEffect;
         public Effect ParticleColorEffect;
         public Effect NormalEffect;
@@ -101,6 +103,8 @@ namespace RetroEngine
             ComposeEffect = GameMain.content.Load<Effect>("ComposedColor");
 
             BloomEffect = GameMain.content.Load<Effect>("BloomSampler");
+
+            OcclusionEffect = GameMain.content.Load<Effect>("OcclusionPath");
 
             occlusionQuery = new OcclusionQuery(GameMain.Instance.GraphicsDevice);
 
@@ -202,6 +206,7 @@ namespace RetroEngine
             graphics.GraphicsDevice.SamplerStates[4] = SamplerState.AnisotropicClamp;
 
             PerformPostProcessing();
+
 
             return outputPath;
         }
@@ -478,8 +483,12 @@ namespace RetroEngine
             performingOcclusionTest = true;
             Stats.StartRecord("occlusion test");
 
+            InitRenderTargetIfNeed(ref occlusionTestPath, DepthFormat.Depth24);
 
-            InitOcclusionMap(ref occlusionTestPath);
+            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, occlusionTestPath.Width, occlusionTestPath.Height);
+
+            OcclusionEffect.Parameters["View"].SetValue(Camera.finalizedView);
+            OcclusionEffect.Parameters["Projection"].SetValue(Camera.projectionOcclusion);
 
             graphics.GraphicsDevice.SetRenderTarget(occlusionTestPath);
             graphics.GraphicsDevice.Clear(ClearOptions.DepthBuffer, Color.Black, 1.0f, 0);

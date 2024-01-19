@@ -313,47 +313,40 @@ namespace RetroEngine
             }
         }
 
-        public virtual void DrawDepth(bool closeShadow = false)
+        public virtual void DrawOcclusion()
         {
+
+            if (Viewmodel) return;
 
             GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
             // Load the custom effect
-            Effect effect = GameMain.Instance.render.ShadowMapEffect;
+            Effect effect = GameMain.Instance.render.OcclusionEffect;
 
             if (frameStaticMeshData.model is not null)
             {
                 if (frameStaticMeshData.model.Meshes is not null)
                     foreach (ModelMesh mesh in frameStaticMeshData.model.Meshes)
-                {
-                    
-                    foreach (ModelMeshPart meshPart in mesh.MeshParts)
                     {
 
-                        // Set the vertex buffer and index buffer for this mesh part
-                        graphicsDevice.SetVertexBuffer(meshPart.VertexBuffer);
-                        graphicsDevice.Indices = meshPart.IndexBuffer;
-
-                        // Set effect parameters
-                        effect.Parameters["World"].SetValue(frameStaticMeshData.World);
-                        effect.Parameters["View"].SetValue(frameStaticMeshData.View);
-                        if (frameStaticMeshData.Viewmodel)
-                            effect.Parameters["Projection"].SetValue(frameStaticMeshData.ProjectionViewmodel);
-                        else
-                            effect.Parameters["Projection"].SetValue(frameStaticMeshData.Projection);
-
-
-                        // Draw the primitives using the custom effect
-                        foreach (EffectPass pass in effect.CurrentTechnique.Passes)
+                        foreach (ModelMeshPart meshPart in mesh.MeshParts)
                         {
-                            pass.Apply();
+
+                            // Set the vertex buffer and index buffer for this mesh part
+                            graphicsDevice.SetVertexBuffer(meshPart.VertexBuffer);
+                            graphicsDevice.Indices = meshPart.IndexBuffer;
+
+                            effect.Parameters["World"].SetValue(frameStaticMeshData.World);
+
+                            effect.Techniques[0].Passes[0].Apply();
+
                             graphicsDevice.DrawIndexedPrimitives(
                                 PrimitiveType.TriangleList,
                                 meshPart.VertexOffset,
                                 meshPart.StartIndex,
                                 meshPart.PrimitiveCount);
+
                         }
                     }
-                }
             }
         }
 
@@ -424,7 +417,7 @@ namespace RetroEngine
 
             OcclusionQuery.Begin();
 
-            DrawDepth();
+            DrawOcclusion();
 
             OcclusionQuery.End();
         }

@@ -58,6 +58,8 @@ namespace RetroEngine
 
             ImGui.Begin("Graphics");
 
+            ImGui.Checkbox("occlusion queries", ref Level.GetCurrent().OcclusionCullingEnabled);
+
             ImGui.Checkbox("fxaa", ref Graphics.EnableAntiAliasing);
 
             ImGui.Checkbox("bloom", ref Graphics.EnableBloom);

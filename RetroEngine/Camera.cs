@@ -18,6 +18,7 @@ namespace RetroEngine
         public static Matrix world;
         public static Matrix view;
         public static Matrix projection;
+        public static Matrix projectionOcclusion;
         public static Matrix projectionViewmodel;
 
         public static Matrix finalizedView;
@@ -62,6 +63,9 @@ namespace RetroEngine
             view = Matrix.CreateLookAt(position, position + rotation.GetForwardVector(), lastWorkingRotation.GetUpVector().RotateVector(rotation.GetForwardVector(), roll));
 
             projection = Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.ToRadians(FOV),HtW, 0.15f, FarPlane);
+
+            projectionOcclusion = Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.ToRadians(FOV*1.3f), HtW, 0.15f, FarPlane);
+
             projectionViewmodel = Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.ToRadians(ViewmodelFOV), HtW, 0.01f, 1f);
 
             frustum.Matrix = view * projection;

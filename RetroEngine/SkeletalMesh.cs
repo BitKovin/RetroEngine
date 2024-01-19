@@ -256,6 +256,37 @@ namespace RetroEngine
 
         }
 
+        public override void DrawOcclusion()
+        {
+            GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
+
+            Effect effect = GameMain.Instance.render.OcclusionEffect;
+
+            effect.Parameters["Bones"].SetValue(finalizedBones);
+
+            if (RiggedModel != null)
+            {
+                foreach (RiggedModel.RiggedModelMesh meshPart in RiggedModel.meshes)
+                {
+                    // Set the vertex buffer and index buffer for this mesh part
+                    graphicsDevice.SetVertexBuffer(meshPart.VertexBuffer);
+                    graphicsDevice.Indices = meshPart.IndexBuffer;
+
+                    effect.Parameters["World"].SetValue(frameStaticMeshData.World);
+                    
+
+                    effect.Techniques[0].Passes[0].Apply();
+
+                    graphicsDevice.DrawIndexedPrimitives(
+                        PrimitiveType.TriangleList,
+                        meshPart.VertexOffset,
+                        meshPart.StartIndex,
+                        meshPart.PrimitiveCount);
+
+                }
+            }
+        }
+
         public override void DrawUnified()
         {
 
