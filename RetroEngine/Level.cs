@@ -94,6 +94,11 @@ namespace RetroEngine
                 entity.Destroy();
             }
 
+            Physics.Update();
+
+            Physics.Start();
+            Physics.Update();
+
             UiElement.Viewport.childs.Clear();
 
 
@@ -102,10 +107,10 @@ namespace RetroEngine
             
             AssetRegistry.AllowGeneratingMipMaps = true;
 
-            
 
             GameMain.Instance.curentLevel = MapParser.MapParser.ParseMap(path).GetLevel();
-
+            Time.deltaTime = 0;
+            Physics.Update();
             GameMain.Instance.curentLevel.StartEnities();
 
             GameMain.Instance.curentLevel.LoadAssets();

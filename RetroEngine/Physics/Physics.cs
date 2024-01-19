@@ -60,6 +60,7 @@ namespace RetroEngine
                 dynamicsWorld.RemoveCollisionObject(collisionObject);
                 collisionObject.Dispose();
             }
+            removeList.Clear();
 
             if (GameMain.Instance.paused == false)
                 dynamicsWorld.StepSimulation(RetroEngine.Time.deltaTime, steps, Math.Max(1 / 100f, Time.deltaTime));
