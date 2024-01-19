@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using RetroEngine.Entities.Navigaion;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,7 @@ namespace RetroEngine
 {
     public static class Navigation
     {
+
 
         static List<NavPoint> navPoints = new List<NavPoint>();
 
@@ -41,7 +43,7 @@ namespace RetroEngine
 
             for(int i = points.Count -1; i >=0; i--)
             {
-                var hit = Physics.SphereTraceForStatic(start.ToNumerics(), points[i].ToNumerics());
+                var hit = Physics.SphereTraceForStatic(start.ToNumerics(), points[i].ToNumerics(), 0.3f);
 
                 if(hit.HasHit == false)
                 {
@@ -58,7 +60,7 @@ namespace RetroEngine
         {
             Vector3 Position;
 
-            var hit = Physics.LineTraceForStatic(point.ToNumerics(), (point - new Vector3(0, 10, 0)).ToNumerics());
+            var hit = Physics.LineTraceForStatic(point.ToNumerics(), (point - new Vector3(0, 100, 0)).ToNumerics());
 
             Position = hit.HitPointWorld;
             Position += new Vector3(0, 1.25f, 0);
@@ -72,7 +74,7 @@ namespace RetroEngine
 
             foreach (var point in navPoints)
             {
-               var hit = Physics.SphereTraceForStatic(start.ToNumerics(), point.Position.ToNumerics());
+               var hit = Physics.SphereTraceForStatic(start.ToNumerics(), point.Position.ToNumerics(), 0.3f);
                 
                 if(hit.HasHit == false)
                     return point;
@@ -95,6 +97,38 @@ namespace RetroEngine
         }
 
         public static List<NavPoint> GetNavPoints() { return navPoints; }
+
+    }
+
+    public delegate void PathFound(List<Vector3> points);
+
+    public class PathfindingQuery
+    {
+        public event PathFound OnPathFound;
+
+        public bool Processing { get; private set; } = false;
+
+        public void Execute(Vector3 start, Vector3 target)
+        {
+
+            
+
+            Task.Run(() => { Process(start, target); });
+
+        }
+
+        void Process(Vector3 start, Vector3 target)
+        {
+            
+            List<Vector3> points;
+            Processing = true;
+                try
+                {
+                    points = Navigation.FindPath(start, target);
+                    OnPathFound?.Invoke(points);
+                }catch (Exception ex) { }
+            Processing = false;
+        }
 
     }
 }

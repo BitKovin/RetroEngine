@@ -34,6 +34,8 @@ namespace RetroEngine.Entities
 
         static List<Vector3> directionsLUT = new List<Vector3>();
 
+        PathfindingQuery pathfindingQuery = new PathfindingQuery();
+
         public override void Start()
         {
             base.Start();
@@ -46,6 +48,8 @@ namespace RetroEngine.Entities
 
 
             npcList.Add(this);
+
+            pathfindingQuery.OnPathFound += PathfindingQuery_OnPathFound;
 
             InitDirectionsLUT();
         }
@@ -78,7 +82,7 @@ namespace RetroEngine.Entities
 
             mesh.SetInterpolationEnabled(false);
 
-            mesh.texture = AssetRegistry.LoadTextureFromFile("textures/brushes/__TB_empty.png");
+            mesh.texture = AssetRegistry.LoadTextureFromFile("cat.png");
 
 
             sm.LoadFromFile("models/cube.obj");
@@ -104,13 +108,12 @@ namespace RetroEngine.Entities
 
         public override void Update()
         {
-            UpdateNPCList();
+            //UpdateNPCList();
 
 
             targetLocation = Camera.position;
 
-            if(currentUpdateNPCs.Contains(this))
-                UpdateMovementDirection();
+                RequestNewTargetLocation();
         }
 
         public override void OnDamaged(float damage, Entity causer = null, Entity weapon = null)
@@ -164,7 +167,6 @@ namespace RetroEngine.Entities
 
             foreach (Vector3 dir in directionsLUT)
             {
-
                 List<Vector3> path = Navigation.FindPath(Position, targetLocation + dir * 0.5f);
 
                 if (path.Count > 0)
@@ -179,20 +181,32 @@ namespace RetroEngine.Entities
 
             Vector3 newMoveDirection = moveLocation - Position;
 
-            if(false)
-            if ((moveLocation - Navigation.ProjectToGround(targetLocation)).Length() < 0.2f)
+            
+
+            DesiredMoveDirection = newMoveDirection;
+
+            DesiredMoveDirection.Normalize();
+        }
+
+        void RequestNewTargetLocation()
+        {
+            if(pathfindingQuery.Processing ==false)
+                pathfindingQuery.Execute(Position, targetLocation);
+        }
+
+        private void PathfindingQuery_OnPathFound(List<Vector3> points)
+        {
+            Vector3 moveLocation = new Vector3();
+
+            if (points.Count > 0)
             {
-
-                if (Physics.SphereTraceForStatic(Position.ToNumerics(), targetLocation.ToNumerics(), 0.4f).HasHit)
-                {
-
-                    var hit = Physics.SphereTraceForStatic(Position.ToNumerics(), targetLocation.ToNumerics(), 0.4f);
-
-                    moveLocation += hit.HitNormalWorld * (moveLocation - Navigation.ProjectToGround(targetLocation)).Length();
-
-                    newMoveDirection = moveLocation - Position;
-                }
+                moveLocation = points[0];
+            }else
+            {
+                return;
             }
+
+            Vector3 newMoveDirection = moveLocation - Position;
 
             DesiredMoveDirection = newMoveDirection;
 
@@ -209,7 +223,7 @@ namespace RetroEngine.Entities
 
             currentUpdateNPCs.Clear();
 
-            for (int i = 0; i < 1; i++)
+            for (int i = 0; i < 100; i++)
             {
                 currentUpdateIndex++;
 

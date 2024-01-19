@@ -408,10 +408,18 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness)
     
         shadow += GetShadow(lightCoords, input, false);
     }
-    else if (Viewmodel == false)
+    else if (Viewmodel == true)
+    {
+        shadow += GetShadow(lightCoords, input, false);
+    }
+    else
     {
         shadow += 1;
     }
+    
+    shadow = saturate(shadow);
+    
+    
     
     float3 specular = 0;
     
@@ -419,7 +427,6 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness)
     
     if (!isParticle)
     {
-        
     
         specular *= 1 - shadow;
     }
@@ -433,7 +440,7 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness)
     
     light -= shadow;
     
-    float3 globalLight = GlobalBrightness * GlobalLightColor * lerp(max(dot(normal, float3(0, 1, 0)),-1), 1, 0.7);
+    float3 globalLight = GlobalBrightness * GlobalLightColor * lerp(max(dot(normal, float3(0, 1, 0)), -1), 1, 0.7);
     
     light = max(light, 0);
     light += globalLight;

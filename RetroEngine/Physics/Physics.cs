@@ -17,6 +17,8 @@ namespace RetroEngine
 
         private static int steps = 1;
 
+        static List<CollisionObject> removeList = new List<CollisionObject>();
+
         public class CollisionShapeData
         {
             public string surfaceType = "default";
@@ -52,6 +54,13 @@ namespace RetroEngine
 
         public static void Simulate()
         {
+
+            foreach(CollisionObject collisionObject in removeList)
+            {
+                dynamicsWorld.RemoveCollisionObject(collisionObject);
+                collisionObject.Dispose();
+            }
+
             if (GameMain.Instance.paused == false)
                 dynamicsWorld.StepSimulation(RetroEngine.Time.deltaTime, steps, Math.Max(1 / 100f, Time.deltaTime));
         }
@@ -60,8 +69,8 @@ namespace RetroEngine
         {
             if(collisionObject is null) return;
 
-            dynamicsWorld.RemoveCollisionObject(collisionObject);
-            collisionObject.Dispose();
+            removeList.Add(collisionObject);
+            collisionObject.CollisionShape = new SphereShape(0);
         }
 
         public static void Update()

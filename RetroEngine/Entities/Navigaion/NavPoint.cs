@@ -98,7 +98,7 @@ namespace RetroEngine.Entities.Navigaion
 
             myHistory.Add(this);
 
-            var hit = Physics.SphereTraceForStatic(Position.ToNumerics(), target.ToNumerics());
+            var hit = Physics.SphereTraceForStatic(Position.ToNumerics(), target.ToNumerics(),0.3f);
 
             
 
