@@ -483,7 +483,7 @@ namespace RetroEngine
             performingOcclusionTest = true;
             Stats.StartRecord("occlusion test");
 
-            InitRenderTargetIfNeed(ref occlusionTestPath, DepthFormat.Depth24);
+            InitRenderTargetIfNeed(ref occlusionTestPath, DepthFormat.Depth16);
 
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, occlusionTestPath.Width, occlusionTestPath.Height);
 

@@ -208,7 +208,6 @@ float3 ApplyNormalTexture(float3 sampledNormalColor, float3 worldNormal, float3 
     if (length(sampledNormalColor) < 0.1f)
         sampledNormalColor = float3(0.5, 0.5, 1);
     
-    sampledNormalColor.y = 1 - sampledNormalColor.y;
     
     sampledNormalColor *= float3(1, 1, 0.8f);
     
@@ -357,13 +356,17 @@ float GetShadow(float3 lightCoords, PixelInput input, bool close = false)
 float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal)
 {
 
+    
     float3 lightVector = LightPositions[i] - pixelInput.MyPosition;
     float distanceToLight = length(lightVector);
     float intense = saturate(1.0 - distanceToLight / LightRadiuses[i]);
     float3 dirToSurface = normalize(lightVector);
-
+    
     if (isParticle)
         dirToSurface = normal;
+    
+    if (dot(dirToSurface, pixelInput.Normal) < 0)
+        return float3(0, 0, 0);
     
     intense *= saturate(dot(normal, dirToSurface) * 1.1 + 0.4);
 
@@ -378,8 +381,13 @@ float3 CalculatePointLightSpeculars(int i, PixelInput pixelInput, float3 normal,
     float intense = saturate(1.0 - distanceToLight / LightRadiuses[i]);
     float3 dirToSurface = normalize(lightVector);
 
+    
     if (isParticle)
         dirToSurface = normal;
+    
+    
+    if (dot(dirToSurface, pixelInput.Normal) < 0)
+        return float3(0, 0, 0);
     
     intense *= 1;
 
