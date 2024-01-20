@@ -696,7 +696,7 @@ namespace RetroEngine
                         // Negate the x-coordinate to correct mirroring
                         vertices[vertexIndex] = new VertexData
                         {
-                            Position = new Vector3(-vertex.X, vertex.Y, vertex.Z), // Negate x-coordinate
+                            Position = new Vector3(-vertex.X, vertex.Y, vertex.Z),
                             Normal = new Vector3(-normal.X, normal.Y, normal.Z),
                             TextureCoordinate = new Vector2(textureCoord.X, textureCoord.Y),
                             Tangent = new Vector3(-tangent.X, tangent.Y, tangent.Z)

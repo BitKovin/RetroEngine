@@ -210,20 +210,17 @@ float3 ApplyNormalTexture(float3 sampledNormalColor, float3 worldNormal, float3 
     
     sampledNormalColor *= float3(1, 1, 0.8f);
     
-    sampledNormalColor = normalize(sampledNormalColor);
-    
     float3 normalMapSample = sampledNormalColor * 2.0 - 1.0;
     
-    normalMapSample*=10;
+    normalMapSample *= 10;
     
     // Create the tangent space matrix as before
-    float3 bitangent = cross(worldNormal, worldTangent);
+        float3 bitangent = cross(worldNormal, worldTangent);
     float3x3 tangentToWorld = float3x3(worldTangent, bitangent, worldNormal);
 
     // Transform the normal from tangent space to world space
     float3 worldNormalFromTexture = mul(normalMapSample, tangentToWorld);
-
-    // Normalize the final normal
+    
     worldNormalFromTexture = normalize(worldNormalFromTexture);
 
     return worldNormalFromTexture;

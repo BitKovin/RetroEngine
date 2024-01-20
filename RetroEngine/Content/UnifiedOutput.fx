@@ -67,6 +67,7 @@ PixelOutput PixelShaderFunction(PixelInput input)
     
     output.Normal = float4((pixelNormal + 1) / 2,1);
     
+    
     return output;
 }
 

@@ -16,6 +16,11 @@ namespace RetroEngine
 
         public string textureName = "";
 
+        static Assimp.PostProcessSteps PostProcessSteps = Assimp.PostProcessSteps.Triangulate | 
+            Assimp.PostProcessSteps.FixInFacingNormals | 
+            Assimp.PostProcessSteps.CalculateTangentSpace | 
+            Assimp.PostProcessSteps.MakeLeftHanded;
+
         public BrushFaceMesh(Model model, Texture2D texture, string textureName = "")
         {
             this.model = model;
@@ -45,7 +50,7 @@ namespace RetroEngine
                 scene = loadedScenes[filePath];
             else
             {
-                scene = importer.ImportFile(filePath, Assimp.PostProcessSteps.MakeLeftHanded | Assimp.PostProcessSteps.FlipUVs | Assimp.PostProcessSteps.CalculateTangentSpace) ;
+                scene = importer.ImportFile(filePath, PostProcessSteps) ;
                 loadedScenes.Add(filePath, scene);
             }
 
@@ -112,13 +117,16 @@ namespace RetroEngine
                     var tangent = mesh.Tangents[i];
                     var textureCoord = mesh.HasTextureCoords(0) ? mesh.TextureCoordinateChannels[0][i] : new Assimp.Vector3D(0, 0, 0);
 
+                    if (normal.X > 0)
+                        tangent *= -1;
+
                     // Negate the x-coordinate to correct mirroring
                     vertices.Add(new VertexData
                     {
                         Position = new Vector3(-vertex.X / unitSize, vertex.Y / unitSize, vertex.Z / unitSize), // Negate x-coordinate
-                        Normal = new Vector3(-normal.X, normal.Y, normal.Z),
+                        Normal = new Vector3(normal.X, normal.Y, normal.Z),
                         TextureCoordinate = new Vector2(textureCoord.X, textureCoord.Y),
-                        Tangent = new Vector3(-tangent.X, tangent.Y, tangent.Z)
+                        Tangent = new Vector3(tangent.X, tangent.Y, tangent.Z)
                     });
                 }
 
@@ -181,7 +189,7 @@ namespace RetroEngine
                 scene = loadedScenes[filePath];
             else
             {
-                scene = importer.ImportFile(filePath, Assimp.PostProcessSteps.MakeLeftHanded | Assimp.PostProcessSteps.FlipUVs);
+                scene = importer.ImportFile(filePath, PostProcessSteps);
                 loadedScenes.Add(filePath, scene);
             }
 
@@ -245,6 +253,15 @@ namespace RetroEngine
                     var vertex = mesh.Vertices[i];
                     var normal = mesh.Normals[i];
                     var tangent = mesh.Tangents[i];
+
+                    if(Vector3D.Dot(normal, new Vector3D(-1,1,1))>0)
+                    {
+                        tangent *= -1;
+                    }else
+                    {
+                        tangent *= 1;
+                    }
+
                     var textureCoord = mesh.HasTextureCoords(0) ? mesh.TextureCoordinateChannels[0][i] : new Assimp.Vector3D(0, 0, 0);
 
                     // Negate the x-coordinate to correct mirroring

@@ -71,7 +71,7 @@ namespace RetroEngine
             if(collisionObject is null) return;
 
             removeList.Add(collisionObject);
-            collisionObject.CollisionShape = new SphereShape(0);
+            dynamicsWorld.RemoveCollisionObject(collisionObject);
         }
 
         public static void Update()
