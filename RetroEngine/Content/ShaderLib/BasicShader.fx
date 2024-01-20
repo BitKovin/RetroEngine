@@ -208,8 +208,11 @@ float3 ApplyNormalTexture(float3 sampledNormalColor, float3 worldNormal, float3 
     if (length(sampledNormalColor) < 0.1f)
         sampledNormalColor = float3(0.5, 0.5, 1);
     
+    sampledNormalColor.y = 1 - sampledNormalColor.y;
+    
     sampledNormalColor *= float3(1, 1, 0.8f);
     
+
     float3 normalMapSample = sampledNormalColor * 2.0 - 1.0;
     
     normalMapSample *= 10;
