@@ -355,7 +355,6 @@ float GetShadow(float3 lightCoords, PixelInput input, bool close = false)
 
 float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal)
 {
-
     
     float3 lightVector = LightPositions[i] - pixelInput.MyPosition;
     float distanceToLight = length(lightVector);
@@ -365,8 +364,9 @@ float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal)
     if (isParticle)
         dirToSurface = normal;
     
-    if (dot(dirToSurface, pixelInput.Normal) < 0)
-        return float3(0, 0, 0);
+    if (Viewmodel == false)
+        if (dot(dirToSurface, pixelInput.Normal) < 0)
+            return float3(0, 0, 0);
     
     intense *= saturate(dot(normal, dirToSurface) * 1.1 + 0.4);
 
@@ -385,7 +385,7 @@ float3 CalculatePointLightSpeculars(int i, PixelInput pixelInput, float3 normal,
     if (isParticle)
         dirToSurface = normal;
     
-    
+    if (Viewmodel == false)
     if (dot(dirToSurface, pixelInput.Normal) < 0)
         return float3(0, 0, 0);
     
@@ -413,7 +413,6 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness)
     
     if (dot(input.TangentNormal, LightDirection) < 0.0f)
     {
-    
         shadow += GetShadow(lightCoords, input, false);
     }
     else if (Viewmodel == true)

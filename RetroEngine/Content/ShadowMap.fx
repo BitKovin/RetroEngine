@@ -18,6 +18,7 @@ matrix Bones[BONE_NUM];
 struct VertexShaderInput
 {
     float4 Position : POSITION0;
+    float3 Normal : NORMAL0;
     
     float4 BlendIndices : BLENDINDICES0;
     float4 BlendWeights : BLENDWEIGHT0;
@@ -30,6 +31,25 @@ struct VertexShaderOutput
 };
 
 float DepthScale = 1;
+
+float3 GetTangentNormal(float3 worldNormal, float3 worldTangent)
+{
+    
+    float3 normalMapSample = float3(0, 0, 1);
+    
+    
+    // Create the tangent space matrix as before
+    float3 bitangent = cross(worldNormal, worldTangent);
+    float3x3 tangentToWorld = float3x3(worldTangent, bitangent, worldNormal);
+
+    // Transform the normal from tangent space to world space
+    float3 worldNormalFromTexture = mul(normalMapSample, tangentToWorld);
+
+    // Normalize the final normal
+    worldNormalFromTexture = normalize(worldNormalFromTexture);
+
+    return worldNormalFromTexture;
+}
 
 float4x4 GetBoneTransforms(VertexShaderInput input)
 {
@@ -60,13 +80,14 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 
     float4x4 boneTrans = GetBoneTransforms(input);
     
+    input.Position -= float4(input.Normal * 0.02f,0);
+    
     // Transform the vertex position to world space
     output.Position = mul(mul(input.Position, boneTrans), World);
     output.Position = mul(output.Position, View);
     output.Position = mul(output.Position, Projection);
     output.myPosition = output.Position;
-    //output.Position.z *= DepthScale;
-
+    
     return output;
 }
 

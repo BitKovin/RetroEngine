@@ -186,7 +186,8 @@ namespace RetroEngine
             InitShadowMap(ref shadowMap);
 
             graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-            
+
+            graphics.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
 
             List<StaticMesh> renderList = level.GetMeshesToRender();
 
