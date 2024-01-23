@@ -181,6 +181,7 @@ namespace RetroEngine
 
             ScreenWidth = GraphicsDevice.PresentationParameters.Bounds.Width;
 
+
             if (AsyncGameThread)
             {
                 if (gameTask is null)
@@ -201,7 +202,7 @@ namespace RetroEngine
             }
 
             PerformReservedTimeTasks();
-            
+
             foreach (UiElement elem in UiElement.Viewport.childs)
                 elem.Update();
 

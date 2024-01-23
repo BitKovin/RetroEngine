@@ -179,7 +179,6 @@ namespace RetroEngine.Game.Entities.Player
             if (Input.GetAction("lastSlot").Pressed())
                 SwitchToSlot(lastSlot);
 
-
             PlayerUI.Update();
 
             FirstTick = false;

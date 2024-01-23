@@ -842,6 +842,7 @@ namespace RetroEngine
             }
             isRendered = inFrustrum && !occluded;
             frameStaticMeshData.IsRendered = isRendered;
+
         }
 
 

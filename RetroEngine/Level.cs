@@ -219,26 +219,12 @@ namespace RetroEngine
             foreach (Entity entity in list)
                 if (entity.LateUpdateWhilePaused && GameMain.Instance.paused || GameMain.Instance.paused == false)
                     entity.LateUpdate();
-
-
-            foreach (Entity entity in list)
-                foreach (StaticMesh mesh in entity.meshes)
-                {
-                    if (mesh is null) continue;
-                    mesh.UpdateCulling();
-
-                }
-
-
         }
 
         public virtual void RenderPreparation()
         {
 
             Graphics.UpdateDirectionalLight();
-
-            Entity[] list = entities.ToArray();
-
 
             Camera.finalizedView = Camera.view;
             Camera.finalizedProjection = Camera.projection;
@@ -249,11 +235,15 @@ namespace RetroEngine
 
                 if (renderLayers.Contains(entity.Layer))
 
-                foreach (StaticMesh mesh in entity.meshes)
-                    if(entity is not null)
+                    foreach (StaticMesh mesh in entity.meshes)
+                        if (entity is not null)
 
-                    if(mesh is not null) 
-                        mesh.RenderPreparation();
+                            if (mesh is not null)
+                            {
+                                mesh.UpdateCulling();
+
+                                mesh.RenderPreparation();
+                            }
             });
 
             renderList = new List<StaticMesh>();
