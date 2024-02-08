@@ -109,7 +109,7 @@ namespace RetroEngine.Game.Entities
                 return;
             }
 
-            var hit = Physics.LineTrace(OldPos.ToNumerics(), Position.ToNumerics(), ignoreObjects);
+            var hit = Physics.LineTraceForStatic(OldPos.ToNumerics(), Position.ToNumerics());
 
             if (hit.HasHit)
             {

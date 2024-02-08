@@ -117,9 +117,19 @@ namespace RetroEngine
         Dictionary<NavPoint, List<Vector3>> VisibleLocations = new Dictionary<NavPoint, List<Vector3>>();
         Dictionary<Vector3, List<Vector3>> VisibleLocationsFromPoint = new Dictionary<Vector3, List<Vector3>>();
 
+        Task task;
+
         public void Execute(Vector3 start, Vector3 target)
         {
+            if (Processing == true) return;
 
+            Process(start, target);
+            return;
+
+            task = Task.Run(() => { Process(start, target); });
+
+
+            return;
             target = Navigation.ProjectToGround(target);
 
             if (Physics.SphereTraceForStatic(start.ToNumerics(), target.ToNumerics(), 0.3f).HasHit == false)
@@ -128,21 +138,7 @@ namespace RetroEngine
                 return;
             }
 
-
-
-            NavPoint startPoint = Navigation.GetStartNavPoint(start);
-
-            var pointsAll = Navigation.GetAllPoints();
-
-            foreach (var point in pointsAll)
-            {
-
-                ProcessPoint(point, start);
-                ProcessPoint(point, target);
-
-            }
-
-            Task.Run(() => { Process(start, target,startPoint); });
+            
 
         }
 
@@ -163,23 +159,21 @@ namespace RetroEngine
 
         }
 
-        void Process(Vector3 start, Vector3 target, NavPoint startPoint)
+        void Process(Vector3 start, Vector3 target)
         {
 
+
+
+
+            Processing = true;
             
 
             List<Vector3> points;
-            Processing = true;
-                try
-                {
-
-
-                    points = FindPath(start, target, startPoint);
-                    OnPathFound?.Invoke(points);
+            points = Navigation.FindPath(start, target);
+            OnPathFound?.Invoke(points);
 
 
 
-                }catch (Exception ex) { }
             Processing = false;
         }
 
@@ -207,7 +201,7 @@ namespace RetroEngine
             if (startPoint is null)
                 return new List<Vector3>();
 
-            List<Vector3> points = startPoint.GetPathNext(new List<NavPoint>(), target, ref it, this);
+            List<Vector3> points = startPoint.GetPathNext(new List<NavPoint>(), target, ref it);
             List<Vector3> result = new List<Vector3>(points);
 
             for (int i = points.Count - 1; i >= 0; i--)

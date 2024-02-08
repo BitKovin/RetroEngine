@@ -8,12 +8,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Numerics;
 
+
 namespace RetroEngine
 {
     public class Physics
     {
 
         private static DiscreteDynamicsWorld dynamicsWorld;
+
+        private static DiscreteDynamicsWorld staticWorld;
+        private static List<StaticRigidBody> staticBodies = new List<StaticRigidBody>();
 
         private static int steps = 1;
 
@@ -38,6 +42,18 @@ namespace RetroEngine
             dynamicsWorld.Gravity = new Vector3(0, -9.81f, 0); // Set gravity
             dynamicsWorld.DispatchInfo.UseContinuous = true;
 
+            collisionConfig = new DefaultCollisionConfiguration();
+            dispatcher = new CollisionDispatcher(collisionConfig);
+            // Create a broadphase and a solver
+            broadphase = new DbvtBroadphase();
+            solver = new SequentialImpulseConstraintSolver();
+
+            staticWorld = new DiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfig);
+            staticWorld.Gravity = new Vector3(0, -9.81f, 0); // Set gravity
+            staticWorld.DispatchInfo.UseContinuous = true;
+
+            staticBodies.Clear();
+
         }
 
         public static void PerformContactCheck(CollisionObject collisionObject, CollisionCallback callback) 
@@ -55,6 +71,10 @@ namespace RetroEngine
         public static void Simulate()
         {
 
+            foreach(StaticRigidBody staticRigidBody in staticBodies)
+            {
+                staticRigidBody.UpdateFromParrent();
+            }
 
             foreach(CollisionObject collisionObject in removeList)
             {
@@ -227,6 +247,20 @@ namespace RetroEngine
             RigidBody.UserObject = entity;
 
             dynamicsWorld.AddRigidBody(RigidBody);
+            if(collisionFlags == CollisionFlags.StaticObject) 
+            {
+
+                var staticBody = new RetroEngine.StaticRigidBody(boxRigidBodyInfo);
+                staticBody.CollisionFlags = collisionFlags;
+
+                staticBody.SetParrent(RigidBody);
+
+                staticBodies.Add(staticBody);
+
+                staticWorld.AddRigidBody(staticBody);
+            }
+
+
 
             RigidBody.Friction = 1f;
             RigidBody.SetDamping(0.1f, 0.1f);
@@ -284,7 +318,7 @@ namespace RetroEngine
 
         public static MyClosestConvexResultCallback SphereTraceForStatic(Vector3 rayStart, Vector3 rayEnd, float radius = 0.5f)
         {
-            CollisionWorld world = dynamicsWorld;
+            CollisionWorld world = staticWorld;
 
             // Create a sphere shape with the specified radius
             SphereShape sphereShape = new SphereShape(radius);
@@ -309,7 +343,7 @@ namespace RetroEngine
 
         public static MyClosestRayResultCallback LineTraceForStatic(Vector3 rayStart, Vector3 rayEnd)
         {
-            CollisionWorld world = dynamicsWorld;
+            CollisionWorld world = staticWorld;
 
             MyClosestRayResultCallback rayCallback = new MyClosestRayResultCallback(ref rayStart, ref rayEnd);
 

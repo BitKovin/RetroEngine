@@ -48,7 +48,7 @@ namespace RetroEngine.Entities
             bodies.Add(body);
 
 
-            npcList.Add(this);
+            //npcList.Add(this);
 
             pathfindingQuery.OnPathFound += PathfindingQuery_OnPathFound;
 
