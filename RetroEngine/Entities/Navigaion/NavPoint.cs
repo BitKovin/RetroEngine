@@ -49,7 +49,7 @@ namespace RetroEngine.Entities.Navigaion
 
         }
 
-        public List<Vector3> GetPathNext(List<NavPoint> history, Vector3 target, ref int totalItterations)
+        public List<Vector3> GetPathNext(List<NavPoint> history, Vector3 target, ref int totalItterations, PathfindingQuery query = null)
         {
             List<Vector3> output = new List<Vector3>();
 
@@ -98,11 +98,22 @@ namespace RetroEngine.Entities.Navigaion
 
             myHistory.Add(this);
 
-            var hit = Physics.SphereTraceForStatic(Position.ToNumerics(), target.ToNumerics(),0.3f);
+            bool hited = false;
 
+            if (query == null)
+            {
+
+                var hit = Physics.SphereTraceForStatic(Position.ToNumerics(), target.ToNumerics(), 0.3f);
+
+                hited = hit.HasHit;
+
+            }else
+            {
+                hited = query.IsVisibleFromPoint(this, target) == false;
+            }
             
 
-            if (hit.HasHit)
+            if (hited)
             {
                 foreach(NavPoint point in connected)
                 {

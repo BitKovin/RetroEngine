@@ -12,6 +12,7 @@ namespace RetroEngine
     public static class Navigation
     {
 
+        internal static int ActiveQueries = 0;
 
         static List<NavPoint> navPoints = new List<NavPoint>();
 
@@ -24,6 +25,11 @@ namespace RetroEngine
         {
             navPoints.Add(point);
 
+        }
+
+        public static List<NavPoint> GetAllPoints()
+        {
+            return navPoints;
         }
 
         public static List<Vector3> FindPath(Vector3 start, Vector3 target)
@@ -68,7 +74,7 @@ namespace RetroEngine
             return Position;
         }
 
-        static NavPoint GetStartNavPoint(Vector3 start)
+        public static NavPoint GetStartNavPoint(Vector3 start)
         {
             navPoints = navPoints.OrderBy(point => Vector3.Distance(start, point.Position)).ToList();
 
@@ -108,27 +114,120 @@ namespace RetroEngine
 
         public bool Processing { get; private set; } = false;
 
+        Dictionary<NavPoint, List<Vector3>> VisibleLocations = new Dictionary<NavPoint, List<Vector3>>();
+        Dictionary<Vector3, List<Vector3>> VisibleLocationsFromPoint = new Dictionary<Vector3, List<Vector3>>();
+
         public void Execute(Vector3 start, Vector3 target)
         {
 
-            
+            target = Navigation.ProjectToGround(target);
 
-            Task.Run(() => { Process(start, target); });
+            if (Physics.SphereTraceForStatic(start.ToNumerics(), target.ToNumerics(), 0.3f).HasHit == false)
+            {
+                OnPathFound?.Invoke(new List<Vector3> { target });
+                return;
+            }
+
+
+
+            NavPoint startPoint = Navigation.GetStartNavPoint(start);
+
+            var pointsAll = Navigation.GetAllPoints();
+
+            foreach (var point in pointsAll)
+            {
+
+                ProcessPoint(point, start);
+                ProcessPoint(point, target);
+
+            }
+
+            Task.Run(() => { Process(start, target,startPoint); });
 
         }
 
-        void Process(Vector3 start, Vector3 target)
+        void ProcessPoint(NavPoint point,Vector3 pos)
         {
+            var hit = Physics.SphereTraceForStatic(pos.ToNumerics(), point.Position.ToNumerics(), 0.3f);
+
+            if (hit.HasHit) return;
+
+            if(VisibleLocations.ContainsKey(point) == false)
+                VisibleLocations.Add(point, new List<Vector3>());
+
+            if (VisibleLocationsFromPoint.ContainsKey(point.Position) == false)
+                VisibleLocationsFromPoint.Add(point.Position, new List<Vector3>());
+
+            VisibleLocations[point].Add(pos);
+            VisibleLocationsFromPoint[point.Position].Add(pos);
+
+        }
+
+        void Process(Vector3 start, Vector3 target, NavPoint startPoint)
+        {
+
             
+
             List<Vector3> points;
             Processing = true;
                 try
                 {
-                    points = Navigation.FindPath(start, target);
+
+
+                    points = FindPath(start, target, startPoint);
                     OnPathFound?.Invoke(points);
+
+
+
                 }catch (Exception ex) { }
             Processing = false;
         }
+
+        internal bool IsVisibleFromPoint(NavPoint point, Vector3 location)
+        {
+            if (VisibleLocations.ContainsKey(point) == false) return false;
+
+            return VisibleLocations[point].Contains(location);
+
+        }
+
+        internal bool IsVisibleFromPoint(Vector3 point, Vector3 location)
+        {
+            if (VisibleLocationsFromPoint.ContainsKey(point) == false) return false;
+
+            return VisibleLocationsFromPoint[point].Contains(location);
+
+        }
+
+        List<Vector3> FindPath(Vector3 start, Vector3 target, NavPoint startPoint)
+        {
+
+            int it = 0;
+
+            if (startPoint is null)
+                return new List<Vector3>();
+
+            List<Vector3> points = startPoint.GetPathNext(new List<NavPoint>(), target, ref it, this);
+            List<Vector3> result = new List<Vector3>(points);
+
+            for (int i = points.Count - 1; i >= 0; i--)
+            {
+                if (IsVisibleFromPoint(points[i], start) == true)
+                {
+
+                    Console.WriteLine($"{points[i]}   {start}");
+                    result.RemoveRange(0, i); break;
+                }
+
+            }
+
+            bool removing = false;
+
+
+            return result;
+
+        }
+
 
     }
 }

@@ -36,6 +36,7 @@ namespace RetroEngine.Entities
 
         PathfindingQuery pathfindingQuery = new PathfindingQuery();
 
+
         public override void Start()
         {
             base.Start();
@@ -96,12 +97,13 @@ namespace RetroEngine.Entities
 
             meshes.Add(mesh);
             meshes.Add(mesh2);
+            //meshes.Add(sm);
 
             mesh.SetInterpolationEnabled(false);
 
             sm.Transperent = false;
 
-            sm.Scale =new Vector3(0.2f);
+            sm.Scale =new Vector3(0.7f);
 
 
         }
@@ -113,22 +115,24 @@ namespace RetroEngine.Entities
 
             targetLocation = Camera.position;
 
-                RequestNewTargetLocation();
+                
         }
 
         public override void OnDamaged(float damage, Entity causer = null, Entity weapon = null)
         {
             base.OnDamaged(damage, causer, weapon);
 
-            Destroy();
+            //Destroy();
 
         }
 
         public override void AsyncUpdate()
         {
-            body.LinearVelocity = new System.Numerics.Vector3(MoveDirection.X * speed, body.LinearVelocity.Y, MoveDirection.Z * speed);
+            body.Activate();
 
-            MoveDirection = Vector3.Lerp(MoveDirection, DesiredMoveDirection, Time.deltaTime*5);
+            body.LinearVelocity = new System.Numerics.Vector3(MoveDirection.X * speed, 0, MoveDirection.Z * speed);
+
+            MoveDirection = Vector3.Lerp(MoveDirection, DesiredMoveDirection, Time.deltaTime);
 
             if (loadedAssets)
                 mesh.Update(Time.deltaTime);
@@ -142,6 +146,9 @@ namespace RetroEngine.Entities
 
             if(mesh.isRendered)
                 mesh2.PastePose(mesh.CopyPose());
+
+            RequestNewTargetLocation();
+
         }
         public override void LateUpdate()
         {
@@ -205,6 +212,8 @@ namespace RetroEngine.Entities
             {
                 return;
             }
+
+            sm.Position = moveLocation;
 
             Vector3 newMoveDirection = moveLocation - Position;
 

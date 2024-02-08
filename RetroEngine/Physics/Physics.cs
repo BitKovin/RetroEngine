@@ -55,10 +55,10 @@ namespace RetroEngine
         public static void Simulate()
         {
 
+
             foreach(CollisionObject collisionObject in removeList)
             {
                 dynamicsWorld.RemoveCollisionObject(collisionObject);
-                collisionObject.Dispose();
             }
             removeList.Clear();
 

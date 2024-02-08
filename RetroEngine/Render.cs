@@ -81,6 +81,7 @@ namespace RetroEngine
 
         public static OcclusionQuery occlusionQuery;
 
+
         public Render()
         {
             graphics = GameMain.Instance._graphics;
