@@ -14,7 +14,7 @@ namespace RetroEngine.Entities.Navigaion
 
         public List<NavPoint> connected = new List<NavPoint>();
 
-        int MaxDepth = 20;
+        int MaxDepth = 12;
 
         public override void Start()
         {
@@ -57,7 +57,7 @@ namespace RetroEngine.Entities.Navigaion
 
             totalItterations++;
 
-            if (totalItterations > 70)
+            if (totalItterations > 40)
             {
                 output = PointsToPositions(history);
 

@@ -198,7 +198,7 @@ namespace RetroEngine.Entities
         void RequestNewTargetLocation()
         {
             if(pathfindingQuery.Processing ==false)
-                pathfindingQuery.Execute(Position, targetLocation);
+                pathfindingQuery.Start(Position, targetLocation);
         }
 
         private void PathfindingQuery_OnPathFound(List<Vector3> points)

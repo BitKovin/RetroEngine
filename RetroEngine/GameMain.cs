@@ -242,6 +242,8 @@ namespace RetroEngine
 
             Physics.Update();
 
+            Navigation.Update();
+
             curentLevel.Update();
 
             curentLevel.AsyncUpdate();

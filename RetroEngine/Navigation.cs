@@ -16,6 +16,8 @@ namespace RetroEngine
 
         static List<NavPoint> navPoints = new List<NavPoint>();
 
+        internal static List<PathfindingQuery> pathfindingQueries = new List<PathfindingQuery>();
+
         public static void ClearNavData()
         {
             navPoints.Clear();
@@ -31,6 +33,26 @@ namespace RetroEngine
         {
             return navPoints;
         }
+
+        public static void Update()
+        {
+            ParallelOptions options = new ParallelOptions();
+            options.MaxDegreeOfParallelism = Environment.ProcessorCount;
+
+            int processed = 0;
+
+            List<PathfindingQuery> queries = pathfindingQueries.GetRange(0, Math.Min(options.MaxDegreeOfParallelism, pathfindingQueries.Count));
+
+            Parallel.ForEach(queries, options, item =>
+            {
+                item?.Execute();
+                processed++;
+            });
+
+            pathfindingQueries.RemoveRange(0, processed);
+
+        }
+
 
         public static List<Vector3> FindPath(Vector3 start, Vector3 target)
         {
@@ -119,11 +141,17 @@ namespace RetroEngine
 
         Task task;
 
-        public void Execute(Vector3 start, Vector3 target)
+        Vector3 startLocation;
+        Vector3 endLocation;
+
+        public void Start(Vector3 start, Vector3 target)
         {
             if (Processing == true) return;
 
-            Process(start, target);
+            startLocation = start;
+            endLocation = target;
+
+            Navigation.pathfindingQueries.Add(this);
             return;
 
             task = Task.Run(() => { Process(start, target); });
@@ -159,12 +187,13 @@ namespace RetroEngine
 
         }
 
+        internal void Execute()
+        {
+            Process(startLocation, endLocation);
+        }
+
         void Process(Vector3 start, Vector3 target)
         {
-
-
-
-
             Processing = true;
             
 
