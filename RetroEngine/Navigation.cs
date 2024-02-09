@@ -41,15 +41,13 @@ namespace RetroEngine
 
             int processed = 0;
 
-            List<PathfindingQuery> queries = pathfindingQueries.GetRange(0, Math.Min(options.MaxDegreeOfParallelism, pathfindingQueries.Count));
+            List<PathfindingQuery> queries = pathfindingQueries.GetRange(0, Math.Min(options.MaxDegreeOfParallelism, pathfindingQueries.Count * 3));
 
             Parallel.ForEach(queries, options, item =>
             {
                 item?.Execute();
-                processed++;
+                pathfindingQueries.Remove(item);
             });
-
-            pathfindingQueries.RemoveRange(0, processed);
 
         }
 
@@ -146,7 +144,8 @@ namespace RetroEngine
 
         public void Start(Vector3 start, Vector3 target)
         {
-            if (Processing == true) return;
+            if (Navigation.pathfindingQueries.Contains(this)) return;
+
 
             startLocation = start;
             endLocation = target;
@@ -194,16 +193,11 @@ namespace RetroEngine
 
         void Process(Vector3 start, Vector3 target)
         {
-            Processing = true;
             
-
             List<Vector3> points;
             points = Navigation.FindPath(start, target);
             OnPathFound?.Invoke(points);
 
-
-
-            Processing = false;
         }
 
         internal bool IsVisibleFromPoint(NavPoint point, Vector3 location)
