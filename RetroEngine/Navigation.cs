@@ -37,17 +37,23 @@ namespace RetroEngine
         public static void Update()
         {
             ParallelOptions options = new ParallelOptions();
-            options.MaxDegreeOfParallelism = Environment.ProcessorCount;
+            options.MaxDegreeOfParallelism = 8;
 
-            int processed = 0;
 
-            List<PathfindingQuery> queries = pathfindingQueries.GetRange(0, Math.Min(options.MaxDegreeOfParallelism, pathfindingQueries.Count * 3));
+            int n = Math.Max(pathfindingQueries.Count, Math.Min(8, pathfindingQueries.Count * 3));
+
+            List<PathfindingQuery> queries = pathfindingQueries.GetRange(0, Math.Min(pathfindingQueries.Count, n));
+
+            List<PathfindingQuery> removeList = new List<PathfindingQuery>();
 
             Parallel.ForEach(queries, options, item =>
             {
                 item?.Execute();
-                pathfindingQueries.Remove(item);
+                removeList.Add(item);
             });
+
+            foreach(PathfindingQuery query in removeList)
+                pathfindingQueries.Remove(query);
 
         }
 

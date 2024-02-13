@@ -305,7 +305,7 @@ namespace RetroEngine
             Stats.StartRecord("Render");
 
             RenderTarget2D frame = render.StartRenderLevel(curentLevel);
-
+            Level.GetCurrent().EndOcclusionCheck();
 
             GraphicsDevice.SetRenderTarget(null);
 
@@ -378,6 +378,7 @@ namespace RetroEngine
             GraphicsDevice.Present();
             presentingFrame = false;
             Stats.StopRecord("Render");
+            Level.LoadedAssetsThisFrame = 0;
         }
 
         public void WaitForFramePresent()

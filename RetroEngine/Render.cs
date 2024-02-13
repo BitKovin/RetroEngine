@@ -483,7 +483,6 @@ namespace RetroEngine
         public void PerformOcclusionTest(List<StaticMesh> meshes)
         {
             performingOcclusionTest = true;
-            Stats.StartRecord("occlusion test");
 
             InitRenderTargetIfNeed(ref occlusionTestPath, DepthFormat.Depth16);
 
@@ -504,16 +503,21 @@ namespace RetroEngine
                 mesh.StartOcclusionTest();
             }
 
+            
+        }
+
+        public void EndOcclusionTest(List<StaticMesh> meshes)
+        {
             foreach (StaticMesh mesh in meshes)
             {
                 mesh.EndOcclusionTest();
             }
 
-            Stats.StopRecord("occlusion test");
             performingOcclusionTest = false;
+
         }
 
-        void DownsampleToTexture(Texture2D source, RenderTarget2D target)
+            void DownsampleToTexture(Texture2D source, RenderTarget2D target)
         {
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, target.Width, target.Height);
             graphics.GraphicsDevice.SetRenderTarget(target);

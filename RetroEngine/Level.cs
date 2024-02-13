@@ -280,13 +280,25 @@ namespace RetroEngine
         public void PerformOcclusionCheck()
         {
             if(OcclusionCullingEnabled)
-                OcclusionCulling();
+                OcclusionCullingStart();
         }
 
-        void OcclusionCulling()
+        public void EndOcclusionCheck()
+        {
+            if (OcclusionCullingEnabled)
+                OcclusionCullingEnd();
+        }
+
+        void OcclusionCullingStart()
         {
             GameMain.Instance.render.PerformOcclusionTest(renderList);
         }
+        void OcclusionCullingEnd()
+        {
+            GameMain.Instance.render.EndOcclusionTest(renderList);
+        }
+
+        static internal int LoadedAssetsThisFrame = 0;
 
         public bool LoadAssets()
         {
@@ -297,9 +309,15 @@ namespace RetroEngine
 
             foreach (Entity ent in list)
             {
-                if(ent is not null)
-                if(ent.LoadAssetsIfNeeded())
-                        loaded = true;
+                if (LoadedAssetsThisFrame < 1)
+                    if (ent is not null)
+                        if (ent.LoadAssetsIfNeeded())
+                        {
+                            loaded = true;
+
+                            LoadedAssetsThisFrame++;
+
+                        }
             }
             return loaded;
         }
