@@ -29,10 +29,16 @@ namespace RetroEngine.Map
 
             GameMain.Instance.curentLevel = level;
 
+            float i = 0;
+
             foreach (EntityData ent in Entities)
             {
 
                 Entity entity = LevelObjectFactory.CreateByTechnicalName(ent.Classname);
+
+                float progress = 0.2f + (i / (float)Entities.Count) * 0.5f;
+
+                LoadingScreen.Update(progress);
 
                 if (ent.Brushes.Count > 0)
                 {
@@ -92,6 +98,8 @@ namespace RetroEngine.Map
                     level.entities.Add(entity);
                     //entity.Start();
                 }
+
+                i++;
 
             }
 

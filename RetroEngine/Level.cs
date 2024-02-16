@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using RetroEngine;
 using RetroEngine.Entities;
+using RetroEngine.Map;
 using RetroEngine.UI;
 using System;
 using System.Collections.Generic;
@@ -69,6 +70,10 @@ namespace RetroEngine
 
         public static void LoadFromFile(string name, bool force = false)
         {
+            LoadingScreen.Progress = 0;
+            LoadingScreen.Draw();
+
+            AssetRegistry.ClearAllTextures();
 
             if(force == false)
             {
@@ -107,21 +112,36 @@ namespace RetroEngine
             
             AssetRegistry.AllowGeneratingMipMaps = true;
 
+            LoadingScreen.Update(0.1f);
 
-            GameMain.Instance.curentLevel = MapParser.MapParser.ParseMap(path).GetLevel();
+            MapData mapData = MapParser.MapParser.ParseMap(path);
+
+            LoadingScreen.Update(0.2f);
+
+            GameMain.Instance.curentLevel = mapData.GetLevel();
+
+            LoadingScreen.Update(0.7f);
+
             Time.deltaTime = 0;
             Physics.Update();
-            GameMain.Instance.curentLevel.StartEnities();
 
             GameMain.Instance.curentLevel.LoadAssets();
+
+            LoadingScreen.Update(0.8f);
+
+            GameMain.Instance.curentLevel.StartEnities();  
 
             Navigation.RebuildConnectionsData();
             GameMain.Instance.OnLevelChanged();
             ChangingLevel = false;
 
+            LoadingScreen.Update(0.9f);
+
             AssetRegistry.WaitForAssetsToLoad();
 
             AssetRegistry.AllowGeneratingMipMaps = false;
+
+            LoadingScreen.Update(1f);
 
         }
 
@@ -314,8 +334,6 @@ namespace RetroEngine
                         if (ent.LoadAssetsIfNeeded())
                         {
                             loaded = true;
-
-                            LoadedAssetsThisFrame++;
 
                         }
             }

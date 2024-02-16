@@ -84,6 +84,9 @@ namespace RetroEngine
             curentLevel = new Level();
             UiElement.Viewport = UIManger;
             _graphics.GraphicsProfile = GraphicsProfile.HiDef;
+
+            RenderThread = Thread.CurrentThread;
+
         }
 
         protected override void Initialize()
@@ -111,7 +114,7 @@ namespace RetroEngine
             //_graphics.IsFullScreen = true;
             _graphics.ApplyChanges();
 
-            RenderThread = Thread.CurrentThread;
+            
             render = new Render();
 
             LevelObjectFactory.InitializeTypeCache();

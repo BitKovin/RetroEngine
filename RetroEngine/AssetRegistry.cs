@@ -85,6 +85,18 @@ namespace RetroEngine
 
         }
 
+        public static void ClearAllTextures()
+        {
+            foreach(Texture2D tex in textures.Values)
+            {
+                tex?.Dispose();
+            }
+
+            textures.Clear();
+            texturesHistory.Clear();
+
+        }
+
         static Texture2D GenerateMipMaps(Texture2D intermediateTexture)
         {
 
