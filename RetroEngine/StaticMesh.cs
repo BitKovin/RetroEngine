@@ -72,7 +72,7 @@ namespace RetroEngine
 
         public bool Viewmodel = false;
 
-        static Dictionary<string, Texture2D> textures = new Dictionary<string, Texture2D>();
+        internal static Dictionary<string, Texture2D> textures = new Dictionary<string, Texture2D>();
 
         public bool CastShadows = false;
 

@@ -74,6 +74,7 @@ namespace RetroEngine
             LoadingScreen.Draw();
 
             AssetRegistry.ClearAllTextures();
+            StaticMesh.textures.Clear();
 
             if(force == false)
             {
