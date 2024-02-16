@@ -43,7 +43,7 @@ namespace RetroEngine.Game
         {
             base.OnLevelChanged();
 
-            GameMain.Instance.curentLevel.entities.Add(new PlayerGlobal());
+            Level.GetCurrent().AddEntity(new PlayerGlobal());
 
             
 

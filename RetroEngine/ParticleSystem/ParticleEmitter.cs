@@ -45,9 +45,7 @@ namespace RetroEngine.Particles
         {
             for (int i = 0; i < InitialSpawnCount; i++) 
             {
-
                 Particle particle = GetNewParticle();
-
 
                 particles.Add(particle);
             }

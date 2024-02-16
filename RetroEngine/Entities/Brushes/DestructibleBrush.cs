@@ -91,5 +91,17 @@ namespace RetroEngine.Entities.Brushes
 
         }
 
+        protected override void LoadAssets()
+        {
+            base.LoadAssets();
+
+            var sys = ParticleSystemFactory.CreateByTechnicalName(systemName);
+
+            sys.LoadAssetsIfNeeded();
+
+            sys.Destroy();
+
+        }
+
     }
 }
