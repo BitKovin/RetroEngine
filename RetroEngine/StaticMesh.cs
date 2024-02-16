@@ -89,7 +89,7 @@ namespace RetroEngine
         public bool Static = false;
 
         protected bool occluded = false;
-        protected bool inFrustrum = false;
+        protected bool inFrustrum = true;
 
         public Effect Shader;
 
@@ -100,7 +100,10 @@ namespace RetroEngine
 
             OcclusionQuery = new OcclusionQuery(GameMain.Instance.GraphicsDevice);
 
-            Shader = AssetRegistry.GetShaderFromName("UnifiedOutput");
+            Shader = GameMain.Instance.DefaultShader;
+
+            if (GameMain.Instance.DefaultShader == null)
+                Shader = AssetRegistry.GetShaderFromName("UnifiedOutput");
 
         }
 

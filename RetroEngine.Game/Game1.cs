@@ -33,6 +33,8 @@ namespace RetroEngine.Game
         {
             //MakeFullscreen();
 
+            //DefaultShader = AssetRegistry.GetShaderFromName("SimpleEffect");
+
             Level.LoadFromFile("test2.map");
 
         }

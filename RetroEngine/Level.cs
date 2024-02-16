@@ -135,11 +135,15 @@ namespace RetroEngine
             GameMain.Instance.OnLevelChanged();
             ChangingLevel = false;
 
-            LoadingScreen.Update(0.9f);
+            LoadingScreen.Update(0.85f);
 
             AssetRegistry.WaitForAssetsToLoad();
 
             AssetRegistry.AllowGeneratingMipMaps = false;
+
+            LoadingScreen.Update(0.9f);
+
+            GameMain.SkipFrames = 2;
 
             LoadingScreen.Update(1f);
 

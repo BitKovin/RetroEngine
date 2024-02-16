@@ -28,6 +28,7 @@
   </ItemGroup>
   <ItemGroup>
     <MonoGameContentReference Include="..\RetroEngine\Content\Content.mgcb" />
+    <MonoGameContentReference Include="..\RetroEngine.Game\Content\Content.mgcb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Icon.ico" />

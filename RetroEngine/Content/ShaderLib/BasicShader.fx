@@ -273,6 +273,12 @@ PBRData CalculatePBR(float3 normal, float roughness, float metallic, float3 worl
 float3 CalculateSpecular(float roughness, float3 worldPos, float3 normal, float3 lightDir)
 {
     
+    #ifdef NO_SPECULAR
+    
+    return float3(0,0,0);
+    
+    #endif
+
     roughness = clamp(roughness, 0.001f, 1);
     
     float3 reflectDir = reflect(normalize(viewPos - worldPos), normal);
@@ -375,6 +381,12 @@ float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal)
 
 float3 CalculatePointLightSpeculars(int i, PixelInput pixelInput, float3 normal, float roughness)
 {
+    
+    #ifdef NO_SPECULAR
+    
+    return float3(0,0,0);
+    
+    #endif
 
     float3 lightVector = LightPositions[i] - pixelInput.MyPosition;
     float distanceToLight = length(lightVector);

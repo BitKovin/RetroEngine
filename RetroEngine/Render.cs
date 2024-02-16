@@ -209,6 +209,7 @@ namespace RetroEngine
 
             PerformPostProcessing();
 
+            graphics.GraphicsDevice.SetRenderTarget(null);
 
             return outputPath;
         }
@@ -266,14 +267,14 @@ namespace RetroEngine
 
 
 
-                foreach (StaticMesh mesh in renderList)
+            foreach (StaticMesh mesh in renderList)
+            {
+                if (mesh.Transperent || onlyTransperent == false)
                 {
-                    if (mesh.Transperent || onlyTransperent == false)
-                    {
-                        mesh.DrawUnified();
-                    }
+                    mesh.DrawUnified();
                 }
-            
+            }
+
             ParticleEmitter.LoadRenderEmitter();
 
             graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;

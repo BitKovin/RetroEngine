@@ -102,7 +102,7 @@ namespace RetroEngine
 
                 if(node.isThisARealBone)
                 {
-
+                    if (pose.ContainsKey(key) == false) continue;
                     node.LocalTransformMg = pose[key];
 
                     //RiggedModel.globalShaderMatrixs[node.boneShaderFinalTransformIndex] = node.OffsetMatrixMg *  pose[key];

@@ -27,6 +27,7 @@ namespace RetroEngine
     {
         public SpriteFont DefaultFont;
 
+        public Effect DefaultShader = null;
 
         public GraphicsDeviceManager _graphics;
         public SpriteBatch SpriteBatch;
@@ -72,6 +73,8 @@ namespace RetroEngine
         public bool LimitFPS = false;
 
         ImFontPtr font;
+
+        internal static int SkipFrames = 0;
 
         public static float ReservedTaskMinTime = 0.000f;
 
@@ -355,6 +358,11 @@ namespace RetroEngine
             if (pendingGraphicsUpdate)
                 _graphics.ApplyChanges();
 
+            if(SkipFrames>0)
+            {
+                SkipFrames--;
+                return;
+            }
 
             if (AllowAsyncAssetLoading)
             {
