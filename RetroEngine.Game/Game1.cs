@@ -23,7 +23,7 @@ namespace RetroEngine.Game
             devMenu.Init();
 
 
-            Level.LoadFromFile("test2.map");
+            
 
             Window.Title = "Game";
 
@@ -32,6 +32,9 @@ namespace RetroEngine.Game
         public override void GameInitialized()
         {
             //MakeFullscreen();
+
+            Level.LoadFromFile("test2.map");
+
         }
 
         public override void OnLevelChanged()

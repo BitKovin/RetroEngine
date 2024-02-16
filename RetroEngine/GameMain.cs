@@ -115,6 +115,7 @@ namespace RetroEngine
             _graphics.ApplyChanges();
 
             
+            
             render = new Render();
 
             LevelObjectFactory.InitializeTypeCache();
@@ -139,6 +140,7 @@ namespace RetroEngine
 
         protected override void LoadContent()
         {
+
             if (DevMenuEnabled)
             {
                 ImGuiRenderer = new ImGuiRenderer(this);
@@ -170,7 +172,7 @@ namespace RetroEngine
 
             checkAppRegainedFocus();
 
-            if (tick == 10)
+            if (tick == 2)
                 GameInitialized();
 
             LimitFrameRate();
