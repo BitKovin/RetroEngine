@@ -84,6 +84,8 @@ namespace RetroEngine
                 return;
             }
 
+            Time.deltaTime = 0;
+
             Navigation.WaitForProcess();
 
             string path = AssetRegistry.FindPathForFile(name);
@@ -105,7 +107,7 @@ namespace RetroEngine
 
             Physics.Update();
 
-            Physics.Start();
+            Physics.ResetWorld();
             Physics.Update();
 
             UiElement.Viewport.childs.Clear();
@@ -126,7 +128,7 @@ namespace RetroEngine
 
             LoadingScreen.Update(0.7f);
 
-            Time.deltaTime = 0;
+            
             Physics.Update();
 
             GameMain.Instance.curentLevel.LoadAssets();
@@ -150,6 +152,8 @@ namespace RetroEngine
             StaticMesh.loadedScenes.Clear();
 
             GameMain.SkipFrames = 2;
+
+            GC.Collect();
 
             LoadingScreen.Update(1f);
 

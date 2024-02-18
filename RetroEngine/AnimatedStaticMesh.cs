@@ -105,9 +105,12 @@ namespace RetroEngine
 
             if (frameStaticMeshData.model is not null)
             {
+                if (model.Meshes == null) return;
                 for (int j = 0; j < model.Meshes.Count; j++)
                 {
-                    for(int i = 0; i < model.Meshes[j].MeshParts.Count; i++)
+                    if(model.Meshes[j].MeshParts == null) continue;
+
+                    for (int i = 0; i < model.Meshes[j].MeshParts.Count; i++)
                     {
                         ModelMeshPart meshPart1 = frameStaticMeshData.model.Meshes[j].MeshParts[i];
                         ModelMeshPart meshPart2 = frameStaticMeshData.model2.Meshes[j].MeshParts[i];

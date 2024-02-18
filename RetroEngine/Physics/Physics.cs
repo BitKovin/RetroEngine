@@ -25,6 +25,12 @@ namespace RetroEngine
 
         static List<CollisionObject> collisionObjects = new List<CollisionObject>();
 
+
+
+        static SequentialImpulseConstraintSolver solver;
+        static DbvtBroadphase broadphase;
+        static CollisionDispatcher dispatcher;
+
         public class CollisionShapeData
         {
             public string surfaceType = "default";
@@ -32,19 +38,15 @@ namespace RetroEngine
 
         public static void Start()
         {
-            // Create a collision configuration and dispatcher
-            var collisionConfig = new DefaultCollisionConfiguration();
-            var dispatcher = new CollisionDispatcher(collisionConfig);
-            // Create a broadphase and a solver
-            var broadphase = new DbvtBroadphase();
-            var solver = new SequentialImpulseConstraintSolver();
+
+            solver?.Reset();
+            solver?.Dispose();
+            broadphase?.Dispose();
+            dispatcher?.Dispose();
 
             removeList.Clear();
 
-            foreach(CollisionObject collisionObject in collisionObjects)
-            {
-                collisionObject.Dispose();
-            }
+            
 
             if (dynamicsWorld != null )
             {
@@ -58,22 +60,55 @@ namespace RetroEngine
                 staticWorld = null;
             }
 
+            // Create a collision configuration and dispatcher
+            var collisionConfig = new DefaultCollisionConfiguration();
+            collisionConfig.SetConvexConvexMultipointIterations(1,1);
+            collisionConfig.SetPlaneConvexMultipointIterations(1,1);
+            dispatcher = new CollisionDispatcher(collisionConfig);
+            // Create a broadphase and a solver
+            broadphase = new DbvtBroadphase();
+
+            solver = new SequentialImpulseConstraintSolver();
+            
+
             // Create the dynamics world
             dynamicsWorld = new DiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfig);
             dynamicsWorld.Gravity = new Vector3(0, -9.81f, 0); // Set gravity
             dynamicsWorld.DispatchInfo.UseContinuous = true;
 
-            collisionConfig = new DefaultCollisionConfiguration();
-            dispatcher = new CollisionDispatcher(collisionConfig);
-            // Create a broadphase and a solver
-            broadphase = new DbvtBroadphase();
-            solver = new SequentialImpulseConstraintSolver();
 
-            staticWorld = new DiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfig);
+            staticWorld = new DiscreteDynamicsWorld(new CollisionDispatcher(collisionConfig), new DbvtBroadphase(), new SequentialImpulseConstraintSolver(), collisionConfig);
             staticWorld.Gravity = new Vector3(0, -9.81f, 0); // Set gravity
-            staticWorld.DispatchInfo.UseContinuous = true;
 
             staticBodies.Clear();
+
+        }
+
+        public static void ResetWorld()
+        {
+            foreach(RigidBody body in staticBodies)
+            {
+                staticWorld.RemoveCollisionObject(body);
+                body.CollisionShape?.Dispose();
+                body.MotionState = null;
+                body.Dispose();
+            }
+
+            foreach (CollisionObject collisionObject in collisionObjects)
+            {
+
+                RigidBody body = RigidBody.Upcast(collisionObject);
+
+                if (body == null)
+                    Remove(collisionObject);
+                else
+                    Remove(body);
+            }
+
+            staticBodies.Clear();
+            collisionObjects.Clear();
+            solver.Reset();
+            broadphase.NeedCleanup = true;
 
         }
 
@@ -114,7 +149,21 @@ namespace RetroEngine
 
             dynamicsWorld.RemoveCollisionObject(collisionObject);
             collisionObjects.Remove(collisionObject);
+            collisionObject.UserObject = null;
+            collisionObject.CollisionShape.Dispose();
             collisionObject.Dispose();
+        }
+
+        public static void Remove(RigidBody body)
+        {
+            if (body is null) return;
+
+            dynamicsWorld.RemoveRigidBody(body);
+            collisionObjects.Remove(body);
+            body.UserObject = null;
+            body.MotionState.Dispose();
+            body.CollisionShape.Dispose();
+            body.Dispose();
         }
 
         public static void Update()
@@ -308,7 +357,6 @@ namespace RetroEngine
             Shape.UserObject = new CollisionShapeData();
             var motionState = new DefaultMotionState(Matrix4x4.CreateTranslation(0, 0, 0));
 
-            Shape.Margin = 0f;
 
             // Create a rigid body for the sphere
             var boxRigidBodyInfo = new RigidBodyConstructionInfo(collisionFlags == CollisionFlags.StaticObject ? 0 : mass, motionState, Shape);
@@ -323,8 +371,6 @@ namespace RetroEngine
             RigidBody.SetDamping(0.1f, 0.1f);
             RigidBody.Restitution = 0f;
             
-
-            Matrix4x4 fixedRotation = Matrix4x4.Identity;
 
             collisionObjects.Add(RigidBody);
 

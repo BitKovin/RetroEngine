@@ -165,8 +165,6 @@ namespace RetroEngine
 
             }
 
-            Console.WriteLine("failed to find point");
-
             return null;
 
         }

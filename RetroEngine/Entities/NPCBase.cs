@@ -112,6 +112,10 @@ namespace RetroEngine.Entities
         {
             //UpdateNPCList();
 
+            if(Input.GetAction("test").Pressed())
+            {
+                Destroy();
+            }
 
             targetLocation = Camera.position;
 
@@ -122,7 +126,7 @@ namespace RetroEngine.Entities
         {
             base.OnDamaged(damage, causer, weapon);
 
-            //Destroy();
+            Destroy();
 
         }
 
