@@ -119,7 +119,6 @@ namespace RetroEngine.Skeletal
         /// </summary>
         /// 
 
-        static Dictionary<string, Scene> loadedScenes = new Dictionary<string, Scene>();
 
         public RiggedModel LoadAsset(string filePathorFileName, int defaultAnimatedFramesPerSecondLod)
         {
@@ -130,12 +129,7 @@ namespace RetroEngine.Skeletal
             // load the file at path to the scene
             //
 
-            if (loadedScenes.ContainsKey(filePathorFileName))
-            {
-                scene = loadedScenes[filePathorFileName];
-            }
-            else
-            {
+            
 
                 scene = new Scene();
                 var importer = new AssimpContext();
@@ -165,7 +159,7 @@ namespace RetroEngine.Skeletal
                     Debug.Assert(false, filePathorFileName + "\n\n" + "A problem loading the model occured: \n " + filePathorFileName + " \n" + e.Message);
                     scene = null;
                 }
-            }
+            
             return CreateModel(filepathorname);
         }
 
@@ -232,6 +226,8 @@ namespace RetroEngine.Skeletal
             {
                 MinimalInfo(model, filePath);
             }
+
+            scene = null;
 
             return model;
         }

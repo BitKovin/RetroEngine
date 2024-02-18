@@ -73,6 +73,7 @@ namespace RetroEngine
             LoadingScreen.Progress = 0;
             LoadingScreen.Draw();
 
+            AssetRegistry.ConstantCache.Clear();
             AssetRegistry.ClearAllTextures();
             StaticMesh.textures.Clear();
 
@@ -82,6 +83,8 @@ namespace RetroEngine
                 ChangingLevel = true;
                 return;
             }
+
+            Navigation.WaitForProcess();
 
             string path = AssetRegistry.FindPathForFile(name);
 
@@ -143,6 +146,8 @@ namespace RetroEngine
             AssetRegistry.AllowGeneratingMipMaps = false;
 
             LoadingScreen.Update(0.9f);
+
+            StaticMesh.loadedScenes.Clear();
 
             GameMain.SkipFrames = 2;
 
@@ -255,22 +260,25 @@ namespace RetroEngine
             Camera.finalizedProjection = Camera.projection;
             Camera.finalizedProjectionViewmodel = Camera.projectionViewmodel;
 
-            Parallel.ForEach(entities, entity =>
+            Entity[] list = entities.ToArray();
+            try
             {
+                Parallel.ForEach(list, entity =>
+                {
 
-                if (renderLayers.Contains(entity.Layer))
+                    if (renderLayers.Contains(entity.Layer))
 
-                    foreach (StaticMesh mesh in entity.meshes)
-                        if (entity is not null)
+                        foreach (StaticMesh mesh in entity.meshes)
+                            if (entity is not null)
 
-                            if (mesh is not null)
-                            {
-                                mesh.UpdateCulling();
+                                if (mesh is not null)
+                                {
+                                    mesh.UpdateCulling();
 
-                                mesh.RenderPreparation();
-                            }
-            });
-
+                                    mesh.RenderPreparation();
+                                }
+                });
+            }catch (Exception) { }
             renderList = new List<StaticMesh>();
 
             List<StaticMesh> transperentMeshes = new List<StaticMesh>();

@@ -626,7 +626,7 @@ namespace RetroEngine
             avgVertexPosition = CalculateAvgVertexLocation();
         }
 
-        protected static Dictionary<string, Assimp.Scene> loadedScenes = new Dictionary<string, Assimp.Scene>();
+        internal static Dictionary<string, Assimp.Scene> loadedScenes = new Dictionary<string, Assimp.Scene>();
         protected static Dictionary<string, Model> loadedModels = new Dictionary<string, Model>();
 
         protected virtual Model GetModelFromPath(string filePath,bool dynamicBuffer = false)
@@ -920,6 +920,11 @@ namespace RetroEngine
         protected virtual void Unload()
         {
 
+        }
+
+        public virtual void Destroyed()
+        {
+            model = null;
         }
 
         public void Dispose()

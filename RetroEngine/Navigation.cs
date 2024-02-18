@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace RetroEngine
@@ -34,26 +35,77 @@ namespace RetroEngine
             return navPoints;
         }
 
+        internal static bool ProcessingPathfinding = false;
+
+        static bool waitingToFinish = false;
+
+        static void UpdateCycle()
+        {
+            while(true)
+            {
+
+                ProcessingPathfinding = false;
+
+                if (waitingToFinish)
+                {
+                    Thread.Sleep(1);
+                    waitingToFinish = false;
+                    continue;
+                }
+
+                if (Level.ChangingLevel)
+                {
+                    Thread.Sleep(1);
+                    continue;
+                }
+
+                ProcessingPathfinding = true;
+
+                ParallelOptions options = new ParallelOptions();
+                options.MaxDegreeOfParallelism = 8;
+
+
+                int n = Math.Max(pathfindingQueries.Count, Math.Min(8, pathfindingQueries.Count * 3));
+
+                List<PathfindingQuery> queries = pathfindingQueries.GetRange(0, Math.Min(pathfindingQueries.Count, n));
+
+                List<PathfindingQuery> removeList = new List<PathfindingQuery>();
+
+                Parallel.ForEach(queries, options, item =>
+                {
+                    item?.Execute();
+                    removeList.Add(item);
+                });
+
+                foreach (PathfindingQuery query in removeList)
+                    pathfindingQueries.Remove(query);
+
+                ProcessingPathfinding = false;
+
+            }
+        }
+
+        static Task UpdateTask;
+
+        internal static void WaitForProcess()
+        {
+
+            waitingToFinish = true;
+
+            while(ProcessingPathfinding)
+            {
+
+            }
+        }
+
         public static void Update()
         {
-            ParallelOptions options = new ParallelOptions();
-            options.MaxDegreeOfParallelism = 8;
+            
+            if(UpdateTask == null)
+                UpdateTask = Task.Factory.StartNew(() => { UpdateCycle(); });
 
 
-            int n = Math.Max(pathfindingQueries.Count, Math.Min(8, pathfindingQueries.Count * 3));
 
-            List<PathfindingQuery> queries = pathfindingQueries.GetRange(0, Math.Min(pathfindingQueries.Count, n));
-
-            List<PathfindingQuery> removeList = new List<PathfindingQuery>();
-
-            Parallel.ForEach(queries, options, item =>
-            {
-                item?.Execute();
-                removeList.Add(item);
-            });
-
-            foreach(PathfindingQuery query in removeList)
-                pathfindingQueries.Remove(query);
 
         }
 

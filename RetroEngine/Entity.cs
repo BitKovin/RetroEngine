@@ -101,6 +101,14 @@ namespace RetroEngine
                 Physics.Remove(rigidBody);
             }
 
+            foreach(StaticMesh mesh in meshes)
+            {
+                mesh.Destroyed();
+            }
+
+            meshes.Clear();
+            meshes = null;
+
             GameMain.Instance.curentLevel.entities.Remove(this);
             Dispose();
         }

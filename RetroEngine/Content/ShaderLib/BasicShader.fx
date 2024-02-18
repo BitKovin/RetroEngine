@@ -459,6 +459,8 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness)
     
     light -= shadow;
     
+    
+    
     float3 globalLight = GlobalBrightness * GlobalLightColor * lerp(max(dot(normal, float3(0, 1, 0)), -1), 1, 0.7);
     
     light = max(light, 0);

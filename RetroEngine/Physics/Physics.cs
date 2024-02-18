@@ -23,6 +23,8 @@ namespace RetroEngine
 
         static List<CollisionObject> removeList = new List<CollisionObject>();
 
+        static List<CollisionObject> collisionObjects = new List<CollisionObject>();
+
         public class CollisionShapeData
         {
             public string surfaceType = "default";
@@ -36,6 +38,25 @@ namespace RetroEngine
             // Create a broadphase and a solver
             var broadphase = new DbvtBroadphase();
             var solver = new SequentialImpulseConstraintSolver();
+
+            removeList.Clear();
+
+            foreach(CollisionObject collisionObject in collisionObjects)
+            {
+                collisionObject.Dispose();
+            }
+
+            if (dynamicsWorld != null )
+            {
+                dynamicsWorld.Dispose();
+                dynamicsWorld = null;
+            }
+
+            if (staticWorld != null)
+            {
+                staticWorld.Dispose();
+                staticWorld = null;
+            }
 
             // Create the dynamics world
             dynamicsWorld = new DiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfig);
@@ -70,7 +91,7 @@ namespace RetroEngine
 
         public static void Simulate()
         {
-
+           
             foreach(StaticRigidBody staticRigidBody in staticBodies)
             {
                 staticRigidBody.UpdateFromParrent();
@@ -79,6 +100,7 @@ namespace RetroEngine
             foreach(CollisionObject collisionObject in removeList)
             {
                 dynamicsWorld.RemoveCollisionObject(collisionObject);
+                collisionObject.Dispose();
             }
             removeList.Clear();
 
@@ -90,8 +112,9 @@ namespace RetroEngine
         {
             if(collisionObject is null) return;
 
-            removeList.Add(collisionObject);
             dynamicsWorld.RemoveCollisionObject(collisionObject);
+            collisionObjects.Remove(collisionObject);
+            collisionObject.Dispose();
         }
 
         public static void Update()
@@ -197,6 +220,8 @@ namespace RetroEngine
             RigidBody.SetDamping(0.1f, 0.1f);
             RigidBody.Restitution = 0.5f;
 
+            collisionObjects.Add(RigidBody);
+
             return RigidBody;
         }
 
@@ -224,6 +249,8 @@ namespace RetroEngine
             RigidBody.Friction = 1f;
             RigidBody.SetDamping(0.1f, 0.1f);
             RigidBody.Restitution = 0.1f;
+
+            collisionObjects.Add(RigidBody);
 
             return RigidBody;
         }
@@ -266,6 +293,8 @@ namespace RetroEngine
             RigidBody.SetDamping(0.1f, 0.1f);
             RigidBody.Restitution = 0.1f;
 
+            collisionObjects.Add(RigidBody);
+
             return RigidBody;
         }
 
@@ -296,6 +325,8 @@ namespace RetroEngine
             
 
             Matrix4x4 fixedRotation = Matrix4x4.Identity;
+
+            collisionObjects.Add(RigidBody);
 
             return RigidBody;
         }

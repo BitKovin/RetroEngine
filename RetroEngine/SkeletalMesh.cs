@@ -94,6 +94,8 @@ namespace RetroEngine
         {
             if (RiggedModel == null) return;
 
+            if (pose == null) return;
+
             foreach(string key in pose.Keys)
             {
                 if (namesToBones.ContainsKey(key) == false) continue;
@@ -370,6 +372,17 @@ namespace RetroEngine
 
             isRendered = inFrustrum && !occluded || Viewmodel;
         }
+
+        public override void Destroyed()
+        {
+
+            if (RiggedModel == null) return;
+            namesToBones = null;
+            RiggedModel.Destroy();
+            RiggedModel = null;
+
+        }
+
     }
 }
 

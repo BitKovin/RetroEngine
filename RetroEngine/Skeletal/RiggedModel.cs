@@ -98,6 +98,7 @@ namespace RetroEngine.Skeletal
 
         #region methods
 
+
         /// <summary>
         /// Instantiates the model object and the boneShaderFinalMatrix array setting them all to identity.
         /// </summary>
@@ -108,6 +109,17 @@ namespace RetroEngine.Skeletal
             {
                 globalShaderMatrixs[i] = Matrix.Identity;
             }
+        }
+
+        ~RiggedModel()
+        {
+            flatListToAllNodes = null;
+            flatListToBoneNodes = null;
+            rootNodeOfTree = null;
+            firstRealBoneInTree = null;
+            globalShaderMatrixs = null;
+            meshes = null;
+            originalAnimations = null;
         }
 
         public void CreateBuffers()
@@ -305,6 +317,27 @@ namespace RetroEngine.Skeletal
             }
         }
 
+        public void Destroy()
+        {
+
+            foreach(RiggedModelNode n in flatListToAllNodes)
+            {
+                if(n == null) continue;
+
+                n.children = null;
+                n.parent = null;
+
+            }
+
+            flatListToAllNodes = null;
+            flatListToBoneNodes = null;
+            rootNodeOfTree = null;
+            firstRealBoneInTree = null;
+            globalShaderMatrixs = null;
+            meshes = null;
+            originalAnimations = null;
+        }
+
         #endregion
 
         #region Region animation stuff
@@ -469,6 +502,7 @@ namespace RetroEngine.Skeletal
                 IndexBuffer = new IndexBuffer(GameMain.Instance.GraphicsDevice, IndexElementSize.ThirtyTwoBits, indices.Count(), BufferUsage.None);
                 IndexBuffer.SetData(indices.ToArray());
                 PrimitiveCount = indices.Length/3;
+                vertices = null;
             }
 
             public void Draw(GraphicsDevice gd)
