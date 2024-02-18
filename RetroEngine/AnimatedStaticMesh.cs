@@ -102,49 +102,50 @@ namespace RetroEngine
             Effect effect = Shader;
             
             AddFrameVertexData();
-
-            if (frameStaticMeshData.model is not null)
-            {
-                if (model.Meshes == null) return;
-                for (int j = 0; j < model.Meshes.Count; j++)
+            
+                if (frameStaticMeshData.model is not null)
                 {
-                    if(model.Meshes[j].MeshParts == null) continue;
-
-                    for (int i = 0; i < model.Meshes[j].MeshParts.Count; i++)
+                    if (frameStaticMeshData.model.Meshes == null) return;
+                    for (int j = 0; j < frameStaticMeshData.model.Meshes.Count; j++)
                     {
-                        ModelMeshPart meshPart1 = frameStaticMeshData.model.Meshes[j].MeshParts[i];
-                        ModelMeshPart meshPart2 = frameStaticMeshData.model2.Meshes[j].MeshParts[i];
-                        
-                        VertexBuffer result = CreateVertexBufferIfNeeded($"m_{j}_p_{i}", meshPart1.VertexBuffer, graphicsDevice);
-                        
-                        LerpVertexBuffers(graphicsDevice,result,meshPart1.VertexBuffer, meshPart2.VertexBuffer, finalAnimationTime / frameTime - (float)Math.Truncate((double)(finalAnimationTime / frameTime)));
-                        
-                        // Set the vertex buffer and index buffer for this mesh part
-                        graphicsDevice.SetVertexBuffer(result);
-                        graphicsDevice.Indices = meshPart1.IndexBuffer;
+                        if (model.Meshes[j].MeshParts == null) continue;
 
-
-                        MeshPartData meshPartData = meshPart1.Tag as MeshPartData;
-
-                        ApplyShaderParams(effect, meshPartData);
-
-                        if (_disposed) return;
-
-                        Stats.RenderedMehses++;
-
-                        // Draw the primitives using the custom effect
-                        foreach (EffectPass pass in effect.CurrentTechnique.Passes)
+                        for (int i = 0; i < frameStaticMeshData.model.Meshes[j].MeshParts.Count; i++)
                         {
-                            pass.Apply();
-                            graphicsDevice.DrawIndexedPrimitives(
-                                PrimitiveType.TriangleList,
-                                meshPart1.VertexOffset,
-                                meshPart1.StartIndex,
-                                meshPart1.PrimitiveCount);
+                            ModelMeshPart meshPart1 = frameStaticMeshData.model.Meshes[j].MeshParts[i];
+                            ModelMeshPart meshPart2 = frameStaticMeshData.model2.Meshes[j].MeshParts[i];
+
+                            VertexBuffer result = CreateVertexBufferIfNeeded($"m_{j}_p_{i}", meshPart1.VertexBuffer, graphicsDevice);
+
+                            LerpVertexBuffers(graphicsDevice, result, meshPart1.VertexBuffer, meshPart2.VertexBuffer, finalAnimationTime / frameTime - (float)Math.Truncate((double)(finalAnimationTime / frameTime)));
+
+                            // Set the vertex buffer and index buffer for this mesh part
+                            graphicsDevice.SetVertexBuffer(result);
+                            graphicsDevice.Indices = meshPart1.IndexBuffer;
+
+
+                            MeshPartData meshPartData = meshPart1.Tag as MeshPartData;
+
+                            ApplyShaderParams(effect, meshPartData);
+
+                            if (_disposed) return;
+
+                            Stats.RenderedMehses++;
+
+                            // Draw the primitives using the custom effect
+                            foreach (EffectPass pass in effect.CurrentTechnique.Passes)
+                            {
+                                pass.Apply();
+                                graphicsDevice.DrawIndexedPrimitives(
+                                    PrimitiveType.TriangleList,
+                                    meshPart1.VertexOffset,
+                                    meshPart1.StartIndex,
+                                    meshPart1.PrimitiveCount);
+                            }
                         }
                     }
                 }
-            }
+            
         }
 
         public override void DrawPathes()
