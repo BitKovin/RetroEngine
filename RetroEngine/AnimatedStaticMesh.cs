@@ -108,7 +108,7 @@ namespace RetroEngine
                     if (frameStaticMeshData.model.Meshes == null) return;
                     for (int j = 0; j < frameStaticMeshData.model.Meshes.Count; j++)
                     {
-                        if (model.Meshes[j].MeshParts == null) continue;
+                        if (frameStaticMeshData.model.Meshes[j].MeshParts == null) continue;
 
                         for (int i = 0; i < frameStaticMeshData.model.Meshes[j].MeshParts.Count; i++)
                         {

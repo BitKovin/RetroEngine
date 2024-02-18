@@ -1,8 +1,10 @@
-﻿using Microsoft.Xna.Framework;
+﻿using BulletSharp.SoftBody;
+using Microsoft.Xna.Framework;
 using RetroEngine.Entities.Navigaion;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -100,9 +102,19 @@ namespace RetroEngine
 
         public static void Update()
         {
-            
-            if(UpdateTask == null)
-                UpdateTask = Task.Factory.StartNew(() => { UpdateCycle(); });
+
+            if (UpdateTask == null)
+            {
+                    UpdateTask = Task.Factory.StartNew(() => { UpdateCycle(); });
+            }
+            else
+            {
+                if (UpdateTask.IsCompleted || UpdateTask.IsFaulted)
+                {
+                    UpdateTask = Task.Factory.StartNew(() => { UpdateCycle(); });
+                    Logger.Log("restarting nav task");
+                }
+            }
 
 
 
@@ -110,7 +122,7 @@ namespace RetroEngine
         }
 
 
-        public static List<Vector3> FindPath(Vector3 start, Vector3 target)
+        public static List<Vector3> FindPath(Vector3 start, Vector3 target, PathfindingQuery query = null)
         {
 
             target = Navigation.ProjectToGround(target);
@@ -122,7 +134,7 @@ namespace RetroEngine
             if (startPoint is null)
                 return new List<Vector3>();
 
-            List<Vector3> points = startPoint.GetPathNext(new List<NavPoint>(), target, ref it);
+            List<Vector3> points = startPoint.GetPathNext(new List<NavPoint>(), target, ref it, query);
             List<Vector3> result = new List<Vector3>(points);
 
             for(int i = points.Count -1; i >=0; i--)
@@ -198,6 +210,8 @@ namespace RetroEngine
         Vector3 startLocation;
         Vector3 endLocation;
 
+        internal Delay deathDelay = new Delay();
+
         public void Start(Vector3 start, Vector3 target)
         {
             if (Navigation.pathfindingQueries.Contains(this)) return;
@@ -205,6 +219,8 @@ namespace RetroEngine
 
             startLocation = start;
             endLocation = target;
+
+            deathDelay.AddDelay(3);
 
             Navigation.pathfindingQueries.Add(this);
             return;
@@ -249,7 +265,18 @@ namespace RetroEngine
 
         void Process(Vector3 start, Vector3 target)
         {
-            
+
+            start = Navigation.ProjectToGround(start);
+            target = Navigation.ProjectToGround(target);    
+
+            var hit = Physics.SphereTraceForStatic(start.ToPhysics(), target.ToPhysics(), 0.3f);
+
+            if(hit.HasHit == false)
+            {
+                OnPathFound?.Invoke(new List<Vector3>() { target});
+                return;
+            }
+
             List<Vector3> points;
             points = Navigation.FindPath(start, target);
             OnPathFound?.Invoke(points);

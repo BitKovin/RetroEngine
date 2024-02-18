@@ -14,7 +14,7 @@ namespace RetroEngine.Entities.Navigaion
 
         public List<NavPoint> connected = new List<NavPoint>();
 
-        int MaxDepth = 12;
+        int MaxDepth = 30;
 
         public override void Start()
         {
@@ -49,7 +49,7 @@ namespace RetroEngine.Entities.Navigaion
 
         }
 
-        public List<Vector3> GetPathNext(List<NavPoint> history, Vector3 target, ref int totalItterations)
+        public List<Vector3> GetPathNext(List<NavPoint> history, Vector3 target, ref int totalItterations, PathfindingQuery query = null)
         {
             List<Vector3> output = new List<Vector3>();
 
@@ -57,7 +57,13 @@ namespace RetroEngine.Entities.Navigaion
 
             totalItterations++;
 
-            if (totalItterations > 40)
+            if (query != null)
+            {
+                if (query.deathDelay.Wait() == false)
+                    return new List<Vector3> { target};
+            }
+
+            if (totalItterations > 100)
             {
                 output = PointsToPositions(history);
 
