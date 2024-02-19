@@ -65,6 +65,7 @@ namespace RetroEngine
             collisionConfig.SetConvexConvexMultipointIterations(1,1);
             collisionConfig.SetPlaneConvexMultipointIterations(1,1);
             dispatcher = new CollisionDispatcher(collisionConfig);
+
             // Create a broadphase and a solver
             broadphase = new DbvtBroadphase();
 
@@ -110,6 +111,12 @@ namespace RetroEngine
             collisionObjects.Clear();
             solver.Reset();
             broadphase.NeedCleanup = true;
+            broadphase.Optimize();
+
+            dynamicsWorld.UpdateAabbs();
+            broadphase.PairCache.Dispose();
+
+            Start();
 
         }
 
@@ -153,6 +160,13 @@ namespace RetroEngine
             collisionObject.UserObject = null;
             collisionObject.CollisionShape.Dispose();
             collisionObject.Dispose();
+
+            broadphase.Optimize();
+            broadphase.ResetPool(dispatcher);
+            broadphase.ReleasePairCache = true;
+            broadphase.Optimize();
+
+            dynamicsWorld.UpdateAabbs();
         }
 
         public static void Remove(RigidBody body)
@@ -160,11 +174,23 @@ namespace RetroEngine
             if (body is null) return;
 
             dynamicsWorld.RemoveRigidBody(body);
+            dynamicsWorld.CollisionObjectArray.Remove(body);
             collisionObjects.Remove(body);
+            body.ClearForces();
+
+            broadphase.Optimize();
+            broadphase.ResetPool(dispatcher);
+            broadphase.ReleasePairCache = true;
+            broadphase.Optimize();
+
+
             body.UserObject = null;
             body.MotionState.Dispose();
             body.CollisionShape.Dispose();
+
             body.Dispose();
+
+            dynamicsWorld.UpdateAabbs();
         }
 
         public static void Update()

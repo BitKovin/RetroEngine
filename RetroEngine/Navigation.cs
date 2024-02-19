@@ -82,6 +82,8 @@ namespace RetroEngine
                 foreach (PathfindingQuery query in removeList)
                     pathfindingQueries.Remove(query);
 
+                Thread.Sleep(1);
+
                 ProcessingPathfinding = false;
 
             }

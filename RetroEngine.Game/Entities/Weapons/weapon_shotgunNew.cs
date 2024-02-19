@@ -42,7 +42,7 @@ namespace RetroEngine.Game.Entities.Weapons
         {
             base.Update();
 
-            mesh.Update(Time.deltaTime*1.2f);
+            mesh.Update(Time.deltaTime);
 
             if (Input.GetAction("attack").Holding())
                 Shoot();

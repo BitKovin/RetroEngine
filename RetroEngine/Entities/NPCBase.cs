@@ -18,7 +18,7 @@ namespace RetroEngine.Entities
 
         SkeletalMesh mesh2 = new SkeletalMesh();
 
-        float speed = 3f;
+        float speed = 5f;
 
         static Delay updateDelay = new Delay();
 
@@ -140,7 +140,7 @@ namespace RetroEngine.Entities
         {
             body.Activate();
 
-            body.LinearVelocity = new System.Numerics.Vector3(MoveDirection.X * speed, 0, MoveDirection.Z * speed);
+            body.LinearVelocity = new System.Numerics.Vector3(MoveDirection.X * speed, body.LinearVelocity.Y, MoveDirection.Z * speed);
 
             MoveDirection = Vector3.Lerp(MoveDirection, DesiredMoveDirection, Time.deltaTime);
 
