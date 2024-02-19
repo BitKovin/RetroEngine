@@ -1,4 +1,5 @@
 ﻿using BulletSharp;
+using RetroEngine.Map;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,8 @@ namespace RetroEngine.Entities
         CollisionCallback collisionCallback = new CollisionCallback();
 
         string collideToTag = "player";
+
+        string target = "";
 
         List<Entity> entities = new List<Entity>();
 
@@ -33,12 +36,21 @@ namespace RetroEngine.Entities
 
         private void TriggerEntered(BulletSharp.CollisionObjectWrapper thisObject, BulletSharp.CollisionObjectWrapper collidedObject, Entity collidedEntity, BulletSharp.ManifoldPoint contactPoint)
         {
+
             if (collidedEntity is null) return;
 
             if (collidedEntity.Tags.Contains(collideToTag))
             {
                 entities.Add(collidedEntity);
             }
+
+        }
+
+        public override void FromData(EntityData data)
+        {
+            base.FromData(data);
+
+            target = data.GetPropertyString("targetname");
 
         }
 
@@ -62,7 +74,6 @@ namespace RetroEngine.Entities
                     OnTriggerEnter(entity);
 
             }
-
         }
 
         public virtual void OnTriggerEnter(Entity entity)

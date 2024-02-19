@@ -84,7 +84,7 @@ namespace RetroEngine
 
             foreach(var bone in RiggedModel.flatListToAllNodes)
             {
-                boneNamesToTransforms.TryAdd(bone.name, bone.LocalTransformMg);
+                boneNamesToTransforms.TryAdd(bone.name, bone.CombinedTransformMg);
             }
 
             return boneNamesToTransforms;
@@ -107,12 +107,12 @@ namespace RetroEngine
                     if (pose.ContainsKey(key) == false) continue;
                     node.LocalTransformMg = pose[key];
 
-                    //RiggedModel.globalShaderMatrixs[node.boneShaderFinalTransformIndex] = node.OffsetMatrixMg *  pose[key];
+                    RiggedModel.globalShaderMatrixs[node.boneShaderFinalTransformIndex] = node.OffsetMatrixMg *  pose[key];
                 }
 
 
             }
-            RiggedModel.UpdatePose();
+            //RiggedModel.UpdatePose();
 
         }
 

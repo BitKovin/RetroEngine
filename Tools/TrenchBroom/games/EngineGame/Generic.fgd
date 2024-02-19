@@ -10,20 +10,27 @@
 	directLightBrightness(float) : "Direct Light Brightness": "0.7"
 ]
 
+@BaseClass = Entity 
+[ 
+	targetname(string) : "targetname" : ""
+]
+
 @baseclass size(-16 -16 -24, 16 16 32) color(0 255 0) = PlayerClass []
 
-@PointClass base(PlayerClass) = info_player_start : "Player 1 start" 
+@PointClass base(PlayerClass, Entity) = info_player_start : "Player 1 start" 
 [
 	angle(float) : "Angle" : "0"
 ]
 
-@baseclass size(-16 -16 -16, 16 16 16) color(255 255 0) = PointEntity []
+@baseclass base(Entity) size(-16 -16 -16, 16 16 16) color(255 255 0) = PointEntity 
+[
+]
 
-@PointClass base(PointEntity) = ent_cat_point : "Cat" []
+@PointClass base(PointEntity) color(255 51 204) = ent_cat_point : "Cat" []
 
 @SolidClass = trigger : "Trigger"
 [
-	targetTag(string) : "Target Tag" : ""
+	target(string) : "Target Tag" : ""
 ]
 
 @baseclass size(-8 -8 -8, 8 8 48) color(70 70 255) = NavPoint []

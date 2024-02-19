@@ -209,12 +209,14 @@ float3 ApplyNormalTexture(float3 sampledNormalColor, float3 worldNormal, float3 
         sampledNormalColor = float3(0.5, 0.5, 1);
     
     
-    sampledNormalColor *= float3(1, 1, 0.8f);
+    sampledNormalColor *= float3(1, 1, 1);
     
+    worldNormal = normalize(worldNormal);
+    worldTangent = normalize(worldTangent);
 
     float3 normalMapSample = sampledNormalColor * 2.0 - 1.0;
     
-    normalMapSample *= 10;
+    normalMapSample *= 1;
     
     // Create the tangent space matrix as before
         float3 bitangent = cross(worldNormal, worldTangent);

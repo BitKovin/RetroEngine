@@ -534,7 +534,7 @@ namespace RetroEngine.Skeletal
                 // maybe its multi colored or something ill have to read up on this ...  not sure this is the right way to do it ?
                 //  This will have to be made from scratch need v4 to mg and other stuff
                 //
-                if (mesh.HasVertexColors(0))
+                if (mesh.HasVertexColors(0) && false)
                 {
                     var cchan0 = mesh.VertexColorChannels[0];
                     for (int k = 0; k < cchan0.Count; k++)

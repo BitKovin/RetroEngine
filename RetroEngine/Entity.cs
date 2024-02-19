@@ -66,6 +66,7 @@ namespace RetroEngine
         public virtual void FromData(EntityData data)
         {
             Layer = (int)data.GetPropertyFloat("_tb_layer");
+            name = data.GetPropertyString("name");
         }
 
         public virtual void AsyncUpdate()
@@ -107,7 +108,6 @@ namespace RetroEngine
             }
 
             meshes.Clear();
-            meshes = null;
 
             GameMain.Instance.curentLevel.entities.Remove(this);
             Dispose();

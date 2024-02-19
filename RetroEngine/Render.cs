@@ -271,7 +271,11 @@ namespace RetroEngine
             {
                 if (mesh.Transperent || onlyTransperent == false)
                 {
-                    mesh.DrawUnified();
+                    try
+                    {
+                        mesh.DrawUnified();
+
+                    } catch(Exception e) { }
                 }
             }
 
