@@ -36,7 +36,7 @@ namespace RetroEngine.Entities
 
         PathfindingQuery pathfindingQuery = new PathfindingQuery();
 
-
+        SoundPlayer deathSoundPlayer;
         public override void Start()
         {
             base.Start();
@@ -47,6 +47,7 @@ namespace RetroEngine.Entities
 
             bodies.Add(body);
 
+            deathSoundPlayer = (SoundPlayer)Level.GetCurrent().AddEntity(new SoundPlayer());
 
             //npcList.Add(this);
 
@@ -105,7 +106,8 @@ namespace RetroEngine.Entities
 
             sm.Scale =new Vector3(0.7f);
 
-
+            deathSoundPlayer.SetSound(AssetRegistry.LoadSoundFromFile("sounds/mew.wav"));
+            deathSoundPlayer.Volume = 1f;
         }
 
         public override void Update()
@@ -119,7 +121,7 @@ namespace RetroEngine.Entities
 
             targetLocation = Camera.position;
 
-                
+            
         }
 
         public override void OnDamaged(float damage, Entity causer = null, Entity weapon = null)
@@ -127,6 +129,10 @@ namespace RetroEngine.Entities
             base.OnDamaged(damage, causer, weapon);
 
             Destroy();
+
+            deathSoundPlayer.Position = Position;
+            deathSoundPlayer.Play();
+            deathSoundPlayer.Destroy(2);
 
         }
 

@@ -14,6 +14,9 @@ namespace RetroEngine
 {
     public class Entity : IDisposable
     {
+
+        public bool Static = false;
+
         public Vector3 Position;
 
         public Vector3 Rotation;

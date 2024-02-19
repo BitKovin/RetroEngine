@@ -11,7 +11,10 @@ namespace RetroEngine.Entities
     [LevelObject("worldspawn")]
     public class WorldSpawn : Entity
     {
-        public WorldSpawn() {  }
+        public WorldSpawn() 
+        {
+            Static = true;
+        }
 
         List<string> visibleLayers = new List<string>();
 

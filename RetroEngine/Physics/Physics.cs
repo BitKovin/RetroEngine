@@ -77,15 +77,16 @@ namespace RetroEngine
             dynamicsWorld.DispatchInfo.UseContinuous = true;
 
 
-            staticWorld = new DiscreteDynamicsWorld(new CollisionDispatcher(collisionConfig), new DbvtBroadphase(), new SequentialImpulseConstraintSolver(), collisionConfig);
-            staticWorld.Gravity = new Vector3(0, -9.81f, 0); // Set gravity
-
+            staticWorld = new DiscreteDynamicsWorld(new CollisionDispatcher(new DefaultCollisionConfiguration()), new DbvtBroadphase(), new SequentialImpulseConstraintSolver(), new DefaultCollisionConfiguration());
             staticBodies.Clear();
 
         }
 
         public static void ResetWorld()
         {
+
+            
+
             foreach(RigidBody body in staticBodies)
             {
                 staticWorld.RemoveCollisionObject(body);
@@ -323,7 +324,7 @@ namespace RetroEngine
             RigidBody.UserObject = entity;
 
             dynamicsWorld.AddRigidBody(RigidBody);
-            if(collisionFlags == CollisionFlags.StaticObject) 
+            if(collisionFlags == CollisionFlags.StaticObject && entity.Static) 
             {
 
                 var staticBody = new RetroEngine.StaticRigidBody(boxRigidBodyInfo);
