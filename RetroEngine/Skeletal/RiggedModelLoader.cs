@@ -147,6 +147,8 @@ namespace RetroEngine.Skeletal
                                             | PostProcessSteps.ImproveCacheLocality
                                             | PostProcessSteps.FlipUVs
                                             | PostProcessSteps.FixInFacingNormals
+                                            | PostProcessSteps.OptimizeMeshes
+                                            
                                             //| PostProcessSteps.GlobalScale
                                             //| PostProcessSteps.RemoveRedundantMaterials // sketchy
                                             //| PostProcessSteps.PreTransformVertices
