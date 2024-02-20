@@ -648,7 +648,7 @@ namespace RetroEngine
             }
             else
             {
-                scene = importer.ImportFile(filePath, Assimp.PostProcessSteps.MakeLeftHanded | Assimp.PostProcessSteps.FlipUVs | Assimp.PostProcessSteps.CalculateTangentSpace);
+                scene = importer.ImportFile(filePath, Assimp.PostProcessSteps.MakeLeftHanded | Assimp.PostProcessSteps.FlipUVs | Assimp.PostProcessSteps.CalculateTangentSpace | Assimp.PostProcessSteps.Triangulate |Assimp.PostProcessSteps.FindDegenerates);
                 //loadedScenes.Add(filePath, scene);
             }
 
@@ -673,9 +673,7 @@ namespace RetroEngine
             foreach (var mesh in scene.Meshes)
             {
 
-                var vertices = new VertexData[mesh.VertexCount];
-                var indices = new int[mesh.FaceCount * 3];
-                int vertexIndex = 0;
+                
 
                 if(mesh.Name.Contains("op_"))
                 {
@@ -685,48 +683,64 @@ namespace RetroEngine
                     points.Add(name, new Vector3(-mesh.Vertices[0].X, mesh.Vertices[0].Y, mesh.Vertices[0].Z));
                 }
 
+                var vertices = new List<VertexData>();
+                var indices = new List<int>();
+
+
                 foreach (var face in mesh.Faces)
                 {
-                    if (face.Indices.Count != 3) continue;
-
-                    for (int i = 0; i < 3; i++)
+                    if (face.IndexCount < 3)
                     {
-                        var vertex = mesh.Vertices[face.Indices[i]];
-                        var normal = mesh.Normals[face.Indices[i]];
-                        var tangent = mesh.Tangents[face.Indices[i]];
-                        var textureCoord = mesh.HasTextureCoords(0) ? mesh.TextureCoordinateChannels[0][face.Indices[i]] : new Assimp.Vector3D(0, 0, 0);
-
-                        // Negate the x-coordinate to correct mirroring
-                        vertices[vertexIndex] = new VertexData
-                        {
-                            Position = new Vector3(-vertex.X, vertex.Y, vertex.Z),
-                            Normal = new Vector3(-normal.X, normal.Y, normal.Z),
-                            TextureCoordinate = new Vector2(textureCoord.X, textureCoord.Y),
-                            Tangent = new Vector3(-tangent.X, tangent.Y, tangent.Z)
-                        };
-
-                        indices[vertexIndex] = vertexIndex;
-                        vertexIndex++;
+                        // Skip faces with fewer than 3 vertices (not a triangle)
+                        continue;
                     }
+
+                    // Iterate through the face and create triangles
+                    for (int i = 1; i < face.IndexCount - 1; i++)
+                    {
+                        indices.Add(face.Indices[0]);
+                        indices.Add(face.Indices[i]);
+                        indices.Add(face.Indices[i + 1]);
+                    }
+                }
+
+                for (int i = 0; i < mesh.VertexCount; i++)
+                {
+                    var vertex = mesh.Vertices[i];
+                    var normal = mesh.Normals[i];
+                    var tangent = mesh.Tangents[i];
+
+                    
+
+                    var textureCoord = mesh.HasTextureCoords(0) ? mesh.TextureCoordinateChannels[0][i] : new Assimp.Vector3D(0, 0, 0);
+
+                    // Negate the x-coordinate to correct mirroring
+                    vertices.Add(new VertexData
+                    {
+                        Position = new Vector3(-vertex.X, vertex.Y , vertex.Z), // Negate x-coordinate
+                        Normal = new Vector3(-normal.X, normal.Y, normal.Z),
+                        TextureCoordinate = new Vector2(textureCoord.X, textureCoord.Y),
+                        Tangent = new Vector3(-tangent.X, tangent.Y, tangent.Z)
+                    });
                 }
 
 
                 VertexBuffer vertexBuffer;
 
-                vertexBuffer = new VertexBuffer(graphicsDevice, typeof(VertexData), vertices.Length, BufferUsage.None);
+                vertexBuffer = new VertexBuffer(graphicsDevice, typeof(VertexData), vertices.Count, BufferUsage.None);
                 
-                vertexBuffer.SetData(vertices);
-                var indexBuffer = new IndexBuffer(graphicsDevice, IndexElementSize.ThirtyTwoBits, indices.Length, BufferUsage.None);
-                indexBuffer.SetData(indices);
+                vertexBuffer.SetData(vertices.ToArray());
+                var indexBuffer = new IndexBuffer(graphicsDevice, IndexElementSize.ThirtyTwoBits, indices.Count, BufferUsage.None);
+                indexBuffer.SetData(indices.ToArray());
 
                 int numFaces = mesh.FaceCount;
                 int primitiveCount = numFaces * 3;  // Each face is a triangle with 3 vertices
 
 
-                boundingSphere = CalculateBoundingSphere(vertices);
+                boundingSphere = CalculateBoundingSphere(vertices.ToArray());
 
 
-                meshParts.Add(new ModelMeshPart { VertexBuffer = vertexBuffer, IndexBuffer = indexBuffer, StartIndex = 0, NumVertices = indices.Length, PrimitiveCount = primitiveCount, Tag= new MeshPartData {textureName = Path.GetFileName(scene.Materials[mesh.MaterialIndex].TextureDiffuse.FilePath), Points = points, Vertices = dynamicBuffer? vertices : null} });
+                meshParts.Add(new ModelMeshPart { VertexBuffer = vertexBuffer, IndexBuffer = indexBuffer, StartIndex = 0, NumVertices = indices.Count, PrimitiveCount = primitiveCount, Tag= new MeshPartData {textureName = Path.GetFileName(scene.Materials[mesh.MaterialIndex].TextureDiffuse.FilePath), Points = points, Vertices = dynamicBuffer? vertices.ToArray() : null} });
             }
 
 

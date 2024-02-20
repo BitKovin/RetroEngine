@@ -75,10 +75,9 @@ namespace RetroEngine.Game.Entities.Player
 
         void LoadWorldCrosshair()
         {
-            crosshairMesh.LoadFromFile("models/particle.obj");
+            crosshairMesh.LoadFromFile("models/ui/crosshair.obj");
             crosshairMesh.Shader = AssetRegistry.GetShaderFromName("unlit");
-            crosshairMesh.texture = AssetRegistry.LoadTextureFromFile("ui/crosshair.png");
-            crosshairMesh.Transperent = true;
+            crosshairMesh.texture = AssetRegistry.LoadTextureFromFile("engine/textures/white.png");
             player.meshes.Add(crosshairMesh);
         }
 
@@ -89,7 +88,7 @@ namespace RetroEngine.Game.Entities.Player
 
             var hit = Physics.LineTrace(cameraPosWithOffset.ToPhysics(), (cameraPosWithOffset + Camera.rotation.GetForwardVector() * 100).ToPhysics(), new List<CollisionObject>() {player.body });
 
-            Vector3 crosshairPos = cameraPosWithOffset + Camera.rotation.GetForwardVector() * 60;
+            Vector3 crosshairPos = cameraPosWithOffset + Camera.rotation.GetForwardVector() * 100;
 
             if (hit.HasHit)
             {
@@ -97,7 +96,7 @@ namespace RetroEngine.Game.Entities.Player
             }
 
             float scale = MathHelper.Lerp(Vector3.Distance(crosshairPos, Camera.position)/10,1,0.5f);
-            scale *= 0.2f;
+            scale *= 0.1f;
 
             crosshairMesh.Position = Vector3.Lerp(crosshairPos,Camera.position,0.5f);
             crosshairMesh.Rotation = MathHelper.FindLookAtRotation(Camera.rotation.GetForwardVector(),Vector3.Zero);
