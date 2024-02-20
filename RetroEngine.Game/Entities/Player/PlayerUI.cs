@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using BulletSharp;
+using Microsoft.Xna.Framework;
 using RetroEngine.UI;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,10 @@ namespace RetroEngine.Game.Entities.Player
 
         bool loaded = false;
 
+        StaticMesh crosshairMesh = new StaticMesh();
+
+        public Vector3 crosshairOffset = new Vector3(0.05f,-0.1f,0);
+
         public void Load()
         {
             crosshair.baseColor = new Color(1f, 1f, 1f) * 2f;
@@ -30,7 +35,7 @@ namespace RetroEngine.Game.Entities.Player
             crosshair.originV = Origin.CenterV;
             crosshair.size = new Vector2(4, 4);
             crosshair.position = -crosshair.size/2;
-            UiElement.Viewport.childs.Add(crosshair);
+            //UiElement.Viewport.childs.Add(crosshair);
 
             health.originH = Origin.Left;
             health.originV = Origin.Bottom;
@@ -46,6 +51,8 @@ namespace RetroEngine.Game.Entities.Player
             fps.AlignProgress = new Vector2(0.0f, 0.5f);
             UiElement.Viewport.childs.Add(fps);
 
+            LoadWorldCrosshair();
+
             loaded = true;
         }
 
@@ -57,11 +64,44 @@ namespace RetroEngine.Game.Entities.Player
 
             fps.text = ((int)(1f / Time.deltaTime)).ToString();
 
+            UpdateWorldCrosshair();
+
         }
 
         public void Destroy()
         {
 
+        }
+
+        void LoadWorldCrosshair()
+        {
+            crosshairMesh.LoadFromFile("models/particle.obj");
+            crosshairMesh.Shader = AssetRegistry.GetShaderFromName("unlit");
+            crosshairMesh.texture = AssetRegistry.LoadTextureFromFile("ui/crosshair.png");
+            crosshairMesh.Transperent = true;
+            player.meshes.Add(crosshairMesh);
+        }
+
+        void UpdateWorldCrosshair()
+        {
+
+            Vector3 cameraPosWithOffset = Camera.position + Camera.rotation.GetUpVector() * crosshairOffset.Y + Camera.rotation.GetRightVector() * crosshairOffset.X + Camera.rotation.GetForwardVector() * crosshairOffset.Z;
+
+            var hit = Physics.LineTrace(cameraPosWithOffset.ToPhysics(), (cameraPosWithOffset + Camera.rotation.GetForwardVector() * 100).ToPhysics(), new List<CollisionObject>() {player.body });
+
+            Vector3 crosshairPos = cameraPosWithOffset + Camera.rotation.GetForwardVector() * 60;
+
+            if (hit.HasHit)
+            {
+                crosshairPos = hit.HitPointWorld;
+            }
+
+            float scale = MathHelper.Lerp(Vector3.Distance(crosshairPos, Camera.position)/10,1,0.5f);
+            scale *= 0.2f;
+
+            crosshairMesh.Position = Vector3.Lerp(crosshairPos,Camera.position,0.5f);
+            crosshairMesh.Rotation = MathHelper.FindLookAtRotation(Camera.rotation.GetForwardVector(),Vector3.Zero);
+            crosshairMesh.Scale = new Vector3(scale);
         }
 
     }
