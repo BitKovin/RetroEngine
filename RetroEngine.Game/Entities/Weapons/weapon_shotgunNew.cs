@@ -86,6 +86,12 @@ namespace RetroEngine.Game.Entities.Weapons
             for (float y = -3; y <= 3; y += 2f)
                 for (float x = -3; x <= 3; x += 2f)
                 {
+
+                    Vector2 v = new Vector2(x, y);
+
+                    if (v.Length() > 4)
+                        continue;
+
                     Bullet bullet = new Bullet();
 
                     bullet.ignore.Add(player);
@@ -104,7 +110,7 @@ namespace RetroEngine.Game.Entities.Weapons
                     Level.GetCurrent().AddEntity(bullet);
 
 
-                    bullet.Position = (Camera.position.ToPhysics() + Camera.rotation.GetForwardVector().ToPhysics() * 0.5f + Camera.rotation.GetRightVector().ToPhysics() / 10f - Camera.rotation.GetUpVector().ToPhysics() / 4f);
+                    bullet.Position = (Camera.position.ToPhysics() + Camera.rotation.GetForwardVector().ToPhysics() * 0.2f + Camera.rotation.GetRightVector().ToPhysics() / 10f - Camera.rotation.GetUpVector().ToPhysics() / 4f);
 
                     bullet.Start();
                     bullet.Speed = 100;
