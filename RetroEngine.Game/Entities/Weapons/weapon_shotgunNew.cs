@@ -105,7 +105,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
                     bullet.Rotation = bulletRotation;
 
-                    bullet.LifeTime = 0.2f;
+                    bullet.LifeTime = 0.4f;
 
                     Level.GetCurrent().AddEntity(bullet);
 

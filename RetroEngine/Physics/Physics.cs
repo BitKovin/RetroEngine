@@ -161,10 +161,6 @@ namespace RetroEngine
             collisionObject.CollisionShape.Dispose();
             collisionObject.Dispose();
 
-            broadphase.Optimize();
-            broadphase.ResetPool(dispatcher);
-            broadphase.ReleasePairCache = true;
-            broadphase.Optimize();
 
             dynamicsWorld.UpdateAabbs();
         }
@@ -178,11 +174,6 @@ namespace RetroEngine
             collisionObjects.Remove(body);
             body.ClearForces();
 
-            broadphase.Optimize();
-            broadphase.ResetPool(dispatcher);
-            broadphase.ReleasePairCache = true;
-            broadphase.Optimize();
-
 
             body.UserObject = null;
             body.MotionState.Dispose();
@@ -190,7 +181,6 @@ namespace RetroEngine
 
             body.Dispose();
 
-            dynamicsWorld.UpdateAabbs();
         }
 
         public static void Update()

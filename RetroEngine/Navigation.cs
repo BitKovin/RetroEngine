@@ -50,7 +50,7 @@ namespace RetroEngine
 
                 if (waitingToFinish)
                 {
-                    Thread.Sleep(1);
+                    Thread.Sleep(2);
                     waitingToFinish = false;
                     continue;
                 }
@@ -73,11 +73,10 @@ namespace RetroEngine
 
                 List<PathfindingQuery> removeList = new List<PathfindingQuery>();
 
-                Parallel.ForEach(queries, options, item =>
-                {
+                foreach (PathfindingQuery item in queries) { 
                     item?.Execute();
                     removeList.Add(item);
-                });
+                }
 
                 foreach (PathfindingQuery query in removeList)
                     pathfindingQueries.Remove(query);

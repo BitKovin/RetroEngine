@@ -47,6 +47,7 @@ namespace RetroEngine.Entities
 
             bodies.Add(body);
 
+
             deathSoundPlayer = (SoundPlayer)Level.GetCurrent().AddEntity(new SoundPlayer());
 
             //npcList.Add(this);
@@ -98,6 +99,7 @@ namespace RetroEngine.Entities
 
             meshes.Add(mesh);
             meshes.Add(mesh2);
+            mesh2.CastShadows = true;
             //meshes.Add(sm);
 
             mesh.SetInterpolationEnabled(false);

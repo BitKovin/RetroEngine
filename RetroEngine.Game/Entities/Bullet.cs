@@ -43,8 +43,6 @@ namespace RetroEngine.Game.Entities
 
             base.LoadAssets();
 
-            Console.WriteLine("loaded bullet");
-
             mesh.LoadFromFile("models/weapons/bullet/bullet.obj");
 
             mesh.texture = AssetRegistry.LoadTextureFromFile("models/weapons/bullet/bullet.png");
@@ -122,8 +120,6 @@ namespace RetroEngine.Game.Entities
                 RigidBody.Upcast(hit.CollisionObject)?.ApplyCentralImpulse(startRotation.GetForwardVector().ToNumerics() * Damage / 2f);
 
                 ent.OnPointDamage(Damage, hit.HitPointWorld, Rotation.GetForwardVector(), this, this);
-
-                Logger.Log(ent.name);
 
                 Destroy();
             }

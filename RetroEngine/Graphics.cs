@@ -49,7 +49,7 @@ namespace RetroEngine
         public static Matrix GetCloseLightProjection()
         {
 
-            return Matrix.CreateOrthographic(CloseLightDistance, CloseLightDistance, -100, 100);
+            return Matrix.CreateOrthographic(CloseLightDistance, CloseLightDistance, -1000, 1000);
         }
 
         public static Matrix GetLightView()
@@ -60,7 +60,7 @@ namespace RetroEngine
         static Vector3 GetCameraPositionByPixelGrid()
         {
 
-            Vector3 pos = Camera.position + Camera.rotation.GetForwardVector().XZ().Normalized() * LightDistance/5;
+            Vector3 pos = Camera.position + Camera.rotation.GetForwardVector().XZ().Normalized() * LightDistance/3;
 
             //ector3 pos = Camera.position - new Vector3(0, 1, 0);
 

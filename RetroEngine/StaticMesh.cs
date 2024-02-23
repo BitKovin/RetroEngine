@@ -209,7 +209,7 @@ namespace RetroEngine
                 UpdateTextureParamIfNeeded(effect, "NormalTexture", normalTexture);
                 UpdateTextureParamIfNeeded(effect, "ORMTexture", ormTexture);
             }
-            effect.Parameters["EmissionPower"].SetValue(EmissionPower);
+            effect.Parameters["EmissionPower"]?.SetValue(EmissionPower);
         }
 
         public virtual void DrawUnified()

@@ -32,7 +32,7 @@ namespace RetroEngine.Game.Entities.Player
 
         public RigidBody body;
 
-        float maxSpeed = 6;
+        float maxSpeed = 8;
         float maxSpeedAir = 2;
         float acceleration = 90;
         float airAcceleration = 40;
@@ -60,7 +60,7 @@ namespace RetroEngine.Game.Entities.Player
         int currentSlot = -1;
         int lastSlot = -1;
 
-        float bobSpeed = 7;
+        float bobSpeed = 8;
 
         PlayerUI PlayerUI;
 
@@ -372,8 +372,8 @@ namespace RetroEngine.Game.Entities.Player
 
         void Jump()
         {
-            if (jumpDelay.Wait()) return;
-            if (onGround)
+            //if (jumpDelay.Wait()) return;
+            if (onGround||true)
             {
                 body.LinearVelocity = new Vector3(body.LinearVelocity.X, 12, body.LinearVelocity.Z).ToNumerics();
                 jumpDelay.AddDelay(0.1f);

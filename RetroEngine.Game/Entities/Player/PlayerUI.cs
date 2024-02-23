@@ -24,7 +24,7 @@ namespace RetroEngine.Game.Entities.Player
 
         StaticMesh crosshairMesh = new StaticMesh();
 
-        public Vector3 crosshairOffset = new Vector3(0.05f,-0.1f,0);
+        public Vector3 crosshairOffset = new Vector3(0.1f,-0.15f,0);
 
         public void Load()
         {
@@ -95,10 +95,10 @@ namespace RetroEngine.Game.Entities.Player
                 crosshairPos = hit.HitPointWorld;
             }
 
-            float scale = MathHelper.Lerp(Vector3.Distance(crosshairPos, Camera.position)/10,1,0.5f);
-            scale *= 0.1f;
+            float scale = MathHelper.Lerp(Vector3.Distance(crosshairPos, Camera.position)/10,1,0.3f);
+            scale *= 0.03f;
 
-            crosshairMesh.Position = Vector3.Lerp(crosshairPos,Camera.position,0.5f);
+            crosshairMesh.Position = Vector3.Lerp(crosshairPos,Camera.position,0.8f);
             crosshairMesh.Rotation = MathHelper.FindLookAtRotation(Camera.rotation.GetForwardVector(),Vector3.Zero);
             crosshairMesh.Scale = new Vector3(scale);
         }
