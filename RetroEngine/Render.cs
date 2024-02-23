@@ -559,7 +559,7 @@ namespace RetroEngine
                 Graphics.shadowMapResolution,
                 Graphics.shadowMapResolution,
                 false, // No mipmaps
-                SurfaceFormat.HalfSingle, // Color format
+                SurfaceFormat.Single, // Color format
                 depthFormat); // Depth format
         }
 
