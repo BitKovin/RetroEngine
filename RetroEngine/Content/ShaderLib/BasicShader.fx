@@ -438,7 +438,7 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness)
         shadow += 1;
     }
     
-    shadow = saturate(shadow);
+    //shadow = saturate(shadow);
     
     
     

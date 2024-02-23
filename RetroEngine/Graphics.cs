@@ -64,7 +64,6 @@ namespace RetroEngine
 
             Vector3 pos = Camera.position + Camera.rotation.GetForwardVector().XZ().Normalized() * LightDistance/2f * hFactor;
 
-            Console.WriteLine(hFactor);
 
             //ector3 pos = Camera.position - new Vector3(0, 1, 0);
 
