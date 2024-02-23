@@ -188,7 +188,7 @@ namespace RetroEngine
 
             graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 
-            graphics.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
+            graphics.GraphicsDevice.RasterizerState = RasterizerState.CullClockwise;
 
             List<StaticMesh> renderList = level.GetMeshesToRender();
 
@@ -299,7 +299,7 @@ namespace RetroEngine
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, Graphics.shadowMapResolution, Graphics.shadowMapResolution);
 
             // Clear the shadow map with the desired clear color (e.g., Color.White)
-            graphics.GraphicsDevice.Clear(Color.White);
+            graphics.GraphicsDevice.Clear(Color.Transparent);
 
             // Iterate through meshes and draw shadows
             foreach (StaticMesh mesh in renderList)

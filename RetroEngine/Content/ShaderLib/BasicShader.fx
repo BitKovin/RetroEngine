@@ -299,7 +299,10 @@ float3 CalculateSpecular(float roughness, float3 worldPos, float3 normal, float3
 
 float SampleShadowMap(sampler2D shadowMap, float2 coords, float compare)
 {
-    return step(compare, tex2D(shadowMap, coords).r);
+    
+    float4 sample = tex2D(shadowMap, coords);
+    
+    return step(compare, sample.r);
 }
 
 float SampleShadowMapLinear(sampler2D shadowMap, float2 coords, float compare, float2 texelSize)
@@ -323,39 +326,42 @@ float GetShadow(float3 lightCoords, PixelInput input, bool close = false)
 {
     float shadow = 0;
 
-    if (lightCoords.x >= 0 && lightCoords.x <= 1 && lightCoords.y >= 0 && lightCoords.y <= 1)
-    {
-        float currentDepth = lightCoords.z * 2 - 1;
+    if (distance(viewPos, input.MyPosition) > 100)
+        return 0;
+    
+        if (lightCoords.x >= 0 && lightCoords.x <= 1 && lightCoords.y >= 0 && lightCoords.y <= 1)
+        {
+            float currentDepth = lightCoords.z * 2 - 1;
 
-        float resolution = 1;
+            float resolution = 1;
         
 
-        int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)
+            int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)
 
-        float bias = ShadowBias * (1 - saturate(dot(input.Normal, -LightDirection))) + ShadowBias / 2.0f;
-        resolution = ShadowMapResolution;
+            float bias = ShadowBias * (1 - saturate(dot(input.Normal, -LightDirection))) + ShadowBias / 2.0f;
+            resolution = ShadowMapResolution;
             
         
-        float texelSize = 1.0f / resolution; // Assuming ShadowMapSize is the size of your shadow map texture
+            float texelSize = 1.0f / resolution; // Assuming ShadowMapSize is the size of your shadow map texture
         
-        for (int i = -numSamples; i <= numSamples; ++i)
-        {
-            for (int j = -numSamples; j <= numSamples; ++j)
+            for (int i = -numSamples; i <= numSamples; ++i)
             {
-                float2 offsetCoords = lightCoords.xy + float2(i, j) * texelSize;
-                float closestDepth;
-                closestDepth = SampleShadowMapLinear(ShadowMapSampler, offsetCoords, currentDepth - bias, float2(texelSize, texelSize));
+                for (int j = -numSamples; j <= numSamples; ++j)
+                {
+                    float2 offsetCoords = lightCoords.xy + float2(i, j) * texelSize;
+                    float closestDepth;
+                    closestDepth = SampleShadowMapLinear(ShadowMapSampler, offsetCoords, currentDepth - bias, float2(texelSize, texelSize));
 
-                shadow += closestDepth;
+                    shadow += closestDepth;
 
+                }
             }
-        }
 
         // Normalize the accumulated shadow value
-        shadow /= ((2 * numSamples + 1) * (2 * numSamples + 1));
+            shadow /= ((2 * numSamples + 1) * (2 * numSamples + 1));
         
-        return (1 - shadow) * (1 - shadow);
-    }
+            return (1 - shadow) * (1 - shadow);
+        }
     return 0;
     
 }

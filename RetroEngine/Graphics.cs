@@ -15,7 +15,7 @@ namespace RetroEngine
         public static Color BackgroundColor = new Color(0.15f, 0.15f, 0.2f);
         public static Vector3 LightColor = new Vector3(1,1,1);
 
-        public static float ShadowBias = -0.00005f;
+        public static float ShadowBias = 0.001f;
         public static int shadowMapResolution = 2048*2;
         public static int closeShadowMapResolution = 2048;
 
@@ -54,7 +54,7 @@ namespace RetroEngine
 
         public static Matrix GetLightView()
         {
-            return Matrix.CreateLookAt(GetCameraPositionByPixelGrid(), GetCameraPositionByPixelGrid() + LightDirection, MathHelper.FindLookAtRotation(new Vector3(), LightDirection).GetUpVector());
+            return Matrix.CreateLookAt(GetCameraPositionByPixelGrid(), GetCameraPositionByPixelGrid() + LightDirection, new Vector3(0,0,1));
         }
 
         static Vector3 GetCameraPositionByPixelGrid()
@@ -68,7 +68,7 @@ namespace RetroEngine
             //ector3 pos = Camera.position - new Vector3(0, 1, 0);
 
             // Calculate step based on shadow map resolution and light distance
-            float step = 1f/2f;
+            float step = 1f/(shadowMapResolution/LightDistance);
 
             // Adjust the position using the calculated step
             pos *= step;
