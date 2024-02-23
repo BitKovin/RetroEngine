@@ -80,7 +80,7 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 
     float4x4 boneTrans = GetBoneTransforms(input);
     
-    input.Position -= float4(input.Normal * 0.02f,0);
+    input.Position -= float4(input.Normal * -0.03f, 0) + float4(0,0.15,0,0);
     
     // Transform the vertex position to world space
     output.Position = mul(mul(input.Position, boneTrans), World);
@@ -97,9 +97,11 @@ float4 MainPS(VertexShaderOutput input) : SV_TARGET
     // Retrieve the depth value from the depth buffer
     float depthValue = input.myPosition.z;
 
+    
+        
 	//depthValue /= 20;
 
-    return float4(depthValue,0,0,1);
+        return float4(depthValue, 0, 0, 1);
 }
 
 technique NormalColorDrawing

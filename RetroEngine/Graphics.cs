@@ -15,7 +15,7 @@ namespace RetroEngine
         public static Color BackgroundColor = new Color(0.15f, 0.15f, 0.2f);
         public static Vector3 LightColor = new Vector3(1,1,1);
 
-        public static float ShadowBias = 0.00025f;
+        public static float ShadowBias = -0.0001f;
         public static int shadowMapResolution = 2048;
         public static int closeShadowMapResolution = 2048;
 
@@ -43,18 +43,18 @@ namespace RetroEngine
         public static Matrix GetLightProjection()
         {
 
-            return Matrix.CreateOrthographic(LightDistance, LightDistance, -100, 100);
+            return Matrix.CreateOrthographic(LightDistance, LightDistance, -LightDistance, 1000);
         }
 
         public static Matrix GetCloseLightProjection()
         {
 
-            return Matrix.CreateOrthographic(CloseLightDistance, CloseLightDistance, -1000, 1000);
+            return Matrix.CreateOrthographic(CloseLightDistance, CloseLightDistance, -100, 300);
         }
 
         public static Matrix GetLightView()
         {
-            return Matrix.CreateLookAt(GetCameraPositionByPixelGrid() - LightDirection * 20f, GetCameraPositionByPixelGrid(), MathHelper.FindLookAtRotation(new Vector3(), LightDirection).GetUpVector());
+            return Matrix.CreateLookAt(GetCameraPositionByPixelGrid(), GetCameraPositionByPixelGrid() + LightDirection, MathHelper.FindLookAtRotation(new Vector3(), LightDirection).GetUpVector());
         }
 
         static Vector3 GetCameraPositionByPixelGrid()
@@ -62,7 +62,7 @@ namespace RetroEngine
 
             float hFactor = 1f - Math.Abs(Camera.rotation.GetForwardVector().Y);
 
-            Vector3 pos = Camera.position + Camera.rotation.GetForwardVector().XZ().Normalized() * LightDistance/2f * hFactor;
+            Vector3 pos = Camera.position + Camera.rotation.GetForwardVector().XZ().Normalized() * LightDistance/4f * hFactor;
 
 
             //ector3 pos = Camera.position - new Vector3(0, 1, 0);

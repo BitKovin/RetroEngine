@@ -325,14 +325,28 @@ float GetShadow(float3 lightCoords, PixelInput input, bool close = false)
 
     if (lightCoords.x >= 0 && lightCoords.x <= 1 && lightCoords.y >= 0 && lightCoords.y <= 1)
     {
+        
+        float bias = ShadowBias * (1 - saturate(dot(input.Normal, -LightDirection))) + ShadowBias / 2.0f;
+        
         float currentDepth = lightCoords.z * 2 - 1;
+        
+        if (input.MyPixelPosition.z > 20)
+        {
+            return 1 - SampleShadowMap(ShadowMapSampler, lightCoords.xy, currentDepth - bias);
+        }
 
         float resolution = 1;
         
+        int numSamples = 2;
+        
+        if (dot(input.Normal, float3(0,1,0))<0.3)
+            numSamples = 1;
+        
+        if (input.MyPixelPosition.z > 10)
+            numSamples = 1;
+            
+             // Number of samples in each direction (total samples = numSamples^2)
 
-        int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)
-
-        float bias = ShadowBias * (1 - saturate(dot(input.Normal, -LightDirection))) + ShadowBias / 2.0f;
         resolution = ShadowMapResolution;
             
         
@@ -354,7 +368,7 @@ float GetShadow(float3 lightCoords, PixelInput input, bool close = false)
         // Normalize the accumulated shadow value
         shadow /= ((2 * numSamples + 1) * (2 * numSamples + 1));
         
-        return (1 - shadow) * (1 - shadow);
+        return (1 - shadow);
     }
     return 0;
     
