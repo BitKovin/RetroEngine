@@ -60,7 +60,11 @@ namespace RetroEngine
         static Vector3 GetCameraPositionByPixelGrid()
         {
 
-            Vector3 pos = Camera.position + Camera.rotation.GetForwardVector().XZ().Normalized() * LightDistance/3;
+            float hFactor = 1f - Math.Abs(Camera.rotation.GetForwardVector().Y);
+
+            Vector3 pos = Camera.position + Camera.rotation.GetForwardVector().XZ().Normalized() * LightDistance/2f * hFactor;
+
+            Console.WriteLine(hFactor);
 
             //ector3 pos = Camera.position - new Vector3(0, 1, 0);
 
