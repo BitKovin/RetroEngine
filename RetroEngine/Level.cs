@@ -75,7 +75,7 @@ namespace RetroEngine
 
             AssetRegistry.ConstantCache.Clear();
             AssetRegistry.ClearAllTextures();
-            StaticMesh.textures.Clear();
+            //StaticMesh.textures.Clear();
 
             if(force == false)
             {

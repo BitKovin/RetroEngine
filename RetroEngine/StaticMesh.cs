@@ -72,7 +72,7 @@ namespace RetroEngine
 
         public bool Viewmodel = false;
 
-        internal static Dictionary<string, Texture2D> textures = new Dictionary<string, Texture2D>();
+        internal Dictionary<string, Texture2D> textures = new Dictionary<string, Texture2D>();
 
         public bool CastShadows = false;
 
@@ -455,14 +455,14 @@ namespace RetroEngine
                     output = AssetRegistry.LoadTextureFromFile(item + name, false);
                     if (output != null)
                     {
-                        //textures.TryAdd(item + name, output);
+                        textures.TryAdd(item + name, output);
                         return output;
                     }
                 }
                 
             }
 
-            Console.WriteLine($"failed to find texture {name}");
+            //Console.WriteLine($"failed to find texture {name}");
 
             return texture;
             

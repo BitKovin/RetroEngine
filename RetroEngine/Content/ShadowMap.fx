@@ -20,6 +20,8 @@ struct VertexShaderInput
     float4 Position : POSITION0;
     float3 Normal : NORMAL0;
     
+    float3 Tangent : TANGENT0;
+    
     float4 BlendIndices : BLENDINDICES0;
     float4 BlendWeights : BLENDWEIGHT0;
 };
@@ -80,7 +82,9 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 
     float4x4 boneTrans = GetBoneTransforms(input);
     
-    input.Position -= float4(input.Normal * 0.02f, 0) + float4(0, 0.15, 0, 0);
+    float3 normal = GetTangentNormal(input.Normal, input.Tangent);
+    
+    input.Position -= float4(normal * 0.07f, 0) + float4(0, 0.07, 0, 0);
     
     // Transform the vertex position to world space
     output.Position = mul(mul(input.Position, boneTrans), World);
