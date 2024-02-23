@@ -65,6 +65,8 @@ namespace RetroEngine
 
         public Effect fxaaEffect;
 
+        public Effect maxDepth;
+
         public Effect PostProcessingEffect;
 
         public Effect SSAOEffect;
@@ -93,6 +95,7 @@ namespace RetroEngine
 
             ShadowMapEffect = GameMain.content.Load<Effect>("ShadowMap");
             fxaaEffect = GameMain.content.Load<Effect>("fxaa");
+            maxDepth = GameMain.content.Load<Effect>("maxDepth");
             //PostProcessingEffect = GameMain.content.Load<Effect>("PostProcessing");
             //ColorEffect = GameMain.content.Load<Effect>("ColorOutput");
             //ParticleColorEffect = GameMain.content.Load<Effect>("ParticleColorOutput");
@@ -290,7 +293,6 @@ namespace RetroEngine
         void RenderShadowMap(List<StaticMesh> renderList)
         {
 
-            if (shadowPassRenderDelay.Wait()) return;
 
             shadowPassRenderDelay.AddDelay(0.05f);
 
@@ -299,7 +301,22 @@ namespace RetroEngine
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, Graphics.shadowMapResolution, Graphics.shadowMapResolution);
 
             // Clear the shadow map with the desired clear color (e.g., Color.White)
-            graphics.GraphicsDevice.Clear(Color.Transparent);
+            graphics.GraphicsDevice.Clear(Color.Black);
+
+
+            SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
+            spriteBatch.Begin(effect: maxDepth,sortMode: SpriteSortMode.FrontToBack);
+
+            // Draw a full-screen quad to apply the lighting
+            DrawShadowQuad(spriteBatch, black);
+
+            // End the SpriteBatch
+            spriteBatch.End();
+
+
+            graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+
+            graphics.GraphicsDevice.RasterizerState = RasterizerState.CullClockwise;
 
             // Iterate through meshes and draw shadows
             foreach (StaticMesh mesh in renderList)
@@ -541,6 +558,15 @@ namespace RetroEngine
         {
             // Create a rectangle covering the entire screen
             Rectangle screenRectangle = new Rectangle(0, 0, graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height);
+
+            // Draw the full-screen quad using SpriteBatch
+            spriteBatch.Draw(inputTexture, screenRectangle, Color.White);
+        }
+
+        void DrawShadowQuad(SpriteBatch spriteBatch, Texture2D inputTexture)
+        {
+            // Create a rectangle covering the entire screen
+            Rectangle screenRectangle = new Rectangle(0, 0, shadowMap.Width, shadowMap.Height);
 
             // Draw the full-screen quad using SpriteBatch
             spriteBatch.Draw(inputTexture, screenRectangle, Color.White);

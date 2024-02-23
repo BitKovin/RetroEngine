@@ -81,6 +81,12 @@
 /processorParam:DebugMode=Auto
 /build:GPathesOutput.fx
 
+#begin MaxDepth.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:MaxDepth.fx
+
 #begin OcclusionPath.fx
 /importer:EffectImporter
 /processor:EffectProcessor
