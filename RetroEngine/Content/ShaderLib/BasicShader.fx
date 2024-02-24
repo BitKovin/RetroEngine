@@ -122,10 +122,10 @@ float4x4 GetBoneTransforms(VertexInput input)
     
     float sum = input.BlendWeights.x + input.BlendWeights.y + input.BlendWeights.z + input.BlendWeights.w;
     
-    if (sum<0.05f)
+    if (sum < 0.05f)
         return identity;
     
-        float4x4 mbones =
+    float4x4 mbones =
     Bones[input.BlendIndices.x] * (float) input.BlendWeights.x / sum +
     Bones[input.BlendIndices.y] * (float) input.BlendWeights.y / sum +
     Bones[input.BlendIndices.z] * (float) input.BlendWeights.z / sum +
@@ -137,7 +137,7 @@ float4x4 GetBoneTransforms(VertexInput input)
 float3 GetTangentNormal(float3 worldNormal, float3 worldTangent)
 {
     
-    float3 normalMapSample = float3(0,0,1);
+    float3 normalMapSample = float3(0, 0, 1);
     
     
     // Create the tangent space matrix as before
@@ -221,7 +221,7 @@ float3 ApplyNormalTexture(float3 sampledNormalColor, float3 worldNormal, float3 
     normalMapSample *= 1;
     
     // Create the tangent space matrix as before
-        float3 bitangent = cross(worldNormal, worldTangent);
+    float3 bitangent = cross(worldNormal, worldTangent);
     float3x3 tangentToWorld = float3x3(worldTangent, bitangent, worldNormal);
 
     // Transform the normal from tangent space to world space
@@ -277,11 +277,11 @@ PBRData CalculatePBR(float3 normal, float roughness, float metallic, float3 worl
 float3 CalculateSpecular(float roughness, float3 worldPos, float3 normal, float3 lightDir)
 {
     
-    #ifdef NO_SPECULAR
+#ifdef NO_SPECULAR
     
     return float3(0,0,0);
     
-    #endif
+#endif
 
     roughness = clamp(roughness, 0.001f, 1);
     
@@ -331,39 +331,43 @@ float GetShadow(float3 lightCoords, PixelInput input, bool close = false)
     if (distance(viewPos, input.MyPosition) > 100)
         return 0;
     
-        if (lightCoords.x >= 0 && lightCoords.x <= 1 && lightCoords.y >= 0 && lightCoords.y <= 1)
-        {
-            float currentDepth = lightCoords.z * 2 - 1;
+    if (lightCoords.x >= 0 && lightCoords.x <= 1 && lightCoords.y >= 0 && lightCoords.y <= 1)
+    {
+        float currentDepth = lightCoords.z * 2 - 1;
 
-            float resolution = 1;
+        float resolution = 1;
         
 
-            int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)
+        int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)
 
-            float bias = ShadowBias * (1 - saturate(dot(input.Normal, -LightDirection))) + ShadowBias / 2.0f;
-            resolution = ShadowMapResolution;
+        float bias = ShadowBias * (1 - saturate(dot(input.Normal, -LightDirection))) + ShadowBias / 2.0f;
+        resolution = ShadowMapResolution;
             
+        if (distance(viewPos, input.MyPosition) > 30)
+        {
+            return 1 - SampleShadowMap(ShadowMapSampler, lightCoords.xy, currentDepth - bias);
+        }
         
-            float texelSize = 1.0f / resolution; // Assuming ShadowMapSize is the size of your shadow map texture
+        float texelSize = 1.0f / resolution; // Assuming ShadowMapSize is the size of your shadow map texture
         
-            for (int i = -numSamples; i <= numSamples; ++i)
+        for (int i = -numSamples; i <= numSamples; ++i)
+        {
+            for (int j = -numSamples; j <= numSamples; ++j)
             {
-                for (int j = -numSamples; j <= numSamples; ++j)
-                {
-                    float2 offsetCoords = lightCoords.xy + float2(i, j) * texelSize;
-                    float closestDepth;
-                    closestDepth = SampleShadowMapLinear(ShadowMapSampler, offsetCoords, currentDepth - bias, float2(texelSize, texelSize));
+                float2 offsetCoords = lightCoords.xy + float2(i, j) * texelSize;
+                float closestDepth;
+                closestDepth = SampleShadowMapLinear(ShadowMapSampler, offsetCoords, currentDepth - bias, float2(texelSize, texelSize));
 
-                    shadow += closestDepth;
+                shadow += closestDepth;
 
-                }
             }
+        }
 
         // Normalize the accumulated shadow value
-            shadow /= ((2 * numSamples + 1) * (2 * numSamples + 1));
+        shadow /= ((2 * numSamples + 1) * (2 * numSamples + 1));
         
-            return (1 - shadow) * (1 - shadow);
-        }
+        return (1 - shadow) * (1 - shadow);
+    }
     return 0;
     
 }
@@ -392,11 +396,11 @@ float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal)
 float3 CalculatePointLightSpeculars(int i, PixelInput pixelInput, float3 normal, float roughness)
 {
     
-    #ifdef NO_SPECULAR
+#ifdef NO_SPECULAR
     
     return float3(0,0,0);
     
-    #endif
+#endif
 
     float3 lightVector = LightPositions[i] - pixelInput.MyPosition;
     float distanceToLight = length(lightVector);
@@ -408,8 +412,8 @@ float3 CalculatePointLightSpeculars(int i, PixelInput pixelInput, float3 normal,
         dirToSurface = normal;
     
     if (Viewmodel == false)
-    if (dot(dirToSurface, pixelInput.Normal) < 0)
-        return float3(0, 0, 0);
+        if (dot(dirToSurface, pixelInput.Normal) < 0)
+            return float3(0, 0, 0);
     
     intense *= 1;
 
@@ -462,7 +466,7 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness)
     
         
     
-    if(isParticle)
+    if (isParticle)
         normal = -LightDirection;
     
     float3 light = max(0.0, dot(normal, normalize(-LightDirection))) * DirectBrightness * GlobalLightColor; // Example light direction;
