@@ -22,6 +22,7 @@ namespace RetroEngine
         public static void StartRecord(string name)
         {
             if (!Enabled) return;
+
             if (stopwatches.ContainsKey(name))
             {
                 stopwatches[name] = Stopwatch.StartNew();

@@ -216,6 +216,8 @@ float3 ApplyNormalTexture(float3 sampledNormalColor, float3 worldNormal, float3 
 
     float3 normalMapSample = sampledNormalColor * 2.0 - 1.0;
     
+    normalMapSample *= float3(-1, -1, 1);
+    
     normalMapSample *= 1;
     
     // Create the tangent space matrix as before

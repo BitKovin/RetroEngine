@@ -78,6 +78,8 @@ namespace RetroEngine
 
         public static float ReservedTaskMinTime = 0.000f;
 
+        public static float ReservedTaskPresentMinTime = 0.001f;
+
         public GameMain()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -306,7 +308,18 @@ namespace RetroEngine
 
         protected override void Draw(GameTime gameTime)
         {
+            Stats.StartRecord("wait for present");
+
+            Stopwatch sw = Stopwatch.StartNew();    
+
             WaitForFramePresent();
+
+            if (ReservedTaskPresentMinTime > 0)
+                while (sw.Elapsed.TotalSeconds < ReservedTaskPresentMinTime)
+                {
+                }
+
+            Stats.StopRecord("wait for present");
 
             Level.GetCurrent().PerformOcclusionCheck();
 

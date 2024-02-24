@@ -305,7 +305,7 @@ namespace RetroEngine
 
 
             SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
-            spriteBatch.Begin(effect: maxDepth,sortMode: SpriteSortMode.FrontToBack);
+            spriteBatch.Begin(effect: maxDepth);
 
             // Draw a full-screen quad to apply the lighting
             DrawShadowQuad(spriteBatch, black);
