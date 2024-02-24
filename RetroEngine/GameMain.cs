@@ -308,27 +308,15 @@ namespace RetroEngine
 
         protected override void Draw(GameTime gameTime)
         {
-            /*
-            Stats.StartRecord("wait for present");
+            
+            
 
-            Stopwatch sw = Stopwatch.StartNew();    
-
-            WaitForFramePresent();
-
-            if (ReservedTaskPresentMinTime > 0)
-                while (sw.Elapsed.TotalSeconds < ReservedTaskPresentMinTime)
-                {
-                }
-
-            Stats.StopRecord("wait for present");
-            */
-
-            //Level.GetCurrent().PerformOcclusionCheck();
+            Level.GetCurrent().PerformOcclusionCheck();
 
             Stats.StartRecord("Render");
 
             RenderTarget2D frame = render.StartRenderLevel(curentLevel);
-            //Level.GetCurrent().EndOcclusionCheck();
+            Level.GetCurrent().EndOcclusionCheck();
 
             GraphicsDevice.SetRenderTarget(null);
 

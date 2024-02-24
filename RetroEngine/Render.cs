@@ -196,6 +196,8 @@ namespace RetroEngine
 
             List<StaticMesh> renderList = level.GetMeshesToRender();
 
+            InitSampler(5);
+
             GameMain.Instance.WaitForFramePresent();
 
             RenderShadowMap(renderList);
@@ -254,7 +256,7 @@ namespace RetroEngine
 
             Stats.RenderedMehses = 0;
 
-            InitSampler(5);
+            
 
             UpdateShaderFrameData();
 
@@ -263,8 +265,6 @@ namespace RetroEngine
             graphics.GraphicsDevice.SetRenderTargets(DeferredOutput,DepthOutput, normalPath);
             graphics.GraphicsDevice.Clear(ClearOptions.DepthBuffer, Color.Black, 1.0f, 0);
             graphics.GraphicsDevice.Clear(Graphics.BackgroundColor);
-
-
 
 
             particlesToDraw.Clear();
@@ -293,7 +293,7 @@ namespace RetroEngine
 
         void RenderShadowMap(List<StaticMesh> renderList)
         {
-
+            if (shadowPassRenderDelay.Wait()) return;
 
             shadowPassRenderDelay.AddDelay(0.05f);
 
@@ -303,16 +303,6 @@ namespace RetroEngine
 
             // Clear the shadow map with the desired clear color (e.g., Color.White)
             graphics.GraphicsDevice.Clear(Color.Black);
-
-
-            SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
-            spriteBatch.Begin(effect: maxDepth);
-
-            // Draw a full-screen quad to apply the lighting
-            DrawShadowQuad(spriteBatch, black);
-
-            // End the SpriteBatch
-            spriteBatch.End();
 
 
             graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
@@ -513,6 +503,8 @@ namespace RetroEngine
 
             OcclusionEffect.Parameters["View"].SetValue(Camera.finalizedView);
             OcclusionEffect.Parameters["Projection"].SetValue(Camera.projectionOcclusion);
+
+            GameMain.Instance.WaitForFramePresent();
 
             graphics.GraphicsDevice.SetRenderTarget(occlusionTestPath);
             graphics.GraphicsDevice.Clear(ClearOptions.DepthBuffer, Color.Black, 1.0f, 0);

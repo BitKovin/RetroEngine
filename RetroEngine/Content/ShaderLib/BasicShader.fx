@@ -328,7 +328,12 @@ float GetShadow(float3 lightCoords, PixelInput input, bool close = false)
 {
     float shadow = 0;
     
-    if (distance(viewPos, input.MyPosition) > 100)
+    float dist = distance(viewPos, input.MyPosition);
+    
+    if (dist > 100)
+        return 0;
+    
+    if (tex2D(ShadowMapSampler,lightCoords.xy).r<0.01)
         return 0;
     
     if (lightCoords.x >= 0 && lightCoords.x <= 1 && lightCoords.y >= 0 && lightCoords.y <= 1)
@@ -343,12 +348,16 @@ float GetShadow(float3 lightCoords, PixelInput input, bool close = false)
         float bias = ShadowBias * (1 - saturate(dot(input.Normal, -LightDirection))) + ShadowBias / 2.0f;
         resolution = ShadowMapResolution;
             
-        if (distance(viewPos, input.MyPosition) > 30)
+        if (dist > 50)
         {
             return 1 - SampleShadowMap(ShadowMapSampler, lightCoords.xy, currentDepth - bias);
         }
         
-        float texelSize = 1.0f / resolution; // Assuming ShadowMapSize is the size of your shadow map texture
+        if (dist > 30)
+            numSamples = 0;
+        
+        
+            float texelSize = 1.0f / resolution; // Assuming ShadowMapSize is the size of your shadow map texture
         
         for (int i = -numSamples; i <= numSamples; ++i)
         {
