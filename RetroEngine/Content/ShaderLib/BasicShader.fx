@@ -328,6 +328,8 @@ float GetShadow(float3 lightCoords, PixelInput input, bool close = false)
 {
     float shadow = 0;
     
+    if (distance(viewPos, input.MyPosition) > 100)
+        return 0;
     
         if (lightCoords.x >= 0 && lightCoords.x <= 1 && lightCoords.y >= 0 && lightCoords.y <= 1)
         {

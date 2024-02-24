@@ -163,6 +163,7 @@ namespace RetroEngine
         public RenderTarget2D StartRenderLevel(Level level)
         {
             
+            
 
             CreateBlackTexture();
 
@@ -195,7 +196,7 @@ namespace RetroEngine
 
             List<StaticMesh> renderList = level.GetMeshesToRender();
 
-
+            GameMain.Instance.WaitForFramePresent();
 
             RenderShadowMap(renderList);
 
