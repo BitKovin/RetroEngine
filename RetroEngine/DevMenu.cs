@@ -64,6 +64,8 @@ namespace RetroEngine
 
             ImGui.Checkbox("opaque blending", ref Graphics.OpaqueBlending);
 
+            ImGui.Checkbox("diasble backface culling", ref Graphics.DisableBackFaceCulling);
+
             ImGui.Checkbox("fxaa", ref Graphics.EnableAntiAliasing);
 
             ImGui.Checkbox("bloom", ref Graphics.EnableBloom);

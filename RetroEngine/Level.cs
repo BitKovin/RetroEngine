@@ -264,6 +264,9 @@ namespace RetroEngine
             Camera.finalizedProjection = Camera.projection;
             Camera.finalizedProjectionViewmodel = Camera.projectionViewmodel;
 
+            Camera.finalizedPosition = Camera.position;
+            Camera.finalizedForward = Camera.rotation.GetForwardVector();
+
             Entity[] list = entities.ToArray();
             try
             {

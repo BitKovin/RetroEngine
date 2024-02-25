@@ -228,8 +228,8 @@ namespace RetroEngine
 
             if (Transperent || Graphics.OpaqueBlending == false)
             {
-                if (graphicsDevice.BlendState != BlendState.AlphaBlend)
-                    graphicsDevice.BlendState = BlendState.AlphaBlend;
+                if (graphicsDevice.BlendState != BlendState.NonPremultiplied)
+                    graphicsDevice.BlendState = BlendState.NonPremultiplied;
             }
             else if (graphicsDevice.BlendState != BlendState.Opaque)
                 graphicsDevice.BlendState = BlendState.Opaque;

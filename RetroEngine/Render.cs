@@ -123,8 +123,8 @@ namespace RetroEngine
             foreach (Effect effect in shaders)
             {
 
-                effect.Parameters["viewDir"]?.SetValue(Camera.rotation.GetForwardVector());
-                effect.Parameters["viewPos"]?.SetValue(Camera.position);
+                effect.Parameters["viewDir"]?.SetValue(Camera.finalizedForward);
+                effect.Parameters["viewPos"]?.SetValue(Camera.finalizedPosition);
 
                 effect.Parameters["DirectBrightness"]?.SetValue(Graphics.DirectLighting);
                 effect.Parameters["GlobalBrightness"]?.SetValue(Graphics.GlobalLighting);
@@ -204,7 +204,7 @@ namespace RetroEngine
 
             RenderShadowMap(renderList);
 
-            graphics.GraphicsDevice.RasterizerState = RasterizerState.CullClockwise;
+            graphics.GraphicsDevice.RasterizerState = Graphics.DisableBackFaceCulling? RasterizerState.CullNone : RasterizerState.CullClockwise;
 
 
             RenderForwardPath(renderList);
@@ -397,7 +397,7 @@ namespace RetroEngine
 
             SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
 
-            spriteBatch.Begin(effect: SSAOEffect);
+            spriteBatch.Begin(effect: SSAOEffect, blendState: BlendState.Opaque);
 
             DrawFullScreenQuad(spriteBatch, DeferredOutput);
 
@@ -438,7 +438,7 @@ namespace RetroEngine
 
             // Begin drawing with SpriteBatch
             SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
-            spriteBatch.Begin(effect: fxaaEffect);
+            spriteBatch.Begin(effect: fxaaEffect, blendState: BlendState.Opaque);
 
             // Draw a full-screen quad to apply the lighting
             DrawFullScreenQuad(spriteBatch, ComposedOutput);
@@ -464,7 +464,7 @@ namespace RetroEngine
 
             SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
 
-            spriteBatch.Begin(effect: ComposeEffect);
+            spriteBatch.Begin(effect: ComposeEffect, blendState: BlendState.Opaque);
 
             DrawFullScreenQuad(spriteBatch, DeferredOutput);
 
@@ -486,7 +486,7 @@ namespace RetroEngine
 
             SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
 
-            spriteBatch.Begin(effect: BloomEffect);
+            spriteBatch.Begin(effect: BloomEffect, blendState: BlendState.Opaque);
 
             DrawFullScreenQuad(spriteBatch, DeferredOutput);
 
@@ -543,7 +543,7 @@ namespace RetroEngine
 
             SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
 
-            spriteBatch.Begin();
+            spriteBatch.Begin(blendState: BlendState.Opaque);
 
             DrawFullScreenQuad(spriteBatch, source);
 

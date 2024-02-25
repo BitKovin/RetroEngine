@@ -25,6 +25,9 @@ namespace RetroEngine
         public static Matrix finalizedProjection;
         public static Matrix finalizedProjectionViewmodel;
 
+        public static Vector3 finalizedPosition;
+        public static Vector3 finalizedForward;
+
         public static BoundingFrustum frustum = new BoundingFrustum(new Matrix());
 
         public static float roll = 0;
@@ -69,6 +72,7 @@ namespace RetroEngine
             projectionViewmodel = Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.ToRadians(ViewmodelFOV), HtW, 0.01f, 1f);
 
             frustum.Matrix = view * projection;
+
 
         }
 

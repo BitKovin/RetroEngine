@@ -35,6 +35,10 @@ namespace RetroEngine.Particles
             CastShadows = false;
             Transperent = true;
             isParticle = true;
+
+
+            OverrideBlendState = BlendState.NonPremultiplied;
+
         }
 
         List<Particle> finalizedParticles;
