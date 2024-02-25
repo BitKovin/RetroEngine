@@ -193,6 +193,7 @@ namespace RetroEngine
 
             graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 
+
             graphics.GraphicsDevice.RasterizerState = RasterizerState.CullClockwise;
 
             List<StaticMesh> renderList = level.GetMeshesToRender();
@@ -207,6 +208,8 @@ namespace RetroEngine
 
 
             RenderForwardPath(renderList);
+
+            graphics.GraphicsDevice.BlendState = BlendState.Opaque;
 
             //graphics.GraphicsDevice.SamplerStates[0] = SamplerState.AnisotropicClamp;
             graphics.GraphicsDevice.SamplerStates[1] = SamplerState.AnisotropicClamp;

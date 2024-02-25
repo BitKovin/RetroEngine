@@ -212,6 +212,20 @@ namespace RetroEngine
             effect.Parameters["EmissionPower"]?.SetValue(EmissionPower);
         }
 
+        protected virtual void SetupBlending()
+        {
+
+            GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
+
+            if (Transperent || Graphics.OpaqueBlending == false)
+            {
+                if (graphicsDevice.BlendState != BlendState.AlphaBlend)
+                    graphicsDevice.BlendState = BlendState.AlphaBlend;
+            }
+            else if (graphicsDevice.BlendState != BlendState.Opaque)
+                graphicsDevice.BlendState = BlendState.Opaque;
+        }
+
         public virtual void DrawUnified()
         {
             if (frameStaticMeshData.IsRendered == false && frameStaticMeshData.Viewmodel == false) return;
@@ -220,6 +234,7 @@ namespace RetroEngine
             // Load the custom effect
             Effect effect = Shader;
 
+            SetupBlending();
 
             if (frameStaticMeshData.model is not null)
             {

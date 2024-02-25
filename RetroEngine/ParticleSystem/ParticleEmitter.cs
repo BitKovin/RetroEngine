@@ -150,7 +150,6 @@ namespace RetroEngine.Particles
             if (Destroyed) return;
             if (particleModel == null)
             {
-                LoadFromFile("models/particle.obj");
                 particleModel = GetModelFromPath("models/particle.obj");
             }
 
@@ -173,7 +172,7 @@ namespace RetroEngine.Particles
             {
                 texture = AssetRegistry.LoadTextureFromFile(particle.texturePath);
 
-                frameStaticMeshData.model = (particle.customModelPath == null) ? GetModelFromPath("models/particle.obj") : GetModelFromPath(particle.customModelPath);
+                frameStaticMeshData.model = (particle.customModelPath == null) ? particleModel : GetModelFromPath(particle.customModelPath);
                 frameStaticMeshData.World = GetWorldForParticle(particle);
                 frameStaticMeshData.Transparency = particle.transparency;
                 frameStaticMeshData.Transperent = true;

@@ -31,6 +31,8 @@ namespace RetroEngine
 
         public static bool EnableBloom = true;
 
+        public static bool OpaqueBlending = true;
+
         public static Vector3 lightlocation = new Vector3();
 
         public static BoundingFrustum DirectionalLightFrustrum = new BoundingFrustum(Matrix.Identity);

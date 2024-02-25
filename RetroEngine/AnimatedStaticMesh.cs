@@ -100,7 +100,9 @@ namespace RetroEngine
             GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
             // Load the custom effect
             Effect effect = Shader;
-            
+
+            SetupBlending();
+
             AddFrameVertexData();
             
                 if (frameStaticMeshData.model is not null)

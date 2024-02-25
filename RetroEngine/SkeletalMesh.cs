@@ -298,6 +298,7 @@ namespace RetroEngine
             // Load the custom effect
             Effect effect = Shader;
 
+            SetupBlending();
 
             effect.Parameters["Bones"].SetValue(finalizedBones);
             if (RiggedModel != null)

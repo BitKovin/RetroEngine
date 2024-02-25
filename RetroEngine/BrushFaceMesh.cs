@@ -230,6 +230,9 @@ namespace RetroEngine
                 List<ModelMesh> modelMeshes = new List<ModelMesh>();
                 Texture2D texture = AssetRegistry.LoadTextureFromFile(scene.Materials[mesh.MaterialIndex].Name + ".png", generateMipMaps: true);
 
+                if (texture == null)
+                    texture = GameMain.Instance.render.black;
+
                 if (scene.Materials[mesh.MaterialIndex].Name.Contains("_tranperent"))
                     transperent = true;
 
