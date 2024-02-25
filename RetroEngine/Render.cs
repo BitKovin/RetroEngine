@@ -83,7 +83,7 @@ namespace RetroEngine
 
         public static OcclusionQuery occlusionQuery;
 
-        public static float ResolutionScale = 2f;
+        public static float ResolutionScale = 1f;
 
         public Render()
         {
