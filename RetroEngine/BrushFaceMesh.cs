@@ -89,6 +89,12 @@ namespace RetroEngine
                 if (scene.Materials[mesh.MaterialIndex].Name.Contains("_tranperent"))
                     transperent = true;
 
+                if (scene.Materials[mesh.MaterialIndex].Name.EndsWith("_t"))
+                    transperent = true;
+
+                if (scene.Materials[mesh.MaterialIndex].HasColorTransparent)
+                    transperent = true;
+
                 var vertices = new List<VertexData>();
                 var indices = new List<int>();
 
@@ -227,6 +233,12 @@ namespace RetroEngine
                 if (scene.Materials[mesh.MaterialIndex].Name.Contains("_tranperent"))
                     transperent = true;
 
+                if (scene.Materials[mesh.MaterialIndex].Name.EndsWith("_t"))
+                    transperent = true;
+
+                if (scene.Materials[mesh.MaterialIndex].HasColorTransparent)
+                    transperent = true;
+
                 var vertices = new List<VertexData>();
                 var indices = new List<int>();
 
@@ -332,13 +344,41 @@ namespace RetroEngine
 
             List<Model> models = new List<Model>();
 
+            bool transperent = false;
+
             foreach(Texture2D texture in keyValuePairs.Keys)
             {
                 models.Clear();
-
+                transperent = false;
                 foreach(BrushFaceMesh mesh in keyValuePairs[texture])
                 {
                     models.Add(mesh.model);
+                    if(mesh.Transperent)
+                        transperent = true;
+                }
+
+                if(transperent)
+                {
+
+
+                    foreach(BrushFaceMesh mesh in keyValuePairs[texture])
+                    {
+                        BrushFaceMesh brush = new BrushFaceMesh(MergeModels(new List<Model> {mesh.model }), texture);
+
+                        brush.textureSearchPaths.Add("textures/brushes");
+                        brush.textureSearchPaths.Add("textures/");
+
+                        brush.avgVertexPosition = brush.CalculateAvgVertexLocation();
+
+                        brush.Transperent = true;
+
+
+                        merged.Add(brush);
+
+                    }
+
+
+                    continue;
                 }
 
                 BrushFaceMesh brushFaceMesh = new BrushFaceMesh(MergeModels(models), texture);

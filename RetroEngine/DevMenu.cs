@@ -58,6 +58,8 @@ namespace RetroEngine
 
             ImGui.Begin("Graphics");
 
+            ImGui.SliderFloat("resolution scale", ref Render.ResolutionScale, 0.2f, 3);
+
             ImGui.Checkbox("occlusion queries", ref Level.GetCurrent().OcclusionCullingEnabled);
 
             ImGui.Checkbox("fxaa", ref Graphics.EnableAntiAliasing);

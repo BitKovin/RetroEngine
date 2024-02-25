@@ -716,17 +716,17 @@ usemtl __TB_empty
 f  123/156/11  126/155/11  127/154/11  128/157/11
 
 o entity3_brush0
-usemtl brushes/trigger
+usemtl brushes/trigger_t
 f  129/158/1  130/159/1  131/160/1  132/161/1
-usemtl brushes/trigger
+usemtl brushes/trigger_t
 f  133/162/2  131/163/2  130/164/2  134/165/2
-usemtl brushes/trigger
+usemtl brushes/trigger_t
 f  134/166/3  130/167/3  129/168/3  135/169/3
-usemtl brushes/trigger
+usemtl brushes/trigger_t
 f  136/169/4  132/168/4  131/167/4  133/166/4
-usemtl brushes/trigger
+usemtl brushes/trigger_t
 f  135/165/5  129/164/5  132/163/5  136/162/5
-usemtl brushes/trigger
+usemtl brushes/trigger_t
 f  136/161/6  133/160/6  134/159/6  135/158/6
 
 o entity8_brush0

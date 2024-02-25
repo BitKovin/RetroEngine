@@ -141,6 +141,9 @@ namespace RetroEngine
         protected override void UnloadContent()
         {
             content.Unload();
+
+            Console.WriteLine("unload");
+
         }
 
         protected override void LoadContent()
@@ -171,6 +174,9 @@ namespace RetroEngine
 
         protected override void Update(GameTime gameTime)
         {
+
+            Render.DestroyPending();
+
             Stats.StopRecord("frame change");
             Stats.StopRecord("frame total");
             Stats.StartRecord("frame total");
@@ -309,7 +315,7 @@ namespace RetroEngine
         protected override void Draw(GameTime gameTime)
         {
             
-            
+            WaitForFramePresent();
 
             Level.GetCurrent().PerformOcclusionCheck();
 
@@ -320,11 +326,12 @@ namespace RetroEngine
 
             GraphicsDevice.SetRenderTarget(null);
 
+            Rectangle screenRectangle = new Rectangle(0, 0, (int)render.GetScreenResolution().X, (int)render.GetScreenResolution().Y);
 
-            SpriteBatch.Begin();
+            SpriteBatch.Begin(transformMatrix: Matrix.CreateScale(1f/Render.ResolutionScale));
 
             // Draw the render target to the screen
-            SpriteBatch.Draw(frame, Vector2.Zero, Color.White);
+            SpriteBatch.Draw(frame, Vector2.Zero, screenRectangle, Color.White);
 
             SpriteBatch.End();
 

@@ -139,7 +139,10 @@ namespace RetroEngine.Particles
                 LoadFromFile("models/particle.obj");
                 particleModel = model;
             }
-            GameMain.Instance.render.particlesToDraw.AddRange(finalizedParticles);
+
+            DrawParticles(finalizedParticles);
+
+            //GameMain.Instance.render.particlesToDraw.AddRange(finalizedParticles);
         }
 
         public override void Draw()
@@ -148,9 +151,12 @@ namespace RetroEngine.Particles
             if (particleModel == null)
             {
                 LoadFromFile("models/particle.obj");
-                particleModel = model;
+                particleModel = GetModelFromPath("models/particle.obj");
             }
-            GameMain.Instance.render.particlesToDraw.AddRange(finalizedParticles);
+
+            DrawParticles(finalizedParticles);
+
+            //GameMain.Instance.render.particlesToDraw.AddRange(finalizedParticles);
         }
 
         public static void LoadRenderEmitter()
@@ -167,10 +173,11 @@ namespace RetroEngine.Particles
             {
                 texture = AssetRegistry.LoadTextureFromFile(particle.texturePath);
 
-                frameStaticMeshData.model = (particle.customModelPath == null) ? particleModel : GetModelFromPath(particle.customModelPath);
+                frameStaticMeshData.model = (particle.customModelPath == null) ? GetModelFromPath("models/particle.obj") : GetModelFromPath(particle.customModelPath);
                 frameStaticMeshData.World = GetWorldForParticle(particle);
                 frameStaticMeshData.Transparency = particle.transparency;
                 frameStaticMeshData.Transperent = true;
+                frameStaticMeshData.IsRendered = true;
 
                 isParticle = particle.customModelPath == null;
 

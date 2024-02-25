@@ -1,24 +1,48 @@
 ﻿
 using Microsoft.Xna.Framework;
-using RetroEngine;
 using SharpDX.DirectInput;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
-internal class Program
+namespace RetroEngine.Windows
 {
-    private static void Main(string[] args)
+    internal class GameWindows : RetroEngine.Game.Game
     {
-        using var game = new RetroEngine.Game.Game();
-        RetroEngine.GameMain.platform = RetroEngine.Platform.Desktop;
-        Input.MouseMoveCalculatorObject = new WindowsInputCalculator();
-        game.Run();
+
+        public GameWindows() 
+        {
+            AllowAsyncAssetLoading = true;
+        }
+
+
+        public override void GameInitialized()
+        {
+            base.GameInitialized();
+
+            var calc = new WindowsInputCalculator();
+
+            Input.MouseMoveCalculatorObject = calc;
+
+            Window.Title = Window.Title + "   DXVK";
+
+            AsyncGameThread = true;
+
+        }
+
     }
+
 
     class WindowsInputCalculator : Input.MouseMoveCalculator
     {
 
         Mouse mouse;
 
-        public WindowsInputCalculator()
+        public WindowsInputCalculator() 
         {
             DirectInput directInput = new DirectInput();
 
@@ -33,7 +57,7 @@ internal class Program
         {
             mouse.Poll();
 
-            if (Input.LockCursor)
+            if(Input.LockCursor)
             {
                 Microsoft.Xna.Framework.Input.Mouse.SetPosition((int)Input.windowCenter.X, (int)Input.windowCenter.Y);
             }
@@ -45,5 +69,4 @@ internal class Program
             return delta / 3f;
         }
     }
-
 }

@@ -83,6 +83,7 @@ namespace RetroEngine
 
         public static OcclusionQuery occlusionQuery;
 
+        public static float ResolutionScale = 2f;
 
         public Render()
         {
@@ -260,16 +261,16 @@ namespace RetroEngine
 
             UpdateShaderFrameData();
 
-            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
+            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, (int)GetScreenResolution().X, (int)GetScreenResolution().Y);
 
             graphics.GraphicsDevice.SetRenderTargets(DeferredOutput,DepthOutput, normalPath);
             graphics.GraphicsDevice.Clear(ClearOptions.DepthBuffer, Color.Black, 1.0f, 0);
             graphics.GraphicsDevice.Clear(Graphics.BackgroundColor);
 
 
-            particlesToDraw.Clear();
+            //particlesToDraw.Clear();
 
-
+            ParticleEmitter.LoadRenderEmitter();
 
             foreach (StaticMesh mesh in renderList)
             {
@@ -283,10 +284,10 @@ namespace RetroEngine
                 }
             }
 
-            ParticleEmitter.LoadRenderEmitter();
+            
 
             graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
-            ParticleEmitter.RenderEmitter.DrawParticles(particlesToDraw);
+            //ParticleEmitter.RenderEmitter.DrawParticles(particlesToDraw);
 
             
         }
@@ -338,7 +339,7 @@ namespace RetroEngine
             }
 
             // Reset the render target and viewport to the back buffer's dimensions
-            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
+            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, (int)GetScreenResolution().X, (int)GetScreenResolution().Y);
 
         }
 
@@ -356,7 +357,7 @@ namespace RetroEngine
 
 
             return;
-            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
+            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, (int)GetScreenResolution().X, (int)GetScreenResolution().Y);
 
             graphics.GraphicsDevice.SetRenderTarget(postProcessingOutput);
 
@@ -428,8 +429,8 @@ namespace RetroEngine
             fxaaEffect.Parameters["fxaaQualityEdgeThreshold"].SetValue(fxaaQualityEdgeThreshold);
             fxaaEffect.Parameters["fxaaQualityEdgeThresholdMin"].SetValue(fxaaQualityEdgeThresholdMin);
 
-            fxaaEffect.Parameters["invViewportWidth"].SetValue(1f / graphics.PreferredBackBufferWidth);
-            fxaaEffect.Parameters["invViewportHeight"].SetValue(1f / graphics.PreferredBackBufferHeight);
+            fxaaEffect.Parameters["invViewportWidth"].SetValue(1f / ComposedOutput.Width);
+            fxaaEffect.Parameters["invViewportHeight"].SetValue(1f / ComposedOutput.Height);
             fxaaEffect.Parameters["screenColor"].SetValue(ComposedOutput);
 
             // Begin drawing with SpriteBatch
@@ -448,7 +449,7 @@ namespace RetroEngine
 
         void PerformCompose()
         {
-            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
+            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, (int)GetScreenResolution().X, (int)GetScreenResolution().Y);
 
             graphics.GraphicsDevice.SetRenderTarget(ComposedOutput);
 
@@ -569,6 +570,8 @@ namespace RetroEngine
         {
             if (shadowMap is not null && shadowMap.Height == Graphics.shadowMapResolution) return;
 
+            DestroyRenderTarget(shadowMap);
+
             // Set the depth format based on your requirements
             DepthFormat depthFormat = DepthFormat.Depth16;
 
@@ -616,19 +619,17 @@ namespace RetroEngine
 
         void InitRenderTargetIfNeed(ref RenderTarget2D target, DepthFormat depthFormat = DepthFormat.None)
         {
-            if(graphics.PreferredBackBufferWidth>0 && graphics.PreferredBackBufferHeight>0)
+            if(GetScreenResolution().X>0 && GetScreenResolution().Y > 0)
 
-            if (target is null || target.Width != graphics.PreferredBackBufferWidth || target.Height != graphics.PreferredBackBufferHeight)
+            if (target is null || target.Width != (int)GetScreenResolution().X || target.Height != (int)GetScreenResolution().Y)
             {
-                // Dispose of the old render target if it exists
-                target?.Dispose();
 
-
-                // Create the new render target with the specified depth format
-                target = new RenderTarget2D(
+                    DestroyRenderTarget(target);
+                    // Create the new render target with the specified depth format
+                    target = new RenderTarget2D(
                     graphics.GraphicsDevice,
-                    graphics.PreferredBackBufferWidth,
-                    graphics.PreferredBackBufferHeight,
+                    (int)GetScreenResolution().X,
+                    (int)GetScreenResolution().Y,
                     false, // No mipmaps
                     SurfaceFormat.Rgba64, // Color format
                     depthFormat); // Depth format
@@ -638,7 +639,7 @@ namespace RetroEngine
         void InitSizedRenderTargetIfNeed(ref RenderTarget2D target, float height, DepthFormat depthFormat = DepthFormat.None)
         {
 
-            float ratio = ((float)graphics.PreferredBackBufferWidth) / ((float)graphics.PreferredBackBufferHeight);
+            float ratio = ((float)GetScreenResolution().X) / ((float)GetScreenResolution().Y);
 
             int width = (int)(height * ratio);
 
@@ -646,9 +647,7 @@ namespace RetroEngine
 
                 if (target is null || target.Width != width || target.Height != height)
                 {
-                    // Dispose of the old render target if it exists
-                    target?.Dispose();
-
+                    DestroyRenderTarget(target);
 
                     // Create the new render target with the specified depth format
                     target = new RenderTarget2D(
@@ -663,12 +662,11 @@ namespace RetroEngine
 
         void InitVectorRenderTargetIfNeed(ref RenderTarget2D target)
         {
-            if (graphics.PreferredBackBufferWidth > 0 && graphics.PreferredBackBufferHeight > 0)
+            if (GetScreenResolution().X > 0 && GetScreenResolution().Y > 0)
 
-                if (target is null || target.Width != graphics.PreferredBackBufferWidth || target.Height != graphics.PreferredBackBufferHeight)
+                if (target is null || target.Width != (int)GetScreenResolution().X || target.Height != (int)GetScreenResolution().Y)
                 {
-                    // Dispose of the old render target if it exists
-                    target?.Dispose();
+                    DestroyRenderTarget(target);
 
                     // Set the depth format based on your requirements
                     DepthFormat depthFormat = DepthFormat.Depth16;
@@ -676,8 +674,8 @@ namespace RetroEngine
                     // Create the new render target with the specified depth format
                     target = new RenderTarget2D(
                         graphics.GraphicsDevice,
-                        graphics.PreferredBackBufferWidth,
-                        graphics.PreferredBackBufferHeight,
+                        (int)GetScreenResolution().X,
+                        (int)GetScreenResolution().Y,
                         false, // No mipmaps
                         SurfaceFormat.HalfVector4, // Color format
                         depthFormat); // Depth format
@@ -686,23 +684,49 @@ namespace RetroEngine
 
         void InitRenderTargetVectorIfNeed(ref RenderTarget2D target)
         {
-            if(graphics.PreferredBackBufferWidth>0 && graphics.PreferredBackBufferHeight > 0)
-            if (target is null || target.Width != graphics.PreferredBackBufferWidth || target.Height != graphics.PreferredBackBufferHeight)
+            if (GetScreenResolution().X > 0 && GetScreenResolution().Y > 0)
+                if (target is null || target.Width != (int)GetScreenResolution().X || target.Height != (int)GetScreenResolution().Y)
+                {
+
+                    DestroyRenderTarget(target);
+
+                    // Set the depth format based on your requirements
+                    DepthFormat depthFormat = DepthFormat.Depth24;
+
+                    // Create the new render target with the specified depth format
+                    target = new RenderTarget2D(
+                        graphics.GraphicsDevice,
+                        (int)GetScreenResolution().X,
+                        (int)GetScreenResolution().Y,
+                        false, // No mipmaps
+                        SurfaceFormat.HalfVector4, // Color format
+                        depthFormat,0,RenderTargetUsage.PreserveContents); // Depth format
+
+
+
+                }
+
+            graphics.ApplyChanges();
+            
+
+        }
+
+        static List<GraphicsResource> destroyList = new List<GraphicsResource>();
+        public static void DestroyPending()
+        {
+            foreach(var resource in destroyList)
             {
-                // Dispose of the old render target if it exists
-                target?.Dispose();
+                resource.Dispose();
+            }
+        }
 
-                // Set the depth format based on your requirements
-                DepthFormat depthFormat = DepthFormat.Depth24;
+        void DestroyRenderTarget(RenderTarget2D target)
+        {
+            if (target != null)
+            {
 
-                // Create the new render target with the specified depth format
-                target = new RenderTarget2D(
-                    graphics.GraphicsDevice,
-                    graphics.PreferredBackBufferWidth,
-                    graphics.PreferredBackBufferHeight,
-                    false, // No mipmaps
-                    SurfaceFormat.HalfVector4, // Color format
-                    depthFormat); // Depth format
+                destroyList.Add(target);
+
             }
         }
 
@@ -726,6 +750,10 @@ namespace RetroEngine
             return effect;
         }
 
+        public Vector2 GetScreenResolution()
+        {
+            return new Vector2(graphics.PreferredBackBufferWidth * ResolutionScale, graphics.PreferredBackBufferHeight * ResolutionScale);
+        }
         void CreateBlackTexture()
         {
             if (black != null) return;

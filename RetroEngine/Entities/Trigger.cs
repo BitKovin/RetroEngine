@@ -31,7 +31,7 @@ namespace RetroEngine.Entities
             }
             collisionCallback.CollisionEvent += TriggerEntered;
 
-            meshes[0].Transperent = true;
+            //meshes[0].Transperent = true;
         }
 
         private void TriggerEntered(BulletSharp.CollisionObjectWrapper thisObject, BulletSharp.CollisionObjectWrapper collidedObject, Entity collidedEntity, BulletSharp.ManifoldPoint contactPoint)
