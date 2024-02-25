@@ -36,6 +36,7 @@ namespace RetroEngine.Particles
             Transperent = true;
             isParticle = true;
 
+            SimpleTransperent = true;
 
             OverrideBlendState = BlendState.NonPremultiplied;
 

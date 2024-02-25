@@ -30,6 +30,9 @@ namespace RetroEngine
 
             Static = true;
             CastShadows = true;
+
+            SimpleTransperent = true;
+
         }
 
         public static List<BrushFaceMesh> GetFacesFromPath(string filePath, string objectName, float unitSize = 32)
@@ -239,8 +242,6 @@ namespace RetroEngine
                 if (scene.Materials[mesh.MaterialIndex].Name.EndsWith("_t"))
                     transperent = true;
 
-                if (scene.Materials[mesh.MaterialIndex].HasColorTransparent)
-                    transperent = true;
 
                 var vertices = new List<VertexData>();
                 var indices = new List<int>();

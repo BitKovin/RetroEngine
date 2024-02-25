@@ -96,6 +96,8 @@ namespace RetroEngine
         public bool OverrideBlend = false;
         public BlendState OverrideBlendState = BlendState.Additive;
 
+        public bool SimpleTransperent = false;
+
         public StaticMesh()
         {
 
@@ -220,19 +222,37 @@ namespace RetroEngine
 
             GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
 
-            if(OverrideBlend)
+            if (OverrideBlend)
             {
                 graphicsDevice.BlendState = OverrideBlendState;
+                graphicsDevice.DepthStencilState = DepthStencilState.Default;
                 return;
             }
 
             if (Transperent || Graphics.OpaqueBlending == false)
             {
                 if (graphicsDevice.BlendState != BlendState.NonPremultiplied)
+                {
                     graphicsDevice.BlendState = BlendState.NonPremultiplied;
+
+
+                }
+
             }
             else if (graphicsDevice.BlendState != BlendState.Opaque)
+            {
                 graphicsDevice.BlendState = BlendState.Opaque;
+
+            }
+
+            if (SimpleTransperent && Transperent)
+            {
+                graphicsDevice.DepthStencilState = DepthStencilState.DepthRead;
+            } else
+            {
+                graphicsDevice.DepthStencilState = DepthStencilState.Default;
+            }
+
         }
 
         public virtual void DrawUnified()
