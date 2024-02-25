@@ -93,6 +93,9 @@ namespace RetroEngine
 
         public Effect Shader;
 
+        public bool OverrideBlend = false;
+        public BlendState OverrideBlendState = BlendState.Additive;
+
         public StaticMesh()
         {
 
@@ -216,6 +219,12 @@ namespace RetroEngine
         {
 
             GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
+
+            if(OverrideBlend)
+            {
+                graphicsDevice.BlendState = OverrideBlendState;
+                return;
+            }
 
             if (Transperent || Graphics.OpaqueBlending == false)
             {
