@@ -178,7 +178,6 @@ namespace RetroEngine
 
             InitRenderTargetIfNeed(ref FxaaOutput);
 
-            InitRenderTargetIfNeed(ref outputPath);
 
             InitSizedRenderTargetIfNeed(ref ssaoOutput, 128);
 
@@ -308,10 +307,20 @@ namespace RetroEngine
             // Clear the shadow map with the desired clear color (e.g., Color.White)
             graphics.GraphicsDevice.Clear(Color.Black);
 
+            SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
+            spriteBatch.Begin(effect: maxDepth, sortMode: SpriteSortMode.FrontToBack);
+
+            // Draw a full-screen quad to apply the lighting
+            DrawShadowQuad(spriteBatch, black);
+
+            // End the SpriteBatch
+            spriteBatch.End();
 
             graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 
             graphics.GraphicsDevice.RasterizerState = RasterizerState.CullClockwise;
+
+            graphics.GraphicsDevice.BlendState = BlendState.NonPremultiplied;
 
             // Iterate through meshes and draw shadows
             foreach (StaticMesh mesh in renderList)
@@ -411,7 +420,6 @@ namespace RetroEngine
             {
                 outputPath = ComposedOutput;
 
-                Console.WriteLine("AA disabled");
 
                 return;
             }
@@ -598,8 +606,8 @@ namespace RetroEngine
             // Create the new render target with the specified depth format
             target = new RenderTarget2D(
                 graphics.GraphicsDevice,
-                1280,
-                720,
+                480,
+                480,
                 false, // No mipmaps
                 SurfaceFormat.HalfSingle, // Color format
                 depthFormat); // Depth format

@@ -27,6 +27,19 @@ namespace RetroEngine.Entities
             }
         }
 
+        public static void Preload(string systemName)
+        {
+            var sys = ParticleSystemFactory.CreateByTechnicalName(systemName);
+
+            if (sys == null) return;
+
+            sys.LoadAssetsIfNeeded();
+
+            sys.Start();
+
+            sys.Destroy();
+        }
+
         public override void LateUpdate()
         {
             base.LateUpdate();

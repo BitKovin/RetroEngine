@@ -141,8 +141,7 @@ namespace RetroEngine.Particles
             if (Destroyed) return;
             if (particleModel == null)
             {
-                LoadFromFile("models/particle.obj");
-                particleModel = model;
+                particleModel = GetModelFromPath("models/particle.obj");
             }
 
             DrawParticles(finalizedParticles);

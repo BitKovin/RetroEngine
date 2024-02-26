@@ -95,11 +95,7 @@ namespace RetroEngine.Entities.Brushes
         {
             base.LoadAssets();
 
-            var sys = ParticleSystemFactory.CreateByTechnicalName(systemName);
-
-            sys.LoadAssetsIfNeeded();
-
-            sys.Destroy();
+            ParticleSystem.Preload(systemName);
 
         }
 
