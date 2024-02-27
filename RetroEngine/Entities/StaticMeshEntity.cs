@@ -1,4 +1,5 @@
-﻿using RetroEngine.Map;
+﻿using BulletSharp;
+using RetroEngine.Map;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,8 @@ namespace RetroEngine.Entities
         string modelPath = "";
         string texturePath = "";
         StaticMesh mesh = new StaticMesh();
+
+        RigidBody body;
 
         public override void FromData(EntityData data)
         {
@@ -33,6 +36,13 @@ namespace RetroEngine.Entities
 
             mesh.LoadFromFile(modelPath);
             mesh.texture = AssetRegistry.LoadTextureFromFile(texturePath);
+
+            body = Physics.CreateFromShape(this, mesh.Scale.ToPhysics(), Physics.CreateCollisionShapeFromModel(mesh.model, complex: true), 0);
+
+            body.SetPosition(mesh.Position.ToPhysics());
+            body.SetRotation(mesh.Rotation);
+
+            bodies.Add(body);
 
         }
 

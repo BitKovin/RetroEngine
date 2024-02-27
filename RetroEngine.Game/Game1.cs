@@ -31,10 +31,24 @@ namespace RetroEngine.Game
         {
             //MakeFullscreen();
 
-            //DefaultShader = AssetRegistry.GetShaderFromName("SimpleEffect");
-
             Level.LoadFromFile("test2.map");
 
+
+        }
+
+        protected override void Update(GameTime gameTime)
+        {
+
+            if (Graphics.DefaultUnlit)
+            {
+                DefaultShader = AssetRegistry.GetShaderFromName("Unlit");
+            }
+            else
+            {
+                DefaultShader = null;
+            }
+
+            base.Update(gameTime);
         }
 
         public override void OnLevelChanged()

@@ -85,6 +85,8 @@ namespace RetroEngine
 
         public static float ResolutionScale = 1f;
 
+        bool dirtySampler = true;
+
         public Render()
         {
             graphics = GameMain.Instance._graphics;
@@ -190,35 +192,31 @@ namespace RetroEngine
 
             InitShadowMap(ref shadowMap);
 
+            List<StaticMesh> renderList = level.GetMeshesToRender();
+
+            
+
             graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 
 
             graphics.GraphicsDevice.RasterizerState = RasterizerState.CullClockwise;
 
-            List<StaticMesh> renderList = level.GetMeshesToRender();
-
-            InitSampler(5);
-
-            GameMain.Instance.WaitForFramePresent();
-
+            
             RenderShadowMap(renderList);
 
             graphics.GraphicsDevice.RasterizerState = Graphics.DisableBackFaceCulling? RasterizerState.CullNone : RasterizerState.CullClockwise;
 
+            InitSampler(5);
 
             RenderForwardPath(renderList);
 
             graphics.GraphicsDevice.BlendState = BlendState.Opaque;
 
-            //graphics.GraphicsDevice.SamplerStates[0] = SamplerState.AnisotropicClamp;
-            graphics.GraphicsDevice.SamplerStates[1] = SamplerState.AnisotropicClamp;
-            graphics.GraphicsDevice.SamplerStates[2] = SamplerState.AnisotropicClamp;
-            graphics.GraphicsDevice.SamplerStates[3] = SamplerState.AnisotropicClamp;
-            graphics.GraphicsDevice.SamplerStates[4] = SamplerState.AnisotropicClamp;
 
             PerformPostProcessing();
 
             graphics.GraphicsDevice.SetRenderTarget(null);
+
 
             return outputPath;
         }
@@ -291,7 +289,9 @@ namespace RetroEngine
             graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
             //ParticleEmitter.RenderEmitter.DrawParticles(particlesToDraw);
 
-            
+            if (Graphics.DrawPhysics)
+                Physics.DebugDraw();
+
         }
 
         void RenderShadowMap(List<StaticMesh> renderList)

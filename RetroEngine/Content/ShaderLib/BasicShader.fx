@@ -307,6 +307,14 @@ float SampleShadowMap(sampler2D shadowMap, float2 coords, float compare)
     return step(compare, sample.r);
 }
 
+float SampleShadowDif(sampler2D shadowMap, float2 coords, float compare)
+{
+    
+    float sample = tex2D(shadowMap, coords).r - compare;
+    
+    return sample;
+}
+
 float SampleShadowMapLinear(sampler2D shadowMap, float2 coords, float compare, float2 texelSize)
 {
     float2 pixelPos = coords / texelSize + float2(0.5, 0.5);
@@ -356,8 +364,10 @@ float GetShadow(float3 lightCoords, PixelInput input, bool close = false)
         if (dist > 30)
             numSamples = 0;
         
+        float size = 1;
         
-            float texelSize = 1.0f / resolution; // Assuming ShadowMapSize is the size of your shadow map texture
+        
+        float texelSize = size / resolution; // Assuming ShadowMapSize is the size of your shadow map texture
         
         for (int i = -numSamples; i <= numSamples; ++i)
         {

@@ -80,6 +80,7 @@ namespace RetroEngine
 
         public static float ReservedTaskPresentMinTime = 0.001f;
 
+
         public GameMain()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -326,9 +327,13 @@ namespace RetroEngine
 
             GraphicsDevice.SetRenderTarget(null);
 
-            Rectangle screenRectangle = new Rectangle(0, 0, (int)render.GetScreenResolution().X, (int)render.GetScreenResolution().Y);
+            
 
-            SpriteBatch.Begin(transformMatrix: Matrix.CreateScale(1f/Render.ResolutionScale));
+            Rectangle screenRectangle = new Rectangle(0, 0, (int)(render.GetScreenResolution().X), (int)(render.GetScreenResolution().Y));
+
+            float dif = _graphics.PreferredBackBufferHeight / (float)((int)render.GetScreenResolution().Y);
+
+            SpriteBatch.Begin(transformMatrix: Matrix.CreateScale(dif), samplerState: SamplerState.AnisotropicClamp);
 
             // Draw the render target to the screen
             SpriteBatch.Draw(frame, Vector2.Zero, screenRectangle, Color.White);

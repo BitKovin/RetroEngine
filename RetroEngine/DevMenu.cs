@@ -60,6 +60,10 @@ namespace RetroEngine
 
             ImGui.SliderFloat("resolution scale", ref Render.ResolutionScale, 0.2f, 3);
 
+            ImGui.Checkbox("draw physics", ref Graphics.DrawPhysics);
+
+            ImGui.Checkbox("default unlit", ref Graphics.DefaultUnlit);
+
             ImGui.Checkbox("occlusion queries", ref Level.GetCurrent().OcclusionCullingEnabled);
 
             ImGui.Checkbox("opaque blending", ref Graphics.OpaqueBlending);

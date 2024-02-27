@@ -28,12 +28,19 @@ namespace RetroEngine
         {
 
             // Create a new motion state with the updated position and current rotation
-            Matrix newTransform = Matrix.CreateFromQuaternion(newRotation) * Matrix.CreateTranslation(body.WorldTransform.Translation) ;
+            Matrix newTransform = Matrix.CreateFromQuaternion(newRotation) * Matrix.CreateTranslation(body.WorldTransform.Translation);
 
 
             // Update the body's world transform directly to apply the transformation
             body.WorldTransform = newTransform.ToNumerics();
             body.MotionState.WorldTransform = newTransform.ToNumerics();
+        }
+
+        public static void SetRotation(this RigidBody body, Vector3 Rotation)
+        {
+            SetRotation(body, Quaternion.CreateFromRotationMatrix(Matrix.CreateRotationX(Rotation.X / 180 * (float)Math.PI) *
+                                Matrix.CreateRotationY(Rotation.Y / 180 * (float)Math.PI) *
+                                Matrix.CreateRotationZ(Rotation.Z / 180 * (float)Math.PI)));
         }
 
         public static System.Numerics.Vector3 ToPhysics(this Microsoft.Xna.Framework.Vector3 vector)

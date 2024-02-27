@@ -36,6 +36,11 @@ namespace RetroEngine
             public string surfaceType = "default";
         }
 
+        public static void DebugDraw()
+        {
+            dynamicsWorld.DebugDrawWorld();
+        }
+
         public static void Start()
         {
 
@@ -80,6 +85,8 @@ namespace RetroEngine
 
             staticWorld = new DiscreteDynamicsWorld(new CollisionDispatcher(new DefaultCollisionConfiguration()), new DbvtBroadphase(), new SequentialImpulseConstraintSolver(), new DefaultCollisionConfiguration());
             staticBodies.Clear();
+
+            dynamicsWorld.DebugDrawer = new DebugDrawer(GameMain.Instance.GraphicsDevice);
 
         }
 
@@ -452,7 +459,7 @@ namespace RetroEngine
         }
 
 
-        public static CollisionShape CreateCollisionShapeFromModel(Model model, float scale = 1.0f, CollisionShapeData shapeData = null)
+        public static CollisionShape CreateCollisionShapeFromModel(Model model, float scale = 1.0f, CollisionShapeData shapeData = null, bool complex = false)
         {
 
             if(shapeData == null)
@@ -465,30 +472,36 @@ namespace RetroEngine
             // Loop through the model's meshes
             foreach (ModelMesh mesh in model.Meshes)
             {
-                // Create a convex hull shape for each mesh
-                ConvexHullShape convexShape = CreateConvexHullShape(mesh, scale);
+                for (int i = 0; i < mesh.MeshParts.Count; i++)
+                {
+                    // Create a convex hull shape for each mesh
+                    CollisionShape Shape;
+                    if (complex)
+                        Shape = CreateBvhTriangleMeshShape(mesh, scale, i);
+                    else
+                        Shape = CreateConvexHullShape(mesh, scale, i);
 
-                convexShape.UserObject = shapeData;
-
-                Matrix4x4 scaling = Matrix4x4.CreateScale(scale);
+                    Shape.UserObject = shapeData;
 
 
 
-                // Calculate the mesh's transformation matrix (position and rotation)
-                Matrix4x4 transform = Matrix4x4.Identity;
 
-                // Add the convex shape to the compound shape with the calculated transformation
-                compoundShape.AddChildShape(transform, convexShape);
+                    // Calculate the mesh's transformation matrix (position and rotation)
+                    Matrix4x4 transform = Matrix4x4.Identity;
+
+                    // Add the convex shape to the compound shape with the calculated transformation
+                    compoundShape.AddChildShape(transform, Shape);
+                }
             }
 
             return compoundShape;
         }
 
-        public static ConvexHullShape CreateConvexHullShape(ModelMesh mesh, float scale)
+        public static ConvexHullShape CreateConvexHullShape(ModelMesh mesh, float scale, int part = 0)
         {
             // Get the vertices from the model's mesh part
-            VertexData[] vertices = new VertexData[mesh.MeshParts[0].VertexBuffer.VertexCount];
-            mesh.MeshParts[0].VertexBuffer.GetData(vertices);
+            VertexData[] vertices = new VertexData[mesh.MeshParts[part].VertexBuffer.VertexCount];
+            mesh.MeshParts[part].VertexBuffer.GetData(vertices);
 
             // Extract the positions and scale them if necessary
             Vector3[] positions = new Vector3[vertices.Length];
@@ -501,6 +514,83 @@ namespace RetroEngine
             ConvexHullShape shape = new ConvexHullShape(positions);
 
             return shape;
+        }
+
+        public static BvhTriangleMeshShape CreateBvhTriangleMeshShape(ModelMesh mesh, float scale, int part = 0)
+        {
+            // 1. Gather vertices in a contiguous array
+            VertexData[] vertices = new VertexData[mesh.MeshParts[part].VertexBuffer.VertexCount];
+            mesh.MeshParts[0].VertexBuffer.GetData(vertices);
+
+
+            // 3. Access indices for correct triangle construction
+            // Assuming indices are 32-bit integers
+            int[] indices = new int[mesh.MeshParts[part].IndexBuffer.IndexCount];
+            mesh.MeshParts[0].IndexBuffer.GetData(indices);
+
+            // 4. Create the triangle mesh
+            TriangleMesh triangleMesh = new TriangleMesh();
+            for (int i = 0; i < indices.Length; i += 3)
+            {
+                var vertex0 = vertices[indices[i]].Position.ToPhysics();
+                var vertex1 = vertices[indices[i+1]].Position.ToPhysics();
+                var vertex2 = vertices[indices[i+2]].Position.ToPhysics();
+                triangleMesh.AddTriangle(vertex0, vertex1, vertex2, true);  // Assume triangles are not welded
+            }
+
+
+            // 6. Create the collision shape
+            BvhTriangleMeshShape meshShape = new BvhTriangleMeshShape(triangleMesh, true); // Use quantization for better performance
+
+            return meshShape;
+        }
+
+        public class DebugDrawer : DebugDraw
+        {
+            GraphicsDevice graphicsDevice;
+            BasicEffect basicEffect;
+
+            public DebugDrawer(GraphicsDevice graphicsDevice)
+            {
+                this.graphicsDevice = graphicsDevice;
+                basicEffect = new BasicEffect(graphicsDevice);
+                basicEffect.VertexColorEnabled = true;
+                basicEffect.LightingEnabled = false;
+                basicEffect.TextureEnabled = false;
+
+            }
+
+            public override DebugDrawModes DebugMode
+            {
+                get { return DebugDrawModes.DrawWireframe; }
+                set { }
+            }
+
+            public override void Draw3DText(ref Vector3 location, string textString)
+            {
+                
+            }
+
+            public override void ReportErrorWarning(string warningString)
+            {
+                
+            }
+
+            public override void DrawLine(ref Vector3 from, ref Vector3 to, ref Vector3 color)
+            {
+                VertexPositionColor[] vertices = new VertexPositionColor[2];
+                vertices[0] = new VertexPositionColor(from, new Microsoft.Xna.Framework.Color(color.X, color.Y, color.Z));
+                vertices[1] = new VertexPositionColor(to, new Microsoft.Xna.Framework.Color(color.X, color.Y, color.Z));
+
+                basicEffect.View = Camera.finalizedView;
+                basicEffect.Projection = Camera.finalizedProjection;
+
+                foreach (EffectPass pass in basicEffect.CurrentTechnique.Passes)
+                {
+                    pass.Apply();
+                    graphicsDevice.DrawUserPrimitives(PrimitiveType.LineList, vertices, 0, 1);
+                }
+            }
         }
 
     }

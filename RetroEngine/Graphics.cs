@@ -29,9 +29,13 @@ namespace RetroEngine
         public static bool AnisotropicFiltration = true;
         public static bool EnableAntiAliasing = true;
 
+        public static bool DrawPhysics = false;
+
         public static bool EnableBloom = true;
 
         public static bool OpaqueBlending = true;
+
+        public static bool DefaultUnlit = false;
 
         public static bool DisableBackFaceCulling = false;
 
