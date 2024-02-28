@@ -509,7 +509,7 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness)
 
     }
     
-    for (int s = 0; s < MAX_POINT_LIGHTS / 2; s++)
+    for (int s = 0; s < MAX_POINT_LIGHTS; s++)
     {
         specular += CalculatePointLightSpeculars(s, input, normal, roughness);
 
