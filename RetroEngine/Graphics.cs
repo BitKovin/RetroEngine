@@ -15,13 +15,13 @@ namespace RetroEngine
         public static Color BackgroundColor = new Color(0.15f, 0.15f, 0.2f);
         public static Vector3 LightColor = new Vector3(1,1,1);
 
-        public static float ShadowBias = 0.003f;
+        public static float ShadowBias = 0.0025f;
         public static int shadowMapResolution = 2048;
         public static int closeShadowMapResolution = 2048;
 
         public static Matrix LightViewProjection;
         public static Matrix LightViewProjectionClose;
-        public static float LightDistance = 200;
+        public static float LightDistance = 150;
         public static float CloseLightDistance = 50;
 
         public static bool EnablePostPocessing = true;
