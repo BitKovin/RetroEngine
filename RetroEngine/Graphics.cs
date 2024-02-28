@@ -33,7 +33,7 @@ namespace RetroEngine
 
         public static bool EnableBloom = true;
 
-        public static bool OpaqueBlending = true;
+        public static bool OpaqueBlending = false;
 
         public static bool DefaultUnlit = false;
 
