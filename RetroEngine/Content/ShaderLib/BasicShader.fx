@@ -53,7 +53,7 @@ bool Viewmodel = false;
 matrix ShadowMapViewProjectionClose;
 float ShadowMapResolutionClose;
 
-#define MAX_POINT_LIGHTS 15
+#define MAX_POINT_LIGHTS 30
 
 float3 LightPositions[MAX_POINT_LIGHTS];
 float3 LightColors[MAX_POINT_LIGHTS];
@@ -397,8 +397,11 @@ float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal)
     
     float3 lightVector = LightPositions[i] - pixelInput.MyPosition;
     float distanceToLight = length(lightVector);
+    
+    
     float intense = saturate(1.0 - distanceToLight / LightRadiuses[i]);
     float3 dirToSurface = normalize(lightVector);
+    
     
     if (isParticle)
         dirToSurface = normal;
