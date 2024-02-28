@@ -13,7 +13,6 @@ internal class Program
         Game game = new GameWindows();
         game.Run();
 
-
     }
 
 }

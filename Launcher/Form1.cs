@@ -21,9 +21,9 @@ namespace Launcher
 
 #if RELEASE
 
-            executables.Add(GameExecutable.DirectX,ROOT_PATH + "Engine/bin/Release/DirectX/RetroEngine.Windows.exe");
-            executables.Add(GameExecutable.Vulkan, ROOT_PATH + "Engine/bin/Release/OpenGL/RetroEngine.Desktop.exe");
-            executables.Add(GameExecutable.OpenGL, ROOT_PATH + "Engine/bin/Release/WindowsVK/RetroEngine.WindowsVK.exe");
+            executables.Add(GameExecutable.DirectX,"Engine/bin/Release/DirectX/RetroEngine.Windows.exe");
+            executables.Add(GameExecutable.OpenGL, "Engine/bin/Release/OpenGL/RetroEngine.Desktop.exe");
+            executables.Add(GameExecutable.Vulkan, "Engine/bin/Release/WindowsVK/RetroEngine.WindowsVK.exe");
 #else
             executables.Add(GameExecutable.DirectX,ROOT_PATH + "RetroEngine.Windows/bin/Release/net6.0-windows10.0.22621.0/RetroEngine.Windows.exe");
             executables.Add(GameExecutable.OpenGL, ROOT_PATH + "RetroEngine.Desktop/bin/Release/net6.0/RetroEngine.Desktop.exe");
@@ -37,7 +37,11 @@ namespace Launcher
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Process process = Process.Start(executables[executable]);
+            string executablePath = executables[executable];
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+            startInfo.FileName = executablePath;
+            startInfo.WorkingDirectory = Path.GetDirectoryName(executablePath); // Set working directory to the game's directory
+            Process.Start(startInfo);
             Thread.Sleep(1000);
             this.Close();
 

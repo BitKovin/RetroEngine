@@ -20,6 +20,9 @@ namespace RetroEngine
 
         static Dictionary<string, RiggedModel> LoadedRigModels = new Dictionary<string, RiggedModel>();
 
+        Dictionary<string, Matrix> additionalLocalOffsets = new Dictionary<string, Matrix>();
+        Dictionary<string, Matrix> additionalMeshOffsets = new Dictionary<string, Matrix>();
+
         public SkeletalMesh()
         {
             CastShadows = false;
@@ -52,6 +55,10 @@ namespace RetroEngine
 
             GetBoneMatrix("");
 
+            additionalLocalOffsets = RiggedModel.additionalLocalOffsets;
+
+            additionalMeshOffsets = RiggedModel.additionalMeshOffsets;
+
             RiggedModel.overrideAnimationFrameTime = -1;
         }
 
@@ -72,6 +79,31 @@ namespace RetroEngine
             boundingSphere.Radius *= 1.5f;
 
         }
+
+        public void SetBoneLocalTransformModification(string name,Matrix tranform)
+        {
+            if (additionalLocalOffsets.ContainsKey(name))
+            {
+                additionalLocalOffsets[name] = tranform;
+                return;
+            }
+
+            additionalLocalOffsets.Add(name, tranform);
+
+        }
+
+        public void SetBoneMeshTransformModification(string name, Matrix tranform)
+        {
+            if (additionalMeshOffsets.ContainsKey(name))
+            {
+                additionalMeshOffsets[name] = tranform;
+                return;
+            }
+
+            additionalMeshOffsets.Add(name, tranform);
+
+        }
+
 
         public Dictionary<string, Matrix> CopyPose()
         {
