@@ -92,12 +92,9 @@ namespace RetroEngine.Skeletal
 
         public bool UpdateVisual = true;
 
-        public Dictionary<string, Matrix> additionalLocalOffsets = new Dictionary<string, Matrix>();
-        public Dictionary<string, Matrix> additionalMeshOffsets = new Dictionary<string, Matrix>();
-
         #endregion
 
-
+       
 
         #region methods
 
@@ -267,25 +264,10 @@ namespace RetroEngine.Skeletal
         /// </summary>
         private void IterateUpdate(RiggedModelNode node)
         {
-
-            Matrix additionalLocal = Matrix.Identity;
-
-            if(additionalLocalOffsets.ContainsKey(node.name))
-            {
-                additionalLocal = additionalLocalOffsets[node.name];
-            }
-
-            Matrix additionalMesh = Matrix.Identity;
-
-            if (additionalMeshOffsets.ContainsKey(node.name))
-            {
-                additionalMesh = additionalMeshOffsets[node.name];
-            }
-
             if (node.parent != null)
-                node.CombinedTransformMg = additionalMesh * node.LocalTransformMg * additionalLocal * node.parent.CombinedTransformMg;
+                node.CombinedTransformMg = node.LocalTransformMg * node.parent.CombinedTransformMg;
             else
-                node.CombinedTransformMg = additionalMesh * node.LocalTransformMg * additionalLocal;
+                node.CombinedTransformMg = node.LocalTransformMg;
 
             //// humm little test
             //if (node.name == "Armature")

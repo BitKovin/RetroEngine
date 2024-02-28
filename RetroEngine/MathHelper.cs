@@ -135,14 +135,6 @@ namespace RetroEngine
             public Vector3 Position;
             public Vector3 Rotation; // Now in degrees
             public Vector3 Scale;
-
-            public Transform()
-            {
-                Position = new Vector3();
-                Rotation = new Vector3();
-                Scale = new Vector3(1);
-            }
-
         }
 
         public static Transform DecomposeMatrix(this Matrix matrix)
@@ -161,16 +153,6 @@ namespace RetroEngine
                 Scale = scale
             };
         }
-
-        public static Matrix ToMatrix(this Transform transform)
-        {
-            return Matrix.CreateScale(transform.Scale) *
-                                Matrix.CreateRotationX(transform.Rotation.X / 180 * (float)Math.PI) *
-                                Matrix.CreateRotationY(transform.Rotation.Y / 180 * (float)Math.PI) *
-                                Matrix.CreateRotationZ(transform.Rotation.Z / 180 * (float)Math.PI) *
-                                Matrix.CreateTranslation(transform.Position);
-        }
-
 
     }
 }

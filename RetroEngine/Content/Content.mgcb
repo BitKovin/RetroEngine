@@ -108,6 +108,6 @@
 #begin UnifiedOutput.fx
 /importer:EffectImporter
 /processor:EffectProcessor
-/processorParam:DebugMode=Debug
+/processorParam:DebugMode=Auto
 /build:UnifiedOutput.fx
 

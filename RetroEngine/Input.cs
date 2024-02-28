@@ -66,7 +66,7 @@ namespace RetroEngine
             MouseDelta *= sensitivity;
 
 
-            if (LockCursor&&GameMain.Instance.IsActive)
+            if (LockCursor)
                 if (Vector2.Distance(windowCenter, mousePos) > 0)
                 {
 

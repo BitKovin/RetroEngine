@@ -1,5 +1,3 @@
-newmtl __TB_empty
-
 newmtl brushes/__TB_empty
 map_Kd textures\brushes\__TB_empty.png
 
@@ -12,6 +10,6 @@ map_Kd textures\brushes\bricks.png
 newmtl brushes/ground_pbr
 map_Kd textures\brushes\ground_pbr.png
 
-newmtl brushes/trigger_t
-map_Kd textures\brushes\trigger_t.png
+newmtl brushes/trigger
+map_Kd textures\brushes\trigger.png
 

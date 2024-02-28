@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static RetroEngine.MathHelper;
 
 namespace RetroEngine.Entities
 {
@@ -111,7 +110,6 @@ namespace RetroEngine.Entities
 
             deathSoundPlayer.SetSound(AssetRegistry.LoadSoundFromFile("sounds/mew.wav"));
             deathSoundPlayer.Volume = 1f;
-
         }
 
         public override void Update()
@@ -122,16 +120,10 @@ namespace RetroEngine.Entities
             {
                 Destroy();
             }
+
             targetLocation = Camera.position;
 
-            float angleDif = MathHelper.FindLookAtRotation(Position, targetLocation).Y - mesh.Rotation.Y;
-
-            MathHelper.Transform transform = new MathHelper.Transform();
-
-            transform.Rotation = new Vector3(angleDif, 0, 0);
-
-            mesh.SetBoneMeshTransformModification("spine_02", transform.ToMatrix());
-
+            
         }
 
         public override void OnDamaged(float damage, Entity causer = null, Entity weapon = null)
