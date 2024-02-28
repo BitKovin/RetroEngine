@@ -37,7 +37,7 @@ namespace RetroEngine
 
         public static bool DefaultUnlit = false;
 
-        public static bool DisableBackFaceCulling = false;
+        public static bool DisableBackFaceCulling = true;
 
         public static Vector3 lightlocation = new Vector3();
 

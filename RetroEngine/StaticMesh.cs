@@ -248,9 +248,11 @@ namespace RetroEngine
             if (SimpleTransperent && Transperent)
             {
                 graphicsDevice.DepthStencilState = DepthStencilState.DepthRead;
+                graphicsDevice.RasterizerState = RasterizerState.CullClockwise;
             } else
             {
                 graphicsDevice.DepthStencilState = DepthStencilState.Default;
+                graphicsDevice.RasterizerState = RasterizerState.CullNone;
             }
 
         }

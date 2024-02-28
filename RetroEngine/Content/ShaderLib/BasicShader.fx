@@ -53,7 +53,7 @@ bool Viewmodel = false;
 matrix ShadowMapViewProjectionClose;
 float ShadowMapResolutionClose;
 
-#define MAX_POINT_LIGHTS 30
+#define MAX_POINT_LIGHTS 10
 
 float3 LightPositions[MAX_POINT_LIGHTS];
 float3 LightColors[MAX_POINT_LIGHTS];
@@ -292,8 +292,10 @@ float3 CalculateSpecular(float roughness, float3 worldPos, float3 normal, float3
     
     halfwayDir *= DistributionGGX(normal, halfwayDir, roughness);
     
+    float temp = max(dot(normal, halfwayDir), 0.0);
+    temp = temp * temp;
 
-    float specular = pow(max(dot(normal, halfwayDir), 0.0), 2) / 5;
+    float specular = temp / 5;
     
     
     return specular * GlobalLightColor;

@@ -27,7 +27,6 @@ namespace RetroEngine.Entities
 
             mesh.texture = AssetRegistry.LoadTextureFromFile("cat.png");
 
-            mesh.Viewmodel = true;
 
             meshes.Add(mesh);
 
