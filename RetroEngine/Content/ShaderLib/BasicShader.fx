@@ -176,11 +176,13 @@ PixelInput DefaultVertexShaderFunction(VertexInput input)
         output.Position = mul(output.Position, Projection);
     }
     
-    output.MyPixelPosition = output.Position;
-    
     
     if (Viewmodel)
         output.Position.z *= 0.02;
+    
+    output.MyPixelPosition = output.Position;
+    
+    
     
     output.TexCoord = input.TexCoord;
 
