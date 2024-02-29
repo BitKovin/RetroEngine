@@ -290,8 +290,11 @@ namespace RetroEngine
 
         }
 
-        public override void DrawOcclusion()
+        public override void DrawDepth()
         {
+
+            if (Viewmodel) return;
+
             GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
 
             Effect effect = GameMain.Instance.render.OcclusionEffect;

@@ -315,15 +315,17 @@ namespace RetroEngine
 
         protected override void Draw(GameTime gameTime)
         {
-            
-            WaitForFramePresent();
 
-            Level.GetCurrent().PerformOcclusionCheck();
+            //WaitForFramePresent();
+
+            if (render.renderShadow() == false)
+                Level.GetCurrent().PerformOcclusionCheck();
 
             Stats.StartRecord("Render");
 
             RenderTarget2D frame = render.StartRenderLevel(curentLevel);
-            Level.GetCurrent().EndOcclusionCheck();
+
+            
 
             GraphicsDevice.SetRenderTarget(null);
 
@@ -379,6 +381,8 @@ namespace RetroEngine
                 return;
             }
 
+            
+
             if (AllowAsyncAssetLoading)
             {
                 presentingFrame = true;
@@ -388,7 +392,10 @@ namespace RetroEngine
                 PresentFrame();
             }
 
-            
+
+            if (render.renderShadow() == false)
+                Level.GetCurrent().EndOcclusionCheck();
+
 
             Stats.StartRecord("frame change");
 

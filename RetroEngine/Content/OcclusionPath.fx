@@ -26,6 +26,7 @@ struct VertexShaderInput
 struct VertexShaderOutput
 {
     float4 Position : POSITION0;
+    float4 MyPosition : TEXCOORD0;
 };
 
 float DepthScale = 1;
@@ -64,12 +65,17 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
     output.Position = mul(output.Position, View);
     output.Position = mul(output.Position, Projection);
 
+    output.MyPosition = output.Position;
+    
     return output;
 }
 
 float4 MainPS(VertexShaderOutput input) : SV_TARGET
 {
-    return float4(1,1,1,1);
+    
+    float depth = input.MyPosition.z;
+    
+    return float4(depth, depth, depth, 1);
 }
 
 technique NormalColorDrawing

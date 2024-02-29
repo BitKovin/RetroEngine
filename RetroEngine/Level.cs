@@ -331,6 +331,9 @@ namespace RetroEngine
 
         void OcclusionCullingStart()
         {
+
+            GameMain.Instance.WaitForFramePresent();
+
             GameMain.Instance.render.PerformOcclusionTest(renderList);
         }
         void OcclusionCullingEnd()

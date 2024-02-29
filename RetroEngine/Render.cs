@@ -22,6 +22,7 @@ namespace RetroEngine
         RenderTarget2D depthPath;
 
         RenderTarget2D DeferredOutput;
+        RenderTarget2D DepthPrepathOutput;
 
         RenderTarget2D ForwardOutput;
         RenderTarget2D ForwardDepth;
@@ -161,6 +162,7 @@ namespace RetroEngine
                 effect.Parameters["LightPositions"]?.SetValue(LightPos);
                 effect.Parameters["LightColors"]?.SetValue(LightColor);
                 effect.Parameters["LightRadiuses"]?.SetValue(LightRadius);
+                effect.Parameters["DepthTexture"]?.SetValue(DepthPrepathOutput);
             }
         }
         public RenderTarget2D StartRenderLevel(Level level)
@@ -170,7 +172,9 @@ namespace RetroEngine
 
             CreateBlackTexture();
 
-            InitRenderTargetIfNeed(ref DepthOutput);
+            InitRenderTargetDepth(ref DepthOutput);
+
+            InitRenderTargetDepth(ref DepthPrepathOutput);
 
             InitRenderTargetVectorIfNeed(ref DeferredOutput);
 
@@ -199,7 +203,7 @@ namespace RetroEngine
             graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 
 
-            graphics.GraphicsDevice.RasterizerState = RasterizerState.CullClockwise;
+            graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 
             
             RenderShadowMap(renderList);
@@ -207,6 +211,8 @@ namespace RetroEngine
             graphics.GraphicsDevice.RasterizerState = Graphics.DisableBackFaceCulling? RasterizerState.CullNone : RasterizerState.CullClockwise;
 
             InitSampler(5);
+
+            RenderPrepass(renderList);
 
             RenderForwardPath(renderList);
 
@@ -268,6 +274,7 @@ namespace RetroEngine
             graphics.GraphicsDevice.Clear(Graphics.BackgroundColor);
 
 
+
             //particlesToDraw.Clear();
 
             ParticleEmitter.LoadRenderEmitter();
@@ -294,9 +301,57 @@ namespace RetroEngine
 
         }
 
+        void RenderPrepass(List<StaticMesh> renderList)
+        {
+            UpdateShaderFrameData();
+
+            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, (int)GetScreenResolution().X, (int)GetScreenResolution().Y);
+
+            graphics.GraphicsDevice.SetRenderTargets(DepthPrepathOutput);
+            graphics.GraphicsDevice.Clear(ClearOptions.DepthBuffer, Color.Black, 1.0f, 0);
+
+            SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
+            spriteBatch.Begin(effect: maxDepth, sortMode: SpriteSortMode.FrontToBack);
+
+            // Draw a full-screen quad to apply the lighting
+            DrawShadowQuad(spriteBatch, black);
+
+            // End the SpriteBatch
+            spriteBatch.End();
+
+            graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+
+            graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
+
+            graphics.GraphicsDevice.BlendState = BlendState.Opaque;
+
+
+            OcclusionEffect.Parameters["View"].SetValue(Camera.finalizedView);
+            OcclusionEffect.Parameters["Projection"].SetValue(Camera.projection);
+
+
+            foreach (StaticMesh mesh in renderList)
+            {
+                if (mesh.Transperent == false)
+                {
+                    try
+                    {
+                        mesh.DrawDepth();
+
+                    }
+                    catch (Exception e) { }
+                }
+            }
+        }
+
+        public bool renderShadow()
+        {
+            return !shadowPassRenderDelay.Wait();
+        }
+
         void RenderShadowMap(List<StaticMesh> renderList)
         {
-            if (shadowPassRenderDelay.Wait()) return;
+            if (renderShadow() == false) return;
 
             shadowPassRenderDelay.AddDelay(0.05f);
 
@@ -645,6 +700,25 @@ namespace RetroEngine
                     SurfaceFormat.Rgba64, // Color format
                     depthFormat); // Depth format
             }
+        }
+
+        void InitRenderTargetDepth(ref RenderTarget2D target, DepthFormat depthFormat = DepthFormat.Depth24)
+        {
+            if (GetScreenResolution().X > 0 && GetScreenResolution().Y > 0)
+
+                if (target is null || target.Width != (int)GetScreenResolution().X || target.Height != (int)GetScreenResolution().Y)
+                {
+
+                    DestroyRenderTarget(target);
+                    // Create the new render target with the specified depth format
+                    target = new RenderTarget2D(
+                    graphics.GraphicsDevice,
+                    (int)GetScreenResolution().X,
+                    (int)GetScreenResolution().Y,
+                    false, // No mipmaps
+                    SurfaceFormat.Single, // Color format
+                    depthFormat); // Depth format
+                }
         }
 
         void InitSizedRenderTargetIfNeed(ref RenderTarget2D target, float height, DepthFormat depthFormat = DepthFormat.None)

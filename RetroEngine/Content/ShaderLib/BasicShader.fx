@@ -88,6 +88,7 @@ struct PixelInput
     float4 lightPosClose : TEXCOORD4;
     float3 MyPosition : TEXCOORD5;
     float4 MyPixelPosition : TEXCOORD6;
+    float2 ScreenCoords : COLOR0;
     float3 Tangent : TEXCOORD7;
     float3 TangentNormal : TEXCOORD8;
 };
@@ -165,6 +166,8 @@ PixelInput DefaultVertexShaderFunction(VertexInput input)
     output.MyPosition = output.Position.xyz;
     output.Position = mul(output.Position, View);
     
+    
+    
     if (Viewmodel)
     {
         output.Position = mul(output.Position, ProjectionViewmodel);
@@ -173,10 +176,9 @@ PixelInput DefaultVertexShaderFunction(VertexInput input)
     {
         output.Position = mul(output.Position, Projection);
     }
-        
-    
     
     output.MyPixelPosition = output.Position;
+    
     
     if (Viewmodel)
         output.Position.z *= 0.02;
@@ -200,6 +202,12 @@ PixelInput DefaultVertexShaderFunction(VertexInput input)
     output.TexCoord = input.TexCoord;
     
     return output;
+}
+
+void DepthDiscard(float depth, PixelInput input)
+{
+    if (depth < input.MyPixelPosition.z - 0.1)
+        discard;
 }
 
 float3 ApplyNormalTexture(float3 sampledNormalColor, float3 worldNormal, float3 worldTangent)

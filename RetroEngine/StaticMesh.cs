@@ -362,7 +362,7 @@ namespace RetroEngine
             }
         }
 
-        public virtual void DrawOcclusion()
+        public virtual void DrawDepth()
         {
 
             if (Viewmodel) return;
@@ -464,9 +464,10 @@ namespace RetroEngine
 
             oclusionCulling = true;
 
+
             OcclusionQuery.Begin();
 
-            DrawOcclusion();
+            DrawDepth();
 
             OcclusionQuery.End();
         }

@@ -23,6 +23,12 @@ sampler ORMTextureSampler = sampler_state
     texture = <ORMTexture>;
 };
 
+texture DepthTexture;
+sampler DepthTextureSampler = sampler_state
+{
+    texture = <DepthTexture>;
+};
+
 PixelInput VertexShaderFunction(VertexInput input)
 {
     return DefaultVertexShaderFunction(input);
@@ -30,6 +36,16 @@ PixelInput VertexShaderFunction(VertexInput input)
 
 PixelOutput PixelShaderFunction(PixelInput input)
 {
+    
+    float2 screenCoords = input.MyPixelPosition.xyz / input.MyPixelPosition.w;
+    
+    screenCoords = (screenCoords + 1.0f) / 2.0f;
+
+    screenCoords.y = 1.0f - screenCoords.y;
+    
+    float depthIn = tex2D(DepthTextureSampler, screenCoords).r;
+    
+    DepthDiscard(depthIn,input);
     
     PixelOutput output = (PixelOutput)0;
     
@@ -64,7 +80,7 @@ PixelOutput PixelShaderFunction(PixelInput input)
     textureAlpha *= Transparency;
     
     
-    output.Color = float4(textureColor, textureAlpha);
+    output.Color = float4(textureColor, 1);
     
     output.Normal = float4((pixelNormal + 1) / 2,1);
     
