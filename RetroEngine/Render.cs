@@ -212,9 +212,12 @@ namespace RetroEngine
 
             InitSampler(5);
 
+            EndOcclusionTest(renderList);
             RenderPrepass(renderList);
+            
 
             RenderForwardPath(renderList);
+            
 
             graphics.GraphicsDevice.BlendState = BlendState.Opaque;
 
@@ -311,10 +314,10 @@ namespace RetroEngine
             graphics.GraphicsDevice.Clear(ClearOptions.DepthBuffer, Color.Black, 1.0f, 0);
 
             SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
-            spriteBatch.Begin(effect: maxDepth, sortMode: SpriteSortMode.FrontToBack);
+            spriteBatch.Begin(effect: maxDepth);
 
             // Draw a full-screen quad to apply the lighting
-            DrawShadowQuad(spriteBatch, black);
+            DrawFullScreenQuad(spriteBatch, black);
 
             // End the SpriteBatch
             spriteBatch.End();
@@ -336,7 +339,7 @@ namespace RetroEngine
                 {
                     try
                     {
-                        mesh.DrawDepth();
+                        mesh.StartOcclusionTest();
 
                     }
                     catch (Exception e) { }
@@ -592,7 +595,8 @@ namespace RetroEngine
         {
             foreach (StaticMesh mesh in meshes)
             {
-                mesh.EndOcclusionTest();
+                if(mesh.Transperent==false)
+                    mesh.EndOcclusionTest();
             }
 
             performingOcclusionTest = false;

@@ -318,8 +318,6 @@ namespace RetroEngine
 
             //WaitForFramePresent();
 
-            if (render.renderShadow() == false)
-                Level.GetCurrent().PerformOcclusionCheck();
 
             Stats.StartRecord("Render");
 
@@ -393,8 +391,7 @@ namespace RetroEngine
             }
 
 
-            if (render.renderShadow() == false)
-                Level.GetCurrent().EndOcclusionCheck();
+                //Level.GetCurrent().EndOcclusionCheck();
 
 
             Stats.StartRecord("frame change");

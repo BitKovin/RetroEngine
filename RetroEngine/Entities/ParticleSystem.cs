@@ -33,9 +33,14 @@ namespace RetroEngine.Entities
 
             if (sys == null) return;
 
+            
+            sys.Start();
+
             sys.LoadAssetsIfNeeded();
 
-            sys.Start();
+            sys.Update();
+
+            sys.LoadAssetsIfNeeded();
 
             sys.Destroy();
         }

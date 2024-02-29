@@ -325,8 +325,7 @@ namespace RetroEngine
 
         public void EndOcclusionCheck()
         {
-            if (OcclusionCullingEnabled)
-                OcclusionCullingEnd();
+            OcclusionCullingEnd();
         }
 
         void OcclusionCullingStart()

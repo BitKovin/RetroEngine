@@ -58,7 +58,7 @@ namespace RetroEngine
 
             ImGui.Begin("Graphics");
 
-            ImGui.SliderFloat("resolution scale", ref Render.ResolutionScale, 0.2f, 3);
+            ImGui.SliderFloat("resolution scale", ref Render.ResolutionScale, 0.2f, 6);
 
             ImGui.Checkbox("draw physics", ref Graphics.DrawPhysics);
 
