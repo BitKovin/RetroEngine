@@ -304,7 +304,7 @@ float3 CalculateSpecular(float roughness, float3 worldPos, float3 normal, float3
     float temp = max(dot(normal, halfwayDir), 0.0);
     temp = temp * temp;
 
-    float specular = temp / 5;
+    float specular = temp / 8;
     
     
     return specular * GlobalLightColor;
@@ -494,7 +494,7 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness)
     if (!isParticle)
     {
     
-        specular *= 1 - shadow;
+        specular *= min((1.1 - shadow),1);
     }
     
         
@@ -502,7 +502,7 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness)
     if (isParticle)
         normal = -LightDirection;
     
-    float3 light = max(0.0, dot(normal, normalize(-LightDirection))) * DirectBrightness * GlobalLightColor; // Example light direction;
+    float3 light = max(0, dot(normal, normalize(-LightDirection)+0.2)) * DirectBrightness * GlobalLightColor; // Example light direction;
     
     light -= shadow;
     
@@ -520,7 +520,7 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness)
 
     }
     
-    for (int s = 0; s < MAX_POINT_LIGHTS; s++)
+    for (int s = 0; s < MAX_POINT_LIGHTS/3; s++)
     {
         specular += CalculatePointLightSpeculars(s, input, normal, roughness);
 
