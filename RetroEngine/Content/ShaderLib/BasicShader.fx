@@ -494,7 +494,7 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness)
     if (!isParticle)
     {
     
-        specular *= min((1.1 - shadow),1);
+        specular *= min((1.05 - shadow),1);
     }
     
         
