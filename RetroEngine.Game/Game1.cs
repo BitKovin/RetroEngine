@@ -59,9 +59,9 @@ namespace RetroEngine.Game
 
             
 
-            for (int i = 1; i <= 0; i++)
+            for (int i = 1; i <= 2; i++)
             {
-                Entity npc = new Box();
+                Entity npc = new NPCBase();
                 npc.Position = new Vector3(0, i*0.2f + 2, 0);
                 Level.GetCurrent().AddEntity(npc);
                 npc.Start();

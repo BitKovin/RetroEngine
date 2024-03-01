@@ -17,6 +17,11 @@ namespace RetroEngine.Entities.Brushes
 
         string systemName = "destructionWood";
 
+        public DestructibleBrush() 
+        {
+            mergeBrushes = true;
+        }
+
         public override void FromData(EntityData data)
         {
             base.FromData(data);

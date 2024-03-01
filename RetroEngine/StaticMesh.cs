@@ -47,7 +47,7 @@ namespace RetroEngine
     {
         public Vector3 Position { get; set; } = Vector3.Zero;
         public Vector3 Rotation { get; set; } = Vector3.Zero;
-        public Vector3 Scale { get; set; } = new Vector3(1,1,1);
+        public Vector3 Scale { get; set; } = new Vector3(1, 1, 1);
 
         public Model model;
 
@@ -150,7 +150,7 @@ namespace RetroEngine
 
                         effect.Parameters["WorldViewProjection"].SetValue(frameStaticMeshData.World * frameStaticMeshData.View * projection);
 
-                        
+
 
                         // Draw the primitives using the custom effect
                         foreach (EffectPass pass in effect.CurrentTechnique.Passes)
@@ -197,7 +197,7 @@ namespace RetroEngine
             effect.Parameters["isParticle"]?.SetValue(isParticle);
             effect.Parameters["Viewmodel"]?.SetValue(frameStaticMeshData.Viewmodel);
 
-            
+
 
             if (meshPartData is not null && textureSearchPaths.Count > 0)
             {
@@ -215,6 +215,54 @@ namespace RetroEngine
                 UpdateTextureParamIfNeeded(effect, "ORMTexture", ormTexture);
             }
             effect.Parameters["EmissionPower"]?.SetValue(EmissionPower);
+
+            if (Graphics.GlobalPointLights == false)
+            {
+                Vector3[] LightPos = new Vector3[LightManager.MAX_POINT_LIGHTS];
+                Vector3[] LightColor = new Vector3[LightManager.MAX_POINT_LIGHTS];
+                float[] LightRadius = new float[LightManager.MAX_POINT_LIGHTS];
+
+                //LightManager.FinalPointLights = LightManager.FinalPointLights.OrderBy(l => Vector3.Distance(l.Position, useAvgVertexPosition? avgVertexPosition : Position)).ToList();
+
+                int filledLights = 0;
+
+
+                for (int i = 0; i < LightManager.FinalPointLights.Count && filledLights < LightManager.MAX_POINT_LIGHTS; i++)
+                {
+
+                    bool intersects = false;
+
+                    if (frameStaticMeshData.model is not null)
+                    {
+
+                        foreach (ModelMesh mesh in frameStaticMeshData.model.Meshes)
+                        {
+
+                            if (mesh.BoundingSphere.Intersects(new BoundingSphere { Radius = LightManager.FinalPointLights[i].Radius, Center = LightManager.FinalPointLights[i].Position }))
+                            {
+                                intersects = true;
+                                break;
+                            }
+
+
+                        }
+                    }
+
+                    if (intersects == false) continue;
+
+                    LightPos[filledLights] = LightManager.FinalPointLights[i].Position;
+                    LightColor[filledLights] = LightManager.FinalPointLights[i].Color;
+                    LightRadius[filledLights] = LightManager.FinalPointLights[i].Radius;
+
+                    filledLights++;
+
+                }
+
+                effect.Parameters["LightPositions"]?.SetValue(LightPos);
+                effect.Parameters["LightColors"]?.SetValue(LightColor);
+                effect.Parameters["LightRadiuses"]?.SetValue(LightRadius);
+            }
+
         }
 
         protected virtual void SetupBlending()
@@ -249,7 +297,8 @@ namespace RetroEngine
             {
                 graphicsDevice.DepthStencilState = DepthStencilState.DepthRead;
                 graphicsDevice.RasterizerState = RasterizerState.CullClockwise;
-            } else
+            }
+            else
             {
                 graphicsDevice.DepthStencilState = DepthStencilState.Default;
                 graphicsDevice.RasterizerState = RasterizerState.CullNone;
@@ -280,7 +329,7 @@ namespace RetroEngine
 
 
                         MeshPartData meshPartData = meshPart.Tag as MeshPartData;
-                        
+
                         ApplyShaderParams(effect, meshPartData);
 
                         Stats.RenderedMehses++;
@@ -300,13 +349,13 @@ namespace RetroEngine
             }
         }
 
-        protected void UpdateTextureParamIfNeeded(Effect effect,string name, Texture2D value)
+        protected void UpdateTextureParamIfNeeded(Effect effect, string name, Texture2D value)
         {
             Texture2D current = effect.Parameters[name]?.GetValueTexture2D();
 
-            if (current == value) 
-            { 
-                return; 
+            if (current == value)
+            {
+                return;
             }
 
             effect.Parameters[name]?.SetValue(value);
@@ -333,7 +382,7 @@ namespace RetroEngine
                         graphicsDevice.SetVertexBuffer(meshPart.VertexBuffer);
                         graphicsDevice.Indices = meshPart.IndexBuffer;
 
-                        
+
                         if (closeShadow)
                             Graphics.LightViewProjectionClose = frameStaticMeshData.LightView * frameStaticMeshData.LightProjectionClose;
                         else
@@ -342,7 +391,7 @@ namespace RetroEngine
                         // Set effect parameters
                         effect.Parameters["World"].SetValue(frameStaticMeshData.World);
                         effect.Parameters["View"].SetValue(frameStaticMeshData.LightView);
-                        if(closeShadow)
+                        if (closeShadow)
                             effect.Parameters["Projection"].SetValue(frameStaticMeshData.LightProjectionClose);
                         else
                             effect.Parameters["Projection"].SetValue(frameStaticMeshData.LightProjection);
@@ -441,13 +490,13 @@ namespace RetroEngine
 
 
                         // Draw the primitives using the custom effect
-                        
-                            graphicsDevice.DrawIndexedPrimitives(
-                                PrimitiveType.TriangleList,
-                                meshPart.VertexOffset,
-                                meshPart.StartIndex,
-                                meshPart.PrimitiveCount);
-                        
+
+                        graphicsDevice.DrawIndexedPrimitives(
+                            PrimitiveType.TriangleList,
+                            meshPart.VertexOffset,
+                            meshPart.StartIndex,
+                            meshPart.PrimitiveCount);
+
                     }
                 }
             }
@@ -472,7 +521,7 @@ namespace RetroEngine
             OcclusionQuery.End();
         }
 
-        public void EndOcclusionTest() 
+        public void EndOcclusionTest()
         {
 
             if (oclusionCulling == false) return;
@@ -506,13 +555,13 @@ namespace RetroEngine
                         return output;
                     }
                 }
-                
+
             }
 
             //Console.WriteLine($"failed to find texture {name}");
 
             return texture;
-            
+
         }
 
         protected Texture2D FindTextureWithSufix(string name, string sufix = "_em", Texture2D def = null)
@@ -522,7 +571,8 @@ namespace RetroEngine
                 if (emisssiveTexture == null)
                 {
                     return GameMain.Instance.render.black;
-                }else
+                }
+                else
                 {
                     return emisssiveTexture;
                 }
@@ -533,7 +583,7 @@ namespace RetroEngine
             if (textures.ContainsKey(name))
                 return textures[name];
 
-            
+
             if (textureSearchPaths.Count > 0)
             {
 
@@ -584,7 +634,7 @@ namespace RetroEngine
                         // Set effect parameters
                         effect.Parameters["World"].SetValue(frameStaticMeshData.World);
                         effect.Parameters["View"].SetValue(frameStaticMeshData.View);
-                        effect.Parameters["Projection"].SetValue(frameStaticMeshData.Viewmodel? frameStaticMeshData.ProjectionViewmodel: frameStaticMeshData.Projection);
+                        effect.Parameters["Projection"].SetValue(frameStaticMeshData.Viewmodel ? frameStaticMeshData.ProjectionViewmodel : frameStaticMeshData.Projection);
 
                         effect.Parameters["DepthScale"].SetValue(frameStaticMeshData.Viewmodel ? 0.01f : 1);
 
@@ -676,13 +726,13 @@ namespace RetroEngine
         internal static Dictionary<string, Assimp.Scene> loadedScenes = new Dictionary<string, Assimp.Scene>();
         protected static Dictionary<string, Model> loadedModels = new Dictionary<string, Model>();
 
-        protected virtual Model GetModelFromPath(string filePath,bool dynamicBuffer = false)
+        protected virtual Model GetModelFromPath(string filePath, bool dynamicBuffer = false)
         {
             GraphicsDevice graphicsDevice = GameMain.Instance.GraphicsDevice;
 
             filePath = AssetRegistry.FindPathForFile(filePath);
 
-            if(loadedModels.ContainsKey(filePath))
+            if (loadedModels.ContainsKey(filePath))
             {
                 return loadedModels[filePath];
             }
@@ -695,7 +745,7 @@ namespace RetroEngine
             }
             else
             {
-                scene = importer.ImportFile(filePath, Assimp.PostProcessSteps.MakeLeftHanded | Assimp.PostProcessSteps.FlipUVs | Assimp.PostProcessSteps.CalculateTangentSpace | Assimp.PostProcessSteps.Triangulate |Assimp.PostProcessSteps.FindDegenerates);
+                scene = importer.ImportFile(filePath, Assimp.PostProcessSteps.MakeLeftHanded | Assimp.PostProcessSteps.FlipUVs | Assimp.PostProcessSteps.CalculateTangentSpace | Assimp.PostProcessSteps.Triangulate | Assimp.PostProcessSteps.FindDegenerates);
                 //loadedScenes.Add(filePath, scene);
             }
 
@@ -720,12 +770,12 @@ namespace RetroEngine
             foreach (var mesh in scene.Meshes)
             {
 
-                
 
-                if(mesh.Name.Contains("op_"))
+
+                if (mesh.Name.Contains("op_"))
                 {
                     string name = mesh.Name;
-                    name = name.Replace("op_","");
+                    name = name.Replace("op_", "");
                     name = name.Replace("_Mesh", "");
                     points.Add(name, new Vector3(-mesh.Vertices[0].X, mesh.Vertices[0].Y, mesh.Vertices[0].Z));
                 }
@@ -757,14 +807,14 @@ namespace RetroEngine
                     var normal = mesh.Normals[i];
                     var tangent = mesh.Tangents[i];
 
-                    
+
 
                     var textureCoord = mesh.HasTextureCoords(0) ? mesh.TextureCoordinateChannels[0][i] : new Assimp.Vector3D(0, 0, 0);
 
                     // Negate the x-coordinate to correct mirroring
                     vertices.Add(new VertexData
                     {
-                        Position = new Vector3(-vertex.X, vertex.Y , vertex.Z), // Negate x-coordinate
+                        Position = new Vector3(-vertex.X, vertex.Y, vertex.Z), // Negate x-coordinate
                         Normal = new Vector3(-normal.X, normal.Y, normal.Z),
                         TextureCoordinate = new Vector2(textureCoord.X, textureCoord.Y),
                         Tangent = new Vector3(-tangent.X, tangent.Y, tangent.Z)
@@ -775,7 +825,7 @@ namespace RetroEngine
                 VertexBuffer vertexBuffer;
 
                 vertexBuffer = new VertexBuffer(graphicsDevice, typeof(VertexData), vertices.Count, BufferUsage.None);
-                
+
                 vertexBuffer.SetData(vertices.ToArray());
                 var indexBuffer = new IndexBuffer(graphicsDevice, IndexElementSize.ThirtyTwoBits, indices.Count, BufferUsage.None);
                 indexBuffer.SetData(indices.ToArray());
@@ -787,7 +837,7 @@ namespace RetroEngine
                 boundingSphere = CalculateBoundingSphere(vertices.ToArray());
 
 
-                meshParts.Add(new ModelMeshPart { VertexBuffer = vertexBuffer, IndexBuffer = indexBuffer, StartIndex = 0, NumVertices = indices.Count, PrimitiveCount = primitiveCount, Tag= new MeshPartData {textureName = Path.GetFileName(scene.Materials[mesh.MaterialIndex].TextureDiffuse.FilePath), Points = points, Vertices = dynamicBuffer? vertices.ToArray() : null} });
+                meshParts.Add(new ModelMeshPart { VertexBuffer = vertexBuffer, IndexBuffer = indexBuffer, StartIndex = 0, NumVertices = indices.Count, PrimitiveCount = primitiveCount, Tag = new MeshPartData { textureName = Path.GetFileName(scene.Materials[mesh.MaterialIndex].TextureDiffuse.FilePath), Points = points, Vertices = dynamicBuffer ? vertices.ToArray() : null } });
             }
 
 
@@ -931,7 +981,7 @@ namespace RetroEngine
                 }
 
             }
-            return vector/n;
+            return vector / n;
         }
 
         protected static BoundingSphere CalculateBoundingSphere(VertexData[] vertices)
@@ -957,16 +1007,16 @@ namespace RetroEngine
         {
             Vector3 point = new Vector3();
 
-            if(model is not null)
+            if (model is not null)
             {
-                foreach(ModelMesh mesh in  model.Meshes)
+                foreach (ModelMesh mesh in model.Meshes)
                 {
-                    foreach(ModelMeshPart part in mesh.MeshParts)
+                    foreach (ModelMeshPart part in mesh.MeshParts)
                     {
                         MeshPartData data = part.Tag as MeshPartData;
                         if (data is null) continue;
 
-                        if(data.Points.TryGetValue(name, out point))
+                        if (data.Points.TryGetValue(name, out point))
                         {
                             return point;
                         }
@@ -999,8 +1049,8 @@ namespace RetroEngine
 
         public static void UnloadModel(Model model)
         {
-            foreach(var mesh in model.Meshes)
-                foreach(var part in mesh.MeshParts)
+            foreach (var mesh in model.Meshes)
+                foreach (var part in mesh.MeshParts)
                 {
                     part.VertexBuffer?.Dispose();
                     part.IndexBuffer?.Dispose();

@@ -53,7 +53,7 @@ bool Viewmodel = false;
 matrix ShadowMapViewProjectionClose;
 float ShadowMapResolutionClose;
 
-#define MAX_POINT_LIGHTS 10
+#define MAX_POINT_LIGHTS 5
 
 float3 LightPositions[MAX_POINT_LIGHTS];
 float3 LightColors[MAX_POINT_LIGHTS];
@@ -367,13 +367,11 @@ float GetShadow(float3 lightCoords, PixelInput input, bool close = false)
         float bias = ShadowBias * (1 - saturate(dot(input.Normal, -LightDirection))) + ShadowBias / 2.0f;
         resolution = ShadowMapResolution;
             
-        if (dist > 50)
+        if (dist > 40)
         {
             return 1 - SampleShadowMap(ShadowMapSampler, lightCoords.xy, currentDepth - bias);
         }
         
-        if (dist > 30)
-            numSamples = 0;
         
         float size = 1;
         
@@ -520,7 +518,7 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness)
 
     }
     
-    for (int s = 0; s < MAX_POINT_LIGHTS/3; s++)
+    for (int s = 0; s < 2; s++)
     {
         specular += CalculatePointLightSpeculars(s, input, normal, roughness);
 

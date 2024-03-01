@@ -152,7 +152,7 @@ namespace RetroEngine.Entities
 
             body.LinearVelocity = new System.Numerics.Vector3(MoveDirection.X * speed, body.LinearVelocity.Y, MoveDirection.Z * speed);
 
-            MoveDirection = Vector3.Lerp(MoveDirection, DesiredMoveDirection, Time.deltaTime);
+            MoveDirection = Vector3.Lerp(MoveDirection, DesiredMoveDirection, Time.deltaTime*3);
 
             if (loadedAssets)
                 mesh.Update(Time.deltaTime);

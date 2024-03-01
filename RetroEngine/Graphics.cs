@@ -39,6 +39,8 @@ namespace RetroEngine
 
         public static bool DisableBackFaceCulling = true;
 
+        public static bool GlobalPointLights = true;
+
         public static Vector3 lightlocation = new Vector3();
 
         public static BoundingFrustum DirectionalLightFrustrum = new BoundingFrustum(Matrix.Identity);

@@ -10,11 +10,11 @@ namespace RetroEngine
     public static class LightManager
     {
 
-        public static int MAX_POINT_LIGHTS = 10;
+        public static int MAX_POINT_LIGHTS = 5;
 
         static List<PointLightData> pointLights = new List<PointLightData>();
 
-        public static PointLightData[] FinalPointLights = new PointLightData[MAX_POINT_LIGHTS];
+        public static List<PointLightData> FinalPointLights = new List<PointLightData>();
 
         public static void AddPointLight(PointLightData pointLight)
         {
@@ -31,15 +31,24 @@ namespace RetroEngine
         {
             pointLights = pointLights.OrderBy(l => Vector3.Distance(l.Position,Camera.position)).ToList();
 
-            for(int i = 0; i < MAX_POINT_LIGHTS; i++) 
+            FinalPointLights.Clear();
+
+            if (Graphics.GlobalPointLights == false)
             {
-                if(pointLights.Count <= i)
+                FinalPointLights.AddRange(pointLights);
+            }
+            else
+            {
+                for (int i = 0; i < MAX_POINT_LIGHTS; i++)
                 {
-                    FinalPointLights[i] = new PointLightData();
-                }
-                else
-                {
-                    FinalPointLights[i] = pointLights[i];
+                    if (pointLights.Count <= i)
+                    {
+                        FinalPointLights.Add(new PointLightData());
+                    }
+                    else
+                    {
+                        FinalPointLights.Add(pointLights[i]);
+                    }
                 }
             }
 

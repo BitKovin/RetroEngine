@@ -68,7 +68,7 @@ namespace RetroEngine.Map
 
                     }
 
-                    if (MergeBrushes)
+                    if (MergeBrushes || entity.mergeBrushes)
                     {
                         entity.meshes.AddRange(BrushFaceMesh.MergeFaceMeshes(faces));
 

@@ -7,7 +7,13 @@ using System.Threading.Tasks;
 namespace RetroEngine.Entities.Brushes
 {
     [LevelObject("groupBrush")]
-    internal class GroupBrush
+    public class GroupBrush : Entity
     {
+
+        public GroupBrush() 
+        {
+            mergeBrushes = true;
+        }
+
     }
 }

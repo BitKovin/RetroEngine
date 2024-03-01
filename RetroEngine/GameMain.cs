@@ -333,7 +333,7 @@ namespace RetroEngine
 
             float dif = _graphics.PreferredBackBufferHeight / (float)((int)render.GetScreenResolution().Y);
 
-            SpriteBatch.Begin(transformMatrix: Matrix.CreateScale(dif), samplerState: SamplerState.AnisotropicClamp);
+            SpriteBatch.Begin(transformMatrix: Matrix.CreateScale(dif), samplerState: SamplerState.PointWrap);
 
             // Draw the render target to the screen
             SpriteBatch.Draw(frame, Vector2.Zero, screenRectangle, Color.White);

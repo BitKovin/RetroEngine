@@ -35,7 +35,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR
     color += saturate(tex2D(SpriteTextureSampler, input.TextureCoordinates).rgb - offset);
 	
 	
-    float sampleRadius = 10;
+    float sampleRadius = 6;
 	
 	
     for (int x = -1 * sampleRadius; x <= sampleRadius; x ++)
@@ -52,7 +52,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR
             color += saturate(tex2D(SpriteTextureSampler, input.TextureCoordinates + offsetCoords).rgb - offset) / (length(TextureOffset) + 1);
         }
 	
-    color = color / 100.0f;
+    color = color / 80.0f;
 	
     color = length(color)*lerp(normalize(color), length(color), length(color)*2);
 	

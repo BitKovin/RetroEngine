@@ -148,20 +148,24 @@ namespace RetroEngine
 
                 effect.Parameters["GlobalLightColor"]?.SetValue(Graphics.LightColor);
 
-                Vector3[] LightPos = new Vector3[LightManager.MAX_POINT_LIGHTS];
-                Vector3[] LightColor = new Vector3[LightManager.MAX_POINT_LIGHTS];
-                float[] LightRadius = new float[LightManager.MAX_POINT_LIGHTS];
-
-                for (int i = 0; i < LightManager.MAX_POINT_LIGHTS; i++)
+                if (Graphics.GlobalPointLights)
                 {
-                    LightPos[i] = LightManager.FinalPointLights[i].Position;
-                    LightColor[i] = LightManager.FinalPointLights[i].Color;
-                    LightRadius[i] = LightManager.FinalPointLights[i].Radius;
+                    Vector3[] LightPos = new Vector3[LightManager.MAX_POINT_LIGHTS];
+                    Vector3[] LightColor = new Vector3[LightManager.MAX_POINT_LIGHTS];
+                    float[] LightRadius = new float[LightManager.MAX_POINT_LIGHTS];
+
+                    for (int i = 0; i < LightManager.MAX_POINT_LIGHTS; i++)
+                    {
+                        LightPos[i] = LightManager.FinalPointLights[i].Position;
+                        LightColor[i] = LightManager.FinalPointLights[i].Color;
+                        LightRadius[i] = LightManager.FinalPointLights[i].Radius;
+                    }
+
+                    effect.Parameters["LightPositions"]?.SetValue(LightPos);
+                    effect.Parameters["LightColors"]?.SetValue(LightColor);
+                    effect.Parameters["LightRadiuses"]?.SetValue(LightRadius);
                 }
 
-                effect.Parameters["LightPositions"]?.SetValue(LightPos);
-                effect.Parameters["LightColors"]?.SetValue(LightColor);
-                effect.Parameters["LightRadiuses"]?.SetValue(LightRadius);
                 effect.Parameters["DepthTexture"]?.SetValue(DepthPrepathOutput);
             }
         }

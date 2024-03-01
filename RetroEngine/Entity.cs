@@ -47,6 +47,8 @@ namespace RetroEngine
 
         public int Layer = 0;
 
+        public bool mergeBrushes = false;
+
         public Entity()
         {
 
