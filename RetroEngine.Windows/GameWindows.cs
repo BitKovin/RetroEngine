@@ -57,7 +57,7 @@ namespace RetroEngine.Windows
         {
             mouse.Poll();
 
-            if(Input.LockCursor)
+            if(Input.LockCursor && GameMain.Instance.IsActive)
             {
                 Microsoft.Xna.Framework.Input.Mouse.SetPosition((int)Input.windowCenter.X, (int)Input.windowCenter.Y);
             }

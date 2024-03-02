@@ -35,6 +35,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
         protected Vector3 DrawRotation = Vector3.Zero;
 
+        protected Vector3 Sway = new Vector3();
 
         public static Weapon CreateFromData(WeaponData data, PlayerCharacter owner = null)
         {
@@ -55,6 +56,8 @@ namespace RetroEngine.Game.Entities.Weapons
 
             if(Time.gameTime - SpawnTime > DrawTime)
                 Drawing = false;
+
+            UpdateSway();
 
         }
 
@@ -85,6 +88,29 @@ namespace RetroEngine.Game.Entities.Weapons
 
             DrawRotation = new Vector3((1 - progress) * 20, (1 - progress) * 20, (1 - progress) * 30);
 
+
+
+        }
+
+
+        void UpdateSway()
+        {
+            Sway -= new Vector3(Input.MouseDelta.X,-Input.MouseDelta.Y,0)/3000;
+            Sway = Vector3.Lerp(Sway,Vector3.Zero, Time.deltaTime*12);
+
+            Sway.X = Math.Clamp(Sway.X,-0.05f, 0.05f);
+            Sway.Y = Math.Clamp(Sway.Y, -0.03f, 0.03f);
+
+            Sway.Z = Math.Abs(Sway.X) + Math.Abs(Sway.Y);
+            Sway.Z /= -1.2f;
+
+            //Console.WriteLine(Sway);
+
+        }
+
+        protected Vector3 GetWorldSway()
+        {
+            return Camera.rotation.GetRightVector()*Sway.X + Camera.rotation.GetUpVector()*Sway.Y + Camera.rotation.GetForwardVector()*Sway.Z;
         }
 
     }

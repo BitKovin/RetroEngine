@@ -39,7 +39,7 @@ namespace RetroEngine
 
         public static bool DisableBackFaceCulling = true;
 
-        public static bool GlobalPointLights = true;
+        public static bool GlobalPointLights = false;
 
         public static Vector3 lightlocation = new Vector3();
 

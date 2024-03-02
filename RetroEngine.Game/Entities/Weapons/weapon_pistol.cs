@@ -59,7 +59,7 @@ namespace RetroEngine.Game.Entities.Weapons
         {
             base.LateUpdate();
 
-            mesh.Position = Position;
+            mesh.Position = Position + GetWorldSway();
             mesh.Rotation = Rotation + DrawRotation;
 
             arms.Position = mesh.Position;

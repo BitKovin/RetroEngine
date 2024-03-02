@@ -10,7 +10,7 @@ namespace RetroEngine
     public static class LightManager
     {
 
-        public static int MAX_POINT_LIGHTS = 5;
+        public static int MAX_POINT_LIGHTS = 4;
 
         static List<PointLightData> pointLights = new List<PointLightData>();
 

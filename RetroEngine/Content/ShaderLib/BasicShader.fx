@@ -53,7 +53,11 @@ bool Viewmodel = false;
 matrix ShadowMapViewProjectionClose;
 float ShadowMapResolutionClose;
 
-#define MAX_POINT_LIGHTS 5
+#ifndef MAX_POINT_LIGHTS
+
+#define MAX_POINT_LIGHTS 4
+
+#endif
 
 float3 LightPositions[MAX_POINT_LIGHTS];
 float3 LightColors[MAX_POINT_LIGHTS];
@@ -304,7 +308,7 @@ float3 CalculateSpecular(float roughness, float3 worldPos, float3 normal, float3
     float temp = max(dot(normal, halfwayDir), 0.0);
     temp = temp * temp;
 
-    float specular = temp / 8;
+    float specular = temp / 6;
     
     
     return specular * GlobalLightColor;
@@ -485,15 +489,11 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness)
     
     
     
-    float3 specular = 0;
+    float specular = 0;
     
     specular = CalculateSpecular(roughness, input.MyPosition, normal, -LightDirection);
     
-    if (!isParticle)
-    {
     
-        specular *= min((1.05 - shadow),1);
-    }
     
         
     
@@ -511,6 +511,10 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness)
     light = max(light, 0);
     light += globalLight;
     
+    if (!isParticle)
+    {
+        specular *= light;
+    }
 
     for (int i = 0; i < MAX_POINT_LIGHTS; i++)
     {
