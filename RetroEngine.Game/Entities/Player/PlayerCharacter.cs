@@ -203,7 +203,7 @@ namespace RetroEngine.Game.Entities.Player
 
             bob = Vector3.Zero;
 
-            bob += Camera.rotation.GetForwardVector() * (float)Math.Sin(bobProgress * 1 * bobSpeed * 1) * 0.5f;
+            bob += Camera.rotation.GetForwardVector() * (float)Math.Sin(bobProgress * 1 * bobSpeed * 1) * -0.5f;
             //bob += Camera.rotation.GetUpVector() * (float)(Math.Abs(Math.Sin(bobProgress * bobSpeed * 1))) * 0.2f;
         }
 
