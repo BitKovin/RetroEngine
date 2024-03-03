@@ -331,7 +331,7 @@ namespace RetroEngine
 
             Rectangle screenRectangle = new Rectangle(0, 0, (int)(render.GetScreenResolution().X), (int)(render.GetScreenResolution().Y));
 
-            float dif = _graphics.PreferredBackBufferHeight / (float)((int)render.GetScreenResolution().Y);
+            float dif = _graphics.PreferredBackBufferHeight / (float)(frame.Height);
 
             SpriteBatch.Begin(transformMatrix: Matrix.CreateScale(dif), samplerState: SamplerState.PointWrap);
 

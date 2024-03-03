@@ -265,6 +265,8 @@ namespace RetroEngine.Particles
 
         public void LoadAssets()
         {
+            GetModelFromPath("models/particle.obj");
+
             texture = AssetRegistry.LoadTextureFromFile(TexturePath);
             if(ModelPath is not null)
                 GetModelFromPath(ModelPath);

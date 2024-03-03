@@ -51,7 +51,8 @@ PixelOutput PixelShaderFunction(PixelInput input)
     
     float Depth = input.MyPixelPosition.z;
     
-    output.Depth = float4(Depth, 0, 0, 1);
+
+    
 
     float3 textureNormal = tex2D(NormalTextureSampler, input.TexCoord).xyz;
     
@@ -79,10 +80,16 @@ PixelOutput PixelShaderFunction(PixelInput input)
     
     textureAlpha *= Transparency;
     
+    float pbs = 1;
+    
+    if (textureAlpha<0.95)
+        pbs = 0;
+    
+    output.Depth = float4(Depth, 0, 0, pbs);
     
     output.Color = float4(textureColor, textureAlpha);
     
-    output.Normal = float4((pixelNormal + 1) / 2,1);
+    output.Normal = float4((pixelNormal + 1) / 2, pbs);
     
     
     return output;

@@ -16,7 +16,7 @@
 #begin BloomSampler.fx
 /importer:EffectImporter
 /processor:EffectProcessor
-/processorParam:DebugMode=Auto
+/processorParam:DebugMode=Optimize
 /build:BloomSampler.fx
 
 #begin box.fbx
@@ -90,7 +90,7 @@
 #begin OcclusionPath.fx
 /importer:EffectImporter
 /processor:EffectProcessor
-/processorParam:DebugMode=Auto
+/processorParam:DebugMode=Optimize
 /build:OcclusionPath.fx
 
 #begin ShadowMap.fx
@@ -108,6 +108,6 @@
 #begin UnifiedOutput.fx
 /importer:EffectImporter
 /processor:EffectProcessor
-/processorParam:DebugMode=Auto
+/processorParam:DebugMode=Optimize
 /build:UnifiedOutput.fx
 

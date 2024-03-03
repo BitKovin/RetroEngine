@@ -392,6 +392,8 @@ namespace RetroEngine
             isRendered = false;
             isRenderedShadow = false;
 
+            if (Visible == false) return;
+
             inFrustrum = false;
 
 
@@ -406,7 +408,8 @@ namespace RetroEngine
 
             }
 
-            isRendered = inFrustrum && !occluded || Viewmodel;
+            isRendered = inFrustrum || Viewmodel;
+            frameStaticMeshData.IsRendered = isRendered;
         }
 
         public override void Destroyed()

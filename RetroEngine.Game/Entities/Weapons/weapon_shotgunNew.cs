@@ -151,6 +151,11 @@ namespace RetroEngine.Game.Entities.Weapons
             mesh.textureSearchPaths.Add("textures/weapons/shotgun_new/");
             mesh.textureSearchPaths.Add("textures/weapons/general/");
 
+            MathHelper.Transform t = new MathHelper.Transform();
+
+            t.Rotation = new Vector3(0,0,-1);
+
+            mesh.SetBoneMeshTransformModification("spine_03", t.ToMatrix());
 
             mesh.CastShadows = false;
             mesh.PreloadTextures();

@@ -35,6 +35,8 @@ namespace RetroEngine
 
         List<int> renderLayers = new List<int>();
 
+        public string Name = "";
+
         public Level()
         {
 
@@ -125,6 +127,8 @@ namespace RetroEngine
             LoadingScreen.Update(0.2f);
 
             GameMain.Instance.curentLevel = mapData.GetLevel();
+
+            GameMain.Instance.curentLevel.Name = name;
 
             LoadingScreen.Update(0.7f);
 
@@ -400,6 +404,12 @@ namespace RetroEngine
         public static void LoadLevelFromFile(string name)
         {
             LoadFromFile(name);
+        }
+
+        [ConsoleCommand("level.reload")]
+        public static void ReloadLevel()
+        {
+            LoadFromFile(Level.GetCurrent().Name);
         }
 
     }

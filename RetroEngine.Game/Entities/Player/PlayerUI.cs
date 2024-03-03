@@ -26,6 +26,8 @@ namespace RetroEngine.Game.Entities.Player
 
         public Vector3 crosshairOffset = new Vector3(0.1f,-0.15f,0);
 
+        public static bool ShowCrosshair = true;
+
         public void Load()
         {
             crosshair.baseColor = new Color(1f, 1f, 1f) * 2f;
@@ -66,6 +68,8 @@ namespace RetroEngine.Game.Entities.Player
 
             UpdateWorldCrosshair();
 
+            crosshairMesh.Visible = ShowCrosshair;
+
         }
 
         public void Destroy()
@@ -85,6 +89,8 @@ namespace RetroEngine.Game.Entities.Player
         {
 
             Vector3 cameraPosWithOffset = Camera.position + Camera.rotation.GetUpVector() * crosshairOffset.Y + Camera.rotation.GetRightVector() * crosshairOffset.X + Camera.rotation.GetForwardVector() * crosshairOffset.Z;
+
+
 
             var hit = Physics.LineTrace(cameraPosWithOffset.ToPhysics(), (cameraPosWithOffset + Camera.rotation.GetForwardVector() * 100).ToPhysics(), new List<CollisionObject>() {player.body });
 

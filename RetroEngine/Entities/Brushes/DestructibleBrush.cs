@@ -31,6 +31,8 @@ namespace RetroEngine.Entities.Brushes
 
             systemName = data.GetPropertyString("paricleSystem", "testSystem");
 
+            ParticleSystem.Preload(systemName);
+
         }
 
         public override void OnDamaged(float damage, Entity causer = null, Entity weapon = null)

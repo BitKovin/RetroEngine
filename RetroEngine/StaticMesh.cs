@@ -96,6 +96,8 @@ namespace RetroEngine
         public bool OverrideBlend = false;
         public BlendState OverrideBlendState = BlendState.Additive;
 
+        public bool Visible = true;
+
         public bool SimpleTransperent = false;
 
         public StaticMesh()
@@ -847,6 +849,8 @@ namespace RetroEngine
 
             loadedModels.TryAdd(filePath, model);
 
+            Console.WriteLine($"loaded model {filePath}");
+
             return model;
         }
 
@@ -936,6 +940,8 @@ namespace RetroEngine
         {
             isRendered = false;
             isRenderedShadow = false;
+
+            if (Visible == false) return;
 
             inFrustrum = false;
 

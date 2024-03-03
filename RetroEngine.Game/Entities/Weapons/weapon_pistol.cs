@@ -19,6 +19,8 @@ namespace RetroEngine.Game.Entities.Weapons
 
         SoundPlayer fireSoundPlayer;
 
+        float aim = 0;
+
 
         public override void Start()
         {
@@ -46,6 +48,38 @@ namespace RetroEngine.Game.Entities.Weapons
 
             if (Input.GetAction("attack").Holding())
                 Shoot();
+
+            UpdateAim();
+
+        }
+
+        void IncreaseAim()
+        {
+            aim += Time.deltaTime * 4;
+        }
+
+        void DecreaseAim()
+        {
+            aim-= Time.deltaTime * 3;
+        }
+
+        void UpdateAim()
+        {
+            if (Input.GetAction("attack2").Holding())
+            {
+                IncreaseAim();
+            }
+            else
+            {
+                DecreaseAim();
+            }
+
+            aim = Math.Clamp(aim, 0, 1);
+
+            Offset = Vector3.Lerp(Vector3.Zero, new Vector3(-0.052488543f, 0.07340118f, -0.12f), aim);
+
+            BobScale = 1 - aim;
+
         }
 
         public override void Destroy()
@@ -59,7 +93,7 @@ namespace RetroEngine.Game.Entities.Weapons
         {
             base.LateUpdate();
 
-            mesh.Position = Position + GetWorldSway();
+            mesh.Position = Position + GetWorldSway()*(1f-aim) + GetWorldOffset();
             mesh.Rotation = Rotation + DrawRotation;
 
             arms.Position = mesh.Position;
@@ -162,7 +196,8 @@ namespace RetroEngine.Game.Entities.Weapons
 
             meshes.Add(mesh);
             meshes.Add(arms);
-            //new Bullet().LoadAssetsIfNeeded();
+
+            new Bullet().LoadAssetsIfNeeded();
 
         }
     }

@@ -22,6 +22,8 @@ namespace RetroEngine.Game.Entities.Weapons
 
         SoundPlayer fireSoundPlayer;
 
+        float aim = 0;
+
 
         public override void Start()
         {

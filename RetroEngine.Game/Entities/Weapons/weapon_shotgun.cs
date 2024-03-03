@@ -147,6 +147,7 @@ namespace RetroEngine.Game.Entities.Weapons
             mesh.UseAlternativeRotationCalculation = true;
             mesh.AddFrameVertexData();
 
+
             meshes.Add(mesh);
             mesh.isLoaded = true;
             //new Bullet().LoadAssetsIfNeeded();

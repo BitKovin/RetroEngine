@@ -36,9 +36,7 @@ namespace RetroEngine.Entities
             
             sys.Start();
 
-            sys.LoadAssetsIfNeeded();
-
-            sys.Update();
+            sys.LateUpdate();
 
             sys.LoadAssetsIfNeeded();
 

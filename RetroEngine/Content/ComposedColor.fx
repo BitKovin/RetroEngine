@@ -67,7 +67,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 	
     float ssao = tex2D(SSAOTextureSampler, input.TextureCoordinates).r;
 	
-    return float4(color + bloomColor,1);
+    return float4((color + bloomColor)*ssao, 1);
 }
 
 technique SpriteDrawing

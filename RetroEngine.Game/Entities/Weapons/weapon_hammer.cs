@@ -161,7 +161,7 @@ namespace RetroEngine.Game.Entities.Weapons
             mesh.isLoaded = true;
             mesh.AddFrameVertexData();
 
-            ParticleSystem.Preload("hitsmoke");
+            ParticleSystem.Preload("hitSmoke");
 
             meshes.Add(mesh);
         }

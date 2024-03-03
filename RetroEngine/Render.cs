@@ -189,7 +189,7 @@ namespace RetroEngine
             InitRenderTargetIfNeed(ref FxaaOutput);
 
 
-            InitSizedRenderTargetIfNeed(ref ssaoOutput, 128);
+            InitSizedRenderTargetIfNeed(ref ssaoOutput,512);
 
             InitSizedRenderTargetIfNeed(ref bloomSample, 64);
             InitSizedRenderTargetIfNeed(ref bloomSample2, 32);
@@ -230,8 +230,11 @@ namespace RetroEngine
 
             graphics.GraphicsDevice.SetRenderTarget(null);
 
+            if(Input.GetAction("test2").Holding())
+                return DepthPrepathOutput;
 
             return outputPath;
+
         }
 
         public void InitSampler(int max = 10)
@@ -419,7 +422,7 @@ namespace RetroEngine
 
         void PerformPostProcessing()
         {
-            //PerformSSAO();
+            PerformSSAO();
 
             
             CalculateBloom();
@@ -452,25 +455,25 @@ namespace RetroEngine
 
         void PerformSSAO()
         {
+
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, ssaoOutput.Width, ssaoOutput.Height);
 
             graphics.GraphicsDevice.SetRenderTarget(ssaoOutput);
 
-            SSAOEffect.Parameters["ColorTexture"].SetValue(DeferredOutput);
-            SSAOEffect.Parameters["NormalTexture"].SetValue(normalPath);
-            SSAOEffect.Parameters["DepthTexture"].SetValue(DepthOutput);
-            SSAOEffect.Parameters["screenWidth"].SetValue(ssaoOutput.Width/2);
-            SSAOEffect.Parameters["screenHeight"].SetValue(ssaoOutput.Height/2);
-            SSAOEffect.Parameters["ssaoRadius"].SetValue(1f);
-            //SSAOEffect.Parameters["ssaoBias"].SetValue(0.000001f);
-            SSAOEffect.Parameters["ssaoIntensity"].SetValue(10f);
+            SSAOEffect.Parameters["NormalTexture"]?.SetValue(normalPath);
+            SSAOEffect.Parameters["DepthTexture"]?.SetValue(DepthPrepathOutput);
+            SSAOEffect.Parameters["screenWidth"]?.SetValue(ssaoOutput.Width);
+            SSAOEffect.Parameters["screenHeight"]?.SetValue(ssaoOutput.Height);
+            SSAOEffect.Parameters["ssaoRadius"]?.SetValue(10);
+            SSAOEffect.Parameters["ssaoBias"]?.SetValue(0.001f);
+            SSAOEffect.Parameters["ssaoIntensity"]?.SetValue(7);
 
 
             SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
 
             spriteBatch.Begin(effect: SSAOEffect, blendState: BlendState.Opaque);
 
-            DrawFullScreenQuad(spriteBatch, DeferredOutput);
+            DrawFullScreenQuad(spriteBatch, DepthOutput);
 
             spriteBatch.End();
         }

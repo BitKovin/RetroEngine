@@ -7,12 +7,6 @@
 #define PS_SHADERMODEL ps_5_0
 #endif
 
-texture ColorTexture;
-sampler ColorTextureSampler = sampler_state
-{
-    texture = <ColorTexture>;
-};
-
 texture DepthTexture;
 sampler DepthTextureSampler = sampler_state
 {
@@ -47,40 +41,47 @@ float CalculateSSAO(float2 texCoord, float depth, float3 normal)
 {
     float ao = 0.0;
 
-    float radius = ssaoRadius;
-    const float bias = 0.01;
+    const float radius = 50;
+    const float bias = ssaoBias;
 
     float rotation = texCoord.x + texCoord.y;
 
-    for (float angle = 0.0; angle < 6.283; angle += 0.3)
-    {
-        float2 offset = radius * float2(cos(angle + rotation), sin(angle + rotation));
-        float2 sampleCoord = texCoord + offset / float2(screenWidth, screenHeight);
-
-        // Clamp sample coordinates to prevent sampling outside texture bounds
-        sampleCoord = clamp(sampleCoord, 0.0, 1.0);
-
-        float3 sampleNormal = DecodeNormal(tex2D(NormalTextureSampler, sampleCoord).xyz);
-        float sampleDepth = tex2D(DepthTextureSampler, sampleCoord).r;
-
-        float depthDifference = sampleDepth - depth + bias;
-
-        if (depthDifference < 0)
+    for (float l = 0; l <= radius; l += radius/4)
+        for (float angle = 0.0; angle < 6.283; angle += 0.5)
         {
-            continue;
+            float2 offset = l * float2(cos(angle + rotation), sin(angle + rotation));
+            float2 sampleCoord = texCoord + offset / 256 / depth;
+       
+            if (sampleCoord.x > 1 || sampleCoord.y > 1 || sampleCoord.x < 0 || sampleCoord.y < 0)
+                continue;
+
+            float3 sampleNormal = DecodeNormal(tex2D(NormalTextureSampler, sampleCoord).xyz);
+            float sampleDepth = tex2D(DepthTextureSampler, sampleCoord).r;
+
+            float depthDifference = depth - sampleDepth + bias;
+            
+            if (depthDifference<0)
+                continue;
+            
+            if (depthDifference > 1)
+                continue;
+            
+            float normalDifference = 1 - dot(normal, sampleNormal);
+       
+            float occlusion = normalDifference;
+       
+            ao += occlusion / lerp(depth, 1, 0.995) * ssaoIntensity;
         }
 
-        // Adjust normals for smoother transitions at edges
-        float3 adjustedNormal = lerp(normal, sampleNormal, smoothstep(0.0, 0.1, length(offset)));
+    ao /= 63.0 * 3;
+    return ao ;
+}
 
-        float normalDifference = dot(adjustedNormal, sampleNormal);
-        float occlusion = 1.0 - smoothstep(0.0, radius, length(depthDifference) / (radius * 0.25) + normalDifference / radius);
-
-        ao += occlusion;
-    }
-
-    ao /= 63.0;
-    return ao * ssaoIntensity;
+// Hermite function for smooth falloff (replace with your preferred falloff function)
+float HermiteFunction(float value, float edge0, float edge1, float slope0)
+{
+    float t = clamp((value - edge0) / (edge1 - edge0), 0.0f, 1.0f);
+    return (3.0f * t * (t - 1.0f) * (t - 1.0f)) * slope0;
 }
 
 
@@ -90,27 +91,16 @@ float4 PixelShaderFunction(float4 position : SV_POSITION, float4 color : COLOR0,
     // Sample depth, normal, and color
     float depth = tex2D(DepthTextureSampler, texCoord).r;
     float3 normal = DecodeNormal(tex2D(NormalTextureSampler, texCoord).xyz);
-    float3 albedo = tex2D(ColorTextureSampler, texCoord).rgb;
 
     float ao = 0;
     
     float sampleRadius = 2;
     
     ao += CalculateSSAO(texCoord, depth, normal);
-    
-    for (int x = -1 * sampleRadius; x < 2 * sampleRadius; x+= sampleRadius)
-        for (int y = -1 * sampleRadius; y < 2 * sampleRadius; y += sampleRadius)
-        {
-            
-            float2 offset = float2(x,y);
-            
-            float2 offsetCoords = offset / float2(screenWidth, screenHeight);
-            
-            ao += CalculateSSAO(texCoord + offsetCoords, depth, normal) / (length(offset) + 1);
-        }
+
     
     // Apply AO to the final color
-    float3 finalColor = 1 * (1.0 - ao) + albedo*0.00000000000000001f;
+    float3 finalColor = 1 ;
 
     return float4(finalColor, 1.0);
 }

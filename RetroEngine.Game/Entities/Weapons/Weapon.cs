@@ -37,6 +37,10 @@ namespace RetroEngine.Game.Entities.Weapons
 
         protected Vector3 Sway = new Vector3();
 
+        public Vector3 Offset = new Vector3();
+
+        public float BobScale = 1;
+
         public static Weapon CreateFromData(WeaponData data, PlayerCharacter owner = null)
         {
             Weapon weapon = Activator.CreateInstance(data.weaponType) as Weapon;
@@ -104,13 +108,17 @@ namespace RetroEngine.Game.Entities.Weapons
             Sway.Z = Math.Abs(Sway.X) + Math.Abs(Sway.Y);
             Sway.Z /= -1.2f;
 
-            //Console.WriteLine(Sway);
 
         }
 
-        protected Vector3 GetWorldSway()
+        public Vector3 GetWorldSway()
         {
             return Camera.rotation.GetRightVector()*Sway.X + Camera.rotation.GetUpVector()*Sway.Y + Camera.rotation.GetForwardVector()*Sway.Z;
+        }
+
+        public Vector3 GetWorldOffset()
+        {
+            return Camera.rotation.GetRightVector() * Offset.X + Camera.rotation.GetUpVector() * Offset.Y + Camera.rotation.GetForwardVector() * Offset.Z;
         }
 
     }

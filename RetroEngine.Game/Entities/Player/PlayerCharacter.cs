@@ -56,7 +56,7 @@ namespace RetroEngine.Game.Entities.Player
 
         List<WeaponData> weapons = new List<WeaponData>();
 
-        Weapon currentWeapon;
+        public Weapon currentWeapon;
         int currentSlot = -1;
         int lastSlot = -1;
 
@@ -361,8 +361,8 @@ namespace RetroEngine.Game.Entities.Player
         {
             if (currentWeapon is not null)
             {
-                currentWeapon.Position = Camera.position + bob * 0.05f + Camera.rotation.GetForwardVector() * Camera.rotation.X / 3000f;
-                currentWeapon.Rotation = Camera.rotation + new Vector3(0, 0, (float)Math.Sin(bobProgress * 1 * bobSpeed) * -1.5f);
+                currentWeapon.Position = Camera.position + bob * 0.05f*currentWeapon.BobScale + Camera.rotation.GetForwardVector() * Camera.rotation.X / 3000f;
+                currentWeapon.Rotation = Camera.rotation + new Vector3(0, 0, (float)Math.Sin(bobProgress * 1 * bobSpeed) * -1.5f) * currentWeapon.BobScale;
             }
 
             cylinder.Position = Position + Camera.rotation.GetForwardVector().XZ() * 3;
