@@ -153,9 +153,6 @@ namespace RetroEngine.Game.Entities.Weapons
 
             MathHelper.Transform t = new MathHelper.Transform();
 
-            t.Rotation = new Vector3(0,0,-1);
-
-            mesh.SetBoneMeshTransformModification("spine_03", t.ToMatrix());
 
             mesh.CastShadows = false;
             mesh.PreloadTextures();
