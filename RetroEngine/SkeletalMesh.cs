@@ -408,7 +408,7 @@ namespace RetroEngine
 
             }
 
-            isRendered = inFrustrum || Viewmodel;
+            isRendered = inFrustrum&& (occluded==false) || Viewmodel;
             frameStaticMeshData.IsRendered = isRendered;
         }
 

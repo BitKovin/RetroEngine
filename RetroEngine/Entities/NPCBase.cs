@@ -82,7 +82,7 @@ namespace RetroEngine.Entities
         {
             base.LoadAssets();
 
-            mesh.LoadFromFile("models/skeletal_test2.fbx");
+            mesh.LoadFromFile("models/skeletal_test.fbx");
 
             mesh.SetInterpolationEnabled(false);
 
@@ -92,7 +92,7 @@ namespace RetroEngine.Entities
             sm.LoadFromFile("models/cube.obj");
             sm.texture = AssetRegistry.LoadTextureFromFile("cat.png");
 
-            mesh2.LoadFromFile("models/skeletal_test.fbx");
+            mesh2.LoadFromFile("models/skeletal_test2.fbx");
 
             mesh2.texture = AssetRegistry.LoadTextureFromFile("cat.png");
 

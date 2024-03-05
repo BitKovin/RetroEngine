@@ -344,12 +344,10 @@ namespace RetroEngine
             {
                 if (mesh.Transperent == false)
                 {
-                    try
-                    {
+                    
                         mesh.StartOcclusionTest();
 
-                    }
-                    catch (Exception e) { }
+                    
                 }
             }
         }

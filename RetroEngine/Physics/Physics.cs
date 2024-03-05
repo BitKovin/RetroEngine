@@ -147,13 +147,6 @@ namespace RetroEngine
                 staticRigidBody.UpdateFromParrent();
             }
 
-            foreach(CollisionObject collisionObject in removeList)
-            {
-                dynamicsWorld.RemoveCollisionObject(collisionObject);
-                collisionObject.Dispose();
-            }
-            removeList.Clear();
-
             if (GameMain.Instance.paused == false)
                 dynamicsWorld.StepSimulation(RetroEngine.Time.deltaTime, steps, Math.Max(1 / 100f, Time.deltaTime));
         }
@@ -168,8 +161,6 @@ namespace RetroEngine
             collisionObject.CollisionShape.Dispose();
             collisionObject.Dispose();
 
-
-            dynamicsWorld.UpdateAabbs();
         }
 
         public static void Remove(RigidBody body)
