@@ -5,9 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TextureCreator"
         mc:Ignorable="d"
-        Title="MainWindow" Height="720" Width="1280">
+        Title="MainWindow" Height="758" Width="1280" ResizeMode="CanMinimize">
     <Grid>
-        <Image x:Name="result" HorizontalAlignment="Left" Height="300" Margin="942,336,0,0" VerticalAlignment="Top" Width="300" Source="/none.png" Stretch="Fill" Cursor="Pen"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="317*"/>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="51*"/>
+        </Grid.RowDefinitions>
+        <Image x:Name="result" Height="300" Margin="942,336,38,0" VerticalAlignment="Top" Source="/none.png" Stretch="Fill" Cursor="Pen" Grid.RowSpan="2"/>
         <Image x:Name="metalic" HorizontalAlignment="Center" Height="200
                " Margin="0,402,0,0" VerticalAlignment="Top" Width="200" Source="/none.png" Stretch="Fill" Cursor="Cross" MouseDown="metalic_MouseDown"/>
         <Image x:Name="roughness" HorizontalAlignment="Left" Height="200                " Margin="308,402,0,0" VerticalAlignment="Top" Width="200" Source="/none.png" Stretch="Fill" Cursor="Cross" MouseDown="roughness_MouseDown"/>
@@ -15,23 +20,23 @@
         <Label Content="Occlusion" HorizontalAlignment="Left" Margin="111,355,0,0" VerticalAlignment="Top" FontSize="24"/>
         <Label Content="Roughness" HorizontalAlignment="Left" Margin="345,355,0,0" VerticalAlignment="Top" FontSize="24"/>
         <Label Content="Metalic" HorizontalAlignment="Center" Margin="0,355,0,0" VerticalAlignment="Top" FontSize="24"/>
-        <ComboBox x:Name="ComboBox1" HorizontalAlignment="Left" Margin="108,630,0,0" VerticalAlignment="Top" Width="120" IsSynchronizedWithCurrentItem="True" SelectionChanged="ComboBox_SelectionChanged">
+        <ComboBox x:Name="ComboBox1" HorizontalAlignment="Left" Margin="108,630,0,0" VerticalAlignment="Top" Width="120" IsSynchronizedWithCurrentItem="True" SelectionChanged="ComboBox_SelectionChanged" Grid.RowSpan="3">
             <ComboBoxItem Content="Red"/>
             <ComboBoxItem Content="Green"/>
             <ComboBoxItem Content="Blue"/>
         </ComboBox>
-        <ComboBox x:Name="ComboBox2" HorizontalAlignment="Left" Margin="348,625,0,0" VerticalAlignment="Top" Width="120" IsSynchronizedWithCurrentItem="True" SelectionChanged="ComboBox_SelectionChanged_1">
+        <ComboBox x:Name="ComboBox2" HorizontalAlignment="Left" Margin="348,625,0,0" VerticalAlignment="Top" Width="120" IsSynchronizedWithCurrentItem="True" SelectionChanged="ComboBox_SelectionChanged_1" Grid.RowSpan="3">
             <ComboBoxItem Content="Red"/>
             <ComboBoxItem Content="Green"/>
             <ComboBoxItem Content="Blue"/>
         </ComboBox>
-        <ComboBox x:Name="ComboBox3" HorizontalAlignment="Center" Margin="0,625,0,0" VerticalAlignment="Top" Width="120" IsSynchronizedWithCurrentItem="True" SelectionChanged="ComboBox_SelectionChanged_2">
+        <ComboBox x:Name="ComboBox3" HorizontalAlignment="Center" Margin="0,625,0,0" Width="120" IsSynchronizedWithCurrentItem="True" SelectionChanged="ComboBox_SelectionChanged_2" Grid.RowSpan="3" Height="22" VerticalAlignment="Top">
             <ComboBoxItem Content="Red"/>
             <ComboBoxItem Content="Green"/>
             <ComboBoxItem Content="Blue"/>
         </ComboBox>
-        <Button Content="Compose" HorizontalAlignment="Left" Margin="778,481,0,0" VerticalAlignment="Top" Click="Button_Click" Height="42" Width="136" FontSize="26"/>
-        <Button Content="Save" HorizontalAlignment="Left" Margin="1024,647,0,0" VerticalAlignment="Top" Click="Button_Click_1" Height="42" Width="136" FontSize="26"/>
+        <Button Content="Compose" Margin="0,0,366,111" Click="Button_Click" FontSize="26" Height="42" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="136"/>
+        <Button Content="Save" Margin="0,0,120,53" Click="Button_Click_1" FontSize="26" HorizontalAlignment="Right" Width="136" Height="42" VerticalAlignment="Bottom" Grid.Row="2"/>
 
     </Grid>
 </Window>

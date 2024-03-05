@@ -110,7 +110,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             if (attackDelay.Wait()) return;
 
-            attackDelay.AddDelay(0.3f);
+            attackDelay.AddDelay(0.4f);
 
             fireSoundPlayer.Play(true);
 
@@ -167,7 +167,7 @@ namespace RetroEngine.Game.Entities.Weapons
         {
             mesh.Scale = new Vector3(1f);
 
-            mesh.LoadFromFile("models/weapons/pistol.fbx");
+            mesh.LoadFromFile("models/weapons/pistol2.fbx");
 
             arms.LoadFromFile("models/weapons/arms.fbx");
             arms.textureSearchPaths.Add("textures/weapons/arms/");

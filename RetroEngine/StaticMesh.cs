@@ -232,23 +232,7 @@ namespace RetroEngine
                 for (int i = 0; i < LightManager.FinalPointLights.Count && filledLights < LightManager.MAX_POINT_LIGHTS; i++)
                 {
 
-                    bool intersects = false;
-
-                    if (frameStaticMeshData.model is not null)
-                    {
-
-                        foreach (ModelMesh mesh in frameStaticMeshData.model.Meshes)
-                        {
-
-                            if (mesh.BoundingSphere.Intersects(new BoundingSphere { Radius = LightManager.FinalPointLights[i].Radius, Center = LightManager.FinalPointLights[i].Position }))
-                            {
-                                intersects = true;
-                                break;
-                            }
-
-
-                        }
-                    }
+                    bool intersects = IntersectsBoubndingSphere(new BoundingSphere { Radius = LightManager.FinalPointLights[i].Radius, Center = LightManager.FinalPointLights[i].Position });
 
                     if (intersects == false) continue;
 
@@ -266,6 +250,30 @@ namespace RetroEngine
             }
 
         }
+
+        public virtual bool IntersectsBoubndingSphere(BoundingSphere sphere)
+        {
+            bool intersects = false;
+
+            if (frameStaticMeshData.model is not null)
+            {
+
+                foreach (ModelMesh mesh in frameStaticMeshData.model.Meshes)
+                {
+
+                    if (mesh.BoundingSphere.Intersects(sphere))
+                    {
+                        intersects = true;
+                        break;
+                    }
+
+
+                }
+            }
+
+            return intersects;
+        }
+
 
         protected virtual void SetupBlending()
         {

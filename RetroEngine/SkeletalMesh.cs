@@ -386,6 +386,19 @@ namespace RetroEngine
             }
         }
 
+        public override bool IntersectsBoubndingSphere(BoundingSphere sphere)
+        {
+            bool intersects = false;
+
+            if (RiggedModel is not null)
+            {
+
+                intersects = boundingSphere.Transform(base.GetWorldMatrix()).Intersects(sphere);
+            }
+
+            return intersects;
+        }
+
         public override void UpdateCulling()
         {
             //isRendered = Camera.frustum.Contains(boundingSphere.Transform(base.GetWorldMatrix())) != ContainmentType.Disjoint;

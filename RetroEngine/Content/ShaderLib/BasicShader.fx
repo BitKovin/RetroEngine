@@ -287,12 +287,12 @@ PBRData CalculatePBR(float3 normal, float roughness, float metallic, float3 worl
 
 }
 
-float3 CalculateSpecular(float roughness, float3 worldPos, float3 normal, float3 lightDir)
+float CalculateSpecular(float roughness, float3 worldPos, float3 normal, float3 lightDir)
 {
     
 #ifdef NO_SPECULAR
     
-    return float3(0,0,0);
+    return float(0);
     
 #endif
 
@@ -308,10 +308,10 @@ float3 CalculateSpecular(float roughness, float3 worldPos, float3 normal, float3
     float temp = max(dot(normal, halfwayDir), 0.0);
     temp = temp * temp;
 
-    float specular = temp / 6;
+    float specular = temp / 10;
     
     
-    return specular * GlobalLightColor;
+    return specular;
 }
 
 float SampleShadowMap(sampler2D shadowMap, float2 coords, float compare)
@@ -494,7 +494,7 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness)
     specular = CalculateSpecular(roughness, input.MyPosition, normal, -LightDirection);
     
     
-    
+    specular *= 1.05- shadow;
         
     
     if (isParticle)

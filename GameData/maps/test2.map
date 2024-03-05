@@ -7074,28 +7074,12 @@
 // entity 13
 {
 "classname" "light_point"
-"origin" "-277 149 155"
-"radius" "7"
-"light_color" "1 0 0.0156863"
-"intensity" "1"
-}
-// entity 14
-{
-"classname" "light_point"
-"origin" "-283 -139 203"
-"radius" "7"
-"light_color" "0.160784 0.0117647 1"
-"intensity" "1"
-}
-// entity 15
-{
-"classname" "light_point"
 "origin" "747 -2843 267"
 "radius" "20"
 "light_color" "0.160784 0.0117647 1"
 "intensity" "1"
 }
-// entity 16
+// entity 14
 {
 "classname" "light_point"
 "origin" "-1115 -4085 331"
@@ -7103,7 +7087,7 @@
 "light_color" "0.160784 0.0117647 1"
 "intensity" "1"
 }
-// entity 17
+// entity 15
 {
 "classname" "light_point"
 "origin" "613 -5317 485"
@@ -7111,7 +7095,7 @@
 "light_color" "0.160784 0.0117647 1"
 "intensity" "1"
 }
-// entity 18
+// entity 16
 {
 "classname" "light_point"
 "origin" "1861 -2853 485"
@@ -7119,7 +7103,7 @@
 "light_color" "0.160784 0.0117647 1"
 "intensity" "1"
 }
-// entity 19
+// entity 17
 {
 "classname" "light_point"
 "origin" "1941 -2629 21"
@@ -7127,7 +7111,7 @@
 "light_color" "0.160784 0.0117647 1"
 "intensity" "1"
 }
-// entity 20
+// entity 18
 {
 "classname" "light_point"
 "origin" "-2651 -3829 251"
@@ -7135,7 +7119,7 @@
 "light_color" "0.160784 0.0117647 1"
 "intensity" "1"
 }
-// entity 21
+// entity 19
 {
 "classname" "light_point"
 "origin" "-2789 -4907 267"
@@ -7143,7 +7127,7 @@
 "light_color" "0.160784 0.0117647 1"
 "intensity" "1"
 }
-// entity 22
+// entity 20
 {
 "classname" "light_point"
 "origin" "-1589 -5803 459"
@@ -7151,7 +7135,7 @@
 "light_color" "0.160784 0.0117647 1"
 "intensity" "1"
 }
-// entity 23
+// entity 21
 {
 "classname" "light_point"
 "origin" "-645 -4309 341"
@@ -7159,7 +7143,7 @@
 "light_color" "0.160784 0.0117647 1"
 "intensity" "1"
 }
-// entity 24
+// entity 22
 {
 "classname" "light_point"
 "origin" "-661 -4453 485"
@@ -7167,7 +7151,7 @@
 "light_color" "0.160784 0.0117647 1"
 "intensity" "1"
 }
-// entity 25
+// entity 23
 {
 "classname" "light_point"
 "origin" "-213 -2517 485"
@@ -7175,7 +7159,7 @@
 "light_color" "0.160784 0.0117647 1"
 "intensity" "1"
 }
-// entity 26
+// entity 24
 {
 "classname" "light_point"
 "origin" "-2677 -2517 485"
@@ -7183,7 +7167,7 @@
 "light_color" "0.160784 0.0117647 1"
 "intensity" "1"
 }
-// entity 27
+// entity 25
 {
 "classname" "light_point"
 "origin" "-1205 -2229 517"
@@ -7191,10 +7175,26 @@
 "light_color" "0.160784 0.0117647 1"
 "intensity" "1"
 }
-// entity 28
+// entity 26
 {
 "classname" "light_point"
 "origin" "1157 -2117 517"
+"radius" "20"
+"light_color" "0.160784 0.0117647 1"
+"intensity" "1"
+}
+// entity 27
+{
+"classname" "light_point"
+"origin" "-283 117 165"
+"radius" "20"
+"light_color" "0.160784 0.0117647 1"
+"intensity" "1"
+}
+// entity 28
+{
+"classname" "light_point"
+"origin" "-283 -69 197"
 "radius" "20"
 "light_color" "0.160784 0.0117647 1"
 "intensity" "1"

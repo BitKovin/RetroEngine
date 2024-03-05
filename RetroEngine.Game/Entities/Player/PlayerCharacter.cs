@@ -362,7 +362,7 @@ namespace RetroEngine.Game.Entities.Player
             if (currentWeapon is not null)
             {
                 currentWeapon.Position = Camera.position + bob * 0.05f*currentWeapon.BobScale + Camera.rotation.GetForwardVector() * Camera.rotation.X / 3000f;
-                currentWeapon.Rotation = Camera.rotation + new Vector3(0, 0, (float)Math.Sin(bobProgress * 1 * bobSpeed) * -1.5f) * currentWeapon.BobScale;
+                currentWeapon.Rotation = Camera.rotation + new Vector3(0, 0, (float)Math.Sin(bobProgress * -1 * bobSpeed) * -1.5f) * currentWeapon.BobScale;
             }
 
             cylinder.Position = Position + Camera.rotation.GetForwardVector().XZ() * 3;
@@ -373,7 +373,7 @@ namespace RetroEngine.Game.Entities.Player
         void Jump()
         {
             
-            if (onGround||true)
+            if (onGround)
             {
                 body.LinearVelocity = new Vector3(body.LinearVelocity.X, 12, body.LinearVelocity.Z).ToNumerics();
                 jumpDelay.AddDelay(0.1f);
