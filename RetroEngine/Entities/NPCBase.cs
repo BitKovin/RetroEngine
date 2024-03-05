@@ -84,7 +84,6 @@ namespace RetroEngine.Entities
 
             mesh.LoadFromFile("models/skeletal_test.fbx");
 
-            mesh.SetInterpolationEnabled(false);
 
             mesh.texture = AssetRegistry.LoadTextureFromFile("cat.png");
 
@@ -100,10 +99,9 @@ namespace RetroEngine.Entities
 
             meshes.Add(mesh);
             meshes.Add(mesh2);
-            mesh2.CastShadows = true;
+            mesh.CastShadows = true;
             //meshes.Add(sm);
 
-            mesh.SetInterpolationEnabled(false);
 
             sm.Transperent = false;
 
