@@ -23,10 +23,10 @@ sampler ORMTextureSampler = sampler_state
     texture = <ORMTexture>;
 };
 
-texture DepthTexture;
-sampler DepthTextureSampler = sampler_state
+texture OldFrameTexture;
+sampler OldFrameTextureSampler = sampler_state
 {
-    texture = <DepthTexture>;
+    texture = <OldFrameTexture>;
 };
 
 PixelInput VertexShaderFunction(VertexInput input)
@@ -51,13 +51,14 @@ PixelOutput PixelShaderFunction(PixelInput input)
     
     float Depth = input.MyPixelPosition.z;
     
-
+    
     
 
     float3 textureNormal = tex2D(NormalTextureSampler, input.TexCoord).xyz;
     
     float roughness = tex2D(ORMTextureSampler, input.TexCoord).g;
     float metalic = tex2D(ORMTextureSampler, input.TexCoord).b;
+    
     
     
     float3 textureColor = tex2D(TextureSampler, input.TexCoord).xyz;
@@ -67,7 +68,11 @@ PixelOutput PixelShaderFunction(PixelInput input)
     float3 pixelNormal = ApplyNormalTexture(textureNormal, input.Normal, input.Tangent);
     
     
-
+    float3 reflection = reflect(normalize(input.MyPosition - viewPos), pixelNormal);
+    
+    float3 oldFrame = SSR(input.MyPixelPosition.xyz / input.MyPixelPosition.w, reflection, OldFrameTextureSampler);
+    
+    
     float3 light = CalculateLight(input, pixelNormal, roughness);
     
 	textureColor *= light;
@@ -79,6 +84,9 @@ PixelOutput PixelShaderFunction(PixelInput input)
     textureColor += tex2D(EmissiveTextureSampler, input.TexCoord).rgb * EmissionPower * tex2D(EmissiveTextureSampler, input.TexCoord).a;
     
     textureAlpha *= Transparency;
+    
+
+    //textureColor = lerp(textureColor, oldFrame, 0.5);
     
     float pbs = 1;
     

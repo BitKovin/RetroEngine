@@ -48,6 +48,8 @@ namespace RetroEngine
 
         RenderTarget2D occlusionTestPath;
 
+        RenderTarget2D oldFrame;
+
         GraphicsDeviceManager graphics;
 
         Effect lightingEffect;
@@ -167,6 +169,9 @@ namespace RetroEngine
                 }
 
                 effect.Parameters["DepthTexture"]?.SetValue(DepthPrepathOutput);
+
+                effect.Parameters["OldFrameTexture"]?.SetValue(oldFrame);
+
             }
         }
         public RenderTarget2D StartRenderLevel(Level level)
@@ -181,6 +186,8 @@ namespace RetroEngine
             InitRenderTargetDepth(ref DepthPrepathOutput);
 
             InitRenderTargetVectorIfNeed(ref DeferredOutput);
+
+            InitRenderTargetVectorIfNeed(ref oldFrame);
 
             InitRenderTargetIfNeed(ref normalPath);
 
@@ -198,7 +205,9 @@ namespace RetroEngine
             InitRenderTargetIfNeed(ref postProcessingOutput);
 
 
-            InitShadowMap(ref shadowMap);
+
+            if(outputPath!=null)
+            DownsampleToTexture(outputPath, oldFrame);
 
             List<StaticMesh> renderList = level.GetMeshesToRender();
 
@@ -231,7 +240,7 @@ namespace RetroEngine
             graphics.GraphicsDevice.SetRenderTarget(null);
 
             if(Input.GetAction("test2").Holding())
-                return DepthPrepathOutput;
+                return normalPath;
 
             return outputPath;
 
@@ -287,19 +296,7 @@ namespace RetroEngine
 
             //particlesToDraw.Clear();
 
-            ParticleEmitter.LoadRenderEmitter();
-
-            foreach (StaticMesh mesh in renderList)
-            {
-                if (mesh.Transperent || onlyTransperent == false)
-                {
-                    try
-                    {
-                        mesh.DrawUnified();
-
-                    } catch(Exception e) { }
-                }
-            }
+            RenderLevelGeometryForward(renderList);
 
             
 
@@ -309,6 +306,20 @@ namespace RetroEngine
             if (Graphics.DrawPhysics)
                 Physics.DebugDraw();
 
+        }
+
+        public void RenderLevelGeometryForward(List<StaticMesh> renderList, bool onlyTransperent = false, bool OnlyStatic = false)
+        {
+            foreach (StaticMesh mesh in renderList)
+            {
+                if (mesh == null) continue;
+                if (mesh.Transperent || onlyTransperent == false)
+                {
+                    if(mesh.Static || OnlyStatic==false)
+                        mesh.DrawUnified();
+
+                }
+            }
         }
 
         void RenderPrepass(List<StaticMesh> renderList)
@@ -352,13 +363,38 @@ namespace RetroEngine
             }
         }
 
-        public bool renderShadow()
+        internal void FillPrepas()
         {
-            return !shadowPassRenderDelay.Wait();
+
+            InitRenderTargetDepth(ref DepthPrepathOutput);
+
+            UpdateShaderFrameData();
+
+            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, (int)GetScreenResolution().X, (int)GetScreenResolution().Y);
+
+            graphics.GraphicsDevice.SetRenderTargets(DepthPrepathOutput);
+            graphics.GraphicsDevice.Clear(ClearOptions.DepthBuffer, Color.Black, 1.0f, 0);
+
+            SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
+            spriteBatch.Begin(effect: maxDepth);
+
+            // Draw a full-screen quad to apply the lighting
+            DrawFullScreenQuad(spriteBatch, black);
+
+            // End the SpriteBatch
+            spriteBatch.End();
+
         }
 
-        void RenderShadowMap(List<StaticMesh> renderList)
+        public bool renderShadow()
         {
+            return !shadowPassRenderDelay.Wait() || Level.ChangingLevel;
+        }
+
+        internal void RenderShadowMap(List<StaticMesh> renderList)
+        {
+            InitShadowMap(ref shadowMap);
+
             if (renderShadow() == false) return;
 
             shadowPassRenderDelay.AddDelay(0.05f);
@@ -608,7 +644,7 @@ namespace RetroEngine
 
         }
 
-            void DownsampleToTexture(Texture2D source, RenderTarget2D target)
+        void DownsampleToTexture(Texture2D source, RenderTarget2D target)
         {
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, target.Width, target.Height);
             graphics.GraphicsDevice.SetRenderTarget(target);

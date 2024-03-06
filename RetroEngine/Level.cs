@@ -139,15 +139,17 @@ namespace RetroEngine
 
             LoadingScreen.Update(0.8f);
 
-            GameMain.Instance.curentLevel.StartEnities();  
+
+            AssetRegistry.WaitForAssetsToLoad();
+
+            LoadingScreen.Update(0.85f);
+
+
+            GameMain.Instance.curentLevel.StartEnities();
 
             Navigation.RebuildConnectionsData();
             GameMain.Instance.OnLevelChanged();
             ChangingLevel = false;
-
-            LoadingScreen.Update(0.85f);
-
-            AssetRegistry.WaitForAssetsToLoad();
 
             AssetRegistry.AllowGeneratingMipMaps = false;
 

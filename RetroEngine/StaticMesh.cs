@@ -51,7 +51,7 @@ namespace RetroEngine
 
         public Model model;
 
-        public Texture2D texture;
+        public Texture texture;
         public Texture2D emisssiveTexture;
         public Texture2D normalTexture;
         public Texture2D ormTexture;
@@ -88,8 +88,8 @@ namespace RetroEngine
 
         public bool Static = false;
 
-        protected bool occluded = false;
-        protected bool inFrustrum = true;
+        internal bool occluded = false;
+        internal bool inFrustrum = true;
 
         public Effect Shader;
 
@@ -359,14 +359,8 @@ namespace RetroEngine
             }
         }
 
-        protected void UpdateTextureParamIfNeeded(Effect effect, string name, Texture2D value)
+        protected void UpdateTextureParamIfNeeded(Effect effect, string name, Texture value)
         {
-            Texture2D current = effect.Parameters[name]?.GetValueTexture2D();
-
-            if (current == value)
-            {
-                return;
-            }
 
             effect.Parameters[name]?.SetValue(value);
 
@@ -545,7 +539,7 @@ namespace RetroEngine
             oclusionCulling = false;
         }
 
-        protected Texture2D FindTexture(string name)
+        protected Texture FindTexture(string name)
         {
             if (name == null)
                 return texture;

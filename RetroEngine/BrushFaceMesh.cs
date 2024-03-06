@@ -333,7 +333,7 @@ namespace RetroEngine
         {
             List<BrushFaceMesh> merged = new List<BrushFaceMesh>();
 
-            Dictionary<Texture2D, List<BrushFaceMesh>> keyValuePairs = new Dictionary<Texture2D, List<BrushFaceMesh>>();
+            Dictionary<Texture, List<BrushFaceMesh>> keyValuePairs = new Dictionary<Texture, List<BrushFaceMesh>>();
 
             foreach (BrushFaceMesh mesh in meshes)
             {

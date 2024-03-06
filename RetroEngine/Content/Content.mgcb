@@ -50,6 +50,12 @@
 /processorParam:DebugMode=Auto
 /build:ComposedColor.fx
 
+#begin CubeMapVisualizer.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:CubeMapVisualizer.fx
+
 #begin DeferredShading.fx
 /importer:EffectImporter
 /processor:EffectProcessor

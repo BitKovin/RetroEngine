@@ -28,6 +28,8 @@
 
 @PointClass base(PointEntity) color(255 51 204) = ent_cat_point : "Cat" []
 
+@PointClass base(PointEntity) color(10 10 204) = cubeMap : "Cube Map" []
+
 @SolidClass = trigger : "Trigger"
 [
 	target(string) : "Target Tag" : ""
@@ -35,7 +37,6 @@
 
 @baseclass size(-8 -8 -8, 8 8 48) color(70 70 255) = NavPoint []
 
-@PointClass base(NavPoint) = info.navpoint : "Nav Point" []
 @PointClass base(NavPoint) = info.navpoint : "Nav Point" []
 
 @SolidClass = destructible : "Destructible Brush"

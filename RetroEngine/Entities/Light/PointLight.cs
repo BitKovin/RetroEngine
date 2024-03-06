@@ -13,6 +13,8 @@ namespace RetroEngine.Entities.Light
     public class PointLight : Entity
     {
 
+        static List<PointLight> lights = new List<PointLight>();
+
         BoundingSphere lightSphere = new BoundingSphere();
 
         public PointLight() 
@@ -29,6 +31,17 @@ namespace RetroEngine.Entities.Light
 
             lightData.Color = data.GetPropertyVector("light_color", new Vector3(1,1,1)) * data.GetPropertyFloat("intensity",1);
             lightData.Radius = data.GetPropertyFloat("radius", 5);
+
+            lights.Add(this);
+
+        }
+
+        public override void Destroy()
+        {
+            base.Destroy();
+
+            lights.Remove(this);
+
         }
 
         public override void LateUpdate()
@@ -51,6 +64,14 @@ namespace RetroEngine.Entities.Light
         protected bool IsBoundingSphereInFrustum(BoundingSphere sphere)
         {
             return Camera.frustum.Contains(sphere.Transform(GetWorldMatrix())) != ContainmentType.Disjoint;
+        }
+
+        internal static void UpdateAll()
+        {
+            foreach(var light in lights)
+            {
+                light.LateUpdate();
+            }
         }
 
     }

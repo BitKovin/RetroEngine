@@ -26,10 +26,10 @@ sampler ShadowMapCloseSampler = sampler_state
     texture = <ShadowMapClose>;
 };
 
-texture DepthMap;
-sampler DepthMapSampler = sampler_state
+texture DepthTexture;
+sampler DepthTextureSampler = sampler_state
 {
-    texture = <DepthMap>;
+    texture = <DepthTexture>;
 };
 
 
@@ -213,6 +213,11 @@ void DepthDiscard(float depth, PixelInput input)
 {
     if (depth < input.MyPixelPosition.z - 0.1)
         discard;
+}
+
+float4 SampleCubemap(samplerCUBE s, float3 coords)
+{
+    return texCUBE(s, coords * float3(-1,1,1));
 }
 
 float3 ApplyNormalTexture(float3 sampledNormalColor, float3 worldNormal, float3 worldTangent)
@@ -532,4 +537,164 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness)
     
     return light;
     
+}
+
+float determinant(float3 a, float3 b, float3 c)
+{
+    return dot(a, cross(b, c));
+}
+
+float4x4 inverse(float4x4 m)
+{
+    float4 c0 = m[0];
+    float4 c1 = m[1];
+    float4 c2 = m[2];
+    float4 c3 = m[3];
+
+    float3 t0 = c1.yzx * c2.zxy - c1.zxy * c2.yzx;
+    float3 t1 = c0.zxy * c2.yzx - c0.yzx * c2.zxy;
+    float3 t2 = c0.yzx * c1.zxy - c0.zxy * c1.yzx;
+
+    float invDet = 1.0 / determinant(c0, c1, c2);
+
+    return float4x4(
+        float4(t0 * invDet, 0),
+        float4(t1 * invDet, 0),
+        float4(t2 * invDet, 0),
+        float4(-(c3.xyz * t0 + c3.yzx * t1 + c3.zxy * t2) * invDet, 1)
+    );
+}
+
+float3 GetPosition(float2 UV, float depth)
+{
+    float4 position = 1.0f;
+ 
+    position.x = UV.x * 2.0f - 1.0f;
+    position.y = -(UV.y * 2.0f - 1.0f);
+
+    position.z = depth;
+ 
+    position = mul(position, inverse(View * Projection));
+ 
+    position /= position.w;
+
+    return position.xyz;
+}
+
+float3 GetUV(float3 position)
+{
+    
+    position = mul(position, (float3x3)View);
+    position = mul(position, (float3x3) Projection);
+    
+    float3 screenCoords = (position + 1.0f) / 2.0f;
+
+    screenCoords.y = 1.0f - screenCoords.y;
+    
+    return screenCoords;
+
+}
+
+float GetDepth(float2 coords)
+{
+    return tex2D(DepthTextureSampler, coords).r;
+}
+
+float random(float2 uv)
+{
+    return frac(sin(dot(uv, float2(12.9898, 78.233))) * 43758.5453123);
+}
+
+// Assuming 'proj' and 'invProj' are constant buffer matrices
+float3 generatePositionFromDepth(float2 texturePos, float depth)
+{
+    float4 ndc = float4((texturePos - 0.5) * 2.0f, depth, 1.0f);
+    float4 inversed = mul(Projection, ndc);
+    inversed.w = 1.0f / inversed.w;
+    return inversed.xyz;
+}
+
+float2 generateProjectedPosition(float3 pos)
+{
+    float4 samplePosition = mul(Projection, float4(pos, 1.0f));
+    samplePosition.xy = (samplePosition.xy / samplePosition.w) * 0.5f + 0.5f;
+    return samplePosition.xy;
+}
+
+float3 SSR(float3 position, float3 reflection, sampler textureFrame)
+{
+    
+    
+    
+    float3 step = 1 * reflection;
+    float3 marchingPosition = position + step;
+    float delta;
+    float depthFromScreen;
+    float2 screenPosition;
+  
+    int iterationCount = 30;
+    
+    float distanceBias = 0.01;
+    
+    bool isAdaptiveStepEnabled = true;
+    
+    bool isBinarySearchEnabled = true;
+    
+    bool isExponentialStepEnabled = true;
+    
+    float rayStep = 1;
+    
+    int i = 0;
+    for (; i < iterationCount; i++)
+    {
+        screenPosition = generateProjectedPosition(marchingPosition);
+        depthFromScreen = abs(generatePositionFromDepth(screenPosition, tex2D(DepthTextureSampler, screenPosition).x).z);
+        delta = abs(marchingPosition.z) - depthFromScreen;
+        if (abs(delta) < distanceBias)
+        {
+            float3 color = float3(1,1,1);
+            return tex2D(textureFrame, screenPosition).xyz * color;
+        }
+        if (isBinarySearchEnabled && delta > 0)
+        {
+            break;
+        }
+        if (isAdaptiveStepEnabled)
+        {
+            float directionSign = sign(abs(marchingPosition.z) - depthFromScreen);
+      //this is sort of adapting step, should prevent lining reflection by doing sort of iterative converging
+      //some implementation doing it by binary search, but I found this idea more cheaty and way easier to implement
+            step = step * (1.0f - rayStep * max(directionSign, 0.0f));
+            marchingPosition += step * (-directionSign);
+        }
+        else
+        {
+            marchingPosition += step;
+        }
+        if (isExponentialStepEnabled)
+        {
+            step *= 1.05f;
+        }
+    }
+    if (isBinarySearchEnabled)
+    {
+        for (; i < iterationCount; i++)
+        {
+ 
+            step *= 0.5f;
+            marchingPosition = marchingPosition - step * sign(delta);
+ 
+            screenPosition = generateProjectedPosition(marchingPosition);
+            depthFromScreen = abs(generatePositionFromDepth(screenPosition, tex2D(DepthTextureSampler, screenPosition).x).z);
+            delta = abs(marchingPosition.z) - depthFromScreen;
+ 
+            if (abs(delta) < distanceBias)
+            {
+                float3 color = float3(1,1,1);
+                return tex2D(textureFrame, screenPosition).xyz * color;
+            }
+        }
+    }
+  
+    return float3(1,1,1);
 }
