@@ -175,6 +175,9 @@ namespace RetroEngine
 
                 effect.Parameters["ReflectionCubemap"]?.SetValue(CubeMap.GetClosestToCamera().map);
 
+                effect.Parameters["ScreenHeight"]?.SetValue(DeferredOutput.Height);
+                effect.Parameters["ScreenWidth"]?.SetValue(DeferredOutput.Width);
+
             }
         }
         public RenderTarget2D StartRenderLevel(Level level)

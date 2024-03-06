@@ -77,6 +77,9 @@ bool isParticle = false;
 
 float depthScale = 1.0f;
 
+float ScreenHeight;
+float ScreenWidth;
+
 struct VertexInput
 {
     float4 Position : SV_POSITION0;
@@ -221,6 +224,30 @@ void DepthDiscard(float depth, PixelInput input)
         discard;
 }
 
+float SampleDepth(float2 coords)
+{
+    return tex2D(DepthTextureSampler, coords);
+
+}
+
+float SampleMaxDepth(float2 screenCoords)
+{
+    
+    float2 texelSize = 1 / float2(ScreenWidth, ScreenHeight);
+    
+    float d = SampleDepth(screenCoords);
+    float d1 = SampleDepth(screenCoords + texelSize);
+    float d2 = SampleDepth(screenCoords - texelSize);
+    
+    float d3 = SampleDepth(screenCoords + texelSize * float2(1,0));
+    float d4 = SampleDepth(screenCoords - texelSize * float2(0, 1));
+
+    return max(d, max(d1, max(d2, max(d3, d4))));
+
+}
+
+
+
 float4 SampleCubemap(samplerCUBE s, float3 coords)
 {
     return texCUBE(s, coords * float3(-1,1,1));
@@ -335,7 +362,7 @@ float CalculateSpecular(float3 worldPos,float3 normal, float3 lightDir, float ro
         specular = D * G * F / (4 * NdotV * saturate(dot(normal, lightDir)) + 0.001);
     }
 
-    return specular;
+    return specular * 0.3;
 }
 
 float SampleShadowMap(sampler2D shadowMap, float2 coords, float compare)
@@ -496,7 +523,7 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness, float me
     lightCoordsClose.y = 1.0f - lightCoordsClose.y;
 
     
-    if (dot(input.TangentNormal, LightDirection) < 0.0f)
+    if (abs(dot(input.TangentNormal, LightDirection)) > 0.05f)
     {
         shadow += GetShadow(lightCoords, input, false);
     }
@@ -518,7 +545,7 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness, float me
     specular = CalculateSpecular(input.MyPosition, normal, LightDirection, roughness, metalic);
     
     
-    specular *= 1 - shadow;
+    specular *= 1.01 - shadow;
         
     
     if (isParticle)
@@ -578,8 +605,10 @@ float CalculateReflectiveness(float roughness, float metallic, float3 viewDir, f
     // Modulate reflectiveness by the Fresnel factor
     reflectiveness *= F;
 
-    reflectiveness -= 0.07;
+    reflectiveness -= 0.11;
     reflectiveness = saturate(reflectiveness);
+    
+    reflectiveness *= 1.1;
     
     return reflectiveness;
 }
@@ -587,7 +616,7 @@ float CalculateReflectiveness(float roughness, float metallic, float3 viewDir, f
 float3 ApplyReflection(float3 inColor, PixelInput input,float3 normal, float roughness, float metallic)
 {
     
-    float3 viewDir = normalize(viewPos - input.MyPosition) * 0.75;
+    float3 viewDir = normalize(viewPos - input.MyPosition) * 0.5;
     
     float3 reflection = reflect(normalize(input.MyPosition - viewPos), input.TangentNormal);
     

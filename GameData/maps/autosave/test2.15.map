@@ -6,7 +6,7 @@
 "_tb_textures" "textures/brushes"
 "globalLightColor" "1 1 0.8"
 "skyColor" "0.8 0.8 1"
-"globalLightBrightness" "0.35"
+"globalLightBrightness" "0.25"
 "directLightBrightness" "0.75"
 // brush 0
 {

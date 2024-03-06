@@ -43,7 +43,7 @@ PixelOutput PixelShaderFunction(PixelInput input)
 
     screenCoords.y = 1.0f - screenCoords.y;
     
-    float depthIn = tex2D(DepthTextureSampler, screenCoords).r;
+    float depthIn = SampleMaxDepth(screenCoords);
     
     DepthDiscard(depthIn,input);
     
