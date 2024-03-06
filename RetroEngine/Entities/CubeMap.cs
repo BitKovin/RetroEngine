@@ -14,13 +14,21 @@ namespace RetroEngine.Entities
     internal class CubeMap : Entity
     {
 
-        RenderTargetCube map;
+        static internal List<CubeMap> cubeMaps = new List<CubeMap>();
+
+        static internal List<CubeMap> cubeMapsFinalized = new List<CubeMap>();
+
+        static BoundingSphere cameraPoit = new BoundingSphere(Vector3.Zero, 0.1f);
+
+        internal RenderTargetCube map;
 
         GraphicsDevice graphicsDevice;
 
         int rendered = 0;
 
         StaticMesh mesh = new StaticMesh();
+
+        BoundingSphere boundingSphere;
 
         public override void FromData(EntityData data)
         {
@@ -34,6 +42,9 @@ namespace RetroEngine.Entities
             meshes.Add(mesh);
             mesh.Visible = false;
 
+            boundingSphere.Center = Position;
+            boundingSphere.Radius = data.GetPropertyFloat("radius", 5);
+
         }
 
         public override void Start()
@@ -45,6 +56,51 @@ namespace RetroEngine.Entities
             mesh.Position = Position;
             mesh.texture = map;
             mesh.Shader = AssetRegistry.GetShaderFromName("CubeMapVisualizer");
+
+        }
+
+        public override void Update()
+        {
+            base.Update();
+
+            cubeMaps.Clear();
+
+            finalizedMaps = false;
+
+        }
+
+        public override void LateUpdate()
+        {
+            base.LateUpdate();
+
+            cameraPoit.Center = Camera.position;
+
+            if (boundingSphere.Intersects(cameraPoit))
+            {
+                cubeMaps.Add(this);
+            }
+
+        }
+
+        static bool finalizedMaps = false;
+
+        public override void FinalizeFrame()
+        {
+            base.FinalizeFrame();
+
+            cubeMapsFinalized = new List<CubeMap>(cubeMaps);
+
+            finalizedMaps = true;
+        }
+
+        public static CubeMap GetClosestToCamera()
+        {
+            if (cubeMapsFinalized.Count == 0)
+                return new CubeMap();
+            cubeMapsFinalized = cubeMapsFinalized.OrderBy(m => Vector3.Distance(m.Position, Camera.position)).ToList();
+
+
+            return cubeMapsFinalized[0];
 
         }
 

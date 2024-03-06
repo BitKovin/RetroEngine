@@ -44,7 +44,7 @@ PixelOutput PixelShaderFunction(PixelInput input)
     
     
 
-    float3 light = CalculateLight(input, pixelNormal, 1);
+    float3 light = CalculateLight(input, pixelNormal, 1, 0);
     
     textureColor *= light;
     

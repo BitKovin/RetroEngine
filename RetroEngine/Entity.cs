@@ -84,6 +84,11 @@ namespace RetroEngine
 
         }
 
+        public virtual void FinalizeFrame()
+        {
+
+        }
+
         public virtual void OnDamaged(float damage, Entity causer = null, Entity weapon = null)
         {
             Health -= damage;

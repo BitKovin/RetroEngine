@@ -32,6 +32,12 @@ sampler DepthTextureSampler = sampler_state
     texture = <DepthTexture>;
 };
 
+texture ReflectionCubemap;
+sampler ReflectionCubemapSampler = sampler_state
+{
+    texture = <ReflectionCubemap>;
+};
+
 
 float FarPlane;
 float3 viewDir;
@@ -292,30 +298,43 @@ PBRData CalculatePBR(float3 normal, float roughness, float metallic, float3 worl
 
 }
 
-float CalculateSpecular(float roughness, float3 worldPos, float3 normal, float3 lightDir)
+float GeometrySmith(float3 N, float3 V, float3 L, float roughness)
+{
+    float NdotV = saturate(dot(N, V));
+    float NdotL = saturate(dot(N, L));
+    float GGXV = 2.0 * NdotV / (NdotV + sqrt(roughness * roughness + (1.0 - roughness * roughness) * NdotV * NdotV));
+    float GGXL = 2.0 * NdotL / (NdotL + sqrt(roughness * roughness + (1.0 - roughness * roughness) * NdotL * NdotL));
+    return GGXV * GGXL;
+}
+
+float FresnelSchlick(float cosTheta, float metallic)
+{
+    return metallic + (1.0 - metallic) * pow(1.0 - cosTheta, 5.0);
+}
+
+float CalculateSpecular(float3 worldPos,float3 normal, float3 lightDir, float roughness, float metallic)
 {
     
-#ifdef NO_SPECULAR
-    
-    return float(0);
-    
-#endif
-
-    roughness = clamp(roughness, 0.001f, 1);
-    
-    float3 reflectDir = reflect(normalize(viewPos - worldPos), normal);
-    
     float3 viewDir = normalize(viewPos - worldPos);
-    float3 halfwayDir = normalize(lightDir + viewDir);
     
-    halfwayDir *= DistributionGGX(normal, halfwayDir, roughness);
+    lightDir *= -1;
     
-    float temp = max(dot(normal, halfwayDir), 0.0);
-    temp = temp * temp;
+    float3 halfwayDir = normalize(viewDir + lightDir);
+    float NdotH = saturate(dot(normal, halfwayDir));
+    float NdotV = saturate(dot(normal, viewDir));
 
-    float specular = temp / 10;
-    
-    
+    float specular = 0.0;
+
+    if (NdotH > 0.0)
+    {
+        float roughnessSq = roughness;
+        float D = DistributionGGX(normal, halfwayDir, roughnessSq);
+        float G = GeometrySmith(normal, viewDir, lightDir, roughnessSq);
+        float F = FresnelSchlick(NdotV, metallic);
+
+        specular = D * G * F / (4 * NdotV * saturate(dot(normal, lightDir)) + 0.001);
+    }
+
     return specular;
 }
 
@@ -433,7 +452,7 @@ float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal)
     return LightColors[i] * max(intense, 0);
 }
 
-float3 CalculatePointLightSpeculars(int i, PixelInput pixelInput, float3 normal, float roughness)
+float3 CalculatePointLightSpeculars(int i, PixelInput pixelInput, float3 normal, float roughness, float metalic)
 {
     
 #ifdef NO_SPECULAR
@@ -457,12 +476,12 @@ float3 CalculatePointLightSpeculars(int i, PixelInput pixelInput, float3 normal,
     
     intense *= 1;
 
-    float3 specular = CalculateSpecular(roughness, pixelInput.MyPosition, normal, dirToSurface);
+    float3 specular = CalculateSpecular(pixelInput.MyPosition,normal, -dirToSurface, roughness, metalic);
     
     return LightColors[i] * max(intense, 0) * specular;
 }
 
-float3 CalculateLight(PixelInput input, float3 normal, float roughness)
+float3 CalculateLight(PixelInput input, float3 normal, float roughness, float metalic)
 {
     float3 lightCoords = input.lightPos.xyz / input.lightPos.w;
 
@@ -496,10 +515,10 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness)
     
     float specular = 0;
     
-    specular = CalculateSpecular(roughness, input.MyPosition, normal, -LightDirection);
+    specular = CalculateSpecular(input.MyPosition, normal, LightDirection, roughness, metalic);
     
     
-    specular *= 1.05- shadow;
+    specular *= 1 - shadow;
         
     
     if (isParticle)
@@ -529,7 +548,7 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness)
     
     for (int s = 0; s < 2; s++)
     {
-        specular += CalculatePointLightSpeculars(s, input, normal, roughness);
+        specular += CalculatePointLightSpeculars(s, input, normal, roughness, metalic);
 
     }
     
@@ -544,157 +563,40 @@ float determinant(float3 a, float3 b, float3 c)
     return dot(a, cross(b, c));
 }
 
-float4x4 inverse(float4x4 m)
+float CalculateReflectiveness(float roughness, float metallic, float3 viewDir, float3 normal)
 {
-    float4 c0 = m[0];
-    float4 c1 = m[1];
-    float4 c2 = m[2];
-    float4 c3 = m[3];
+    // Calculate the base reflectiveness based on metallic
+    float baseReflectiveness = metallic * 0.5;
 
-    float3 t0 = c1.yzx * c2.zxy - c1.zxy * c2.yzx;
-    float3 t1 = c0.zxy * c2.yzx - c0.yzx * c2.zxy;
-    float3 t2 = c0.yzx * c1.zxy - c0.zxy * c1.yzx;
+    // Calculate the Fresnel factor using the Schlick approximation
+    float F0 = lerp(0.01, 0.5, metallic);
+    float F = F0 + (1.0 - F0) * pow(1.0 - dot(viewDir, normal), 5.0);
 
-    float invDet = 1.0 / determinant(c0, c1, c2);
+    // Adjust the base reflectiveness based on roughness
+    float reflectiveness = lerp(baseReflectiveness, 0.01, roughness);
 
-    return float4x4(
-        float4(t0 * invDet, 0),
-        float4(t1 * invDet, 0),
-        float4(t2 * invDet, 0),
-        float4(-(c3.xyz * t0 + c3.yzx * t1 + c3.zxy * t2) * invDet, 1)
-    );
+    // Modulate reflectiveness by the Fresnel factor
+    reflectiveness *= F;
+
+    reflectiveness -= 0.07;
+    reflectiveness = saturate(reflectiveness);
+    
+    return reflectiveness;
 }
 
-float3 GetPosition(float2 UV, float depth)
-{
-    float4 position = 1.0f;
- 
-    position.x = UV.x * 2.0f - 1.0f;
-    position.y = -(UV.y * 2.0f - 1.0f);
-
-    position.z = depth;
- 
-    position = mul(position, inverse(View * Projection));
- 
-    position /= position.w;
-
-    return position.xyz;
-}
-
-float3 GetUV(float3 position)
+float3 ApplyReflection(float3 inColor, PixelInput input,float3 normal, float roughness, float metallic)
 {
     
-    position = mul(position, (float3x3)View);
-    position = mul(position, (float3x3) Projection);
+    float3 viewDir = normalize(viewPos - input.MyPosition) * 0.75;
     
-    float3 screenCoords = (position + 1.0f) / 2.0f;
+    float3 reflection = reflect(normalize(input.MyPosition - viewPos), input.TangentNormal);
+    
+    
+    float3 reflectionColor = SampleCubemap(ReflectionCubemapSampler, reflection);
 
-    screenCoords.y = 1.0f - screenCoords.y;
+    float reflectiveness = CalculateReflectiveness(roughness, metallic, viewDir, normal);
     
-    return screenCoords;
-
-}
-
-float GetDepth(float2 coords)
-{
-    return tex2D(DepthTextureSampler, coords).r;
-}
-
-float random(float2 uv)
-{
-    return frac(sin(dot(uv, float2(12.9898, 78.233))) * 43758.5453123);
-}
-
-// Assuming 'proj' and 'invProj' are constant buffer matrices
-float3 generatePositionFromDepth(float2 texturePos, float depth)
-{
-    float4 ndc = float4((texturePos - 0.5) * 2.0f, depth, 1.0f);
-    float4 inversed = mul(Projection, ndc);
-    inversed.w = 1.0f / inversed.w;
-    return inversed.xyz;
-}
-
-float2 generateProjectedPosition(float3 pos)
-{
-    float4 samplePosition = mul(Projection, float4(pos, 1.0f));
-    samplePosition.xy = (samplePosition.xy / samplePosition.w) * 0.5f + 0.5f;
-    return samplePosition.xy;
-}
-
-float3 SSR(float3 position, float3 reflection, sampler textureFrame)
-{
+    reflectiveness = saturate(reflectiveness);
     
-    
-    
-    float3 step = 1 * reflection;
-    float3 marchingPosition = position + step;
-    float delta;
-    float depthFromScreen;
-    float2 screenPosition;
-  
-    int iterationCount = 30;
-    
-    float distanceBias = 0.01;
-    
-    bool isAdaptiveStepEnabled = true;
-    
-    bool isBinarySearchEnabled = true;
-    
-    bool isExponentialStepEnabled = true;
-    
-    float rayStep = 1;
-    
-    int i = 0;
-    for (; i < iterationCount; i++)
-    {
-        screenPosition = generateProjectedPosition(marchingPosition);
-        depthFromScreen = abs(generatePositionFromDepth(screenPosition, tex2D(DepthTextureSampler, screenPosition).x).z);
-        delta = abs(marchingPosition.z) - depthFromScreen;
-        if (abs(delta) < distanceBias)
-        {
-            float3 color = float3(1,1,1);
-            return tex2D(textureFrame, screenPosition).xyz * color;
-        }
-        if (isBinarySearchEnabled && delta > 0)
-        {
-            break;
-        }
-        if (isAdaptiveStepEnabled)
-        {
-            float directionSign = sign(abs(marchingPosition.z) - depthFromScreen);
-      //this is sort of adapting step, should prevent lining reflection by doing sort of iterative converging
-      //some implementation doing it by binary search, but I found this idea more cheaty and way easier to implement
-            step = step * (1.0f - rayStep * max(directionSign, 0.0f));
-            marchingPosition += step * (-directionSign);
-        }
-        else
-        {
-            marchingPosition += step;
-        }
-        if (isExponentialStepEnabled)
-        {
-            step *= 1.05f;
-        }
-    }
-    if (isBinarySearchEnabled)
-    {
-        for (; i < iterationCount; i++)
-        {
- 
-            step *= 0.5f;
-            marchingPosition = marchingPosition - step * sign(delta);
- 
-            screenPosition = generateProjectedPosition(marchingPosition);
-            depthFromScreen = abs(generatePositionFromDepth(screenPosition, tex2D(DepthTextureSampler, screenPosition).x).z);
-            delta = abs(marchingPosition.z) - depthFromScreen;
- 
-            if (abs(delta) < distanceBias)
-            {
-                float3 color = float3(1,1,1);
-                return tex2D(textureFrame, screenPosition).xyz * color;
-            }
-        }
-    }
-  
-    return float3(1,1,1);
+    return lerp(inColor, reflectionColor, reflectiveness);
 }

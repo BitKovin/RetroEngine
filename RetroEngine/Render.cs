@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using System.IO;
 using RetroEngine.Particles;
+using RetroEngine.Entities;
 
 namespace RetroEngine
 {
@@ -171,6 +172,8 @@ namespace RetroEngine
                 effect.Parameters["DepthTexture"]?.SetValue(DepthPrepathOutput);
 
                 effect.Parameters["OldFrameTexture"]?.SetValue(oldFrame);
+
+                effect.Parameters["ReflectionCubemap"]?.SetValue(CubeMap.GetClosestToCamera().map);
 
             }
         }

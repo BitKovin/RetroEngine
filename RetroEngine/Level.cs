@@ -280,16 +280,21 @@ namespace RetroEngine
                 {
 
                     if (renderLayers.Contains(entity.Layer))
+                    {
+
+                        entity.FinalizeFrame();
 
                         foreach (StaticMesh mesh in entity.meshes)
                             if (entity is not null)
 
                                 if (mesh is not null)
                                 {
+
                                     mesh.UpdateCulling();
 
                                     mesh.RenderPreparation();
                                 }
+                    }
                 });
             }catch (Exception) { }
             renderList = new List<StaticMesh>();

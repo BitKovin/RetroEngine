@@ -70,12 +70,13 @@ PixelOutput PixelShaderFunction(PixelInput input)
     
     float3 reflection = reflect(normalize(input.MyPosition - viewPos), pixelNormal);
     
-    float3 oldFrame = SSR(input.MyPixelPosition.xyz / input.MyPixelPosition.w, reflection, OldFrameTextureSampler);
     
     
-    float3 light = CalculateLight(input, pixelNormal, roughness);
+    float3 light = CalculateLight(input, pixelNormal, roughness, metalic);
     
 	textureColor *= light;
+    
+    textureColor = ApplyReflection(textureColor, input, pixelNormal, roughness, metalic);
     
     light -= 1.1;
     light = saturate(light/8);
