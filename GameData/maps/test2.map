@@ -7202,8 +7202,8 @@
 // entity 29
 {
 "classname" "cubeMap"
-"origin" "80 64 256"
-"radius" "100"
+"origin" "80 64 176"
+"radius" "300"
 }
 // entity 30
 {

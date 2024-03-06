@@ -627,5 +627,9 @@ float3 ApplyReflection(float3 inColor, PixelInput input,float3 normal, float rou
     
     reflectiveness = saturate(reflectiveness);
     
-    return lerp(inColor, reflectionColor, reflectiveness);
+    float3 colorNoEm = saturate(inColor*1.2) / 1.2;
+    
+    float3 colorEm = inColor - colorNoEm;
+    
+    return lerp(colorNoEm, reflectionColor*1.1, reflectiveness) + colorEm;
 }
