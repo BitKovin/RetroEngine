@@ -24,7 +24,7 @@ namespace RetroEngine.Entities
 
         GraphicsDevice graphicsDevice;
 
-        int rendered = 0;
+        int resolution = 512;
 
         StaticMesh mesh = new StaticMesh();
 
@@ -36,7 +36,9 @@ namespace RetroEngine.Entities
 
             graphicsDevice = GameMain.Instance.GraphicsDevice;
 
-            map = new RenderTargetCube(graphicsDevice, 512, false, SurfaceFormat.Color, DepthFormat.Depth24);
+            resolution = (int)data.GetPropertyFloat("resolution",512);
+
+            map = new RenderTargetCube(graphicsDevice, resolution, false, SurfaceFormat.Rgba64, DepthFormat.Depth24);
 
             mesh.LoadFromFile("models/cube.obj");
             meshes.Add(mesh);
@@ -106,7 +108,6 @@ namespace RetroEngine.Entities
 
         void Render()
         {
-            rendered++;
 
             RenderFace(CubeMapFace.PositiveX);
             RenderFace(CubeMapFace.NegativeX);
