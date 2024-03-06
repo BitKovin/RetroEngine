@@ -233,14 +233,14 @@ float SampleDepth(float2 coords)
 float SampleMaxDepth(float2 screenCoords)
 {
     
-    float2 texelSize = 1 / float2(ScreenWidth, ScreenHeight);
+    float2 texelSize = 0.3 / float2(ScreenWidth, ScreenHeight);
     
     float d = SampleDepth(screenCoords);
     float d1 = SampleDepth(screenCoords + texelSize);
     float d2 = SampleDepth(screenCoords - texelSize);
     
-    float d3 = SampleDepth(screenCoords + texelSize * float2(1,0));
-    float d4 = SampleDepth(screenCoords - texelSize * float2(0, 1));
+    float d3 = SampleDepth(screenCoords + texelSize * float2(2,0));
+    float d4 = SampleDepth(screenCoords - texelSize * float2(0, 2));
 
     return max(d, max(d1, max(d2, max(d3, d4))));
 
