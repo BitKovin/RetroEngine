@@ -18,7 +18,7 @@ PixelOutput PixelShaderFunction(PixelInput input)
     
     float Depth = input.MyPixelPosition.z;
    
-    float3 reflection = reflect(normalize(input.MyPosition - viewPos),input.TangentNormal);
+    float3 reflection = normalize(input.MyPosition - viewPos);
 
     
     float3 textureColor = SampleCubemap(TextureSampler, reflection).xyz;

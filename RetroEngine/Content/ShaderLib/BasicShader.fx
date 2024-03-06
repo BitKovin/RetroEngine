@@ -362,7 +362,7 @@ float CalculateSpecular(float3 worldPos,float3 normal, float3 lightDir, float ro
         specular = D * G * F / (4 * NdotV * saturate(dot(normal, lightDir)) + 0.001);
     }
 
-    return specular * 0.3;
+    return specular * 0.5;
 }
 
 float SampleShadowMap(sampler2D shadowMap, float2 coords, float compare)
@@ -545,7 +545,7 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness, float me
     specular = CalculateSpecular(input.MyPosition, normal, LightDirection, roughness, metalic);
     
     
-    specular *= 1.01 - shadow;
+    specular *= 1.005 - shadow;
         
     
     if (isParticle)
@@ -608,7 +608,7 @@ float CalculateReflectiveness(float roughness, float metallic, float3 viewDir, f
     reflectiveness -= 0.11;
     reflectiveness = saturate(reflectiveness);
     
-    reflectiveness *= 1.1;
+    reflectiveness *= 1.3;
     
     return reflectiveness;
 }
@@ -627,9 +627,6 @@ float3 ApplyReflection(float3 inColor, PixelInput input,float3 normal, float rou
     
     reflectiveness = saturate(reflectiveness);
     
-    float3 colorNoEm = saturate(inColor*1.2) / 1.2;
     
-    float3 colorEm = inColor - colorNoEm;
-    
-    return lerp(colorNoEm, reflectionColor*1.1, reflectiveness) + colorEm;
+    return lerp(inColor, reflectionColor, reflectiveness);
 }
