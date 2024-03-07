@@ -22,6 +22,8 @@ namespace RetroEngine.Entities
 
         float speed = 5f;
 
+        float maxSpeed = 5;
+
         static Delay updateDelay = new Delay();
 
         static List<NPCBase> npcList = new List<NPCBase>();
@@ -126,10 +128,11 @@ namespace RetroEngine.Entities
 
             mesh.SetBoneMeshTransformModification("spine_02", transform.ToMatrix());
 
-
             animator.Update();
 
-            mesh.PastePoseLocal(animator.GetResultPose());
+            animator.Speed = ((Vector3)body.LinearVelocity).XZ().Length();
+
+            
 
         }
 
@@ -149,16 +152,31 @@ namespace RetroEngine.Entities
         {
             body.Activate();
 
+            float distance = Vector3.Distance(Position, targetLocation);
+
+
+            if(distance > 2) 
+            {
+                speed += Time.deltaTime * 3;
+                
+            }else
+            {
+                speed -= Time.deltaTime * 4;
+            }
+
+            speed = Math.Clamp(speed, 0, maxSpeed);
+
             body.LinearVelocity = new System.Numerics.Vector3(MoveDirection.X * speed, body.LinearVelocity.Y, MoveDirection.Z * speed);
 
-            MoveDirection = Vector3.Lerp(MoveDirection, DesiredMoveDirection, Time.deltaTime*3);
+            MoveDirection = Vector3.Lerp(MoveDirection, DesiredMoveDirection, Time.deltaTime * 3);
+
 
             if (loadedAssets)
                 mesh.Update(Time.deltaTime);
 
             mesh.Position = Position - new Vector3(0, 1.1f, 0);
 
-            mesh.Rotation = new Vector3(0,MathHelper.FindLookAtRotation(Vector3.Zero, MoveDirection).Y, 0);
+            mesh.Rotation = new Vector3(0, MathHelper.FindLookAtRotation(Vector3.Zero, MoveDirection).Y, 0);
 
 
             RequestNewTargetLocation();
@@ -275,6 +293,8 @@ namespace RetroEngine.Entities
 
             bool loaded = false;
 
+            public float Speed = 0;
+
             public override void Load()
             {
                 base.Load();
@@ -291,9 +311,10 @@ namespace RetroEngine.Entities
                 if(loaded == false)
                     return new Dictionary<string, Matrix>();
 
+                float blendFactor = Speed / 5;
+                blendFactor = Math.Clamp(blendFactor, 0, 1);
 
-
-                return Animation.LerpPose(idleAnimation.GetPoseLocal(), runFAnimation.GetPoseLocal(),0.5f);
+                return Animation.LerpPose(idleAnimation.GetPoseLocal(), runFAnimation.GetPoseLocal(), blendFactor);
 
             }
 
