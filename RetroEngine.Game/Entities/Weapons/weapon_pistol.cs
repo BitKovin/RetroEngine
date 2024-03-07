@@ -99,7 +99,7 @@ namespace RetroEngine.Game.Entities.Weapons
             arms.Position = mesh.Position;
             arms.Rotation = mesh.Rotation;
 
-            arms.PastePose(mesh.CopyPose());
+            arms.PastePose(mesh.GetPose());
 
             fireSoundPlayer.Position = Camera.position;
         }

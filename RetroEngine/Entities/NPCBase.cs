@@ -1,5 +1,6 @@
 ﻿using BulletSharp;
 using Microsoft.Xna.Framework;
+using RetroEngine.Skeletal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace RetroEngine.Entities
 
         SkeletalMesh mesh = new SkeletalMesh();
 
-        SkeletalMesh mesh2 = new SkeletalMesh();
+        TestAnimator animator = new TestAnimator();
 
         float speed = 5f;
 
@@ -91,14 +92,7 @@ namespace RetroEngine.Entities
             sm.LoadFromFile("models/cube.obj");
             sm.texture = AssetRegistry.LoadTextureFromFile("cat.png");
 
-            mesh2.LoadFromFile("models/skeletal_test2.fbx");
-
-            mesh2.texture = AssetRegistry.LoadTextureFromFile("cat.png");
-
-            mesh.PlayAnimation(0);
-
             meshes.Add(mesh);
-            meshes.Add(mesh2);
             mesh.CastShadows = true;
             //meshes.Add(sm);
 
@@ -109,6 +103,8 @@ namespace RetroEngine.Entities
 
             deathSoundPlayer.SetSound(AssetRegistry.LoadSoundFromFile("sounds/mew.wav"));
             deathSoundPlayer.Volume = 1f;
+
+            animator.Load();
 
         }
 
@@ -129,6 +125,11 @@ namespace RetroEngine.Entities
             transform.Rotation = new Vector3(angleDif, 0, 0);
 
             mesh.SetBoneMeshTransformModification("spine_02", transform.ToMatrix());
+
+
+            animator.Update();
+
+            mesh.PastePoseLocal(animator.GetResultPose());
 
         }
 
@@ -159,11 +160,6 @@ namespace RetroEngine.Entities
 
             mesh.Rotation = new Vector3(0,MathHelper.FindLookAtRotation(Vector3.Zero, MoveDirection).Y, 0);
 
-            mesh2.Position = mesh.Position;
-            mesh2.Rotation = mesh.Rotation;
-
-            if(mesh.isRendered)
-                mesh2.PastePose(mesh.CopyPose());
 
             RequestNewTargetLocation();
 
@@ -269,6 +265,38 @@ namespace RetroEngine.Entities
             currentUpdateNPCs.Clear();
             currentUpdateIndex = 0;
             updateDelay = new Delay();
+        }
+
+        internal class TestAnimator : Animator
+        {
+
+            Animation idleAnimation;
+            Animation runFAnimation = new Animation();
+
+            bool loaded = false;
+
+            public override void Load()
+            {
+                base.Load();
+
+                idleAnimation = AddAnimation("Animations/human/idle.fbx");
+
+                runFAnimation = AddAnimation("Animations/human/run_f.fbx");
+
+                loaded = true;
+            }
+
+            public override Dictionary<string, Matrix> GetResultPose()
+            {
+                if(loaded == false)
+                    return new Dictionary<string, Matrix>();
+
+
+
+                return Animation.LerpPose(idleAnimation.GetPoseLocal(), runFAnimation.GetPoseLocal(),0.5f);
+
+            }
+
         }
 
     }

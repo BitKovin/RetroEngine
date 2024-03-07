@@ -133,16 +133,44 @@ namespace RetroEngine
         public struct Transform
         {
             public Vector3 Position;
-            public Vector3 Rotation; // Now in degrees
+            public Vector3 Rotation;
+            public Quaternion RotationQuaternion;
             public Vector3 Scale;
 
             public Transform()
             {
                 Position = new Vector3();
                 Rotation = new Vector3();
+                RotationQuaternion = new Quaternion();
                 Scale = new Vector3(1);
             }
 
+            public static Transform Lerp(Transform a, Transform b, float factor)
+            {
+                Transform result = new Transform();
+
+                result.Position = Vector3.Lerp(a.Position, b.Position, factor);
+                result.RotationQuaternion = Quaternion.Lerp(a.RotationQuaternion, b.RotationQuaternion, factor);
+                result.Rotation = result.RotationQuaternion.ToEulerAnglesDegrees();
+                result.Scale = Vector3.Lerp(a.Scale, b.Scale, factor);
+
+                return result;
+            }
+
+        }
+
+        public static float ClampAngle(float angle)
+        {
+
+            float a = angle;
+
+            if (a < -180)
+                a += 360;
+
+            if (a > 180)
+                a -= 360;
+
+            return a;
         }
 
         public static Transform DecomposeMatrix(this Matrix matrix)
@@ -152,12 +180,17 @@ namespace RetroEngine
 
             matrix.Decompose(out scale, out rotation, out position);
 
-            rotationDegrees = MathHelper.ToEulerAnglesDegrees(rotation);
+            rotationDegrees = ToEulerAnglesDegrees(rotation);
+
+            rotationDegrees.X = ClampAngle(rotationDegrees.X);
+            rotationDegrees.Y = ClampAngle(rotationDegrees.Y);
+            rotationDegrees.Z = ClampAngle(rotationDegrees.Z);
 
             return new Transform
             {
                 Position = position,
-                Rotation = rotationDegrees, // Store as degrees
+                Rotation = rotationDegrees, 
+                RotationQuaternion = rotation,
                 Scale = scale
             };
         }

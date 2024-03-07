@@ -105,7 +105,7 @@ namespace RetroEngine
         }
 
 
-        public Dictionary<string, Matrix> CopyPose()
+        public Dictionary<string, Matrix> GetPose()
         {
 
             if(RiggedModel ==null) return null;
@@ -117,6 +117,22 @@ namespace RetroEngine
             foreach(var bone in RiggedModel.flatListToAllNodes)
             {
                 boneNamesToTransforms.TryAdd(bone.name, bone.CombinedTransformMg);
+            }
+
+            return boneNamesToTransforms;
+        }
+
+        public Dictionary<string, Matrix> GetPoseLocal()
+        {
+
+            if (RiggedModel == null) return null;
+
+            Dictionary<string, Matrix> boneNamesToTransforms = new Dictionary<string, Matrix>();
+
+
+            foreach (var bone in RiggedModel.flatListToAllNodes)
+            {
+                boneNamesToTransforms.TryAdd(bone.name, bone.LocalTransformMg);
             }
 
             return boneNamesToTransforms;
@@ -144,11 +160,33 @@ namespace RetroEngine
 
 
             }
-            //RiggedModel.UpdatePose();
 
         }
 
-        public void Update(float deltaTime)
+        public void PastePoseLocal(Dictionary<string, Matrix> pose)
+        {
+            if (RiggedModel == null) return;
+
+            if (pose == null) return;
+
+            foreach (string key in pose.Keys)
+            {
+                if (namesToBones.ContainsKey(key) == false) continue;
+
+                var node = namesToBones[key];
+
+                if (node.isThisARealBone)
+                {
+                    if (pose.ContainsKey(key) == false) continue;
+                    node.LocalTransformMg = pose[key];
+                }
+
+
+            }
+            RiggedModel.UpdatePose();
+        }
+
+        public virtual void Update(float deltaTime)
         {
             if (RiggedModel is null) return;
 
