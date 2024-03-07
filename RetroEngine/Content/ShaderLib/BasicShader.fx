@@ -497,31 +497,21 @@ float GetPointLightDepth(int i, float3 worldPos)
     lightDir *= float3(1, -1, -1);
     
     if (i == 0)
-    {
-        depth += texCUBE(PointLightCubemap1Sampler, lightDir).r;
-        return depth;
-    }
-    if (i == 1)
-    {
-        depth += texCUBE(PointLightCubemap2Sampler, lightDir).r;
-        return depth;
-    }
-    if (i == 2)
-    {
-        depth += texCUBE(PointLightCubemap3Sampler, lightDir).r;
-        return depth;
-    }
-    if (i == 3)
-    {
-        depth += texCUBE(PointLightCubemap4Sampler, lightDir).r;
-        return depth;
-    }
+        depth = texCUBE(PointLightCubemap1Sampler, lightDir).r;
+    else if (i == 1)
+        depth = texCUBE(PointLightCubemap2Sampler, lightDir).r;
+    else if (i == 2)
+        depth = texCUBE(PointLightCubemap3Sampler, lightDir).r;
+    else if (i == 3)
+        depth = texCUBE(PointLightCubemap4Sampler, lightDir).r;
     
+    depth += 0.02;
+
     return depth;
 }
 
 
-float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal)
+float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal, float roughness, float metalic)
 {
     
     float3 lightVector = LightPositions[i] - pixelInput.MyPosition;
@@ -539,13 +529,16 @@ float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal)
     if (isParticle)
         dirToSurface = normal;
     
-    if (Viewmodel == false)
-        if (dot(dirToSurface, pixelInput.Normal) < 0)
-            return float3(0, 0, 0);
     
     intense *= saturate(dot(normal, dirToSurface) * 1.1 + 0.4);
 
-    return LightColors[i] * max(intense, 0);
+    float3 specular = CalculateSpecular(pixelInput.MyPosition, normal, -dirToSurface, roughness, metalic);
+    
+    intense = max(intense, 0);
+    
+    float3 l = LightColors[i] * intense;
+    
+    return l + intense * specular;
 }
 
 float3 CalculatePointLightSpeculars(int i, PixelInput pixelInput, float3 normal, float roughness, float metalic)
@@ -638,13 +631,7 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness, float me
 
     for (int i = 0; i < MAX_POINT_LIGHTS; i++)
     {
-        light += CalculatePointLight(i, input, normal);
-
-    }
-    
-    for (int s = 0; s < 2; s++)
-    {
-        specular += CalculatePointLightSpeculars(s, input, normal, roughness, metalic);
+        light += CalculatePointLight(i, input, normal, roughness, metalic);
 
     }
     

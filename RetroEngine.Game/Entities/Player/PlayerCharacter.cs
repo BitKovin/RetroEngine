@@ -373,7 +373,7 @@ namespace RetroEngine.Game.Entities.Player
         void Jump()
         {
             
-            if (onGround||true)
+            if (onGround)
             {
                 body.LinearVelocity = new Vector3(body.LinearVelocity.X, 12, body.LinearVelocity.Z).ToNumerics();
                 jumpDelay.AddDelay(0.1f);
