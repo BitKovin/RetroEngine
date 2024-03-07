@@ -29,6 +29,9 @@ sampler OldFrameTextureSampler = sampler_state
     texture = <OldFrameTexture>;
 };
 
+
+
+
 PixelInput VertexShaderFunction(VertexInput input)
 {
     return DefaultVertexShaderFunction(input);

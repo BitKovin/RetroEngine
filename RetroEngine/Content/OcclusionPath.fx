@@ -11,6 +11,10 @@ matrix World;
 matrix View;
 matrix Projection;
 
+float3 CameraPos;
+
+bool pointDistance;
+
 #define BONE_NUM 128
 
 matrix Bones[BONE_NUM];
@@ -27,9 +31,8 @@ struct VertexShaderOutput
 {
     float4 Position : POSITION0;
     float4 MyPosition : TEXCOORD0;
+    float3 WorldPos : TEXCOORD1;
 };
-
-float DepthScale = 1;
 
 float4x4 GetBoneTransforms(VertexShaderInput input)
 {
@@ -62,6 +65,9 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
     
     // Transform the vertex position to world space
     output.Position = mul(mul(input.Position, boneTrans), World);
+    
+    output.WorldPos = output.Position;
+    
     output.Position = mul(output.Position, View);
     output.Position = mul(output.Position, Projection);
 
@@ -75,7 +81,20 @@ float4 MainPS(VertexShaderOutput input) : SV_TARGET
     
     float depth = input.MyPosition.z;
     
-    return float4(depth, depth, depth, 1);
+    if (pointDistance)
+        depth = distance(input.WorldPos, CameraPos);
+    
+    return float4(depth, 0, 0, 1);
+}
+
+float4 MainPSPoint(VertexShaderOutput input) : SV_TARGET
+{
+    
+    float depth = input.MyPosition.z;
+    
+    depth = distance(input.WorldPos, CameraPos);
+    
+    return float4(depth, 0, 0, 1);
 }
 
 technique NormalColorDrawing

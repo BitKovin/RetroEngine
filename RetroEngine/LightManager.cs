@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -59,6 +60,7 @@ namespace RetroEngine
             public Vector3 Position = new Vector3(0, 0, 0);
             public Vector3 Color = new Vector3(0,0,0);
             public float Radius = 0;
+            public RenderTargetCube shadowData = null;
 
             public PointLightData()
             {

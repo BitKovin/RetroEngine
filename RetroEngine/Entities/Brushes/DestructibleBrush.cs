@@ -33,6 +33,11 @@ namespace RetroEngine.Entities.Brushes
 
             ParticleSystem.Preload(systemName);
 
+            foreach(StaticMesh mesh in meshes)
+            {
+                mesh.Static = false;
+            }
+
         }
 
         public override void OnDamaged(float damage, Entity causer = null, Entity weapon = null)

@@ -69,6 +69,31 @@ float3 LightPositions[MAX_POINT_LIGHTS];
 float3 LightColors[MAX_POINT_LIGHTS];
 float LightRadiuses[MAX_POINT_LIGHTS];
 
+texture PointLightCubemap1;
+sampler PointLightCubemap1Sampler = sampler_state
+{
+    texture = <PointLightCubemap1>;
+};
+
+texture PointLightCubemap2;
+sampler PointLightCubemap2Sampler = sampler_state
+{
+    texture = <PointLightCubemap2>;
+};
+
+texture PointLightCubemap3;
+sampler PointLightCubemap3Sampler = sampler_state
+{
+    texture = <PointLightCubemap3>;
+};
+
+texture PointLightCubemap4;
+sampler PointLightCubemap4Sampler = sampler_state
+{
+    texture = <PointLightCubemap4>;
+};
+
+
 #define BONE_NUM 128
 
 matrix Bones[BONE_NUM];
@@ -455,6 +480,46 @@ float GetShadow(float3 lightCoords, PixelInput input, bool close = false)
     
 }
 
+float GetPointLightDepth(int i, float3 worldPos)
+{
+    
+    if (i>=4)
+        return 10000000;
+
+    // Get the direction from the world position to the light position
+        float3 lightDir = LightPositions[i] - worldPos;
+
+    // Normalize the light direction
+    lightDir = normalize(lightDir);
+
+    float depth = 0.05;
+    
+    lightDir *= float3(1, -1, -1);
+    
+    if (i == 0)
+    {
+        depth += texCUBE(PointLightCubemap1Sampler, lightDir).r;
+        return depth;
+    }
+    if (i == 1)
+    {
+        depth += texCUBE(PointLightCubemap2Sampler, lightDir).r;
+        return depth;
+    }
+    if (i == 2)
+    {
+        depth += texCUBE(PointLightCubemap3Sampler, lightDir).r;
+        return depth;
+    }
+    if (i == 3)
+    {
+        depth += texCUBE(PointLightCubemap4Sampler, lightDir).r;
+        return depth;
+    }
+    
+    return depth;
+}
+
 
 float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal)
 {
@@ -462,6 +527,10 @@ float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal)
     float3 lightVector = LightPositions[i] - pixelInput.MyPosition;
     float distanceToLight = length(lightVector);
     
+    float ShadowDistance = GetPointLightDepth(i, pixelInput.MyPosition);
+    
+    if (distanceToLight>ShadowDistance)
+        return float3(0, 0, 0);
     
     float intense = saturate(1.0 - distanceToLight / LightRadiuses[i]);
     float3 dirToSurface = normalize(lightVector);

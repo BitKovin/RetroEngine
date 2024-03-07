@@ -220,8 +220,6 @@ namespace RetroEngine
             
 
             graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-
-
             graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 
             
@@ -328,6 +326,29 @@ namespace RetroEngine
             }
         }
 
+        public void RenderLevelGeometryDepth(List<StaticMesh> renderList, bool OnlyStatic = false)
+        {
+
+
+
+            graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+
+            graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
+
+            graphics.GraphicsDevice.BlendState = BlendState.Opaque;
+
+            foreach (StaticMesh mesh in renderList)
+            {
+                if (mesh == null) continue;
+                if (mesh.Transperent == false)
+                {
+                    if (mesh.Static || OnlyStatic == false)
+                        mesh.DrawDepth();
+
+                }
+            }
+        }
+
         void RenderPrepass(List<StaticMesh> renderList)
         {
             UpdateShaderFrameData();
@@ -355,16 +376,14 @@ namespace RetroEngine
 
             OcclusionEffect.Parameters["View"].SetValue(Camera.finalizedView);
             OcclusionEffect.Parameters["Projection"].SetValue(Camera.projection);
-
+            OcclusionEffect.Parameters["pointDistance"].SetValue(false);
 
             foreach (StaticMesh mesh in renderList)
             {
                 if (mesh.Transperent == false)
-                {
-                    
+                {            
                         mesh.StartOcclusionTest();
 
-                    
                 }
             }
         }
@@ -378,7 +397,7 @@ namespace RetroEngine
 
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, (int)GetScreenResolution().X, (int)GetScreenResolution().Y);
 
-            graphics.GraphicsDevice.SetRenderTargets(DepthPrepathOutput);
+            graphics.GraphicsDevice.SetRenderTarget(DepthPrepathOutput);
             graphics.GraphicsDevice.Clear(ClearOptions.DepthBuffer, Color.Black, 1.0f, 0);
 
             SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
@@ -389,7 +408,7 @@ namespace RetroEngine
 
             // End the SpriteBatch
             spriteBatch.End();
-
+            graphics.GraphicsDevice.SetRenderTarget(null);
         }
 
         public bool renderShadow()

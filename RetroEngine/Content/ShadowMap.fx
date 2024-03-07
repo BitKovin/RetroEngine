@@ -104,7 +104,7 @@ float4 MainPS(VertexShaderOutput input) : SV_TARGET
         
 	//depthValue /= 20;
 
-        return float4(depthValue, 0, 0, 1);
+    return float4(depthValue, depthValue, depthValue, 1);
 }
 
 technique NormalColorDrawing
