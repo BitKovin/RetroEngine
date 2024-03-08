@@ -12,6 +12,8 @@ namespace RetroEngine.Skeletal
 
         public float Speed = 1;
 
+        public bool UpdateFinalPose { get { return RiggedModel.UpdateVisual; } set { if(RiggedModel!=null) RiggedModel.UpdateVisual = value; } }
+
         public static Dictionary<string, Matrix> LerpPose(Dictionary<string, Matrix> a, Dictionary<string, Matrix> b, float factor)
         {
 
@@ -21,8 +23,8 @@ namespace RetroEngine.Skeletal
             {
                 if (b.ContainsKey(key) == false) continue;
 
-                MathHelper.Transform transformA = MathHelper.DecomposeMatrix(a[key]);
 
+                MathHelper.Transform transformA = MathHelper.DecomposeMatrix(a[key]);
                 MathHelper.Transform transformB = MathHelper.DecomposeMatrix(b[key]);
 
 

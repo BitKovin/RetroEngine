@@ -41,15 +41,17 @@ namespace RetroEngine.Skeletal
         }
 
 
-        protected Animation AddAnimation(string path, bool loop = true, int index = 0, bool interpolation = true)
+        protected Animation AddAnimation(string path, bool loop = true, int index = 0, bool interpolation = true, bool updatePose = false)
         {
 
             Animation animation = new Animation();
 
+            
             animation.LoadFromFile(path);
             animation.PlayAnimation(index, loop);
             AnimationsToUpdate.Add(animation);
 
+            animation.UpdateFinalPose = updatePose;
             animation.SetInterpolationEnabled(interpolation);
 
             return animation;
