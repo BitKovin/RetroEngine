@@ -31,7 +31,7 @@ namespace RetroEngine.Game.Entities.Player
             idleAnimation = AddAnimation("Animations/human/idle.fbx");
 
             runFAnimation = AddAnimation("Animations/human/run_f.fbx", interpolation: true);
-            runBAnimation = AddAnimation("Animations/human/run_b.fbx", interpolation: true);
+            runBAnimation = AddAnimation("Animations/human/run_b.fbx", interpolation: false);
             runRAnimation = AddAnimation("Animations/human/run_r.fbx", interpolation: true);
             runLAnimation = AddAnimation("Animations/human/run_l.fbx", interpolation: true);
 
