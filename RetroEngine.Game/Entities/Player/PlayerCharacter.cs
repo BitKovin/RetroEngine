@@ -64,6 +64,10 @@ namespace RetroEngine.Game.Entities.Player
 
         PlayerUI PlayerUI;
 
+        Vector3 interpolatedPosition = new Vector3();
+
+        SkeletalMesh bodyMesh = new SkeletalMesh();
+        PlayerBodyAnimator PlayerBodyAnimator = new PlayerBodyAnimator();
 
         public PlayerCharacter() : base()
         {
@@ -106,7 +110,15 @@ namespace RetroEngine.Game.Entities.Player
         {
             base.LoadAssets();
 
-            Console.WriteLine("loaded player");
+            bodyMesh.LoadFromFile("models/skeletal_test.fbx");
+
+            bodyMesh.texture = AssetRegistry.LoadTextureFromFile("cat.png");
+
+            bodyMesh.Scale = new Vector3(1.15f);
+
+            PlayerBodyAnimator.LoadAssets();
+
+            meshes.Add(bodyMesh);
 
             Weapon.PreloadAllWeapons();
             PlayerUI.Load();
@@ -119,7 +131,6 @@ namespace RetroEngine.Game.Entities.Player
             base.FromData(data);
 
             Camera.position = Position = OldCameraPos = data.GetPropertyVectorPosition("origin");
-
 
 
             Camera.rotation = new Vector3(0, data.GetPropertyFloat("angle") - 90, 0);
@@ -151,6 +162,8 @@ namespace RetroEngine.Game.Entities.Player
             weapons.Add(new WeaponData { weaponType = typeof(weapon_shotgunNew), ammo = 50 });
             weapons.Add(new WeaponData { weaponType = typeof(weapon_hammer), ammo = 50 });
 
+            interpolatedPosition = Position;
+
         }
 
 
@@ -160,9 +173,13 @@ namespace RetroEngine.Game.Entities.Player
 
             CheckGround();
 
+            InterpolatePos();
+
             UpdateMovement();
 
             UpdateCamera();
+
+            
 
             if (Input.GetAction("jump").Holding())
                 Jump();
@@ -187,6 +204,41 @@ namespace RetroEngine.Game.Entities.Player
 
         }
 
+        public override void AsyncUpdate()
+        {
+            base.AsyncUpdate();
+
+            PlayerBodyAnimator.Speed = ((Vector3)body.LinearVelocity).XZ().Length();
+
+            float Dx = Vector3.Dot(((Vector3)body.LinearVelocity).XZ().Normalized(), Camera.rotation.GetRightVector());
+            float Dy = Vector3.Dot(((Vector3)body.LinearVelocity).XZ().Normalized(), Camera.rotation.GetForwardVector());
+
+            Vector2 dir = new Vector2(Dx, Dy);
+
+
+            PlayerBodyAnimator.MovementDirection = dir;
+
+            PlayerBodyAnimator.Update();
+
+            var pose = PlayerBodyAnimator.GetResultPose();
+
+            bodyMesh.PastePoseLocal(pose);
+
+            bodyMesh.Position = interpolatedPosition - Camera.rotation.GetForwardVector().XZ().Normalized() * 0.4f - new Vector3(0,1.1f,0);
+            bodyMesh.Rotation = new Vector3(0,Camera.rotation.Y,0);
+
+        }
+
+        void InterpolatePos()
+        {
+            Vector3 oldPos = interpolatedPosition;
+
+            Vector3 newPos = Position;
+
+            interpolatedPosition = Vector3.Lerp(oldPos, newPos, Time.deltaTime*50);
+
+        }
+
         void UpdateCamera()
         {
             if (!FirstTick)
@@ -195,11 +247,7 @@ namespace RetroEngine.Game.Entities.Player
             Camera.rotation = new Vector3(Math.Clamp(Camera.rotation.X, -89, 89), Camera.rotation.Y, 0);
 
 
-            Vector3 newCameraPos = Position + new Vector3(0, 0.7f, 0);
-
-            Camera.position = Vector3.Lerp(OldCameraPos, newCameraPos, Time.deltaTime * 30);
-
-            OldCameraPos = Camera.position;
+            Camera.position = interpolatedPosition + new Vector3(0,0.7f,0);
 
             bob = Vector3.Zero;
 

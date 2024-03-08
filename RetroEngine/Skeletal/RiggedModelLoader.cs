@@ -82,7 +82,7 @@ namespace RetroEngine.Skeletal
         public bool startupNodeTreeConsoleInfo = false;
         public string targetNodeConsoleName = ""; //"L_Hand";
 
-
+        public bool OnlyAnimation = false;
 
         int defaultAnimatedFramesPerSecondLod = 24;
 
@@ -128,8 +128,6 @@ namespace RetroEngine.Skeletal
             //
             // load the file at path to the scene
             //
-
-            
 
                 scene = new Scene();
                 var importer = new AssimpContext();
@@ -196,10 +194,10 @@ namespace RetroEngine.Skeletal
 
             // this is the last thing we will do because we need the nodes set up first.
 
-            Stopwatch sw = Stopwatch.StartNew();
 
             // get the vertice data from the meshes.
-            CreateVerticeIndiceData(model, scene, 0);
+            if (OnlyAnimation == false)
+                CreateVerticeIndiceData(model, scene, 0);
 
 
             // this calls the models function to create the interpolated animtion frames.

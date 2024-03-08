@@ -178,6 +178,9 @@ namespace RetroEngine
             Vector3 position, scale, rotationDegrees;
             Quaternion rotation;
 
+            if(matrix.M41 is float.NaN)
+                return new Transform();
+
             matrix.Decompose(out scale, out rotation, out position);
 
             rotationDegrees = ToEulerAnglesDegrees(rotation);

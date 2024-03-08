@@ -12,20 +12,36 @@ namespace RetroEngine.Skeletal
 
         protected List<Animation> AnimationsToUpdate = new List<Animation>();
 
-        public virtual void Update()
+        public float Speed = 1;
+
+        public void Update()
         {
+
+            if(loaded == false) return;
+
             foreach (var animation in AnimationsToUpdate)
             {
                 animation.Update(Time.deltaTime);
             }
         }
 
-        public virtual Dictionary<string, Matrix> GetResultPose()
+        bool loaded = false;
+
+        public Dictionary<string, Matrix> GetResultPose()
+        {
+            if(loaded)
+                return ProcessResultPose();
+
+            return new Dictionary<string, Matrix>();
+        }
+
+        protected virtual Dictionary<string, Matrix> ProcessResultPose()
         {
             return new Dictionary<string, Matrix>();
         }
 
-        protected Animation AddAnimation(string path, bool loop = true, int index = 0)
+
+        protected Animation AddAnimation(string path, bool loop = true, int index = 0, bool interpolation = true)
         {
 
             Animation animation = new Animation();
@@ -34,10 +50,18 @@ namespace RetroEngine.Skeletal
             animation.PlayAnimation(index, loop);
             AnimationsToUpdate.Add(animation);
 
+            animation.SetInterpolationEnabled(interpolation);
+
             return animation;
         }
 
-        public virtual void Load()
+        public void LoadAssets()
+        {
+            Load();
+
+            loaded = true;
+        }
+        protected virtual void Load()
         {
 
         }

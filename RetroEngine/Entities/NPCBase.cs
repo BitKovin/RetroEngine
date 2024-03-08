@@ -106,7 +106,7 @@ namespace RetroEngine.Entities
             deathSoundPlayer.SetSound(AssetRegistry.LoadSoundFromFile("sounds/mew.wav"));
             deathSoundPlayer.Volume = 1f;
 
-            animator.Load();
+            animator.LoadAssets();
 
         }
 
@@ -128,7 +128,7 @@ namespace RetroEngine.Entities
 
             mesh.SetBoneMeshTransformModification("spine_02", transform.ToMatrix());
 
-            animator.Update();
+            
 
             animator.Speed = ((Vector3)body.LinearVelocity).XZ().Length();
 
@@ -154,14 +154,17 @@ namespace RetroEngine.Entities
 
             float distance = Vector3.Distance(Position, targetLocation);
 
+            animator.Update();
 
-            if(distance > 2) 
+            mesh.PastePoseLocal(animator.GetResultPose());
+
+            if(distance > 3) 
             {
-                speed += Time.deltaTime * 3;
+                speed += Time.deltaTime * 10;
                 
             }else
             {
-                speed -= Time.deltaTime * 4;
+                speed -= Time.deltaTime * 15;
             }
 
             speed = Math.Clamp(speed, 0, maxSpeed);
@@ -295,18 +298,20 @@ namespace RetroEngine.Entities
 
             public float Speed = 0;
 
-            public override void Load()
+            protected override void Load()
             {
                 base.Load();
 
                 idleAnimation = AddAnimation("Animations/human/idle.fbx");
 
-                runFAnimation = AddAnimation("Animations/human/run_f.fbx");
+                runFAnimation = AddAnimation("Animations/human/run_f.fbx", interpolation: true);
+
+                runFAnimation.Speed = 0.9f;
 
                 loaded = true;
             }
 
-            public override Dictionary<string, Matrix> GetResultPose()
+            protected override Dictionary<string, Matrix> ProcessResultPose()
             {
                 if(loaded == false)
                     return new Dictionary<string, Matrix>();

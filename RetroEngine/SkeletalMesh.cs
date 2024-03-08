@@ -12,16 +12,16 @@ namespace RetroEngine
 {
     public class SkeletalMesh : StaticMesh
     {
-        RiggedModel RiggedModel;
+        protected RiggedModel RiggedModel;
 
-        static RiggedModelLoader modelReader = new RiggedModelLoader(GameMain.content, null);
+        protected RiggedModelLoader modelReader = new RiggedModelLoader(GameMain.content, null);
 
         BoundingSphere boundingSphere = new BoundingSphere();
 
-        static Dictionary<string, RiggedModel> LoadedRigModels = new Dictionary<string, RiggedModel>();
+        protected static Dictionary<string, RiggedModel> LoadedRigModels = new Dictionary<string, RiggedModel>();
 
-        Dictionary<string, Matrix> additionalLocalOffsets = new Dictionary<string, Matrix>();
-        Dictionary<string, Matrix> additionalMeshOffsets = new Dictionary<string, Matrix>();
+        protected Dictionary<string, Matrix> additionalLocalOffsets = new Dictionary<string, Matrix>();
+        protected Dictionary<string, Matrix> additionalMeshOffsets = new Dictionary<string, Matrix>();
 
         public SkeletalMesh()
         {
@@ -40,8 +40,8 @@ namespace RetroEngine
             else
             {
                 RiggedModel = modelReader.LoadAsset(path, 30);
-                RiggedModel.CreateBuffers();
 
+                RiggedModel.CreateBuffers();
 
                 LoadedRigModels.Add(path, RiggedModel);
             }
@@ -62,7 +62,7 @@ namespace RetroEngine
             RiggedModel.overrideAnimationFrameTime = -1;
         }
 
-        void CalculateBoundingSphere()
+        protected void CalculateBoundingSphere()
         {
             List<Vector3> points = new List<Vector3>();
 
@@ -180,8 +180,6 @@ namespace RetroEngine
                     if (pose.ContainsKey(key) == false) continue;
                     node.LocalTransformMg = pose[key];
                 }
-
-
             }
             RiggedModel.UpdatePose();
         }

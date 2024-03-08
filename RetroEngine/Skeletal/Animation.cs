@@ -33,10 +33,49 @@ namespace RetroEngine.Skeletal
             return result;
         }
 
+        public Animation() 
+        {
+            modelReader.OnlyAnimation = true;
+        }
         public override void Update(float deltaTime)
         {
             base.Update(deltaTime * Speed);
         }
+
+
+        public override void LoadFromFile(string filePath)
+        {
+
+            string path = AssetRegistry.FindPathForFile(filePath);
+
+            if (LoadedRigModels.ContainsKey(path))
+            {
+                RiggedModel = LoadedRigModels[path].MakeCopy();
+            }
+            else
+            {
+                RiggedModel = modelReader.LoadAsset(path, 30);
+
+
+                LoadedRigModels.Add(path, RiggedModel);
+            }
+
+            RiggedModel = LoadedRigModels[path].MakeCopy();
+
+
+            RiggedModel.Update(0);
+
+            CalculateBoundingSphere();
+
+            GetBoneMatrix("");
+
+            additionalLocalOffsets = RiggedModel.additionalLocalOffsets;
+
+            additionalMeshOffsets = RiggedModel.additionalMeshOffsets;
+
+            RiggedModel.overrideAnimationFrameTime = -1;
+        }
+
 
         public override void DrawUnified()
         {
