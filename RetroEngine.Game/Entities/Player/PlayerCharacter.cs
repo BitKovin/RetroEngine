@@ -208,7 +208,7 @@ namespace RetroEngine.Game.Entities.Player
         {
             base.AsyncUpdate();
 
-            PlayerBodyAnimator.Speed = ((Vector3)body.LinearVelocity).XZ().Length();
+            PlayerBodyAnimator.MovementSpeed = ((Vector3)body.LinearVelocity).XZ().Length();
 
             float Dx = Vector3.Dot(((Vector3)body.LinearVelocity).XZ().Normalized(), Camera.rotation.GetRightVector());
             float Dy = Vector3.Dot(((Vector3)body.LinearVelocity).XZ().Normalized(), Camera.rotation.GetForwardVector());

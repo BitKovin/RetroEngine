@@ -20,7 +20,7 @@ namespace RetroEngine.Game.Entities.Player
 
         bool loaded = false;
 
-        public float Speed = 0;
+        public float MovementSpeed = 0;
 
         public Vector2 MovementDirection = Vector2.Zero;
 
@@ -42,10 +42,20 @@ namespace RetroEngine.Game.Entities.Player
 
         protected override Dictionary<string, Matrix> ProcessResultPose()
         {
+            
             if (loaded == false)
                 return new Dictionary<string, Matrix>();
 
-            float blendFactor = Speed / 5;
+            if(MovementDirection.Y<0)
+            {
+                Speed = -1;
+                MovementDirection *= -1;
+            }else
+            {
+                Speed = 1;
+            }
+
+            float blendFactor = MovementSpeed / 5;
             blendFactor = Math.Clamp(blendFactor, 0, 1);
 
             return Animation.LerpPose(idleAnimation.GetPoseLocal(), CalculateMovementDirection(), blendFactor);
