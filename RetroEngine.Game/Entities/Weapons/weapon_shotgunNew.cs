@@ -19,6 +19,10 @@ namespace RetroEngine.Game.Entities.Weapons
 
         SoundPlayer fireSoundPlayer;
 
+        public weapon_shotgunNew()
+        {
+            ShowHandL = false;
+        }
 
         public override void Start()
         {

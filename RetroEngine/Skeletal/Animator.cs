@@ -21,7 +21,7 @@ namespace RetroEngine.Skeletal
 
             foreach (var animation in AnimationsToUpdate)
             {
-                animation.Update(Time.deltaTime);
+                animation.Update(Time.deltaTime * Speed);
             }
         }
 

@@ -191,12 +191,17 @@ namespace RetroEngine.Skeletal
 
                 AnimationTime+=gameTime;
 
-                currentAnimationFrameTime = (float)AnimationTime - timeStart;
+                
                 float animationTotalDuration;
                 if (loopAnimation)
                     animationTotalDuration = (float)originalAnimations[currentAnimation].DurationInSeconds;
                 else
                     animationTotalDuration = (float)originalAnimations[currentAnimation].DurationInSeconds;
+
+                while (AnimationTime < timeStart)
+                    AnimationTime += animationTotalDuration;
+
+                currentAnimationFrameTime = (float)AnimationTime - timeStart;
 
                 // just for seeing a single frame lets us override the current frame.
                 if (overrideAnimationFrameTime >= 0f)
@@ -715,6 +720,9 @@ namespace RetroEngine.Skeletal
 
                 while (animTime > durationSecs)
                     animTime -= durationSecs;
+
+                while (animTime < 0)
+                    animTime += durationSecs;
 
                 var nodeAnim = n;
                 // 

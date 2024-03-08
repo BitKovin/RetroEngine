@@ -208,21 +208,59 @@ namespace RetroEngine.Game.Entities.Player
         {
             base.AsyncUpdate();
 
+            PlayerBodyAnimator.Update();
+
             PlayerBodyAnimator.MovementSpeed = ((Vector3)body.LinearVelocity).XZ().Length();
 
             float Dx = Vector3.Dot(((Vector3)body.LinearVelocity).XZ().Normalized(), Camera.rotation.GetRightVector());
-            float Dy = Vector3.Dot(((Vector3)body.LinearVelocity).XZ().Normalized(), Camera.rotation.GetForwardVector());
+            float Dy = Vector3.Dot(((Vector3)body.LinearVelocity).XZ().Normalized(), Camera.rotation.GetForwardVector().XZ().Normalized());
 
             Vector2 dir = new Vector2(Dx, Dy);
 
 
             PlayerBodyAnimator.MovementDirection = dir;
 
-            PlayerBodyAnimator.Update();
+            
 
             var pose = PlayerBodyAnimator.GetResultPose();
 
             bodyMesh.PastePoseLocal(pose);
+
+            MathHelper.Transform hide = new MathHelper.Transform();
+            hide.Scale = Vector3.Zero;
+            MathHelper.Transform show = new MathHelper.Transform();
+
+            Matrix showR = new Matrix();
+            Matrix showL = new Matrix();
+
+            if (currentWeapon == null)
+            {
+                showR = showL = show.ToMatrix();
+            }else
+            {
+                if(currentWeapon.ShowHandR)
+                {
+                    showR = show.ToMatrix();
+                }
+                else
+                {
+                    showR = hide.ToMatrix();
+                }
+
+                if (currentWeapon.ShowHandL)
+                {
+                    showL = show.ToMatrix();
+                }
+                else
+                {
+                    showL = hide.ToMatrix();
+                }
+
+            }
+
+            bodyMesh.SetBoneMeshTransformModification("upperarm_r",showR);
+            bodyMesh.SetBoneMeshTransformModification("upperarm_l", showL);
+            bodyMesh.SetBoneMeshTransformModification("head", hide.ToMatrix());
 
             bodyMesh.Position = interpolatedPosition - Camera.rotation.GetForwardVector().XZ().Normalized() * 0.4f - new Vector3(0,1.1f,0);
             bodyMesh.Rotation = new Vector3(0,Camera.rotation.Y,0);
@@ -247,7 +285,7 @@ namespace RetroEngine.Game.Entities.Player
             Camera.rotation = new Vector3(Math.Clamp(Camera.rotation.X, -89, 89), Camera.rotation.Y, 0);
 
 
-            Camera.position = interpolatedPosition + new Vector3(0,0.7f,0);
+            Camera.position = interpolatedPosition + new Vector3(0,0.7f,0) + Camera.rotation.GetForwardVector().XZ().Normalized()*0.1f;
 
             bob = Vector3.Zero;
 

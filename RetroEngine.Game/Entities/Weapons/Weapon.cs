@@ -41,6 +41,10 @@ namespace RetroEngine.Game.Entities.Weapons
 
         public float BobScale = 1;
 
+        public bool ShowHandR = false;
+
+        public bool ShowHandL = true;
+
         public static Weapon CreateFromData(WeaponData data, PlayerCharacter owner = null)
         {
             Weapon weapon = Activator.CreateInstance(data.weaponType) as Weapon;

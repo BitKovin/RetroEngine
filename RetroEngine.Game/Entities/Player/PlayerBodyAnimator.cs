@@ -46,10 +46,11 @@ namespace RetroEngine.Game.Entities.Player
             if (loaded == false)
                 return new Dictionary<string, Matrix>();
 
-            if(MovementDirection.Y<0)
+            if(MovementDirection.Y<-0.3)
             {
                 Speed = -1;
                 MovementDirection *= -1;
+                Console.WriteLine(MovementDirection.Y);
             }else
             {
                 Speed = 1;
@@ -64,8 +65,6 @@ namespace RetroEngine.Game.Entities.Player
 
         Dictionary<string, Matrix> CalculateMovementDirection()
         {
-
-            MovementDirection.Normalize();
 
             float fwdBlend = MovementDirection.Y / 2f + 0.5f;
             float horBlend = MovementDirection.X / 2f + 0.5f;
