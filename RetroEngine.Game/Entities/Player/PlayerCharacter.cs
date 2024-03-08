@@ -110,7 +110,9 @@ namespace RetroEngine.Game.Entities.Player
         {
             base.LoadAssets();
 
-            bodyMesh.LoadFromFile("models/skeletal_test.fbx");
+            bodyMesh.LoadFromFile("models/player_body.FBX");
+
+            bodyMesh.textureSearchPaths.Add("textures/weapons/arms/");
 
             bodyMesh.texture = AssetRegistry.LoadTextureFromFile("cat.png");
 
@@ -262,7 +264,7 @@ namespace RetroEngine.Game.Entities.Player
             bodyMesh.SetBoneMeshTransformModification("upperarm_l", showL);
             bodyMesh.SetBoneMeshTransformModification("head", hide.ToMatrix());
 
-            bodyMesh.Position = interpolatedPosition - Camera.rotation.GetForwardVector().XZ().Normalized() * 0.4f - new Vector3(0,1.1f,0);
+            bodyMesh.Position = interpolatedPosition - Camera.rotation.GetForwardVector().XZ().Normalized() * 0.4f - new Vector3(0,1.05f,0);
             bodyMesh.Rotation = new Vector3(0,Camera.rotation.Y,0);
 
         }

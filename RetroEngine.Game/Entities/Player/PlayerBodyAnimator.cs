@@ -33,8 +33,6 @@ namespace RetroEngine.Game.Entities.Player
             runRAnimation = AddAnimation("Animations/human/run_r.fbx", interpolation: true);
             runLAnimation = AddAnimation("Animations/human/run_l.fbx", interpolation: true);
 
-            
-
         }
 
         protected override Dictionary<string, Matrix> ProcessResultPose()
