@@ -18,8 +18,6 @@ namespace RetroEngine.Game.Entities.Player
         Animation runLAnimation = new Animation();
         Animation runRAnimation = new Animation();
 
-        bool loaded = false;
-
         public float MovementSpeed = 0;
 
         public Vector2 MovementDirection = Vector2.Zero;
@@ -37,14 +35,11 @@ namespace RetroEngine.Game.Entities.Player
 
             
 
-            loaded = true;
         }
 
         protected override Dictionary<string, Matrix> ProcessResultPose()
         {
             
-            if (loaded == false)
-                return new Dictionary<string, Matrix>();
 
             if(MovementDirection.Y<-0.3)
             {
@@ -69,11 +64,15 @@ namespace RetroEngine.Game.Entities.Player
             float fwdBlend = MovementDirection.Y / 2f + 0.5f;
             float horBlend = MovementDirection.X / 2f + 0.5f;
 
+            
+
             var forwardPose = Animation.LerpPose(runBAnimation.GetPoseLocal(), runFAnimation.GetPoseLocal(), fwdBlend);
 
             var horizonalPose = Animation.LerpPose(runLAnimation.GetPoseLocal(), runRAnimation.GetPoseLocal(), horBlend);
 
             float fwdBlendFactor = Math.Abs(MovementDirection.Y);
+
+            fwdBlendFactor *= MathHelper.Lerp(1, 0.5f, Math.Abs(MovementDirection.X));
 
             return Animation.LerpPose(horizonalPose, forwardPose, fwdBlendFactor);
         }

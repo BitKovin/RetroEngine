@@ -653,7 +653,7 @@ float CalculateReflectiveness(float roughness, float metallic, float3 viewDir, f
 
     // Calculate the Fresnel factor using the Schlick approximation
     float F0 = lerp(0.01, 0.5, metallic);
-    float F = F0 + (1.0 - F0) * pow(1.0 - dot(viewDir, normal), 5.0);
+    float F = F0 + (1.0 - F0) * pow(1.0 - abs(dot(viewDir, normal)), 5.0);
 
     // Adjust the base reflectiveness based on roughness
     float reflectiveness = lerp(baseReflectiveness, 0.01, roughness);
