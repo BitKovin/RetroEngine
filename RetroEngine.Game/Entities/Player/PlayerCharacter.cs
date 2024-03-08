@@ -114,8 +114,6 @@ namespace RetroEngine.Game.Entities.Player
 
             bodyMesh.textureSearchPaths.Add("textures/weapons/arms/");
 
-            bodyMesh.texture = AssetRegistry.LoadTextureFromFile("cat.png");
-
             bodyMesh.Scale = new Vector3(1.15f);
 
             PlayerBodyAnimator.LoadAssets();

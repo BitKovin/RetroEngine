@@ -43,7 +43,6 @@ namespace RetroEngine.Game.Entities.Player
             {
                 Speed = -1;
                 MovementDirection *= -1;
-                Console.WriteLine(MovementDirection.Y);
             }else
             {
                 Speed = 1;

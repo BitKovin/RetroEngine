@@ -42,6 +42,9 @@ namespace RetroEngine
 
             entities = new List<Entity>();
 
+            entities.Capacity = 200;
+            renderList.Capacity = 400;
+
         }
 
         public virtual void Start()
@@ -297,7 +300,7 @@ namespace RetroEngine
                     }
                 });
             }catch (Exception) { }
-            renderList = new List<StaticMesh>();
+            renderList.Clear();
 
             List<StaticMesh> transperentMeshes = new List<StaticMesh>();
 

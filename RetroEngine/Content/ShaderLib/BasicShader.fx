@@ -585,7 +585,7 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness, float me
     lightCoordsClose.y = 1.0f - lightCoordsClose.y;
 
     
-    if (abs(dot(input.TangentNormal, LightDirection)) > 0.05f)
+    if (abs(dot(input.TangentNormal, LightDirection)) > 0.05f || true)
     {
         shadow += GetShadow(lightCoords, input, false);
     }
