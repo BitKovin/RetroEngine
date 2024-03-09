@@ -384,10 +384,10 @@ float CalculateSpecular(float3 worldPos,float3 normal, float3 lightDir, float ro
         float G = GeometrySmith(normal, viewDir, lightDir, roughnessSq);
         float F = FresnelSchlick(NdotV, metallic);
 
-        specular = D * G / (4 * NdotV * saturate(dot(normal, lightDir)) + 0.001) * lerp(F,1,0.5);
+        specular = D * G / (4 * NdotV * saturate(dot(normal, lightDir)) + 0.001) * lerp(F,1,0.6);
     }
 
-    return specular * 0.6;
+    return specular * 1;
 }
 
 float SampleShadowMap(sampler2D shadowMap, float2 coords, float compare)
@@ -596,15 +596,15 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness, float me
     
     float specular = 0;
     
-    specular = CalculateSpecular(input.MyPosition, normal, normalize((normalize(LightDirection) - normal)/2), roughness, metalic);
+    specular = CalculateSpecular(input.MyPosition, normal, normalize((normalize(LightDirection*2) - normal)), roughness, metalic);
     
     
     specular *= 1 - shadow;
     
-    float3 globalSpecularDir = normalize(float3(0, -2, 0) + LightDirection);
+    float3 globalSpecularDir = normalize(viewPos - input.MyPosition );
     
 
-    specular += CalculateSpecular(input.MyPosition, normal, globalSpecularDir, roughness, metalic) * 0.3;
+    //specular += CalculateSpecular(input.MyPosition, normal, globalSpecularDir, roughness, metalic) * 2;
     
     if (isParticle)
         normal = -LightDirection;
@@ -660,7 +660,7 @@ float CalculateReflectiveness(float roughness, float metallic, float3 viewDir, f
     reflectiveness -= 0.08;
     reflectiveness = saturate(reflectiveness);
     
-    reflectiveness *= 1.2;
+    reflectiveness *= 1.3;
     
     return reflectiveness;
 }
