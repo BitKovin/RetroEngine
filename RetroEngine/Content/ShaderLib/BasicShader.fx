@@ -379,15 +379,15 @@ float CalculateSpecular(float3 worldPos,float3 normal, float3 lightDir, float ro
 
     if (NdotH > 0.0)
     {
-        float roughnessSq = roughness;
+        float roughnessSq = lerp(roughness * roughness, roughness, 0.5);
         float D = DistributionGGX(normal, halfwayDir, roughnessSq);
         float G = GeometrySmith(normal, viewDir, lightDir, roughnessSq);
         float F = FresnelSchlick(NdotV, metallic);
 
-        specular = D * G * F / (4 * NdotV * saturate(dot(normal, lightDir)) + 0.001);
+        specular = D * G / (4 * NdotV * saturate(dot(normal, lightDir)) + 0.001) * lerp(F,1,0.4);
     }
 
-    return specular * 0.5;
+    return specular * 0.6;
 }
 
 float SampleShadowMap(sampler2D shadowMap, float2 coords, float compare)
@@ -585,18 +585,9 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness, float me
     lightCoordsClose.y = 1.0f - lightCoordsClose.y;
 
     
-    if (abs(dot(input.TangentNormal, LightDirection)) > 0.05f || true)
-    {
-        shadow += GetShadow(lightCoords, input, false);
-    }
-    else if (Viewmodel == true)
-    {
-        shadow += GetShadow(lightCoords, input, false);
-    }
-    else
-    {
-        shadow += 1;
-    }
+    shadow += GetShadow(lightCoords, input, false);
+    
+    shadow += 1 - max(0, dot(normal, normalize(-LightDirection) * 1.5));
     
     shadow = saturate(shadow);
     
@@ -604,18 +595,19 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness, float me
     
     float specular = 0;
     
-    specular = CalculateSpecular(input.MyPosition, normal, LightDirection, roughness, metalic);
+    specular = CalculateSpecular(input.MyPosition, normal, normalize((normalize(LightDirection) - normal)/2), roughness, metalic);
     
     
     specular *= 1.005 - shadow;
-        
+
+    specular += CalculateSpecular(input.MyPosition, normal, float3(0,-1,0), roughness, metalic)*0.3;
     
     if (isParticle)
         normal = -LightDirection;
     
-    float3 light = max(0, dot(normal, normalize(-LightDirection)+0.2)) * DirectBrightness * GlobalLightColor; // Example light direction;
+    float3 light = DirectBrightness * GlobalLightColor; // Example light direction;
     
-    light -= shadow;
+    light *= 1 - shadow;
     
     
     
