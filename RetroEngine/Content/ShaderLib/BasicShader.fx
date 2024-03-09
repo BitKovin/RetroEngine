@@ -587,7 +587,8 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness, float me
     
     shadow += GetShadow(lightCoords, input, false);
     
-    shadow += 1 - max(0, dot(normal, normalize(-LightDirection) * 1.5));
+    shadow += 1 - max(0, dot(normal, normalize(-LightDirection) * 1));
+    
     
     shadow = saturate(shadow);
     
@@ -599,19 +600,22 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness, float me
     
     
     specular *= 1 - shadow;
+    
+    float3 globalSpecularDir = normalize(float3(0, -2, 0) + LightDirection);
+    
 
-    specular += CalculateSpecular(input.MyPosition, normal, float3(0,-1,0), roughness, metalic)*0.3;
+    specular += CalculateSpecular(input.MyPosition, normal, globalSpecularDir, roughness, metalic) * 0.3;
     
     if (isParticle)
         normal = -LightDirection;
     
     float3 light = DirectBrightness * GlobalLightColor; // Example light direction;
     
-    light *= 1.005 - shadow;
+    light *= (1.0) - shadow;
     
     
     
-    float3 globalLight = GlobalBrightness * GlobalLightColor * lerp(max(dot(normal, float3(0, 1, 0)), -1), 1, 0.7);
+    float3 globalLight = GlobalBrightness * GlobalLightColor * lerp(1, 0.5, dot(normal, float3(0, -1, 0)));
     
     light = max(light, 0);
     light += globalLight;
