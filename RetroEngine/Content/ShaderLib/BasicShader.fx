@@ -384,7 +384,7 @@ float CalculateSpecular(float3 worldPos,float3 normal, float3 lightDir, float ro
         float G = GeometrySmith(normal, viewDir, lightDir, roughnessSq);
         float F = FresnelSchlick(NdotV, metallic);
 
-        specular = D * G / (4 * NdotV * saturate(dot(normal, lightDir)) + 0.001) * lerp(F,1,0.6);
+        specular = D * G / (4 * NdotV * saturate(dot(normal, lightDir)) + 0.001) * lerp(F,1,0.3);
     }
 
     return specular * 1;
@@ -596,15 +596,15 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness, float me
     
     float specular = 0;
     
-    specular = CalculateSpecular(input.MyPosition, normal, normalize((normalize(LightDirection*2) - normal)), roughness, metalic);
+    specular = CalculateSpecular(input.MyPosition, normal, normalize(LightDirection), roughness, metalic);
     
     
     specular *= 1 - shadow;
     
-    float3 globalSpecularDir = normalize(viewPos - input.MyPosition );
+    float3 globalSpecularDir = normalize(-normal + float3(0,-5,0) + LightDirection);
     
 
-    //specular += CalculateSpecular(input.MyPosition, normal, globalSpecularDir, roughness, metalic) * 2;
+    specular += CalculateSpecular(input.MyPosition, normal, globalSpecularDir, roughness, metalic) * 0.02;
     
     if (isParticle)
         normal = -LightDirection;
