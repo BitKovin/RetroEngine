@@ -69,7 +69,7 @@ namespace RetroEngine.Entities
                     {
                         soundEffectInstance.Play();
                     }
-                    catch (Exception) { }
+                    catch (Exception ex) { Console.WriteLine(ex); }
                 }
                 
 
@@ -107,7 +107,7 @@ namespace RetroEngine.Entities
                 LateUpdate();
                 pendingPlay = true;
             }
-            catch (Exception) { }
+            catch (Exception ex ) { Console.WriteLine(ex); }
         }
 
         public void Stop()

@@ -59,7 +59,9 @@ namespace RetroEngine.Windows
 
             if(Input.LockCursor && GameMain.Instance.IsActive)
             {
-                Microsoft.Xna.Framework.Input.Mouse.SetPosition((int)Input.windowCenter.X, (int)Input.windowCenter.Y);
+                int px = (int)Input.windowCenter.X;
+                int py = (int)Input.windowCenter.Y;
+                Microsoft.Xna.Framework.Input.Mouse.SetPosition(px, py);
             }
 
             MouseState state = mouse.GetCurrentState();

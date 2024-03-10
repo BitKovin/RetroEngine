@@ -59,9 +59,11 @@ PixelOutput PixelShaderFunction(PixelInput input)
 
     float3 textureNormal = tex2D(NormalTextureSampler, input.TexCoord).xyz;
     
-    float roughness = tex2D(ORMTextureSampler, input.TexCoord).g;
-    float metalic = tex2D(ORMTextureSampler, input.TexCoord).b;
+    float3 orm = tex2D(ORMTextureSampler, input.TexCoord).rgb;
     
+    float roughness =orm.g;
+    float metalic = orm.b;
+    float ao = orm.r;
     
     
     float3 textureColor = tex2D(TextureSampler, input.TexCoord).xyz;
@@ -75,7 +77,7 @@ PixelOutput PixelShaderFunction(PixelInput input)
     
     
     
-    float3 light = CalculateLight(input, pixelNormal, roughness, metalic);
+    float3 light = CalculateLight(input, pixelNormal, roughness, metalic, ao);
     
 	textureColor *= light;
     

@@ -18358,6 +18358,12 @@
 }
 // entity 6
 {
+"classname" "cubeMap"
+"origin" "123 171 37"
+"radius" "20"
+}
+// entity 7
+{
 "classname" "func_group"
 "_tb_type" "_tb_layer"
 "_tb_name" "Triggers"

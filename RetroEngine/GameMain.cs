@@ -487,7 +487,7 @@ namespace RetroEngine
 
             double elapsedSeconds = stopwatch.Elapsed.TotalSeconds;
 
-            while(elapsedSeconds < 1f/10f)
+            while(elapsedSeconds < 1f/40f)
             {
                 elapsedSeconds = stopwatch.Elapsed.TotalSeconds;
             }

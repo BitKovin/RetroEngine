@@ -17,7 +17,7 @@ namespace RetroEngine.Skeletal
         public static Dictionary<string, Matrix> LerpPose(Dictionary<string, Matrix> a, Dictionary<string, Matrix> b, float factor)
         {
 
-            Dictionary<string, Matrix> result = new Dictionary<string, Matrix>();
+            Dictionary<string, Matrix> result = new Dictionary<string, Matrix>(a);
 
             foreach (var key in a.Keys)
             {
@@ -28,7 +28,7 @@ namespace RetroEngine.Skeletal
                 MathHelper.Transform transformB = MathHelper.DecomposeMatrix(b[key]);
 
 
-                result.Add(key, MathHelper.Transform.Lerp(transformA,transformB, factor).ToMatrix());
+                result[key] = MathHelper.Transform.Lerp(transformA,transformB, factor).ToMatrix();
 
             }
 

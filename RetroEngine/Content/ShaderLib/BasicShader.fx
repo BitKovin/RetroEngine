@@ -570,7 +570,7 @@ float3 CalculatePointLightSpeculars(int i, PixelInput pixelInput, float3 normal,
     return LightColors[i] * max(intense, 0) * specular;
 }
 
-float3 CalculateLight(PixelInput input, float3 normal, float roughness, float metalic)
+float3 CalculateLight(PixelInput input, float3 normal, float roughness, float metalic, float ao)
 {
     float3 lightCoords = input.lightPos.xyz / input.lightPos.w;
 
@@ -589,9 +589,9 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness, float me
     
     shadow += 1 - max(0, dot(normal, normalize(-LightDirection) * 1));
     
+
     
     shadow = saturate(shadow);
-    
     
     
     float specular = 0;
@@ -630,6 +630,8 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness, float me
         light += CalculatePointLight(i, input, normal, roughness, metalic);
 
     }
+    
+    light -= 1 - ao;
     
     light += specular;
     
