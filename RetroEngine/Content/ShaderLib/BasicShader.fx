@@ -228,6 +228,9 @@ PixelInput DefaultVertexShaderFunction(VertexInput input)
     output.Normal = mul(mul(input.Normal, (float3x3) boneTrans), (float3x3) World);
     output.Normal = normalize(output.Normal);
     
+    if (dot(output.Normal, normalize(output.MyPosition - viewPos)) > 0)
+        output.Normal *= -1;
+    
     output.Tangent = mul(mul(input.Tangent, (float3x3) boneTrans), (float3x3) World);
     output.Tangent = normalize(output.Tangent);
 
