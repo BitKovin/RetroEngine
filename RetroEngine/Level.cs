@@ -25,6 +25,8 @@ namespace RetroEngine
 
         List<Entity> pendingAddEntity = new List<Entity>();
 
+        List<StaticMesh> allMeshes = new List<StaticMesh>();
+
         static string pendingLevelChange = null;
 
         public static bool ChangingLevel = true;
@@ -281,7 +283,7 @@ namespace RetroEngine
             {
                 Parallel.ForEach(list, entity =>
                 {
-
+                    if(entity!=null)
                     if (renderLayers.Contains(entity.Layer))
                     {
 
@@ -304,6 +306,8 @@ namespace RetroEngine
 
             List<StaticMesh> transperentMeshes = new List<StaticMesh>();
 
+            allMeshes.Clear();
+
             foreach (Entity ent in entities)
             {
                 if (renderLayers.Contains(ent.Layer) == false) continue;
@@ -316,6 +320,9 @@ namespace RetroEngine
                             transperentMeshes.Add(mesh);
                         else
                             renderList.Add(mesh);
+
+                        allMeshes.Add(mesh);
+
                     }
                 }
             }
@@ -328,6 +335,20 @@ namespace RetroEngine
 
             LightManager.PrepareLightSources();
             LightManager.ClearPointLights();
+
+        }
+
+        internal List<StaticMesh> GetAllOpaqueMeshes()
+        {
+
+            List<StaticMesh> result = new List<StaticMesh>();
+
+            foreach (StaticMesh mesh in allMeshes)
+                if (mesh.Transperent == false)
+                    result.Add(mesh);
+
+
+            return result;
 
         }
 

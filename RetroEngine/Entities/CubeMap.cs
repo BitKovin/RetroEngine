@@ -41,7 +41,7 @@ namespace RetroEngine.Entities
             map = new RenderTargetCube(graphicsDevice, resolution, false, SurfaceFormat.Rgba64, DepthFormat.Depth24);
 
             mesh.LoadFromFile("models/cube.obj");
-            //meshes.Add(mesh);
+            meshes.Add(mesh);
             mesh.Visible = false;
 
             boundingSphere.Center = Position;
@@ -111,12 +111,23 @@ namespace RetroEngine.Entities
 
             PointLight.UpdateAll();
 
+            Vector3 startPos = Camera.position;
+            Matrix view = Camera.view;
+            Matrix projection = Camera.projection;
+
+
             RenderFace(CubeMapFace.PositiveX);
             RenderFace(CubeMapFace.NegativeX);
             RenderFace(CubeMapFace.PositiveY);
             RenderFace(CubeMapFace.NegativeY);
             RenderFace(CubeMapFace.PositiveZ);
             RenderFace(CubeMapFace.NegativeZ);
+
+            Camera.position = startPos;
+            Camera.view = view;
+            Camera.projection = projection;
+
+            Level.GetCurrent().RenderPreparation();
 
         }
 
@@ -132,11 +143,10 @@ namespace RetroEngine.Entities
 
             Camera.frustum.Matrix = Camera.finalizedView * Camera.finalizedProjection;
 
-            PointLight.UpdateAll();
-
             GameMain.Instance.render.FillPrepas();
 
-            
+            PointLight.UpdateAll();
+
             Level.GetCurrent().RenderPreparation();
             var l = Level.GetCurrent().GetMeshesToRender();
 

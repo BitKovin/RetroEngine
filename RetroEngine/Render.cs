@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.IO;
 using RetroEngine.Particles;
 using RetroEngine.Entities;
+using RetroEngine.Entities.Light;
 
 namespace RetroEngine
 {
@@ -217,12 +218,12 @@ namespace RetroEngine
 
             List<StaticMesh> renderList = level.GetMeshesToRender();
 
-            
+            PointLight.DrawDirtyPointLights();
 
             graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 
-            
+
             RenderShadowMap(renderList);
 
             graphics.GraphicsDevice.RasterizerState = Graphics.DisableBackFaceCulling? RasterizerState.CullNone : RasterizerState.CullClockwise;
@@ -326,11 +327,8 @@ namespace RetroEngine
             }
         }
 
-        public void RenderLevelGeometryDepth(List<StaticMesh> renderList, bool OnlyStatic = false)
+        public void RenderLevelGeometryDepth(List<StaticMesh> renderList, bool OnlyStatic = false, bool onlyShadowCasters = false)
         {
-
-
-
             graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 
             graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
@@ -342,7 +340,7 @@ namespace RetroEngine
                 if (mesh == null) continue;
                 if (mesh.Transperent == false)
                 {
-                    if (mesh.Static || OnlyStatic == false)
+                    if (mesh.Static || OnlyStatic == false && mesh.CastShadows == true || onlyShadowCasters == false)
                         mesh.DrawDepth();
 
                 }
@@ -375,7 +373,7 @@ namespace RetroEngine
 
 
             OcclusionEffect.Parameters["View"].SetValue(Camera.finalizedView);
-            OcclusionEffect.Parameters["Projection"].SetValue(Camera.projection);
+            OcclusionEffect.Parameters["Projection"].SetValue(Camera.finalizedProjection);
             OcclusionEffect.Parameters["pointDistance"].SetValue(false);
 
             foreach (StaticMesh mesh in renderList)

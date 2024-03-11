@@ -17,6 +17,8 @@ namespace RetroEngine.Entities.Light
 
         static List<PointLight> lights = new List<PointLight>();
 
+        static List<PointLight> finalLights = new List<PointLight>();
+
         BoundingSphere lightSphere = new BoundingSphere();
 
         public PointLight() 
@@ -29,6 +31,10 @@ namespace RetroEngine.Entities.Light
         GraphicsDevice graphicsDevice;
 
         StaticMesh mesh = new StaticMesh();
+
+        bool dirty = true;
+
+        static bool finalizedFrame = false;
 
         public override void FromData(EntityData data)
         {
@@ -68,13 +74,20 @@ namespace RetroEngine.Entities.Light
         {
             base.Update();
 
-            rendered = false;
+
+            finalizedFrame = false;
 
         }
 
         public override void FinalizeFrame()
         {
             base.FinalizeFrame();
+
+            if (finalizedFrame == true) return;
+
+            finalLights = new List<PointLight>(lights);
+
+            finalizedFrame = true;
 
         }
 
@@ -116,18 +129,26 @@ namespace RetroEngine.Entities.Light
 
             foreach(var light in lights)
             {
+                light.dirty = true;
                 light.Render();
                 light.LateUpdate();
             }
+
         }
 
-        bool rendered = false;
+        internal static void DrawDirtyPointLights()
+        {
+            foreach (var light in finalLights)
+            {
+                if(light.dirty)
+                light.Render();
+            }
+        }
+
 
         void Render()
         {
 
-            if (rendered == true) return;
-            rendered = true;
 
             RenderFace(CubeMapFace.PositiveX);
             RenderFace(CubeMapFace.NegativeX);
@@ -136,44 +157,32 @@ namespace RetroEngine.Entities.Light
             RenderFace(CubeMapFace.PositiveZ);
             RenderFace(CubeMapFace.NegativeZ);
 
+            dirty = false;
+
+
         }
 
         void RenderFace(CubeMapFace face)
         {
 
-            Camera.position = Position;
-
-            Camera.finalizedView = GetViewForFace(face);
-            Camera.view = Camera.finalizedView;
-            Camera.finalizedProjection = Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.ToRadians(90), 1, 0.005f, lightData.Radius*1.42f);
-            Camera.projection = Camera.finalizedProjection;
-
-            Camera.frustum.Matrix = Camera.finalizedView * Camera.finalizedProjection;
+            var view = GetViewForFace(face);
+            var projection = Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.ToRadians(90), 1, 0.005f, lightData.Radius*1.42f);
 
 
-            Level.GetCurrent().RenderPreparation();
 
-            var l = Level.GetCurrent().GetMeshesToRender();
-
-            foreach (var mesh in l)
-            {
-                mesh.occluded = false;
-                mesh.inFrustrum = true;
-                mesh.isRendered = true;
-            }
+            var l = Level.GetCurrent().GetAllOpaqueMeshes();
 
             graphicsDevice.SetRenderTarget(lightData.shadowData, face);
             graphicsDevice.Clear(Color.Black);
 
-            l = Level.GetCurrent().GetMeshesToRender();
 
 
-            GameMain.Instance.render.OcclusionEffect.Parameters["View"].SetValue(Camera.finalizedView);
-            GameMain.Instance.render.OcclusionEffect.Parameters["Projection"].SetValue(Camera.finalizedProjection);
-            GameMain.Instance.render.OcclusionEffect.Parameters["CameraPos"].SetValue(Camera.position);
+            GameMain.Instance.render.OcclusionEffect.Parameters["View"].SetValue(view);
+            GameMain.Instance.render.OcclusionEffect.Parameters["Projection"].SetValue(projection);
+            GameMain.Instance.render.OcclusionEffect.Parameters["CameraPos"].SetValue(Position);
             GameMain.Instance.render.OcclusionEffect.Parameters["pointDistance"].SetValue(true);
 
-            GameMain.Instance.render.RenderLevelGeometryDepth(l, OnlyStatic: true);
+            GameMain.Instance.render.RenderLevelGeometryDepth(l, OnlyStatic: true, onlyShadowCasters: true);
 
             graphicsDevice.SetRenderTarget(null);
         }

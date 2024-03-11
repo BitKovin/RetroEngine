@@ -262,7 +262,7 @@ namespace RetroEngine.Game.Entities.Player
             bodyMesh.SetBoneMeshTransformModification("upperarm_l", showL);
             bodyMesh.SetBoneMeshTransformModification("head", hide.ToMatrix());
 
-            bodyMesh.Position = interpolatedPosition - Camera.rotation.GetForwardVector().XZ().Normalized() * 0.4f - new Vector3(0,1.05f,0);
+            bodyMesh.Position = interpolatedPosition - Camera.rotation.GetForwardVector().XZ().Normalized() * 0.35f - new Vector3(0,1.05f,0);
             bodyMesh.Rotation = new Vector3(0,Camera.rotation.Y,0);
 
         }
@@ -447,7 +447,7 @@ namespace RetroEngine.Game.Entities.Player
         {
             if (currentWeapon is not null)
             {
-                currentWeapon.Position = Camera.position + bob * 0.05f*currentWeapon.BobScale + Camera.rotation.GetForwardVector() * Camera.rotation.X / 3000f;
+                currentWeapon.Position = Camera.position + bob * 0.05f*currentWeapon.BobScale + Camera.rotation.GetForwardVector() * Camera.rotation.X / 2000f;
                 currentWeapon.Rotation = Camera.rotation + new Vector3(0, 0, (float)Math.Sin(bobProgress * -1 * bobSpeed) * -1.5f) * currentWeapon.BobScale;
             }
 
