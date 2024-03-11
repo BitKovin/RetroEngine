@@ -562,7 +562,6 @@ namespace RetroEngine.Skeletal
                 // Note 4D coords are not supported
 
                 // Uv
-                Console.WriteLine("");
                 var uvchannels = mesh.TextureCoordinateChannels;
                 for (int k = 0; k < uvchannels.Length; k++)
                 {

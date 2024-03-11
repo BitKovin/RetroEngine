@@ -221,20 +221,20 @@ PixelInput DefaultVertexShaderFunction(VertexInput input)
     output.MyPixelPosition = output.Position;
     
     
-    
     output.TexCoord = input.TexCoord;
 
 	// Pass the world space normal to the pixel shader
     output.Normal = mul(mul(input.Normal, (float3x3) boneTrans), (float3x3) World);
     output.Normal = normalize(output.Normal);
     
-    if (dot(output.Normal, normalize(output.MyPosition - viewPos)) > 0)
-        output.Normal *= -1;
     
     output.Tangent = mul(mul(input.Tangent, (float3x3) boneTrans), (float3x3) World);
     output.Tangent = normalize(output.Tangent);
 
     output.TangentNormal = GetTangentNormal(output.Normal, output.Tangent);
+    
+    if (dot(output.TangentNormal, normalize(output.MyPosition - viewPos)) > 0)
+        output.TangentNormal *= -1;
     
     output.light = 0;
 
@@ -684,6 +684,7 @@ float3 ApplyReflection(float3 inColor, PixelInput input,float3 normal, float rou
     
     reflectiveness = saturate(reflectiveness);
     
+    reflectionColor *= lerp(float3(1,1,1),inColor, metallic);
     
     return lerp(inColor, reflectionColor, reflectiveness);
 }
