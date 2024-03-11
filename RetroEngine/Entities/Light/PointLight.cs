@@ -50,7 +50,7 @@ namespace RetroEngine.Entities.Light
             lightData.shadowData = new RenderTargetCube(graphicsDevice, 512, false, SurfaceFormat.Single, DepthFormat.Depth24);
 
             mesh.LoadFromFile("models/cube.obj");
-            //meshes.Add(mesh);
+            meshes.Add(mesh);
             mesh.Visible = false;
 
         }
@@ -159,15 +159,13 @@ namespace RetroEngine.Entities.Light
 
             dirty = false;
 
-
         }
 
         void RenderFace(CubeMapFace face)
         {
 
             var view = GetViewForFace(face);
-            var projection = Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.ToRadians(90), 1, 0.005f, lightData.Radius*1.42f);
-
+            var projection = Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.ToRadians(90f), 1, 0.005f, lightData.Radius*1.5f);
 
 
             var l = Level.GetCurrent().GetAllOpaqueMeshes();
@@ -175,7 +173,8 @@ namespace RetroEngine.Entities.Light
             graphicsDevice.SetRenderTarget(lightData.shadowData, face);
             graphicsDevice.Clear(Color.Black);
 
-
+            GameMain.Instance.render.BoundingSphere.Radius = lightData.Radius;
+            GameMain.Instance.render.BoundingSphere.Center = lightData.Position;
 
             GameMain.Instance.render.OcclusionEffect.Parameters["View"].SetValue(view);
             GameMain.Instance.render.OcclusionEffect.Parameters["Projection"].SetValue(projection);
@@ -183,6 +182,8 @@ namespace RetroEngine.Entities.Light
             GameMain.Instance.render.OcclusionEffect.Parameters["pointDistance"].SetValue(true);
 
             GameMain.Instance.render.RenderLevelGeometryDepth(l, OnlyStatic: true, onlyShadowCasters: true);
+
+            GameMain.Instance.render.BoundingSphere.Radius = 0;
 
             graphicsDevice.SetRenderTarget(null);
         }

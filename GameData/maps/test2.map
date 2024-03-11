@@ -7220,7 +7220,7 @@
 // entity 32
 {
 "classname" "light_point"
-"origin" "-261 411 117"
+"origin" "-261 411 69"
 "radius" "20"
 "light_color" "0.160784 0.0117647 1"
 "intensity" "5"

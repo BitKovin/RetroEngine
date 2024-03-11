@@ -15,14 +15,14 @@ namespace RetroEngine
         public static Color BackgroundColor = new Color(0.15f, 0.15f, 0.2f);
         public static Vector3 LightColor = new Vector3(1,1,1);
 
-        public static float ShadowBias = 0.0025f;
+        public static float ShadowBias = 0.0005f;//0025f
         public static int shadowMapResolution = 2048;
         public static int closeShadowMapResolution = 2048;
 
         public static Matrix LightViewProjection;
         public static Matrix LightViewProjectionClose;
         public static float LightDistance = 200;
-        public static float CloseLightDistance = 50;
+        public static float CloseLightDistance = 43;
 
         public static bool EnablePostPocessing = true;
         public static bool TextureFiltration = true;
@@ -59,7 +59,7 @@ namespace RetroEngine
         public static Matrix GetCloseLightProjection()
         {
 
-            return Matrix.CreateOrthographic(CloseLightDistance, CloseLightDistance, -100, 300);
+            return Matrix.CreateOrthographic(CloseLightDistance, CloseLightDistance, -CloseLightDistance, 100);
         }
 
         public static Matrix GetLightView()
@@ -72,7 +72,7 @@ namespace RetroEngine
 
             float hFactor = 1f - Math.Abs(Camera.rotation.GetForwardVector().Y);
 
-            Vector3 pos = Camera.position + Camera.rotation.GetForwardVector().XZ().Normalized() * LightDistance/4f * hFactor;
+            Vector3 pos = Camera.position + Camera.rotation.GetForwardVector().XZ().Normalized();
 
 
             //ector3 pos = Camera.position - new Vector3(0, 1, 0);

@@ -25,7 +25,7 @@ namespace RetroEngine
 
         public SkeletalMesh()
         {
-            CastShadows = false;
+            CastShadows = true;
         }
 
         public override void LoadFromFile(string filePath)
@@ -337,26 +337,28 @@ namespace RetroEngine
 
             effect.Parameters["Bones"].SetValue(finalizedBones);
 
+
             if (RiggedModel != null)
             {
-                foreach (RiggedModel.RiggedModelMesh meshPart in RiggedModel.meshes)
-                {
-                    // Set the vertex buffer and index buffer for this mesh part
-                    graphicsDevice.SetVertexBuffer(meshPart.VertexBuffer);
-                    graphicsDevice.Indices = meshPart.IndexBuffer;
+                if (GameMain.Instance.render.BoundingSphere.Radius == 0 || IntersectsBoubndingSphere(GameMain.Instance.render.BoundingSphere))
+                    foreach (RiggedModel.RiggedModelMesh meshPart in RiggedModel.meshes)
+                    {
+                        // Set the vertex buffer and index buffer for this mesh part
+                        graphicsDevice.SetVertexBuffer(meshPart.VertexBuffer);
+                        graphicsDevice.Indices = meshPart.IndexBuffer;
 
-                    effect.Parameters["World"].SetValue(frameStaticMeshData.World);
-                    
+                        effect.Parameters["World"].SetValue(frameStaticMeshData.World);
 
-                    effect.Techniques[0].Passes[0].Apply();
 
-                    graphicsDevice.DrawIndexedPrimitives(
-                        PrimitiveType.TriangleList,
-                        meshPart.VertexOffset,
-                        meshPart.StartIndex,
-                        meshPart.PrimitiveCount);
+                        effect.Techniques[0].Passes[0].Apply();
 
-                }
+                        graphicsDevice.DrawIndexedPrimitives(
+                            PrimitiveType.TriangleList,
+                            meshPart.VertexOffset,
+                            meshPart.StartIndex,
+                            meshPart.PrimitiveCount);
+
+                    }
             }
         }
 
