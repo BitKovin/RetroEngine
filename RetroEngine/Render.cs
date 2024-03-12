@@ -524,7 +524,7 @@ namespace RetroEngine
 
             graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 
-            graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
+            graphics.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
 
             graphics.GraphicsDevice.BlendState = BlendState.Opaque;
 

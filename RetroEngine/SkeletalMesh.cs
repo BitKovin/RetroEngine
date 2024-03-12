@@ -273,7 +273,7 @@ namespace RetroEngine
 
             if (RiggedModel is null) return;
 
-            finalizedBones = RiggedModel.globalShaderMatrixs;
+            finalizedBones = new List<Matrix>(RiggedModel.globalShaderMatrixs).ToArray();
 
         }
 

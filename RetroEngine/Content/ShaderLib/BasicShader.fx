@@ -498,7 +498,7 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input)
 
         int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)
 
-        float b = 0.0005;
+        float b = 0.0000;
         
         float bias = b * (1 - saturate(dot(input.Normal, -LightDirection))) + b / 2.0f;
         resolution = ShadowMapResolutionClose;
