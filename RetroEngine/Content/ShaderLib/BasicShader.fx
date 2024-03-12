@@ -249,8 +249,8 @@ PixelInput DefaultVertexShaderFunction(VertexInput input)
     output.light = 0;
 
     output.lightPos = mul(float4(mul(mul(input.Position, boneTrans), World)), ShadowMapViewProjection);
-    output.lightPosClose = mul(float4(mul(input.Position, World)), ShadowMapViewProjectionClose);
-    output.lightPosVeryClose = mul(float4(mul(input.Position, World)), ShadowMapViewProjectionVeryClose);
+    output.lightPosClose = mul(float4(mul(mul(input.Position, boneTrans), World)), ShadowMapViewProjectionClose);
+    output.lightPosVeryClose = mul(float4(mul(mul(input.Position, boneTrans), World)), ShadowMapViewProjectionVeryClose);
     
     output.TexCoord = input.TexCoord;
     
