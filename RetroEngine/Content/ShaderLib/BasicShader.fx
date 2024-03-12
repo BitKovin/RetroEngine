@@ -496,7 +496,7 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose, PixelInput input)
         float bias = ShadowBias * (1 - saturate(dot(input.Normal, -LightDirection))) + ShadowBias / 2.0f;
         resolution = ShadowMapResolution;
             
-        if (dist < 20)
+        if (dist < 15)
         {
             if (lightCoordsClose.x >= 0 && lightCoordsClose.x <= 1 && lightCoordsClose.y >= 0 && lightCoordsClose.y <= 1)
             {

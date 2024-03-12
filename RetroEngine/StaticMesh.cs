@@ -38,6 +38,7 @@ namespace RetroEngine
         public Matrix ProjectionViewmodel;
 
         public Matrix LightView;
+        public Matrix LightViewClose;
         public Matrix LightProjection;
         public Matrix LightProjectionClose;
 
@@ -387,6 +388,10 @@ namespace RetroEngine
             {
                 foreach (ModelMesh mesh in frameStaticMeshData.model.Meshes)
                 {
+
+                    if(closeShadow)
+                        if (Graphics.DirectionalLightFrustrumClose.Contains(mesh.BoundingSphere) == ContainmentType.Disjoint) continue;
+
                     foreach (ModelMeshPart meshPart in mesh.MeshParts)
                     {
 
@@ -396,17 +401,23 @@ namespace RetroEngine
 
 
                         if (closeShadow)
-                            Graphics.LightViewProjectionClose = frameStaticMeshData.LightView * frameStaticMeshData.LightProjectionClose;
+                            Graphics.LightViewProjectionClose = frameStaticMeshData.LightViewClose * frameStaticMeshData.LightProjectionClose;
                         else
                             Graphics.LightViewProjection = frameStaticMeshData.LightView * frameStaticMeshData.LightProjection;
 
                         // Set effect parameters
                         effect.Parameters["World"].SetValue(frameStaticMeshData.World);
-                        effect.Parameters["View"].SetValue(frameStaticMeshData.LightView);
+
                         if (closeShadow)
+                        {
                             effect.Parameters["Projection"].SetValue(frameStaticMeshData.LightProjectionClose);
+                            effect.Parameters["View"].SetValue(frameStaticMeshData.LightViewClose);
+                        }
                         else
+                        {
                             effect.Parameters["Projection"].SetValue(frameStaticMeshData.LightProjection);
+                            effect.Parameters["View"].SetValue(frameStaticMeshData.LightView);
+                        }
 
                         // Draw the primitives using the custom effect
                         foreach (EffectPass pass in effect.CurrentTechnique.Passes)
@@ -941,6 +952,7 @@ namespace RetroEngine
             frameStaticMeshData.World = GetWorldMatrix();
             frameStaticMeshData.Viewmodel = Viewmodel;
             frameStaticMeshData.LightView = Graphics.GetLightView();
+            frameStaticMeshData.LightViewClose = Graphics.GetLightViewClose();
             frameStaticMeshData.LightProjection = Graphics.GetLightProjection();
             frameStaticMeshData.Transparency = Transparency;
             frameStaticMeshData.LightProjectionClose = Graphics.GetCloseLightProjection();

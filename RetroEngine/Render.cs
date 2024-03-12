@@ -455,7 +455,8 @@ namespace RetroEngine
             // Iterate through meshes and draw shadows
             foreach (StaticMesh mesh in renderList)
             {
-                mesh.DrawShadow();
+                if(mesh.Static == true)
+                    mesh.DrawShadow();
             }
 
         }
@@ -464,6 +465,7 @@ namespace RetroEngine
         {
             InitShadowMapClose(ref shadowMapClose);
 
+            if(renderShadow()) return;
 
             // Set up the shadow map render target with the desired resolution
             graphics.GraphicsDevice.SetRenderTarget(shadowMapClose);
@@ -634,7 +636,7 @@ namespace RetroEngine
 
             SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
 
-            spriteBatch.Begin(effect: BloomEffect, blendState: BlendState.Opaque);
+            spriteBatch.Begin(effect: BloomEffect, blendState: BlendState.Opaque, samplerState: SamplerState.AnisotropicClamp);
 
             DrawFullScreenQuad(spriteBatch, DeferredOutput);
 

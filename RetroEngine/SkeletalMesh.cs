@@ -289,6 +289,10 @@ namespace RetroEngine
 
             if (RiggedModel != null)
             {
+
+                if (closeShadow)
+                    if (Graphics.DirectionalLightFrustrumClose.Contains(boundingSphere) == ContainmentType.Disjoint) return;
+
                 foreach (RiggedModel.RiggedModelMesh meshPart in RiggedModel.meshes)
                 {
                     // Set the vertex buffer and index buffer for this mesh part
@@ -297,17 +301,23 @@ namespace RetroEngine
 
 
                     if (closeShadow)
-                        Graphics.LightViewProjectionClose = frameStaticMeshData.LightView * frameStaticMeshData.LightProjectionClose;
+                        Graphics.LightViewProjectionClose = frameStaticMeshData.LightViewClose * frameStaticMeshData.LightProjectionClose;
                     else
                         Graphics.LightViewProjection = frameStaticMeshData.LightView * frameStaticMeshData.LightProjection;
 
                     // Set effect parameters
                     effect.Parameters["World"].SetValue(frameStaticMeshData.World);
-                    effect.Parameters["View"].SetValue(frameStaticMeshData.LightView);
+                    
                     if (closeShadow)
+                    {
                         effect.Parameters["Projection"].SetValue(frameStaticMeshData.LightProjectionClose);
+                        effect.Parameters["View"].SetValue(frameStaticMeshData.LightViewClose);
+                    }
                     else
+                    {
+                        effect.Parameters["View"].SetValue(frameStaticMeshData.LightView);
                         effect.Parameters["Projection"].SetValue(frameStaticMeshData.LightProjection);
+                    }
 
                     
 
