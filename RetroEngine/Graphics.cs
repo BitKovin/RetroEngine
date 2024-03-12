@@ -18,11 +18,14 @@ namespace RetroEngine
         public static float ShadowBias = -0.0001f;//0025f
         public static int shadowMapResolution = 2048;
         public static int closeShadowMapResolution = 2048;
+        public static int veryCloseShadowMapResolution = 2048;
 
         public static Matrix LightViewProjection;
         public static Matrix LightViewProjectionClose;
+        public static Matrix LightViewProjectionVeryClose;
         public static float LightDistance = 200;
-        public static float CloseLightDistance = 43;
+        public static float CloseLightDistance = 63;
+        public static float VeryCloseLightDistance = 17;
 
         public static bool EnablePostPocessing = true;
         public static bool TextureFiltration = true;
@@ -45,23 +48,31 @@ namespace RetroEngine
 
         public static BoundingFrustum DirectionalLightFrustrum = new BoundingFrustum(Matrix.Identity);
         public static BoundingFrustum DirectionalLightFrustrumClose = new BoundingFrustum(Matrix.Identity);
+        public static BoundingFrustum DirectionalLightFrustrumVeryClose = new BoundingFrustum(Matrix.Identity);
 
         public static void UpdateDirectionalLight()
         {
             DirectionalLightFrustrum.Matrix = GetLightView() * GetLightProjection();
             DirectionalLightFrustrumClose.Matrix = GetLightViewClose() * GetCloseLightProjection();
+            DirectionalLightFrustrumVeryClose.Matrix = GetLightViewVeryClose() * GetVeryCloseLightProjection();
         }
 
         public static Matrix GetLightProjection()
         {
 
-            return Matrix.CreateOrthographic(LightDistance, LightDistance, -LightDistance, 100);
+            return Matrix.CreateOrthographic(LightDistance, LightDistance, -100, 100);
         }
 
         public static Matrix GetCloseLightProjection()
         {
 
-            return Matrix.CreateOrthographic(CloseLightDistance, CloseLightDistance, -CloseLightDistance, 100);
+            return Matrix.CreateOrthographic(CloseLightDistance, CloseLightDistance, -100, 100);
+        }
+
+        public static Matrix GetVeryCloseLightProjection()
+        {
+
+            return Matrix.CreateOrthographic(VeryCloseLightDistance, VeryCloseLightDistance, -100, 100);
         }
 
         public static Matrix GetLightView()
@@ -73,6 +84,10 @@ namespace RetroEngine
         {
             return Matrix.CreateLookAt(GetCameraPositionByPixelGrid(CloseLightDistance/1.5f), GetCameraPositionByPixelGrid(CloseLightDistance / 1.5f) + LightDirection, new Vector3(0, 0, 1));
         }
+        public static Matrix GetLightViewVeryClose()
+        {
+            return Matrix.CreateLookAt(GetCameraPositionByPixelGrid(VeryCloseLightDistance / 1.5f), GetCameraPositionByPixelGrid(VeryCloseLightDistance / 1.5f) + LightDirection, new Vector3(0, 0, 1));
+        }
 
         static Vector3 GetCameraPositionByPixelGrid(float lightDistance)
         {
@@ -81,6 +96,7 @@ namespace RetroEngine
 
             Vector3 pos = Camera.position + Camera.rotation.GetForwardVector().XZ().Normalized() * lightDistance / 3f * hFactor;
 
+            return Camera.position;
 
             //ector3 pos = Camera.position - new Vector3(0, 1, 0);
 

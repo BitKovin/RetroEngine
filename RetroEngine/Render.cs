@@ -35,6 +35,7 @@ namespace RetroEngine
 
         public RenderTarget2D shadowMap;
         public RenderTarget2D shadowMapClose;
+        public RenderTarget2D shadowMapVeryClose;
 
         public Texture2D black;
 
@@ -142,6 +143,7 @@ namespace RetroEngine
 
                 effect.Parameters["ShadowMapViewProjection"]?.SetValue(Graphics.LightViewProjection);
                 effect.Parameters["ShadowMapViewProjectionClose"]?.SetValue(Graphics.LightViewProjectionClose);
+                effect.Parameters["ShadowMapViewProjectionVeryClose"]?.SetValue(Graphics.LightViewProjectionVeryClose);
 
                 effect.Parameters["ShadowBias"]?.SetValue(Graphics.ShadowBias);
                 effect.Parameters["ShadowMapResolution"]?.SetValue((float)Graphics.shadowMapResolution);
@@ -149,6 +151,7 @@ namespace RetroEngine
 
                 effect.Parameters["ShadowMap"]?.SetValue(GameMain.Instance.render.shadowMap);
                 effect.Parameters["ShadowMapClose"]?.SetValue(GameMain.Instance.render.shadowMapClose);
+                effect.Parameters["ShadowMapVeryClose"]?.SetValue(GameMain.Instance.render.shadowMapVeryClose);
 
 
                 effect.Parameters["View"]?.SetValue(Camera.finalizedView);
@@ -232,6 +235,7 @@ namespace RetroEngine
             RenderShadowMap(renderList);
 
             RenderShadowMapClose(renderList);
+            RenderShadowMapVeryClose(renderList);
 
             graphics.GraphicsDevice.RasterizerState = Graphics.DisableBackFaceCulling? RasterizerState.CullNone : RasterizerState.CullClockwise;
 
@@ -497,6 +501,41 @@ namespace RetroEngine
 
         }
 
+        internal void RenderShadowMapVeryClose(List<StaticMesh> renderList)
+        {
+            InitShadowMapVeryClose(ref shadowMapVeryClose);
+
+
+            // Set up the shadow map render target with the desired resolution
+            graphics.GraphicsDevice.SetRenderTarget(shadowMapVeryClose);
+            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, Graphics.veryCloseShadowMapResolution, Graphics.veryCloseShadowMapResolution);
+
+            // Clear the shadow map with the desired clear color (e.g., Color.White)
+            graphics.GraphicsDevice.Clear(Color.Black);
+
+            SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
+            spriteBatch.Begin(effect: maxDepth, sortMode: SpriteSortMode.FrontToBack);
+
+            // Draw a full-screen quad to apply the lighting
+            DrawShadowQuad(spriteBatch, black);
+
+            // End the SpriteBatch
+            spriteBatch.End();
+
+            graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+
+            graphics.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
+
+            graphics.GraphicsDevice.BlendState = BlendState.Opaque;
+
+            // Iterate through meshes and draw shadows
+            foreach (StaticMesh mesh in renderList)
+            {
+                mesh.DrawShadow(veryClose: true);
+            }
+
+        }
+
         void PerformPostProcessing()
         {
             PerformSSAO();
@@ -742,6 +781,25 @@ namespace RetroEngine
         void InitShadowMapClose(ref RenderTarget2D target)
         {
             if (target is not null && target.Height == Graphics.closeShadowMapResolution) return;
+
+            DestroyRenderTarget(target);
+
+            // Set the depth format based on your requirements
+            DepthFormat depthFormat = DepthFormat.Depth16;
+
+            // Create the new render target with the specified depth format
+            target = new RenderTarget2D(
+                graphics.GraphicsDevice,
+                Graphics.closeShadowMapResolution,
+                Graphics.closeShadowMapResolution,
+                false, // No mipmaps
+                SurfaceFormat.Single, // Color format
+                depthFormat); // Depth format
+        }
+
+        void InitShadowMapVeryClose(ref RenderTarget2D target)
+        {
+            if (target is not null && target.Height == Graphics.veryCloseShadowMapResolution) return;
 
             DestroyRenderTarget(target);
 

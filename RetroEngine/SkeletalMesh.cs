@@ -277,7 +277,7 @@ namespace RetroEngine
 
         }
 
-        public override void DrawShadow(bool closeShadow = false)
+        public override void DrawShadow(bool closeShadow = false, bool veryClose = false)
         {
             if (!CastShadows) return;
 
@@ -291,7 +291,10 @@ namespace RetroEngine
             {
 
                 if (closeShadow)
-                    if (Graphics.DirectionalLightFrustrumClose.Contains(boundingSphere) == ContainmentType.Disjoint) return;
+                    if (Graphics.DirectionalLightFrustrumClose.Contains(boundingSphere.Transform(GetWorldMatrix())) == ContainmentType.Disjoint) return;
+
+                if (veryClose)
+                    if (Graphics.DirectionalLightFrustrumVeryClose.Contains(boundingSphere.Transform(GetWorldMatrix())) == ContainmentType.Disjoint) return;
 
                 foreach (RiggedModel.RiggedModelMesh meshPart in RiggedModel.meshes)
                 {
@@ -302,6 +305,8 @@ namespace RetroEngine
 
                     if (closeShadow)
                         Graphics.LightViewProjectionClose = frameStaticMeshData.LightViewClose * frameStaticMeshData.LightProjectionClose;
+                    else if (veryClose)
+                        Graphics.LightViewProjectionVeryClose = frameStaticMeshData.LightViewVeryClose * frameStaticMeshData.LightProjectionVeryClose;
                     else
                         Graphics.LightViewProjection = frameStaticMeshData.LightView * frameStaticMeshData.LightProjection;
 
@@ -313,7 +318,11 @@ namespace RetroEngine
                         effect.Parameters["Projection"].SetValue(frameStaticMeshData.LightProjectionClose);
                         effect.Parameters["View"].SetValue(frameStaticMeshData.LightViewClose);
                     }
-                    else
+                    else if (veryClose)
+                    {
+                        effect.Parameters["Projection"].SetValue(frameStaticMeshData.LightProjectionVeryClose);
+                        effect.Parameters["View"].SetValue(frameStaticMeshData.LightViewVeryClose);
+                    }else
                     {
                         effect.Parameters["View"].SetValue(frameStaticMeshData.LightView);
                         effect.Parameters["Projection"].SetValue(frameStaticMeshData.LightProjection);

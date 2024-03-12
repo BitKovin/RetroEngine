@@ -26,6 +26,12 @@ sampler ShadowMapCloseSampler = sampler_state
     texture = <ShadowMapClose>;
 };
 
+texture ShadowMapVeryClose;
+sampler ShadowMapVeryCloseSampler = sampler_state
+{
+    texture = <ShadowMapVeryClose>;
+};
+
 texture DepthTexture;
 sampler DepthTextureSampler = sampler_state
 {
@@ -58,6 +64,9 @@ bool Viewmodel = false;
 
 matrix ShadowMapViewProjectionClose;
 float ShadowMapResolutionClose;
+
+matrix ShadowMapViewProjectionVeryClose;
+float ShadowMapResolutionVeryClose;
 
 #ifndef MAX_POINT_LIGHTS
 
@@ -128,6 +137,7 @@ struct PixelInput
     float4 MyPixelPosition : TEXCOORD6;
     float3 Tangent : TEXCOORD7;
     float3 TangentNormal : TEXCOORD8;
+    float4 lightPosVeryClose : TEXCOORD9;
 };
 
 struct PBRData
@@ -240,6 +250,7 @@ PixelInput DefaultVertexShaderFunction(VertexInput input)
 
     output.lightPos = mul(float4(mul(mul(input.Position, boneTrans), World)), ShadowMapViewProjection);
     output.lightPosClose = mul(float4(mul(input.Position, World)), ShadowMapViewProjectionClose);
+    output.lightPosVeryClose = mul(float4(mul(input.Position, World)), ShadowMapViewProjectionVeryClose);
     
     output.TexCoord = input.TexCoord;
     
@@ -472,7 +483,53 @@ float GetShadowClose(float3 lightCoords, PixelInput input)
     
 }
 
-float GetShadow(float3 lightCoords,float3 lightCoordsClose, PixelInput input)
+float GetShadowVeryClose(float3 lightCoords, PixelInput input)
+{
+    float shadow = 0;
+    
+    float dist = distance(viewPos, input.MyPosition);
+    
+    if (lightCoords.x >= 0 && lightCoords.x <= 1 && lightCoords.y >= 0 && lightCoords.y <= 1)
+    {
+        float currentDepth = lightCoords.z * 2 - 1;
+
+        float resolution = 1;
+        
+
+        int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)
+
+        float bias = ShadowBias * (1 - saturate(dot(input.Normal, -LightDirection))) + ShadowBias / 2.0f;
+        resolution = ShadowMapResolutionClose;
+        
+        
+        float size = 1;
+        
+        
+        float texelSize = size / resolution; // Assuming ShadowMapSize is the size of your shadow map texture
+        
+        for (int i = -numSamples; i <= numSamples; ++i)
+        {
+            for (int j = -numSamples; j <= numSamples; ++j)
+            {
+                float2 offsetCoords = lightCoords.xy + float2(i, j) * texelSize;
+                float closestDepth;
+                closestDepth = SampleShadowMapLinear(ShadowMapVeryCloseSampler, offsetCoords, currentDepth - bias, float2(texelSize, texelSize));
+
+                shadow += closestDepth;
+
+            }
+        }
+
+        // Normalize the accumulated shadow value
+        shadow /= ((2 * numSamples + 1) * (2 * numSamples + 1));
+        
+        return (1 - shadow) * (1 - shadow);
+    }
+    return 0;
+    
+}
+
+float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVeryClose, PixelInput input)
 {
     float shadow = 0;
     
@@ -496,7 +553,15 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose, PixelInput input)
         float bias = ShadowBias * (1 - saturate(dot(input.Normal, -LightDirection))) + ShadowBias / 2.0f;
         resolution = ShadowMapResolution;
             
-        if (dist < 15)
+        if (dist < 8)
+        {
+            if (lightCoordsVeryClose.x >= 0 && lightCoordsVeryClose.x <= 1 && lightCoordsVeryClose.y >= 0 && lightCoordsVeryClose.y <= 1)
+            {
+                return GetShadowVeryClose(lightCoordsVeryClose, input);
+            }
+        }
+        
+        if (dist < 31)
         {
             if (lightCoordsClose.x >= 0 && lightCoordsClose.x <= 1 && lightCoordsClose.y >= 0 && lightCoordsClose.y <= 1)
             {
@@ -637,9 +702,13 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness, float me
     float3 lightCoordsClose = input.lightPosClose.xyz / input.lightPosClose.w;
     lightCoordsClose = (lightCoordsClose + 1.0f) / 2.0f;
     lightCoordsClose.y = 1.0f - lightCoordsClose.y;
+    
+    float3 lightCoordsVeryClose = input.lightPosVeryClose.xyz / input.lightPosVeryClose.w;
+    lightCoordsVeryClose = (lightCoordsVeryClose + 1.0f) / 2.0f;
+    lightCoordsVeryClose.y = 1.0f - lightCoordsVeryClose.y;
 
     
-    shadow += GetShadow(lightCoords,lightCoordsClose, input);
+    shadow += GetShadow(lightCoords,lightCoordsClose,lightCoordsVeryClose, input);
     
     shadow += 1 - max(0, dot(normal, normalize(-LightDirection) * 1));
     

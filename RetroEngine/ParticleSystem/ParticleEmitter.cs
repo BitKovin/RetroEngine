@@ -258,7 +258,7 @@ namespace RetroEngine.Particles
             }
         }
 
-        public override void DrawShadow(bool close = false)
+        public override void DrawShadow(bool close = false, bool veryClose = false)
         {
             return; // no shadows for particles
         }
