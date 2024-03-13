@@ -207,9 +207,12 @@ PixelInput DefaultVertexShaderFunction(VertexInput input)
 
     float4x4 boneTrans = GetBoneTransforms(input);
     
+    float4x4 BonesWorld = mul(boneTrans, World);
     
+    float4 worldPos = mul(input.Position, BonesWorld);
 
-    output.Position = mul(mul(input.Position, boneTrans), World);
+    
+    output.Position = worldPos;
     output.MyPosition = output.Position.xyz;
     output.Position = mul(output.Position, View);
     
@@ -218,15 +221,14 @@ PixelInput DefaultVertexShaderFunction(VertexInput input)
     if (Viewmodel)
     {
         output.Position = mul(output.Position, ProjectionViewmodel);
+        output.Position.z *= 0.02;
     }
     else
     {
         output.Position = mul(output.Position, Projection);
     }
     
-    
-    if (Viewmodel)
-        output.Position.z *= 0.02;
+        
     
     output.MyPixelPosition = output.Position;
     
@@ -234,11 +236,11 @@ PixelInput DefaultVertexShaderFunction(VertexInput input)
     output.TexCoord = input.TexCoord;
 
 	// Pass the world space normal to the pixel shader
-    output.Normal = mul(mul(input.Normal, (float3x3) boneTrans), (float3x3) World);
+    output.Normal = mul(input.Normal, (float3x3)BonesWorld);
     output.Normal = normalize(output.Normal);
     
     
-    output.Tangent = mul(mul(input.Tangent, (float3x3) boneTrans), (float3x3) World);
+    output.Tangent = mul(input.Tangent, (float3x3) BonesWorld);
     output.Tangent = normalize(output.Tangent);
 
     output.TangentNormal = GetTangentNormal(output.Normal, output.Tangent);
@@ -248,9 +250,9 @@ PixelInput DefaultVertexShaderFunction(VertexInput input)
     
     output.light = 0;
 
-    output.lightPos = mul(float4(mul(mul(input.Position, boneTrans), World)), ShadowMapViewProjection);
-    output.lightPosClose = mul(float4(mul(mul(input.Position, boneTrans), World)), ShadowMapViewProjectionClose);
-    output.lightPosVeryClose = mul(float4(mul(mul(input.Position, boneTrans), World)), ShadowMapViewProjectionVeryClose);
+    output.lightPos = mul(worldPos, ShadowMapViewProjection);
+    output.lightPosClose = mul(worldPos, ShadowMapViewProjectionClose);
+    output.lightPosVeryClose = mul(worldPos, ShadowMapViewProjectionVeryClose);
     
     output.TexCoord = input.TexCoord;
     
@@ -277,11 +279,8 @@ float SampleMaxDepth(float2 screenCoords)
     float d = SampleDepth(screenCoords);
     float d1 = SampleDepth(screenCoords + texelSize);
     float d2 = SampleDepth(screenCoords - texelSize);
-    
-    float d3 = SampleDepth(screenCoords + texelSize * float2(2,0));
-    float d4 = SampleDepth(screenCoords - texelSize * float2(0, 2));
 
-    return max(d, max(d1, max(d2, max(d3, d4))));
+    return max(d, max(d1, d2));
 
 }
 
@@ -493,7 +492,7 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input)
     {
         float currentDepth = lightCoords.z * 2 - 1;
 
-        float resolution = 2;
+        float resolution = 1;
         
 
         int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)
@@ -723,9 +722,9 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness, float me
     
     float specular = 0;
     
-    specular = CalculateSpecular(input.MyPosition, normal, normalize(LightDirection), roughness, metalic) * GlobalBrightness;
+    specular = CalculateSpecular(input.MyPosition, normal, normalize(LightDirection), roughness, metalic) * DirectBrightness;
     
-    specular *= max(0.1 - shadow, 0);
+    specular *= max(1 - shadow, 0);
     
     float3 globalSpecularDir = normalize(-normal + float3(0,-5,0) + LightDirection);
     

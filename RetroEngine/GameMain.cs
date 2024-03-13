@@ -63,9 +63,9 @@ namespace RetroEngine
 
         public static Thread RenderThread;
 
-        public static bool AsyncGameThread = false;
+        public static bool AsyncGameThread = true;
 
-        public static bool AllowAsyncAssetLoading = false;
+        public static bool AllowAsyncAssetLoading = true;
 
         public bool DevMenuEnabled = true;
 

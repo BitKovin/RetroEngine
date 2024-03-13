@@ -78,7 +78,7 @@
 #begin fxaa.fx
 /importer:EffectImporter
 /processor:EffectProcessor
-/processorParam:DebugMode=Auto
+/processorParam:DebugMode=Optimize
 /build:fxaa.fx
 
 #begin GPathesOutput.fx
@@ -102,7 +102,7 @@
 #begin ShadowMap.fx
 /importer:EffectImporter
 /processor:EffectProcessor
-/processorParam:DebugMode=Auto
+/processorParam:DebugMode=Optimize
 /build:ShadowMap.fx
 
 #begin ssao.fx
@@ -114,7 +114,7 @@
 #begin Tonemap.fx
 /importer:EffectImporter
 /processor:EffectProcessor
-/processorParam:DebugMode=Auto
+/processorParam:DebugMode=Optimize
 /build:Tonemap.fx
 
 #begin UnifiedOutput.fx

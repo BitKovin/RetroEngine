@@ -245,9 +245,10 @@ namespace RetroEngine
 
             graphics.GraphicsDevice.RasterizerState = Graphics.DisableBackFaceCulling? RasterizerState.CullNone : RasterizerState.CullClockwise;
 
-            InitSampler(15);
+            InitSampler(5);
 
             EndOcclusionTest(renderList);
+
             RenderPrepass(renderList);
             
             RenderForwardPath(renderList);
@@ -728,7 +729,7 @@ namespace RetroEngine
             OcclusionEffect.Parameters["View"].SetValue(Camera.finalizedView);
             OcclusionEffect.Parameters["Projection"].SetValue(Camera.projectionOcclusion);
 
-            GameMain.Instance.WaitForFramePresent();
+            
 
             graphics.GraphicsDevice.SetRenderTarget(occlusionTestPath);
             graphics.GraphicsDevice.Clear(ClearOptions.DepthBuffer, Color.Black, 1.0f, 0);

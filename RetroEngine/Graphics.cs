@@ -16,7 +16,7 @@ namespace RetroEngine
         public static Vector3 LightColor = new Vector3(1,1,1);
 
         public static float ShadowBias = -0.0001f;//0025f
-        public static int shadowMapResolution = 2048;
+        public static int shadowMapResolution = 2048/2;
         public static int closeShadowMapResolution = 2048;
         public static int veryCloseShadowMapResolution = 2048;
 
@@ -27,7 +27,7 @@ namespace RetroEngine
         public static Matrix LightViewProjection;
         public static Matrix LightViewProjectionClose;
         public static Matrix LightViewProjectionVeryClose;
-        public static float LightDistance = 200;
+        public static float LightDistance = 100;
         public static float CloseLightDistance = 63;
         public static float VeryCloseLightDistance = 17;
 
@@ -44,7 +44,7 @@ namespace RetroEngine
 
         public static bool DefaultUnlit = false;
 
-        public static bool DisableBackFaceCulling = true;
+        public static bool DisableBackFaceCulling = false;
 
         public static bool GlobalPointLights = false;
 

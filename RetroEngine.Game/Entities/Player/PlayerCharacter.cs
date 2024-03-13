@@ -554,6 +554,7 @@ namespace RetroEngine.Game.Entities.Player
             }
             else
             {
+                currentSlot = slot;
                 SwitchWeapon(null);
             }
         }
