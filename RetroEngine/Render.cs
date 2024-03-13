@@ -219,9 +219,9 @@ namespace RetroEngine
 
             InitRenderTargetIfNeed(ref postProcessingOutput);
 
+            
 
-
-            if(outputPath!=null)
+            if (outputPath!=null)
             DownsampleToTexture(outputPath, oldFrame);
 
             List<StaticMesh> renderList = level.GetMeshesToRender();
@@ -232,9 +232,10 @@ namespace RetroEngine
             graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 
 
+            RenderShadowMapClose(renderList);
+
             RenderShadowMap(renderList);
 
-            RenderShadowMapClose(renderList);
             RenderShadowMapVeryClose(renderList);
 
             graphics.GraphicsDevice.RasterizerState = Graphics.DisableBackFaceCulling? RasterizerState.CullNone : RasterizerState.CullClockwise;
@@ -244,7 +245,6 @@ namespace RetroEngine
             EndOcclusionTest(renderList);
             RenderPrepass(renderList);
             
-
             RenderForwardPath(renderList);
             
 
@@ -298,15 +298,12 @@ namespace RetroEngine
 
             Stats.RenderedMehses = 0;
 
-            
-
             UpdateShaderFrameData();
 
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, (int)GetScreenResolution().X, (int)GetScreenResolution().Y);
 
             graphics.GraphicsDevice.SetRenderTargets(DeferredOutput,DepthOutput, normalPath);
             graphics.GraphicsDevice.Clear(ClearOptions.DepthBuffer, Color.Black, 1.0f, 0);
-            graphics.GraphicsDevice.Clear(Graphics.BackgroundColor);
 
 
 
@@ -361,11 +358,12 @@ namespace RetroEngine
 
         void RenderPrepass(List<StaticMesh> renderList)
         {
+
             UpdateShaderFrameData();
 
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, (int)GetScreenResolution().X, (int)GetScreenResolution().Y);
 
-            graphics.GraphicsDevice.SetRenderTargets(DepthPrepathOutput);
+            graphics.GraphicsDevice.SetRenderTarget(DepthPrepathOutput);
             graphics.GraphicsDevice.Clear(ClearOptions.DepthBuffer, Color.Black, 1.0f, 0);
 
             SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;

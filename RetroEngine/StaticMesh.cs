@@ -329,7 +329,7 @@ namespace RetroEngine
 
         public virtual void DrawUnified()
         {
-            if (frameStaticMeshData.IsRendered == false && frameStaticMeshData.Viewmodel == false) return;
+            if ((frameStaticMeshData.IsRendered == false) && frameStaticMeshData.Viewmodel == false && occluded) return;
 
             GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
             // Load the custom effect
@@ -961,7 +961,7 @@ namespace RetroEngine
             frameStaticMeshData.model = model;
             frameStaticMeshData.Transperent = Transperent;
             frameStaticMeshData.EmissionPower = EmissionPower;
-            frameStaticMeshData.View = Camera.view;
+            frameStaticMeshData.View = Camera.finalizedView;
             frameStaticMeshData.World = GetWorldMatrix();
             frameStaticMeshData.Viewmodel = Viewmodel;
             frameStaticMeshData.LightView = Graphics.GetLightView();

@@ -92,6 +92,8 @@ namespace RetroEngine.Skeletal
 
         public bool UpdateVisual = true;
 
+        internal bool UpdateTransforms = true;
+
         public Dictionary<string, Matrix> additionalLocalOffsets = new Dictionary<string, Matrix>();
         public Dictionary<string, Matrix> additionalMeshOffsets = new Dictionary<string, Matrix>();
 
@@ -134,7 +136,7 @@ namespace RetroEngine.Skeletal
         /// <summary>
         /// As stated
         /// </summary>
-        public void SetEffect(Effect effect, Texture2D t, Matrix world, Matrix view, Matrix projection)
+        void SetEffect(Effect effect, Texture2D t, Matrix world, Matrix view, Matrix projection)
         {
             this.effect = effect;
             //texture = t;
@@ -148,7 +150,7 @@ namespace RetroEngine.Skeletal
         /// <summary>
         /// As stated
         /// </summary>
-        public void SetEffectTexture(Texture2D t)
+        void SetEffectTexture(Texture2D t)
         {
             effect.Parameters["TextureA"].SetValue(t);
         }
@@ -287,18 +289,17 @@ namespace RetroEngine.Skeletal
                 additionalMesh = additionalMeshOffsets[node.name];
             }
 
+
             if (node.parent != null)
                 node.CombinedTransformMg = additionalMesh * node.LocalTransformMg * additionalLocal * node.parent.CombinedTransformMg;
             else
                 node.CombinedTransformMg = additionalMesh * node.LocalTransformMg * additionalLocal;
 
-            //// humm little test
-            //if (node.name == "Armature")
-            //    node.CombinedTransformMg = Matrix.Identity;
-
-            // set to the final shader matrix.
-            if (node.isThisARealBone)
+            
+            if (node.isThisARealBone&&UpdateTransforms)
                 globalShaderMatrixs[node.boneShaderFinalTransformIndex] = node.OffsetMatrixMg * node.CombinedTransformMg;
+
+
             // call children
             foreach (RiggedModelNode n in node.children)
                 IterateUpdate(n);

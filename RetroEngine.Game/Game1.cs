@@ -58,7 +58,8 @@ namespace RetroEngine.Game
 
             Level.GetCurrent().AddEntity(new PlayerGlobal());
 
-            
+            Level.GetCurrent().AddEntity(new Sky());
+
 
             for (int i = 1; i <= 2; i++)
             {

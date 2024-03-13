@@ -67,9 +67,6 @@ namespace RetroEngine.Skeletal
 
             RiggedModel.Update(0);
 
-            CalculateBoundingSphere();
-
-            GetBoneMatrix("");
 
             additionalLocalOffsets = RiggedModel.additionalLocalOffsets;
 

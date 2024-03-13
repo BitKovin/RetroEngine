@@ -15,6 +15,8 @@ float3 CameraPos;
 
 bool pointDistance;
 
+bool Visible;
+
 #define BONE_NUM 128
 
 matrix Bones[BONE_NUM];
@@ -76,25 +78,28 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
     return output;
 }
 
+struct PS_Out
+{
+    float4 occlusion;
+    float4 depth;
+};
+
 float4 MainPS(VertexShaderOutput input) : SV_TARGET
 {
+    
+    PS_Out output = (PS_Out)0;
     
     float depth = input.MyPosition.z;
     
     if (pointDistance)
         depth = distance(input.WorldPos, CameraPos);
     
-    return float4(depth, 0, 0, 1);
-}
-
-float4 MainPSPoint(VertexShaderOutput input) : SV_TARGET
-{
+    output.occlusion = depth;
+    output.depth = depth;
+    if (Visible == false)
+        output.depth = float4(0,0,0,0);
     
-    float depth = input.MyPosition.z;
-    
-    depth = distance(input.WorldPos, CameraPos);
-    
-    return float4(depth, 0, 0, 1);
+        return float4(depth, 0, 0, 1);
 }
 
 technique NormalColorDrawing

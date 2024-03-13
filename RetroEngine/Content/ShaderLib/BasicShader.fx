@@ -493,7 +493,7 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input)
     {
         float currentDepth = lightCoords.z * 2 - 1;
 
-        float resolution = 1;
+        float resolution = 2;
         
 
         int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)

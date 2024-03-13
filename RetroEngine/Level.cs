@@ -149,11 +149,12 @@ namespace RetroEngine
 
             LoadingScreen.Update(0.85f);
 
+            GameMain.Instance.OnLevelChanged();
 
             GameMain.Instance.curentLevel.StartEnities();
 
             Navigation.RebuildConnectionsData();
-            GameMain.Instance.OnLevelChanged();
+            
             ChangingLevel = false;
 
             AssetRegistry.AllowGeneratingMipMaps = false;
