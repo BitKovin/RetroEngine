@@ -184,6 +184,9 @@ namespace RetroEngine.Game.Entities.Player
             if (Input.GetAction("jump").Holding())
                 Jump();
 
+            if (Input.GetAction("slot0").Pressed())
+                SwitchToSlot(-1);
+
             if (Input.GetAction("slot1").Pressed())
                 SwitchToSlot(0);
 
@@ -196,7 +199,7 @@ namespace RetroEngine.Game.Entities.Player
             if (Input.GetAction("lastSlot").Pressed())
                 SwitchToSlot(lastSlot);
 
-            PlayerUI.Update();
+            
 
             FirstTick = false;
 
@@ -445,11 +448,18 @@ namespace RetroEngine.Game.Entities.Player
 
         public override void LateUpdate()
         {
+
+            MathHelper.Transform t = bodyMesh.GetBoneMatrix("head").DecomposeMatrix();
+
+            Camera.position = t.Position + Camera.rotation.GetForwardVector().XZ().Normalized() * 0.35f;
+
             if (currentWeapon is not null)
             {
                 currentWeapon.Position = Camera.position + bob * 0.05f*currentWeapon.BobScale + Camera.rotation.GetForwardVector() * Camera.rotation.X / 2000f;
                 currentWeapon.Rotation = Camera.rotation + new Vector3(0, 0, (float)Math.Sin(bobProgress * -1 * bobSpeed) * -1.5f) * currentWeapon.BobScale;
             }
+
+            PlayerUI.Update();
 
             cylinder.Position = Position + Camera.rotation.GetForwardVector().XZ() * 3;
         }
@@ -541,6 +551,10 @@ namespace RetroEngine.Game.Entities.Player
                 currentSlot = slot;
 
                 SwitchWeapon(weapons[slot]);
+            }
+            else
+            {
+                SwitchWeapon(null);
             }
         }
 

@@ -28,7 +28,13 @@ namespace RetroEngine.Windows
 
             Input.MouseMoveCalculatorObject = calc;
 
-            Window.Title = Window.Title + "   Direct X";
+            Window.Title = Window.Title + " Direct X";
+
+#if DEBUG
+
+            Window.Title = Window.Title + " (Debug)";
+
+#endif
 
             AsyncGameThread = true;
 

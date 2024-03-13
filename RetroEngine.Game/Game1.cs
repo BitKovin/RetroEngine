@@ -61,10 +61,10 @@ namespace RetroEngine.Game
             Level.GetCurrent().AddEntity(new Sky());
 
 
-            for (int i = 1; i <= 200; i++)
+            for (int i = 1; i <= 2; i++)
             {
                 Entity npc = new NPCBase();
-                npc.Position = new Vector3(0, i*10.2f + 2, 0);
+                npc.Position = new Vector3(0, i*2.2f + 2, 0);
                 Level.GetCurrent().AddEntity(npc);
             }
 
@@ -83,6 +83,7 @@ namespace RetroEngine.Game
             Input.AddAction("moveLeft").AddKeyboardKey(Keys.A).AddButton(Buttons.LeftThumbstickLeft);
             Input.AddAction("moveRight").AddKeyboardKey(Keys.D).AddButton(Buttons.LeftThumbstickRight);
 
+            Input.AddAction("slot0").AddKeyboardKey(Keys.LeftAlt);
             Input.AddAction("slot1").AddKeyboardKey(Keys.D1);
             Input.AddAction("slot2").AddKeyboardKey(Keys.D2);
             Input.AddAction("slot3").AddKeyboardKey(Keys.D3);
