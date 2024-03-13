@@ -114,10 +114,6 @@ namespace RetroEngine.Entities
         {
             //UpdateNPCList();
 
-            if(Input.GetAction("test").Pressed())
-            {
-                Destroy();
-            }
             targetLocation = Camera.position;
 
             float angleDif = MathHelper.FindLookAtRotation(Position, targetLocation).Y - mesh.Rotation.Y;
@@ -151,7 +147,6 @@ namespace RetroEngine.Entities
         public override void AsyncUpdate()
         {
             body.Activate();
-
             float distance = Vector3.Distance(Position, targetLocation);
 
             animator.Update();

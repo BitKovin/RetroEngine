@@ -54,6 +54,9 @@ namespace RetroEngine
             ImGui.SliderFloat("light direction Y", ref Graphics.LightDirection.Y, -1, 1);
             ImGui.SliderFloat("light direction Z", ref Graphics.LightDirection.Z, -1, 1);
 
+            ImGui.SliderFloat("global brightness", ref Graphics.GlobalLighting, 0, 5);
+            ImGui.SliderFloat("directional brightness", ref Graphics.DirectLighting, 0, 5);
+
             ImGui.End();
 
             ImGui.Begin("Graphics");
@@ -78,6 +81,17 @@ namespace RetroEngine
 
             ImGui.InputInt("shadowmap size", ref Graphics.shadowMapResolution);
 
+            ImGui.Begin("Tonemapping");
+            ImGui.SliderFloat("Gamma", ref Graphics.Gamma, 0, 5);
+            ImGui.InputFloat("Gamma ", ref Graphics.Gamma);
+
+            ImGui.SliderFloat("Exposure", ref Graphics.Exposure, -4, 4);
+            ImGui.InputFloat("Exposure ", ref Graphics.Exposure);
+
+            ImGui.SliderFloat("Saturation", ref Graphics.Saturation, -1, 2);
+            ImGui.InputFloat("Saturation ", ref Graphics.Saturation);
+
+            ImGui.End();
 
             ImGui.Checkbox("dev menu", ref GameMain.Instance.DevMenuEnabled);
 

@@ -80,6 +80,7 @@ namespace RetroEngine
         public Effect BloomEffect;
 
         public Effect ComposeEffect;
+        Effect TonemapperEffect;
 
         public Delay shadowPassRenderDelay = new Delay();
 
@@ -122,7 +123,11 @@ namespace RetroEngine
 
             OcclusionEffect = GameMain.content.Load<Effect>("OcclusionPath");
 
+            TonemapperEffect = GameMain.content.Load<Effect>("Tonemap");
+
             occlusionQuery = new OcclusionQuery(GameMain.Instance.GraphicsDevice);
+
+            
 
             InitSampler();
         }
@@ -534,10 +539,13 @@ namespace RetroEngine
 
         }
 
+        RenderTarget2D TonemapResult;
+
         void PerformPostProcessing()
         {
             PerformSSAO();
 
+            PerformTonemapping();
             
             CalculateBloom();
 
@@ -564,6 +572,31 @@ namespace RetroEngine
             spriteBatch.End();
 
                 
+
+        }
+
+        void PerformTonemapping()
+        {
+
+            InitRenderTargetVectorIfNeed(ref TonemapResult);
+
+            TonemapperEffect.Parameters["Gamma"].SetValue(Graphics.Gamma);
+            TonemapperEffect.Parameters["Exposure"].SetValue(Graphics.Exposure);
+            TonemapperEffect.Parameters["Saturation"].SetValue(Graphics.Saturation);
+
+            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, TonemapResult.Width, TonemapResult.Height);
+
+            graphics.GraphicsDevice.SetRenderTarget(TonemapResult);
+
+            graphics.GraphicsDevice.Clear(Color.Black);
+
+            SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
+
+            spriteBatch.Begin(effect: TonemapperEffect, blendState: BlendState.NonPremultiplied);
+
+            DrawFullScreenQuad(spriteBatch, DeferredOutput);
+
+            spriteBatch.End();
 
         }
 
@@ -643,7 +676,7 @@ namespace RetroEngine
 
             graphics.GraphicsDevice.SetRenderTarget(ComposedOutput);
 
-            ComposeEffect.Parameters["ColorTexture"].SetValue(DeferredOutput);
+            ComposeEffect.Parameters["ColorTexture"].SetValue(TonemapResult);
             ComposeEffect.Parameters["SSAOTexture"]?.SetValue(ssaoOutput);
             ComposeEffect.Parameters["BloomTexture"].SetValue(bloomSample);
             ComposeEffect.Parameters["Bloom2Texture"].SetValue(bloomSample2);
@@ -653,7 +686,7 @@ namespace RetroEngine
 
             spriteBatch.Begin(effect: ComposeEffect, blendState: BlendState.Opaque);
 
-            DrawFullScreenQuad(spriteBatch, DeferredOutput);
+            DrawFullScreenQuad(spriteBatch, TonemapResult);
 
             spriteBatch.End();
         }
@@ -675,7 +708,7 @@ namespace RetroEngine
 
             spriteBatch.Begin(effect: BloomEffect, blendState: BlendState.Opaque, samplerState: SamplerState.AnisotropicClamp);
 
-            DrawFullScreenQuad(spriteBatch, DeferredOutput);
+            DrawFullScreenQuad(spriteBatch, TonemapResult);
 
             spriteBatch.End();
 

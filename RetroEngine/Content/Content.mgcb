@@ -111,6 +111,12 @@
 /processorParam:DebugMode=Auto
 /build:ssao.fx
 
+#begin Tonemap.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Tonemap.fx
+
 #begin UnifiedOutput.fx
 /importer:EffectImporter
 /processor:EffectProcessor
