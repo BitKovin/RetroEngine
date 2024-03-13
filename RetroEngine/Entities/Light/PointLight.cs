@@ -50,7 +50,7 @@ namespace RetroEngine.Entities.Light
             lightData.shadowData = new RenderTargetCube(graphicsDevice, 512, false, SurfaceFormat.Single, DepthFormat.Depth24);
 
             mesh.LoadFromFile("models/cube.obj");
-            meshes.Add(mesh);
+            //meshes.Add(mesh);
             mesh.Visible = false;
 
         }

@@ -83,13 +83,13 @@ float3 tonemap_uc2(in float3 color)
 
     color *= 16; // Hardcoded Exposure Adjustment
 
-    float exposure_bias = 2.0f;
+    float exposure_bias = 2.0f + Exposure;
     float3 curr = tonemap_uncharted2(exposure_bias * color);
 
     float3 white_scale = 1.0f / tonemap_uncharted2(W);
     float3 ccolor = curr * white_scale;
 
-    float3 ret = pow(abs(ccolor), TONEMAP_GAMMA); // gamma
+    float3 ret = pow(abs(ccolor), Gamma); // gamma
 
     return ret;
 }

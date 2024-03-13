@@ -20,8 +20,8 @@ namespace RetroEngine
         public static int closeShadowMapResolution = 2048;
         public static int veryCloseShadowMapResolution = 2048;
 
-        public static float Gamma = 2.5f;
-        public static float Exposure = 0.3f;
+        public static float Gamma = 2.4f;
+        public static float Exposure = 0.4f;
         public static float Saturation = 0;
 
         public static Matrix LightViewProjection;
