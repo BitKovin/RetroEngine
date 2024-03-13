@@ -61,10 +61,10 @@ namespace RetroEngine.Game
             Level.GetCurrent().AddEntity(new Sky());
 
 
-            for (int i = 1; i <= 2; i++)
+            for (int i = 1; i <= 200; i++)
             {
                 Entity npc = new NPCBase();
-                npc.Position = new Vector3(0, i*0.2f + 2, 0);
+                npc.Position = new Vector3(0, i*10.2f + 2, 0);
                 Level.GetCurrent().AddEntity(npc);
             }
 

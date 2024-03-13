@@ -149,10 +149,11 @@ namespace RetroEngine.Entities
             body.Activate();
             float distance = Vector3.Distance(Position, targetLocation);
 
-            animator.Update();
-
-            mesh.PastePoseLocal(animator.GetResultPose());
-
+            if (mesh.isRendered)
+            {
+                animator.Update();
+                mesh.PastePoseLocal(animator.GetResultPose());
+            }
             if(distance > 3) 
             {
                 speed += Time.deltaTime * 10;
@@ -168,9 +169,6 @@ namespace RetroEngine.Entities
 
             MoveDirection = Vector3.Lerp(MoveDirection, DesiredMoveDirection, Time.deltaTime * 3);
 
-
-            if (loadedAssets)
-                mesh.Update(Time.deltaTime);
 
             mesh.Position = Position - new Vector3(0, 1.1f, 0);
 
