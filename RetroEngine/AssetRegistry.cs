@@ -140,7 +140,7 @@ namespace RetroEngine
 
         public static void ClearAllTextures()
         {
-            foreach(Texture2D tex in textures.Values)
+            foreach(Texture tex in textures.Values)
             {
                 tex?.Dispose();
             }
