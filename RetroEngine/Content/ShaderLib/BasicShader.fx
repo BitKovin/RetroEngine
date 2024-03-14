@@ -544,15 +544,7 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
     
     if (lightCoords.x >= 0 && lightCoords.x <= 1 && lightCoords.y >= 0 && lightCoords.y <= 1)
     {
-        float currentDepth = lightCoords.z * 2 - 1;
-
-        float resolution = 1;
         
-
-        int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)
-
-        float bias = ShadowBias * (1 - saturate(dot(input.Normal, -LightDirection))) + ShadowBias / 2.0f;
-        resolution = ShadowMapResolution;
             
         if (dist < 8)
         {
@@ -569,6 +561,16 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
                 return GetShadowClose(lightCoordsClose, input);
             }
         }
+        
+        float currentDepth = lightCoords.z * 2 - 1;
+
+        float resolution = 1;
+        
+
+        int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)
+
+        float bias = ShadowBias * (1 - saturate(dot(input.Normal, -LightDirection))) + ShadowBias / 2.0f;
+        resolution = ShadowMapResolution;
         
         return 1 - SampleShadowMap(ShadowMapSampler, lightCoords.xy, currentDepth - bias);
         
