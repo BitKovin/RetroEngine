@@ -68,20 +68,20 @@ PixelOutput PixelShaderFunction(PixelInput input)
     
     float3 textureColor = tex2D(TextureSampler, input.TexCoord).xyz;
 	float textureAlpha = tex2D(TextureSampler, input.TexCoord).w;
-
     
     float3 pixelNormal = ApplyNormalTexture(textureNormal, input.Normal, input.Tangent);
     
     
     float3 reflection = reflect(normalize(input.MyPosition - viewPos), pixelNormal);
     
-    
+    float3 albedo = textureColor;
     
     float3 light = CalculateLight(input, pixelNormal, roughness, metalic, ao);
     
+    
 	textureColor *= light;
     
-    textureColor = ApplyReflection(textureColor, input, pixelNormal, roughness, metalic);
+    textureColor = ApplyReflection(textureColor, albedo, input, pixelNormal, roughness, metalic);
     
     light -= 1.1;
     light = saturate(light/8);

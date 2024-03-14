@@ -400,6 +400,8 @@ float CalculateSpecular(float3 worldPos,float3 normal, float3 lightDir, float ro
         specular = D * G / (4 * NdotV * saturate(dot(normal, lightDir)) + 0.001) * lerp(F,1,0.3);
     }
 
+    specular = max(specular,0);
+    
     return specular * 1;
 }
 
@@ -788,12 +790,12 @@ float CalculateReflectiveness(float roughness, float metallic, float3 viewDir, f
     reflectiveness -= 0.08;
     reflectiveness = saturate(reflectiveness);
     
-    reflectiveness *= 1.35;
+    reflectiveness *= 1.5;
     
     return reflectiveness;
 }
 
-float3 ApplyReflection(float3 inColor, PixelInput input,float3 normal, float roughness, float metallic)
+float3 ApplyReflection(float3 inColor, float3 albedo, PixelInput input,float3 normal, float roughness, float metallic)
 {
     
     float3 viewDir = normalize(viewPos - input.MyPosition);
@@ -807,7 +809,7 @@ float3 ApplyReflection(float3 inColor, PixelInput input,float3 normal, float rou
     
     reflectiveness = saturate(reflectiveness);
     
-    reflectionColor *= lerp(float3(1,1,1),inColor, metallic / 2);
+    reflectionColor *= lerp(float3(1, 1, 1), inColor, metallic);
     
     return lerp(inColor, reflectionColor, reflectiveness);
 }
