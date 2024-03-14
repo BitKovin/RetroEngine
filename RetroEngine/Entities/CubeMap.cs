@@ -138,7 +138,7 @@ namespace RetroEngine.Entities
 
             Camera.finalizedView = GetViewForFace(face);
             Camera.view = Camera.finalizedView;
-            Camera.finalizedProjection = Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.ToRadians(90), 1.0f, 1, 100.0f);
+            Camera.finalizedProjection = Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.ToRadians(90), 1.0f, 1, 10000.0f);
             Camera.projection = Camera.finalizedProjection;
 
             Camera.frustum.Matrix = Camera.finalizedView * Camera.finalizedProjection;

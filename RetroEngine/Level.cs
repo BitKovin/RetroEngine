@@ -137,21 +137,24 @@ namespace RetroEngine
 
             LoadingScreen.Update(0.7f);
 
-            
+            GameMain.Instance.OnLevelChanged();
+
             Physics.Update();
 
             GameMain.Instance.curentLevel.LoadAssets();
 
             LoadingScreen.Update(0.8f);
 
-
             AssetRegistry.WaitForAssetsToLoad();
 
             LoadingScreen.Update(0.85f);
 
-            GameMain.Instance.OnLevelChanged();
+            
 
             GameMain.Instance.curentLevel.StartEnities();
+
+
+            AssetRegistry.WaitForAssetsToLoad();
 
             Navigation.RebuildConnectionsData();
             

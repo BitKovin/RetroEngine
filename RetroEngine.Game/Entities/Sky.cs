@@ -16,16 +16,15 @@ namespace RetroEngine.Game.Entities
             base.LoadAssets();
 
             mesh.LoadFromFile("models/sky.obj");
-            mesh.emisssiveTexture = AssetRegistry.LoadTextureFromFile("textures/sky/sky.png");
-            mesh.texture = AssetRegistry.LoadTextureFromFile("textures/sky/sky.png");
+            mesh.texture = AssetRegistry.LoadCubeTextureFromFile("textures/sky/sky.jpg");
             meshes.Add(mesh);
-            mesh.Position = Position;
-            mesh.Shader = AssetRegistry.GetShaderFromName("Unlit");
+            mesh.Static = true;
+            mesh.Shader = AssetRegistry.GetShaderFromName("CubeMapVisualizer");
         }
 
-        public override void LateUpdate()
+        public override void FinalizeFrame()
         {
-            base.LateUpdate();
+            base.FinalizeFrame();
 
             mesh.Position = Camera.position;
 

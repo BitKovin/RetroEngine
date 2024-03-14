@@ -18,7 +18,7 @@ namespace RetroEngine
     public class AssetRegistry
     {
 
-        static Dictionary<string, Texture2D> textures = new Dictionary<string, Texture2D>();
+        static Dictionary<string, Texture> textures = new Dictionary<string, Texture>();
 
         static Dictionary<string, SoundEffect> sounds = new Dictionary<string, SoundEffect>();
 
@@ -42,7 +42,7 @@ namespace RetroEngine
         {
 
             if (textures.ContainsKey(path))
-                return textures[path];
+                return (Texture2D)textures[path];
 
             if(nullTextures.Contains(path))
                 return null;
@@ -72,7 +72,7 @@ namespace RetroEngine
 
                     Console.WriteLine($"loaded texture. Current texture cache: {textures.Count}");
 
-                    return textures[path];
+                    return (Texture2D)textures[path];
                 }
             }
             catch (Exception ex)
@@ -84,6 +84,59 @@ namespace RetroEngine
             }
 
         }
+
+
+        public static TextureCube LoadCubeTextureFromFile(string path, bool ignoreErrors = false, bool generateMipMaps = true)
+        {
+
+            if (textures.ContainsKey(path))
+                return (TextureCube)textures[path];
+
+            if (nullTextures.Contains(path))
+                return null;
+
+            if (GameMain.CanLoadAssetsOnThisThread() == false)
+            {
+                Logger.Log($"THREAD ERROR:  attempted to load texture from not render thread. Texture: {path}");
+                return null;
+            }
+
+            string filePpath = FindPathForFile(path);
+
+            try
+            {
+
+                Texture2D top = LoadTextureFromFile(filePpath.Replace(".","_top."));
+                Texture2D bottom = LoadTextureFromFile(filePpath.Replace(".", "_bottom."));
+                Texture2D left = LoadTextureFromFile(filePpath.Replace(".", "_left."));
+                Texture2D right = LoadTextureFromFile(filePpath.Replace(".", "_right."));
+                Texture2D forward = LoadTextureFromFile(filePpath.Replace(".", "_front."));
+                Texture2D backward = LoadTextureFromFile(filePpath.Replace(".", "_back."));
+
+                RenderTargetCube cube = new RenderTargetCube(GameMain.Instance.GraphicsDevice, top.Height, true, SurfaceFormat.Color, DepthFormat.None);
+
+                GenerateCubeFace(cube, top, CubeMapFace.PositiveY);
+                GenerateCubeFace(cube, bottom, CubeMapFace.NegativeY);
+
+                GenerateCubeFace(cube, left, CubeMapFace.NegativeX);
+                GenerateCubeFace(cube, right, CubeMapFace.PositiveX);
+
+                GenerateCubeFace(cube, forward, CubeMapFace.PositiveZ);
+                GenerateCubeFace(cube, backward, CubeMapFace.NegativeZ);
+
+                textures.Add(path, cube);
+                return (TextureCube)textures[path];
+            }
+            catch (Exception ex)
+            {
+                if (!ignoreErrors)
+                    Logger.Log("Failed to load texture: " + ex.Message);
+                nullTextures.Add(path);
+                return null;
+            }
+
+        }
+
 
         public static void ClearAllTextures()
         {
@@ -120,6 +173,29 @@ namespace RetroEngine
             graphicsDevice.SetRenderTarget(null);
             intermediateTexture.Dispose();
             return texture;
+        }
+
+        static void GenerateCubeFace(RenderTargetCube cube,Texture2D intermediateTexture, CubeMapFace face)
+        {
+
+            GraphicsDevice graphicsDevice = GameMain.Instance.GraphicsDevice;
+
+            Texture2D texture = null;
+            RenderTarget2D renderTarget = new RenderTarget2D(graphicsDevice, intermediateTexture.Width, intermediateTexture.Height, mipMap: true, preferredFormat: SurfaceFormat.Color, preferredDepthFormat: DepthFormat.None);
+
+            BlendState blendState = BlendState.Opaque;
+
+            graphicsDevice.SetRenderTarget(cube, face);
+            using (SpriteBatch sprite = new SpriteBatch(graphicsDevice))
+            {
+                sprite.Begin(SpriteSortMode.Immediate, blendState,SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone,
+                effect: null);
+                sprite.Draw(intermediateTexture, new Vector2(0, 0), Color.White);
+                sprite.End();
+            }
+
+            texture = (Texture2D)renderTarget;
+            graphicsDevice.SetRenderTarget(null);
         }
 
         public static Effect GetShaderFromName(string path)

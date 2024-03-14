@@ -52,7 +52,7 @@ namespace RetroEngine.Entities
             bodies.Add(body);
 
 
-            deathSoundPlayer = (SoundPlayer)Level.GetCurrent().AddEntity(new SoundPlayer());
+            
 
             //npcList.Add(this);
 
@@ -103,6 +103,7 @@ namespace RetroEngine.Entities
 
             sm.Scale =new Vector3(0.7f);
 
+            deathSoundPlayer = (SoundPlayer)Level.GetCurrent().AddEntity(new SoundPlayer());
             deathSoundPlayer.SetSound(AssetRegistry.LoadSoundFromFile("sounds/mew.wav"));
             deathSoundPlayer.Volume = 1f;
 
