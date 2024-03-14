@@ -536,7 +536,7 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
     
     float dist = distance(viewPos, input.MyPosition);
     
-    if (dist > 100)
+    if (dist > 200)
         return 0;
     
     if (tex2D(ShadowMapSampler,lightCoords.xy).r<0.01)
