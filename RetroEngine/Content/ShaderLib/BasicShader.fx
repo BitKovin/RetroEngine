@@ -787,10 +787,10 @@ float CalculateReflectiveness(float roughness, float metallic, float3 viewDir, f
     // Modulate reflectiveness by the Fresnel factor
     reflectiveness *= F;
 
-    reflectiveness -= 0.08;
+    reflectiveness -= 0.04;
     reflectiveness = saturate(reflectiveness);
     
-    reflectiveness *= 1.5;
+    reflectiveness *= 1.7;
     
     return reflectiveness;
 }
@@ -800,7 +800,7 @@ float3 ApplyReflection(float3 inColor, float3 albedo, PixelInput input,float3 no
     
     float3 viewDir = normalize(viewPos - input.MyPosition);
     
-    float3 reflection = reflect(normalize(input.MyPosition - viewPos), normalize(lerp(normal, input.TangentNormal, 0.85)));
+    float3 reflection = reflect(normalize(input.MyPosition - viewPos), normalize(lerp(normal, input.TangentNormal, 0.7)));
     
     
     float3 reflectionColor = SampleCubemap(ReflectionCubemapSampler, reflection);
@@ -809,7 +809,7 @@ float3 ApplyReflection(float3 inColor, float3 albedo, PixelInput input,float3 no
     
     reflectiveness = saturate(reflectiveness);
     
-    reflectionColor *= lerp(float3(1, 1, 1), inColor, metallic);
+    reflectionColor *= lerp(float3(1, 1, 1), albedo, metallic);
     
     return lerp(inColor, reflectionColor, reflectiveness);
 }
