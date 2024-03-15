@@ -17,6 +17,11 @@ namespace RetroEngine.Skeletal
         public static Dictionary<string, Matrix> LerpPose(Dictionary<string, Matrix> a, Dictionary<string, Matrix> b, float factor)
         {
 
+            if(factor<0.005)
+                return a;
+            if(factor>0.995)
+                return b;
+
             Dictionary<string, Matrix> result = new Dictionary<string, Matrix>(a);
 
             foreach (var key in a.Keys)
