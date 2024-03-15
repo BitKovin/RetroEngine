@@ -11,6 +11,7 @@ using RetroEngine.Game.Entities;
 using RetroEngine.Map;
 using RetroEngine.Game.Entities.Weapons;
 using RetroEngine.Entities;
+using BulletSharp.SoftBody;
 
 namespace RetroEngine.Game.Entities.Player
 {
@@ -151,6 +152,7 @@ namespace RetroEngine.Game.Entities.Player
 
             body.CcdMotionThreshold = 0.000001f;
             body.CcdSweptSphereRadius = 0.3f;
+            body.Friction = 1f;
 
             bodies.Add(body);
 
@@ -324,7 +326,7 @@ namespace RetroEngine.Game.Entities.Player
             // Ground movement
 
             velocity = body.LinearVelocity;
-
+            body.Friction = 0.0f;
             if (input.Length() > 0.1f)
             {
                 input.Normalize();
@@ -342,9 +344,6 @@ namespace RetroEngine.Game.Entities.Player
 
                     bobProgress += Time.deltaTime;
 
-
-                    // Apply friction
-                    body.Friction = 0.0f;
 
                     velocity = UpdateGroundVelocity(motion, velocity);
 
@@ -370,7 +369,6 @@ namespace RetroEngine.Game.Entities.Player
 
                     body.LinearVelocity = new Vector3(velocity.X, body.LinearVelocity.Y, velocity.Z).ToPhysics();
 
-                    body.Friction = 0.0f;
                 }
             }
             else
@@ -387,7 +385,7 @@ namespace RetroEngine.Game.Entities.Player
                     body.LinearVelocity = new Vector3(velocity.X, body.LinearVelocity.Y, velocity.Z).ToPhysics();
                 }
                 // No input, apply friction
-                body.Friction = 0f;
+                body.Friction = 0.2f;
             }
 
 

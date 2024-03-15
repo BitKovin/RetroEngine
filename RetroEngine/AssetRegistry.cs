@@ -137,6 +137,24 @@ namespace RetroEngine
 
         }
 
+        public static void UnloadTexture(Texture texture)
+        {
+            if(textures.ContainsValue(texture))
+            {
+                
+                foreach(string key in textures.Keys)
+                {
+                    if (textures[key] == texture)
+                    {
+                        textures.Remove(key);
+                        break;
+                    }
+                }
+
+                texture.Dispose();
+            }
+        }
+
 
         public static void ClearAllTextures()
         {
@@ -192,7 +210,9 @@ namespace RetroEngine
                 sprite.End();
             }
 
-            
+            UnloadTexture(intermediateTexture);
+
+
             graphicsDevice.SetRenderTarget(null);
         }
 

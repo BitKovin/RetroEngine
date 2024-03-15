@@ -148,7 +148,7 @@ namespace RetroEngine
             }
 
             if (GameMain.Instance.paused == false)
-                dynamicsWorld.StepSimulation(RetroEngine.Time.deltaTime, steps, Math.Max(1 / 100f, Time.deltaTime));
+                dynamicsWorld.StepSimulation(RetroEngine.Time.deltaTime, steps, Math.Max(1 / 60f, Time.deltaTime));
         }
 
         public static void Remove(CollisionObject collisionObject)

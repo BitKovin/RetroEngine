@@ -812,7 +812,7 @@ float CalculateReflectiveness(float roughness, float metallic, float3 viewDir, f
     
     reflectiveness -= 0.07;
     
-    reflectiveness *= 1.9;
+    reflectiveness *= 1.8;
     
     return reflectiveness;
 }

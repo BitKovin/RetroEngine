@@ -57,7 +57,7 @@ PixelOutput PixelShaderFunction(PixelInput input)
     
     
 
-    float3 textureNormal = tex2D(NormalTextureSampler, input.TexCoord).xyz;
+    float3 textureNormal = tex2D(NormalTextureSampler, input.TexCoord).rgb;
     
     float3 orm = tex2D(ORMTextureSampler, input.TexCoord).rgb;
     
@@ -71,8 +71,6 @@ PixelOutput PixelShaderFunction(PixelInput input)
     
     float3 pixelNormal = ApplyNormalTexture(textureNormal, input.Normal, input.Tangent);
     
-    
-    float3 reflection = reflect(normalize(input.MyPosition - viewPos), pixelNormal);
     
     float3 albedo = textureColor;
     
