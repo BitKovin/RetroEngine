@@ -65,7 +65,7 @@ namespace RetroEngine
 
         public static bool AsyncGameThread = true;
 
-        public static bool AllowAsyncAssetLoading = true;
+        public static bool AllowAsyncAssetLoading = false;
 
         public bool DevMenuEnabled = true;
 

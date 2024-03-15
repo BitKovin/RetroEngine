@@ -42,6 +42,10 @@ texture ReflectionCubemap;
 sampler ReflectionCubemapSampler = sampler_state
 {
     texture = <ReflectionCubemap>;
+    MinFilter = Linear;
+    MagFilter = Linear;
+    AddressU = Clamp;
+    AddressV = Clamp;
 };
 
 
@@ -82,24 +86,41 @@ texture PointLightCubemap1;
 sampler PointLightCubemap1Sampler = sampler_state
 {
     texture = <PointLightCubemap1>;
+    MinFilter = Linear;
+    MagFilter = Linear;
+    AddressU = Clamp;
+    AddressV = Clamp;
 };
 
 texture PointLightCubemap2;
 sampler PointLightCubemap2Sampler = sampler_state
 {
     texture = <PointLightCubemap2>;
+    MinFilter = Linear;
+    MagFilter = Linear;
+    AddressU = Clamp;
+    AddressV = Clamp;
+
 };
 
 texture PointLightCubemap3;
 sampler PointLightCubemap3Sampler = sampler_state
 {
     texture = <PointLightCubemap3>;
+    MinFilter = Linear;
+    MagFilter = Linear;
+    AddressU = Clamp;
+    AddressV = Clamp;
 };
 
 texture PointLightCubemap4;
 sampler PointLightCubemap4Sampler = sampler_state
 {
     texture = <PointLightCubemap4>;
+    MinFilter = Linear;
+    MagFilter = Linear;
+    AddressU = Clamp;
+    AddressV = Clamp;
 };
 
 
@@ -261,7 +282,7 @@ PixelInput DefaultVertexShaderFunction(VertexInput input)
 
 void DepthDiscard(float depth, PixelInput input)
 {
-    if (depth < input.MyPixelPosition.z - 0.1)
+    if (depth < input.MyPixelPosition.z - 0.02)
         discard;
 }
 
@@ -787,10 +808,11 @@ float CalculateReflectiveness(float roughness, float metallic, float3 viewDir, f
     // Modulate reflectiveness by the Fresnel factor
     reflectiveness *= F;
 
-    reflectiveness -= 0.04;
     reflectiveness = saturate(reflectiveness);
     
-    reflectiveness *= 1.7;
+    reflectiveness -= 0.07;
+    
+    reflectiveness *= 1.9;
     
     return reflectiveness;
 }
@@ -798,9 +820,9 @@ float CalculateReflectiveness(float roughness, float metallic, float3 viewDir, f
 float3 ApplyReflection(float3 inColor, float3 albedo, PixelInput input,float3 normal, float roughness, float metallic)
 {
     
-    float3 viewDir = normalize(viewPos - input.MyPosition);
+    float3 viewDir = normalize(viewPos - input.MyPosition)/3;
     
-    float3 reflection = reflect(normalize(input.MyPosition - viewPos), normalize(lerp(normal, input.TangentNormal, 0.7)));
+    float3 reflection = reflect(normalize(input.MyPosition - viewPos), normalize(lerp(normal, input.TangentNormal, 0.4)));
     
     
     float3 reflectionColor = SampleCubemap(ReflectionCubemapSampler, reflection);

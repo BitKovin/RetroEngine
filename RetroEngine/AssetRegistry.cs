@@ -180,9 +180,7 @@ namespace RetroEngine
 
             GraphicsDevice graphicsDevice = GameMain.Instance.GraphicsDevice;
 
-            Texture2D texture = null;
-            RenderTarget2D renderTarget = new RenderTarget2D(graphicsDevice, intermediateTexture.Width, intermediateTexture.Height, mipMap: true, preferredFormat: SurfaceFormat.Color, preferredDepthFormat: DepthFormat.None);
-
+            
             BlendState blendState = BlendState.Opaque;
 
             graphicsDevice.SetRenderTarget(cube, face);
@@ -194,7 +192,7 @@ namespace RetroEngine
                 sprite.End();
             }
 
-            texture = (Texture2D)renderTarget;
+            
             graphicsDevice.SetRenderTarget(null);
         }
 
