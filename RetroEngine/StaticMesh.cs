@@ -355,6 +355,7 @@ namespace RetroEngine
 
                         Stats.RenderedMehses++;
 
+
                         // Draw the primitives using the custom effect
                         foreach (EffectPass pass in effect.CurrentTechnique.Passes)
                         {

@@ -67,6 +67,10 @@ namespace RetroEngine.Game.Entities
 
             //skeletalMesh.Update(Time.deltaTime);
 
+            body.Activate();
+
+            if (Input.GetAction("test").Holding())
+                body.ApplyCentralImpulse(new System.Numerics.Vector3(0,100,0)*Time.deltaTime);
 
             mesh.Position = Position;
             mesh.Rotation = Rotation;

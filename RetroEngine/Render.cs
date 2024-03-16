@@ -140,7 +140,7 @@ namespace RetroEngine
             foreach (Effect effect in shaders)
             {
 
-                effect.Parameters["viewDir"]?.SetValue(Camera.finalizedForward);
+                //effect.Parameters["viewDir"]?.SetValue(Camera.finalizedForward);
                 effect.Parameters["viewPos"]?.SetValue(Camera.finalizedPosition);
 
                 effect.Parameters["DirectBrightness"]?.SetValue(Graphics.DirectLighting);
@@ -159,6 +159,8 @@ namespace RetroEngine
                 effect.Parameters["ShadowMapClose"]?.SetValue(GameMain.Instance.render.shadowMapClose);
                 effect.Parameters["ShadowMapVeryClose"]?.SetValue(GameMain.Instance.render.shadowMapVeryClose);
 
+
+                effect.Parameters["InverseViewProjection"]?.SetValue(Matrix.Invert(Camera.finalizedView*Camera.finalizedProjection));
 
                 effect.Parameters["View"]?.SetValue(Camera.finalizedView);
                 effect.Parameters["Projection"]?.SetValue(Camera.finalizedProjection);
@@ -186,7 +188,7 @@ namespace RetroEngine
 
                 effect.Parameters["DepthTexture"]?.SetValue(DepthPrepathOutput);
 
-                effect.Parameters["OldFrameTexture"]?.SetValue(oldFrame);
+                effect.Parameters["FrameTexture"]?.SetValue(oldFrame);
 
                 effect.Parameters["ReflectionCubemap"]?.SetValue(CubeMap.GetClosestToCamera().map);
 
@@ -391,6 +393,8 @@ namespace RetroEngine
 
             OcclusionEffect.Parameters["View"].SetValue(Camera.finalizedView);
             OcclusionEffect.Parameters["Projection"].SetValue(Camera.finalizedProjection);
+
+
             OcclusionEffect.Parameters["pointDistance"].SetValue(false);
 
             foreach (StaticMesh mesh in renderList)

@@ -36,6 +36,23 @@ texture DepthTexture;
 sampler DepthTextureSampler = sampler_state
 {
     texture = <DepthTexture>;
+
+    MinFilter = Linear;
+    MagFilter = Linear;
+    AddressU = Clamp;
+    AddressV = Clamp;
+
+};
+
+texture FrameTexture;
+sampler FrameTextureSampler = sampler_state
+{
+    texture = <FrameTexture>;
+
+    MinFilter = Linear;
+    MagFilter = Linear;
+    AddressU = Clamp;
+    AddressV = Clamp;
 };
 
 texture ReflectionCubemap;
@@ -52,6 +69,8 @@ sampler ReflectionCubemapSampler = sampler_state
 float FarPlane;
 float3 viewDir;
 float3 viewPos;
+
+matrix InverseViewProjection;
 
 float DirectBrightness;
 float GlobalBrightness;
@@ -401,13 +420,13 @@ float FresnelSchlick(float cosTheta, float metallic)
 float CalculateSpecular(float3 worldPos,float3 normal, float3 lightDir, float roughness, float metallic)
 {
     
-    float3 viewDir = normalize(viewPos - worldPos);
+    float3 vDir = normalize(viewPos - worldPos);
     
     lightDir *= -1;
     
-    float3 halfwayDir = normalize(viewDir + lightDir);
+    float3 halfwayDir = normalize(vDir + lightDir);
     float NdotH = saturate(dot(normal, halfwayDir));
-    float NdotV = saturate(dot(normal, viewDir));
+    float NdotV = saturate(dot(normal, vDir));
 
     float specular = 0.0;
 
@@ -415,7 +434,7 @@ float CalculateSpecular(float3 worldPos,float3 normal, float3 lightDir, float ro
     {
         float roughnessSq = lerp(roughness * roughness, roughness, 0.5);
         float D = DistributionGGX(normal, halfwayDir, roughnessSq);
-        float G = GeometrySmith(normal, viewDir, lightDir, roughnessSq);
+        float G = GeometrySmith(normal, vDir, lightDir, roughnessSq);
         float F = FresnelSchlick(NdotV, metallic);
 
         specular = D * G / (4 * NdotV * saturate(dot(normal, lightDir)) + 0.001) * lerp(F,1,0.3);
@@ -788,19 +807,110 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness, float me
     
 }
 
-float determinant(float3 a, float3 b, float3 c)
+float2 WorldToScreen(float3 pos)
 {
-    return dot(a, cross(b, c));
+    float4 position = float4(pos, 1);
+    
+    
+    float4 projection = mul(mul(position, View), Projection);
+    
+    float2 screenCoords = projection.xyz / projection.w;
+    
+    screenCoords = (screenCoords + 1.0f) / 2.0f;
+
+    screenCoords.y = 1.0f - screenCoords.y;
+    
+    
+    return screenCoords;
 }
 
-float CalculateReflectiveness(float roughness, float metallic, float3 viewDir, float3 normal)
+float SampleDepthWorldCoords(float3 pos)
+{
+    float2 screenCoords = WorldToScreen(pos);
+    
+    
+    return SampleDepth(screenCoords);
+}
+
+float3 SampleColorWorldCoords(float3 pos)
+{
+    
+    float2 screenCoords = WorldToScreen(pos);
+    
+    return tex2D(FrameTextureSampler, screenCoords).rgb;
+}
+
+float3 GetPosition(float2 UV, float depth)
+{
+    float4 position = 1.0f;
+ 
+    float2 screenCoords = UV;
+    
+    screenCoords.y = 1 - screenCoords;
+    screenCoords = screenCoords * 2 + 1;
+
+    position.x = screenCoords.x;
+    position.y = screenCoords.y;
+    
+    position.z = depth;
+    
+    position = mul(position, InverseViewProjection);
+    
+    return position.xyz;
+}
+
+float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 normal, float3 vDir)
+{
+    
+    float step = 300;
+    
+    const int steps = 20;
+    
+    float4 outColor = float4(0, 0, 0, 0);
+    
+    float3 selectedCoords;
+    
+    float3 dir = direction;
+    
+    float3 pos = position;
+    
+    float2 coords;
+    
+    for (int i = 0; i < steps; i++)
+    {
+        
+        float3 offset = dir * step;
+        
+        coords = WorldToScreen(pos + offset);
+        
+        
+        float SampledDepth = SampleDepthWorldCoords(pos + offset);
+        
+        selectedCoords = pos + offset;
+            
+        float3 newPos = GetPosition(coords, SampledDepth);
+            
+        step = length(pos - newPos);
+    }
+    
+    float fresnel = 0.0 + 2.8 * pow(1 + dot(vDir, normal), 2);
+    
+    fresnel = saturate(fresnel);
+    
+    outColor = float4(tex2D(FrameTextureSampler, coords).rgb, 1);
+    
+    return outColor;
+    
+}
+
+float CalculateReflectiveness(float roughness, float metallic, float3 vDir, float3 normal)
 {
     // Calculate the base reflectiveness based on metallic
     float baseReflectiveness = metallic * 0.5;
 
     // Calculate the Fresnel factor using the Schlick approximation
     float F0 = lerp(0.01, 0.5, metallic);
-    float F = F0 + (1.0 - F0) * pow(1.0 - abs(dot(viewDir, normal)), 5.0);
+    float F = F0 + (1.0 - F0) * pow(1.0 - abs(dot(vDir, normal)), 5.0);
 
     // Adjust the base reflectiveness based on roughness
     float reflectiveness = lerp(baseReflectiveness, 0.01, roughness);
@@ -810,7 +920,7 @@ float CalculateReflectiveness(float roughness, float metallic, float3 viewDir, f
 
     reflectiveness = saturate(reflectiveness);
     
-    reflectiveness -= 0.07;
+    //reflectiveness -= 0.07;
     
     reflectiveness *= 1.8;
     
@@ -820,14 +930,23 @@ float CalculateReflectiveness(float roughness, float metallic, float3 viewDir, f
 float3 ApplyReflection(float3 inColor, float3 albedo, PixelInput input,float3 normal, float roughness, float metallic)
 {
     
-    float3 viewDir = normalize(viewPos - input.MyPosition)/3;
+    float3 offset = float3(0,2,0);
     
-    float3 reflection = reflect(normalize(input.MyPosition - viewPos), normalize(lerp(normal, input.TangentNormal, 0.4)));
+    float3 WorldPos = input.MyPosition;
+    
+    float3 vDir = normalize((WorldPos + offset) - (viewPos+offset));
+    
+    float3 reflection = normalize(reflect(vDir, normal));
     
     
-    float3 reflectionColor = SampleCubemap(ReflectionCubemapSampler, reflection);
+    float4 ssr = SampleSSR(reflection, WorldPos + offset, input.MyPixelPosition.z, normal, vDir);
+    
+    float3 cube = SampleCubemap(ReflectionCubemapSampler, reflection);
+    
+    float3 reflectionColor = lerp(cube, ssr.rgb, ssr.w);
+    
 
-    float reflectiveness = CalculateReflectiveness(roughness, metallic, viewDir, normal);
+    float reflectiveness = CalculateReflectiveness(roughness, metallic, vDir/3, normal);
     
     reflectiveness = saturate(reflectiveness);
     
