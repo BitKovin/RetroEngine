@@ -871,7 +871,7 @@ float3 GetPosition(float2 UV, float depth)
 float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 normal, float3 vDir)
 {
     
-    float step = 0.015;
+    float step = 0.01;
     
     const int steps = 100;
     
@@ -920,7 +920,9 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
         if(SampledDepth<dist)
         {
             
-            float3 newPos = GetPosition(coords, SampledDepth);
+            float d = abs(SampledDepth - dist);
+            
+            
             outCoords = coords;
             step = lerp(step, oldStep,0.7);
             factor = lerp(factor, 1, 0.7);

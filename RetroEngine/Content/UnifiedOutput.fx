@@ -108,7 +108,7 @@ PixelOutput PixelShaderFunction(PixelInput input)
     
     reflectiveness = saturate(reflectiveness);
     
-    output.Reflectiveness = float4(reflectiveness, reflectiveness, reflectiveness,1);
+    output.Reflectiveness = float4(reflectiveness, reflectiveness, reflectiveness, pbs);
     
     return output;
 }
