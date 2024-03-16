@@ -8,6 +8,8 @@ using RetroEngine.MapParser;
 using RetroEngine.Map;
 using RetroEngine;
 using RetroEngine.Entities.Navigaion;
+using RetroEngine.Graphic;
+using RetroEngine.Game.Effects;
 
 namespace RetroEngine.Game
 {
@@ -60,6 +62,7 @@ namespace RetroEngine.Game
 
             Level.GetCurrent().AddEntity(new Sky());
 
+            //PostProcessStep.StepsAfter.Add(new TestPP());
 
             for (int i = 1; i <= 2; i++)
             {

@@ -11,6 +11,7 @@ using System.IO;
 using RetroEngine.Particles;
 using RetroEngine.Entities;
 using RetroEngine.Entities.Light;
+using RetroEngine.Graphic;
 
 namespace RetroEngine
 {
@@ -19,7 +20,7 @@ namespace RetroEngine
 
         RenderTarget2D colorPath;
         RenderTarget2D emissivePath;
-        RenderTarget2D normalPath;
+        internal RenderTarget2D normalPath;
         RenderTarget2D positionPath;
         RenderTarget2D depthPath;
 
@@ -542,16 +543,25 @@ namespace RetroEngine
 
         RenderTarget2D TonemapResult;
 
+        RenderTarget2D stepsResult;
+
         void PerformPostProcessing()
         {
+
+
+            PerformPostProcessingShaders(DeferredOutput);
+
             PerformSSAO();
 
             PerformTonemapping();
             
             CalculateBloom();
 
-
             PerformCompose();
+
+
+            PerformPostProcessingShaders(ComposedOutput, true);
+
 
             PerformFXAA();
 
@@ -576,6 +586,50 @@ namespace RetroEngine
 
         }
 
+        RenderTarget2D targetA;
+        RenderTarget2D targetB;
+        void PerformPostProcessingShaders(RenderTarget2D input, bool after = false)
+        {
+
+            InitRenderTargetVectorIfNeed(ref targetA);
+            InitRenderTargetVectorIfNeed(ref targetB);
+
+            if (after == false)
+                if (PostProcessStep.StepsBefore.Count == 0)
+                    stepsResult = input;
+
+            if (after == true)
+                if (PostProcessStep.StepsAfter.Count == 0)
+                    stepsResult = input;
+
+            DownsampleToTexture(input, targetA);
+            DownsampleToTexture(input, targetB);
+
+
+            RenderTarget2D currentTarget = targetA;
+            bool currentA = true;
+
+            List<PostProcessStep> steps = new List<PostProcessStep>();
+
+            if(after == false)
+                steps = new List<PostProcessStep>(PostProcessStep.StepsBefore);
+
+            if (after == true)
+                steps = new List<PostProcessStep>(PostProcessStep.StepsAfter);
+
+            foreach (var step in steps)
+            {
+                step.BackBuffer = currentA? targetB : targetA;
+                currentTarget = currentA ? targetA : targetB;
+                step.RenderTarget = currentTarget;
+                step.Perform();
+                currentA = !currentA;
+            }
+
+            stepsResult = currentTarget;
+
+        }
+
         void PerformTonemapping()
         {
 
@@ -595,7 +649,7 @@ namespace RetroEngine
 
             spriteBatch.Begin(effect: TonemapperEffect, blendState: BlendState.NonPremultiplied);
 
-            DrawFullScreenQuad(spriteBatch, DeferredOutput);
+            DrawFullScreenQuad(spriteBatch, stepsResult);
 
             spriteBatch.End();
 
@@ -624,6 +678,7 @@ namespace RetroEngine
             DrawFullScreenQuad(spriteBatch, DepthOutput);
 
             spriteBatch.End();
+            graphics.GraphicsDevice.SetRenderTarget(null);
         }
 
         void PerformFXAA()
@@ -631,8 +686,7 @@ namespace RetroEngine
 
             if (Graphics.EnableAntiAliasing == false)
             {
-                outputPath = ComposedOutput;
-
+                outputPath = stepsResult;
 
                 return;
             }
@@ -653,16 +707,16 @@ namespace RetroEngine
             fxaaEffect.Parameters["fxaaQualityEdgeThreshold"].SetValue(fxaaQualityEdgeThreshold);
             fxaaEffect.Parameters["fxaaQualityEdgeThresholdMin"].SetValue(fxaaQualityEdgeThresholdMin);
 
-            fxaaEffect.Parameters["invViewportWidth"].SetValue(1f / ComposedOutput.Width);
-            fxaaEffect.Parameters["invViewportHeight"].SetValue(1f / ComposedOutput.Height);
-            fxaaEffect.Parameters["screenColor"].SetValue(ComposedOutput);
+            fxaaEffect.Parameters["invViewportWidth"].SetValue(1f / stepsResult.Width);
+            fxaaEffect.Parameters["invViewportHeight"].SetValue(1f / stepsResult.Height);
+            fxaaEffect.Parameters["screenColor"].SetValue(stepsResult);
 
             // Begin drawing with SpriteBatch
             SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
             spriteBatch.Begin(effect: fxaaEffect, blendState: BlendState.Opaque);
 
             // Draw a full-screen quad to apply the lighting
-            DrawFullScreenQuad(spriteBatch, ComposedOutput);
+            DrawFullScreenQuad(spriteBatch, stepsResult);
 
             // End the SpriteBatch
             spriteBatch.End();
@@ -690,6 +744,7 @@ namespace RetroEngine
             DrawFullScreenQuad(spriteBatch, TonemapResult);
 
             spriteBatch.End();
+            graphics.GraphicsDevice.SetRenderTarget(null);
         }
 
         void CalculateBloom()
@@ -773,10 +828,10 @@ namespace RetroEngine
 
         }
 
-        void DrawFullScreenQuad(SpriteBatch spriteBatch, Texture2D inputTexture)
+        internal static void DrawFullScreenQuad(SpriteBatch spriteBatch, Texture2D inputTexture)
         {
             // Create a rectangle covering the entire screen
-            Rectangle screenRectangle = new Rectangle(0, 0, graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height);
+            Rectangle screenRectangle = new Rectangle(0, 0, GameMain.Instance.GraphicsDevice.Viewport.Width, GameMain.Instance.GraphicsDevice.Viewport.Height);
 
             // Draw the full-screen quad using SpriteBatch
             spriteBatch.Draw(inputTexture, screenRectangle, Color.White);

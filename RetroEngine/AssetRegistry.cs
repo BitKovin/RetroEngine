@@ -23,6 +23,7 @@ namespace RetroEngine
         static Dictionary<string, SoundEffect> sounds = new Dictionary<string, SoundEffect>();
 
         static Dictionary<string, Effect> effects = new Dictionary<string, Effect>();
+        static Dictionary<string, Effect> effectsPP = new Dictionary<string, Effect>();
 
         static List<string> texturesHistory = new List<string>();
 
@@ -229,10 +230,24 @@ namespace RetroEngine
 
         }
 
-        public static List<Effect> GetAllShaders()
+        public static Effect GetPostProcessShaderFromName(string path)
+        {
+            if (effectsPP.ContainsKey(path))
+            {
+                return effectsPP[path];
+            }
+
+            effectsPP.Add(path, GameMain.content.Load<Effect>(path));
+
+            return effectsPP[path];
+
+        }
+
+        internal static List<Effect> GetAllShaders()
         {
             return effects.Values.ToList();
         }
+
 
         public static SoundEffect LoadSoundFromFile(string path)
         {
