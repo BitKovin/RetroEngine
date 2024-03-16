@@ -29,6 +29,8 @@ namespace RetroEngine.Game.Effects.Particles
 
             ModelPath = "models/particles/wood.obj";
 
+            
+
             InitialSpawnCount = 1;
         }
 
@@ -36,6 +38,8 @@ namespace RetroEngine.Game.Effects.Particles
         {
 
             particle.velocity -= new Vector3(0, 10, 0) * (Time.deltaTime / 2f);
+
+            Console.WriteLine(particle.HasCollision);
 
             particle = base.UpdateParticle(particle);
 
@@ -62,6 +66,8 @@ namespace RetroEngine.Game.Effects.Particles
 
             particle.customModelPath = "models/particles/wood.obj";
             particle.useGlobalRotation = true;
+
+            particle.HasCollision = true;
 
             return particle;
         }

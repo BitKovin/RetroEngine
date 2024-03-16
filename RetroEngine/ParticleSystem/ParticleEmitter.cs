@@ -30,6 +30,7 @@ namespace RetroEngine.Particles
 
         public bool Emitting = false;
 
+
         public ParticleEmitter()
         {
             CastShadows = false;
@@ -96,9 +97,28 @@ namespace RetroEngine.Particles
 
         public virtual Particle UpdateParticle(Particle particle)
         {
+
+            Vector3 oldPos = particle.position;
+
             particle.position += particle.velocity * Time.deltaTime;
 
+            particle.Collided = false;
+
+            if(particle.HasCollision == false) return particle;
+
+            var hit = Physics.SphereTraceForStatic(oldPos.ToPhysics(), particle.position.ToPhysics(), particle.CollisionRadius);
+
+            if(hit.HasHit == false) return particle;
+
+            particle.Collided = true;
+
+            particle.position = hit.HitPointWorld;
+
+            if(Vector3.Dot(particle.velocity, hit.HitNormalWorld)<0)
+
+            particle.velocity = Vector3.Reflect(particle.velocity * particle.BouncePower, hit.HitNormalWorld);
             return particle;
+
         }
 
         public virtual Particle GetNewParticle()
@@ -317,6 +337,12 @@ namespace RetroEngine.Particles
             public bool OrientRotationToVelocity = false;
 
             public string texturePath = null;
+
+            public bool HasCollision = false;
+            public float CollisionRadius = 0.3f;
+            public float BouncePower = 0.8f;
+
+            public bool Collided = false;
 
             public Particle()
             {
