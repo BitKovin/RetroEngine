@@ -873,7 +873,7 @@ float3 GetPosition(float2 UV, float depth)
 float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 normal, float3 vDir)
 {
     
-    float step = 0.015;
+    float step = 0.012;
     
     const int steps = 50;
     
@@ -891,7 +891,12 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
     
     float oldStep = 0;
     
+    float weight = 0;
+    
     bool inScreen;
+    float factor = 1.3;
+    
+    float disToCamera = length(viewPos - position);
     
     for (int i = 0; i < steps; i++)
     {
@@ -906,7 +911,13 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
         
         selectedCoords = pos + offset;
         
-        inScreen = coords.x > 0 && coords.x < 1 && coords.y > 0 && coords.y;
+        inScreen = coords.x > 0.01 && coords.x < 0.99 && coords.y > 0.01 && coords.y < 0.99;
+        
+        if (inScreen == false)
+        {
+            step = lerp(step, oldStep, 0.8);
+            factor = lerp(factor, 1, 0.7);
+        }
         
         if(SampledDepth<dist)
         {
@@ -914,14 +925,13 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
             float3 newPos = GetPosition(coords, SampledDepth);
             outCoords = coords;
             step = lerp(step, oldStep,0.7);
+            factor = lerp(factor, 1, 0.7);
+            weight += 0.5 * disToCamera / 10;
             continue;
 
         }
         
-        if(inScreen == false)
-        {
-            step = lerp(step, oldStep, 0.7);
-        }
+        
             
         selectedCoords = pos + offset;
             
@@ -929,7 +939,7 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
             
         oldStep = step;
         
-        step *= 1.2;
+        step *= factor;
         
     }
     
@@ -937,7 +947,9 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
     
     fresnel = saturate(fresnel);
     
-    outColor = float4(tex2D(FrameTextureSampler, coords).rgb, fresnel);
+    weight = saturate(weight);
+    
+    outColor = float4(tex2D(FrameTextureSampler, coords).rgb, fresnel * weight);
     
     return outColor;
     
@@ -960,7 +972,7 @@ float CalculateReflectiveness(float roughness, float metallic, float3 vDir, floa
 
     reflectiveness = saturate(reflectiveness);
     
-    //reflectiveness -= 0.07;
+    reflectiveness -= 0.07;
     
     reflectiveness *= 1.8;
     
@@ -973,7 +985,7 @@ float3 ApplyReflection(float3 inColor, float3 albedo, PixelInput input,float3 no
     
     float3 WorldPos = input.MyPosition;
     
-    float3 vDir = normalize(viewPos - input.MyPosition);
+    float3 vDir = normalize(input.MyPosition - viewPos);
     
     float3 reflection = reflect(normalize(input.MyPosition - viewPos), normalize(lerp(normal, input.TangentNormal, 0.4)));
     
