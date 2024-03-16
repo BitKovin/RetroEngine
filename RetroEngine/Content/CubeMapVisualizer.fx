@@ -23,11 +23,11 @@ PixelOutput PixelShaderFunction(PixelInput input)
     
     float3 textureColor = SampleCubemap(TextureSampler, reflection).xyz;
     
-    output.Depth = float4(Depth, 0, 0, 1);
     
     output.Color = float4(textureColor, 1);
     
-    
+    output.Position = float4(input.MyPosition, 1);
+    output.Reflectiveness = float4(0,0,0,1);
     
     output.Normal = float4((input.TangentNormal + 1) / 2, 1);
     

@@ -18,7 +18,7 @@ PixelOutput PixelShaderFunction(PixelInput input)
     
     float Depth = input.MyPixelPosition.z;
     
-    output.Depth = float4(Depth, 0, 0, 1);
+    output.Position = float4(input.MyPosition, 1);
     
     
     float3 textureColor = tex2D(TextureSampler, input.TexCoord).xyz;
@@ -30,7 +30,7 @@ PixelOutput PixelShaderFunction(PixelInput input)
     output.Color = float4(textureColor, textureAlpha);
     
     output.Normal = float4((input.Normal + 1) / 2, 1);
-    
+    output.Reflectiveness = float4(0, 0, 0, 1);
     
     return output;
 }

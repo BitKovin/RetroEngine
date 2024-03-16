@@ -190,8 +190,9 @@ struct PBRData
 struct PixelOutput
 {
     float4 Color : COLOR0;
-    float4 Depth : COLOR1;
-    float4 Normal : COLOR2;
+    float4 Normal : COLOR1;
+    float4 Reflectiveness : COLOR2;
+    float4 Position : COLOR3;
 };
 
 float3 normalize(float3 v)
@@ -854,18 +855,15 @@ float3 GetPosition(float2 UV, float depth)
 {
     float4 position = 1.0f;
  
-    float2 screenCoords = UV;
-    
-    screenCoords.y = 1 - screenCoords;
-    screenCoords = screenCoords * 2 + 1;
+    position.x = UV.x * 2.0f - 1.0f;
+    position.y = -(UV.y * 2.0f - 1.0f);
 
-    position.x = screenCoords.x;
-    position.y = screenCoords.y;
-    
     position.z = depth;
-    
+ 
     position = mul(position, InverseViewProjection);
-    
+ 
+    position /= position.w;
+
     return position.xyz;
 }
 
@@ -873,9 +871,9 @@ float3 GetPosition(float2 UV, float depth)
 float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 normal, float3 vDir)
 {
     
-    float step = 0.012;
+    float step = 0.015;
     
-    const int steps = 50;
+    const int steps = 100;
     
     float4 outColor = float4(0, 0, 0, 0);
     
@@ -891,7 +889,7 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
     
     float oldStep = 0;
     
-    float weight = 0;
+    float weight = -0.3;
     
     bool inScreen;
     float factor = 1.3;

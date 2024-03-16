@@ -79,7 +79,7 @@ PixelOutput PixelShaderFunction(PixelInput input)
     
 	textureColor *= light;
     
-    textureColor = ApplyReflection(textureColor, albedo, input, pixelNormal, roughness, metalic);
+    //textureColor = ApplyReflection(textureColor, albedo, input, pixelNormal, roughness, metalic);
     
     light -= 1.1;
     light = saturate(light/8);
@@ -97,12 +97,18 @@ PixelOutput PixelShaderFunction(PixelInput input)
     if (textureAlpha<0.95)
         pbs = 0;
     
-    output.Depth = float4(Depth, 0, 0, pbs);
     
     output.Color = float4(textureColor, textureAlpha);
     
     output.Normal = float4((pixelNormal + 1) / 2, pbs);
+    output.Position = float4(input.MyPosition, pbs);
     
+    float3 vDir = normalize(input.MyPosition - viewPos);
+    float reflectiveness = CalculateReflectiveness(roughness, metalic, vDir / 3, pixelNormal);
+    
+    reflectiveness = saturate(reflectiveness);
+    
+    output.Reflectiveness = float4(reflectiveness, reflectiveness, reflectiveness,1);
     
     return output;
 }

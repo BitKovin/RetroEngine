@@ -19,12 +19,12 @@
 }
 // brush 1
 {
-( -352 528 304 ) ( -352 560 0 ) ( -352 560 304 ) brushes/bricks 0 0 0 0.75 0.75
-( 544 528 304 ) ( -352 528 0 ) ( -352 528 304 ) brushes/bricks 0 0 0 0.75 0.75
-( 544 560 0 ) ( -352 528 0 ) ( 544 528 0 ) brushes/bricks 0 0 0 0.75 0.75
-( 544 560 304 ) ( -352 528 304 ) ( -352 560 304 ) brushes/bricks 0 0 0 0.75 0.75
-( 544 560 304 ) ( -352 560 0 ) ( 544 560 0 ) brushes/bricks 0 0 0 0.75 0.75
-( 544 560 304 ) ( 544 528 0 ) ( 544 528 304 ) brushes/bricks 0 0 0 0.75 0.75
+( -352 528 304 ) ( -352 560 0 ) ( -352 560 304 ) brushes/mirror 0 0 0 0.75 0.75
+( 544 528 304 ) ( -352 528 0 ) ( -352 528 304 ) brushes/mirror 0 0 0 0.75 0.75
+( 544 560 0 ) ( -352 528 0 ) ( 544 528 0 ) brushes/mirror 0 0 0 0.75 0.75
+( 544 560 304 ) ( -352 528 304 ) ( -352 560 304 ) brushes/mirror 0 0 0 0.75 0.75
+( 544 560 304 ) ( -352 560 0 ) ( 544 560 0 ) brushes/mirror 0 0 0 0.75 0.75
+( 544 560 304 ) ( 544 528 0 ) ( 544 528 304 ) brushes/mirror 0 0 0 0.75 0.75
 }
 // brush 2
 {
@@ -6913,12 +6913,12 @@
 }
 // brush 722
 {
-( -11856 11072 16 ) ( -11856 -9184 16 ) ( -11856 -9184 -16 ) brushes/ground_pbr 0 0 0 0.17 0.17
-( -11856 -9184 16 ) ( 7984 -9184 16 ) ( 7984 -9184 -16 ) brushes/ground_pbr 0 0 0 0.17 0.17
-( 7984 -9184 -16 ) ( 7984 11072 -16 ) ( -11856 11072 -16 ) brushes/ground_pbr 0 0 0 0.17 0.17
-( -11856 11072 16 ) ( 7984 11072 16 ) ( 7984 -9184 16 ) brushes/ground_pbr 0 0 0 0.17 0.17
-( 7984 11072 -16 ) ( 7984 11072 16 ) ( -11856 11072 16 ) brushes/ground_pbr 0 0 0 0.17 0.17
-( 7984 -9184 16 ) ( 7984 11072 16 ) ( 7984 11072 -16 ) brushes/ground_pbr 0 0 0 0.17 0.17
+( -11856 11072 16 ) ( -11856 -9184 16 ) ( -11856 -9184 -16 ) brushes/mirror 0 0 0 0.17 0.17
+( -11856 -9184 16 ) ( 7984 -9184 16 ) ( 7984 -9184 -16 ) brushes/mirror 0 0 0 0.17 0.17
+( 7984 -9184 -16 ) ( 7984 11072 -16 ) ( -11856 11072 -16 ) brushes/mirror 0 0 0 0.17 0.17
+( -11856 11072 16 ) ( 7984 11072 16 ) ( 7984 -9184 16 ) brushes/mirror 0 0 0 0.17 0.17
+( 7984 11072 -16 ) ( 7984 11072 16 ) ( -11856 11072 16 ) brushes/mirror 0 0 0 0.17 0.17
+( 7984 -9184 16 ) ( 7984 11072 16 ) ( 7984 11072 -16 ) brushes/mirror 0 0 0 0.17 0.17
 }
 }
 // entity 1
@@ -7245,91 +7245,99 @@
 }
 // entity 36
 {
+"classname" "static_mesh"
+"origin" "59 27 53"
+"angle" "0"
+"path" "models/sphere.obj"
+"scale" "1"
+}
+// entity 37
+{
 "classname" "func_group"
 "_tb_type" "_tb_layer"
 "_tb_name" "navigation"
 "_tb_id" "1"
 "_tb_layer_sort_index" "0"
 }
-// entity 37
+// entity 38
 {
 "classname" "info.navpoint"
 "origin" "216 -584 24"
 "_tb_layer" "1"
 }
-// entity 38
+// entity 39
 {
 "classname" "info.navpoint"
 "origin" "-600 -840 24"
 "_tb_layer" "1"
 }
-// entity 39
+// entity 40
 {
 "classname" "info.navpoint"
 "origin" "840 -168 24"
 "_tb_layer" "1"
 }
-// entity 40
+// entity 41
 {
 "classname" "info.navpoint"
 "origin" "280 216 24"
 "_tb_layer" "1"
 }
-// entity 41
+// entity 42
 {
 "classname" "info.navpoint"
 "origin" "-184 456 24"
 "_tb_layer" "1"
 }
-// entity 42
+// entity 43
 {
 "classname" "info.navpoint"
 "origin" "648 744 24"
 "_tb_layer" "1"
 }
-// entity 43
+// entity 44
 {
 "classname" "info.navpoint"
 "origin" "856 -824 24"
 "_tb_layer" "1"
 }
-// entity 44
+// entity 45
 {
 "classname" "info.navpoint"
 "origin" "-184 -584 24"
 "_tb_layer" "1"
 }
-// entity 45
+// entity 46
 {
 "classname" "info.navpoint"
 "origin" "824 -520 24"
 "_tb_layer" "1"
 }
-// entity 46
+// entity 47
 {
 "classname" "info.navpoint"
 "origin" "-488 536 24"
 "_tb_layer" "1"
 }
-// entity 47
+// entity 48
 {
 "classname" "info.navpoint"
 "origin" "-632 -184 24"
 "_tb_layer" "1"
 }
-// entity 48
+// entity 49
 {
 "classname" "info.navpoint"
 "origin" "-808 -504 24"
 "_tb_layer" "1"
 }
-// entity 49
+// entity 50
 {
 "classname" "info.navpoint"
 "origin" "-88 72 24"
 "_tb_layer" "1"
 }
-// entity 50
+// entity 51
 {
 "classname" "info.navpoint"
 "origin" "-264 72 24"

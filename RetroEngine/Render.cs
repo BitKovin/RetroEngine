@@ -25,6 +25,8 @@ namespace RetroEngine
         RenderTarget2D depthPath;
 
         RenderTarget2D DeferredOutput;
+        RenderTarget2D ReflectionOutput;
+        RenderTarget2D ReflectivenessOutput;
         RenderTarget2D DepthPrepathOutput;
 
         RenderTarget2D ForwardOutput;
@@ -33,6 +35,7 @@ namespace RetroEngine
         RenderTarget2D miscPath;
         RenderTarget2D postProcessingOutput;
         public RenderTarget2D DepthOutput;
+        public RenderTarget2D PositionOutput;
 
         public RenderTarget2D shadowMap;
         public RenderTarget2D shadowMapClose;
@@ -60,6 +63,9 @@ namespace RetroEngine
 
         public Effect BuffersEffect;
         public Effect DeferredEffect;
+
+        public Effect ReflectionEffect;
+        public Effect ReflectionResultEffect;
 
         public Effect OcclusionEffect;
 
@@ -128,7 +134,9 @@ namespace RetroEngine
 
             occlusionQuery = new OcclusionQuery(GameMain.Instance.GraphicsDevice);
 
-            
+            ReflectionEffect = AssetRegistry.GetShaderFromName("ReflectionPath");
+            ReflectionResultEffect = GameMain.content.Load<Effect>("ReflectionResult");
+
 
             InitSampler();
         }
@@ -210,7 +218,11 @@ namespace RetroEngine
 
             InitRenderTargetVectorIfNeed(ref DeferredOutput);
 
+            InitRenderTargetIfNeed(ref ReflectivenessOutput);
+
             InitRenderTargetVectorIfNeed(ref oldFrame);
+
+            InitRenderTargetVectorIfNeed(ref positionPath);
 
             InitRenderTargetIfNeed(ref normalPath);
 
@@ -265,7 +277,7 @@ namespace RetroEngine
             graphics.GraphicsDevice.SetRenderTarget(null);
 
             if(Input.GetAction("test2").Holding())
-                return normalPath;
+                return ReflectivenessOutput;
 
             return outputPath;
 
@@ -311,7 +323,7 @@ namespace RetroEngine
 
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, (int)GetScreenResolution().X, (int)GetScreenResolution().Y);
 
-            graphics.GraphicsDevice.SetRenderTargets(DeferredOutput,DepthOutput, normalPath);
+            graphics.GraphicsDevice.SetRenderTargets(DeferredOutput, normalPath, ReflectivenessOutput, positionPath);
             graphics.GraphicsDevice.Clear(ClearOptions.DepthBuffer, Color.Black, 1.0f, 0);
 
 
@@ -552,8 +564,10 @@ namespace RetroEngine
         void PerformPostProcessing()
         {
 
+            PerformReflection();
+            ApplyReflection();
 
-            PerformPostProcessingShaders(DeferredOutput);
+            PerformPostProcessingShaders(ReflectionOutput);
 
             PerformSSAO();
 
@@ -631,6 +645,54 @@ namespace RetroEngine
             }
 
             stepsResult = currentTarget;
+
+        }
+
+        RenderTarget2D reflection;
+        void PerformReflection()
+        {
+            InitSizedRenderTargetIfNeed(ref reflection, 480);
+
+            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, reflection.Width, reflection.Height);
+
+            graphics.GraphicsDevice.SetRenderTarget(reflection);
+
+            graphics.GraphicsDevice.Clear(Color.Black);
+
+            SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
+
+            ReflectionEffect.Parameters["FrameTexture"]?.SetValue(DeferredOutput);
+            ReflectionEffect.Parameters["PositionTexture"]?.SetValue(positionPath);
+            ReflectionEffect.Parameters["FactorTexture"]?.SetValue(ReflectivenessOutput);
+
+            spriteBatch.Begin(effect: ReflectionEffect, blendState: BlendState.NonPremultiplied);
+
+            DrawFullScreenQuad(spriteBatch, normalPath);
+
+            spriteBatch.End();
+
+        }
+
+        void ApplyReflection()
+        {
+            InitRenderTargetVectorIfNeed(ref ReflectionOutput);
+
+            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, ReflectionOutput.Width, ReflectionOutput.Height);
+
+            graphics.GraphicsDevice.SetRenderTarget(ReflectionOutput);
+
+            graphics.GraphicsDevice.Clear(Color.Black);
+
+            SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
+
+            ReflectionResultEffect.Parameters["ReflectionTexture"].SetValue(reflection);
+            ReflectionResultEffect.Parameters["FactorTexture"].SetValue(ReflectivenessOutput);
+
+            spriteBatch.Begin(effect: ReflectionResultEffect, blendState: BlendState.NonPremultiplied);
+
+            DrawFullScreenQuad(spriteBatch, DeferredOutput);
+
+            spriteBatch.End();
 
         }
 
