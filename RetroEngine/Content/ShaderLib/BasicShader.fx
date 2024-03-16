@@ -824,6 +824,16 @@ float2 WorldToScreen(float3 pos)
     return screenCoords;
 }
 
+float4 WorldToClip(float3 pos)
+{
+    float4 position = float4(pos, 1);
+    
+    
+    float4 projection = mul(mul(position, View), Projection);
+    
+    return projection;
+}
+
 float SampleDepthWorldCoords(float3 pos)
 {
     float2 screenCoords = WorldToScreen(pos);
@@ -859,12 +869,13 @@ float3 GetPosition(float2 UV, float depth)
     return position.xyz;
 }
 
+
 float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 normal, float3 vDir)
 {
     
-    float step = 300;
+    float step = 0.015;
     
-    const int steps = 20;
+    const int steps = 50;
     
     float4 outColor = float4(0, 0, 0, 0);
     
@@ -876,6 +887,12 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
     
     float2 coords;
     
+    float2 outCoords;
+    
+    float oldStep = 0;
+    
+    bool inScreen;
+    
     for (int i = 0; i < steps; i++)
     {
         
@@ -883,21 +900,44 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
         
         coords = WorldToScreen(pos + offset);
         
+        float dist = WorldToClip(pos + offset).z;
         
         float SampledDepth = SampleDepthWorldCoords(pos + offset);
         
         selectedCoords = pos + offset;
+        
+        inScreen = coords.x > 0 && coords.x < 1 && coords.y > 0 && coords.y;
+        
+        if(SampledDepth<dist)
+        {
+            
+            float3 newPos = GetPosition(coords, SampledDepth);
+            outCoords = coords;
+            step = lerp(step, oldStep,0.7);
+            continue;
+
+        }
+        
+        if(inScreen == false)
+        {
+            step = lerp(step, oldStep, 0.7);
+        }
+            
+        selectedCoords = pos + offset;
             
         float3 newPos = GetPosition(coords, SampledDepth);
             
-        step = length(pos - newPos);
+        oldStep = step;
+        
+        step *= 1.2;
+        
     }
     
     float fresnel = 0.0 + 2.8 * pow(1 + dot(vDir, normal), 2);
     
     fresnel = saturate(fresnel);
     
-    outColor = float4(tex2D(FrameTextureSampler, coords).rgb, 1);
+    outColor = float4(tex2D(FrameTextureSampler, coords).rgb, fresnel);
     
     return outColor;
     
@@ -930,16 +970,15 @@ float CalculateReflectiveness(float roughness, float metallic, float3 vDir, floa
 float3 ApplyReflection(float3 inColor, float3 albedo, PixelInput input,float3 normal, float roughness, float metallic)
 {
     
-    float3 offset = float3(0,2,0);
     
     float3 WorldPos = input.MyPosition;
     
-    float3 vDir = normalize((WorldPos + offset) - (viewPos+offset));
+    float3 vDir = normalize(viewPos - input.MyPosition);
     
-    float3 reflection = normalize(reflect(vDir, normal));
+    float3 reflection = reflect(normalize(input.MyPosition - viewPos), normalize(lerp(normal, input.TangentNormal, 0.4)));
     
     
-    float4 ssr = SampleSSR(reflection, WorldPos + offset, input.MyPixelPosition.z, normal, vDir);
+    float4 ssr = SampleSSR(reflection, input.MyPosition, input.MyPixelPosition.z, normal, vDir);
     
     float3 cube = SampleCubemap(ReflectionCubemapSampler, reflection);
     
