@@ -222,7 +222,7 @@ namespace RetroEngine
 
             InitRenderTargetVectorIfNeed(ref oldFrame);
 
-            InitRenderTargetVectorIfNeed(ref positionPath);
+            InitRenderTargetVectorSpaceIfNeed(ref positionPath);
 
             InitRenderTargetIfNeed(ref normalPath);
 
@@ -1113,6 +1113,35 @@ namespace RetroEngine
 
             graphics.ApplyChanges();
             
+
+        }
+
+        void InitRenderTargetVectorSpaceIfNeed(ref RenderTarget2D target)
+        {
+            if (GetScreenResolution().X > 0 && GetScreenResolution().Y > 0)
+                if (target is null || target.Width != (int)GetScreenResolution().X || target.Height != (int)GetScreenResolution().Y)
+                {
+
+                    DestroyRenderTarget(target);
+
+                    // Set the depth format based on your requirements
+                    DepthFormat depthFormat = DepthFormat.Depth24;
+
+                    // Create the new render target with the specified depth format
+                    target = new RenderTarget2D(
+                        graphics.GraphicsDevice,
+                        (int)GetScreenResolution().X,
+                        (int)GetScreenResolution().Y,
+                        false, // No mipmaps
+                        SurfaceFormat.HalfVector4, // Color format
+                        depthFormat, 0, RenderTargetUsage.PreserveContents); // Depth format
+
+
+
+                }
+
+            graphics.ApplyChanges();
+
 
         }
 
