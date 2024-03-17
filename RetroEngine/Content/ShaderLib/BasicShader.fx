@@ -921,7 +921,7 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
 
         }
         
-        if (inScreen == false)
+        if (inScreen == false || SampledDepth>1000)
         {
             step = lerp(step, oldStep, 1);
             factor = lerp(factor, 1, 0.7);

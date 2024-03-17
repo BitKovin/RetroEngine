@@ -35,7 +35,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR
     float depth = SampleDepth(input.TextureCoordinates).r;
 	
     
-    float3 worldPos = tex2D(PositionTextureSampler, input.TextureCoordinates).xyz;
+    float3 worldPos = tex2D(PositionTextureSampler, input.TextureCoordinates).xyz + viewPos;
     
     float3 vDir = normalize(worldPos - viewPos);
     

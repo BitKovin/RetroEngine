@@ -101,7 +101,7 @@ PixelOutput PixelShaderFunction(PixelInput input)
     output.Color = float4(textureColor, textureAlpha);
     
     output.Normal = float4((normalize(lerp(pixelNormal, input.TangentNormal, 0.0)) + 1) / 2, pbs);
-    output.Position = float4(input.MyPosition, pbs);
+    output.Position = float4(input.MyPosition - viewPos, pbs);
     
     float3 vDir = normalize(input.MyPosition - viewPos);
     float reflectiveness = CalculateReflectiveness(roughness, metalic, vDir / 3, pixelNormal);
