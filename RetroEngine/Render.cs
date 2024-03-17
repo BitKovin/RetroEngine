@@ -653,7 +653,7 @@ namespace RetroEngine
         RenderTarget2D reflection;
         void PerformReflection()
         {
-            InitSizedRenderTargetIfNeed(ref reflection, 720);
+            InitSizedRenderTargetIfNeed(ref reflection, 512);
 
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, reflection.Width, reflection.Height);
 
@@ -688,7 +688,7 @@ namespace RetroEngine
             SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
 
             ReflectionResultEffect.Parameters["ReflectionTexture"].SetValue(reflection);
-            ReflectionResultEffect.Parameters["FactorTexture"].SetValue(ReflectivenessOutput);
+            ReflectionResultEffect.Parameters["FactorTexture"]?.SetValue(ReflectivenessOutput);
 
             spriteBatch.Begin(effect: ReflectionResultEffect, blendState: BlendState.NonPremultiplied);
 

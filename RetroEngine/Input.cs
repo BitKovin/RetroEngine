@@ -24,29 +24,32 @@ namespace RetroEngine
 
         public static Vector2 windowCenter;
 
-        static bool pendingCenterCursor = false;
+        public static bool PendingCenterCursor = false;
 
         public static MouseMoveCalculator MouseMoveCalculatorObject;
 
         public static void Update()
         {
-
-            UpdateMouse();
-
             UpdateActions();
+
+            if (PendingCenterCursor)
+                CenterCursor();
+
+            windowCenter = new Vector2(GameMain.Instance.GraphicsDevice.Viewport.Width / 2, GameMain.Instance.GraphicsDevice.Viewport.Height / 2);
+
+            GameMain.Instance.IsMouseVisible = !LockCursor;
 
         }
 
-        static void UpdateMouse()
+        public static void UpdateMouse()
         {
 
-            if (pendingCenterCursor)
-                CenterCursor();
+            
 
             Vector2 mousePos = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
-            GameMain.Instance.IsMouseVisible = !LockCursor;
+           
 
-            windowCenter = new Vector2(GameMain.Instance.GraphicsDevice.Viewport.Width / 2, GameMain.Instance.GraphicsDevice.Viewport.Height / 2);
+            
 
             if (MouseMoveCalculatorObject != null)
             {
@@ -107,10 +110,10 @@ namespace RetroEngine
                 MousePos = windowCenter;
                 MouseDelta = new Vector2();
                 MouseDeltas.Clear();
-                pendingCenterCursor = false;
+                PendingCenterCursor = false;
             }else
             {
-                pendingCenterCursor = true;
+                PendingCenterCursor = true;
             }
         }
 

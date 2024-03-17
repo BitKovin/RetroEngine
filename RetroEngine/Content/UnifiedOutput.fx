@@ -100,7 +100,7 @@ PixelOutput PixelShaderFunction(PixelInput input)
     
     output.Color = float4(textureColor, textureAlpha);
     
-    output.Normal = float4((pixelNormal + 1) / 2, pbs);
+    output.Normal = float4((normalize(lerp(pixelNormal, input.TangentNormal, 0.0)) + 1) / 2, pbs);
     output.Position = float4(input.MyPosition, pbs);
     
     float3 vDir = normalize(input.MyPosition - viewPos);

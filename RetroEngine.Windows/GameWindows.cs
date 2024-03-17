@@ -67,7 +67,7 @@ namespace RetroEngine.Windows
             {
                 int px = (int)Input.windowCenter.X;
                 int py = (int)Input.windowCenter.Y;
-                Microsoft.Xna.Framework.Input.Mouse.SetPosition(px, py);
+                Input.PendingCenterCursor = true;
             }
 
             MouseState state = mouse.GetCurrentState();

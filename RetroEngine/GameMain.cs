@@ -224,6 +224,7 @@ namespace RetroEngine
                 elem.Update();
 
             Camera.ViewportUpdate();
+
             Input.Update();
 
             bool changedLevel = Level.LoadPendingLevel();
@@ -260,6 +261,8 @@ namespace RetroEngine
             Physics.Update();
 
             Navigation.Update();
+
+            Input.UpdateMouse();
 
             curentLevel.Update();
 

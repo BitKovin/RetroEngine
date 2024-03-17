@@ -871,9 +871,9 @@ float3 GetPosition(float2 UV, float depth)
 float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 normal, float3 vDir)
 {
     
-    float step = 0.01;
+    float step = 0.015;
     
-    const int steps = 100;
+    const int steps = 50;
     
     float4 outColor = float4(0, 0, 0, 0);
     
@@ -915,7 +915,7 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
         
         weight = clamp(weight, -500000, 5);
         
-        if (SampledDepth < currentDepth + 0.025 && facingCamera == false)
+        if (SampledDepth < currentDepth - 0.025 && facingCamera == false)
         {
             return float4(0, 0, 0, 0);
 
@@ -953,6 +953,17 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
     
 }
 
+float ReflectionMapping(float x)
+{
+    
+    const float n = -0.066;
+    
+    const float v = x / 3;
+    
+    return v / ((x * 10 + 1 / n)*n);
+
+}
+
 float CalculateReflectiveness(float roughness, float metallic, float3 vDir, float3 normal)
 {
     // Calculate the base reflectiveness based on metallic
@@ -970,11 +981,11 @@ float CalculateReflectiveness(float roughness, float metallic, float3 vDir, floa
 
     reflectiveness = saturate(reflectiveness);
     
-    reflectiveness -= 0.07;
+    reflectiveness -= 0.1;
     
-    reflectiveness *= 1.8;
+    reflectiveness *= 3;
     
-    return reflectiveness;
+    return ReflectionMapping(saturate(reflectiveness));
 }
 
 float3 ApplyReflection(float3 inColor, float3 albedo, PixelInput input,float3 normal, float roughness, float metallic)

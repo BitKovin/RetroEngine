@@ -47,7 +47,6 @@ float4 MainPS(VertexShaderOutput input) : COLOR
     float factor = tex2D(FactorTextureSampler, input.TextureCoordinates).r;
 	
     float3 result = lerp(color, reflection, factor);
-    //result *= color;
 	
     return float4(result,1);
 }
