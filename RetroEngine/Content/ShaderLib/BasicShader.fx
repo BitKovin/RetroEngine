@@ -873,7 +873,7 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
     
     float step = 0.01;
     
-    const int steps = 100;
+    const int steps = 300;
     
     float4 outColor = float4(0, 0, 0, 0);
     
@@ -890,8 +890,7 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
     float oldStep = 0;
     
     float weight = -0.3;
-    
-    bool inScreen;
+   
     float factor = 1.3;
     
     float disToCamera = length(viewPos - position);
@@ -909,7 +908,7 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
         
         selectedCoords = pos + offset;
         
-        inScreen = coords.x > 0.01 && coords.x < 0.99 && coords.y > 0.01 && coords.y < 0.99;
+        bool inScreen = coords.x > 0.001 && coords.x < 0.999 && coords.y > 0.001 && coords.y < 0.999;
         
         if (inScreen == false)
         {
@@ -919,23 +918,13 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
         
         if(SampledDepth<dist)
         {
-            
-            float d = abs(SampledDepth - dist);
-            
-            
             outCoords = coords;
-            step = lerp(step, oldStep,0.7);
+            step = oldStep;
             factor = lerp(factor, 1, 0.7);
             weight += 0.5 * disToCamera / 10;
             continue;
 
         }
-        
-        
-            
-        selectedCoords = pos + offset;
-            
-        float3 newPos = GetPosition(coords, SampledDepth);
             
         oldStep = step;
         
