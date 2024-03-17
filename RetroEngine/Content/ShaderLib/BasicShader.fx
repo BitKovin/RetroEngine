@@ -873,7 +873,7 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
     
     float step = 0.01;
     
-    const int steps = 300;
+    const int steps = 100;
     
     float4 outColor = float4(0, 0, 0, 0);
     
@@ -898,7 +898,7 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
     for (int i = 0; i < steps; i++)
     {
         
-        float3 offset = dir * step;
+        float3 offset = dir * (step + 0.01);
         
         coords = WorldToScreen(pos + offset);
         
@@ -912,7 +912,7 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
         
         if (inScreen == false)
         {
-            step = lerp(step, oldStep, 0.8);
+            step = lerp(step, oldStep, 1);
             factor = lerp(factor, 1, 0.7);
         }
         
@@ -929,6 +929,7 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
         oldStep = step;
         
         step *= factor;
+        step += 0.001;
         
     }
     

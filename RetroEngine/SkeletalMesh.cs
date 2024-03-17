@@ -144,7 +144,9 @@ namespace RetroEngine
 
             if (pose == null) return;
 
-            foreach(string key in pose.Keys)
+            Dictionary<string, Matrix> p = new Dictionary<string, Matrix>(pose);
+
+            foreach (string key in p.Keys)
             {
                 if (namesToBones.ContainsKey(key) == false) continue;
 
@@ -152,10 +154,10 @@ namespace RetroEngine
 
                 if(node.isThisARealBone)
                 {
-                    if (pose.ContainsKey(key) == false) continue;
-                    node.LocalTransformMg = pose[key];
+                    if (p.ContainsKey(key) == false) continue;
+                    node.LocalTransformMg = p[key];
 
-                    RiggedModel.globalShaderMatrixs[node.boneShaderFinalTransformIndex] = node.OffsetMatrixMg *  pose[key];
+                    RiggedModel.globalShaderMatrixs[node.boneShaderFinalTransformIndex] = node.OffsetMatrixMg * p[key];
                 }
 
 
