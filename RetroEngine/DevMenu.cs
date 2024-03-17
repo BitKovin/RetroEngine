@@ -63,6 +63,8 @@ namespace RetroEngine
 
             ImGui.SliderFloat("resolution scale", ref Render.ResolutionScale, 0.2f, 6);
 
+            ImGui.SliderFloat("reflection resolution scale", ref Graphics.SSRResolutionScale, 0.2f, 1);
+
             ImGui.Checkbox("draw physics", ref Graphics.DrawPhysics);
 
             ImGui.Checkbox("default unlit", ref Graphics.DefaultUnlit);

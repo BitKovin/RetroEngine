@@ -14,15 +14,19 @@ namespace RetroEngine.Skeletal
 
         public bool UpdateFinalPose { get { return RiggedModel.UpdateVisual; } set { if(RiggedModel!=null) RiggedModel.UpdateVisual = value; } }
 
-        public static Dictionary<string, Matrix> LerpPose(Dictionary<string, Matrix> a, Dictionary<string, Matrix> b, float factor)
+        public static AnimationPose LerpPose(AnimationPose poseA, AnimationPose poseB, float factor)
         {
 
-            if(factor<0.005)
-                return a;
-            if(factor>0.995)
-                return b;
+            var a = poseA.Pose;
+            var b = poseB.Pose;
 
-            Dictionary<string, Matrix> result = new Dictionary<string, Matrix>(a);
+            if(factor<0.005)
+                return poseA;
+            if(factor>0.995)
+                return poseB;
+
+            AnimationPose result = new AnimationPose();
+            result.Pose= new Dictionary<string, Matrix>(a);
 
             foreach (var key in a.Keys)
             {
@@ -33,7 +37,7 @@ namespace RetroEngine.Skeletal
                 MathHelper.Transform transformB = MathHelper.DecomposeMatrix(b[key]);
 
 
-                result[key] = MathHelper.Transform.Lerp(transformA,transformB, factor).ToMatrix();
+                result.Pose[key] = MathHelper.Transform.Lerp(transformA,transformB, factor).ToMatrix();
 
             }
 

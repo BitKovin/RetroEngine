@@ -653,7 +653,7 @@ namespace RetroEngine
         RenderTarget2D reflection;
         void PerformReflection()
         {
-            InitSizedRenderTargetIfNeed(ref reflection, 512);
+            InitSizedRenderTargetIfNeed(ref reflection, (int)(GetScreenResolution().Y*Graphics.SSRResolutionScale));
 
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, reflection.Width, reflection.Height);
 

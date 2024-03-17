@@ -35,7 +35,7 @@ namespace RetroEngine.Game.Entities.Player
 
         }
 
-        protected override Dictionary<string, Matrix> ProcessResultPose()
+        protected override AnimationPose ProcessResultPose()
         {
             
 
@@ -51,11 +51,17 @@ namespace RetroEngine.Game.Entities.Player
             float blendFactor = MovementSpeed / 5;
             blendFactor = Math.Clamp(blendFactor, 0, 1);
 
-            return Animation.LerpPose(idleAnimation.GetPoseLocal(), CalculateMovementDirection(), blendFactor);
+            var idlePose = idleAnimation.GetPoseLocal();
+
+            var locomotionPose = Animation.LerpPose(idlePose, CalculateMovementDirection(), blendFactor);
+
+            locomotionPose.LayeredBlend(idleAnimation.GetBoneByName("spine_01"), idlePose);
+
+            return locomotionPose;
 
         }
 
-        Dictionary<string, Matrix> CalculateMovementDirection()
+        AnimationPose CalculateMovementDirection()
         {
 
             float fwdBlend = MovementDirection.Y / 2f + 0.5f;

@@ -27,17 +27,17 @@ namespace RetroEngine.Skeletal
 
         bool loaded = false;
 
-        public Dictionary<string, Matrix> GetResultPose()
+        public AnimationPose GetResultPose()
         {
             if(loaded)
                 return ProcessResultPose();
 
-            return new Dictionary<string, Matrix>();
+            return new AnimationPose();
         }
 
-        protected virtual Dictionary<string, Matrix> ProcessResultPose()
+        protected virtual AnimationPose ProcessResultPose()
         {
-            return new Dictionary<string, Matrix>();
+            return new AnimationPose();
         }
 
 

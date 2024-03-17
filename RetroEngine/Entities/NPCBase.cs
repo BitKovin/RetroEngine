@@ -305,10 +305,10 @@ namespace RetroEngine.Entities
                 loaded = true;
             }
 
-            protected override Dictionary<string, Matrix> ProcessResultPose()
+            protected override AnimationPose ProcessResultPose()
             {
                 if(loaded == false)
-                    return new Dictionary<string, Matrix>();
+                    return new AnimationPose();
 
                 float blendFactor = Speed / 5;
                 blendFactor = Math.Clamp(blendFactor, 0, 1);

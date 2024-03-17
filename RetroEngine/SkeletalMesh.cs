@@ -23,6 +23,8 @@ namespace RetroEngine
         protected Dictionary<string, Matrix> additionalLocalOffsets = new Dictionary<string, Matrix>();
         protected Dictionary<string, Matrix> additionalMeshOffsets = new Dictionary<string, Matrix>();
 
+        protected AnimationPose animationPose = new AnimationPose();
+
         public SkeletalMesh()
         {
             CastShadows = true;
@@ -105,10 +107,10 @@ namespace RetroEngine
         }
 
 
-        public Dictionary<string, Matrix> GetPose()
+        public AnimationPose GetPose()
         {
 
-            if(RiggedModel ==null) return null;
+            if(RiggedModel ==null) return new AnimationPose();
 
             Dictionary<string, Matrix> boneNamesToTransforms = new Dictionary<string, Matrix>();
 
@@ -119,13 +121,15 @@ namespace RetroEngine
                 boneNamesToTransforms.TryAdd(bone.name, bone.CombinedTransformMg);
             }
 
-            return boneNamesToTransforms;
+            animationPose.Pose = boneNamesToTransforms;
+
+            return animationPose;
         }
 
-        public Dictionary<string, Matrix> GetPoseLocal()
+        public AnimationPose GetPoseLocal()
         {
 
-            if (RiggedModel == null) return null;
+            if (RiggedModel == null) return new AnimationPose();
 
             Dictionary<string, Matrix> boneNamesToTransforms = new Dictionary<string, Matrix>();
 
@@ -135,12 +139,16 @@ namespace RetroEngine
                 boneNamesToTransforms.TryAdd(bone.name, bone.LocalTransformMg);
             }
 
-            return boneNamesToTransforms;
+            animationPose.Pose = boneNamesToTransforms;
+
+            return animationPose;
         }
 
-        public void PastePose(Dictionary<string, Matrix> pose)
+        public void PastePose(AnimationPose animPose)
         {
             if (RiggedModel == null) return;
+
+            var pose = animPose.Pose;
 
             if (pose == null) return;
 
@@ -165,9 +173,11 @@ namespace RetroEngine
 
         }
 
-        public void PastePoseLocal(Dictionary<string, Matrix> pose)
+        public void PastePoseLocal(AnimationPose animPose)
         {
             if (RiggedModel == null) return;
+
+            var pose = animPose.Pose;
 
             if (pose == null) return;
 
@@ -184,6 +194,17 @@ namespace RetroEngine
                 }
             }
             RiggedModel.UpdatePose();
+        }
+
+        public RiggedModelNode GetBoneByName(string name)
+        {
+            foreach(var bone in RiggedModel.flatListToBoneNodes)
+            {
+                if(bone.name == name)
+                    return bone;
+            }
+
+            return null;
         }
 
         public virtual void Update(float deltaTime)
@@ -498,5 +519,46 @@ namespace RetroEngine
         }
 
     }
+
+
+
+    public struct AnimationPose
+    {
+        public Dictionary<string, Matrix> Pose;
+        public Dictionary<string, BonePoseBlend> BoneOverrides;
+
+        public void LayeredBlend(RiggedModelNode node, AnimationPose pose)
+        {
+            if (node == null) return;
+            ApplyNodeChildrenOnPose(node, pose);
+        }
+
+        void ApplyNodeChildrenOnPose(RiggedModelNode node, AnimationPose pose)
+        {
+            foreach(RiggedModelNode n in node.children)
+            {
+
+                ApplyNodeChildrenOnPose(n, pose);
+
+                if (pose.Pose.ContainsKey(n.name) == false) continue;
+
+                if(Pose.ContainsKey(n.name) == false)
+                    Pose.Add(n.name, Matrix.Identity);
+
+                Pose[n.name] = pose.Pose[n.name];
+
+            }
+        }
+
+    }
+
+    
+
+    public struct BonePoseBlend
+    {
+        public Matrix transform;
+        public float progress;
+    }
+
 }
 
