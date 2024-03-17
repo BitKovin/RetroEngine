@@ -11,6 +11,8 @@ matrix World;
 matrix View;
 matrix Projection;
 
+bool Viewmodel = false;
+
 float3 CameraPos;
 
 bool pointDistance;
@@ -71,6 +73,9 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
     output.Position = mul(output.Position, View);
     output.Position = mul(output.Position, Projection);
 
+    if (Viewmodel)
+        output.Position.z *= 0.02;
+    
     output.MyPosition = output.Position;
     
     return output;

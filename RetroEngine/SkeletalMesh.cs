@@ -350,7 +350,6 @@ namespace RetroEngine
         public override void DrawDepth()
         {
 
-            if (Viewmodel) return;
 
             GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
 
@@ -358,6 +357,10 @@ namespace RetroEngine
 
             effect.Parameters["Bones"].SetValue(finalizedBones);
 
+            effect.Parameters["Viewmodel"].SetValue(Viewmodel);
+
+            if (Viewmodel)
+                effect.Parameters["Projection"].SetValue(Camera.finalizedProjectionViewmodel);
 
             if (RiggedModel != null)
             {

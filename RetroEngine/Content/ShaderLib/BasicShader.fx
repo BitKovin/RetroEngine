@@ -893,12 +893,15 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
    
     float factor = 1.3;
     
+    bool facingCamera = dot(vDir, direction) < 0;
+    
+    
     float disToCamera = length(viewPos - position);
     
     for (int i = 0; i < steps; i++)
     {
         
-        float3 offset = dir * (step + 0.01);
+        float3 offset = dir * (step + 0.02);
         
         coords = WorldToScreen(pos + offset);
         
@@ -909,6 +912,14 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
         selectedCoords = pos + offset;
         
         bool inScreen = coords.x > 0.001 && coords.x < 0.999 && coords.y > 0.001 && coords.y < 0.999;
+        
+        weight = clamp(weight, -500000, 5);
+        
+        if (SampledDepth < currentDepth - 0.02 && facingCamera == false)
+        {
+            return float4(0, 0, 0, 0);
+
+        }
         
         if (inScreen == false)
         {
@@ -922,6 +933,8 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
             step = oldStep;
             factor = lerp(factor, 1, 0.7);
             weight += 0.5 * disToCamera / 10;
+            
+            
             continue;
 
         }
@@ -929,17 +942,12 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
         oldStep = step;
         
         step *= factor;
-        step += 0.001;
         
     }
     
-    float fresnel = 0.0 + 2.8 * pow(1 + dot(vDir, normal), 2);
-    
-    fresnel = saturate(fresnel);
-    
     weight = saturate(weight);
     
-    outColor = float4(tex2D(FrameTextureSampler, coords).rgb, fresnel * weight);
+    outColor = float4(tex2D(FrameTextureSampler, coords).rgb,  weight);
     
     return outColor;
     

@@ -181,7 +181,6 @@ namespace RetroEngine.Game.Entities.Weapons
             mesh.PreloadTextures();
             mesh.Viewmodel = true;
             mesh.UseAlternativeRotationCalculation = true;
-            mesh.Transperent = true;
 
             arms.CastShadows = false;
             arms.PreloadTextures();

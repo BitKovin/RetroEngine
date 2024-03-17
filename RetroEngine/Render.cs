@@ -404,7 +404,7 @@ namespace RetroEngine
 
 
             OcclusionEffect.Parameters["View"].SetValue(Camera.finalizedView);
-            OcclusionEffect.Parameters["Projection"].SetValue(Camera.finalizedProjection);
+            
 
 
             OcclusionEffect.Parameters["pointDistance"].SetValue(false);
@@ -412,8 +412,10 @@ namespace RetroEngine
             foreach (StaticMesh mesh in renderList)
             {
                 if (mesh.Transperent == false)
-                {            
-                        mesh.StartOcclusionTest();
+                {
+                    OcclusionEffect.Parameters["Viewmodel"].SetValue(false);
+                    OcclusionEffect.Parameters["Projection"].SetValue(Camera.finalizedProjection);
+                    mesh.StartOcclusionTest();
 
                 }
             }
@@ -651,7 +653,7 @@ namespace RetroEngine
         RenderTarget2D reflection;
         void PerformReflection()
         {
-            InitSizedRenderTargetIfNeed(ref reflection, ((int)GetScreenResolution().Y)/2);
+            InitSizedRenderTargetIfNeed(ref reflection, 720);
 
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, reflection.Width, reflection.Height);
 

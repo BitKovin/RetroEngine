@@ -26,6 +26,12 @@ Texture2D BloomTexture;
 sampler2D BloomTextureSampler = sampler_state
 {
     Texture = <BloomTexture>;
+
+    MinFilter = Anisotropic;
+    MagFilter = Anisotropic;
+    AddressU = Clamp;
+    AddressV = Clamp;
+
 };
 
 Texture2D Bloom2Texture;
@@ -33,6 +39,11 @@ Texture2D Bloom2Texture;
 sampler2D Bloom2TextureSampler = sampler_state
 {
     Texture = <Bloom2Texture>;
+
+    MinFilter = Anisotropic;
+    MagFilter = Anisotropic;
+    AddressU = Clamp;
+    AddressV = Clamp;
 };
 
 Texture2D Bloom3Texture;
@@ -40,6 +51,12 @@ Texture2D Bloom3Texture;
 sampler2D Bloom3TextureSampler = sampler_state
 {
     Texture = <Bloom3Texture>;
+
+    MinFilter = Anisotropic;
+    MagFilter = Anisotropic;
+    AddressU = Clamp;
+    AddressV = Clamp;
+
 };
 
 
