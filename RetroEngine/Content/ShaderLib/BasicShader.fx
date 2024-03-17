@@ -915,7 +915,7 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
         
         weight = clamp(weight, -500000, 5);
         
-        if (SampledDepth < currentDepth - 0.02 && facingCamera == false)
+        if (SampledDepth < currentDepth + 0.025 && facingCamera == false)
         {
             return float4(0, 0, 0, 0);
 
