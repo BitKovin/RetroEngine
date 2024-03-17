@@ -82,6 +82,9 @@ namespace RetroEngine.Skeletal
 
         public float AnimationTime = 0;
 
+
+        internal AnimationPose animationPose = new AnimationPose();
+
         /// <summary>
         /// Uses static animation frames instead of interpolated frames.
         /// </summary>
@@ -289,9 +292,32 @@ namespace RetroEngine.Skeletal
                 additionalMesh = additionalMeshOffsets[node.name];
             }
 
+            
 
             if (node.parent != null)
-                node.CombinedTransformMg = additionalMesh * node.LocalTransformMg * additionalLocal * node.parent.CombinedTransformMg;
+            {
+
+                var localTransform = node.LocalTransformMg * additionalLocal * node.parent.CombinedTransformMg;
+
+                if (animationPose.BoneOverrides.ContainsKey(node.name))
+                {
+
+                    MathHelper.Transform transformCurrent = localTransform.DecomposeMatrix();
+                    MathHelper.Transform start = transformCurrent;
+
+                    MathHelper.Transform transformOverride = animationPose.BoneOverrides[node.name].transform.DecomposeMatrix();
+
+                    transformCurrent.Rotation = transformOverride.Rotation;
+                    transformCurrent.RotationQuaternion = transformOverride.RotationQuaternion;
+
+                    transformCurrent = MathHelper.Transform.Lerp(start, transformCurrent, animationPose.BoneOverrides[node.name].progress);
+
+                    localTransform = transformCurrent.ToMatrix();
+
+                }
+
+                node.CombinedTransformMg = additionalMesh * localTransform;
+            }
             else
                 node.CombinedTransformMg = additionalMesh * node.LocalTransformMg * additionalLocal;
 
@@ -517,6 +543,7 @@ namespace RetroEngine.Skeletal
             public int StartIndex = 0;
             public int PrimitiveCount;
 
+
             public MeshPartData Tag;
 
             public void CreateBuffers()
@@ -564,6 +591,8 @@ namespace RetroEngine.Skeletal
             public bool isThisAMeshNode = false; // is this actually a mesh node.
             public bool isThisTheFirstMeshNode = false;
             //public RiggedModelMesh meshRef; // no point in this as there can be many refs per node we link in the opposite direction.
+
+            
 
             /// <summary>
             /// The inverse offset takes one from model space to bone space to say it will have a position were the bone is in the world.

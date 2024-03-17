@@ -193,6 +193,9 @@ namespace RetroEngine
                     node.LocalTransformMg = pose[key];
                 }
             }
+
+            RiggedModel.animationPose = animPose;
+
             RiggedModel.UpdatePose();
         }
 
@@ -524,13 +527,21 @@ namespace RetroEngine
 
     public struct AnimationPose
     {
-        public Dictionary<string, Matrix> Pose;
-        public Dictionary<string, BonePoseBlend> BoneOverrides;
+        public Dictionary<string, Matrix> Pose = new Dictionary<string, Matrix>();
+        public Dictionary<string, BonePoseBlend> BoneOverrides = new Dictionary<string, BonePoseBlend>();
 
-        public void LayeredBlend(RiggedModelNode node, AnimationPose pose)
+        public AnimationPose() { }
+
+        public void LayeredBlend(RiggedModelNode node, AnimationPose pose, float meshSpaceRotaion = 1)
         {
             if (node == null) return;
             ApplyNodeChildrenOnPose(node, pose);
+
+            if(meshSpaceRotaion>0)
+            {
+                BoneOverrides.TryAdd(node.name, new BonePoseBlend { progress = meshSpaceRotaion, transform = node.LocalTransformMg * node.parent.CombinedTransformMg});
+            }
+
         }
 
         void ApplyNodeChildrenOnPose(RiggedModelNode node, AnimationPose pose)
