@@ -54,9 +54,11 @@ namespace RetroEngine.Game.Entities.Player
 
             var locomotionPose = Animation.LerpPose(idlePose, CalculateMovementDirection(), blendFactor);
 
-            locomotionPose.LayeredBlend(idleAnimation.GetBoneByName("spine_01"), idlePose, 0.2f);
-            locomotionPose.LayeredBlend(idleAnimation.GetBoneByName("spine_02"), idlePose, 0.2f);
-            locomotionPose.LayeredBlend(idleAnimation.GetBoneByName("spine_03"), idlePose, 1f);
+            var savedLocomotionPose = locomotionPose;
+
+            //locomotionPose.LayeredBlend(idleAnimation.GetBoneByName("spine_01"), idlePose, 0.2f);
+            //locomotionPose.LayeredBlend(idleAnimation.GetBoneByName("spine_02"), idlePose, 0.2f);
+            //locomotionPose.LayeredBlend(idleAnimation.GetBoneByName("spine_03"), idlePose, 1f);
 
             return locomotionPose;
 

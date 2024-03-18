@@ -92,18 +92,21 @@ PixelOutput PixelShaderFunction(PixelInput input)
 
     //textureColor = lerp(textureColor, oldFrame, 0.5);
     
+    float3 vDir = normalize(input.MyPosition - viewPos);
+    
     float pbs = 1;
     
     if (textureAlpha<0.95)
         pbs = 0;
     
+    float3 reflection = reflect(vDir, pixelNormal);
     
     output.Color = float4(textureColor, textureAlpha);
     
     output.Normal = float4((normalize(lerp(pixelNormal, input.TangentNormal, 0.0)) + 1) / 2, pbs);
     output.Position = float4(input.MyPosition - viewPos, pbs);
     
-    float3 vDir = normalize(input.MyPosition - viewPos);
+    
     float reflectiveness = CalculateReflectiveness(roughness, metalic, vDir / 3, pixelNormal);
     
     reflectiveness = saturate(reflectiveness);

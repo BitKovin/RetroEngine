@@ -532,31 +532,43 @@ namespace RetroEngine
 
         public AnimationPose() { }
 
-        public void LayeredBlend(RiggedModelNode node, AnimationPose pose, float meshSpaceRotaion = 1)
+        public void LayeredBlend(RiggedModelNode node, AnimationPose pose, float progress = 1, bool meshSpaceRotation = true)
         {
             if (node == null) return;
-            ApplyNodeChildrenOnPose(node, pose);
+            ApplyNodeChildrenOnPose(node, pose, progress);
 
-            if(meshSpaceRotaion>0)
+            if(meshSpaceRotation)
             {
-                BoneOverrides.TryAdd(node.name, new BonePoseBlend { progress = meshSpaceRotaion, transform = node.LocalTransformMg * node.parent.CombinedTransformMg});
+                BoneOverrides.TryAdd(node.name, new BonePoseBlend { progress = progress, transform = node.LocalTransformMg * node.parent.CombinedTransformMg});
             }
 
         }
 
-        void ApplyNodeChildrenOnPose(RiggedModelNode node, AnimationPose pose)
+        void ApplyNodeChildrenOnPose(RiggedModelNode node, AnimationPose pose, float progress)
         {
             foreach(RiggedModelNode n in node.children)
             {
 
-                ApplyNodeChildrenOnPose(n, pose);
+                ApplyNodeChildrenOnPose(n, pose, progress);
 
                 if (pose.Pose.ContainsKey(n.name) == false) continue;
 
                 if(Pose.ContainsKey(n.name) == false)
                     Pose.Add(n.name, Matrix.Identity);
 
-                Pose[n.name] = pose.Pose[n.name];
+                if(progress<=0.001)
+                {
+                    continue;
+                }else if(progress>0.999)
+                {
+                    Pose[n.name] = pose.Pose[n.name];
+                    continue;
+                }
+
+                MathHelper.Transform a = Pose[n.name].DecomposeMatrix();
+                MathHelper.Transform b = pose.Pose[n.name].DecomposeMatrix();
+
+                Pose[n.name] = MathHelper.Transform.Lerp(a,b,progress).ToMatrix();
 
             }
         }
