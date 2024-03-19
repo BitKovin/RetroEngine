@@ -181,7 +181,8 @@ namespace RetroEngine.Game.Entities.Player
 
             UpdateCamera();
 
-            
+            if (Input.GetAction("test").Holding())
+                PlayerBodyAnimator.FireAction();
 
             if (Input.GetAction("jump").Holding())
                 Jump();

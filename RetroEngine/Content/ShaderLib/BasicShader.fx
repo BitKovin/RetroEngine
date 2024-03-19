@@ -873,7 +873,7 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
     
     float step = 0.01;
     
-    const int steps = 60;
+    const int steps = 50;
     
     float4 outColor = float4(0, 0, 0, 0);
     

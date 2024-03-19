@@ -234,6 +234,12 @@ namespace RetroEngine
             RiggedModel.loopAnimation = looped;
         }
 
+        public void SetAnimation(int id = 0)
+        {
+            if (RiggedModel is null) return;
+            RiggedModel.SetAnimation(id);
+        }
+
         public Matrix GetBoneMatrix(int id)
         {
             if (RiggedModel == null) return Matrix.Identity;

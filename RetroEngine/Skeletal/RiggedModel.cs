@@ -76,12 +76,13 @@ namespace RetroEngine.Skeletal
         int currentAnimation = 0;
         public int currentFrame = 0;
         public bool animationRunning = false;
-        public bool loopAnimation = true;
-        float timeStart = 0f;
+        public bool loopAnimation = false;
+        public float timeStart = 0f;
         public float currentAnimationFrameTime = 0;
 
         public float AnimationTime = 0;
 
+        public float AnimationDuration = 1;
 
         internal AnimationPose animationPose = new AnimationPose();
 
@@ -202,6 +203,8 @@ namespace RetroEngine.Skeletal
                     animationTotalDuration = (float)originalAnimations[currentAnimation].DurationInSeconds;
                 else
                     animationTotalDuration = (float)originalAnimations[currentAnimation].DurationInSeconds;
+
+                AnimationDuration = animationTotalDuration;
 
                 while (AnimationTime < timeStart)
                     AnimationTime += animationTotalDuration;
@@ -414,11 +417,25 @@ namespace RetroEngine.Skeletal
                 anim.SetAnimationFpsCreateFrames(fps, this, addLoopingTime);
         }
 
+        public void StartCurrentAnimation()
+        {
+            timeStart = AnimationTime;
+            animationRunning = true;
+        }
+
+
         public void BeginAnimation(int animationIndex)
         {
             timeStart = AnimationTime;
             currentAnimation = animationIndex;
             animationRunning = true;
+        }
+
+        public void SetAnimation(int animationIndex)
+        {
+            timeStart = AnimationTime;
+            currentAnimation = animationIndex;
+            animationRunning = false;
         }
 
         public void StopAnimation()
@@ -447,9 +464,6 @@ namespace RetroEngine.Skeletal
             copy.currentFrame = currentFrame;
             copy.animationRunning = animationRunning;
             copy.loopAnimation = loopAnimation;
-            copy.timeStart = timeStart;
-            copy.currentAnimationFrameTime = currentAnimationFrameTime;
-            copy.AnimationTime = AnimationTime;
             copy.UseStaticGeneratedFrames = UseStaticGeneratedFrames;
             copy.overrideAnimationFrameTime = overrideAnimationFrameTime;
 

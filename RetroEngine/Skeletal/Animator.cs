@@ -41,7 +41,7 @@ namespace RetroEngine.Skeletal
         }
 
 
-        protected Animation AddAnimation(string path, bool loop = true, int index = 0, bool interpolation = true, bool updatePose = false)
+        protected Animation AddAnimation(string path, bool loop = true, int index = 0, bool interpolation = true)
         {
 
             Animation animation = new Animation();
@@ -51,8 +51,27 @@ namespace RetroEngine.Skeletal
             animation.PlayAnimation(index, loop);
             AnimationsToUpdate.Add(animation);
 
-            animation.UpdateFinalPose = updatePose;
+            animation.UpdateFinalPose = false;
             animation.SetInterpolationEnabled(interpolation);
+
+            return animation;
+        }
+
+        protected ActionAnimation AddActionAnimation(string path, int index = 0, float BlendIn = 0.2f, float BlendOut = 0.2f, bool interpolation = true)
+        {
+
+            ActionAnimation animation = new ActionAnimation();
+
+
+            animation.LoadFromFile(path);
+            animation.SetAnimation(index);
+            AnimationsToUpdate.Add(animation);
+
+            animation.UpdateFinalPose = false;
+            animation.SetInterpolationEnabled(interpolation);
+
+            animation.BlendIn = BlendIn;
+            animation.BlendOut = BlendOut;
 
             return animation;
         }

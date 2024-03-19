@@ -18,9 +18,16 @@ namespace RetroEngine.Game.Entities.Player
         Animation runLAnimation = new Animation();
         Animation runRAnimation = new Animation();
 
+        ActionAnimation actionAnimation = new ActionAnimation();
+
         public float MovementSpeed = 0;
 
         public Vector2 MovementDirection = Vector2.Zero;
+
+        public void FireAction()
+        {
+            actionAnimation.Play();
+        }
 
         protected override void Load()
         {
@@ -32,6 +39,8 @@ namespace RetroEngine.Game.Entities.Player
             runBAnimation = AddAnimation("Animations/human/run_b.fbx", interpolation: false);
             runRAnimation = AddAnimation("Animations/human/run_r.fbx", interpolation: true);
             runLAnimation = AddAnimation("Animations/human/run_l.fbx", interpolation: true);
+
+            actionAnimation = AddActionAnimation("Animations/human/run_f.fbx", interpolation: true, BlendIn: 0);
 
         }
 
@@ -53,6 +62,10 @@ namespace RetroEngine.Game.Entities.Player
             var idlePose = idleAnimation.GetPoseLocal();
 
             var locomotionPose = Animation.LerpPose(idlePose, CalculateMovementDirection(), blendFactor);
+
+            locomotionPose = Animation.LerpPose(locomotionPose, actionAnimation.GetPoseLocal(), actionAnimation.GetBlendFactor());
+
+            Console.WriteLine(actionAnimation.GetBlendFactor());
 
             var savedLocomotionPose = locomotionPose;
 
