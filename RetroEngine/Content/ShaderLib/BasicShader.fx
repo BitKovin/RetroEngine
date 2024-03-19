@@ -871,9 +871,9 @@ float3 GetPosition(float2 UV, float depth)
 float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 normal, float3 vDir)
 {
     
-    float step = 0.015;
+    float step = 0.01;
     
-    const int steps = 50;
+    const int steps = 60;
     
     float4 outColor = float4(0, 0, 0, 0);
     
@@ -891,7 +891,7 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
     
     float weight = -0.3;
    
-    float factor = 1.3;
+    float factor = 1.25;
     
     bool facingCamera = dot(vDir, direction) < 0;
     
@@ -901,9 +901,9 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
     for (int i = 0; i < steps; i++)
     {
         
-        float3 offset = dir * (step + 0.02);
+        float3 offset = dir * (step) * disToCamera / 30 + dir * 0.02 * disToCamera;
         
-        coords = WorldToScreen(pos + offset);
+        coords = WorldToScreen(pos + offset + dir * 0.02 * disToCamera);
         
         float dist = WorldToClip(pos + offset).z;
         
