@@ -20,6 +20,7 @@ namespace RetroEngine
 
         protected static Dictionary<string, RiggedModel> LoadedRigModels = new Dictionary<string, RiggedModel>();
 
+
         protected Dictionary<string, Matrix> additionalLocalOffsets = new Dictionary<string, Matrix>();
         protected Dictionary<string, Matrix> additionalMeshOffsets = new Dictionary<string, Matrix>();
 
@@ -261,7 +262,7 @@ namespace RetroEngine
             if (RiggedModel == null) return Matrix.Identity;
 
             if(namesToBones.ContainsKey(name))
-                return namesToBones[name].CombinedTransformMg* GetWorldMatrix();
+                return namesToBones[name].CombinedTransformMg * GetWorldMatrix();
 
             foreach (var bone in RiggedModel.flatListToAllNodes)
             {

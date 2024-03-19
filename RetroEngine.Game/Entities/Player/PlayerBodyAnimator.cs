@@ -18,6 +18,8 @@ namespace RetroEngine.Game.Entities.Player
         Animation runLAnimation = new Animation();
         Animation runRAnimation = new Animation();
 
+        Animation pistolIdle = new Animation();
+
         ActionAnimation actionAnimation = new ActionAnimation();
 
         public float MovementSpeed = 0;
@@ -40,7 +42,9 @@ namespace RetroEngine.Game.Entities.Player
             runRAnimation = AddAnimation("Animations/human/run_r.fbx", interpolation: true);
             runLAnimation = AddAnimation("Animations/human/run_l.fbx", interpolation: true);
 
-            actionAnimation = AddActionAnimation("Animations/human/run_f.fbx", interpolation: true, BlendIn: 0);
+            pistolIdle = AddAnimation("models/weapons/pistol2.fbx", interpolation: false, loop: false);
+
+            actionAnimation = AddActionAnimation("models/weapons/pistol2.fbx", interpolation: true, BlendIn: 0);
 
         }
 
@@ -63,7 +67,7 @@ namespace RetroEngine.Game.Entities.Player
 
             var locomotionPose = Animation.LerpPose(idlePose, CalculateMovementDirection(), blendFactor);
 
-            locomotionPose = Animation.LerpPose(locomotionPose, actionAnimation.GetPoseLocal(), actionAnimation.GetBlendFactor());
+            //locomotionPose = Animation.LerpPose(locomotionPose, actionAnimation.GetPoseLocal(), actionAnimation.GetBlendFactor());
 
             Console.WriteLine(actionAnimation.GetBlendFactor());
 
@@ -71,7 +75,10 @@ namespace RetroEngine.Game.Entities.Player
 
             //locomotionPose.LayeredBlend(idleAnimation.GetBoneByName("spine_01"), idlePose, 0.2f);
             //locomotionPose.LayeredBlend(idleAnimation.GetBoneByName("spine_02"), idlePose, 0.2f);
-            //locomotionPose.LayeredBlend(idleAnimation.GetBoneByName("spine_03"), idlePose, 1f);
+
+            var weaponPose = Animation.LerpPose(pistolIdle.GetPoseLocal(), actionAnimation.GetPoseLocal(), actionAnimation.GetBlendFactor());
+
+            locomotionPose.LayeredBlend(idleAnimation.GetBoneByName("spine_03"), weaponPose, 1);
 
             return locomotionPose;
 

@@ -14,6 +14,9 @@ namespace RetroEngine.Skeletal
 
         public bool UpdateFinalPose { get { return RiggedModel.UpdateVisual; } set { if(RiggedModel!=null) RiggedModel.UpdateVisual = value; } }
 
+
+        protected static Dictionary<string, RiggedModel> LoadedRigModelsAnimations = new Dictionary<string, RiggedModel>();
+
         public static AnimationPose LerpPose(AnimationPose poseA, AnimationPose poseB, float factor)
         {
 
@@ -70,19 +73,19 @@ namespace RetroEngine.Skeletal
 
             string path = AssetRegistry.FindPathForFile(filePath);
 
-            if (LoadedRigModels.ContainsKey(path))
+            if (LoadedRigModelsAnimations.ContainsKey(path))
             {
-                RiggedModel = LoadedRigModels[path].MakeCopy();
+                RiggedModel = LoadedRigModelsAnimations[path].MakeCopy();
             }
             else
             {
                 RiggedModel = modelReader.LoadAsset(path, 30);
 
 
-                LoadedRigModels.Add(path, RiggedModel);
+                LoadedRigModelsAnimations.Add(path, RiggedModel);
             }
 
-            RiggedModel = LoadedRigModels[path].MakeCopy();
+            RiggedModel = LoadedRigModelsAnimations[path].MakeCopy();
 
 
             RiggedModel.Update(0);
