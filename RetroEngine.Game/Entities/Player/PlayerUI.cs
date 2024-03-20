@@ -35,9 +35,9 @@ namespace RetroEngine.Game.Entities.Player
 
             crosshair.originH = Origin.CenterH;
             crosshair.originV = Origin.CenterV;
-            crosshair.size = new Vector2(4, 4);
+            crosshair.size = new Vector2(8, 8);
             crosshair.position = -crosshair.size/2;
-            //UiElement.Viewport.childs.Add(crosshair);
+            UiElement.Viewport.childs.Add(crosshair);
 
             health.originH = Origin.Left;
             health.originV = Origin.Bottom;
@@ -53,7 +53,7 @@ namespace RetroEngine.Game.Entities.Player
             fps.AlignProgress = new Vector2(0.0f, 0.5f);
             UiElement.Viewport.childs.Add(fps);
 
-            LoadWorldCrosshair();
+            //LoadWorldCrosshair();
 
             loaded = true;
         }
