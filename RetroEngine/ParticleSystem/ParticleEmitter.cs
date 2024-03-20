@@ -31,6 +31,10 @@ namespace RetroEngine.Particles
         public bool Emitting = false;
 
 
+        float elapsedTime = 0;
+
+        public float SpawnRate = 0;
+
         public ParticleEmitter()
         {
             CastShadows = false;
@@ -62,6 +66,18 @@ namespace RetroEngine.Particles
 
             if (Destroyed) return;
 
+            elapsedTime += Time.deltaTime;
+
+            float spawnInterval = 1f / SpawnRate;
+
+            if(SpawnRate>0)
+            while (elapsedTime >= spawnInterval)
+            {
+                Particle particle = GetNewParticle();
+                particles.Add(particle);
+                elapsedTime -= spawnInterval;
+            }
+
             List<Particle> toRemove = new List<Particle>();
 
             int n = particles.Count;
@@ -91,8 +107,8 @@ namespace RetroEngine.Particles
                 particles[i] = UpdateParticle(particles[i]);
             }
 
-            if (Emitting == false && particles.Count == 0)
-                Destroyed = true;
+            //if (Emitting == false && particles.Count == 0)
+                //Destroyed = true;
         }
 
         public virtual Particle UpdateParticle(Particle particle)

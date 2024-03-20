@@ -29,7 +29,7 @@ namespace RetroEngine.Game.Effects.Particles
 
             ModelPath = "models/particles/wood.obj";
 
-            
+            SpawnRate = 0;
 
             InitialSpawnCount = 1;
         }
