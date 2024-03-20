@@ -927,7 +927,7 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
             factor = lerp(factor, 1, 0.7);
         }
         
-        if(SampledDepth<dist)
+        if (SampledDepth < dist && (SampledDepth > dist - 1 || facingCamera == false))
         {
             outCoords = coords;
             step = oldStep;

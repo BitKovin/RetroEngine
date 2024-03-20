@@ -65,8 +65,6 @@ namespace RetroEngine.Windows
 
             if(Input.LockCursor && GameMain.Instance.IsActive)
             {
-                int px = (int)Input.windowCenter.X;
-                int py = (int)Input.windowCenter.Y;
                 Input.PendingCenterCursor = true;
             }
 
