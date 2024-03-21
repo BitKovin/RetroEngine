@@ -233,8 +233,8 @@ namespace RetroEngine
                         int vertexCount = frames[f].Meshes[j].MeshParts[i].VertexBuffer.VertexCount;
                         //VertexPositionNormalTexture[] data = new VertexPositionNormalTexture[vertexCount];
 
-                        VertexData[] data = ((MeshPartData)frames[f].Meshes[j].MeshParts[i].Tag).Vertices;
-                        frameVertexData.TryAdd(frames[f].Meshes[j].MeshParts[i].VertexBuffer.GetHashCode(), data);
+                        //VertexData[] data = ((MeshPartData)frames[f].Meshes[j].MeshParts[i].Tag).Vertices;
+                        //frameVertexData.TryAdd(frames[f].Meshes[j].MeshParts[i].VertexBuffer.GetHashCode(), data);
                     }
                 }
 

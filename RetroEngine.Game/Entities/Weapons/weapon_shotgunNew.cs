@@ -155,7 +155,6 @@ namespace RetroEngine.Game.Entities.Weapons
             mesh.textureSearchPaths.Add("textures/weapons/shotgun_new/");
             mesh.textureSearchPaths.Add("textures/weapons/general/");
 
-            MathHelper.Transform t = new MathHelper.Transform();
 
 
             mesh.CastShadows = false;

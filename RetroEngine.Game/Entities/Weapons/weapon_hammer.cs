@@ -142,7 +142,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
         void LoadVisual()
         {
-            //return;
+            return;
             mesh.Scale = new Vector3(0.4f);
 
             for (int i = 1; i <= 50; i+=3)

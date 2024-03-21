@@ -12,6 +12,7 @@ using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
 using System.Threading;
+using RetroEngine.Graphic;
 
 namespace RetroEngine
 {
@@ -22,8 +23,8 @@ namespace RetroEngine
 
         static Dictionary<string, SoundEffect> sounds = new Dictionary<string, SoundEffect>();
 
-        static Dictionary<string, Effect> effects = new Dictionary<string, Effect>();
-        static Dictionary<string, Effect> effectsPP = new Dictionary<string, Effect>();
+        static Dictionary<string, Shader> effects = new Dictionary<string, Shader>();
+        static Dictionary<string, Shader> effectsPP = new Dictionary<string, Shader>();
 
         static List<string> texturesHistory = new List<string>();
 
@@ -224,26 +225,32 @@ namespace RetroEngine
                 return effects[path];
             }
 
-            effects.Add(path, GameMain.content.Load<Effect>(path));
+            var effect = GameMain.content.Load<Effect>(path);
+
+            effects.Add(path, new Shader(effect));
+            effect.Dispose();
 
             return effects[path];
 
         }
 
-        public static Effect GetPostProcessShaderFromName(string path)
+        public static Shader GetPostProcessShaderFromName(string path)
         {
             if (effectsPP.ContainsKey(path))
             {
                 return effectsPP[path];
             }
 
-            effectsPP.Add(path, GameMain.content.Load<Effect>(path));
+            var effect = GameMain.content.Load<Effect>(path);
+
+            effectsPP.Add(path, new Shader(effect));
+            effect.Dispose();
 
             return effectsPP[path];
 
         }
 
-        internal static List<Effect> GetAllShaders()
+        internal static List<Shader> GetAllShaders()
         {
             return effects.Values.ToList();
         }

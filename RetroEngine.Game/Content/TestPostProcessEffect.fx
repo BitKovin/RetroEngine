@@ -22,6 +22,15 @@ sampler2D DepthTextureSampler = sampler_state
     Texture = <DepthTexture>;
 };
 
+Texture2D PositionTexture;
+
+sampler2D PositionTextureSampler = sampler_state
+{
+    Texture = <PositionTexture>;
+};
+
+
+float3 viewPos;
 
 struct VertexShaderOutput
 {
@@ -37,7 +46,9 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 	
     float depth = tex2D(DepthTextureSampler, input.TextureCoordinates).r;
 	
-    float factor = 1 - depth/40;
+    float3 pos = tex2D(PositionTextureSampler, input.TextureCoordinates).rgb + viewPos;
+	
+    float factor = 1 - distance(pos, viewPos) / 40;
 	
     return color * input.Color * factor;
 }

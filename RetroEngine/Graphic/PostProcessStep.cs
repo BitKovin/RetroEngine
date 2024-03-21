@@ -15,7 +15,7 @@ namespace RetroEngine.Graphic
         public static List<PostProcessStep> StepsBefore = new List<PostProcessStep>();
         public static List<PostProcessStep> StepsAfter = new List<PostProcessStep>();
 
-        public Effect Shader;
+        public Shader Shader;
 
         public Dictionary<string, float> FloatValues = new Dictionary<string, float>();
         public Dictionary<string, Matrix> MatrixValues = new Dictionary<string, Matrix>();
@@ -32,6 +32,8 @@ namespace RetroEngine.Graphic
                 Logger.Log("Warining: " + this.ToString()+" Shader == null!");
                 return;
             }
+
+            GameMain.Instance.render.UpdateDataForEffect(Shader);
 
             RenderStep();
 
@@ -60,24 +62,18 @@ namespace RetroEngine.Graphic
 
             Shader.Parameters["Color"]?.SetValue(BackBuffer);
 
-            Shader.Parameters["DepthTexture"]?.SetValue(GameMain.Instance.render.DepthOutput);
+            Shader.Parameters["DepthTexture"]?.SetValue(GameMain.Instance.render.DepthPrepathOutput);
+
+            Shader.Parameters["PositionTexture"]?.SetValue(GameMain.Instance.render.positionPath);
 
             Shader.Parameters["NormalTexture"]?.SetValue(GameMain.Instance.render.normalPath);
 
-            foreach (string key in FloatValues.Keys)
-            {
-                Shader.Parameters[key].SetValue(FloatValues[key]);
-            }
+            Shader.FloatValues = FloatValues;
+            Shader.MatrixValues = MatrixValues;
+            Shader.TextureValues = TextureValues;
 
-            foreach (string key in MatrixValues.Keys)
-            {
-                Shader.Parameters[key].SetValue(MatrixValues[key]);
-            }
+            Shader.ApplyValues();
 
-            foreach (string key in TextureValues.Keys)
-            {
-                Shader.Parameters[key].SetValue(TextureValues[key]);
-            }
         }
 
 

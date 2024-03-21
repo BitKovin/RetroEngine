@@ -21,13 +21,13 @@ namespace RetroEngine
         RenderTarget2D colorPath;
         RenderTarget2D emissivePath;
         internal RenderTarget2D normalPath;
-        RenderTarget2D positionPath;
+        public RenderTarget2D positionPath;
         RenderTarget2D depthPath;
 
         RenderTarget2D DeferredOutput;
         RenderTarget2D ReflectionOutput;
         RenderTarget2D ReflectivenessOutput;
-        RenderTarget2D DepthPrepathOutput;
+        internal RenderTarget2D DepthPrepathOutput;
 
         RenderTarget2D ForwardOutput;
         RenderTarget2D ForwardDepth;
@@ -35,7 +35,6 @@ namespace RetroEngine
         RenderTarget2D miscPath;
         RenderTarget2D postProcessingOutput;
         public RenderTarget2D DepthOutput;
-        public RenderTarget2D PositionOutput;
 
         public RenderTarget2D shadowMap;
         public RenderTarget2D shadowMapClose;
@@ -146,7 +145,7 @@ namespace RetroEngine
         {
             var shaders = AssetRegistry.GetAllShaders();
 
-            foreach (Effect effect in shaders)
+            foreach (Shader effect in shaders)
             {
 
                 UpdateDataForEffect(effect);
@@ -154,7 +153,7 @@ namespace RetroEngine
             }
         }
 
-        void UpdateDataForEffect(Effect effect)
+        public void UpdateDataForEffect(Shader effect)
         {
             //effect.Parameters["viewDir"]?.SetValue(Camera.finalizedForward);
             effect.Parameters["viewPos"]?.SetValue(Camera.finalizedPosition);
@@ -210,6 +209,9 @@ namespace RetroEngine
 
             effect.Parameters["ScreenHeight"]?.SetValue(DeferredOutput.Height);
             effect.Parameters["ScreenWidth"]?.SetValue(DeferredOutput.Width);
+
+            effect.ApplyValues();
+
         }
 
         public RenderTarget2D StartRenderLevel(Level level)
