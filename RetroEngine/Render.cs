@@ -103,6 +103,7 @@ namespace RetroEngine
 
         internal BoundingSphere BoundingSphere = new BoundingSphere();
 
+        static internal List<StaticMesh> testedMeshes = new List<StaticMesh>();
 
         public Render()
         {
@@ -148,63 +149,69 @@ namespace RetroEngine
             foreach (Effect effect in shaders)
             {
 
-                //effect.Parameters["viewDir"]?.SetValue(Camera.finalizedForward);
-                effect.Parameters["viewPos"]?.SetValue(Camera.finalizedPosition);
-
-                effect.Parameters["DirectBrightness"]?.SetValue(Graphics.DirectLighting);
-                effect.Parameters["GlobalBrightness"]?.SetValue(Graphics.GlobalLighting);
-                effect.Parameters["LightDirection"]?.SetValue(Graphics.LightDirection.Normalized());
-
-                effect.Parameters["ShadowMapViewProjection"]?.SetValue(Graphics.LightViewProjection);
-                effect.Parameters["ShadowMapViewProjectionClose"]?.SetValue(Graphics.LightViewProjectionClose);
-                effect.Parameters["ShadowMapViewProjectionVeryClose"]?.SetValue(Graphics.LightViewProjectionVeryClose);
-
-                effect.Parameters["ShadowBias"]?.SetValue(Graphics.ShadowBias);
-                effect.Parameters["ShadowMapResolution"]?.SetValue((float)Graphics.shadowMapResolution);
-                effect.Parameters["ShadowMapResolutionClose"]?.SetValue((float)Graphics.closeShadowMapResolution);
-
-                effect.Parameters["ShadowMap"]?.SetValue(GameMain.Instance.render.shadowMap);
-                effect.Parameters["ShadowMapClose"]?.SetValue(GameMain.Instance.render.shadowMapClose);
-                effect.Parameters["ShadowMapVeryClose"]?.SetValue(GameMain.Instance.render.shadowMapVeryClose);
-
-
-                effect.Parameters["InverseViewProjection"]?.SetValue(Matrix.Invert(Camera.finalizedView*Camera.finalizedProjection));
-
-                effect.Parameters["View"]?.SetValue(Camera.finalizedView);
-                effect.Parameters["Projection"]?.SetValue(Camera.finalizedProjection);
-                effect.Parameters["ProjectionViewmodel"]?.SetValue(Camera.finalizedProjectionViewmodel);
-
-                effect.Parameters["GlobalLightColor"]?.SetValue(Graphics.LightColor);
-
-                if (Graphics.GlobalPointLights)
-                {
-                    Vector3[] LightPos = new Vector3[LightManager.MAX_POINT_LIGHTS];
-                    Vector3[] LightColor = new Vector3[LightManager.MAX_POINT_LIGHTS];
-                    float[] LightRadius = new float[LightManager.MAX_POINT_LIGHTS];
-
-                    for (int i = 0; i < LightManager.MAX_POINT_LIGHTS; i++)
-                    {
-                        LightPos[i] = LightManager.FinalPointLights[i].Position;
-                        LightColor[i] = LightManager.FinalPointLights[i].Color;
-                        LightRadius[i] = LightManager.FinalPointLights[i].Radius;
-                    }
-
-                    effect.Parameters["LightPositions"]?.SetValue(LightPos);
-                    effect.Parameters["LightColors"]?.SetValue(LightColor);
-                    effect.Parameters["LightRadiuses"]?.SetValue(LightRadius);
-                }
-
-                effect.Parameters["DepthTexture"]?.SetValue(DepthPrepathOutput);
-
-                effect.Parameters["FrameTexture"]?.SetValue(oldFrame);
-
-                effect.Parameters["ReflectionCubemap"]?.SetValue(CubeMap.GetClosestToCamera().map);
-
-                effect.Parameters["ScreenHeight"]?.SetValue(DeferredOutput.Height);
-                effect.Parameters["ScreenWidth"]?.SetValue(DeferredOutput.Width);
+                UpdateDataForEffect(effect);
 
             }
         }
+
+        void UpdateDataForEffect(Effect effect)
+        {
+            //effect.Parameters["viewDir"]?.SetValue(Camera.finalizedForward);
+            effect.Parameters["viewPos"]?.SetValue(Camera.finalizedPosition);
+
+            effect.Parameters["DirectBrightness"]?.SetValue(Graphics.DirectLighting);
+            effect.Parameters["GlobalBrightness"]?.SetValue(Graphics.GlobalLighting);
+            effect.Parameters["LightDirection"]?.SetValue(Graphics.LightDirection.Normalized());
+
+            effect.Parameters["ShadowMapViewProjection"]?.SetValue(Graphics.LightViewProjection);
+            effect.Parameters["ShadowMapViewProjectionClose"]?.SetValue(Graphics.LightViewProjectionClose);
+            effect.Parameters["ShadowMapViewProjectionVeryClose"]?.SetValue(Graphics.LightViewProjectionVeryClose);
+
+            effect.Parameters["ShadowBias"]?.SetValue(Graphics.ShadowBias);
+            effect.Parameters["ShadowMapResolution"]?.SetValue((float)Graphics.shadowMapResolution);
+            effect.Parameters["ShadowMapResolutionClose"]?.SetValue((float)Graphics.closeShadowMapResolution);
+
+            effect.Parameters["ShadowMap"]?.SetValue(GameMain.Instance.render.shadowMap);
+            effect.Parameters["ShadowMapClose"]?.SetValue(GameMain.Instance.render.shadowMapClose);
+            effect.Parameters["ShadowMapVeryClose"]?.SetValue(GameMain.Instance.render.shadowMapVeryClose);
+
+
+            effect.Parameters["InverseViewProjection"]?.SetValue(Matrix.Invert(Camera.finalizedView * Camera.finalizedProjection));
+
+            effect.Parameters["View"]?.SetValue(Camera.finalizedView);
+            effect.Parameters["Projection"]?.SetValue(Camera.finalizedProjection);
+            effect.Parameters["ProjectionViewmodel"]?.SetValue(Camera.finalizedProjectionViewmodel);
+
+            effect.Parameters["GlobalLightColor"]?.SetValue(Graphics.LightColor);
+
+            if (Graphics.GlobalPointLights)
+            {
+                Vector3[] LightPos = new Vector3[LightManager.MAX_POINT_LIGHTS];
+                Vector3[] LightColor = new Vector3[LightManager.MAX_POINT_LIGHTS];
+                float[] LightRadius = new float[LightManager.MAX_POINT_LIGHTS];
+
+                for (int i = 0; i < LightManager.MAX_POINT_LIGHTS; i++)
+                {
+                    LightPos[i] = LightManager.FinalPointLights[i].Position;
+                    LightColor[i] = LightManager.FinalPointLights[i].Color;
+                    LightRadius[i] = LightManager.FinalPointLights[i].Radius;
+                }
+
+                effect.Parameters["LightPositions"]?.SetValue(LightPos);
+                effect.Parameters["LightColors"]?.SetValue(LightColor);
+                effect.Parameters["LightRadiuses"]?.SetValue(LightRadius);
+            }
+
+            effect.Parameters["DepthTexture"]?.SetValue(DepthPrepathOutput);
+
+            effect.Parameters["FrameTexture"]?.SetValue(oldFrame);
+
+            effect.Parameters["ReflectionCubemap"]?.SetValue(CubeMap.GetClosestToCamera().map);
+
+            effect.Parameters["ScreenHeight"]?.SetValue(DeferredOutput.Height);
+            effect.Parameters["ScreenWidth"]?.SetValue(DeferredOutput.Width);
+        }
+
         public RenderTarget2D StartRenderLevel(Level level)
         {
             
@@ -260,9 +267,9 @@ namespace RetroEngine
 
             graphics.GraphicsDevice.RasterizerState = Graphics.DisableBackFaceCulling? RasterizerState.CullNone : RasterizerState.CullClockwise;
 
-            InitSampler(5);
+            //InitSampler(5);
 
-            EndOcclusionTest(renderList);
+            //EndOcclusionTest(renderList);
 
             RenderPrepass(renderList);
             
@@ -277,7 +284,7 @@ namespace RetroEngine
             graphics.GraphicsDevice.SetRenderTarget(null);
 
             if(Input.GetAction("test2").Holding())
-                return normalPath;
+                return reflection;
 
             return outputPath;
 
@@ -419,6 +426,9 @@ namespace RetroEngine
 
                 }
             }
+
+            testedMeshes = new List<StaticMesh>(renderList);
+
         }
 
         internal void FillPrepas()
@@ -663,6 +673,8 @@ namespace RetroEngine
 
             SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
 
+            ReflectionEffect.Parameters["enableSSR"].SetValue(Graphics.EnableSSR);
+            ReflectionEffect.Parameters["NormalTexture"]?.SetValue(normalPath);
             ReflectionEffect.Parameters["FrameTexture"]?.SetValue(DeferredOutput);
             ReflectionEffect.Parameters["PositionTexture"]?.SetValue(positionPath);
             ReflectionEffect.Parameters["FactorTexture"]?.SetValue(ReflectivenessOutput);
@@ -866,6 +878,7 @@ namespace RetroEngine
                 mesh.StartOcclusionTest();
             }
 
+            testedMeshes = new List<StaticMesh>(meshes);
             
         }
 
@@ -873,6 +886,7 @@ namespace RetroEngine
         {
             foreach (StaticMesh mesh in meshes)
             {
+                if(mesh == null) continue;
                 if(mesh.Transperent==false)
                     mesh.EndOcclusionTest();
             }

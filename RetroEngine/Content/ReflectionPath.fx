@@ -28,6 +28,8 @@ struct VertexShaderOutput
 	float2 TextureCoordinates : TEXCOORD0;
 };
 
+bool enableSSR;
+
 float4 MainPS(VertexShaderOutput input) : COLOR
 {
 	
@@ -47,12 +49,13 @@ float4 MainPS(VertexShaderOutput input) : COLOR
     
     float3 cube = SampleCubemap(ReflectionCubemapSampler, reflection);
     
+    if (enableSSR == false)
+        return float4(cube, 1);
+    
     float4 ssr = float4(cube, 1);
     
-    if (factor>0.1)
+    if (factor > 0.1)
         ssr = SampleSSR(reflection, worldPos, depth, normal, vDir);
-    
-    
     
     float3 reflectionColor = lerp(cube, ssr.rgb, ssr.w);
     

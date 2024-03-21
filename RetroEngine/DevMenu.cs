@@ -65,6 +65,8 @@ namespace RetroEngine
 
             ImGui.SliderFloat("reflection resolution scale", ref Graphics.SSRResolutionScale, 0.2f, 1);
 
+            ImGui.Checkbox("ssr enabled", ref Graphics.EnableSSR);
+
             ImGui.Checkbox("draw physics", ref Graphics.DrawPhysics);
 
             ImGui.Checkbox("default unlit", ref Graphics.DefaultUnlit);

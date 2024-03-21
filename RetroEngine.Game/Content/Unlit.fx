@@ -4,6 +4,10 @@ texture Texture;
 sampler TextureSampler = sampler_state
 {
     texture = <Texture>;
+
+    AddressU = Wrap;
+    AddressV = Wrap;
+
 };
 
 PixelInput VertexShaderFunction(VertexInput input)

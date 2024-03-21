@@ -329,7 +329,7 @@ namespace RetroEngine
 
         public virtual void DrawUnified()
         {
-            if ((frameStaticMeshData.IsRendered == false) && frameStaticMeshData.Viewmodel == false && occluded) return;
+            if ((frameStaticMeshData.IsRendered == false) && frameStaticMeshData.Viewmodel == false || occluded) return;
 
             GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
             // Load the custom effect

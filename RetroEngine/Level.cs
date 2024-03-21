@@ -4,6 +4,7 @@ using RetroEngine;
 using RetroEngine.Entities;
 using RetroEngine.Map;
 using RetroEngine.UI;
+using SharpFont;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -281,6 +282,8 @@ namespace RetroEngine
 
             Camera.finalizedPosition = Camera.position;
             Camera.finalizedForward = Camera.rotation.GetForwardVector();
+
+            GameMain.Instance.render.EndOcclusionTest(Render.testedMeshes);
 
             Entity[] list = entities.ToArray();
             try

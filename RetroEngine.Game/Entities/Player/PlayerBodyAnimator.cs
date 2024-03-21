@@ -69,7 +69,6 @@ namespace RetroEngine.Game.Entities.Player
 
             //locomotionPose = Animation.LerpPose(locomotionPose, actionAnimation.GetPoseLocal(), actionAnimation.GetBlendFactor());
 
-            Console.WriteLine(actionAnimation.GetBlendFactor());
 
             var savedLocomotionPose = locomotionPose;
 

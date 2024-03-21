@@ -13,6 +13,17 @@ PixelInput VertexShaderFunction(VertexInput input)
 
 PixelOutput PixelShaderFunction(PixelInput input)
 {
+   
+    float2 screenCoords = input.MyPixelPosition.xyz / input.MyPixelPosition.w;
+    
+    screenCoords = (screenCoords + 1.0f) / 2.0f;
+
+    screenCoords.y = 1.0f - screenCoords.y;
+    
+    float depthIn = SampleMaxDepth(screenCoords);
+    
+    DepthDiscard(depthIn, input);
+    
     
     PixelOutput output = (PixelOutput) 0;
     

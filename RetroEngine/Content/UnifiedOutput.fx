@@ -4,23 +4,31 @@ texture Texture;
 sampler TextureSampler = sampler_state
 {
     texture = <Texture>;
+    AddressU = Wrap;
+    AddressV = Wrap;
 };
 texture EmissiveTexture;
 sampler EmissiveTextureSampler = sampler_state
 {
     texture = <EmissiveTexture>;
+    AddressU = Wrap;
+    AddressV = Wrap;
 };
 
 texture NormalTexture;
 sampler NormalTextureSampler = sampler_state
 {
     texture = <NormalTexture>;
+    AddressU = Wrap;
+    AddressV = Wrap;
 };
 
 texture ORMTexture;
 sampler ORMTextureSampler = sampler_state
 {
     texture = <ORMTexture>;
+    AddressU = Wrap;
+    AddressV = Wrap;
 };
 
 texture OldFrameTexture;

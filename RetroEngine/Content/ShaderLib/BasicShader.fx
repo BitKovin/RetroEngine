@@ -871,7 +871,7 @@ float3 GetPosition(float2 UV, float depth)
 float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 normal, float3 vDir)
 {
     
-    float step = 0.01;
+    float step = 0.013;
     
     const int steps = 50;
     
@@ -891,7 +891,7 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
     
     float weight = -0.3;
    
-    float factor = 1.25;
+    float factor = 1.3;
     
     bool facingCamera = dot(vDir, direction) < 0;
     

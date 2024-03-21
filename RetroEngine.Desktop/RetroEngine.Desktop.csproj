@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows10.0.22621.0</TargetFramework>
     <RollForward>Major</RollForward>
     <PublishReadyToRun>false</PublishReadyToRun>
     <TieredCompilation>false</TieredCompilation>
@@ -13,6 +13,8 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
     <StartupObject>Program</StartupObject>
     <PlatformTarget>AnyCPU</PlatformTarget>
+    <SupportedOSPlatformVersion>8.0</SupportedOSPlatformVersion>
+    <PublishAot>True</PublishAot>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Icon.ico" />
