@@ -17,6 +17,7 @@ namespace RetroEngine.Entities
         public float MinDistance = 1;
 
         public float Volume = 1;
+        public float Pitch = 1;
 
         bool _looped;
 
@@ -38,6 +39,8 @@ namespace RetroEngine.Entities
             base.LateUpdate();
 
             if(soundEffectInstance == null) return;
+
+            soundEffectInstance.Pitch = Pitch;
 
             if (pendingPlay && !pendingPlayDelay.Wait())
             {
