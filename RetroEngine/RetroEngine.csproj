@@ -10,10 +10,20 @@
     <IsAotCompatible>True</IsAotCompatible>
   </PropertyGroup>
   <ItemGroup>
+    <Content Remove="C:\Users\Admin\.nuget\packages\monogame.framework.content.pipeline\3.8.1.303\contentFiles\any\net6.0\libmojoshader_64.dll" />
+    <Content Remove="C:\Users\Admin\.nuget\packages\monogame.framework.content.pipeline\3.8.1.303\contentFiles\any\net6.0\mgfxc" />
+    <Content Remove="C:\Users\Admin\.nuget\packages\monogame.framework.content.pipeline\3.8.1.303\contentFiles\any\net6.0\mgfxc.deps.json" />
+    <Content Remove="C:\Users\Admin\.nuget\packages\monogame.framework.content.pipeline\3.8.1.303\contentFiles\any\net6.0\mgfxc.dll" />
+    <Content Remove="C:\Users\Admin\.nuget\packages\monogame.framework.content.pipeline\3.8.1.303\contentFiles\any\net6.0\mgfxc.pdb" />
+    <Content Remove="C:\Users\Admin\.nuget\packages\monogame.framework.content.pipeline\3.8.1.303\contentFiles\any\net6.0\mgfxc.runtimeconfig.json" />
     <Content Remove="C:\Users\Admin\.nuget\packages\monogame.framework.content.pipeline\3.8.1.303\contentFiles\any\net6.0\SharpDX.D3DCompiler.dll" />
     <Content Remove="C:\Users\Admin\.nuget\packages\monogame.framework.content.pipeline\3.8.1.303\contentFiles\any\net6.0\SharpDX.D3DCompiler.xml" />
     <Content Remove="C:\Users\Admin\.nuget\packages\monogame.framework.content.pipeline\3.8.1.303\contentFiles\any\net6.0\SharpDX.dll" />
     <Content Remove="C:\Users\Admin\.nuget\packages\monogame.framework.content.pipeline\3.8.1.303\contentFiles\any\net6.0\SharpDX.xml" />
+    <Content Remove="C:\Users\Admin\.nuget\packages\rhubulletsharp\1.0.3\contentFiles\any\net6.0\runtimes\linux-arm64\native\liblibbulletc.so" />
+    <Content Remove="C:\Users\Admin\.nuget\packages\rhubulletsharp\1.0.3\contentFiles\any\net6.0\runtimes\linux-x64\native\liblibbulletc.so" />
+    <Content Remove="C:\Users\Admin\.nuget\packages\rhubulletsharp\1.0.3\contentFiles\any\net6.0\runtimes\win-x64\native\libbulletc.dll" />
+    <Content Remove="C:\Users\Admin\.nuget\packages\rhubulletsharp\1.0.3\contentFiles\any\net6.0\runtimes\win10-x64\native\libbulletc.dll" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Assimp" Version="3.0.0" />

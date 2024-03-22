@@ -40,7 +40,7 @@ namespace RetroEngine.Entities
 
             if(soundEffectInstance == null) return;
 
-            soundEffectInstance.Pitch = Pitch;
+            soundEffectInstance.Pitch = 1 - Pitch;
 
             if (pendingPlay && !pendingPlayDelay.Wait())
             {
