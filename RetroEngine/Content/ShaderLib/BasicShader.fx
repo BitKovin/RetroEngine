@@ -1006,7 +1006,7 @@ float3 ApplyReflection(float3 inColor, float3 albedo, PixelInput input,float3 no
     float3 reflectionColor = lerp(cube, ssr.rgb, ssr.w);
     
 
-    float reflectiveness = CalculateReflectiveness(roughness, metallic, vDir/3, normal);
+    float reflectiveness = CalculateReflectiveness(roughness, metallic, vDir/6, normal);
     
     reflectiveness = saturate(reflectiveness);
     
