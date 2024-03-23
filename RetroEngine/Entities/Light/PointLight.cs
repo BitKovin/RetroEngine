@@ -36,6 +36,10 @@ namespace RetroEngine.Entities.Light
 
         static bool finalizedFrame = false;
 
+        public bool Dynamic = false;
+        public bool CastShadows = true;
+
+
         public override void FromData(EntityData data)
         {
             base.FromData(data);
@@ -47,7 +51,11 @@ namespace RetroEngine.Entities.Light
 
             graphicsDevice = GameMain.Instance.GraphicsDevice;
 
-            lightData.shadowData = new RenderTargetCube(graphicsDevice, 512, false, SurfaceFormat.Single, DepthFormat.Depth24);
+            int resolution = 512;
+            if (CastShadows == false)
+                resolution = 1;
+
+            lightData.shadowData = new RenderTargetCube(graphicsDevice, resolution, false, SurfaceFormat.Single, DepthFormat.Depth24);
 
             mesh.LoadFromFile("models/cube.obj");
             //meshes.Add(mesh);
@@ -140,7 +148,7 @@ namespace RetroEngine.Entities.Light
         {
             foreach (var light in finalLights)
             {
-                if(light.dirty)
+                if(light.dirty || light.Dynamic)
                 light.Render();
             }
         }
@@ -149,6 +157,18 @@ namespace RetroEngine.Entities.Light
         void Render()
         {
 
+            if (CastShadows == false) return;
+
+            if (Dynamic)
+            {
+                BoundingSphere boundingSphere = new BoundingSphere(lightData.Position, lightData.Radius);
+
+                if (Camera.frustum.Contains(boundingSphere) == ContainmentType.Disjoint)
+                    return;
+
+            }
+
+            if (CastShadows == false) return;
 
             RenderFace(CubeMapFace.PositiveX);
             RenderFace(CubeMapFace.NegativeX);
@@ -181,7 +201,7 @@ namespace RetroEngine.Entities.Light
             GameMain.Instance.render.OcclusionEffect.Parameters["CameraPos"].SetValue(Position);
             GameMain.Instance.render.OcclusionEffect.Parameters["pointDistance"].SetValue(true);
 
-            GameMain.Instance.render.RenderLevelGeometryDepth(l, OnlyStatic: true, onlyShadowCasters: true);
+            GameMain.Instance.render.RenderLevelGeometryDepth(l, OnlyStatic: !Dynamic, onlyShadowCasters: true);
 
             GameMain.Instance.render.BoundingSphere.Radius = 0;
 

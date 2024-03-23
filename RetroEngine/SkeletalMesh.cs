@@ -137,7 +137,7 @@ namespace RetroEngine
 
             foreach (var bone in RiggedModel.flatListToAllNodes)
             {
-                boneNamesToTransforms.TryAdd(bone.name, bone.LocalTransformMg);
+                boneNamesToTransforms.TryAdd(bone.name, bone.LocalFinalTransformMg);
             }
 
             animationPose.Pose = boneNamesToTransforms;

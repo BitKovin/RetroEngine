@@ -295,7 +295,7 @@ namespace RetroEngine.Skeletal
                 additionalMesh = additionalMeshOffsets[node.name];
             }
 
-            
+
 
             if (node.parent != null)
             {
@@ -320,10 +320,13 @@ namespace RetroEngine.Skeletal
                 }
 
                 node.CombinedTransformMg = additionalMesh * localTransform;
+                node.LocalFinalTransformMg = node.CombinedTransformMg * Matrix.Invert(node.parent.CombinedTransformMg);
             }
             else
+            {
                 node.CombinedTransformMg = additionalMesh * node.LocalTransformMg * additionalLocal;
-
+                node.LocalFinalTransformMg = node.CombinedTransformMg;
+            }
             
             if (node.isThisARealBone&&UpdateTransforms)
                 globalShaderMatrixs[node.boneShaderFinalTransformIndex] = node.OffsetMatrixMg * node.CombinedTransformMg;
@@ -625,6 +628,8 @@ namespace RetroEngine.Skeletal
             /// This is a world transformation that has local properties.
             /// </summary>
             public Matrix LocalTransformMg { get; set; }
+
+            public Matrix LocalFinalTransformMg { get; set; }
             /// <summary>
             /// The multiplication of transforms down the tree accumulate this value tracks those accumulations.
             /// While the local transforms affect the particular orientation of a specific bone.

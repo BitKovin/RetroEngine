@@ -670,6 +670,9 @@ float GetPointLightDepth(int i, float3 worldPos)
     else if (i == 3)
         depth = texCUBE(PointLightCubemap4Sampler, lightDir).r;
     
+    if(depth == 0)
+        return 1000000;
+    
     depth += 0.02;
 
     return depth;

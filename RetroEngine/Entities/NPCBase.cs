@@ -288,7 +288,6 @@ namespace RetroEngine.Entities
             Animation idleAnimation;
             Animation runFAnimation = new Animation();
 
-            bool loaded = false;
 
             public float Speed = 0;
 
@@ -302,13 +301,16 @@ namespace RetroEngine.Entities
 
                 runFAnimation.Speed = 0.9f;
 
-                loaded = true;
+                MathHelper.Transform t = new MathHelper.Transform();
+
+                t.Rotation = new Vector3(0,0,-45);
+
+                idleAnimation.SetBoneMeshTransformModification("spine_03", t.ToMatrix());
+
             }
 
             protected override AnimationPose ProcessResultPose()
             {
-                if(loaded == false)
-                    return new AnimationPose();
 
                 float blendFactor = Speed / 5;
                 blendFactor = Math.Clamp(blendFactor, 0, 1);
