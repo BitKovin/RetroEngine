@@ -546,7 +546,28 @@ namespace RetroEngine
 
             if(meshSpaceRotation)
             {
-                BoneOverrides.TryAdd(node.name, new BonePoseBlend { progress = progress, transform = node.LocalTransformMg * node.parent.CombinedTransformMg});
+
+                var newTransform = node.LocalTransformMg * node.parent.CombinedTransformMg;
+
+                if (BoneOverrides.ContainsKey(node.name) == false)
+                {
+                    BoneOverrides.TryAdd(node.name, new BonePoseBlend { progress = progress, transform = newTransform });
+                }else
+                {
+                    var oldTransform = BoneOverrides[node.name].transform.DecomposeMatrix();
+
+
+                    var overr = BoneOverrides[node.name];
+
+
+
+                    overr.transform = MathHelper.Transform.Lerp(oldTransform, newTransform.DecomposeMatrix(), progress).ToMatrix();
+
+                    overr.progress = progress;
+
+                    BoneOverrides[node.name] = overr;
+
+                }
             }
 
         }
