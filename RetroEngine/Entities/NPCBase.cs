@@ -153,6 +153,7 @@ namespace RetroEngine.Entities
             if (mesh.isRendered)
             {
                 animator.Update();
+                animator.Simple = true;
                 mesh.PastePoseLocal(animator.GetResultPose());
             }
             if(distance > 3) 
@@ -305,7 +306,7 @@ namespace RetroEngine.Entities
 
                 t.Rotation = new Vector3(0,0,-45);
 
-                idleAnimation.SetBoneMeshTransformModification("spine_03", t.ToMatrix());
+                //idleAnimation.SetBoneMeshTransformModification("spine_03", t.ToMatrix());
 
             }
 
@@ -318,6 +319,17 @@ namespace RetroEngine.Entities
                 return Animation.LerpPose(idleAnimation.GetPoseLocal(), runFAnimation.GetPoseLocal(), blendFactor);
 
             }
+
+            protected override AnimationPose ProcessSimpleResultPose()
+            {
+                if (Speed > 1)
+                {
+                    return runFAnimation.GetPoseLocal();
+                }
+
+                return idleAnimation.GetPoseLocal();
+            }
+
 
         }
 

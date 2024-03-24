@@ -571,6 +571,7 @@ namespace RetroEngine
             }
 
             occluded = OcclusionQuery.PixelCount < 2;
+
             oclusionCulling = false;
         }
 

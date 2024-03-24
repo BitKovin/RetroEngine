@@ -258,17 +258,25 @@ namespace RetroEngine
 
             Stats.StartRecord("GameLogic");
 
+            Stats.StartRecord("Physics Update");
             Physics.Update();
+            Stats.StopRecord("Physics Update");
 
             Navigation.Update();
 
             Input.UpdateMouse();
 
+            Stats.StartRecord("Level Update");
             curentLevel.Update();
+            Stats.StopRecord("Level Update");
 
+            Stats.StartRecord("Level AsyncUpdate");
             curentLevel.AsyncUpdate();
+            Stats.StopRecord("Level AsyncUpdate");
 
+            Stats.StartRecord("Level LateUpdate");
             curentLevel.LateUpdate();
+            Stats.StopRecord("Level LateUpdate");
 
             SoundManager.Update();
 

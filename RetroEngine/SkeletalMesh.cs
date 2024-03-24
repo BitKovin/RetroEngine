@@ -381,7 +381,6 @@ namespace RetroEngine
         public override void DrawDepth()
         {
 
-
             GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
 
             Effect effect = GameMain.Instance.render.OcclusionEffect;
@@ -393,6 +392,8 @@ namespace RetroEngine
             if (Viewmodel)
                 effect.Parameters["Projection"].SetValue(Camera.finalizedProjectionViewmodel);
 
+            effect.Parameters["World"].SetValue(frameStaticMeshData.World);
+
             if (RiggedModel != null)
             {
                 if (GameMain.Instance.render.BoundingSphere.Radius == 0 || IntersectsBoubndingSphere(GameMain.Instance.render.BoundingSphere))
@@ -401,9 +402,6 @@ namespace RetroEngine
                         // Set the vertex buffer and index buffer for this mesh part
                         graphicsDevice.SetVertexBuffer(meshPart.VertexBuffer);
                         graphicsDevice.Indices = meshPart.IndexBuffer;
-
-                        effect.Parameters["World"].SetValue(frameStaticMeshData.World);
-
 
                         effect.Techniques[0].Passes[0].Apply();
 

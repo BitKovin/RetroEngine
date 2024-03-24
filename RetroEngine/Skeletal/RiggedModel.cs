@@ -195,7 +195,7 @@ namespace RetroEngine.Skeletal
             if (originalAnimations.Count > 0 && currentAnimation < originalAnimations.Count)
             {
 
-                AnimationTime+=gameTime;
+                AnimationTime = AnimationTime + gameTime;
 
                 
                 float animationTotalDuration;
@@ -207,7 +207,7 @@ namespace RetroEngine.Skeletal
                 AnimationDuration = animationTotalDuration;
 
                 while (AnimationTime < timeStart)
-                    AnimationTime += animationTotalDuration;
+                    AnimationTime = AnimationTime + animationTotalDuration;
 
                 currentAnimationFrameTime = (float)AnimationTime - timeStart;
 

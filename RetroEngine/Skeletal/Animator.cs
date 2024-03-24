@@ -14,6 +14,10 @@ namespace RetroEngine.Skeletal
 
         public float Speed = 1;
 
+        //public bool InterpolateAnimations = true;
+
+        public bool Simple = false;
+
         public void Update()
         {
 
@@ -21,6 +25,7 @@ namespace RetroEngine.Skeletal
 
             foreach (var animation in AnimationsToUpdate)
             {
+                //animation.SetInterpolationEnabled(InterpolateAnimations);
                 animation.Update(Time.deltaTime * Speed);
             }
         }
@@ -29,10 +34,12 @@ namespace RetroEngine.Skeletal
 
         public AnimationPose GetResultPose()
         {
-            if(loaded)
-                return ProcessResultPose();
+            if (loaded == false) return new AnimationPose();
 
-            return new AnimationPose();
+            if (Simple)
+                return ProcessSimpleResultPose();
+
+            return ProcessResultPose();
         }
 
         protected virtual AnimationPose ProcessResultPose()
@@ -40,6 +47,10 @@ namespace RetroEngine.Skeletal
             return new AnimationPose();
         }
 
+        protected virtual AnimationPose ProcessSimpleResultPose()
+        {
+            return new AnimationPose();
+        }
 
         protected Animation AddAnimation(string path, bool loop = true, int index = 0, bool interpolation = true)
         {

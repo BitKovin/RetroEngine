@@ -254,7 +254,7 @@ namespace RetroEngine
 
             Entity[] list = entities.ToArray();
 
-            Parallel.ForEach(list,options, entity =>
+            Parallel.ForEach(entities, options, entity =>
             {
                 if (entity.UpdateWhilePaused && GameMain.Instance.paused || GameMain.Instance.paused == false)
                     entity.AsyncUpdate();
@@ -334,9 +334,9 @@ namespace RetroEngine
                 }
             }
 
-            renderList = renderList.OrderBy(m => Vector3.Distance(m.useAvgVertexPosition ? m.avgVertexPosition : m.Position, Camera.position)).ToList();
+            renderList = renderList.OrderBy(m => Vector3.Distance(m.useAvgVertexPosition ? m.avgVertexPosition : m.Position, Camera.position) + (m.Static ? 0 : 1000)).ToList();
 
-            transperentMeshes = transperentMeshes.OrderByDescending(m => Vector3.Distance(m.useAvgVertexPosition? m.avgVertexPosition : m.Position, Camera.position)).ToList();
+            transperentMeshes = transperentMeshes.OrderByDescending(m => Vector3.Distance((m.useAvgVertexPosition? m.avgVertexPosition : m.Position), Camera.position)).ToList();
 
             renderList.AddRange(transperentMeshes);
 
