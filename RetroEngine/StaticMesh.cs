@@ -29,6 +29,7 @@ namespace RetroEngine
         public bool Viewmodel;
         public bool IsRendered;
         public bool IsRenderedShadow;
+        public bool InFrustrum;
 
         public float Transparency;
 
@@ -452,6 +453,8 @@ namespace RetroEngine
         {
 
             if (Viewmodel) return;
+
+            if (frameStaticMeshData.InFrustrum == false) return;
 
             GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
             // Load the custom effect
@@ -975,6 +978,7 @@ namespace RetroEngine
             frameStaticMeshData.LightProjectionClose = Graphics.GetCloseLightProjection();
             frameStaticMeshData.IsRendered = isRendered;
             frameStaticMeshData.IsRenderedShadow = isRenderedShadow;
+            frameStaticMeshData.InFrustrum = inFrustrum;
         }
 
         public virtual void UpdateCulling()

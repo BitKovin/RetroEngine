@@ -381,6 +381,8 @@ namespace RetroEngine
         public override void DrawDepth()
         {
 
+            if (frameStaticMeshData.InFrustrum == false) return;
+
             GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
 
             Effect effect = GameMain.Instance.render.OcclusionEffect;
