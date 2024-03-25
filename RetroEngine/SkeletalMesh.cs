@@ -417,7 +417,7 @@ namespace RetroEngine
 
         public override void DrawUnified()
         {
-
+            if(Viewmodel == false)
             if(frameStaticMeshData.IsRendered == false || occluded) { return; }
 
             GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
