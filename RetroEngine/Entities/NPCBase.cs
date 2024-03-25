@@ -40,7 +40,14 @@ namespace RetroEngine.Entities
 
         PathfindingQuery pathfindingQuery = new PathfindingQuery();
 
-        SoundPlayer deathSoundPlayer;
+         SoundPlayer deathSoundPlayer;
+
+        protected float AnimationInterpolationDistance = 20;
+        protected float AnimationComplexDistance = 40;
+        protected float AnimationDistance = 90;
+        protected float ShadowDistance = 20;
+        protected bool AnimationAlwaysUpdateTime = false;
+
         public override void Start()
         {
             base.Start();
@@ -150,11 +157,21 @@ namespace RetroEngine.Entities
             body.Activate();
             float distance = Vector3.Distance(Position, targetLocation);
 
-            if (mesh.isRendered)
+            float cameraDistance = Vector3.Distance(Position, Camera.position);
+
+            if (mesh.isRendered && cameraDistance<=AnimationDistance)
             {
+                animator.UpdateVisual = true;
                 animator.Update();
-                animator.Simple = true;
+                animator.Simple = cameraDistance > AnimationComplexDistance;
+                animator.InterpolateAnimations = cameraDistance < AnimationInterpolationDistance;
                 mesh.PastePoseLocal(animator.GetResultPose());
+                mesh.CastShadows = cameraDistance < ShadowDistance;
+            }
+            else if(AnimationAlwaysUpdateTime)
+            {
+                animator.UpdateVisual = false;
+                animator.Update();
             }
             if(distance > 3) 
             {

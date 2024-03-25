@@ -250,7 +250,7 @@ namespace RetroEngine
         {
 
             ParallelOptions options = new ParallelOptions();
-            options.MaxDegreeOfParallelism = Environment.ProcessorCount*2;
+            options.MaxDegreeOfParallelism = Environment.ProcessorCount-1;
 
             Entity[] list = entities.ToArray();
 
@@ -301,7 +301,6 @@ namespace RetroEngine
 
                                 if (mesh is not null)
                                 {
-
                                     mesh.UpdateCulling();
 
                                     mesh.RenderPreparation();
@@ -323,6 +322,11 @@ namespace RetroEngine
                 {
                     foreach (StaticMesh mesh in ent.meshes)
                     {
+
+                        if(mesh.Visible == false) continue;
+
+                        if(mesh.inFrustrum == false && mesh.CastShadows == false) continue;
+
                         if (mesh.Transperent)
                             transperentMeshes.Add(mesh);
                         else

@@ -14,9 +14,11 @@ namespace RetroEngine.Skeletal
 
         public float Speed = 1;
 
-        //public bool InterpolateAnimations = true;
+        public bool InterpolateAnimations = true;
 
         public bool Simple = false;
+
+        public bool UpdateVisual = true;
 
         public void Update()
         {
@@ -25,7 +27,8 @@ namespace RetroEngine.Skeletal
 
             foreach (var animation in AnimationsToUpdate)
             {
-                //animation.SetInterpolationEnabled(InterpolateAnimations);
+                animation.SetInterpolationEnabled(InterpolateAnimations);
+                animation.UpdateFinalPose = UpdateVisual;
                 animation.Update(Time.deltaTime * Speed);
             }
         }
