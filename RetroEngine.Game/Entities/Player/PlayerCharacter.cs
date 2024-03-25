@@ -179,7 +179,7 @@ namespace RetroEngine.Game.Entities.Player
 
             UpdateMovement();
 
-            UpdateCamera();
+            
 
             if (Input.GetAction("test").Holding())
                 PlayerBodyAnimator.FireAction();
@@ -268,8 +268,7 @@ namespace RetroEngine.Game.Entities.Player
             bodyMesh.SetBoneMeshTransformModification("upperarm_l", showL);
             bodyMesh.SetBoneMeshTransformModification("head", hide.ToMatrix());
 
-            bodyMesh.Position = interpolatedPosition - Camera.rotation.GetForwardVector().XZ().Normalized() * 0.25f - new Vector3(0,1.05f,0);
-            bodyMesh.Rotation = new Vector3(0,Camera.rotation.Y,0);
+            
 
         }
 
@@ -447,6 +446,11 @@ namespace RetroEngine.Game.Entities.Player
 
         public override void LateUpdate()
         {
+
+            UpdateCamera();
+
+            bodyMesh.Position = interpolatedPosition - Camera.rotation.GetForwardVector().XZ().Normalized() * 0.25f - new Vector3(0, 1.05f, 0);
+            bodyMesh.Rotation = new Vector3(0, Camera.rotation.Y, 0);
 
             MathHelper.Transform t = bodyMesh.GetBoneMatrix("head").DecomposeMatrix();
 

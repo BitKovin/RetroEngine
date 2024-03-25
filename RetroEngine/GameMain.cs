@@ -264,8 +264,6 @@ namespace RetroEngine
 
             Navigation.Update();
 
-            Input.UpdateMouse();
-
             Stats.StartRecord("Level Update");
             curentLevel.Update();
             Stats.StopRecord("Level Update");
@@ -273,6 +271,8 @@ namespace RetroEngine
             Stats.StartRecord("Level AsyncUpdate");
             curentLevel.AsyncUpdate();
             Stats.StopRecord("Level AsyncUpdate");
+
+            Input.UpdateMouse();
 
             Stats.StartRecord("Level LateUpdate");
             curentLevel.LateUpdate();
