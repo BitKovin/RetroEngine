@@ -67,6 +67,8 @@ namespace RetroEngine
 
             ImGui.Checkbox("ssr enabled", ref Graphics.EnableSSR);
 
+            ImGui.Checkbox("low latency", ref Graphics.LowLatency);
+
             ImGui.Checkbox("draw physics", ref Graphics.DrawPhysics);
 
             ImGui.Checkbox("default unlit", ref Graphics.DefaultUnlit);

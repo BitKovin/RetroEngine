@@ -272,6 +272,9 @@ namespace RetroEngine
             curentLevel.AsyncUpdate();
             Stats.StopRecord("Level AsyncUpdate");
 
+            if(Graphics.LowLatency)
+            WaitForFramePresent();
+
             Input.UpdateMouse();
 
             Stats.StartRecord("Level LateUpdate");

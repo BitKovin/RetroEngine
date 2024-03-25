@@ -51,6 +51,8 @@ namespace RetroEngine
 
         public static bool GlobalPointLights = false;
 
+        public static bool LowLatency = false;
+
         public static Vector3 lightlocation = new Vector3();
 
         public static BoundingFrustum DirectionalLightFrustrum = new BoundingFrustum(Matrix.Identity);
