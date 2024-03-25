@@ -177,9 +177,17 @@ namespace RetroEngine.Game.Entities.Player
 
             InterpolatePos();
 
-            UpdateMovement();
+            FirstTick = false;
 
             
+
+        }
+
+        void UpdatePlayerInput()
+        {
+            UpdateMovement();
+
+            UpdateCamera();
 
             if (Input.GetAction("test").Holding())
                 PlayerBodyAnimator.FireAction();
@@ -201,13 +209,6 @@ namespace RetroEngine.Game.Entities.Player
 
             if (Input.GetAction("lastSlot").Pressed())
                 SwitchToSlot(lastSlot);
-
-            
-
-            FirstTick = false;
-
-            
-
         }
 
         public override void AsyncUpdate()
@@ -447,7 +448,8 @@ namespace RetroEngine.Game.Entities.Player
         public override void LateUpdate()
         {
 
-            UpdateCamera();
+            
+            UpdatePlayerInput();
 
             bodyMesh.Position = interpolatedPosition - Camera.rotation.GetForwardVector().XZ().Normalized() * 0.25f - new Vector3(0, 1.05f, 0);
             bodyMesh.Rotation = new Vector3(0, Camera.rotation.Y, 0);

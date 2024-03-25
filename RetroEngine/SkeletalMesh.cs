@@ -418,7 +418,7 @@ namespace RetroEngine
         public override void DrawUnified()
         {
 
-            if(frameStaticMeshData.IsRendered == false && occluded) { return; }
+            if(frameStaticMeshData.IsRendered == false || occluded) { return; }
 
             GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
             // Load the custom effect
