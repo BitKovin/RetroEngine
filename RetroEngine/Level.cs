@@ -283,12 +283,14 @@ namespace RetroEngine
 
             GameMain.Instance.render.EndOcclusionTest(Render.testedMeshes);
 
+            
             Entity[] list = entities.ToArray();
-            try
+
+            Stats.StartRecord("order");
+
+            Parallel.ForEach(list, entity =>
             {
-                Parallel.ForEach(list, entity =>
-                {
-                    if(entity!=null)
+                if (entity != null)
                     if (renderLayers.Contains(entity.Layer))
                     {
 
@@ -304,10 +306,13 @@ namespace RetroEngine
                                     mesh.RenderPreparation();
                                 }
                     }
-                });
-            }catch (Exception) { }
-            renderList.Clear();
+            });
 
+            Stats.StopRecord("order");
+
+            renderList.Clear();
+            
+            
             List<StaticMesh> transperentMeshes = new List<StaticMesh>();
 
             allMeshes.Clear();
@@ -335,6 +340,7 @@ namespace RetroEngine
                     }
                 }
             }
+
 
             renderList = renderList.OrderBy(m => Vector3.Distance(m.useAvgVertexPosition ? m.avgVertexPosition : m.Position, Camera.position) + (m.Static ? 0 : 1000)).ToList();
 

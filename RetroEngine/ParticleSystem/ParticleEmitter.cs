@@ -111,6 +111,10 @@ namespace RetroEngine.Particles
                 //Destroyed = true;
         }
 
+        public override void UpdateCulling()
+        {
+            inFrustrum = true;
+        }
         public virtual Particle UpdateParticle(Particle particle)
         {
 

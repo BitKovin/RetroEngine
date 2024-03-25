@@ -59,11 +59,28 @@ namespace RetroEngine
         public static BoundingFrustum DirectionalLightFrustrumClose = new BoundingFrustum(Matrix.Identity);
         public static BoundingFrustum DirectionalLightFrustrumVeryClose = new BoundingFrustum(Matrix.Identity);
 
+        internal static Matrix LightVeryCloseView;
+        internal static Matrix LightCloseView;
+        internal static Matrix LightView;
+
+        internal static Matrix LightVeryCloseProjection;
+        internal static Matrix LightCloseProjection;
+        internal static Matrix LightProjection;
+
         public static void UpdateDirectionalLight()
         {
             DirectionalLightFrustrum.Matrix = GetLightView() * GetLightProjection();
             DirectionalLightFrustrumClose.Matrix = GetLightViewClose() * GetCloseLightProjection();
             DirectionalLightFrustrumVeryClose.Matrix = GetLightViewVeryClose() * GetVeryCloseLightProjection();
+
+            LightVeryCloseView = GetLightViewVeryClose();
+            LightCloseView = GetLightViewClose();
+            LightView = GetLightView();
+
+            LightVeryCloseProjection = GetVeryCloseLightProjection();
+            LightCloseProjection = GetCloseLightProjection();
+            LightProjection = GetLightProjection();
+
         }
 
         public static Matrix GetLightProjection()

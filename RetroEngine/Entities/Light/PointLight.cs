@@ -39,6 +39,7 @@ namespace RetroEngine.Entities.Light
         public bool Dynamic = false;
         public bool CastShadows = true;
 
+        float DynamicUpdateDystance;
 
         public override void FromData(EntityData data)
         {
@@ -60,6 +61,8 @@ namespace RetroEngine.Entities.Light
             mesh.LoadFromFile("models/cube.obj");
             //meshes.Add(mesh);
             mesh.Visible = false;
+
+            DynamicUpdateDystance = (lightData.Radius + 5) * 2;
 
         }
 
@@ -171,6 +174,10 @@ namespace RetroEngine.Entities.Light
 
             if (Dynamic)
             {
+
+                if (Vector3.Distance(Camera.position, Position) >= DynamicUpdateDystance)
+                    return;
+
                 BoundingSphere boundingSphere = new BoundingSphere(lightData.Position, lightData.Radius);
 
                 if (Camera.frustum.Contains(boundingSphere) == ContainmentType.Disjoint)

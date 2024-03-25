@@ -104,6 +104,8 @@ namespace RetroEngine
 
         public bool SimpleTransperent = false;
 
+        protected Matrix WorldMatrix;
+
         public StaticMesh()
         {
 
@@ -394,10 +396,10 @@ namespace RetroEngine
                 {
 
                     if(closeShadow)
-                        if (Graphics.DirectionalLightFrustrumClose.Contains(mesh.BoundingSphere.Transform(GetWorldMatrix())) == ContainmentType.Disjoint) continue;
+                        if (Graphics.DirectionalLightFrustrumClose.Contains(mesh.BoundingSphere.Transform(WorldMatrix)) == ContainmentType.Disjoint) continue;
 
                     if (veryClose)
-                        if (Graphics.DirectionalLightFrustrumVeryClose.Contains(mesh.BoundingSphere.Transform(GetWorldMatrix())) == ContainmentType.Disjoint) continue;
+                        if (Graphics.DirectionalLightFrustrumVeryClose.Contains(mesh.BoundingSphere.Transform(WorldMatrix)) == ContainmentType.Disjoint) continue;
 
                     foreach (ModelMeshPart meshPart in mesh.MeshParts)
                     {
@@ -950,12 +952,12 @@ namespace RetroEngine
 
         protected bool IsBoundingSphereInFrustum(BoundingSphere sphere)
         {
-            return Camera.frustum.Contains(sphere.Transform(GetWorldMatrix())) != ContainmentType.Disjoint;
+            return Camera.frustum.Contains(sphere.Transform(WorldMatrix)) != ContainmentType.Disjoint;
         }
 
         protected bool IsBoundingSphereInShadowFrustum(BoundingSphere sphere)
         {
-            return Graphics.DirectionalLightFrustrum.Contains(sphere.Transform(GetWorldMatrix())) != ContainmentType.Disjoint;
+            return Graphics.DirectionalLightFrustrum.Contains(sphere.Transform(WorldMatrix)) != ContainmentType.Disjoint;
         }
 
         public virtual void RenderPreparation()
@@ -967,15 +969,15 @@ namespace RetroEngine
             frameStaticMeshData.Transperent = Transperent;
             frameStaticMeshData.EmissionPower = EmissionPower;
             frameStaticMeshData.View = Camera.finalizedView;
-            frameStaticMeshData.World = GetWorldMatrix();
+            frameStaticMeshData.World = WorldMatrix;
             frameStaticMeshData.Viewmodel = Viewmodel;
-            frameStaticMeshData.LightView = Graphics.GetLightView();
-            frameStaticMeshData.LightViewClose = Graphics.GetLightViewClose();
-            frameStaticMeshData.LightViewVeryClose = Graphics.GetLightViewVeryClose();
-            frameStaticMeshData.LightProjection = Graphics.GetLightProjection();
-            frameStaticMeshData.LightProjectionVeryClose = Graphics.GetVeryCloseLightProjection();
+            frameStaticMeshData.LightView = Graphics.LightView;
+            frameStaticMeshData.LightViewClose = Graphics.LightCloseView;
+            frameStaticMeshData.LightViewVeryClose = Graphics.LightVeryCloseView;
+            frameStaticMeshData.LightProjection = Graphics.LightProjection;
+            frameStaticMeshData.LightProjectionVeryClose = Graphics.LightVeryCloseProjection;
             frameStaticMeshData.Transparency = Transparency;
-            frameStaticMeshData.LightProjectionClose = Graphics.GetCloseLightProjection();
+            frameStaticMeshData.LightProjectionClose = Graphics.LightCloseProjection;
             frameStaticMeshData.IsRendered = isRendered;
             frameStaticMeshData.IsRenderedShadow = isRenderedShadow;
             frameStaticMeshData.InFrustrum = inFrustrum;
@@ -985,12 +987,14 @@ namespace RetroEngine
         {
             isRendered = false;
             isRenderedShadow = false;
+            inFrustrum = false;
 
             if (Visible == false) return;
 
-            inFrustrum = false;
-
             if (model is null) return;
+
+            WorldMatrix = GetWorldMatrix();
+
             foreach (ModelMesh mesh in model.Meshes)
             {
                 if (IsBoundingSphereInFrustum(mesh.BoundingSphere) || Viewmodel)
@@ -1051,7 +1055,7 @@ namespace RetroEngine
 
         public virtual Vector3 GetOffsetPointWorldSpace(string name)
         {
-            return Vector3.Transform(GetOffsetPoint(name), GetWorldMatrix());
+            return Vector3.Transform(GetOffsetPoint(name), WorldMatrix);
         }
 
         public virtual Vector3 GetOffsetPoint(string name)

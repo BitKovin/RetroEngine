@@ -502,6 +502,7 @@ namespace RetroEngine
 
             inFrustrum = false;
 
+            WorldMatrix = GetWorldMatrix();
 
             if (Camera.frustum.Contains(boundingSphere.Transform(base.GetWorldMatrix())) != ContainmentType.Disjoint)
             {
