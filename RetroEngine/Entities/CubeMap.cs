@@ -145,8 +145,8 @@ namespace RetroEngine.Entities
 
             GameMain.Instance.render.FillPrepas();
 
-            PointLight.UpdateAll();
-
+            
+            PointLight.LateUpdateAll();
             Level.GetCurrent().RenderPreparation();
             var l = Level.GetCurrent().GetMeshesToRender();
 

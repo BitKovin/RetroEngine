@@ -134,14 +134,24 @@ namespace RetroEngine.Entities.Light
 
         internal static void UpdateAll()
         {
-
-            foreach(var light in lights)
+            LightManager.ClearPointLights();
+            foreach (var light in lights)
             {
                 light.dirty = true;
+                light.LateUpdate();
+                LightManager.ClearPointLights();
                 light.Render();
                 light.LateUpdate();
             }
 
+        }
+
+        internal static void LateUpdateAll()
+        {
+            foreach (var light in lights)
+            {
+                light.LateUpdate();
+            }
         }
 
         internal static void DrawDirtyPointLights()

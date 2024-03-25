@@ -147,9 +147,7 @@ namespace RetroEngine
 
             foreach (Shader effect in shaders)
             {
-
                 UpdateDataForEffect(effect);
-
             }
         }
 

@@ -150,8 +150,6 @@ namespace RetroEngine
 
             LoadingScreen.Update(0.85f);
 
-            
-
             GameMain.Instance.curentLevel.StartEnities();
 
 

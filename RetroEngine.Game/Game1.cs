@@ -64,7 +64,7 @@ namespace RetroEngine.Game
 
             //PostProcessStep.StepsAfter.Add(new TestPP());
 
-            for (int i = 1; i <= 200; i++)
+            for (int i = 1; i <= 0; i++)
             {
                 Entity npc = new NPCBase();
                 npc.Position = new Vector3(0, i*2.2f + 2, 0);
