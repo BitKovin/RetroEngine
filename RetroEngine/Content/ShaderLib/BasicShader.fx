@@ -170,14 +170,13 @@ struct PixelInput
     float4 Position : SV_POSITION;
     float2 TexCoord : TEXCOORD0;
     float3 Normal : TEXCOORD1; // Pass normal to pixel shader
-    float3 light : TEXCOORD2;
-    float4 lightPos : TEXCOORD3;
-    float4 lightPosClose : TEXCOORD4;
-    float3 MyPosition : TEXCOORD5;
-    float4 MyPixelPosition : TEXCOORD6;
-    float3 Tangent : TEXCOORD7;
-    float3 TangentNormal : TEXCOORD8;
-    float4 lightPosVeryClose : TEXCOORD9;
+    float4 lightPos : TEXCOORD2;
+    float4 lightPosClose : TEXCOORD3;
+    float3 MyPosition : TEXCOORD4;
+    float4 MyPixelPosition : TEXCOORD5;
+    float3 Tangent : TEXCOORD6;
+    float3 TangentNormal : TEXCOORD7;
+    float4 lightPosVeryClose : TEXCOORD8;
 };
 
 struct PBRData
@@ -289,7 +288,6 @@ PixelInput DefaultVertexShaderFunction(VertexInput input)
     if (dot(output.TangentNormal, normalize(output.MyPosition - viewPos)) > 0)
         output.TangentNormal *= -1;
     
-    output.light = 0;
 
     output.lightPos = mul(worldPos, ShadowMapViewProjection);
     output.lightPosClose = mul(worldPos, ShadowMapViewProjectionClose);
@@ -918,7 +916,7 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
         
         weight = clamp(weight, -500000, 5);
         
-        if (SampledDepth < currentDepth - 0.1 && facingCamera == false)
+        if (SampledDepth < currentDepth - 0.025 && facingCamera == false)
         {
             return float4(0, 0, 0, 0);
 
@@ -930,7 +928,7 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
             factor = lerp(factor, 1, 0.5);
         }
         
-        if (SampledDepth < dist && (SampledDepth > dist - 2 || facingCamera == false))
+        if (SampledDepth < dist && (SampledDepth > dist - 1 || facingCamera == false))
         {
             outCoords = coords;
             step = oldStep;

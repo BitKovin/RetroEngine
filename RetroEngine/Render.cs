@@ -267,7 +267,7 @@ namespace RetroEngine
 
             graphics.GraphicsDevice.RasterizerState = Graphics.DisableBackFaceCulling? RasterizerState.CullNone : RasterizerState.CullClockwise;
 
-            //InitSampler(5);
+            InitSampler(25);
 
             //EndOcclusionTest(renderList);
 
@@ -302,8 +302,8 @@ namespace RetroEngine
             samplerState.AddressV = TextureAddressMode.Wrap;
             samplerState.AddressW = TextureAddressMode.Wrap;
 
-            samplerState.MipMapLevelOfDetailBias = -2;
-
+            samplerState.MipMapLevelOfDetailBias = -10;
+            samplerState.MaxAnisotropy = 16;
 
             int i = 0;
             while (i<=max)
