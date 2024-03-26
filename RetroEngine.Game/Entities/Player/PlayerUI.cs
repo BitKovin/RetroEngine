@@ -35,7 +35,7 @@ namespace RetroEngine.Game.Entities.Player
 
             //crosshair.originH = Origin.CenterH;
             //crosshair.originV = Origin.CenterV;
-            crosshair.size = new Vector2(20, 20);
+            crosshair.size = new Vector2(10, 10);
             crosshair.position = -crosshair.size/2;
             UiElement.Viewport.childs.Add(crosshair);
 

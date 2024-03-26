@@ -918,7 +918,7 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
         
         weight = clamp(weight, -500000, 5);
         
-        if (SampledDepth < currentDepth - 0.025 && facingCamera == false)
+        if (SampledDepth < currentDepth - 0.1 && facingCamera == false)
         {
             return float4(0, 0, 0, 0);
 
@@ -930,7 +930,7 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
             factor = lerp(factor, 1, 0.5);
         }
         
-        if (SampledDepth < dist && (SampledDepth > dist - 1 || facingCamera == false))
+        if (SampledDepth < dist && (SampledDepth > dist - 2 || facingCamera == false))
         {
             outCoords = coords;
             step = oldStep;
@@ -974,7 +974,7 @@ float CalculateReflectiveness(float roughness, float metallic, float3 vDir, floa
 
     // Calculate the Fresnel factor using the Schlick approximation
     float F0 = lerp(0.01, 0.5, metallic);
-    float F = F0 + (1.0 - F0) * pow(1.0 - abs(dot(vDir, normal)), 5.0);
+    float F = 1; // F0 + (1.0 - F0) * pow(1.0 - abs(dot(vDir, normal)), 5.0);
 
     // Adjust the base reflectiveness based on roughness
     float reflectiveness = lerp(baseReflectiveness, 0.01, roughness);
@@ -1009,7 +1009,7 @@ float3 ApplyReflection(float3 inColor, float3 albedo, PixelInput input,float3 no
     float3 reflectionColor = lerp(cube, ssr.rgb, ssr.w);
     
 
-    float reflectiveness = CalculateReflectiveness(roughness, metallic, vDir/6, normal);
+    float reflectiveness = CalculateReflectiveness(roughness, metallic, normal, normal);
     
     reflectiveness = saturate(reflectiveness);
     
