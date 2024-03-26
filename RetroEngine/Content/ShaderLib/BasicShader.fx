@@ -874,7 +874,7 @@ float3 GetPosition(float2 UV, float depth)
 float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 normal, float3 vDir)
 {
     
-    float step = 0.013;
+    float step = 0.015;
     
     const int steps = 50;
     
@@ -894,7 +894,7 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
     
     float weight = -0.3;
    
-    float factor = 1.3;
+    float factor = 1.4;
     
     bool facingCamera = dot(vDir, direction) < 0;
     
@@ -927,15 +927,15 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
         if (inScreen == false || SampledDepth>1000)
         {
             step = lerp(step, oldStep, 1);
-            factor = lerp(factor, 1, 0.7);
+            factor = lerp(factor, 1, 0.5);
         }
         
         if (SampledDepth < dist && (SampledDepth > dist - 1 || facingCamera == false))
         {
             outCoords = coords;
             step = oldStep;
-            factor = lerp(factor, 1, 0.7);
-            weight += 0.5 * disToCamera / 10;
+            factor = lerp(factor, 1, 0.5);
+            weight += 1;
             
             
             continue;

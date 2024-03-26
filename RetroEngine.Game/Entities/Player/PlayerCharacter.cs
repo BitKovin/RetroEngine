@@ -279,7 +279,7 @@ namespace RetroEngine.Game.Entities.Player
 
             Vector3 newPos = Position;
 
-            interpolatedPosition = Vector3.Lerp(oldPos, newPos, Time.deltaTime*50);
+            interpolatedPosition = Vector3.Lerp(oldPos, newPos, Time.deltaTime*25);
 
         }
 

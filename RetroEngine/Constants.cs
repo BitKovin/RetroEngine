@@ -6,6 +6,6 @@ namespace RetroEngine
 {
     public static class Constants
     {
-        public static float ResoultionY = 720;
+        public static float ResolutionY = 720;
     }
 }

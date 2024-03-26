@@ -33,9 +33,9 @@ namespace RetroEngine.Game.Entities.Player
             crosshair.baseColor = new Color(1f, 1f, 1f) * 2f;
             crosshair.SetTexture("ui/crosshair.png");
 
-            crosshair.originH = Origin.CenterH;
-            crosshair.originV = Origin.CenterV;
-            crosshair.size = new Vector2(8, 8);
+            //crosshair.originH = Origin.CenterH;
+            //crosshair.originV = Origin.CenterV;
+            crosshair.size = new Vector2(20, 20);
             crosshair.position = -crosshair.size/2;
             UiElement.Viewport.childs.Add(crosshair);
 
@@ -66,6 +66,7 @@ namespace RetroEngine.Game.Entities.Player
 
             fps.text = ((int)(1f / Time.deltaTime)).ToString();
 
+            
             UpdateWorldCrosshair();
 
             crosshairMesh.Visible = ShowCrosshair;
@@ -107,6 +108,9 @@ namespace RetroEngine.Game.Entities.Player
             crosshairMesh.Position = Vector3.Lerp(crosshairPos,Camera.position,0.8f);
             crosshairMesh.Rotation = MathHelper.FindLookAtRotation(Camera.rotation.GetForwardVector(),Vector3.Zero);
             crosshairMesh.Scale = new Vector3(scale);
+
+            crosshair.position = UiElement.WorldToScreenSpace(crosshairPos) - crosshair.size/2;
+
         }
 
     }

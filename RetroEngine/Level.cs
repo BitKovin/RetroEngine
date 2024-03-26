@@ -286,8 +286,6 @@ namespace RetroEngine
             
             Entity[] list = entities.ToArray();
 
-            Stats.StartRecord("order");
-
             Parallel.ForEach(list, entity =>
             {
                 if (entity != null)
@@ -307,8 +305,6 @@ namespace RetroEngine
                                 }
                     }
             });
-
-            Stats.StopRecord("order");
 
             renderList.Clear();
             

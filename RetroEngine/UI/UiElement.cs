@@ -23,18 +23,18 @@ namespace RetroEngine.UI
     public static class Origins
     {
         public static Vector2 Top = new Vector2();
-        public static Vector2 Bottom = new Vector2(0, Constants.ResoultionY);
+        public static Vector2 Bottom = new Vector2(0, Constants.ResolutionY);
         public static Vector2 Left = new Vector2();
-        public static Vector2 Right = new Vector2(Constants.ResoultionY*Camera.HtW, 0);
-        public static Vector2 CenterH = new Vector2(Constants.ResoultionY*Camera.HtW/2,0);
-        public static Vector2 CenterV = new Vector2(0, Constants.ResoultionY/2);
+        public static Vector2 Right = new Vector2(Constants.ResolutionY*Camera.HtW, 0);
+        public static Vector2 CenterH = new Vector2(Constants.ResolutionY*Camera.HtW/2,0);
+        public static Vector2 CenterV = new Vector2(0, Constants.ResolutionY/2);
 
         public static Vector2 Get(Origin origin)
         {
 
-        Right = new Vector2(Constants.ResoultionY * Camera.HtW, 0);
-        CenterH = new Vector2(Constants.ResoultionY * Camera.HtW / 2, 0);
-        CenterV = new Vector2(0, Constants.ResoultionY / 2);
+        Right = new Vector2(Constants.ResolutionY * Camera.HtW, 0);
+        CenterH = new Vector2(Constants.ResolutionY * Camera.HtW / 2, 0);
+        CenterV = new Vector2(0, Constants.ResolutionY / 2);
 
             switch (origin)
             {
@@ -92,9 +92,9 @@ namespace RetroEngine.UI
 
         public virtual void Update()
         {
-            float ScaleY = GameMain.Instance.Window.ClientBounds.Height / Constants.ResoultionY;
+            float ScaleY = GameMain.Instance.Window.ClientBounds.Height / Constants.ResolutionY;
             float HtV = ((float)GameMain.Instance.Window.ClientBounds.Width) / ((float)GameMain.Instance.Window.ClientBounds.Height);
-            Origins.Right = new Vector2(Constants.ResoultionY * HtV, 0);
+            Origins.Right = new Vector2(Constants.ResolutionY * HtV, 0);
 
 
             origin = Origins.Get(originH) + Origins.Get(originV);
@@ -131,6 +131,26 @@ namespace RetroEngine.UI
 
         }
 
+        public static Vector2 WorldToScreenSpace(Vector3 pos)
+        {
+            Vector4 position = new Vector4(pos, 1);
+            Matrix ViewProjection = Camera.CalculateView() * Camera.projection;
+            Vector4 projectedPosition = Vector4.Transform(position, ViewProjection);
+
+            // Normalize the projected position
+            Vector2 screenSpacePosition = new Vector2(
+                projectedPosition.X / projectedPosition.W,
+                projectedPosition.Y / projectedPosition.W);
+
+            // Map to the screen coordinates
+            float halfScreenWidth = Constants.ResolutionY * Camera.HtW / 2f;
+            float halfScreenHeight = Constants.ResolutionY / 2f;
+
+            screenSpacePosition.X = halfScreenWidth + halfScreenWidth * screenSpacePosition.X;
+            screenSpacePosition.Y = halfScreenHeight - halfScreenHeight * screenSpacePosition.Y;
+
+            return screenSpacePosition;
+        }
 
 
         public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)

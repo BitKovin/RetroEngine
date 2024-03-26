@@ -42,9 +42,9 @@ namespace RetroEngine.Entities
 
          SoundPlayer deathSoundPlayer;
 
-        protected float AnimationInterpolationDistance = 20;
-        protected float AnimationComplexDistance = 40;
-        protected float AnimationDistance = 90;
+        protected float AnimationInterpolationDistance = 10;
+        protected float AnimationComplexDistance = 30;
+        protected float AnimationDistance = 60;
         protected float ShadowDistance = 20;
         protected bool AnimationAlwaysUpdateTime = false;
 

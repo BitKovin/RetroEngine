@@ -63,7 +63,7 @@ namespace RetroEngine
                 Logger.Log("Wrong camera up vector detected! Trying to fix");
             }
 
-            view = Matrix.CreateLookAt(position, position + rotation.GetForwardVector(), lastWorkingRotation.GetUpVector().RotateVector(rotation.GetForwardVector(), roll));
+            view = CalculateView();
 
             projection = Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.ToRadians(FOV),HtW, 0.05f, FarPlane);
 
@@ -76,11 +76,16 @@ namespace RetroEngine
 
         }
 
+        public static Matrix CalculateView()
+        {
+            return Matrix.CreateLookAt(position, position + rotation.GetForwardVector(), lastWorkingRotation.GetUpVector().RotateVector(rotation.GetForwardVector(), roll));
+        }
+
         public static void ViewportUpdate()
         {
             HtW = (float)GameMain.Instance.Window.ClientBounds.Width / (float)GameMain.Instance.Window.ClientBounds.Height;
 
-            float ScaleY = (float)GameMain.Instance.Window.ClientBounds.Height / Constants.ResoultionY;
+            float ScaleY = (float)GameMain.Instance.Window.ClientBounds.Height / Constants.ResolutionY;
 
             var scale = Matrix.CreateScale(ScaleY, ScaleY, 1);
 
