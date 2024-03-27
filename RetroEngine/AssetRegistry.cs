@@ -55,11 +55,11 @@ namespace RetroEngine
                 return GameMain.Instance.render.black;
             }
 
-            string filePpath = FindPathForFile(path);
+            string filePath = FindPathForFile(path);
 
             try
             {
-                using (FileStream stream = new FileStream(filePpath, FileMode.Open))
+                using (FileStream stream = new FileStream(filePath, FileMode.Open))
                 {
                     if (generateMipMaps && AllowGeneratingMipMaps)
                     {

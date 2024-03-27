@@ -24,7 +24,7 @@ namespace RetroEngine.Entities
 
         float maxSpeed = 5;
 
-        static Delay updateDelay = new Delay();
+        Delay updateDelay = new Delay();
 
         static List<NPCBase> npcList = new List<NPCBase>();
         static List<NPCBase> currentUpdateNPCs = new List<NPCBase>();
@@ -46,7 +46,7 @@ namespace RetroEngine.Entities
         protected float AnimationComplexDistance = 30;
         protected float AnimationDistance = 60;
         protected float ShadowDistance = 20;
-        protected bool AnimationAlwaysUpdateTime = false;
+        protected bool AnimationAlwaysUpdateTime = true;
 
         public override void Start()
         {
@@ -122,19 +122,7 @@ namespace RetroEngine.Entities
         {
             //UpdateNPCList();
 
-            targetLocation = Camera.position;
-
-            float angleDif = MathHelper.FindLookAtRotation(Position, targetLocation).Y - mesh.Rotation.Y;
-
-            MathHelper.Transform transform = new MathHelper.Transform();
-
-            transform.Rotation = new Vector3(angleDif, 0, 0);
-
-            mesh.SetBoneMeshTransformModification("spine_02", transform.ToMatrix());
-
             
-
-            animator.Speed = ((Vector3)body.LinearVelocity).XZ().Length();
 
             
 
@@ -154,7 +142,22 @@ namespace RetroEngine.Entities
 
         public override void AsyncUpdate()
         {
-            body.Activate();
+
+            targetLocation = Camera.position;
+
+            float angleDif = MathHelper.FindLookAtRotation(Position, targetLocation).Y - mesh.Rotation.Y;
+
+            MathHelper.Transform transform = new MathHelper.Transform();
+
+            transform.Rotation = new Vector3(angleDif, 0, 0);
+
+            mesh.SetBoneMeshTransformModification("spine_02", transform.ToMatrix());
+
+
+
+            animator.Speed = ((Vector3)body.LinearVelocity).XZ().Length();
+
+            
             float distance = Vector3.Distance(Position, targetLocation);
 
             float cameraDistance = Vector3.Distance(Position, Camera.position);
@@ -173,6 +176,8 @@ namespace RetroEngine.Entities
                 animator.UpdateVisual = false;
                 animator.Update();
             }
+
+
             if(distance > 3) 
             {
                 speed += Time.deltaTime * 10;
@@ -184,6 +189,8 @@ namespace RetroEngine.Entities
 
             speed = Math.Clamp(speed, 0, maxSpeed);
 
+            body.Activate();
+
             body.LinearVelocity = new System.Numerics.Vector3(MoveDirection.X * speed, body.LinearVelocity.Y, MoveDirection.Z * speed);
 
             MoveDirection = Vector3.Lerp(MoveDirection, DesiredMoveDirection, Time.deltaTime * 3);
@@ -193,8 +200,9 @@ namespace RetroEngine.Entities
 
             mesh.Rotation = new Vector3(0, MathHelper.FindLookAtRotation(Vector3.Zero, MoveDirection).Y, 0);
 
-
+            if (updateDelay.Wait()) return;
             RequestNewTargetLocation();
+            updateDelay.AddDelay(Math.Min(Vector3.Distance(Position, targetLocation)/60,1));
 
         }
         public override void LateUpdate()
@@ -252,6 +260,8 @@ namespace RetroEngine.Entities
         {
             Vector3 moveLocation = new Vector3();
 
+            updateDelay.AddDelay(0.3f);
+
             if (points.Count > 0)
             {
                 moveLocation = points[0];
@@ -272,10 +282,6 @@ namespace RetroEngine.Entities
         static void UpdateNPCList()
         {
 
-            if (updateDelay.Wait())
-                return;
-
-            updateDelay.AddDelay(0.01f);
 
             currentUpdateNPCs.Clear();
 
@@ -297,7 +303,6 @@ namespace RetroEngine.Entities
             npcList.Clear();
             currentUpdateNPCs.Clear();
             currentUpdateIndex = 0;
-            updateDelay = new Delay();
         }
 
         internal class TestAnimator : Animator

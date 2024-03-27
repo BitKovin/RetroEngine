@@ -900,7 +900,19 @@ namespace RetroEngine
 
         public static void ClearCache()
         {
+            foreach (var model in loadedModels.Values)
+            {
+                foreach(var mesh in model.Meshes)
+                {
+                    foreach (var meshPart in mesh.MeshParts)
+                    {
+                        meshPart.VertexBuffer.Dispose();
+                        meshPart.IndexBuffer.Dispose();
+                    }
+                }
+            }
             loadedModels.Clear();
+
             loadedScenes.Clear();
         }
         public virtual void PreloadTextures()

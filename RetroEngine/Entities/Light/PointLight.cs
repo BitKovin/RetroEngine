@@ -52,11 +52,11 @@ namespace RetroEngine.Entities.Light
 
             graphicsDevice = GameMain.Instance.GraphicsDevice;
 
-            int resolution = 512;
+            int resolution = 256;
             if (CastShadows == false)
                 resolution = 1;
 
-            lightData.shadowData = new RenderTargetCube(graphicsDevice, resolution, false, SurfaceFormat.Single, DepthFormat.Depth24);
+            lightData.shadowData = new RenderTargetCube(graphicsDevice, resolution, false, SurfaceFormat.HalfSingle, DepthFormat.Depth24);
 
             mesh.LoadFromFile("models/cube.obj");
             //meshes.Add(mesh);

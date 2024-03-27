@@ -81,8 +81,6 @@ namespace RetroEngine
             LoadingScreen.Progress = 0;
             LoadingScreen.Draw();
 
-            AssetRegistry.ConstantCache.Clear();
-            AssetRegistry.ClearAllTextures();
             //StaticMesh.textures.Clear();
 
             if(force == false)
@@ -91,6 +89,10 @@ namespace RetroEngine
                 ChangingLevel = true;
                 return;
             }
+
+            AssetRegistry.ConstantCache.Clear();
+            AssetRegistry.ClearAllTextures();
+            StaticMesh.ClearCache();
 
             Time.deltaTime = 0;
 
