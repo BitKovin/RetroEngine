@@ -1103,6 +1103,7 @@ namespace RetroEngine
         public virtual void Destroyed()
         {
             model = null;
+            OcclusionQuery?.Dispose();
         }
 
         public void Dispose()
@@ -1112,6 +1113,7 @@ namespace RetroEngine
             GC.SuppressFinalize(this);
             texture = null;
             _disposed = true;
+            OcclusionQuery?.Dispose();
         }
 
         public static void UnloadModel(Model model)

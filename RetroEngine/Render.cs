@@ -173,6 +173,8 @@ namespace RetroEngine
             effect.Parameters["ShadowMapVeryClose"]?.SetValue(GameMain.Instance.render.shadowMapVeryClose);
 
 
+            
+
             effect.Parameters["InverseViewProjection"]?.SetValue(Matrix.Invert(Camera.finalizedView * Camera.finalizedProjection));
 
             effect.Parameters["View"]?.SetValue(Camera.finalizedView);
@@ -199,11 +201,15 @@ namespace RetroEngine
                 effect.Parameters["LightRadiuses"]?.SetValue(LightRadius);
             }
 
+            
+
             effect.Parameters["DepthTexture"]?.SetValue(DepthPrepathOutput);
 
             effect.Parameters["FrameTexture"]?.SetValue(oldFrame);
 
-            effect.Parameters["ReflectionCubemap"]?.SetValue(CubeMap.GetClosestToCamera().map);
+            var cubeMap = CubeMap.GetClosestToCamera();
+            if(cubeMap!=null)
+                effect.Parameters["ReflectionCubemap"]?.SetValue(cubeMap.map);
 
             effect.Parameters["ScreenHeight"]?.SetValue(DeferredOutput.Height);
             effect.Parameters["ScreenWidth"]?.SetValue(DeferredOutput.Width);
@@ -253,6 +259,9 @@ namespace RetroEngine
 
             List<StaticMesh> renderList = level.GetMeshesToRender();
 
+            RenderPrepass(renderList);
+            
+
             PointLight.DrawDirtyPointLights();
 
             graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
@@ -264,23 +273,25 @@ namespace RetroEngine
             RenderShadowMap(renderList);
 
             RenderShadowMapVeryClose(renderList);
-
+            
             graphics.GraphicsDevice.RasterizerState = Graphics.DisableBackFaceCulling? RasterizerState.CullNone : RasterizerState.CullClockwise;
 
             InitSampler(25);
 
             //EndOcclusionTest(renderList);
+            //return DeferredOutput;
 
-            RenderPrepass(renderList);
             
+
+
+
             RenderForwardPath(renderList);
             
 
             graphics.GraphicsDevice.BlendState = BlendState.Opaque;
 
-
+            
             PerformPostProcessing();
-
             graphics.GraphicsDevice.SetRenderTarget(null);
 
             if(Input.GetAction("test2").Holding())
@@ -325,16 +336,16 @@ namespace RetroEngine
         {
 
             Stats.RenderedMehses = 0;
-
+            
             UpdateShaderFrameData();
-
+            
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, (int)GetScreenResolution().X, (int)GetScreenResolution().Y);
-
+            
             graphics.GraphicsDevice.SetRenderTargets(DeferredOutput, normalPath, ReflectivenessOutput, positionPath);
             graphics.GraphicsDevice.Clear(ClearOptions.DepthBuffer, Color.Black, 1.0f, 0);
+            
 
-
-
+            
             //particlesToDraw.Clear();
 
             RenderLevelGeometryForward(renderList);
@@ -386,7 +397,6 @@ namespace RetroEngine
 
         void RenderPrepass(List<StaticMesh> renderList)
         {
-
             UpdateShaderFrameData();
 
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, (int)GetScreenResolution().X, (int)GetScreenResolution().Y);
@@ -416,6 +426,8 @@ namespace RetroEngine
 
             OcclusionEffect.Parameters["pointDistance"].SetValue(false);
 
+            
+
             foreach (StaticMesh mesh in renderList)
             {
                 if (mesh.Transperent == false)
@@ -427,7 +439,7 @@ namespace RetroEngine
                 }
             }
 
-            testedMeshes = new List<StaticMesh>(renderList);
+            //testedMeshes = new List<StaticMesh>(renderList);
 
         }
 
@@ -578,9 +590,9 @@ namespace RetroEngine
 
             PerformReflection();
             ApplyReflection();
-
+            
             PerformPostProcessingShaders(ReflectionOutput);
-
+            
             PerformSSAO();
 
             PerformTonemapping();
@@ -620,7 +632,6 @@ namespace RetroEngine
         RenderTarget2D targetB;
         void PerformPostProcessingShaders(RenderTarget2D input, bool after = false)
         {
-
             InitRenderTargetVectorIfNeed(ref targetA);
             InitRenderTargetVectorIfNeed(ref targetB);
 
@@ -943,7 +954,7 @@ namespace RetroEngine
                 Graphics.shadowMapResolution,
                 Graphics.shadowMapResolution,
                 false, // No mipmaps
-                SurfaceFormat.Single, // Color format
+                SurfaceFormat.HalfSingle, // Color format
                 depthFormat); // Depth format
         }
 
@@ -962,7 +973,7 @@ namespace RetroEngine
                 Graphics.closeShadowMapResolution,
                 Graphics.closeShadowMapResolution,
                 false, // No mipmaps
-                SurfaceFormat.Single, // Color format
+                SurfaceFormat.HalfSingle, // Color format
                 depthFormat); // Depth format
         }
 

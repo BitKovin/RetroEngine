@@ -261,6 +261,8 @@ namespace RetroEngine
         void GameLogic()
         {
 
+
+
             Stats.StartRecord("GameLogic");
 
             Stats.StartRecord("Physics Update");
@@ -339,6 +341,8 @@ namespace RetroEngine
 
 
             Stats.StartRecord("Render");
+
+            
 
             RenderTarget2D frame = render.StartRenderLevel(curentLevel);
 

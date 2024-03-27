@@ -98,7 +98,7 @@ namespace RetroEngine.Entities
         public static CubeMap GetClosestToCamera()
         {
             if (cubeMapsFinalized.Count == 0)
-                return new CubeMap();
+                return null;
             cubeMapsFinalized = cubeMapsFinalized.OrderBy(m => Vector3.Distance(m.Position, Camera.position)).ToList();
 
 

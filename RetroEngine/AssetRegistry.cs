@@ -115,7 +115,7 @@ namespace RetroEngine
                 Texture2D forward = LoadTextureFromFile(filePpath.Replace(".", "_front."));
                 Texture2D backward = LoadTextureFromFile(filePpath.Replace(".", "_back."));
 
-                RenderTargetCube cube = new RenderTargetCube(GameMain.Instance.GraphicsDevice, top.Height, true, SurfaceFormat.Color, DepthFormat.None);
+                RenderTargetCube cube = new RenderTargetCube(GameMain.Instance.GraphicsDevice, top.Height, false, SurfaceFormat.Color, DepthFormat.None);
 
                 GenerateCubeFace(cube, top, CubeMapFace.PositiveY);
                 GenerateCubeFace(cube, bottom, CubeMapFace.NegativeY);

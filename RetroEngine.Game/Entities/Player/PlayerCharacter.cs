@@ -121,7 +121,7 @@ namespace RetroEngine.Game.Entities.Player
 
             meshes.Add(bodyMesh);
 
-            //Weapon.PreloadAllWeapons();
+            Weapon.PreloadAllWeapons();
             PlayerUI.Load();
         }
 
