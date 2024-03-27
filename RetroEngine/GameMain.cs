@@ -218,7 +218,10 @@ namespace RetroEngine
                 UpdateTime(gameTime);
             }
 
+            var physicsTask = Task.Factory.StartNew(() => { Physics.Simulate(); });
+
             PerformReservedTimeTasks();
+
 
             foreach (UiElement elem in UiElement.Viewport.childs)
                 elem.Update();
@@ -226,6 +229,8 @@ namespace RetroEngine
             Camera.ViewportUpdate();
 
             Input.Update();
+
+            physicsTask.Wait();
 
             bool changedLevel = Level.LoadPendingLevel();
             if (AsyncGameThread && changedLevel == false)

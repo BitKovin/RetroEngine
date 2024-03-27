@@ -183,7 +183,7 @@ namespace RetroEngine
 
         public static void Update()
         {
-            Simulate();
+            //Simulate();
 
             for (int i = 0; i < dynamicsWorld.NumCollisionObjects; i++)
             {
