@@ -226,12 +226,7 @@ namespace RetroEngine.Game.Entities.Player
 
 
             PlayerBodyAnimator.MovementDirection = dir;
-
             
-
-            var pose = PlayerBodyAnimator.GetResultPose();
-
-            bodyMesh.PastePoseLocal(pose);
 
             MathHelper.Transform hide = new MathHelper.Transform();
             hide.Scale = Vector3.Zero;
@@ -270,6 +265,16 @@ namespace RetroEngine.Game.Entities.Player
             bodyMesh.SetBoneMeshTransformModification("head", hide.ToMatrix());
 
             
+
+        }
+
+        public override void VisualUpdate()
+        {
+            base.VisualUpdate();
+
+            var pose = PlayerBodyAnimator.GetResultPose();
+
+            bodyMesh.PastePoseLocal(pose);
 
         }
 

@@ -227,9 +227,9 @@ namespace RetroEngine
             pendingDispose.Clear();
 
             var physicsTask = Task.Factory.StartNew(() => { Physics.Simulate(); });
-
+            curentLevel.WaitForVisualUpdate();
             PerformReservedTimeTasks();
-
+            curentLevel.StartVisualUpdate();
 
             foreach (UiElement elem in UiElement.Viewport.childs)
                 elem.Update();
@@ -238,7 +238,9 @@ namespace RetroEngine
 
             Input.Update();
 
+            Stats.StartRecord("waiting for physics");
             physicsTask.Wait();
+            Stats.StopRecord("waiting for physics");
 
             bool changedLevel = Level.LoadPendingLevel();
             if (AsyncGameThread && changedLevel == false)
@@ -296,11 +298,11 @@ namespace RetroEngine
             curentLevel.LateUpdate();
             Stats.StopRecord("Level LateUpdate");
 
-            SoundManager.Update();
-
             Camera.Update();
 
+            Stats.StartRecord("Sound Update");
             SoundManager.Update();
+            Stats.StopRecord("Sound Update");
 
             tick++;
 

@@ -256,9 +256,53 @@ namespace RetroEngine
 
             Parallel.ForEach(entities, options, entity =>
             {
-                if (entity.UpdateWhilePaused && GameMain.Instance.paused || GameMain.Instance.paused == false)
-                    entity.AsyncUpdate();
+                try
+                {
+                    if (entity.UpdateWhilePaused && GameMain.Instance.paused || GameMain.Instance.paused == false)
+                        entity.AsyncUpdate();
+                }catch(Exception ex) { Console.WriteLine(ex.ToString()); }
             });
+        }
+
+        Task visualUpdateTask;
+
+        public virtual void StartVisualUpdate()
+        {
+            visualUpdateTask = Task.Factory.StartNew(VisualUpdate);
+        }
+
+        public virtual void WaitForVisualUpdate()
+        {
+
+            Stats.StartRecord("WaitForVisualUpdate");
+
+            if(visualUpdateTask!=null)
+                visualUpdateTask.Wait();
+
+            Stats.StopRecord("WaitForVisualUpdate");
+
+        }
+
+        protected virtual void VisualUpdate()
+        {
+            if (GameMain.Instance.paused) return;
+            Stats.StartRecord("VisualUpdate");
+
+            ParallelOptions options = new ParallelOptions();
+            options.MaxDegreeOfParallelism = Environment.ProcessorCount;
+
+            Entity[] list = entities.ToArray();
+
+            
+
+            Parallel.ForEach(entities, options, entity =>
+            {
+                if(entity!=null)
+                    entity.VisualUpdate();
+            });
+
+            Stats.StopRecord("VisualUpdate");
+
         }
 
         public virtual void LateUpdate()

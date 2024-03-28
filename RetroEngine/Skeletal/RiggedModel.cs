@@ -377,22 +377,27 @@ namespace RetroEngine.Skeletal
         public void Destroy()
         {
 
-            foreach(RiggedModelNode n in flatListToAllNodes)
+            
+
+            flatListToAllNodes = null;
+            flatListToBoneNodes = null;
+            rootNodeOfTree = null;
+            firstRealBoneInTree = null;
+            //globalShaderMatrixs = null;
+            meshes = null;
+            originalAnimations = null;
+
+            return;
+            foreach (RiggedModelNode n in flatListToAllNodes)
             {
-                if(n == null) continue;
+                if (n == null) continue;
 
                 n.children = null;
                 n.parent = null;
 
             }
 
-            flatListToAllNodes = null;
-            flatListToBoneNodes = null;
-            rootNodeOfTree = null;
-            firstRealBoneInTree = null;
-            globalShaderMatrixs = null;
-            meshes = null;
-            originalAnimations = null;
+
         }
 
         #endregion

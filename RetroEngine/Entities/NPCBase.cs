@@ -160,22 +160,7 @@ namespace RetroEngine.Entities
             
             float distance = Vector3.Distance(Position, targetLocation);
 
-            float cameraDistance = Vector3.Distance(Position, Camera.position);
-
-            if (mesh.isRendered && cameraDistance<=AnimationDistance)
-            {
-                animator.UpdateVisual = true;
-                animator.Update();
-                animator.Simple = cameraDistance > AnimationComplexDistance;
-                animator.InterpolateAnimations = cameraDistance < AnimationInterpolationDistance;
-                mesh.PastePoseLocal(animator.GetResultPose());
-                mesh.CastShadows = cameraDistance < ShadowDistance;
-            }
-            else if(AnimationAlwaysUpdateTime)
-            {
-                animator.UpdateVisual = false;
-                animator.Update();
-            }
+            
 
 
             if(distance > 3) 
@@ -205,6 +190,30 @@ namespace RetroEngine.Entities
             updateDelay.AddDelay(Math.Min(Vector3.Distance(Position, targetLocation)/60,1));
 
         }
+
+        public override void VisualUpdate()
+        {
+            base.VisualUpdate();
+
+            float cameraDistance = Vector3.Distance(Position, Camera.position);
+
+            if (mesh.isRendered && cameraDistance <= AnimationDistance)
+            {
+                animator.UpdateVisual = true;
+                animator.Update();
+                animator.Simple = cameraDistance > AnimationComplexDistance;
+                animator.InterpolateAnimations = cameraDistance < AnimationInterpolationDistance;
+                mesh.PastePoseLocal(animator.GetResultPose());
+                mesh.CastShadows = cameraDistance < ShadowDistance;
+            }
+            else if (AnimationAlwaysUpdateTime)
+            {
+                animator.UpdateVisual = false;
+                animator.Update();
+            }
+
+        }
+
         public override void LateUpdate()
         {
             base.LateUpdate();

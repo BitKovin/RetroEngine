@@ -53,6 +53,10 @@
 	light_color(Vector3) : "Color" : "1 1 1"
 	radius(float) : "Radius" : "5"
 	intensity(float) : "Intensity" : "1"
+	resolution(int) : "Resolution" : "256"
+	dynamic(bool) : "Dynamic" : "false"
+
+
 ]
 
 @PointClass base(PointLight) = cubeMap : "Cube Map" 
