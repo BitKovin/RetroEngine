@@ -523,9 +523,13 @@ namespace RetroEngine
         {
 
             if (RiggedModel == null) return;
-            namesToBones = null;
+            //namesToBones = null;
             RiggedModel.Destroy();
-            RiggedModel = null;
+            destroyed = true;
+            GameMain.pendingDispose.Add(this);
+            //RiggedModel = null;
+
+            Visible = false;
 
         }
 

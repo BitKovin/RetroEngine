@@ -379,13 +379,13 @@ namespace RetroEngine.Skeletal
 
             
 
-            flatListToAllNodes = null;
-            flatListToBoneNodes = null;
-            rootNodeOfTree = null;
-            firstRealBoneInTree = null;
+            //flatListToAllNodes = null;
+            //flatListToBoneNodes = null;
+            //rootNodeOfTree = null;
+            //firstRealBoneInTree = null;
             //globalShaderMatrixs = null;
-            meshes = null;
-            originalAnimations = null;
+            //meshes = null;
+            //originalAnimations = null;
 
             return;
             foreach (RiggedModelNode n in flatListToAllNodes)

@@ -106,6 +106,8 @@ namespace RetroEngine
 
         protected Matrix WorldMatrix;
 
+        internal bool destroyed = false;
+
         public StaticMesh()
         {
 
@@ -1102,8 +1104,9 @@ namespace RetroEngine
 
         public virtual void Destroyed()
         {
-            model = null;
+            //model = null;
             GameMain.pendingDispose.Add(this);
+            destroyed = true;
         }
 
         public void Dispose()

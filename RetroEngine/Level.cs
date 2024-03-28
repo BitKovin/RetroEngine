@@ -345,6 +345,7 @@ namespace RetroEngine
 
                                 if (mesh is not null)
                                 {
+                                    if (mesh.destroyed) continue;
                                     mesh.UpdateCulling();
 
                                     mesh.RenderPreparation();
