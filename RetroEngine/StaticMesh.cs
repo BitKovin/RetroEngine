@@ -231,6 +231,7 @@ namespace RetroEngine
                 Vector3[] LightPos = new Vector3[LightManager.MAX_POINT_LIGHTS];
                 Vector3[] LightColor = new Vector3[LightManager.MAX_POINT_LIGHTS];
                 float[] LightRadius = new float[LightManager.MAX_POINT_LIGHTS];
+                int[] LightRes = new int[LightManager.MAX_POINT_LIGHTS];
                 RenderTargetCube[] LightMaps = new RenderTargetCube[LightManager.MAX_POINT_LIGHTS];
 
                 //LightManager.FinalPointLights = LightManager.FinalPointLights.OrderBy(l => Vector3.Distance(l.Position, useAvgVertexPosition? avgVertexPosition : Position)).ToList();
@@ -248,6 +249,7 @@ namespace RetroEngine
                     LightPos[filledLights] = LightManager.FinalPointLights[i].Position;
                     LightColor[filledLights] = LightManager.FinalPointLights[i].Color;
                     LightRadius[filledLights] = LightManager.FinalPointLights[i].Radius;
+                    LightRes[filledLights] = LightManager.FinalPointLights[i].Resolution;
                     LightMaps[filledLights] = LightManager.FinalPointLights[i].shadowData;
 
                     filledLights++;
@@ -257,6 +259,7 @@ namespace RetroEngine
                 effect.Parameters["LightPositions"]?.SetValue(LightPos);
                 effect.Parameters["LightColors"]?.SetValue(LightColor);
                 effect.Parameters["LightRadiuses"]?.SetValue(LightRadius);
+                effect.Parameters["LightResolutions"]?.SetValue(LightRes);
 
                 effect.Parameters["PointLightCubemap1"]?.SetValue(LightMaps[0]);
                 effect.Parameters["PointLightCubemap2"]?.SetValue(LightMaps[1]);

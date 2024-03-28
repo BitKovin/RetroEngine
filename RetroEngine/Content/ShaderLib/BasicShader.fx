@@ -100,6 +100,7 @@ float ShadowMapResolutionVeryClose;
 float3 LightPositions[MAX_POINT_LIGHTS];
 float3 LightColors[MAX_POINT_LIGHTS];
 float LightRadiuses[MAX_POINT_LIGHTS];
+int LightResolutions[MAX_POINT_LIGHTS];
 
 texture PointLightCubemap1;
 sampler PointLightCubemap1Sampler = sampler_state
@@ -671,7 +672,7 @@ float GetPointLightDepth(int i, float3 worldPos)
     if(depth == 0)
         return 1000000;
     
-    depth += depth/128;
+    depth += depth / (LightResolutions[i]*2) + 0.02;
 
     return depth;
 }

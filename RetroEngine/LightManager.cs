@@ -60,6 +60,7 @@ namespace RetroEngine
             public Vector3 Position = new Vector3(0, 0, 0);
             public Vector3 Color = new Vector3(0,0,0);
             public float Radius = 0;
+            public int Resolution = 256;
             public RenderTargetCube shadowData = null;
 
             public PointLightData()

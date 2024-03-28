@@ -144,8 +144,6 @@ namespace RetroEngine.Map
                     else
                         entity.meshes.AddRange(faces);
 
-                    Logger.Log($"point lights: {pointLights.Count}");
-
                     level.entities.Add(entity);
                     entity.FromData(ent);
                 }

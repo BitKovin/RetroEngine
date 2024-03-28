@@ -62,6 +62,8 @@ namespace RetroEngine.Entities.Light
             if (CastShadows == false)
                 resolution = 1;
 
+            lightData.Resolution = resolution;
+
             lightData.shadowData = new RenderTargetCube(graphicsDevice, resolution, false, SurfaceFormat.HalfSingle, DepthFormat.Depth24);
 
             mesh.LoadFromFile("models/cube.obj");
