@@ -671,7 +671,7 @@ float GetPointLightDepth(int i, float3 worldPos)
     if(depth == 0)
         return 1000000;
     
-    depth += 0.02;
+    depth += depth/128;
 
     return depth;
 }

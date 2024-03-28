@@ -570,8 +570,12 @@ namespace RetroEngine
         public void EndOcclusionTest()
         {
 
+            if (destroyed) return;
+
             if (oclusionCulling == false) return;
 
+
+            if (OcclusionQuery.GraphicsDevice == null) return;
             while (OcclusionQuery.IsComplete == false)
             {
 
@@ -1105,8 +1109,10 @@ namespace RetroEngine
         public virtual void Destroyed()
         {
             //model = null;
-            GameMain.pendingDispose.Add(this);
+
             destroyed = true;
+            GameMain.pendingDispose.Add(this);
+            
         }
 
         public void Dispose()

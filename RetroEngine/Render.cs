@@ -439,7 +439,7 @@ namespace RetroEngine
                 }
             }
 
-            //testedMeshes = new List<StaticMesh>(renderList);
+            testedMeshes = new List<StaticMesh>(renderList);
 
         }
 
@@ -954,7 +954,7 @@ namespace RetroEngine
                 Graphics.shadowMapResolution,
                 Graphics.shadowMapResolution,
                 false, // No mipmaps
-                SurfaceFormat.HalfSingle, // Color format
+                SurfaceFormat.Single, // Color format
                 depthFormat); // Depth format
         }
 
@@ -973,7 +973,7 @@ namespace RetroEngine
                 Graphics.closeShadowMapResolution,
                 Graphics.closeShadowMapResolution,
                 false, // No mipmaps
-                SurfaceFormat.HalfSingle, // Color format
+                SurfaceFormat.Single, // Color format
                 depthFormat); // Depth format
         }
 

@@ -7,6 +7,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Assimp.Metadata;
+using SharpFont.PostScript;
+using RetroEngine.Entities.Light;
+using MonoGame.Framework.Content.Pipeline.Builder;
 
 namespace RetroEngine.Map
 {
@@ -31,6 +35,25 @@ namespace RetroEngine.Map
 
             float i = 0;
 
+            List<Vector3> pointLights = new List<Vector3>();
+
+            foreach (EntityData ent in Entities)
+            {
+
+                PointLight entity = LevelObjectFactory.CreateByTechnicalName(ent.Classname) as PointLight;
+
+                if (entity == null) continue;
+
+                if (ent.Properties.ContainsKey("origin"))
+                {
+                    Vector3 position = ent.GetPropertyVectorPosition("origin");
+                    entity.Position = position;
+                }
+
+                pointLights.AddUnique(entity.Position);
+
+            }
+
             foreach (EntityData ent in Entities)
             {
 
@@ -42,14 +65,21 @@ namespace RetroEngine.Map
 
                 if (ent.Brushes.Count > 0)
                 {
-                    
-
                     if (entity is null)
                         entity = new Entity();
 
                     entity.name = ent.Classname;
 
                     List<BrushFaceMesh> faces = new List<BrushFaceMesh>();
+
+                    Dictionary<Vector3, List<BrushFaceMesh>> pointLightFaces = new Dictionary<Vector3, List<BrushFaceMesh>>();
+
+                    foreach(Vector3 pos in pointLights)
+                    {
+                        pointLightFaces.TryAdd(pos, new List<BrushFaceMesh>());
+                    }
+
+                    pointLightFaces.TryAdd(Vector3.Zero, new List<BrushFaceMesh>());
 
                     foreach (BrushData brush in ent.Brushes)
                     {
@@ -68,17 +98,53 @@ namespace RetroEngine.Map
 
                     }
 
+                    var poses = pointLightFaces.Keys.ToArray();
+
+                    foreach(var face in faces)
+                    {
+
+                        if (poses.Length == 0)
+                        {
+                            pointLightFaces[Vector3.Zero].Add(face);
+                            continue;
+                        }
+
+
+
+                        Vector3 facePos = face.avgVertexPosition;
+
+                        Vector3 closestPos;
+
+                        poses = poses.OrderBy(p => Vector3.Distance(facePos, p)).ToArray();
+
+                        
+                        closestPos = poses[0];
+
+                        pointLightFaces[closestPos].Add(face);
+
+
+                    }
+
                     if (MergeBrushes || entity.mergeBrushes)
                     {
-                        entity.meshes.AddRange(BrushFaceMesh.MergeFaceMeshes(faces));
+                        foreach (var key in pointLightFaces.Keys)
+                        {
+
+                            var faceList = pointLightFaces[key];
+
+                            entity.meshes.AddRange(BrushFaceMesh.MergeFaceMeshes(faceList));
+                        }
+
 
                         foreach (BrushFaceMesh brushFaceMesh in faces)
                             StaticMesh.UnloadModel(brushFaceMesh.model);
+
 
                     }
                     else
                         entity.meshes.AddRange(faces);
 
+                    Logger.Log($"point lights: {pointLights.Count}");
 
                     level.entities.Add(entity);
                     entity.FromData(ent);
