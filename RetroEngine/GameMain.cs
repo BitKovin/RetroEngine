@@ -13,6 +13,7 @@ using ImGuiNET;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace RetroEngine
 {
@@ -80,6 +81,7 @@ namespace RetroEngine
 
         public static float ReservedTaskPresentMinTime = 0.001f;
 
+        internal static List<IDisposable> pendingDispose = new List<IDisposable>();
 
         public GameMain()
         {
@@ -217,6 +219,12 @@ namespace RetroEngine
             {
                 UpdateTime(gameTime);
             }
+
+            foreach(IDisposable disposable in pendingDispose)
+            {
+                disposable.Dispose();
+            }
+            pendingDispose.Clear();
 
             var physicsTask = Task.Factory.StartNew(() => { Physics.Simulate(); });
 

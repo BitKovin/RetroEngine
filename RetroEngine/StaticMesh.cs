@@ -1103,7 +1103,7 @@ namespace RetroEngine
         public virtual void Destroyed()
         {
             model = null;
-            OcclusionQuery?.Dispose();
+            GameMain.pendingDispose.Add(this);
         }
 
         public void Dispose()
