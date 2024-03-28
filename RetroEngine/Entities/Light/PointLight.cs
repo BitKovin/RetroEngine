@@ -48,11 +48,17 @@ namespace RetroEngine.Entities.Light
             lightData.Color = data.GetPropertyVector("light_color", new Vector3(1,1,1)) * data.GetPropertyFloat("intensity",1);
             lightData.Radius = data.GetPropertyFloat("radius", 5);
 
+            Dynamic = data.GetPropertyBool("dynamic");
+
             lights.Add(this);
 
             graphicsDevice = GameMain.Instance.GraphicsDevice;
 
+
             int resolution = 256;
+
+            resolution = (int)data.GetPropertyFloat("resolution", 256);
+
             if (CastShadows == false)
                 resolution = 1;
 

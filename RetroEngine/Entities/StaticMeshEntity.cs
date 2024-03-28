@@ -17,6 +17,8 @@ namespace RetroEngine.Entities
 
         RigidBody body;
 
+        float scale = 1;
+
         public override void FromData(EntityData data)
         {
             base.FromData(data);
@@ -36,11 +38,15 @@ namespace RetroEngine.Entities
 
             mesh.LoadFromFile(modelPath);
             mesh.texture = AssetRegistry.LoadTextureFromFile(texturePath);
+            mesh.normalTexture = AssetRegistry.LoadTextureFromFile(texturePath.Replace(".png","_n.png"));
+            mesh.ormTexture = AssetRegistry.LoadTextureFromFile(texturePath.Replace(".png", "_orm.png"));
 
             body = Physics.CreateFromShape(this, mesh.Scale.ToPhysics(), Physics.CreateCollisionShapeFromModel(mesh.model, complex: true), 0);
 
             body.SetPosition(mesh.Position.ToPhysics());
             body.SetRotation(mesh.Rotation);
+
+            mesh.CastShadows = true;
 
             bodies.Add(body);
 

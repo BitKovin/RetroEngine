@@ -183,6 +183,21 @@ namespace RetroEngine.Map
             }
         }
 
+        public bool GetPropertyBool(string name, bool defaultValue = false)
+        {
+            try
+            {
+
+                string[] parts = Properties[name].Split(" ");
+
+                return bool.Parse(parts[0].Replace("0", "false").Replace("1", "true").ToLower());
+            }
+            catch (Exception)
+            {
+                return defaultValue;
+            }
+        }
+
         public string GetPropertyString(string name, string defaultValue = "")
         {
             if(Properties.ContainsKey(name))

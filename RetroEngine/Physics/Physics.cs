@@ -332,6 +332,7 @@ namespace RetroEngine
 
             Vector3 inertia = Vector3.Zero;
             shape.CalculateLocalInertia(mass, out inertia);
+            shape.LocalScaling = size;
 
             // Create a rigid body for the sphere
             var boxRigidBodyInfo = new RigidBodyConstructionInfo(collisionFlags == CollisionFlags.StaticObject ? 0 : mass, motionState, shape, inertia);
