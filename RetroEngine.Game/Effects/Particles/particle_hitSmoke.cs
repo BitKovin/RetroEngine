@@ -27,15 +27,20 @@ namespace RetroEngine.Game.Effects.Particles
             TexturePath = "textures/particles/smoke.png";
 
             InitialSpawnCount = 10;
-            SpawnRate = 1000;
+            //SpawnRate = 1000;
             BoundingRadius = 3;
         }
 
         public override Particle UpdateParticle(Particle particle)
         {
+
+            particle.velocity -= new Vector3(0, 2, 0) * (Time.deltaTime / 2f);
+
             particle = base.UpdateParticle(particle);
 
-            particle.transparency = Math.Max(particle.transparency -= Time.deltaTime/4, 0);
+            particle.velocity -= new Vector3(0, 2, 0) * (Time.deltaTime / 2f);
+
+            particle.transparency = Math.Max(particle.transparency -= Time.deltaTime, 0);
 
             return particle;
         }
@@ -49,7 +54,7 @@ namespace RetroEngine.Game.Effects.Particles
             Vector3 randPos = RandomPosition(0.12f);
 
             particle.position += randPos;
-            particle.velocity = randPos.Normalized()*1.5f;
+            particle.velocity = randPos.Normalized()*0.5f;
             particle.transparency = 0.8f;
             particle.deathTime = 2;
 
