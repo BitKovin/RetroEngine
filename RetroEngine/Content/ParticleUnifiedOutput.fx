@@ -42,7 +42,7 @@ sampler OldFrameTextureSampler = sampler_state
 
 
 
-PixelInput VertexShaderFunction(VertexInput input, float4 row1: BLENDINDICES1, float4 row2 : BLENDINDICES2, float4 row3 : BLENDINDICES3, float4 row4 : BLENDINDICES4)
+PixelInput VertexShaderFunction(VertexInput input, float4 row1: BLENDINDICES1, float4 row2 : BLENDINDICES2, float4 row3 : BLENDINDICES3, float4 row4 : BLENDINDICES4, float4 InstanceColor : Color2)
 {
 
     float4x4 world = float4x4(row1,row2,row3,row4);
@@ -93,6 +93,7 @@ PixelInput VertexShaderFunction(VertexInput input, float4 row1: BLENDINDICES1, f
     output.lightPosVeryClose = mul(worldPos, ShadowMapViewProjectionVeryClose);
 
     output.TexCoord = input.TexCoord;
+    output.Color = InstanceColor;
 
     return output;
 }
@@ -126,8 +127,8 @@ PixelOutput PixelShaderFunction(PixelInput input)
     float ao = orm.r;
     
     
-    float3 textureColor = tex2D(TextureSampler, input.TexCoord).xyz;
-	float textureAlpha = tex2D(TextureSampler, input.TexCoord).w;
+    float3 textureColor = tex2D(TextureSampler, input.TexCoord).xyz * input.Color.rgb;
+	float textureAlpha = tex2D(TextureSampler, input.TexCoord).w * input.Color.a;
     
     float3 pixelNormal = ApplyNormalTexture(textureNormal, input.Normal, input.Tangent);
     

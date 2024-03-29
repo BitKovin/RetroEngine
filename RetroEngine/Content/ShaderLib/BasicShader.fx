@@ -178,6 +178,7 @@ struct PixelInput
     float3 Tangent : TEXCOORD6;
     float3 TangentNormal : TEXCOORD7;
     float4 lightPosVeryClose : TEXCOORD8;
+    float4 Color : Color0;
 };
 
 struct PBRData
@@ -295,7 +296,8 @@ PixelInput DefaultVertexShaderFunction(VertexInput input)
     output.lightPosVeryClose = mul(worldPos, ShadowMapViewProjectionVeryClose);
     
     output.TexCoord = input.TexCoord;
-    
+    output.Color = float4(1, 1, 1, 1);
+
     return output;
 }
 

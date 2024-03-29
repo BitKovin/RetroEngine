@@ -39,7 +39,6 @@ namespace RetroEngine.Game.Effects.Particles
 
             particle.velocity -= new Vector3(0, 10, 0) * (Time.deltaTime / 2f);
 
-            particle.velocity = Vector3.Zero;
             particle = base.UpdateParticle(particle);
 
             particle.velocity -= new Vector3 (0, 10, 0) * (Time.deltaTime / 2f);
@@ -59,7 +58,7 @@ namespace RetroEngine.Game.Effects.Particles
 
             particle.position += randPos;
             particle.velocity = randPos.Normalized() * 0.2f + new Vector3(0,2,0);
-            particle.deathTime = 300;
+            particle.deathTime = 3;
 
             particle.globalRotation = RandomPosition(500);
 

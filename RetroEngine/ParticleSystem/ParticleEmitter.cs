@@ -39,7 +39,6 @@ namespace RetroEngine.Particles
         {
             CastShadows = false;
             Transperent = true;
-            isParticle = true;
 
             SimpleTransperent = true;
 
@@ -210,14 +209,24 @@ namespace RetroEngine.Particles
                 RenderEmitter.RenderPreparation();
         }
 
+        VertexBuffer instanceBuffer;
+
         public void DrawParticles(List<Particle> particleList)
         {
             particleList = particleList.OrderByDescending(p => Vector3.Dot(p.position - Camera.position, Camera.rotation.GetForwardVector())).ToList();
 
             List<InstanceData> instanceData = new List<InstanceData>();
 
+
+
             foreach (var particle in particleList)
             {
+
+                if (particle.transparency <= 0)
+                    continue;
+                if (particle.lifeTime >= particle.deathTime)
+                    continue;
+
                 texture = AssetRegistry.LoadTextureFromFile(particle.texturePath);
 
                 frameStaticMeshData.model = (particle.customModelPath == null) ? particleModel : GetModelFromPath(particle.customModelPath);
@@ -234,6 +243,10 @@ namespace RetroEngine.Particles
                 data.Row3 = frameStaticMeshData.World.GetRow(2);
                 data.Row4 = frameStaticMeshData.World.GetRow(3);
 
+                data.Color = particle.color;
+
+                data.Color.A = (byte)((float)data.Color.A * particle.transparency);
+
                 instanceData.Add(data);
 
                 //base.DrawUnified();
@@ -241,7 +254,9 @@ namespace RetroEngine.Particles
 
             if (instanceData.Count == 0) return;
 
-            VertexBuffer instanceBuffer = new VertexBuffer(GameMain.Instance.GraphicsDevice, InstanceData.VertexDeclaration, instanceData.Count, BufferUsage.None);
+            instanceBuffer?.Dispose();
+
+            instanceBuffer = new VertexBuffer(GameMain.Instance.GraphicsDevice, InstanceData.VertexDeclaration, instanceData.Count, BufferUsage.None);
 
             instanceBuffer.SetData(instanceData.ToArray());
 
@@ -256,6 +271,8 @@ namespace RetroEngine.Particles
             GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
             // Load the custom effect
             Effect effect = Shader;
+
+            effect.Parameters["isParticle"].SetValue(isParticle);
 
             GameMain.Instance.render.UpdateDataForShader((RetroEngine.Graphic.Shader)effect);
 
@@ -426,6 +443,8 @@ namespace RetroEngine.Particles
             public float deathTime = 2;
 
             public float transparency = 1;
+
+            public Color color = Color.White;
 
             public float Scale = 0;
             public float Rotation = 0;

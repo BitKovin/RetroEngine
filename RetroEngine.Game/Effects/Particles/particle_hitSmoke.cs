@@ -49,7 +49,7 @@ namespace RetroEngine.Game.Effects.Particles
             particle.position += randPos;
             particle.velocity = randPos.Normalized()*0.5f;
             particle.transparency = 0.8f;
-            particle.deathTime = 1;
+            particle.deathTime = 2;
 
             return particle;
         }

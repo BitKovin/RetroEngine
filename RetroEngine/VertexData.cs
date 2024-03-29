@@ -40,13 +40,15 @@ namespace RetroEngine
         public Vector4 Row2;
         public Vector4 Row3;
         public Vector4 Row4;
+        public Color Color;
 
         public static VertexDeclaration VertexDeclaration = new VertexDeclaration
         (
                 new VertexElement(VertexElementByteOffset.PositionStartOffset(4), VertexElementFormat.Vector4, VertexElementUsage.BlendIndices, 1),
                 new VertexElement(VertexElementByteOffset.OffsetVector4(), VertexElementFormat.Vector4, VertexElementUsage.BlendIndices, 2),
                 new VertexElement(VertexElementByteOffset.OffsetVector4(), VertexElementFormat.Vector4, VertexElementUsage.BlendIndices, 3),
-                new VertexElement(VertexElementByteOffset.OffsetVector4(), VertexElementFormat.Vector4, VertexElementUsage.BlendIndices, 4)
+                new VertexElement(VertexElementByteOffset.OffsetVector4(), VertexElementFormat.Vector4, VertexElementUsage.BlendIndices, 4),
+                new VertexElement(VertexElementByteOffset.OffsetColor(), VertexElementFormat.Color, VertexElementUsage.Color, 2)
         );
         VertexDeclaration IVertexType.VertexDeclaration { get { return VertexDeclaration; } }
 
