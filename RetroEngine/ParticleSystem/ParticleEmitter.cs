@@ -30,6 +30,7 @@ namespace RetroEngine.Particles
 
         public bool Emitting = false;
 
+        public float BoundingRadius = 1000;
 
         float elapsedTime = 0;
 
@@ -108,8 +109,10 @@ namespace RetroEngine.Particles
                 particles[i] = UpdateParticle(particles[i]);
             }
 
+            finalizedParticles = new List<Particle>(particles);
+
             //if (Emitting == false && particles.Count == 0)
-                //Destroyed = true;
+            //Destroyed = true;
         }
 
         public override void UpdateCulling()
@@ -151,8 +154,6 @@ namespace RetroEngine.Particles
         public override void RenderPreparation()
         {
             base.RenderPreparation();
-
-            finalizedParticles = new List<Particle>(particles);
         }
 
         Matrix GetWorldForParticle(Particle particle)
@@ -185,6 +186,7 @@ namespace RetroEngine.Particles
                 particleModel = GetModelFromPath("models/particle.obj");
             }
 
+            if(Camera.frustum.Contains(new BoundingSphere(Position, BoundingRadius))!= ContainmentType.Disjoint)
             DrawParticles(finalizedParticles);
 
             //GameMain.Instance.render.particlesToDraw.AddRange(finalizedParticles);
@@ -213,27 +215,28 @@ namespace RetroEngine.Particles
 
         public void DrawParticles(List<Particle> particleList)
         {
+
+            if (particleList.Count == 0) return;
+
             particleList = particleList.OrderByDescending(p => Vector3.Dot(p.position - Camera.position, Camera.rotation.GetForwardVector())).ToList();
 
-            List<InstanceData> instanceData = new List<InstanceData>();
+            InstanceData[] instanceData = new InstanceData[particleList.Count];
 
 
+            texture = AssetRegistry.LoadTextureFromFile(particleList[0].texturePath);
+            frameStaticMeshData.model = (particleList[0].customModelPath == null) ? particleModel : GetModelFromPath(particleList[0].customModelPath);
 
+
+            int i = -1;
             foreach (var particle in particleList)
             {
-
+                i++;
                 if (particle.transparency <= 0)
                     continue;
+
                 if (particle.lifeTime >= particle.deathTime)
                     continue;
-
-                texture = AssetRegistry.LoadTextureFromFile(particle.texturePath);
-
-                frameStaticMeshData.model = (particle.customModelPath == null) ? particleModel : GetModelFromPath(particle.customModelPath);
                 frameStaticMeshData.World = GetWorldForParticle(particle);
-                frameStaticMeshData.Transparency = 1;
-                frameStaticMeshData.Transperent = true;
-                frameStaticMeshData.IsRendered = true;
 
                 isParticle = particle.customModelPath == null;
 
@@ -247,20 +250,19 @@ namespace RetroEngine.Particles
 
                 data.Color.A = (byte)((float)data.Color.A * particle.transparency);
 
-                instanceData.Add(data);
+                instanceData[i] = data;
 
                 //base.DrawUnified();
             }
 
-            if (instanceData.Count == 0) return;
 
             instanceBuffer?.Dispose();
 
-            instanceBuffer = new VertexBuffer(GameMain.Instance.GraphicsDevice, InstanceData.VertexDeclaration, instanceData.Count, BufferUsage.None);
+            instanceBuffer = new VertexBuffer(GameMain.Instance.GraphicsDevice, InstanceData.VertexDeclaration, particleList.Count, BufferUsage.None);
 
             instanceBuffer.SetData(instanceData.ToArray());
 
-            DrawInstanced(instanceBuffer, instanceData.Count);
+            DrawInstanced(instanceBuffer, particleList.Count);
 
         }
 

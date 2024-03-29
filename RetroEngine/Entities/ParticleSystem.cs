@@ -36,7 +36,7 @@ namespace RetroEngine.Entities
             
             sys.Start();
 
-            sys.LateUpdate();
+            sys.VisualUpdate();
 
             sys.LoadAssetsIfNeeded();
 
@@ -47,11 +47,17 @@ namespace RetroEngine.Entities
         {
             base.LateUpdate();
 
-            List<ParticleEmitter> list = new List <ParticleEmitter>(emitters);
+        }
+
+        public override void VisualUpdate()
+        {
+            base.VisualUpdate();
+
+            List<ParticleEmitter> list = new List<ParticleEmitter>(emitters);
 
             foreach (var emitter in list)
             {
-                if(emitter.Destroyed)
+                if (emitter.Destroyed)
                     emitters.Remove(emitter);
 
                 emitter.Position = Position;

@@ -84,9 +84,6 @@ PixelInput VertexShaderFunction(VertexInput input, float4 row1: BLENDINDICES1, f
 
     output.TangentNormal = GetTangentNormal(output.Normal, output.Tangent);
 
-    if (dot(output.TangentNormal, normalize(output.MyPosition - viewPos)) > 0)
-        output.TangentNormal *= -1;
-
 
     output.lightPos = mul(worldPos, ShadowMapViewProjection);
     output.lightPosClose = mul(worldPos, ShadowMapViewProjectionClose);
@@ -120,15 +117,18 @@ PixelOutput PixelShaderFunction(PixelInput input)
 
     float3 textureNormal = tex2D(NormalTextureSampler, input.TexCoord).rgb;
     
-    float3 orm = tex2D(ORMTextureSampler, input.TexCoord).rgb;
+    float3 orm;// = tex2D(ORMTextureSampler, input.TexCoord).rgb;
     
+    orm = float3(1, 1, 0);
+
     float roughness =orm.g;
     float metalic = orm.b;
     float ao = orm.r;
     
+    float4 tex = tex2D(TextureSampler, input.TexCoord);
     
-    float3 textureColor = tex2D(TextureSampler, input.TexCoord).xyz * input.Color.rgb;
-	float textureAlpha = tex2D(TextureSampler, input.TexCoord).w * input.Color.a;
+    float3 textureColor = tex.xyz * input.Color.rgb;
+	float textureAlpha = tex.w * input.Color.a;
     
     float3 pixelNormal = ApplyNormalTexture(textureNormal, input.Normal, input.Tangent);
     
