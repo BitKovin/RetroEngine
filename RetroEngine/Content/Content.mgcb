@@ -105,6 +105,18 @@
 /processorParam:DebugMode=Auto
 /build:OcclusionPathStatic.fx
 
+#begin ParticleUnifiedOutput.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:ParticleUnifiedOutput.fx
+
+#begin ParticleUnifiedOutput.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:ParticleUnifiedOutput.fx
+
 #begin ReflectionPath.fx
 /importer:EffectImporter
 /processor:EffectProcessor

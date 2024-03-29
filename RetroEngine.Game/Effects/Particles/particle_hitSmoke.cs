@@ -26,7 +26,7 @@ namespace RetroEngine.Game.Effects.Particles
         {
             TexturePath = "textures/particles/smoke.png";
 
-            InitialSpawnCount = 3;
+            InitialSpawnCount = 10;
         }
 
         public override Particle UpdateParticle(Particle particle)

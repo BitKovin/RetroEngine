@@ -150,11 +150,11 @@ namespace RetroEngine
 
             foreach (Shader effect in shaders)
             {
-                UpdateDataForEffect(effect);
+                UpdateDataForShader(effect);
             }
         }
 
-        public void UpdateDataForEffect(Shader effect)
+        public void UpdateDataForShader(Shader effect)
         {
             //effect.Parameters["viewDir"]?.SetValue(Camera.finalizedForward);
             effect.Parameters["viewPos"]?.SetValue(Camera.finalizedPosition);
@@ -220,6 +220,7 @@ namespace RetroEngine
             effect.ApplyValues();
 
         }
+
 
         public RenderTarget2D StartRenderLevel(Level level)
         {

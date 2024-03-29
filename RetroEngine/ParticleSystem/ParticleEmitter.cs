@@ -45,6 +45,8 @@ namespace RetroEngine.Particles
 
             OverrideBlendState = BlendState.NonPremultiplied;
 
+            Shader = AssetRegistry.GetShaderFromName("ParticleUnifiedOutput");
+
         }
 
         List<Particle> finalizedParticles;
@@ -212,19 +214,92 @@ namespace RetroEngine.Particles
         {
             particleList = particleList.OrderByDescending(p => Vector3.Dot(p.position - Camera.position, Camera.rotation.GetForwardVector())).ToList();
 
+            List<InstanceData> instanceData = new List<InstanceData>();
+
             foreach (var particle in particleList)
             {
                 texture = AssetRegistry.LoadTextureFromFile(particle.texturePath);
 
                 frameStaticMeshData.model = (particle.customModelPath == null) ? particleModel : GetModelFromPath(particle.customModelPath);
                 frameStaticMeshData.World = GetWorldForParticle(particle);
-                frameStaticMeshData.Transparency = particle.transparency;
+                frameStaticMeshData.Transparency = 1;
                 frameStaticMeshData.Transperent = true;
                 frameStaticMeshData.IsRendered = true;
 
                 isParticle = particle.customModelPath == null;
 
-                base.DrawUnified();
+                InstanceData data = new InstanceData();
+                data.Row1 = frameStaticMeshData.World.GetRow(0);
+                data.Row2 = frameStaticMeshData.World.GetRow(1);
+                data.Row3 = frameStaticMeshData.World.GetRow(2);
+                data.Row4 = frameStaticMeshData.World.GetRow(3);
+
+                instanceData.Add(data);
+
+                //base.DrawUnified();
+            }
+
+            if (instanceData.Count == 0) return;
+
+            VertexBuffer instanceBuffer = new VertexBuffer(GameMain.Instance.GraphicsDevice, InstanceData.VertexDeclaration, instanceData.Count, BufferUsage.None);
+
+            instanceBuffer.SetData(instanceData.ToArray());
+
+            DrawInstanced(instanceBuffer, instanceData.Count);
+
+        }
+
+        void DrawInstanced(VertexBuffer instanceBuffer, int count)
+        {
+            if ((frameStaticMeshData.IsRendered == false) && frameStaticMeshData.Viewmodel == false || occluded) return;
+
+            GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
+            // Load the custom effect
+            Effect effect = Shader;
+
+            GameMain.Instance.render.UpdateDataForShader((RetroEngine.Graphic.Shader)effect);
+
+            SetupBlending();
+
+            if (frameStaticMeshData.model is not null)
+            {
+                foreach (ModelMesh mesh in frameStaticMeshData.model.Meshes)
+                {
+                    foreach (ModelMeshPart meshPart in mesh.MeshParts)
+                    {
+
+                        // Set the vertex buffer and index buffer for this mesh part
+                        //graphicsDevice.SetVertexBuffer(meshPart.VertexBuffer);
+                        graphicsDevice.Indices = meshPart.IndexBuffer;
+
+                        var bindings = new VertexBufferBinding[2];
+                        bindings[0] = new VertexBufferBinding(meshPart.VertexBuffer);
+                        bindings[1] = new VertexBufferBinding(instanceBuffer, 0, 1);
+
+                       
+
+                        MeshPartData meshPartData = meshPart.Tag as MeshPartData;
+
+                        ApplyShaderParams(effect, meshPartData);
+
+                        Stats.RenderedMehses++;
+
+
+                        // Draw the primitives using the custom effect
+                        foreach (EffectPass pass in effect.CurrentTechnique.Passes)
+                        {
+                            pass.Apply();
+
+                            graphicsDevice.SetVertexBuffers(bindings);
+
+                            graphicsDevice.DrawInstancedPrimitives(
+                                PrimitiveType.TriangleList,
+                                meshPart.VertexOffset,
+                                meshPart.StartIndex,
+                                meshPart.PrimitiveCount, count);
+                        }
+                    }
+                }
             }
         }
 

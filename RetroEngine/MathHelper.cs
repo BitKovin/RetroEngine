@@ -173,6 +173,11 @@ namespace RetroEngine
             return a;
         }
 
+        public static Vector4 GetRow(this Matrix matrix, int row)
+        {
+            return new Vector4(matrix[row, 0], matrix[row, 1], matrix[row, 2], matrix[row, 3]);
+        }
+
         public static Transform DecomposeMatrix(this Matrix matrix)
         {
             Vector3 position, scale, rotationDegrees;

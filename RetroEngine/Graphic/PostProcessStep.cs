@@ -33,7 +33,7 @@ namespace RetroEngine.Graphic
                 return;
             }
 
-            GameMain.Instance.render.UpdateDataForEffect(Shader);
+            GameMain.Instance.render.UpdateDataForShader(Shader);
 
             RenderStep();
 

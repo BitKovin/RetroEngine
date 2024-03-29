@@ -31,25 +31,45 @@ namespace RetroEngine
         );
         VertexDeclaration IVertexType.VertexDeclaration { get { return VertexDeclaration; } }
 
-        public struct VertexElementByteOffset
-        {
-            public static int currentByteSize = 0;
-            //[STAThread]
-            public static int PositionStartOffset() { currentByteSize = 0; var s = sizeof(float) * 3; currentByteSize += s; return currentByteSize - s; }
-            public static int Offset(int n) { var s = sizeof(int); currentByteSize += s; return currentByteSize - s; }
-            public static int Offset(float n) { var s = sizeof(float); currentByteSize += s; return currentByteSize - s; }
-            public static int Offset(Vector2 n) { var s = sizeof(float) * 2; currentByteSize += s; return currentByteSize - s; }
-            public static int Offset(Color n) { var s = sizeof(int); currentByteSize += s; return currentByteSize - s; }
-            public static int Offset(Vector3 n) { var s = sizeof(float) * 3; currentByteSize += s; return currentByteSize - s; }
-            public static int Offset(Vector4 n) { var s = sizeof(float) * 4; currentByteSize += s; return currentByteSize - s; }
+    }
 
-            public static int OffsetInt() { var s = sizeof(int); currentByteSize += s; return currentByteSize - s; }
-            public static int OffsetFloat() { var s = sizeof(float); currentByteSize += s; return currentByteSize - s; }
-            public static int OffsetColor() { var s = sizeof(int); currentByteSize += s; return currentByteSize - s; }
-            public static int OffsetVector2() { var s = sizeof(float) * 2; currentByteSize += s; return currentByteSize - s; }
-            public static int OffsetVector3() { var s = sizeof(float) * 3; currentByteSize += s; return currentByteSize - s; }
-            public static int OffsetVector4() { var s = sizeof(float) * 4; currentByteSize += s; return currentByteSize - s; }
-        }
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct InstanceData : IVertexType
+    {
+        public Vector4 Row1;
+        public Vector4 Row2;
+        public Vector4 Row3;
+        public Vector4 Row4;
+
+        public static VertexDeclaration VertexDeclaration = new VertexDeclaration
+        (
+                new VertexElement(VertexElementByteOffset.PositionStartOffset(4), VertexElementFormat.Vector4, VertexElementUsage.BlendIndices, 1),
+                new VertexElement(VertexElementByteOffset.OffsetVector4(), VertexElementFormat.Vector4, VertexElementUsage.BlendIndices, 2),
+                new VertexElement(VertexElementByteOffset.OffsetVector4(), VertexElementFormat.Vector4, VertexElementUsage.BlendIndices, 3),
+                new VertexElement(VertexElementByteOffset.OffsetVector4(), VertexElementFormat.Vector4, VertexElementUsage.BlendIndices, 4)
+        );
+        VertexDeclaration IVertexType.VertexDeclaration { get { return VertexDeclaration; } }
 
     }
+
+    public struct VertexElementByteOffset
+    {
+        public static int currentByteSize = 0;
+        //[STAThread]
+        public static int PositionStartOffset(int size = 3) { currentByteSize = 0; var s = sizeof(float) * size; currentByteSize += s; return currentByteSize - s; }
+        public static int Offset(int n) { var s = sizeof(int); currentByteSize += s; return currentByteSize - s; }
+        public static int Offset(float n) { var s = sizeof(float); currentByteSize += s; return currentByteSize - s; }
+        public static int Offset(Vector2 n) { var s = sizeof(float) * 2; currentByteSize += s; return currentByteSize - s; }
+        public static int Offset(Color n) { var s = sizeof(int); currentByteSize += s; return currentByteSize - s; }
+        public static int Offset(Vector3 n) { var s = sizeof(float) * 3; currentByteSize += s; return currentByteSize - s; }
+        public static int Offset(Vector4 n) { var s = sizeof(float) * 4; currentByteSize += s; return currentByteSize - s; }
+
+        public static int OffsetInt() { var s = sizeof(int); currentByteSize += s; return currentByteSize - s; }
+        public static int OffsetFloat() { var s = sizeof(float); currentByteSize += s; return currentByteSize - s; }
+        public static int OffsetColor() { var s = sizeof(int); currentByteSize += s; return currentByteSize - s; }
+        public static int OffsetVector2() { var s = sizeof(float) * 2; currentByteSize += s; return currentByteSize - s; }
+        public static int OffsetVector3() { var s = sizeof(float) * 3; currentByteSize += s; return currentByteSize - s; }
+        public static int OffsetVector4() { var s = sizeof(float) * 4; currentByteSize += s; return currentByteSize - s; }
+    }
+
 }

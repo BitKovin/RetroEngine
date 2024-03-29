@@ -31,7 +31,7 @@ namespace RetroEngine.Game.Effects.Particles
 
             SpawnRate = 0;
 
-            InitialSpawnCount = 1;
+            InitialSpawnCount = 3;
         }
 
         public override Particle UpdateParticle(Particle particle)
@@ -39,8 +39,7 @@ namespace RetroEngine.Game.Effects.Particles
 
             particle.velocity -= new Vector3(0, 10, 0) * (Time.deltaTime / 2f);
 
-            Console.WriteLine(particle.HasCollision);
-
+            particle.velocity = Vector3.Zero;
             particle = base.UpdateParticle(particle);
 
             particle.velocity -= new Vector3 (0, 10, 0) * (Time.deltaTime / 2f);
@@ -56,11 +55,11 @@ namespace RetroEngine.Game.Effects.Particles
 
             particle.Scale = MathHelper.Lerp(0.5f,1, (float)random.NextDouble());
 
-            Vector3 randPos = RandomPosition(0.3f);
+            Vector3 randPos = RandomPosition(1f);
 
             particle.position += randPos;
             particle.velocity = randPos.Normalized() * 0.2f + new Vector3(0,2,0);
-            particle.deathTime = 3;
+            particle.deathTime = 300;
 
             particle.globalRotation = RandomPosition(500);
 
