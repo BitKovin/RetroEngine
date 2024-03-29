@@ -391,8 +391,11 @@ namespace RetroEngine
 
             effect.Parameters["Viewmodel"].SetValue(Viewmodel);
 
+
             if (Viewmodel)
-                effect.Parameters["Projection"].SetValue(Camera.finalizedProjectionViewmodel);
+                effect.Parameters["ViewProjection"].SetValue(Camera.view * Camera.finalizedProjectionViewmodel);
+            else
+                effect.Parameters["ViewProjection"].SetValue(Camera.view * Camera.finalizedProjection);
 
             effect.Parameters["World"].SetValue(frameStaticMeshData.World);
 

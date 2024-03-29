@@ -10,22 +10,13 @@
 matrix World;
 matrix ViewProjection;
 
-bool Viewmodel = false;
-
 float3 CameraPos;
 
 bool pointDistance;
 
-#define BONE_NUM 128
-
-matrix Bones[BONE_NUM];
-
 struct VertexShaderInput
 {
     float4 Position : POSITION0;
-    
-    float4 BlendIndices : BLENDINDICES0;
-    float4 BlendWeights : BLENDWEIGHT0;
 };
 
 struct VertexShaderOutput
@@ -35,47 +26,19 @@ struct VertexShaderOutput
     float3 WorldPos : TEXCOORD1;
 };
 
-float4x4 GetBoneTransforms(VertexShaderInput input)
-{
-    
-    float4x4 identity = float4x4(
-    1.0, 0.0, 0.0, 0.0,
-    0.0, 1.0, 0.0, 0.0,
-    0.0, 0.0, 1.0, 0.0,
-    0.0, 0.0, 0.0, 1.0);
-    
-    float sum = input.BlendWeights.x + input.BlendWeights.y + input.BlendWeights.z + input.BlendWeights.w;
-    
-    if (sum < 0.05f)
-        return identity;
-    
-    float4x4 mbones =
-    Bones[input.BlendIndices.x] * (float) input.BlendWeights.x / sum +
-    Bones[input.BlendIndices.y] * (float) input.BlendWeights.y / sum +
-    Bones[input.BlendIndices.z] * (float) input.BlendWeights.z / sum +
-    Bones[input.BlendIndices.w] * (float) input.BlendWeights.w / sum;
-    
-    return mbones;
-}
-
 VertexShaderOutput MainVS(in VertexShaderInput input)
 {
     VertexShaderOutput output;
 
-    float4x4 boneTrans = GetBoneTransforms(input);
-    
     // Transform the vertex position to world space
-    output.Position = mul(mul(input.Position, boneTrans), World);
-    
+    output.Position = mul(input.Position, World);
+
     output.WorldPos = output.Position;
-    
+
     output.Position = mul(output.Position, ViewProjection);
 
-    if (Viewmodel)
-        output.Position.z *= 0.02;
-    
     output.MyPosition = output.Position;
-    
+
     return output;
 }
 
@@ -87,14 +50,14 @@ struct PS_Out
 
 float4 MainPS(VertexShaderOutput input) : SV_TARGET
 {
-    
+
     PS_Out output = (PS_Out)0;
-    
+
     float depth = input.MyPosition.z;
-    
+
     if (pointDistance)
         depth = distance(input.WorldPos, CameraPos);
-    
+
     return float4(depth, 0, 0, 1);
 }
 

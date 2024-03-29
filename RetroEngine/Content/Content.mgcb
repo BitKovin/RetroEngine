@@ -99,6 +99,12 @@
 /processorParam:DebugMode=Optimize
 /build:OcclusionPath.fx
 
+#begin OcclusionPathStatic.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:OcclusionPathStatic.fx
+
 #begin ReflectionPath.fx
 /importer:EffectImporter
 /processor:EffectProcessor

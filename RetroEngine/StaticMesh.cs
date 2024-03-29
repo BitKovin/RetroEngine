@@ -465,7 +465,7 @@ namespace RetroEngine
 
             GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
             // Load the custom effect
-            Effect effect = GameMain.Instance.render.OcclusionEffect;
+            Effect effect = GameMain.Instance.render.OcclusionStaticEffect;
 
             if(GameMain.Instance.render.BoundingSphere.Radius == 0 || IntersectsBoubndingSphere(GameMain.Instance.render.BoundingSphere))
 

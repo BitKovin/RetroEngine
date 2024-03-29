@@ -221,10 +221,13 @@ namespace RetroEngine.Entities.Light
             GameMain.Instance.render.BoundingSphere.Radius = lightData.Radius;
             GameMain.Instance.render.BoundingSphere.Center = lightData.Position;
 
-            GameMain.Instance.render.OcclusionEffect.Parameters["View"].SetValue(view);
-            GameMain.Instance.render.OcclusionEffect.Parameters["Projection"].SetValue(projection);
+            GameMain.Instance.render.OcclusionEffect.Parameters["ViewProjection"].SetValue(view * projection);
             GameMain.Instance.render.OcclusionEffect.Parameters["CameraPos"].SetValue(Position);
             GameMain.Instance.render.OcclusionEffect.Parameters["pointDistance"].SetValue(true);
+
+            GameMain.Instance.render.OcclusionStaticEffect.Parameters["ViewProjection"].SetValue(view * projection);
+            GameMain.Instance.render.OcclusionStaticEffect.Parameters["CameraPos"].SetValue(Position);
+            GameMain.Instance.render.OcclusionStaticEffect.Parameters["pointDistance"].SetValue(true);
 
             GameMain.Instance.render.RenderLevelGeometryDepth(l, OnlyStatic: !Dynamic, onlyShadowCasters: true);
 

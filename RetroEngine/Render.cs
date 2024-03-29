@@ -67,6 +67,7 @@ namespace RetroEngine
         public Effect ReflectionResultEffect;
 
         public Effect OcclusionEffect;
+        public Effect OcclusionStaticEffect;
 
         public Effect ColorEffect;
         public Effect ParticleColorEffect;
@@ -129,6 +130,8 @@ namespace RetroEngine
             BloomEffect = GameMain.content.Load<Effect>("BloomSampler");
 
             OcclusionEffect = GameMain.content.Load<Effect>("OcclusionPath");
+            OcclusionStaticEffect = GameMain.content.Load<Effect>("OcclusionPathStatic");
+
 
             TonemapperEffect = GameMain.content.Load<Effect>("Tonemap");
 
@@ -420,20 +423,20 @@ namespace RetroEngine
             graphics.GraphicsDevice.BlendState = BlendState.Opaque;
 
 
-            OcclusionEffect.Parameters["View"].SetValue(Camera.finalizedView);
-            
+            OcclusionEffect.Parameters["ViewProjection"].SetValue(Camera.finalizedView * Camera.finalizedProjection);
+            OcclusionStaticEffect.Parameters["ViewProjection"].SetValue(Camera.finalizedView * Camera.finalizedProjection);
 
 
             OcclusionEffect.Parameters["pointDistance"].SetValue(false);
+            OcclusionStaticEffect.Parameters["pointDistance"].SetValue(false);
 
-            
+
 
             foreach (StaticMesh mesh in renderList)
             {
                 if (mesh.Transperent == false)
                 {
                     OcclusionEffect.Parameters["Viewmodel"].SetValue(false);
-                    OcclusionEffect.Parameters["Projection"].SetValue(Camera.finalizedProjection);
                     mesh.StartOcclusionTest();
 
                 }
