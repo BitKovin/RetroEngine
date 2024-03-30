@@ -438,6 +438,11 @@ namespace RetroEngine
                 if (mesh.Transperent == false)
                 {
                     OcclusionEffect.Parameters["Viewmodel"].SetValue(false);
+
+                    if (mesh.Viewmodel)
+                        OcclusionEffect.Parameters["ViewProjection"].SetValue(Camera.view * Camera.finalizedProjectionViewmodel);
+                    else
+                        OcclusionEffect.Parameters["ViewProjection"].SetValue(Camera.view * Camera.finalizedProjection);
                     mesh.StartOcclusionTest();
 
                 }
