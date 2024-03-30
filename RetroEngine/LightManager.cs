@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using RetroEngine.Entities.Light;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -61,7 +62,7 @@ namespace RetroEngine
             public Vector3 Color = new Vector3(0,0,0);
             public float Radius = 0;
             public int Resolution = 256;
-            public RenderTargetCube shadowData = null;
+            public PointLight shadowData = null;
 
             public PointLightData()
             {

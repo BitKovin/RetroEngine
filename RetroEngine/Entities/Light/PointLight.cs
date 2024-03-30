@@ -36,10 +36,14 @@ namespace RetroEngine.Entities.Light
 
         static bool finalizedFrame = false;
 
+        int resolution;
+
         public bool Dynamic = false;
         public bool CastShadows = true;
 
         float DynamicUpdateDystance;
+
+        internal RenderTargetCube renderTargetCube;
 
         public override void FromData(EntityData data)
         {
@@ -55,7 +59,7 @@ namespace RetroEngine.Entities.Light
             graphicsDevice = GameMain.Instance.GraphicsDevice;
 
 
-            int resolution = 256;
+            resolution = 256;
 
             resolution = (int)data.GetPropertyFloat("resolution", 256);
 
@@ -64,14 +68,13 @@ namespace RetroEngine.Entities.Light
 
             lightData.Resolution = resolution;
 
-            lightData.shadowData = new RenderTargetCube(graphicsDevice, resolution, false, SurfaceFormat.HalfSingle, DepthFormat.Depth24);
-
             mesh.LoadFromFile("models/cube.obj");
             //meshes.Add(mesh);
             mesh.Visible = false;
 
-            DynamicUpdateDystance = (lightData.Radius + 5) * 2;
+            DynamicUpdateDystance = (lightData.Radius + 7) * 3;
 
+            lightData.shadowData = this;
         }
 
         public override void Start()
@@ -84,7 +87,7 @@ namespace RetroEngine.Entities.Light
 
             mesh.Visible = true;
             mesh.Position = Position;
-            mesh.texture = lightData.shadowData;
+            mesh.texture = renderTargetCube;
             mesh.Shader = AssetRegistry.GetShaderFromName("CubeMapVisualizer");
 
         }
@@ -93,9 +96,32 @@ namespace RetroEngine.Entities.Light
         {
             base.Update();
 
+            float dist = Vector3.Distance(Camera.position, Position);
+
+            if (dist < (lightData.Radius + 1) * 2)
+            {
+                SetLightResolution(resolution);
+            }
+            if(dist > (lightData.Radius + 1) * 2)
+            {
+                SetLightResolution((int)((float)resolution/1.5f));
+            }
+            if (dist > (lightData.Radius+2) * 3)
+            {
+                SetLightResolution((int)((float)resolution / 2));
+            }
+            if (dist > (lightData.Radius + 2) * 5)
+            {
+                SetLightResolution(resolution / 4);
+            }
 
             finalizedFrame = false;
 
+        }
+
+        bool isDynamic()
+        {
+            return Dynamic;
         }
 
         public override void FinalizeFrame()
@@ -116,8 +142,13 @@ namespace RetroEngine.Entities.Light
 
             lights.Remove(this);
 
-            lightData.shadowData?.Dispose();
+            renderTargetCube?.Dispose();
 
+        }
+
+        public void SetLightResolution(int res)
+        {
+            lightData.Resolution = res;
         }
 
         public override void LateUpdate()
@@ -169,18 +200,49 @@ namespace RetroEngine.Entities.Light
         {
             foreach (var light in finalLights)
             {
-                if(light.dirty || light.Dynamic)
                 light.Render();
             }
         }
 
+        void InitRenderTargetIfNeeded()
+        {
+
+            //InitRenderTarget();
+
+            if (renderTargetCube == null)
+                InitRenderTarget();
+
+            if(renderTargetCube.Size!= lightData.Resolution)
+                InitRenderTarget();
+
+        }
+
+
+        GraphicsResource disposeTarget;
+
+        void InitRenderTarget()
+        {
+            renderTargetCube?.Dispose();
+
+            renderTargetCube = new RenderTargetCube(graphicsDevice, lightData.Resolution, false, SurfaceFormat.Single, DepthFormat.Depth24);
+
+            dirty = true;
+
+        }
 
         void Render()
         {
 
+            InitRenderTargetIfNeeded();
+
+            if (isDynamic() == false && dirty == false)
+            {
+                return;
+            }
+
             if (CastShadows == false) return;
 
-            if (Dynamic)
+            if (isDynamic())
             {
 
                 if (Vector3.Distance(Camera.position, Position) >= DynamicUpdateDystance)
@@ -195,6 +257,10 @@ namespace RetroEngine.Entities.Light
 
             if (CastShadows == false) return;
 
+
+
+
+
             RenderFace(CubeMapFace.PositiveX);
             RenderFace(CubeMapFace.NegativeX);
             RenderFace(CubeMapFace.PositiveY);
@@ -202,8 +268,9 @@ namespace RetroEngine.Entities.Light
             RenderFace(CubeMapFace.PositiveZ);
             RenderFace(CubeMapFace.NegativeZ);
 
-            dirty = false;
+            bool wasDirty = dirty;
 
+            dirty = false;
         }
 
         void RenderFace(CubeMapFace face)
@@ -215,7 +282,7 @@ namespace RetroEngine.Entities.Light
 
             var l = Level.GetCurrent().GetAllOpaqueMeshes();
 
-            graphicsDevice.SetRenderTarget(lightData.shadowData, face);
+            graphicsDevice.SetRenderTarget(renderTargetCube, face);
             graphicsDevice.Clear(Color.Black);
 
             GameMain.Instance.render.BoundingSphere.Radius = lightData.Radius;
@@ -229,7 +296,7 @@ namespace RetroEngine.Entities.Light
             GameMain.Instance.render.OcclusionStaticEffect.Parameters["CameraPos"].SetValue(Position);
             GameMain.Instance.render.OcclusionStaticEffect.Parameters["pointDistance"].SetValue(true);
 
-            GameMain.Instance.render.RenderLevelGeometryDepth(l, OnlyStatic: !Dynamic, onlyShadowCasters: true);
+            GameMain.Instance.render.RenderLevelGeometryDepth(l, OnlyStatic: !isDynamic(), onlyShadowCasters: true);
 
             GameMain.Instance.render.BoundingSphere.Radius = 0;
 

@@ -250,7 +250,7 @@ namespace RetroEngine
                     LightColor[filledLights] = LightManager.FinalPointLights[i].Color;
                     LightRadius[filledLights] = LightManager.FinalPointLights[i].Radius;
                     LightRes[filledLights] = LightManager.FinalPointLights[i].Resolution;
-                    LightMaps[filledLights] = LightManager.FinalPointLights[i].shadowData;
+                    LightMaps[filledLights] = LightManager.FinalPointLights[i].shadowData.renderTargetCube;
 
                     filledLights++;
 
