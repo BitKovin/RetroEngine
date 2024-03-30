@@ -29,6 +29,9 @@ namespace RetroEngine.Game.Effects.Particles
             InitialSpawnCount = 10;
             //SpawnRate = 1000;
             BoundingRadius = 3;
+
+            
+
         }
 
         public override Particle UpdateParticle(Particle particle)
@@ -40,7 +43,7 @@ namespace RetroEngine.Game.Effects.Particles
 
             particle.velocity -= new Vector3(0, 2, 0) * (Time.deltaTime / 2f);
 
-            particle.transparency = Math.Max(particle.transparency -= Time.deltaTime, 0);
+            particle.transparency = Math.Max(particle.transparency -= Time.deltaTime/1.5f, 0);
 
             return particle;
         }
@@ -52,7 +55,8 @@ namespace RetroEngine.Game.Effects.Particles
             particle.Scale = 0.2f;
 
             Vector3 randPos = RandomPosition(0.12f);
-
+            particle.HasCollision = true;
+            particle.BouncePower = 0.1f;
             particle.position += randPos;
             particle.velocity = randPos.Normalized()*0.5f;
             particle.transparency = 0.8f;

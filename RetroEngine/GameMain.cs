@@ -228,8 +228,9 @@ namespace RetroEngine
 
             var physicsTask = Task.Factory.StartNew(() => { Physics.Simulate(); });
             curentLevel.WaitForVisualUpdate();
+
             PerformReservedTimeTasks();
-            curentLevel.StartVisualUpdate();
+            
 
             foreach (UiElement elem in UiElement.Viewport.childs)
                 elem.Update();
@@ -253,7 +254,7 @@ namespace RetroEngine
             {
                 GameLogic();
             }
-
+            curentLevel.StartVisualUpdate();
             base.Update(gameTime);
         }
 

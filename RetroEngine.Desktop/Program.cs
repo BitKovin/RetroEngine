@@ -28,8 +28,6 @@ internal class Program
 
         }
 
-        Vector2 oldPos = new Vector2();
-
         public override Vector2 GetMouseDelta()
         {
             mouse.Poll();
