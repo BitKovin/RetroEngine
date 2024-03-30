@@ -55,7 +55,7 @@ namespace RetroEngine.Game.Effects.Particles
             particle.Scale = 0.2f;
 
             Vector3 randPos = RandomPosition(0.12f);
-            particle.HasCollision = true;
+            //particle.HasCollision = true;
             particle.BouncePower = 0.1f;
             particle.position += randPos;
             particle.velocity = randPos.Normalized()*0.5f;

@@ -293,8 +293,6 @@ namespace RetroEngine
 
             Entity[] list = entities.ToArray();
 
-            
-
             Parallel.ForEach(entities, options, entity =>
             {
                 if(entity!=null)
@@ -329,6 +327,8 @@ namespace RetroEngine
 
             GameMain.Instance.render.EndOcclusionTest(Render.testedMeshes);
 
+            ParallelOptions options = new ParallelOptions();
+            options.MaxDegreeOfParallelism = Environment.ProcessorCount;
             
             Entity[] list = entities.ToArray();
 
