@@ -93,7 +93,7 @@ float ShadowMapResolutionVeryClose;
 
 #ifndef MAX_POINT_LIGHTS
 
-#define MAX_POINT_LIGHTS 4
+#define MAX_POINT_LIGHTS 6
 
 #endif
 
@@ -143,6 +143,65 @@ sampler PointLightCubemap4Sampler = sampler_state
     AddressV = Clamp;
 };
 
+texture PointLightCubemap5;
+sampler PointLightCubemap5Sampler = sampler_state
+{
+    texture = <PointLightCubemap5>;
+    MinFilter = Linear;
+    MagFilter = Linear;
+    AddressU = Clamp;
+    AddressV = Clamp;
+};
+
+texture PointLightCubemap6;
+sampler PointLightCubemap6Sampler = sampler_state
+{
+    texture = <PointLightCubemap6>;
+    MinFilter = Linear;
+    MagFilter = Linear;
+    AddressU = Clamp;
+    AddressV = Clamp;
+};
+
+texture PointLightCubemap7;
+sampler PointLightCubemap7Sampler = sampler_state
+{
+    texture = <PointLightCubemap7>;
+    MinFilter = Linear;
+    MagFilter = Linear;
+    AddressU = Clamp;
+    AddressV = Clamp;
+};
+
+texture PointLightCubemap8;
+sampler PointLightCubemap8Sampler = sampler_state
+{
+    texture = <PointLightCubemap8>;
+    MinFilter = Linear;
+    MagFilter = Linear;
+    AddressU = Clamp;
+    AddressV = Clamp;
+};
+
+texture PointLightCubemap9;
+sampler PointLightCubemap9Sampler = sampler_state
+{
+    texture = <PointLightCubemap9>;
+    MinFilter = Linear;
+    MagFilter = Linear;
+    AddressU = Clamp;
+    AddressV = Clamp;
+};
+
+texture PointLightCubemap10;
+sampler PointLightCubemap10Sampler = sampler_state
+{
+    texture = <PointLightCubemap10>;
+    MinFilter = Linear;
+    MagFilter = Linear;
+    AddressU = Clamp;
+    AddressV = Clamp;
+};
 
 #define BONE_NUM 128
 
@@ -649,8 +708,8 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
 float GetPointLightDepth(int i, float3 worldPos)
 {
     
-    if (i>=4)
-        return 10000000;
+    if (i>= MAX_POINT_LIGHTS)
+        return 10000;
 
     // Get the direction from the world position to the light position
         float3 lightDir = LightPositions[i] - worldPos;
@@ -670,9 +729,21 @@ float GetPointLightDepth(int i, float3 worldPos)
         depth = texCUBE(PointLightCubemap3Sampler, lightDir).r;
     else if (i == 3)
         depth = texCUBE(PointLightCubemap4Sampler, lightDir).r;
+    else if (i == 4)
+        depth = texCUBE(PointLightCubemap5Sampler, lightDir).r;
+    else if (i == 5)
+        depth = texCUBE(PointLightCubemap6Sampler, lightDir).r;
+    else if (i == 6)
+        depth = texCUBE(PointLightCubemap7Sampler, lightDir).r;
+    else if (i == 7)
+        depth = texCUBE(PointLightCubemap8Sampler, lightDir).r;
+    else if (i == 8)
+        depth = texCUBE(PointLightCubemap9Sampler, lightDir).r;
+    else if (i == 9)
+        depth = texCUBE(PointLightCubemap10Sampler, lightDir).r;
     
     if(depth == 0)
-        return 1000000;
+        return 10000;
     
     depth += depth / (LightResolutions[i]*2) + 0.02;
 

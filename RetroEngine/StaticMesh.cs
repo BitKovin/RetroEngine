@@ -53,6 +53,8 @@ namespace RetroEngine
         public Vector3 Rotation { get; set; } = Vector3.Zero;
         public Vector3 Scale { get; set; } = new Vector3(1, 1, 1);
 
+        public Matrix ParrentTransform = Matrix.Identity;
+
         public Model model;
 
         public Texture texture;
@@ -265,6 +267,12 @@ namespace RetroEngine
                 effect.Parameters["PointLightCubemap2"]?.SetValue(LightMaps[1]);
                 effect.Parameters["PointLightCubemap3"]?.SetValue(LightMaps[2]);
                 effect.Parameters["PointLightCubemap4"]?.SetValue(LightMaps[3]);
+                effect.Parameters["PointLightCubemap5"]?.SetValue(LightMaps[4]);
+                effect.Parameters["PointLightCubemap6"]?.SetValue(LightMaps[5]);
+                effect.Parameters["PointLightCubemap7"]?.SetValue(LightMaps[6]);
+                effect.Parameters["PointLightCubemap8"]?.SetValue(LightMaps[7]);
+                effect.Parameters["PointLightCubemap9"]?.SetValue(LightMaps[8]);
+                effect.Parameters["PointLightCubemap10"]?.SetValue(LightMaps[9]);
 
             }
 
@@ -754,7 +762,6 @@ namespace RetroEngine
                             Matrix.CreateRotationZ(Rotation.Z / 180 * (float)Math.PI) *
                             Matrix.CreateRotationX(Rotation.X / 180 * (float)Math.PI) *
                             Matrix.CreateRotationY(Rotation.Y / 180 * (float)Math.PI) *
-
                             Matrix.CreateTranslation(Position);
                 return worldMatrix;
             }
@@ -765,7 +772,7 @@ namespace RetroEngine
                                 Matrix.CreateRotationX(Rotation.X / 180 * (float)Math.PI) *
                                 Matrix.CreateRotationY(Rotation.Y / 180 * (float)Math.PI) *
                                 Matrix.CreateRotationZ(Rotation.Z / 180 * (float)Math.PI) *
-                                Matrix.CreateTranslation(Position);
+                                Matrix.CreateTranslation(Position) * ParrentTransform;
                 return worldMatrix;
             }
         }
