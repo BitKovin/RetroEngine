@@ -15,7 +15,7 @@ namespace RetroEngine
         public static Color BackgroundColor = new Color(0.15f, 0.15f, 0.2f);
         public static Vector3 LightColor = new Vector3(1,1,1);
 
-        public static float ShadowBias = -0.0001f;//0025f
+        public static float ShadowBias = -0.001f;//0025f
         public static int shadowMapResolution = 2048*2;
         public static int closeShadowMapResolution = 2048;
         public static int veryCloseShadowMapResolution = 2048;
@@ -92,7 +92,7 @@ namespace RetroEngine
         public static Matrix GetCloseLightProjection()
         {
 
-            return Matrix.CreateOrthographic(CloseLightDistance, CloseLightDistance, -100, 100);
+            return Matrix.CreateOrthographic(CloseLightDistance, CloseLightDistance, -300, 100);
         }
 
         public static Matrix GetVeryCloseLightProjection()

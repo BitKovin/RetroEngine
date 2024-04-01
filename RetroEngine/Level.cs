@@ -83,6 +83,9 @@ namespace RetroEngine
 
             //StaticMesh.textures.Clear();
 
+            if (name.EndsWith(".map") == false)
+                name += ".map";
+
             if(force == false)
             {
                 pendingLevelChange = name;
@@ -159,7 +162,7 @@ namespace RetroEngine
 
             Navigation.RebuildConnectionsData();
             
-            ChangingLevel = false;
+            
 
             AssetRegistry.AllowGeneratingMipMaps = false;
 
@@ -172,6 +175,8 @@ namespace RetroEngine
             GC.Collect();
 
             LoadingScreen.Update(1f);
+
+            ChangingLevel = false;
 
         }
 

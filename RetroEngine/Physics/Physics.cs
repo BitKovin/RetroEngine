@@ -437,6 +437,31 @@ namespace RetroEngine
             return convResultCallback;
         }
 
+        public static MyClosestConvexResultCallback SphereTrace(Vector3 rayStart, Vector3 rayEnd, List<CollisionObject> ignoreList = null, float radius = 0.5f)
+        {
+            CollisionWorld world = dynamicsWorld;
+
+            // Create a sphere shape with the specified radius
+            SphereShape sphereShape = new SphereShape(radius);
+
+            Matrix4x4 start = Matrix4x4.CreateTranslation(rayStart);
+            Matrix4x4 end = Matrix4x4.CreateTranslation(rayEnd);
+
+
+            MyClosestConvexResultCallback convResultCallback = new MyClosestConvexResultCallback(ref rayStart, ref rayEnd);
+
+            if (ignoreList is not null)
+                convResultCallback.ignoreList = ignoreList;
+
+            // Perform the sphere sweep
+            world.ConvexSweepTest(sphereShape, start, end, convResultCallback);
+
+            // Dispose of the sphere shape to release resources
+            sphereShape.Dispose();
+
+            return convResultCallback;
+        }
+
         public static MyClosestRayResultCallback LineTraceForStatic(Vector3 rayStart, Vector3 rayEnd)
         {
             CollisionWorld world = staticWorld;

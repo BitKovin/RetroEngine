@@ -46,7 +46,7 @@ float CalculateSSAO(float2 texCoord, float depth, float3 normal)
 
     float rotation = texCoord.x + texCoord.y;
 
-    for (float l = 0; l <= radius; l += radius/4)
+    for (float l = 0; l <= radius; l += radius/20)
         for (float angle = 0.0; angle < 6.283; angle += 0.5)
         {
             float2 offset = l * float2(cos(angle + rotation), sin(angle + rotation));
@@ -60,17 +60,16 @@ float CalculateSSAO(float2 texCoord, float depth, float3 normal)
 
             float depthDifference = depth - sampleDepth + bias;
             
-            if (depthDifference<0)
-                continue;
-            
-            if (depthDifference > 1)
-                continue;
+            depthDifference = clamp(depthDifference, -4, 4);
+
+            float factor = (radius - l) / radius;
+
             
             float normalDifference = 1 - dot(normal, sampleNormal);
        
-            float occlusion = normalDifference;
+            float occlusion = normalDifference * depthDifference;
        
-            ao += occlusion / lerp(depth, 1, 0.995) * ssaoIntensity;
+            ao += occlusion / lerp(depth, 1, 0.995) * ssaoIntensity * factor;
         }
 
     ao /= 63.0 * 3;
@@ -100,7 +99,7 @@ float4 PixelShaderFunction(float4 position : SV_POSITION, float4 color : COLOR0,
 
     
     // Apply AO to the final color
-    float3 finalColor = 1 ;
+    float3 finalColor = 1;// -ao;
 
     return float4(finalColor, 1.0);
 }

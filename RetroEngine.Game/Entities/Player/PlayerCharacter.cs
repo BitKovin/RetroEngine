@@ -70,6 +70,8 @@ namespace RetroEngine.Game.Entities.Player
         SkeletalMesh bodyMesh = new SkeletalMesh();
         PlayerBodyAnimator PlayerBodyAnimator = new PlayerBodyAnimator();
 
+        StaticMesh testCube = new StaticMesh();
+
         public PlayerCharacter() : base()
         {
             if (GameMain.platform == Platform.Mobile)
@@ -120,6 +122,11 @@ namespace RetroEngine.Game.Entities.Player
             PlayerBodyAnimator.LoadAssets();
 
             meshes.Add(bodyMesh);
+
+            testCube.LoadFromFile("models/cube.obj");
+            testCube.texture = AssetRegistry.LoadTextureFromFile("cat.png");
+            testCube.Scale = new Vector3(0.1f);
+            meshes.Add(testCube);
 
             Weapon.PreloadAllWeapons();
             PlayerUI.Load();
@@ -355,6 +362,9 @@ namespace RetroEngine.Game.Entities.Player
 
                     body.LinearVelocity = new Vector3(velocity.X, body.LinearVelocity.Y, velocity.Z).ToPhysics();
 
+                    TryStep(motion.Normalized()/2);
+                    TryStep(motion.Normalized()/1.6f);
+
                 }
                 else
                 {
@@ -443,11 +453,60 @@ namespace RetroEngine.Game.Entities.Player
 
         }
 
+
         bool CheckGroundAtOffset(Vector3 offset)
         {
             var hit = Physics.LineTrace(Position.ToNumerics() + offset.ToNumerics(), (Position - new Vector3(0, 1.05f, 0) + offset).ToNumerics(), new List<CollisionObject>() { body });
 
-            return hit.HasHit;
+            if(hit.HasHit == false)
+                return false;
+
+            return hit.HitNormalWorld.Y>0.7;
+        }
+
+        Delay stepDelay = new Delay();
+
+        void TryStep(Vector3 dir)
+        {
+
+            if (stepDelay.Wait()) return;
+
+            Vector3 pos = ProjectToGround(Position) + dir  + new Vector3(0,1f,0);
+
+            
+
+            var hit = Physics.SphereTrace(pos.ToNumerics(), (pos - new Vector3(0, 0.85f, 0)).ToNumerics(), new List<CollisionObject>() { body },0.05f);
+
+            if (hit.HasHit == false)
+                return;
+
+
+            if (hit.HitNormalWorld.Y < 0.95)
+                return;
+
+            Vector3 hitPoint = hit.HitPointWorld;
+
+            testCube.Position = hitPoint;
+
+            if (hitPoint.Y > Position.Y - 1 + 0.8)
+                return;
+
+            hitPoint.Y += 1.2f;
+
+            Vector3 lerpPose = Vector3.Lerp(Position, hitPoint, 0.5f);
+
+            body.SetPosition(lerpPose);
+
+            stepDelay.AddDelay(0.1f);
+
+        }
+
+        Vector3 ProjectToGround(Vector3 pos)
+        {
+            var hit = Physics.LineTrace(pos.ToNumerics(), (pos - new Vector3(0, 100000000, 0)).ToNumerics(), new List<CollisionObject>() { body });
+
+            return hit.HitPointWorld;
+
         }
 
         public override void LateUpdate()

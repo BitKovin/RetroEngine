@@ -49,7 +49,9 @@ namespace RetroEngine.Entities.Light
         {
             base.FromData(data);
 
-            lightData.Color = data.GetPropertyVector("light_color", new Vector3(1,1,1)) * data.GetPropertyFloat("intensity",1);
+            float intens = data.GetPropertyFloat("intensity", 1);
+
+            lightData.Color = data.GetPropertyVector("light_color", new Vector3(1,1,1)) * intens;
             lightData.Radius = data.GetPropertyFloat("radius", 5);
 
             Dynamic = data.GetPropertyBool("dynamic");
@@ -70,9 +72,9 @@ namespace RetroEngine.Entities.Light
 
             mesh.LoadFromFile("models/cube.obj");
             //meshes.Add(mesh);
-            mesh.Visible = false;
+            //mesh.Visible = false;
 
-            DynamicUpdateDystance = (lightData.Radius + 7) * 3;
+            DynamicUpdateDystance = (lightData.Radius + 10) * 5;
 
             lightData.shadowData = this;
         }
@@ -87,7 +89,7 @@ namespace RetroEngine.Entities.Light
 
             mesh.Visible = true;
             mesh.Position = Position;
-            mesh.texture = renderTargetCube;
+            
             mesh.Shader = AssetRegistry.GetShaderFromName("CubeMapVisualizer");
 
         }
@@ -133,6 +135,7 @@ namespace RetroEngine.Entities.Light
             finalLights = new List<PointLight>(lights);
 
             finalizedFrame = true;
+
 
         }
 
@@ -207,8 +210,6 @@ namespace RetroEngine.Entities.Light
         void InitRenderTargetIfNeeded()
         {
 
-            //InitRenderTarget();
-
             if (renderTargetCube == null)
                 InitRenderTarget();
 
@@ -218,13 +219,13 @@ namespace RetroEngine.Entities.Light
         }
 
 
-        GraphicsResource disposeTarget;
-
         void InitRenderTarget()
         {
             renderTargetCube?.Dispose();
 
             renderTargetCube = new RenderTargetCube(graphicsDevice, lightData.Resolution, false, SurfaceFormat.Single, DepthFormat.Depth24);
+
+            mesh.texture = renderTargetCube;
 
             dirty = true;
 
@@ -232,6 +233,10 @@ namespace RetroEngine.Entities.Light
 
         void Render()
         {
+
+
+            if (GameMain.SkipFrames > 0)
+                InitRenderTarget();
 
             InitRenderTargetIfNeeded();
 

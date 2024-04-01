@@ -410,6 +410,7 @@ namespace RetroEngine
             if(SkipFrames>0)
             {
                 SkipFrames--;
+                LoadingScreen.Draw();
                 return;
             }
 

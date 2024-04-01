@@ -560,7 +560,10 @@ float GetShadowClose(float3 lightCoords, PixelInput input)
         
         float size = 1;
         
+        bias *= 1;
         
+        return 1 - SampleShadowMap(ShadowMapCloseSampler, lightCoords.xy, currentDepth + bias);
+
         float texelSize = size / resolution; // Assuming ShadowMapSize is the size of your shadow map texture
         
         for (int i = -numSamples; i <= numSamples; ++i)
@@ -569,7 +572,7 @@ float GetShadowClose(float3 lightCoords, PixelInput input)
             {
                 float2 offsetCoords = lightCoords.xy + float2(i, j) * texelSize;
                 float closestDepth;
-                closestDepth = SampleShadowMapLinear(ShadowMapCloseSampler, offsetCoords, currentDepth - bias, float2(texelSize, texelSize));
+                closestDepth = SampleShadowMapLinear(ShadowMapCloseSampler, offsetCoords, currentDepth + bias, float2(texelSize, texelSize));
 
                 shadow += closestDepth;
 
@@ -600,11 +603,12 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input)
 
         int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)
 
-        float b = 0.0002;
+        float b = 0.002;
         
-        float bias = b * (1 - saturate(dot(input.Normal, -LightDirection))) + b / 2.0f;
+        float bias = b * (1 - abs(dot(input.Normal, -LightDirection))) - b / 5.0f;
         resolution = ShadowMapResolutionClose;
         
+        //bias -= max(dot(input.Normal, float3(0,1,0)),0) * b/2;
         
         float size = 1;
         
@@ -649,7 +653,7 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
     {
         
             
-        if (dist < 8)
+        if (dist < 8 && abs(dot(input.Normal, -LightDirection))>0.1)
         {
             if (lightCoordsVeryClose.x >= 0 && lightCoordsVeryClose.x <= 1 && lightCoordsVeryClose.y >= 0 && lightCoordsVeryClose.y <= 1)
             {
@@ -675,7 +679,9 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
         float bias = ShadowBias * (1 - saturate(dot(input.Normal, -LightDirection))) + ShadowBias / 2.0f;
         resolution = ShadowMapResolution;
         
-        return 1 - SampleShadowMap(ShadowMapSampler, lightCoords.xy, currentDepth - bias);
+        bias *= 1;
+
+        return 1 - SampleShadowMap(ShadowMapSampler, lightCoords.xy, currentDepth + bias);
         
         float size = 1;
         
@@ -688,7 +694,7 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
             {
                 float2 offsetCoords = lightCoords.xy + float2(i, j) * texelSize;
                 float closestDepth;
-                closestDepth = SampleShadowMapLinear(ShadowMapSampler, offsetCoords, currentDepth - bias, float2(texelSize, texelSize));
+                closestDepth = SampleShadowMapLinear(ShadowMapSampler, offsetCoords, currentDepth + bias, float2(texelSize, texelSize));
 
                 shadow += closestDepth;
 
@@ -770,7 +776,7 @@ float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal, float ro
         dirToSurface = normal;
     
     
-    intense *= saturate(dot(normal, dirToSurface) * 1.1 + 0.4);
+    intense *= saturate(dot(normal, dirToSurface));
 
     float3 specular = CalculateSpecular(pixelInput.MyPosition, normal, -dirToSurface, roughness, metalic);
     

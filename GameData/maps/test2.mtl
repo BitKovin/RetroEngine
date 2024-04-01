@@ -1,20 +1,21 @@
 newmtl __TB_empty
+map_Kd textures/__TB_empty.png
 
 newmtl brushes/__TB_empty
-map_Kd textures\brushes\__TB_empty.png
+map_Kd textures/brushes/__TB_empty.png
 
 newmtl brushes/brickPBR
-map_Kd textures\brushes\brickPBR.png
+map_Kd textures/brushes/brickPBR.png
 
 newmtl brushes/bricks
-map_Kd textures\brushes\bricks.png
+map_Kd textures/brushes/bricks.png
 
 newmtl brushes/ground_pbr
-map_Kd textures\brushes\ground_pbr.png
+map_Kd textures/brushes/ground_pbr.png
 
 newmtl brushes/mirror
-map_Kd textures\brushes\mirror.png
+map_Kd textures/brushes/mirror.png
 
 newmtl brushes/trigger_t
-map_Kd textures\brushes\trigger_t.png
+map_Kd textures/brushes/trigger_t.png
 

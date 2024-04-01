@@ -272,13 +272,14 @@ namespace RetroEngine
             graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 
 
+            ShadowMapEffect.Parameters["close"].SetValue(false);
             RenderShadowMapClose(renderList);
 
             RenderShadowMap(renderList);
-
+            ShadowMapEffect.Parameters["close"].SetValue(true);
             RenderShadowMapVeryClose(renderList);
             
-            graphics.GraphicsDevice.RasterizerState = Graphics.DisableBackFaceCulling? RasterizerState.CullNone : RasterizerState.CullClockwise;
+            graphics.GraphicsDevice.RasterizerState = Graphics.DisableBackFaceCulling? RasterizerState.CullNone : RasterizerState.CullNone;
 
             InitSampler(25);
 
@@ -299,7 +300,7 @@ namespace RetroEngine
             graphics.GraphicsDevice.SetRenderTarget(null);
 
             if(Input.GetAction("test2").Holding())
-                return reflection;
+                return shadowMapClose;
 
             return outputPath;
 
@@ -506,7 +507,7 @@ namespace RetroEngine
 
             graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 
-            graphics.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
+            graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 
             graphics.GraphicsDevice.BlendState = BlendState.NonPremultiplied;
 
@@ -543,7 +544,7 @@ namespace RetroEngine
 
             graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 
-            graphics.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
+            graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 
             graphics.GraphicsDevice.BlendState = BlendState.Opaque;
 
@@ -773,9 +774,9 @@ namespace RetroEngine
 
             SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
 
-            spriteBatch.Begin(effect: SSAOEffect, blendState: BlendState.Opaque);
+            spriteBatch.Begin(effect: SSAOEffect);
 
-            DrawFullScreenQuad(spriteBatch, DepthOutput);
+            DrawFullScreenQuad(spriteBatch, DepthPrepathOutput);
 
             spriteBatch.End();
             graphics.GraphicsDevice.SetRenderTarget(null);
@@ -891,7 +892,7 @@ namespace RetroEngine
             graphics.GraphicsDevice.Clear(Color.Black);
 
             graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-            graphics.GraphicsDevice.RasterizerState = RasterizerState.CullClockwise;
+            graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 
             foreach (StaticMesh mesh in meshes)
             {
