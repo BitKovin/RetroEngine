@@ -16,6 +16,9 @@ namespace RetroEngine
 
         public string textureName = "";
 
+        BoundingBox BoundingBox;
+
+
         static Assimp.PostProcessSteps PostProcessSteps = Assimp.PostProcessSteps.Triangulate | 
             Assimp.PostProcessSteps.FixInFacingNormals | 
             Assimp.PostProcessSteps.CalculateTangentSpace | 
@@ -171,6 +174,8 @@ namespace RetroEngine
                 BrushFaceMesh brushFaceMesh = new BrushFaceMesh(new Model(graphicsDevice, new List<ModelBone>(), new List<ModelMesh> { modelMesh }), texture, scene.Materials[mesh.MaterialIndex].Name) { Transperent = transperent };
 
                 brushFaceMesh.avgVertexPosition = brushFaceMesh.CalculateAvgVertexLocation();
+
+                brushFaceMesh.GenerateBoundingBox();
 
                 models.Add(brushFaceMesh);
             }
@@ -389,6 +394,8 @@ namespace RetroEngine
 
                 brushFaceMesh.textureSearchPaths.Add("textures/brushes");
                 brushFaceMesh.textureSearchPaths.Add("textures/");
+
+                brushFaceMesh.GenerateBoundingBox();
 
                 brushFaceMesh.avgVertexPosition = brushFaceMesh.CalculateAvgVertexLocation();
 
@@ -617,6 +624,52 @@ namespace RetroEngine
 
             return new Model(graphicsDevice, new List<ModelBone>(), modelMesh);
 
+        }
+
+        void GenerateBoundingBox()
+        {
+
+            List<Vector3> vertices = new List<Vector3>();
+
+            foreach(var mesh in model.Meshes)
+                foreach(var meshPart in mesh.MeshParts)
+                {
+                    VertexData[] newVertices = new VertexData[meshPart.VertexBuffer.VertexCount];
+                    meshPart.VertexBuffer.GetData(newVertices);
+
+                    foreach(var vertex in newVertices)
+                    {
+                        vertices.Add(vertex.Position);
+                    }
+
+                }
+
+            BoundingBox = CalculateBoundingBox(vertices);
+
+        }
+
+        BoundingBox CalculateBoundingBox(List<Vector3> points)
+        {
+            if (points.Count == 0)
+            {
+                throw new System.ArgumentException("Points list is empty.");
+            }
+
+            Vector3 min = points[0];
+            Vector3 max = points[0];
+
+            foreach (Vector3 point in points)
+            {
+                min = Vector3.Min(min, point);
+                max = Vector3.Max(max, point);
+            }
+
+            return new BoundingBox(min, max);
+        }
+
+        public override bool IntersectsBoubndingSphere(BoundingSphere sphere)
+        {
+            return BoundingBox.Intersects(sphere);
         }
 
         public override void PreloadTextures()

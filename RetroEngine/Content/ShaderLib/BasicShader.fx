@@ -93,7 +93,7 @@ float ShadowMapResolutionVeryClose;
 
 #ifndef MAX_POINT_LIGHTS
 
-#define MAX_POINT_LIGHTS 6
+#define MAX_POINT_LIGHTS 7
 
 #endif
 
