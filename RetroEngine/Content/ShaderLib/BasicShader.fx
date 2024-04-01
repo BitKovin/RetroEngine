@@ -603,15 +603,16 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input)
 
         int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)
 
-        float b = 0.002;
+        float b = 0.0004;
         
-        float bias = b * (1 - abs(dot(input.Normal, -LightDirection))) - b / 5.0f;
+        float bias = b * (1 - saturate(dot(input.Normal, -LightDirection))) + b / 2.0f;
         resolution = ShadowMapResolutionClose;
         
         //bias -= max(dot(input.Normal, float3(0,1,0)),0) * b/2;
         
-        float size = 1;
+        float size = (abs(dot(input.Normal, -LightDirection))-0.5)*2;
         
+        size = 1; max(size, 0.001);
         
         float texelSize = size / resolution; // Assuming ShadowMapSize is the size of your shadow map texture
         
@@ -653,7 +654,7 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
     {
         
             
-        if (dist < 8 && abs(dot(input.Normal, -LightDirection))>0.1)
+        if (dist < 8 && abs(dot(input.Normal, -LightDirection))>0.3)
         {
             if (lightCoordsVeryClose.x >= 0 && lightCoordsVeryClose.x <= 1 && lightCoordsVeryClose.y >= 0 && lightCoordsVeryClose.y <= 1)
             {

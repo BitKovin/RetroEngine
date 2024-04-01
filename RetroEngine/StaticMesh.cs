@@ -236,7 +236,7 @@ namespace RetroEngine
                 int[] LightRes = new int[LightManager.MAX_POINT_LIGHTS];
                 RenderTargetCube[] LightMaps = new RenderTargetCube[LightManager.MAX_POINT_LIGHTS];
 
-                //LightManager.FinalPointLights = LightManager.FinalPointLights.OrderBy(l => Vector3.Distance(l.Position, useAvgVertexPosition? avgVertexPosition : Position)).ToList();
+                LightManager.FinalPointLights = LightManager.FinalPointLights.OrderBy(l => Vector3.Distance(l.Position, useAvgVertexPosition? avgVertexPosition : Position)).ToList();
 
                 int filledLights = 0;
 
