@@ -73,6 +73,7 @@ namespace RetroEngine
             {
 
                 bool transperent = false;
+                bool masked = false;
 
                 if (mesh.Name != objectName && operatingMesh == false)
                 {
@@ -100,6 +101,12 @@ namespace RetroEngine
 
                 if (scene.Materials[mesh.MaterialIndex].HasColorTransparent)
                     transperent = true;
+
+                if (scene.Materials[mesh.MaterialIndex].Name.Contains("_masked"))
+                    masked = true;
+
+                if (scene.Materials[mesh.MaterialIndex].Name.EndsWith("_m"))
+                    masked = true;
 
                 var vertices = new List<VertexData>();
                 var indices = new List<int>();
@@ -171,7 +178,7 @@ namespace RetroEngine
 
                 meshPart.Effect = defaultEffect;
 
-                BrushFaceMesh brushFaceMesh = new BrushFaceMesh(new Model(graphicsDevice, new List<ModelBone>(), new List<ModelMesh> { modelMesh }), texture, scene.Materials[mesh.MaterialIndex].Name) { Transperent = transperent };
+                BrushFaceMesh brushFaceMesh = new BrushFaceMesh(new Model(graphicsDevice, new List<ModelBone>(), new List<ModelMesh> { modelMesh }), texture, scene.Materials[mesh.MaterialIndex].Name) { Transperent = transperent, Masked = masked };
 
                 brushFaceMesh.avgVertexPosition = brushFaceMesh.CalculateAvgVertexLocation();
 
@@ -219,6 +226,7 @@ namespace RetroEngine
             {
 
                 bool transperent = false;
+                bool masked = false;
 
                 if (mesh.Name != objectName && operatingMesh == false)
                 {
@@ -247,6 +255,11 @@ namespace RetroEngine
                 if (scene.Materials[mesh.MaterialIndex].Name.EndsWith("_t"))
                     transperent = true;
 
+                if (scene.Materials[mesh.MaterialIndex].Name.Contains("_masked"))
+                    masked = true;
+
+                if (scene.Materials[mesh.MaterialIndex].Name.EndsWith("_m"))
+                    masked = true;
 
                 var vertices = new List<VertexData>();
                 var indices = new List<int>();
@@ -323,7 +336,7 @@ namespace RetroEngine
 
                 meshPart.Effect = defaultEffect;
 
-                BrushFaceMesh brushFaceMesh = new BrushFaceMesh(new Model(graphicsDevice, new List<ModelBone>(), new List<ModelMesh> { modelMesh }), texture, scene.Materials[mesh.MaterialIndex].Name) { Transperent = transperent };
+                BrushFaceMesh brushFaceMesh = new BrushFaceMesh(new Model(graphicsDevice, new List<ModelBone>(), new List<ModelMesh> { modelMesh }), texture, scene.Materials[mesh.MaterialIndex].Name) { Transperent = transperent, Masked = masked };
 
                 brushFaceMesh.avgVertexPosition = brushFaceMesh.CalculateAvgVertexLocation();
 
@@ -359,11 +372,18 @@ namespace RetroEngine
             {
                 models.Clear();
                 transperent = false;
+
+                bool masked = false;
+
                 foreach(BrushFaceMesh mesh in keyValuePairs[texture])
                 {
                     models.Add(mesh.model);
                     if(mesh.Transperent)
                         transperent = true;
+
+                    if(mesh.Masked)
+                        masked = true;
+
                 }
 
                 if(transperent)
@@ -394,7 +414,7 @@ namespace RetroEngine
 
                 brushFaceMesh.textureSearchPaths.Add("textures/brushes");
                 brushFaceMesh.textureSearchPaths.Add("textures/");
-
+                brushFaceMesh.Masked = masked;
                 brushFaceMesh.GenerateBoundingBox();
 
                 brushFaceMesh.avgVertexPosition = brushFaceMesh.CalculateAvgVertexLocation();

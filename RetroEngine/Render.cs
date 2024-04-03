@@ -105,6 +105,8 @@ namespace RetroEngine
 
         static internal List<StaticMesh> testedMeshes = new List<StaticMesh>();
 
+        static internal bool IgnoreFrustrumCheck = false;
+
         public Render()
         {
             graphics = GameMain.Instance._graphics;

@@ -380,8 +380,8 @@ namespace RetroEngine
 
         public override void DrawDepth()
         {
-
-            if (frameStaticMeshData.InFrustrum == false) return;
+            if (Render.IgnoreFrustrumCheck == false)
+                if (frameStaticMeshData.InFrustrum == false) return;
 
             GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
 
@@ -397,6 +397,10 @@ namespace RetroEngine
 
             if (RiggedModel != null)
             {
+
+                if (!Masked)
+                    effect.Techniques[0].Passes[0].Apply();
+
                 if (GameMain.Instance.render.BoundingSphere.Radius == 0 || IntersectsBoubndingSphere(GameMain.Instance.render.BoundingSphere))
                     foreach (RiggedModel.RiggedModelMesh meshPart in RiggedModel.meshes)
                     {
@@ -404,6 +408,19 @@ namespace RetroEngine
                         graphicsDevice.SetVertexBuffer(meshPart.VertexBuffer);
                         graphicsDevice.Indices = meshPart.IndexBuffer;
 
+                        //effect.Techniques[0].Passes[0].Apply();
+
+
+                        effect.Parameters["Masked"].SetValue(Masked);
+                        if (Masked)
+                        {
+                            MeshPartData meshPartData = meshPart.Tag as MeshPartData;
+                            ApplyShaderParams(effect, meshPartData);
+
+                            if(texture!=null)
+                            if (texture.GetType() == typeof(RenderTargetCube))
+                                effect.Parameters["Texture"].SetValue(AssetRegistry.LoadTextureFromFile("engine/textures/white.png"));
+                        }
                         effect.Techniques[0].Passes[0].Apply();
 
                         graphicsDevice.DrawIndexedPrimitives(

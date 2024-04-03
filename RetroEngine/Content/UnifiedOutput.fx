@@ -62,8 +62,10 @@ PixelOutput PixelShaderFunction(PixelInput input)
     
     float Depth = input.MyPixelPosition.z;
     
+    float4 ColorRGBTA = tex2D(TextureSampler, input.TexCoord);
     
-    
+    if (ColorRGBTA.a < 0.001)
+        discard;
 
     float3 textureNormal = tex2D(NormalTextureSampler, input.TexCoord).rgb;
     
@@ -74,7 +76,7 @@ PixelOutput PixelShaderFunction(PixelInput input)
     float ao = orm.r;
     
     
-    float3 textureColor = tex2D(TextureSampler, input.TexCoord).xyz;
+    float3 textureColor = ColorRGBTA.xyz;
 	float textureAlpha = tex2D(TextureSampler, input.TexCoord).w;
     
     float3 pixelNormal = ApplyNormalTexture(textureNormal, input.Normal, input.Tangent);

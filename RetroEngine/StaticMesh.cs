@@ -75,6 +75,7 @@ namespace RetroEngine
         public Vector3 avgVertexPosition;
 
         public bool Transperent = false;
+        public bool Masked = false;
 
         public bool Viewmodel = false;
 
@@ -208,7 +209,6 @@ namespace RetroEngine
 
             effect.Parameters["isParticle"]?.SetValue(isParticle);
             effect.Parameters["Viewmodel"]?.SetValue(frameStaticMeshData.Viewmodel);
-
 
 
             if (meshPartData is not null && textureSearchPaths.Count > 0)
@@ -469,40 +469,56 @@ namespace RetroEngine
 
             if (Viewmodel) return;
 
+            if(Render.IgnoreFrustrumCheck == false)
             if (frameStaticMeshData.InFrustrum == false) return;
 
             GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
             // Load the custom effect
             Effect effect = GameMain.Instance.render.OcclusionStaticEffect;
 
-            if(GameMain.Instance.render.BoundingSphere.Radius == 0 || IntersectsBoubndingSphere(GameMain.Instance.render.BoundingSphere))
+            if (GameMain.Instance.render.BoundingSphere.Radius == 0 || IntersectsBoubndingSphere(GameMain.Instance.render.BoundingSphere))
 
-            if (frameStaticMeshData.model is not null)
-            {
-                if (frameStaticMeshData.model.Meshes is not null)
-                    foreach (ModelMesh mesh in frameStaticMeshData.model.Meshes)
-                    {
+                if (frameStaticMeshData.model is not null)
+                {
 
-                        foreach (ModelMeshPart meshPart in mesh.MeshParts)
+                    if (frameStaticMeshData.model.Meshes is not null)
+                        foreach (ModelMesh mesh in frameStaticMeshData.model.Meshes)
                         {
 
-                            // Set the vertex buffer and index buffer for this mesh part
-                            graphicsDevice.SetVertexBuffer(meshPart.VertexBuffer);
-                            graphicsDevice.Indices = meshPart.IndexBuffer;
+                            foreach (ModelMeshPart meshPart in mesh.MeshParts)
+                            {
 
-                            effect.Parameters["World"].SetValue(frameStaticMeshData.World);
+                                // Set the vertex buffer and index buffer for this mesh part
+                                graphicsDevice.SetVertexBuffer(meshPart.VertexBuffer);
+                                graphicsDevice.Indices = meshPart.IndexBuffer;
 
-                            effect.Techniques[0].Passes[0].Apply();
+                                effect.Parameters["World"].SetValue(frameStaticMeshData.World);
 
-                            graphicsDevice.DrawIndexedPrimitives(
-                                PrimitiveType.TriangleList,
-                                meshPart.VertexOffset,
-                                meshPart.StartIndex,
-                                meshPart.PrimitiveCount);
 
+                                
+
+                                effect.Parameters["Masked"].SetValue(Masked);
+                                if (Masked)
+                                {
+                                    MeshPartData meshPartData = meshPart.Tag as MeshPartData;
+                                    ApplyShaderParams(effect, meshPartData);
+
+
+                                    if (texture.GetType() == typeof(RenderTargetCube))
+                                        effect.Parameters["Texture"].SetValue(AssetRegistry.LoadTextureFromFile("engine/textures/white.png"));
+                                }
+                                effect.Techniques[0].Passes[0].Apply();
+
+
+                                graphicsDevice.DrawIndexedPrimitives(
+                                    PrimitiveType.TriangleList,
+                                    meshPart.VertexOffset,
+                                    meshPart.StartIndex,
+                                    meshPart.PrimitiveCount);
+
+                            }
                         }
-                    }
-            }
+                }
         }
 
         public virtual void DrawPathes()

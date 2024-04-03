@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RetroEngine.Map;
+using SharpFont;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +20,7 @@ namespace RetroEngine.Entities.Light
 
         static List<PointLight> finalLights = new List<PointLight>();
 
-        BoundingSphere lightSphere = new BoundingSphere();
+        internal BoundingSphere lightSphere = new BoundingSphere();
 
         public PointLight() 
         {
@@ -161,8 +162,8 @@ namespace RetroEngine.Entities.Light
             
             lightSphere.Radius = lightData.Radius;
 
-            if (IsBoundingSphereInFrustum(lightSphere))
-                LightManager.AddPointLight(lightData);
+            //if (IsBoundingSphereInFrustum(lightSphere) || Level.ChangingLevel)
+            LightManager.AddPointLight(lightData);
         }
 
         protected Matrix GetWorldMatrix()
@@ -171,7 +172,7 @@ namespace RetroEngine.Entities.Light
             return worldMatrix;
         }
 
-        protected bool IsBoundingSphereInFrustum(BoundingSphere sphere)
+        internal bool IsBoundingSphereInFrustum(BoundingSphere sphere)
         {
             return Camera.frustum.Contains(sphere.Transform(GetWorldMatrix())) != ContainmentType.Disjoint;
         }
@@ -262,16 +263,15 @@ namespace RetroEngine.Entities.Light
 
             if (CastShadows == false) return;
 
-
-
-
-
+            RetroEngine.Render.IgnoreFrustrumCheck = true;
+            
             RenderFace(CubeMapFace.PositiveX);
             RenderFace(CubeMapFace.NegativeX);
             RenderFace(CubeMapFace.PositiveY);
             RenderFace(CubeMapFace.NegativeY);
             RenderFace(CubeMapFace.PositiveZ);
             RenderFace(CubeMapFace.NegativeZ);
+            RetroEngine.Render.IgnoreFrustrumCheck = false;
 
             bool wasDirty = dirty;
 

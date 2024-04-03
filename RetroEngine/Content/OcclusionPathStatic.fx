@@ -10,6 +10,8 @@
 matrix World;
 matrix ViewProjection;
 
+bool Masked;
+
 float3 CameraPos;
 
 bool pointDistance;
@@ -17,6 +19,15 @@ bool pointDistance;
 struct VertexShaderInput
 {
     float4 Position : POSITION0;
+    float2 TexCoords : TEXCOORD0;
+};
+
+Texture2D Texture;
+sampler TextureSampler = sampler_state
+{
+    texture = <Texture>;
+    AddressU = Wrap;
+    AddressV = Wrap;
 };
 
 struct VertexShaderOutput
@@ -24,6 +35,7 @@ struct VertexShaderOutput
     float4 Position : POSITION0;
     float4 MyPosition : TEXCOORD0;
     float3 WorldPos : TEXCOORD1;
+    float2 TexCoords : TEXCOORD2;
 };
 
 VertexShaderOutput MainVS(in VertexShaderInput input)
@@ -38,6 +50,8 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
     output.Position = mul(output.Position, ViewProjection);
 
     output.MyPosition = output.Position;
+
+    output.TexCoords = input.TexCoords;
 
     return output;
 }
@@ -57,6 +71,10 @@ float4 MainPS(VertexShaderOutput input) : SV_TARGET
 
     if (pointDistance)
         depth = distance(input.WorldPos, CameraPos);
+
+if(Masked)
+    if (tex2D(TextureSampler, input.TexCoords).a < 0.99)
+        discard;
 
     return float4(depth, 0, 0, 1);
 }
