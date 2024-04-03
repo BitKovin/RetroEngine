@@ -953,9 +953,9 @@ float3 GetPosition(float2 UV, float depth)
 float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 normal, float3 vDir)
 {
     
-    float step = 0.015;
+    float step = 0.012;
     
-    const int steps = 50;
+    const int steps = 200;
     
     float4 outColor = float4(0, 0, 0, 0);
     
@@ -969,13 +969,11 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
     
     float2 outCoords;
     
-    float oldStep = 0;
-    
     float weight = -0.3;
    
-    float factor = 1.4;
+    float factor = 1.25;
     
-    bool facingCamera = dot(vDir, direction) < 0;
+    bool facingCamera = false; dot(vDir, direction) < 0;
     
     
     float disToCamera = length(viewPos - position);
@@ -985,7 +983,7 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
         
         float3 offset = dir * (step) * disToCamera / 30 + dir * 0.02 * disToCamera;
         
-        coords = WorldToScreen(pos + offset + dir * 0.02 * disToCamera);
+        coords = WorldToScreen(pos + offset);
         
         float dist = WorldToClip(pos + offset).z;
         
@@ -1005,14 +1003,14 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
         
         if (inScreen == false || SampledDepth>1000)
         {
-            step = lerp(step, oldStep, 1);
+            step /= 5;
             factor = lerp(factor, 1, 0.5);
         }
         
         if (SampledDepth < dist && (SampledDepth > dist - 1 || facingCamera == false))
         {
             outCoords = coords;
-            step = oldStep;
+            step /= 2;
             factor = lerp(factor, 1, 0.5);
             weight += 1;
             
@@ -1020,9 +1018,7 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
             continue;
 
         }
-            
-        oldStep = step;
-        
+
         step *= factor;
         
     }

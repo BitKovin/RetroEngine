@@ -198,6 +198,8 @@ namespace RetroEngine
                         continue;
                     }
 
+                    if (colObj.IsActive == false) continue;
+
                     Entity ent = (Entity)colObj.UserObject;
 
                     Vector3 pos = colObj.WorldTransform.Translation;
