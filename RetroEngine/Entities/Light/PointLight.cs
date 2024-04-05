@@ -66,8 +66,10 @@ namespace RetroEngine.Entities.Light
 
             resolution = (int)data.GetPropertyFloat("resolution", 256);
 
+            CastShadows = data.GetPropertyBool("shadows",true);
+
             if (CastShadows == false)
-                resolution = 1;
+                resolution = 2;
 
             lightData.Resolution = resolution;
 
@@ -152,6 +154,9 @@ namespace RetroEngine.Entities.Light
 
         public void SetLightResolution(int res)
         {
+            if(res<1)
+                res = 1;
+
             lightData.Resolution = res;
         }
 
@@ -162,7 +167,7 @@ namespace RetroEngine.Entities.Light
             
             lightSphere.Radius = lightData.Radius;
 
-            //if (IsBoundingSphereInFrustum(lightSphere) || Level.ChangingLevel)
+            if (IsBoundingSphereInFrustum(lightSphere) || Level.ChangingLevel)
             LightManager.AddPointLight(lightData);
         }
 

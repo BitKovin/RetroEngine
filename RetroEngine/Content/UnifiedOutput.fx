@@ -31,12 +31,6 @@ sampler ORMTextureSampler = sampler_state
     AddressV = Wrap;
 };
 
-texture OldFrameTexture;
-sampler OldFrameTextureSampler = sampler_state
-{
-    texture = <OldFrameTexture>;
-};
-
 
 
 

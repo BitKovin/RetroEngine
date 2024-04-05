@@ -238,24 +238,45 @@ namespace RetroEngine
 
                 LightManager.FinalPointLights = LightManager.FinalPointLights.OrderBy(l => Vector3.Distance(l.Position, useAvgVertexPosition? avgVertexPosition : Position)).ToList();
 
+                List<LightManager.PointLightData> objectLights = new List<LightManager.PointLightData>();
+
                 int filledLights = 0;
 
-
-                for (int i = 0; i < LightManager.FinalPointLights.Count && filledLights < LightManager.MAX_POINT_LIGHTS; i++)
+                //shadows
+                for (int i = 0; i < LightManager.FinalPointLights.Count && filledLights < 6; i++)
                 {
-
+                    if (LightManager.FinalPointLights[i].shadowData.CastShadows == false) continue;
                     bool intersects = IntersectsBoubndingSphere(new BoundingSphere { Radius = LightManager.FinalPointLights[i].Radius, Center = LightManager.FinalPointLights[i].Position });
 
                     if (intersects == false) continue;
 
-                    LightPos[filledLights] = LightManager.FinalPointLights[i].Position;
-                    LightColor[filledLights] = LightManager.FinalPointLights[i].Color;
-                    LightRadius[filledLights] = LightManager.FinalPointLights[i].Radius;
-                    LightRes[filledLights] = LightManager.FinalPointLights[i].Resolution;
-                    LightMaps[filledLights] = LightManager.FinalPointLights[i].shadowData.renderTargetCube;
-
+                    objectLights.Add(LightManager.FinalPointLights[i]);
                     filledLights++;
 
+                }
+
+                //no shadows
+                for (int i = 0; i < LightManager.FinalPointLights.Count && filledLights < LightManager.MAX_POINT_LIGHTS; i++)
+                {
+                    if (LightManager.FinalPointLights[i].shadowData.CastShadows == true) continue;
+                    bool intersects = IntersectsBoubndingSphere(new BoundingSphere { Radius = LightManager.FinalPointLights[i].Radius, Center = LightManager.FinalPointLights[i].Position });
+
+                    if (intersects == false) continue;
+
+                    objectLights.Add(LightManager.FinalPointLights[i]);
+                    filledLights++;
+
+                }
+
+                objectLights = objectLights.OrderByDescending(l => l.shadowData.CastShadows).ToList();
+
+                for (int i = 0; i < objectLights.Count; i++)
+                {
+                    LightPos[i] = objectLights[i].Position;
+                    LightColor[i] = objectLights[i].Color;
+                    LightRadius[i] = objectLights[i].Radius;
+                    LightRes[i] = objectLights[i].Resolution;
+                    LightMaps[i] = objectLights[i].shadowData.renderTargetCube;
                 }
 
                 effect.Parameters["LightPositions"]?.SetValue(LightPos);

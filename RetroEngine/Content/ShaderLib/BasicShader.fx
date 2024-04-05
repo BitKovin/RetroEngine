@@ -93,7 +93,7 @@ float ShadowMapResolutionVeryClose;
 
 #ifndef MAX_POINT_LIGHTS
 
-#define MAX_POINT_LIGHTS 7
+#define MAX_POINT_LIGHTS 20
 
 #endif
 
@@ -715,7 +715,7 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
 float GetPointLightDepth(int i, float3 worldPos)
 {
     
-    if (i>= MAX_POINT_LIGHTS)
+    if (i>= 6)
         return 10000;
 
     // Get the direction from the world position to the light position
@@ -740,14 +740,14 @@ float GetPointLightDepth(int i, float3 worldPos)
         depth = texCUBE(PointLightCubemap5Sampler, lightDir).r;
     else if (i == 5)
         depth = texCUBE(PointLightCubemap6Sampler, lightDir).r;
-    else if (i == 6)
-        depth = texCUBE(PointLightCubemap7Sampler, lightDir).r;
-    else if (i == 7)
-        depth = texCUBE(PointLightCubemap8Sampler, lightDir).r;
-    else if (i == 8)
-        depth = texCUBE(PointLightCubemap9Sampler, lightDir).r;
-    else if (i == 9)
-        depth = texCUBE(PointLightCubemap10Sampler, lightDir).r;
+	/*else if (i == 6)
+		depth = texCUBE(PointLightCubemap7Sampler, lightDir).r;
+	else if (i == 7)
+		depth = texCUBE(PointLightCubemap8Sampler, lightDir).r;
+	else if (i == 8)
+		depth = texCUBE(PointLightCubemap9Sampler, lightDir).r;
+	else if (i == 9)
+		depth = texCUBE(PointLightCubemap10Sampler, lightDir).r;*/
     
     if(depth == 0)
         return 10000;
@@ -769,7 +769,8 @@ float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal, float ro
     if (distanceToLight>ShadowDistance)
         return float3(0, 0, 0);
     
-    float intense = saturate(1.0 - distanceToLight / LightRadiuses[i]);
+    float dist = (distanceToLight / LightRadiuses[i]);
+    float intense = saturate(1.0 - dist*dist);
     float3 dirToSurface = normalize(lightVector);
     
     

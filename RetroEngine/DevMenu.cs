@@ -149,8 +149,9 @@ namespace RetroEngine
             ImGui.Begin("Stats");
 
             ImGui.Text($"{Stats.RenderedMehses} meshes were rendered");
+            ImGui.Text($"{LightManager.FinalPointLights.Count} point lights are active");
 
-            foreach(var item in statsResults.Keys)
+            foreach (var item in statsResults.Keys)
             {
 
                 float value = statsResults[item];
