@@ -48,7 +48,8 @@ namespace RetroEngine.Particles
                     dir = Vector3.Normalize(particles[i].position - particles[i - 1].position);
                 }
 
-                Vector3 cameraForward = Camera.rotation.GetForwardVector();
+                Vector3 cameraForward = p1 - Camera.position;
+                cameraForward.Normalize();
                 Vector3 perp = Vector3.Cross(dir, cameraForward);
                 perp.Normalize();
 

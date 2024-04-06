@@ -20,15 +20,15 @@ namespace RetroEngine.Game.Effects.Particles
         }
 
     }
-    public class particle_hitSmoke : ParticleEmitter
+    public class particle_hitSmoke : RibbonEmitter
     {
         public particle_hitSmoke()
         {
-            TexturePath = "textures/particles/smoke.png";
+            TexturePath = "cat.png";
 
-            InitialSpawnCount = 10;
-            //SpawnRate = 1000;
-            BoundingRadius = 3;
+            InitialSpawnCount = 1;
+            SpawnRate = 50;
+            BoundingRadius = 10;
 
             
 
@@ -38,6 +38,8 @@ namespace RetroEngine.Game.Effects.Particles
         {
 
             particle.velocity -= new Vector3(0, 2, 0) * (Time.deltaTime / 2f);
+
+            particle.velocity = new Vector3(0,-5,0);
 
             particle = base.UpdateParticle(particle);
 
@@ -54,13 +56,13 @@ namespace RetroEngine.Game.Effects.Particles
 
             particle.Scale = 0.2f;
 
-            Vector3 randPos = RandomPosition(0.12f);
+            Vector3 randPos = RandomPosition(0.02f);
             //particle.HasCollision = true;
             particle.BouncePower = 0.1f;
             particle.position += randPos;
-            particle.velocity = randPos.Normalized()*0.5f;
+            particle.velocity = randPos.Normalized()*0.2f;
             particle.transparency = 0.8f;
-            particle.deathTime = 2;
+            particle.deathTime = 1;
 
             return particle;
         }

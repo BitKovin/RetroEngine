@@ -178,8 +178,6 @@ namespace RetroEngine
             effect.Parameters["ShadowMapVeryClose"]?.SetValue(GameMain.Instance.render.shadowMapVeryClose);
 
 
-            
-
             effect.Parameters["InverseViewProjection"]?.SetValue(Matrix.Invert(Camera.finalizedView * Camera.finalizedProjection));
 
             effect.Parameters["View"]?.SetValue(Camera.finalizedView);
@@ -206,7 +204,6 @@ namespace RetroEngine
                 effect.Parameters["LightRadiuses"]?.SetValue(LightRadius);
             }
 
-            
 
             effect.Parameters["DepthTexture"]?.SetValue(DepthPrepathOutput);
             effect.Parameters["ReflectionTexture"]?.SetValue(reflection);
