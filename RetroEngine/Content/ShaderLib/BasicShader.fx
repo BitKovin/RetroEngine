@@ -55,6 +55,17 @@ sampler FrameTextureSampler = sampler_state
     AddressV = Clamp;
 };
 
+texture ReflectionTexture;
+sampler ReflectionTextureSampler = sampler_state
+{
+    texture = <ReflectionTexture>;
+
+    MinFilter = Linear;
+    MagFilter = Linear;
+    AddressU = Clamp;
+    AddressV = Clamp;
+};
+
 texture ReflectionCubemap;
 sampler ReflectionCubemapSampler = sampler_state
 {
@@ -1092,4 +1103,9 @@ float3 ApplyReflection(float3 inColor, float3 albedo, PixelInput input,float3 no
     reflectionColor *= lerp(float3(1, 1, 1), albedo, metallic);
     
     return lerp(inColor, reflectionColor, reflectiveness);
+}
+
+float3 ApplyReflectionOnSurface(float3 color,float2 screenCoords, float reflectiveness)
+{
+    return lerp(color, tex2D(ReflectionTextureSampler, screenCoords).rgb * color, reflectiveness);
 }

@@ -48,7 +48,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 	
     float3 result = lerp(color, reflection, factor);
 	
-    return float4(result,1);
+    return float4(color,1);
 }
 
 technique SpriteDrawing

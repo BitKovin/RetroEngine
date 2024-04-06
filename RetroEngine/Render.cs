@@ -209,7 +209,7 @@ namespace RetroEngine
             
 
             effect.Parameters["DepthTexture"]?.SetValue(DepthPrepathOutput);
-
+            effect.Parameters["ReflectionTexture"]?.SetValue(reflection);
             effect.Parameters["FrameTexture"]?.SetValue(oldFrame);
 
             var cubeMap = CubeMap.GetClosestToCamera();
@@ -722,7 +722,7 @@ namespace RetroEngine
 
             SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
 
-            ReflectionResultEffect.Parameters["ReflectionTexture"].SetValue(reflection);
+            ReflectionResultEffect.Parameters["ReflectionTexture"]?.SetValue(reflection);
             ReflectionResultEffect.Parameters["FactorTexture"]?.SetValue(ReflectivenessOutput);
 
             spriteBatch.Begin(effect: ReflectionResultEffect, blendState: BlendState.NonPremultiplied);
