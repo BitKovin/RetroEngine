@@ -57,7 +57,7 @@ namespace RetroEngine.Entities
 
             foreach (var emitter in list)
             {
-                if (emitter.Destroyed)
+                if (emitter.destroyed)
                     emitters.Remove(emitter);
 
                 emitter.Position = Position;

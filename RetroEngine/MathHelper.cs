@@ -157,6 +157,11 @@ namespace RetroEngine
                 return result;
             }
 
+            public override string ToString()
+            {
+                return $"position: {Position} \nrotation: {Rotation}\n rotationQ: {RotationQuaternion}\n Scale:{Scale}";
+            }
+
         }
 
         public static float ClampAngle(float angle)

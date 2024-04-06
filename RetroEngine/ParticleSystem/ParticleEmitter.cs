@@ -26,7 +26,7 @@ namespace RetroEngine.Particles
 
         public static ParticleEmitter RenderEmitter = new ParticleEmitter();
 
-        public bool Destroyed = false;
+        public bool destroyed = false;
 
         public bool Emitting = false;
 
@@ -49,7 +49,7 @@ namespace RetroEngine.Particles
 
         }
 
-        List<Particle> finalizedParticles;
+        protected List<Particle> finalizedParticles;
 
         int currentId = 0;
 
@@ -66,7 +66,7 @@ namespace RetroEngine.Particles
         public virtual void Update()
         {
 
-            if (Destroyed) return;
+            if (destroyed) return;
 
             elapsedTime += Time.deltaTime;
 
@@ -193,7 +193,7 @@ namespace RetroEngine.Particles
         }
         public override void DrawUnified()
         {
-            if (Destroyed) return;
+            if (destroyed) return;
             if (particleModel == null)
             {
                 particleModel = GetModelFromPath("models/particle.obj");
@@ -207,7 +207,7 @@ namespace RetroEngine.Particles
 
         public override void Draw()
         {
-            if (Destroyed) return;
+            if (destroyed) return;
             if (particleModel == null)
             {
                 particleModel = GetModelFromPath("models/particle.obj");
@@ -260,15 +260,15 @@ namespace RetroEngine.Particles
                 if (particle.lifeTime >= particle.deathTime)
                     continue;
 
-                frameStaticMeshData.World = GetWorldForParticle(particle);
+                Matrix world = GetWorldForParticle(particle);
 
                 isParticle = particle.customModelPath == null;
 
                 InstanceData data = new InstanceData();
-                data.Row1 = frameStaticMeshData.World.GetRow(0);
-                data.Row2 = frameStaticMeshData.World.GetRow(1);
-                data.Row3 = frameStaticMeshData.World.GetRow(2);
-                data.Row4 = frameStaticMeshData.World.GetRow(3);
+                data.Row1 = world.GetRow(0);
+                data.Row2 = world.GetRow(1);
+                data.Row3 = world.GetRow(2);
+                data.Row4 = world.GetRow(3);
 
                 data.Color = particle.color;
 
