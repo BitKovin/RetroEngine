@@ -1,5 +1,6 @@
 ﻿using BulletSharp;
 using Microsoft.Xna.Framework;
+using RetroEngine.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,8 @@ namespace RetroEngine.Game.Entities
         public float Damage = 15;
 
         Vector3 OldPos = new Vector3();
+
+        ParticleSystem trail;
 
         public Bullet() 
         {
@@ -77,6 +80,11 @@ namespace RetroEngine.Game.Entities
             destroyDelay.AddDelay(LifeTime);
 
             OldPos = Position;
+
+            trail = ParticleSystem.Create("trail");
+            trail.Position = Position;
+            trail.Start();
+
         }
 
         private void Hit(BulletSharp.CollisionObjectWrapper thisObject, BulletSharp.CollisionObjectWrapper collidedObject, Entity collidedEntity, BulletSharp.ManifoldPoint contactPoint)
@@ -95,6 +103,14 @@ namespace RetroEngine.Game.Entities
             }
 
             Destroy();
+        }
+
+        public override void Destroy()
+        {
+            base.Destroy();
+
+            trail.StopAll();
+
         }
 
         public override void Update()
@@ -123,6 +139,8 @@ namespace RetroEngine.Game.Entities
 
                 Destroy();
             }
+
+            trail.Position = Position;
 
             OldPos = Position;
             Position += Rotation.GetForwardVector() * Speed * Time.DeltaTime;

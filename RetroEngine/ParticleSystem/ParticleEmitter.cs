@@ -34,6 +34,8 @@ namespace RetroEngine.Particles
 
         float elapsedTime = 0;
 
+        public float Duration = 10000000000000;
+
         public float SpawnRate = 0;
 
         public ParticleEmitter()
@@ -70,9 +72,12 @@ namespace RetroEngine.Particles
 
             elapsedTime += Time.DeltaTime;
 
+            if(elapsedTime>Duration)
+                Emitting = false;
+
             float spawnInterval = 1f / SpawnRate;
 
-            if(SpawnRate>0)
+            if(SpawnRate>0 && Emitting)
             while (elapsedTime >= spawnInterval)
             {
                 Particle particle = GetNewParticle();
@@ -111,10 +116,10 @@ namespace RetroEngine.Particles
 
             finalizedParticles = new List<Particle>(particles);
 
-            
-
-            //if (Emitting == false && particles.Count == 0)
-            //Destroyed = true;
+            if (Emitting == false && particles.Count == 0)
+            {
+                destroyed = true;
+            }
         }
 
         public override void UpdateCulling()

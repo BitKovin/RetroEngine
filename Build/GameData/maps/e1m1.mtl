@@ -1,0 +1,9 @@
+newmtl brushes/brickPBR
+map_Kd textures/brushes/brickPBR.png
+
+newmtl brushes/mask_test_m
+map_Kd textures/brushes/mask_test_m.png
+
+newmtl brushes/mirror
+map_Kd textures/brushes/mirror.png
+

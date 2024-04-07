@@ -19,6 +19,13 @@ namespace RetroEngine.Particles
         {
             Shader = AssetRegistry.GetShaderFromName("UnifiedOutput");
             isParticle = true;
+
+            CastShadows = false;
+            Transperent = true;
+            Transparency = 1;
+            SimpleTransperent = false;
+
+            OverrideBlendState = BlendState.NonPremultiplied;
         }
 
         public void GenerateBuffers(List<Particle> particles)
@@ -71,12 +78,13 @@ namespace RetroEngine.Particles
                 // Add indices to form the quad
                 if (i > 0)
                 {
+                    indices.Add((short)(i * 2));
+                    indices.Add((short)(i * 2 - 1));
                     indices.Add((short)(i * 2 - 2));
-                    indices.Add((short)(i * 2 - 1));
+
                     indices.Add((short)(i * 2));
-                    indices.Add((short)(i * 2 - 1));
                     indices.Add((short)(i * 2 + 1));
-                    indices.Add((short)(i * 2));
+                    indices.Add((short)(i * 2 - 1));
                 }
             }
 
@@ -115,23 +123,28 @@ namespace RetroEngine.Particles
 
         void DrawRibbon()
         {
-
+            GraphicsDevice _graphicsDevice = GameMain.Instance.GraphicsDevice;
             GenerateBuffers(finalizedParticles);
 
             if (vertexBuffer == null)
-                return;
+                { Console.WriteLine("empty vertex buffer"); return; }
 
 
             Effect effect = Shader;
-            
 
+            SetupBlending();
             ApplyShaderParams(effect,null);
-            effect.CurrentTechnique.Passes[0].Apply();
 
-            GraphicsDevice _graphicsDevice = GameMain.Instance.GraphicsDevice;
 
             _graphicsDevice.SetVertexBuffer(vertexBuffer);
             _graphicsDevice.Indices = indexBuffer;
+
+            effect.CurrentTechnique.Passes[0].Apply();
+
+            
+
+
+            Stats.RenderedMehses++;
 
             _graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, vertexBuffer.VertexCount);
             
@@ -157,7 +170,7 @@ namespace RetroEngine.Particles
             frameStaticMeshData.LightViewVeryClose = Graphics.LightVeryCloseView;
             frameStaticMeshData.LightProjection = Graphics.LightProjection;
             frameStaticMeshData.LightProjectionVeryClose = Graphics.LightVeryCloseProjection;
-            frameStaticMeshData.Transparency = Transparency;
+            frameStaticMeshData.Transparency = 1;
             frameStaticMeshData.LightProjectionClose = Graphics.LightCloseProjection;
             frameStaticMeshData.IsRendered = isRendered;
             frameStaticMeshData.IsRenderedShadow = isRenderedShadow;

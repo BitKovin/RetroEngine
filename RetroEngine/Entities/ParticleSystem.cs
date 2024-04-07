@@ -49,7 +49,25 @@ namespace RetroEngine.Entities
 
         }
 
-        public override void VisualUpdate()
+        public virtual void StopAll()
+        {
+            foreach (var emitter in emitters)
+            {
+                emitter.Emitting = false;
+                emitter.SpawnRate = 0;
+            }
+        }
+
+        public override void Update()
+        {
+            base.Update();
+
+            if (emitters.Count == 0)
+                Destroy();
+
+        }
+
+        public override void AsyncUpdate()
         {
             base.VisualUpdate();
 
@@ -63,9 +81,6 @@ namespace RetroEngine.Entities
                 emitter.Position = Position;
                 emitter.Update();
             }
-
-            if (emitters.Count == 0)
-                Destroy();
 
         }
 
@@ -84,6 +99,15 @@ namespace RetroEngine.Entities
             ParticleSystem system = ParticleSystemFactory.CreateByTechnicalName(name);
             Level.GetCurrent().AddEntity(system);
             return system;
+        }
+
+        public override void Destroy()
+        {
+            base.Destroy();
+
+            foreach(var emitter in emitters)
+                emitter.Destroy();
+
         }
 
     }
