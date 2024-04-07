@@ -37,13 +37,13 @@ namespace RetroEngine.Game.Effects.Particles
         public override Particle UpdateParticle(Particle particle)
         {
 
-            particle.velocity -= new Vector3(0, 10, 0) * (Time.deltaTime / 2f);
+            particle.velocity -= new Vector3(0, 10, 0) * (Time.DeltaTime / 2f);
 
             particle = base.UpdateParticle(particle);
 
-            particle.velocity -= new Vector3 (0, 10, 0) * (Time.deltaTime / 2f);
+            particle.velocity -= new Vector3 (0, 10, 0) * (Time.DeltaTime / 2f);
 
-            particle.globalRotation += new Vector3(300,100, 0) * Time.deltaTime;
+            particle.globalRotation += new Vector3(300,100, 0) * Time.DeltaTime;
 
             return particle;
         }

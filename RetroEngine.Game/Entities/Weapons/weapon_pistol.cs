@@ -44,7 +44,7 @@ namespace RetroEngine.Game.Entities.Weapons
         {
             base.Update();
 
-            mesh.Update(Time.deltaTime*1.2f);
+            mesh.Update(Time.DeltaTime*1.2f);
 
             if (Input.GetAction("attack").Holding())
                 Shoot();
@@ -55,12 +55,12 @@ namespace RetroEngine.Game.Entities.Weapons
 
         void IncreaseAim()
         {
-            aim += Time.deltaTime * 4;
+            aim += Time.DeltaTime * 4;
         }
 
         void DecreaseAim()
         {
-            aim-= Time.deltaTime * 3;
+            aim-= Time.DeltaTime * 3;
         }
 
         void UpdateAim()

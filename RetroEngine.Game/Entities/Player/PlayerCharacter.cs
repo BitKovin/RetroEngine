@@ -291,7 +291,7 @@ namespace RetroEngine.Game.Entities.Player
 
             Vector3 newPos = Position;
 
-            interpolatedPosition = Vector3.Lerp(oldPos, newPos, Time.deltaTime*25);
+            interpolatedPosition = Vector3.Lerp(oldPos, newPos, Time.DeltaTime*25);
 
         }
 
@@ -350,12 +350,12 @@ namespace RetroEngine.Game.Entities.Player
                 if (onGround)
                 {
                     
-                    if (Math.Sin(bobProgress * bobSpeed * 2) <= 0 && Math.Sin((bobProgress + Time.deltaTime) * bobSpeed * 2) > 0)
+                    if (Math.Sin(bobProgress * bobSpeed * 2) <= 0 && Math.Sin((bobProgress + Time.DeltaTime) * bobSpeed * 2) > 0)
                     {
                         stepSoundPlayer.Play(true);
                     }
 
-                    bobProgress += Time.deltaTime;
+                    bobProgress += Time.DeltaTime;
 
 
                     velocity = UpdateGroundVelocity(motion, velocity);
@@ -405,7 +405,7 @@ namespace RetroEngine.Game.Entities.Player
             }
 
 
-            cameraRoll = MathHelper.Lerp(cameraRoll, input.X * 1.5f, Time.deltaTime * 10);
+            cameraRoll = MathHelper.Lerp(cameraRoll, input.X * 1.5f, Time.DeltaTime * 10);
 
             Camera.roll = cameraRoll;
 
@@ -551,7 +551,7 @@ namespace RetroEngine.Game.Entities.Player
             vel = Friction(vel);
 
             float currentSpeed = Vector3.Dot(vel, withDir);
-            float addSpeed = Math.Clamp(maxSpeed - currentSpeed, 0, acceleration*Time.deltaTime);
+            float addSpeed = Math.Clamp(maxSpeed - currentSpeed, 0, acceleration*Time.DeltaTime);
     
             if(tryLimit)
                 if(currentSpeed + addSpeed > maxSpeed)
@@ -574,7 +574,7 @@ namespace RetroEngine.Game.Entities.Player
                 return vel;
             }
 
-            float accelspeed = airAcceleration * Time.deltaTime * wishspeed;
+            float accelspeed = airAcceleration * Time.DeltaTime * wishspeed;
 
             if (accelspeed > addSpeed)
             {
@@ -597,7 +597,7 @@ namespace RetroEngine.Game.Entities.Player
 
             vel.Normalize();
 
-            length -= factor * Time.deltaTime;
+            length -= factor * Time.DeltaTime;
 
             length = Math.Max(0, length);
 

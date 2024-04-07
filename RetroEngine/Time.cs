@@ -6,7 +6,8 @@ namespace RetroEngine
 {
     public static class Time
     {
-        public static float deltaTime = 1;
+        public static float DeltaTime = 1;
+        public static float TimeScale = 1;
 
         public static float deltaTimeDifference = 1;
 
@@ -31,7 +32,7 @@ namespace RetroEngine
 
             avg /= (float)frames.Count;
 
-            deltaTime = avg;
+            DeltaTime = avg;
         }
 
     }

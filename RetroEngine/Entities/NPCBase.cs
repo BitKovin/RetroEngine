@@ -165,11 +165,11 @@ namespace RetroEngine.Entities
 
             if(distance > 3) 
             {
-                speed += Time.deltaTime * 10;
+                speed += Time.DeltaTime * 10;
                 
             }else
             {
-                speed -= Time.deltaTime * 15;
+                speed -= Time.DeltaTime * 15;
             }
 
             speed = Math.Clamp(speed, 0, maxSpeed);
@@ -178,7 +178,7 @@ namespace RetroEngine.Entities
 
             body.LinearVelocity = new System.Numerics.Vector3(MoveDirection.X * speed, body.LinearVelocity.Y, MoveDirection.Z * speed);
 
-            MoveDirection = Vector3.Lerp(MoveDirection, DesiredMoveDirection, Time.deltaTime * 3);
+            MoveDirection = Vector3.Lerp(MoveDirection, DesiredMoveDirection, Time.DeltaTime * 3);
 
 
             mesh.Position = Position - new Vector3(0, 1.1f, 0);

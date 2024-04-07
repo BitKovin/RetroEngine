@@ -97,7 +97,7 @@ namespace RetroEngine
             AssetRegistry.ClearAllTextures();
             StaticMesh.ClearCache();
 
-            Time.deltaTime = 0;
+            Time.DeltaTime = 0;
 
             Navigation.WaitForProcess();
 

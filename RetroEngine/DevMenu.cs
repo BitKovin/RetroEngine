@@ -41,7 +41,7 @@ namespace RetroEngine
             DrawStats();
 
             ImGui.BeginMainMenuBar();
-            ImGui.Text("fps: " + (int)(1f / Time.deltaTime) + "    entity count: " + Level.GetCurrent().entities.Count + "async game thread: " + GameMain.AsyncGameThread.ToString());
+            ImGui.Text("fps: " + (int)(1f / Time.DeltaTime) + "    entity count: " + Level.GetCurrent().entities.Count + "async game thread: " + GameMain.AsyncGameThread.ToString());
             ImGui.EndMainMenuBar();
 
             if (!GameMain.Instance.paused) return;

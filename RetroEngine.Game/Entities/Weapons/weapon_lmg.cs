@@ -45,7 +45,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             if (loadedAssets == false) return;
 
-            mesh.AddTime(Time.deltaTime);
+            mesh.AddTime(Time.DeltaTime);
             mesh.Update();
 
             if (Input.GetAction("attack").Holding())

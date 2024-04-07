@@ -70,7 +70,7 @@ namespace RetroEngine.Game.Entities
             body.Activate();
 
             if (Input.GetAction("test").Holding())
-                body.ApplyCentralImpulse(new System.Numerics.Vector3(0,100,0)*Time.deltaTime);
+                body.ApplyCentralImpulse(new System.Numerics.Vector3(0,100,0)*Time.DeltaTime);
 
             mesh.Position = Position;
             mesh.Rotation = Rotation;

@@ -64,7 +64,7 @@ namespace RetroEngine.Game.Entities.Player
 
             health.text = ((Vector3)player.body.LinearVelocity).XZ().Length().ToString();
 
-            fps.text = ((int)(1f / Time.deltaTime)).ToString();
+            fps.text = ((int)(1f / Time.DeltaTime)).ToString();
 
             
             UpdateWorldCrosshair();

@@ -29,7 +29,7 @@ namespace RetroEngine.Skeletal
             {
                 animation.SetInterpolationEnabled(InterpolateAnimations);
                 animation.UpdateFinalPose = UpdateVisual;
-                animation.Update(Time.deltaTime * Speed);
+                animation.Update(Time.DeltaTime * Speed);
             }
         }
 

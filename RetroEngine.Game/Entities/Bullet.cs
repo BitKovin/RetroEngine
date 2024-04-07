@@ -125,7 +125,7 @@ namespace RetroEngine.Game.Entities
             }
 
             OldPos = Position;
-            Position += Rotation.GetForwardVector() * Speed * Time.deltaTime;
+            Position += Rotation.GetForwardVector() * Speed * Time.DeltaTime;
 
         }
 

@@ -104,7 +104,7 @@ namespace RetroEngine.Game.Entities.Weapons
         void UpdateSway()
         {
             Sway -= new Vector3(Input.MouseDelta.X,-Input.MouseDelta.Y,0)/3000;
-            Sway = Vector3.Lerp(Sway,Vector3.Zero, Time.deltaTime*12);
+            Sway = Vector3.Lerp(Sway,Vector3.Zero, Time.DeltaTime*12);
 
             Sway.X = Math.Clamp(Sway.X,-0.05f, 0.05f);
             Sway.Y = Math.Clamp(Sway.Y, -0.03f, 0.03f);

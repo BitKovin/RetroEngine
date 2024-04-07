@@ -23,6 +23,7 @@ namespace RetroEngine.Particles
 
         public void GenerateBuffers(List<Particle> particles)
         {
+            if (particles == null) return;
             if (particles.Count < 2)
                 return;
 
@@ -45,7 +46,7 @@ namespace RetroEngine.Particles
                     dir = Vector3.Normalize(particles[i].position - particles[i+1].position);
                 }else
                 {
-                    dir = Vector3.Normalize(particles[i].position - particles[i - 1].position);
+                    dir = Vector3.Normalize(particles[i-1].position - particles[i].position);
                 }
 
                 Vector3 cameraForward = p1 - Camera.position;

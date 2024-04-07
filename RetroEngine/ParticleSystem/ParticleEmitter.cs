@@ -68,7 +68,7 @@ namespace RetroEngine.Particles
 
             if (destroyed) return;
 
-            elapsedTime += Time.deltaTime;
+            elapsedTime += Time.DeltaTime;
 
             float spawnInterval = 1f / SpawnRate;
 
@@ -88,7 +88,7 @@ namespace RetroEngine.Particles
 
                 Particle particle = particles[i];
 
-                particle.lifeTime += Time.deltaTime;
+                particle.lifeTime += Time.DeltaTime;
 
                 particles[i] = particle;
 
@@ -126,7 +126,7 @@ namespace RetroEngine.Particles
 
             Vector3 oldPos = particle.position;
 
-            particle.position += particle.velocity * Time.deltaTime;
+            particle.position += particle.velocity * Time.DeltaTime;
 
             particle.Collided = false;
 

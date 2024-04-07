@@ -36,7 +36,7 @@ namespace RetroEngine.UI
         {
             base.Update();
 
-            delay -= Time.deltaTime;
+            delay -= Time.DeltaTime;
 
             if (GameMain.platform == Platform.Desktop)
             {

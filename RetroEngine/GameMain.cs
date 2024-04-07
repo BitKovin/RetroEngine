@@ -262,12 +262,12 @@ namespace RetroEngine
         {
             float newDeltaTime = (float)Math.Min(gameTime.ElapsedGameTime.TotalSeconds, 0.04d);
 
-            Time.deltaTime = newDeltaTime;
+            Time.DeltaTime = newDeltaTime;
 
             Time.AddFrameTime(newDeltaTime);
 
             if (!paused)
-                Time.gameTime += Time.deltaTime;
+                Time.gameTime += Time.DeltaTime;
         }
         void GameLogic()
         {
