@@ -59,6 +59,18 @@ sampler2D Bloom3TextureSampler = sampler_state
 
 };
 
+Texture2D LutTexture;
+
+sampler2D LutTextureSampler = sampler_state
+{
+    Texture = <LutTexture>;
+
+    MinFilter = Anisotropic;
+    MagFilter = Anisotropic;
+    AddressU = Clamp;
+    AddressV = Clamp;
+
+};
 
 struct VertexShaderOutput
 {
@@ -66,6 +78,30 @@ struct VertexShaderOutput
     float4 Color : COLOR0;
     float2 TextureCoordinates : TEXCOORD0;
 };
+
+float3 blueM;
+
+// Function to apply the LUT
+float3 GetFromLUT(float3 color)
+{
+
+	float COLORS = 16;
+	float2  _LUT_TexelSize = float2(256, 16);
+	float maxColor = COLORS - 1.0;
+	float3 col = color;
+	float halfColX = 0.5 / _LUT_TexelSize.x;
+	float halfColY = 0.5 / _LUT_TexelSize.y;
+	float threshold = maxColor / COLORS;
+
+	float xOffset = halfColX + col.r * threshold / COLORS;
+	float yOffset = halfColY + col.g * threshold;
+	float cell = floor(col.b * maxColor);
+
+	float2 lutPos = float2(cell / COLORS + xOffset, yOffset);
+	float3 gradedCol = tex2D(LutTextureSampler, lutPos).rgb;
+
+	return gradedCol;
+}
 
 float4 MainPS(VertexShaderOutput input) : COLOR
 {
@@ -84,7 +120,11 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 	
     float ssao = tex2D(SSAOTextureSampler, input.TextureCoordinates).r;
 	
-    return float4((color + bloomColor)*ssao, 1);
+    float3 result = (color + bloomColor)*ssao;
+
+    float3 lutResult = GetFromLUT(result);
+
+    return float4(lutResult, 1);
 }
 
 technique SpriteDrawing

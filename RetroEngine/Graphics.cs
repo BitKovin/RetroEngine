@@ -53,6 +53,8 @@ namespace RetroEngine
 
         public static bool LowLatency = false;
 
+        public static System.Numerics.Vector3 blueM = new System.Numerics.Vector3(1);
+
         public static Vector3 lightlocation = new Vector3();
 
         public static BoundingFrustum DirectionalLightFrustrum = new BoundingFrustum(Matrix.Identity);

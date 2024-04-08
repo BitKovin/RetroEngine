@@ -88,6 +88,9 @@ namespace RetroEngine
             ImGui.InputInt("shadowmap size", ref Graphics.shadowMapResolution);
 
             ImGui.Begin("Tonemapping");
+
+            ImGui.InputFloat3("blueM ", ref Graphics.blueM);
+
             ImGui.SliderFloat("Gamma", ref Graphics.Gamma, 0, 5);
             ImGui.InputFloat("Gamma ", ref Graphics.Gamma);
 

@@ -107,6 +107,8 @@ namespace RetroEngine
 
         static internal bool IgnoreFrustrumCheck = false;
 
+        public static Texture2D LUT;
+
         public Render()
         {
             graphics = GameMain.Instance._graphics;
@@ -142,6 +144,7 @@ namespace RetroEngine
             ReflectionEffect = AssetRegistry.GetShaderFromName("ReflectionPath");
             ReflectionResultEffect = GameMain.content.Load<Effect>("ReflectionResult");
 
+            
 
             InitSampler();
         }
@@ -735,9 +738,9 @@ namespace RetroEngine
 
             InitRenderTargetVectorIfNeed(ref TonemapResult);
 
-            TonemapperEffect.Parameters["Gamma"].SetValue(Graphics.Gamma);
-            TonemapperEffect.Parameters["Exposure"].SetValue(Graphics.Exposure);
-            TonemapperEffect.Parameters["Saturation"].SetValue(Graphics.Saturation);
+            TonemapperEffect.Parameters["Gamma"]?.SetValue(Graphics.Gamma);
+            TonemapperEffect.Parameters["Exposure"]?.SetValue(Graphics.Exposure);
+            TonemapperEffect.Parameters["Saturation"]?.SetValue(Graphics.Saturation);
 
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, TonemapResult.Width, TonemapResult.Height);
 
@@ -833,13 +836,15 @@ namespace RetroEngine
 
             ComposeEffect.Parameters["ColorTexture"].SetValue(TonemapResult);
             ComposeEffect.Parameters["SSAOTexture"]?.SetValue(ssaoOutput);
-            ComposeEffect.Parameters["BloomTexture"].SetValue(bloomSample);
-            ComposeEffect.Parameters["Bloom2Texture"].SetValue(bloomSample2);
-            ComposeEffect.Parameters["Bloom3Texture"].SetValue(bloomSample3);
+            ComposeEffect.Parameters["BloomTexture"]?.SetValue(bloomSample);
+            ComposeEffect.Parameters["Bloom2Texture"]?.SetValue(bloomSample2);
+            ComposeEffect.Parameters["Bloom3Texture"]?.SetValue(bloomSample3);
+            ComposeEffect.Parameters["LutTexture"]?.SetValue(LUT);
+            ComposeEffect.Parameters["blueM"]?.SetValue(Graphics.blueM);
 
             SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
 
-            spriteBatch.Begin(effect: ComposeEffect, blendState: BlendState.Opaque);
+            spriteBatch.Begin(effect: ComposeEffect);
 
             DrawFullScreenQuad(spriteBatch, TonemapResult);
 
