@@ -24,7 +24,7 @@ namespace RetroEngine.Game.Effects.Particles
     {
         public particle_trail():base()
         {
-            TexturePath = "cat.png";
+            TexturePath = "particles/trail.png";
 
             InitialSpawnCount = 2;
             SpawnRate = 30;
@@ -44,6 +44,8 @@ namespace RetroEngine.Game.Effects.Particles
             particle.Scale -= Time.DeltaTime/10;
 
             particle.Scale = Math.Clamp(particle.Scale, 0,1);
+
+            //particle.color = Color.Red;
 
             //particle.velocity -= new Vector3(0, 2, 0) * (Time.DeltaTime / 2f);
 

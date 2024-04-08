@@ -71,8 +71,6 @@ namespace RetroEngine.Game
                 Level.GetCurrent().AddEntity(npc);
             }
 
-            Render.LUT = AssetRegistry.LoadTextureFromFile("engine/textures/Sin Shitty.png_out.png", generateMipMaps:false);
-
         }
 
         void CreateInputActions()

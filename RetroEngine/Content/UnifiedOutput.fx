@@ -56,7 +56,7 @@ PixelOutput PixelShaderFunction(PixelInput input)
     
     float Depth = input.MyPixelPosition.z;
     
-    float4 ColorRGBTA = tex2D(TextureSampler, input.TexCoord);
+    float4 ColorRGBTA = tex2D(TextureSampler, input.TexCoord) * input.Color;
     
     if (ColorRGBTA.a < 0.001)
         discard;

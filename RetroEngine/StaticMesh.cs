@@ -1162,6 +1162,11 @@ namespace RetroEngine
             
         }
 
+        public virtual Vector3 GetClosestToCameraPosition()
+        {
+            return useAvgVertexPosition ? avgVertexPosition : Position;
+        }
+
         public void Dispose()
         {
             Unload();

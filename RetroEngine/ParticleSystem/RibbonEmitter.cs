@@ -71,8 +71,8 @@ namespace RetroEngine.Particles
                 float texCoordYBottom = 1f;
 
                 // Add vertices to the list with texture coordinates
-                vertices.Add(new VertexData { Position = topLeft, TextureCoordinate = new Vector2(texCoordX, texCoordYTop) });
-                vertices.Add(new VertexData { Position = topRight, TextureCoordinate = new Vector2(texCoordX, texCoordYBottom) });
+                vertices.Add(new VertexData { Position = topLeft, TextureCoordinate = new Vector2(texCoordX, texCoordYTop), Color = particle.color});
+                vertices.Add(new VertexData { Position = topRight, TextureCoordinate = new Vector2(texCoordX, texCoordYBottom), Color = particle.color });
 
 
                 // Add indices to form the quad

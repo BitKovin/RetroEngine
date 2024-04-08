@@ -448,6 +448,17 @@ namespace RetroEngine.Particles
 
         }
 
+        public override Vector3 GetClosestToCameraPosition()
+        {
+
+            if (finalizedParticles.Count == 0) return Vector3.Zero;
+
+            List<Particle> particles = finalizedParticles.OrderBy(p => Vector3.Distance( p.position, Camera.position)).ToList();
+
+            return particles[0].position;
+
+        }
+
         public struct Particle
         {
             public Vector3 position = new Vector3();

@@ -738,6 +738,11 @@ namespace RetroEngine
 
             InitRenderTargetVectorIfNeed(ref TonemapResult);
 
+            if(LUT == null)
+                Render.LUT = AssetRegistry.LoadTextureFromFile("engine/textures/lut.png", generateMipMaps: false);
+            if(LUT.IsDisposed)
+                Render.LUT = AssetRegistry.LoadTextureFromFile("engine/textures/lut.png", generateMipMaps: false);
+
             TonemapperEffect.Parameters["Gamma"]?.SetValue(Graphics.Gamma);
             TonemapperEffect.Parameters["Exposure"]?.SetValue(Graphics.Exposure);
             TonemapperEffect.Parameters["Saturation"]?.SetValue(Graphics.Saturation);

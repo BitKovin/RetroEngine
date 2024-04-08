@@ -234,6 +234,9 @@ struct VertexInput
     
     float4 BlendIndices : BLENDINDICES0;
     float4 BlendWeights : BLENDWEIGHT0;
+
+    float4 Color : COLOR0;
+
 };
 
 struct PixelInput
@@ -248,7 +251,7 @@ struct PixelInput
     float3 Tangent : TEXCOORD6;
     float3 TangentNormal : TEXCOORD7;
     float4 lightPosVeryClose : TEXCOORD8;
-    float4 Color : Color0;
+    float4 Color : COLOR0;
 };
 
 struct PBRData
@@ -366,7 +369,7 @@ PixelInput DefaultVertexShaderFunction(VertexInput input)
     output.lightPosVeryClose = mul(worldPos, ShadowMapViewProjectionVeryClose);
     
     output.TexCoord = input.TexCoord;
-    output.Color = float4(1, 1, 1, 1);
+    output.Color = input.Color;
 
     return output;
 }
@@ -934,9 +937,9 @@ float SampleDepthWorldCoords(float3 pos)
 {
     float2 screenCoords = WorldToScreen(pos);
     
-    
     return SampleDepth(screenCoords);
 }
+
 
 float3 SampleColorWorldCoords(float3 pos)
 {
@@ -1022,6 +1025,7 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
         
         if (SampledDepth < dist && (SampledDepth > dist - 1 || facingCamera == false))
         {
+
             outCoords = coords;
             step /= 2;
             factor = lerp(factor, 1, 0.5);

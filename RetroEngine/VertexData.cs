@@ -12,13 +12,15 @@ namespace RetroEngine
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct VertexData : IVertexType
     {
-        public Vector3 Position;
-        public Vector3 Normal;
-        public Vector2 TextureCoordinate;
-        public Vector3 Tangent;
+        public Vector3 Position = new Vector3();
+        public Vector3 Normal = new Vector3();
+        public Vector2 TextureCoordinate = new Vector2();
+        public Vector3 Tangent = new Vector3();
 
-        public Vector4 BlendIndices;
-        public Vector4 BlendWeights;
+        public Vector4 BlendIndices = new Vector4();
+        public Vector4 BlendWeights = new Vector4();
+
+        public Color Color = Color.White;
 
         public static VertexDeclaration VertexDeclaration = new VertexDeclaration
         (
@@ -27,8 +29,14 @@ namespace RetroEngine
               new VertexElement(VertexElementByteOffset.OffsetVector2(), VertexElementFormat.Vector2, VertexElementUsage.TextureCoordinate, 0),
               new VertexElement(VertexElementByteOffset.OffsetVector3(), VertexElementFormat.Vector3, VertexElementUsage.Tangent, 0),
               new VertexElement(VertexElementByteOffset.OffsetVector4(), VertexElementFormat.Vector4, VertexElementUsage.BlendIndices, 0),
-              new VertexElement(VertexElementByteOffset.OffsetVector4(), VertexElementFormat.Vector4, VertexElementUsage.BlendWeight, 0)
+              new VertexElement(VertexElementByteOffset.OffsetVector4(), VertexElementFormat.Vector4, VertexElementUsage.BlendWeight, 0),
+              new VertexElement(VertexElementByteOffset.OffsetColor(), VertexElementFormat.Color, VertexElementUsage.Color, 0)
         );
+
+        public VertexData()
+        {
+        }
+
         VertexDeclaration IVertexType.VertexDeclaration { get { return VertexDeclaration; } }
 
     }
