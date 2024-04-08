@@ -23,6 +23,7 @@ namespace RetroEngine
         public static float SSRResolutionScale = 0.7f;
         public static bool EnableSSR = true;
 
+        public static float Brightness = 1;
         public static float Gamma = 2.4f;
         public static float Exposure = 0.35f;
         public static float Saturation = 0;
@@ -52,8 +53,6 @@ namespace RetroEngine
         public static bool GlobalPointLights = false;
 
         public static bool LowLatency = false;
-
-        public static System.Numerics.Vector3 blueM = new System.Numerics.Vector3(1);
 
         public static Vector3 lightlocation = new Vector3();
 

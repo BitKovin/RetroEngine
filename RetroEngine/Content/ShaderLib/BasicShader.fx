@@ -573,6 +573,7 @@ float GetShadowClose(float3 lightCoords, PixelInput input)
         
         bias *= 1;
         
+        if(abs(dot(input.Normal, -LightDirection)) <= 0.3)
         return 1 - SampleShadowMap(ShadowMapCloseSampler, lightCoords.xy, currentDepth + bias);
 
         float texelSize = size / resolution; // Assuming ShadowMapSize is the size of your shadow map texture

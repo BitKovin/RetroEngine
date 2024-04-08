@@ -89,7 +89,7 @@ namespace RetroEngine
 
             ImGui.Begin("Tonemapping");
 
-            ImGui.InputFloat3("blueM ", ref Graphics.blueM);
+            ImGui.InputFloat("Brightness ", ref Graphics.Brightness);
 
             ImGui.SliderFloat("Gamma", ref Graphics.Gamma, 0, 5);
             ImGui.InputFloat("Gamma ", ref Graphics.Gamma);

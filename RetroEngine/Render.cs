@@ -741,6 +741,7 @@ namespace RetroEngine
             TonemapperEffect.Parameters["Gamma"]?.SetValue(Graphics.Gamma);
             TonemapperEffect.Parameters["Exposure"]?.SetValue(Graphics.Exposure);
             TonemapperEffect.Parameters["Saturation"]?.SetValue(Graphics.Saturation);
+            TonemapperEffect.Parameters["Brightness"]?.SetValue(Graphics.Brightness);
 
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, TonemapResult.Width, TonemapResult.Height);
 
@@ -840,7 +841,6 @@ namespace RetroEngine
             ComposeEffect.Parameters["Bloom2Texture"]?.SetValue(bloomSample2);
             ComposeEffect.Parameters["Bloom3Texture"]?.SetValue(bloomSample3);
             ComposeEffect.Parameters["LutTexture"]?.SetValue(LUT);
-            ComposeEffect.Parameters["blueM"]?.SetValue(Graphics.blueM);
 
             SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
 

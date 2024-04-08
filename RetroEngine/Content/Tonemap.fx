@@ -14,6 +14,7 @@ sampler2D SpriteTextureSampler = sampler_state
 	Texture = <SpriteTexture>;
 };
 
+float Brightness = 1;
 float Exposure;
 float Gamma;
 float Saturation;
@@ -169,7 +170,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR0
 	
     float3 color = tex2D(SpriteTextureSampler, input.TextureCoordinates).rgb;
 	
-    color = ToneMap(tonemap_filmic(color), 1, Exposure, Saturation);
+    color = ToneMap(tonemap_filmic(color)* Brightness, 1, Exposure, Saturation);
 	
     
     return float4(color, 1);
