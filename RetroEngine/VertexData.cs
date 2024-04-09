@@ -20,7 +20,7 @@ namespace RetroEngine
         public Vector4 BlendIndices = new Vector4();
         public Vector4 BlendWeights = new Vector4();
 
-        public Color Color = Color.White;
+        public Vector4 Color = Vector4.One;
 
         public static VertexDeclaration VertexDeclaration = new VertexDeclaration
         (
@@ -30,7 +30,7 @@ namespace RetroEngine
               new VertexElement(VertexElementByteOffset.OffsetVector3(), VertexElementFormat.Vector3, VertexElementUsage.Tangent, 0),
               new VertexElement(VertexElementByteOffset.OffsetVector4(), VertexElementFormat.Vector4, VertexElementUsage.BlendIndices, 0),
               new VertexElement(VertexElementByteOffset.OffsetVector4(), VertexElementFormat.Vector4, VertexElementUsage.BlendWeight, 0),
-              new VertexElement(VertexElementByteOffset.OffsetColor(), VertexElementFormat.Color, VertexElementUsage.Color, 0)
+              new VertexElement(VertexElementByteOffset.OffsetVector4(), VertexElementFormat.Vector4, VertexElementUsage.Color, 0)
         );
 
         public VertexData()
@@ -48,7 +48,7 @@ namespace RetroEngine
         public Vector4 Row2;
         public Vector4 Row3;
         public Vector4 Row4;
-        public Color Color;
+        public Vector4 Color;
 
         public static VertexDeclaration VertexDeclaration = new VertexDeclaration
         (
@@ -56,7 +56,7 @@ namespace RetroEngine
                 new VertexElement(VertexElementByteOffset.OffsetVector4(), VertexElementFormat.Vector4, VertexElementUsage.BlendIndices, 2),
                 new VertexElement(VertexElementByteOffset.OffsetVector4(), VertexElementFormat.Vector4, VertexElementUsage.BlendIndices, 3),
                 new VertexElement(VertexElementByteOffset.OffsetVector4(), VertexElementFormat.Vector4, VertexElementUsage.BlendIndices, 4),
-                new VertexElement(VertexElementByteOffset.OffsetColor(), VertexElementFormat.Color, VertexElementUsage.Color, 2)
+                new VertexElement(VertexElementByteOffset.OffsetVector4(), VertexElementFormat.Vector4, VertexElementUsage.Color, 2)
         );
         VertexDeclaration IVertexType.VertexDeclaration { get { return VertexDeclaration; } }
 

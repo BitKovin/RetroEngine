@@ -10,6 +10,7 @@ internal class Program
         using var game = new RetroEngine.Game.Game();
         RetroEngine.GameMain.platform = RetroEngine.Platform.Desktop;
         Input.MouseMoveCalculatorObject = new WindowsInputCalculator();
+        LightManager.MAX_POINT_LIGHTS = 6;
         Graphics.EnableSSR = false;
         game.Run();
     }

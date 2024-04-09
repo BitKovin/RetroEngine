@@ -102,10 +102,16 @@ float ShadowMapResolutionClose;
 matrix ShadowMapViewProjectionVeryClose;
 float ShadowMapResolutionVeryClose;
 
+
+
 #ifndef MAX_POINT_LIGHTS
 
 #define MAX_POINT_LIGHTS 20
 
+#endif
+
+#ifdef OPENGL
+#define MAX_POINT_LIGHTS 6
 #endif
 
 float3 LightPositions[MAX_POINT_LIGHTS];

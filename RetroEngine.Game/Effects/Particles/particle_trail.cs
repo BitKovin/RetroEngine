@@ -45,7 +45,7 @@ namespace RetroEngine.Game.Effects.Particles
 
             particle.Scale = Math.Clamp(particle.Scale, 0,1);
 
-            //particle.color = Color.Red;
+            particle.color -= new Vector4(0,1,1,0) * Time.DeltaTime*10;
 
             //particle.velocity -= new Vector3(0, 2, 0) * (Time.DeltaTime / 2f);
 

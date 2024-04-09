@@ -219,15 +219,16 @@ namespace RetroEngine
             {
                 UpdateTime(gameTime);
             }
+            curentLevel.WaitForVisualUpdate();
 
             foreach(IDisposable disposable in pendingDispose)
             {
-                disposable.Dispose();
+                disposable?.Dispose();
             }
             pendingDispose.Clear();
 
             var physicsTask = Task.Factory.StartNew(() => { Physics.Simulate(); });
-            curentLevel.WaitForVisualUpdate();
+            
 
             PerformReservedTimeTasks();
             

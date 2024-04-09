@@ -518,7 +518,7 @@ namespace RetroEngine
 
                                 
 
-                                effect.Parameters["Masked"].SetValue(Masked);
+                                effect.Parameters["Masked"]?.SetValue(Masked);
                                 if (Masked)
                                 {
                                     MeshPartData meshPartData = meshPart.Tag as MeshPartData;
@@ -1158,7 +1158,8 @@ namespace RetroEngine
             //model = null;
 
             destroyed = true;
-            GameMain.pendingDispose.Add(this);
+            //GameMain.pendingDispose.Add(this);
+            Dispose();
             
         }
 
@@ -1174,7 +1175,7 @@ namespace RetroEngine
             GC.SuppressFinalize(this);
             texture = null;
             _disposed = true;
-            OcclusionQuery?.Dispose();
+            //OcclusionQuery?.Dispose();
         }
 
         public static void UnloadModel(Model model)

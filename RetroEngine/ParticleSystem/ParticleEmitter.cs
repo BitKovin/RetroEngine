@@ -277,7 +277,7 @@ namespace RetroEngine.Particles
 
                 data.Color = particle.color;
 
-                data.Color.A = (byte)((float)data.Color.A * particle.transparency);
+                data.Color.W = (byte)((float)data.Color.W * particle.transparency);
 
                 instanceData_new[i] = data;
 
@@ -478,7 +478,7 @@ namespace RetroEngine.Particles
 
             public float transparency = 1;
 
-            public Color color = Color.White;
+            public Vector4 color = Vector4.One;
 
             public float Scale = 0;
             public float Rotation = 0;

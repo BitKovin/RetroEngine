@@ -738,10 +738,7 @@ namespace RetroEngine
 
             InitRenderTargetVectorIfNeed(ref TonemapResult);
 
-            if(LUT == null)
-                Render.LUT = AssetRegistry.LoadTextureFromFile("engine/textures/lut.png", generateMipMaps: false);
-            if(LUT.IsDisposed)
-                Render.LUT = AssetRegistry.LoadTextureFromFile("engine/textures/lut.png", generateMipMaps: false);
+            
 
             TonemapperEffect.Parameters["Gamma"]?.SetValue(Graphics.Gamma);
             TonemapperEffect.Parameters["Exposure"]?.SetValue(Graphics.Exposure);
@@ -840,12 +837,20 @@ namespace RetroEngine
 
             graphics.GraphicsDevice.SetRenderTarget(ComposedOutput);
 
+            int lutSize = 0;
+
+            if(LUT!=null)
+                if(LUT.IsDisposed==false)
+                    lutSize = LUT.Height;
+
+
             ComposeEffect.Parameters["ColorTexture"].SetValue(TonemapResult);
             ComposeEffect.Parameters["SSAOTexture"]?.SetValue(ssaoOutput);
             ComposeEffect.Parameters["BloomTexture"]?.SetValue(bloomSample);
             ComposeEffect.Parameters["Bloom2Texture"]?.SetValue(bloomSample2);
             ComposeEffect.Parameters["Bloom3Texture"]?.SetValue(bloomSample3);
             ComposeEffect.Parameters["LutTexture"]?.SetValue(LUT);
+            ComposeEffect.Parameters["lutSize"]?.SetValue(lutSize);
 
             SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
 

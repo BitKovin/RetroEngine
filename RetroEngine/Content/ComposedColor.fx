@@ -65,8 +65,8 @@ sampler2D LutTextureSampler = sampler_state
 {
     Texture = <LutTexture>;
 
-    MinFilter = Anisotropic;
-    MagFilter = Anisotropic;
+    MinFilter = Linear;
+    MagFilter = Linear;
     AddressU = Clamp;
     AddressV = Clamp;
 
@@ -79,14 +79,14 @@ struct VertexShaderOutput
     float2 TextureCoordinates : TEXCOORD0;
 };
 
-float3 blueM;
+int lutSize;
 
 // Function to apply the LUT
 float3 GetFromLUT(float3 color)
 {
 
-	float COLORS = 16;
-	float2  _LUT_TexelSize = float2(256, 16);
+	float COLORS = lutSize;
+	float2  _LUT_TexelSize = float2(lutSize* lutSize, lutSize);
 	float maxColor = COLORS - 1.0;
 	float3 col = color;
 	float halfColX = 0.5 / _LUT_TexelSize.x;
@@ -122,7 +122,10 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 	
     float3 result = (color + bloomColor)*ssao;
 
-    float3 lutResult = GetFromLUT(result);
+    float3 lutResult = result;
+
+    if(lutSize>1)
+        lutResult = GetFromLUT(result);
 
     return float4(lutResult, 1);
 }

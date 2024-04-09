@@ -47,7 +47,7 @@ namespace RetroEngine.Game.Entities
             base.LoadAssets();
 
             mesh.LoadFromFile("models/weapons/bullet/bullet.obj");
-
+            ParticleSystem.Preload("trail");
             mesh.texture = AssetRegistry.LoadTextureFromFile("models/weapons/bullet/bullet.png");
             mesh.emisssiveTexture = AssetRegistry.LoadTextureFromFile("models/weapons/bullet/bullet_em.png");
 
@@ -102,6 +102,8 @@ namespace RetroEngine.Game.Entities
 
             }
 
+            Position = contactPoint.PositionWorldOnB;
+
             Destroy();
         }
 
@@ -109,7 +111,8 @@ namespace RetroEngine.Game.Entities
         {
             base.Destroy();
 
-            trail.StopAll();
+            trail.Position = Position;
+            trail.Destroy(1);
 
         }
 

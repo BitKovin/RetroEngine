@@ -30,7 +30,12 @@ namespace RetroEngine.Particles
 
         public void GenerateBuffers(List<Particle> particles)
         {
+            vertexBuffer?.Dispose();
+            vertexBuffer = null;
+            indexBuffer?.Dispose();
+            indexBuffer = null;
             if (particles == null) return;
+           
             if (particles.Count < 2)
                 return;
 
@@ -87,9 +92,7 @@ namespace RetroEngine.Particles
                     indices.Add((short)(i * 2 - 1));
                 }
             }
-
-            vertexBuffer?.Dispose();
-            indexBuffer?.Dispose();
+            
 
             // Create and set vertex buffer
             vertexBuffer = new VertexBuffer(_graphicsDevice, VertexData.VertexDeclaration, vertices.Count, BufferUsage.WriteOnly);
@@ -116,9 +119,12 @@ namespace RetroEngine.Particles
         {
             base.Destroyed();
 
-            vertexBuffer?.Dispose();
-            indexBuffer?.Dispose();
+            destroyed = true;
 
+            GameMain.pendingDispose.Add(vertexBuffer);
+            GameMain.pendingDispose.Add(indexBuffer);
+            vertexBuffer = null;
+            indexBuffer = null;
         }
 
         void DrawRibbon()
@@ -126,7 +132,7 @@ namespace RetroEngine.Particles
             GraphicsDevice _graphicsDevice = GameMain.Instance.GraphicsDevice;
             GenerateBuffers(finalizedParticles);
 
-            if (vertexBuffer == null)
+            if (vertexBuffer == null || indexBuffer==null || vertexBuffer.IsDisposed || indexBuffer.IsDisposed)
                 { Console.WriteLine("empty vertex buffer"); return; }
 
 
@@ -141,11 +147,11 @@ namespace RetroEngine.Particles
 
             effect.CurrentTechnique.Passes[0].Apply();
 
-            
-
 
             Stats.RenderedMehses++;
-
+            if (vertexBuffer == null || indexBuffer == null || vertexBuffer.IsDisposed || indexBuffer.IsDisposed)
+            { Console.WriteLine("empty vertex buffer"); return; }
+            if(destroyed == false)
             _graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, vertexBuffer.VertexCount);
             
                 
