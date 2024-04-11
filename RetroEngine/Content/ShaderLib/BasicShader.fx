@@ -1084,7 +1084,7 @@ float CalculateReflectiveness(float roughness, float metallic, float3 vDir, floa
     
     reflectiveness -= 0.1;
     
-    reflectiveness *= 3;
+    reflectiveness *= 2.6;
     
     return ReflectionMapping(saturate(reflectiveness));
 }
