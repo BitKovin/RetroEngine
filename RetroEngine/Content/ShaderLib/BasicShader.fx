@@ -1089,6 +1089,11 @@ float CalculateReflectiveness(float roughness, float metallic, float3 vDir, floa
     return ReflectionMapping(saturate(reflectiveness));
 }
 
+float CalcLuminance(float3 color)
+{
+    return dot(color, float3(0.299f, 0.587f, 0.114f));
+}
+
 float3 ApplyReflection(float3 inColor, float3 albedo, PixelInput input,float3 normal, float roughness, float metallic)
 {
     
@@ -1118,5 +1123,10 @@ float3 ApplyReflection(float3 inColor, float3 albedo, PixelInput input,float3 no
 
 float3 ApplyReflectionOnSurface(float3 color,float2 screenCoords, float reflectiveness)
 {
-    return lerp(color, tex2D(ReflectionTextureSampler, screenCoords).rgb * color, reflectiveness);
+
+    float3 reflection = tex2D(ReflectionTextureSampler, screenCoords).rgb;
+
+    float lum = CalcLuminance(reflection);
+
+    return lerp(color, reflection * color, saturate(reflectiveness/2 * lum + reflectiveness));
 }

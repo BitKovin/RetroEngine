@@ -10,9 +10,6 @@ map_Kd textures/brushes/brickPBR.png
 newmtl brushes/bricks
 map_Kd textures/brushes/bricks.png
 
-newmtl brushes/ground_pbr
-map_Kd textures/brushes/ground_pbr.png
-
 newmtl brushes/mirror
 map_Kd textures/brushes/mirror.png
 
