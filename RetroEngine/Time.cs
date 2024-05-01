@@ -11,7 +11,7 @@ namespace RetroEngine
 
         public static float deltaTimeDifference = 1;
 
-        public static float gameTime = 0;
+        public static double gameTime = 0;
 
         static List<float> frames = new List<float>();
         static int framesCount = 0;

@@ -302,7 +302,7 @@ namespace RetroEngine
             graphics.GraphicsDevice.SetRenderTarget(null);
 
             if(Input.GetAction("test2").Holding())
-                return shadowMapClose;
+                return DepthPrepathOutput;
 
             return outputPath;
 
@@ -438,8 +438,7 @@ namespace RetroEngine
 
             foreach (StaticMesh mesh in renderList)
             {
-                if (mesh.Transperent == false)
-                {
+                
                     OcclusionEffect.Parameters["Viewmodel"].SetValue(false);
 
                     if (mesh.Viewmodel)
@@ -448,7 +447,7 @@ namespace RetroEngine
                         OcclusionEffect.Parameters["ViewProjection"].SetValue(Camera.view * Camera.finalizedProjection);
                     mesh.StartOcclusionTest();
 
-                }
+                
             }
 
             testedMeshes = new List<StaticMesh>(renderList);

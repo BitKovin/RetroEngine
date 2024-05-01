@@ -391,7 +391,8 @@ namespace RetroEngine
 
             effect.Parameters["Viewmodel"].SetValue(Viewmodel);
 
-
+            if (Transperent)
+                Masked = true;
 
             effect.Parameters["World"].SetValue(frameStaticMeshData.World);
 

@@ -8,7 +8,7 @@ namespace RetroEngine
 {
     public class Delay
     {
-        float waitUntilTime = 0;
+        double waitUntilTime = 0;
 
         public bool Wait()
         {

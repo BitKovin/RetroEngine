@@ -1025,7 +1025,7 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
         
         if (inScreen == false || SampledDepth>10000)
         {
-            step /= 5;
+            step == 0.02;
             factor = lerp(factor, 1, 0.5);
         }
         

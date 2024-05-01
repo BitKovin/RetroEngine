@@ -497,6 +497,10 @@ namespace RetroEngine
             // Load the custom effect
             Effect effect = GameMain.Instance.render.OcclusionStaticEffect;
 
+
+            if (Transperent)
+                Masked = true;
+
             if (GameMain.Instance.render.BoundingSphere.Radius == 0 || IntersectsBoubndingSphere(GameMain.Instance.render.BoundingSphere))
 
                 if (frameStaticMeshData.model is not null)

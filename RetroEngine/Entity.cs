@@ -33,7 +33,7 @@ namespace RetroEngine
 
         public List<string> Tags = new List<string>();
 
-        public float SpawnTime = 0;
+        public double SpawnTime = 0;
 
         Delay destroyDelay = new Delay();
 
