@@ -59,7 +59,7 @@ namespace RetroEngine
 
             try
             {
-                using (FileStream stream = new FileStream(filePath, FileMode.Open))
+                using (Stream stream = GetFileStreamFromPath(filePath))
                 {
                     if (generateMipMaps && AllowGeneratingMipMaps)
                     {
@@ -87,6 +87,10 @@ namespace RetroEngine
 
         }
 
+        public static Stream GetFileStreamFromPath(string path)
+        {
+            return File.OpenRead(path);
+        }
 
         public static TextureCube LoadCubeTextureFromFile(string path, bool ignoreErrors = false, bool generateMipMaps = true)
         {
@@ -265,7 +269,7 @@ namespace RetroEngine
 
             try
             {
-                using (FileStream stream = new FileStream(filePpath, FileMode.Open))
+                using (Stream stream = GetFileStreamFromPath(filePpath))
                 {
 
                     SoundEffect soundEffect = SoundEffect.FromStream(stream);

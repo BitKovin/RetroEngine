@@ -847,7 +847,12 @@ namespace RetroEngine
             }
             else
             {
-                scene = importer.ImportFile(filePath, Assimp.PostProcessSteps.MakeLeftHanded | Assimp.PostProcessSteps.FlipUVs | Assimp.PostProcessSteps.CalculateTangentSpace | Assimp.PostProcessSteps.Triangulate | Assimp.PostProcessSteps.FindDegenerates);
+
+                string hint = "";
+                if (filePath.EndsWith(".obj"))
+                    hint = "obj";
+
+                scene = importer.ImportFileFromStream(AssetRegistry.GetFileStreamFromPath(filePath), Assimp.PostProcessSteps.MakeLeftHanded | Assimp.PostProcessSteps.FlipUVs | Assimp.PostProcessSteps.CalculateTangentSpace | Assimp.PostProcessSteps.Triangulate | Assimp.PostProcessSteps.FindDegenerates, formatHint: hint);
                 //loadedScenes.Add(filePath, scene);
             }
 

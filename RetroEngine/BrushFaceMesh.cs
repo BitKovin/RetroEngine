@@ -56,7 +56,7 @@ namespace RetroEngine
                 scene = loadedScenes[filePath];
             else
             {
-                scene = importer.ImportFile(filePath, PostProcessSteps) ;
+                scene = importer.ImportFileFromStream(AssetRegistry.GetFileStreamFromPath(filePath), PostProcessSteps) ;
                 loadedScenes.Add(filePath, scene);
             }
 
@@ -210,7 +210,7 @@ namespace RetroEngine
                 scene = loadedScenes[filePath];
             else
             {
-                scene = importer.ImportFile(filePath, PostProcessSteps);
+                scene = importer.ImportFileFromStream(AssetRegistry.GetFileStreamFromPath(filePath), PostProcessSteps);
                 loadedScenes.Add(filePath, scene);
             }
 
@@ -552,7 +552,7 @@ namespace RetroEngine
 
 
             var importer = new Assimp.AssimpContext();
-            var scene = importer.ImportFile(filePath, Assimp.PostProcessSteps.MakeLeftHanded | Assimp.PostProcessSteps.FlipUVs | Assimp.PostProcessSteps.Triangulate);
+            var scene = importer.ImportFileFromStream(AssetRegistry.GetFileStreamFromPath(filePath), Assimp.PostProcessSteps.MakeLeftHanded | Assimp.PostProcessSteps.FlipUVs | Assimp.PostProcessSteps.Triangulate);
 
             if (scene == null)
             {

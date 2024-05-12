@@ -137,9 +137,9 @@ namespace RetroEngine.Skeletal
                     //importer.Scale = 1f / importer.Scale;
                     //Console.WriteLine("(not sure this works) Model scale: " + importer.Scale);
 
-                    scene = importer.ImportFile
+                    scene = importer.ImportFileFromStream
                                            (
-                                            filepathorname,
+                                            AssetRegistry.GetFileStreamFromPath(filepathorname),
                                               PostProcessSteps.CalculateTangentSpace
                                             | PostProcessSteps.Triangulate
                                             | PostProcessSteps.ImproveCacheLocality
