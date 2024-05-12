@@ -418,25 +418,20 @@ namespace RetroEngine
         {
             CollisionWorld world = staticWorld;
 
+            // Create a sphere shape with the specified radius
+            SphereShape sphereShape = new SphereShape(radius);
+
+            Matrix4x4 start = Matrix4x4.CreateTranslation(rayStart);
+            Matrix4x4 end = Matrix4x4.CreateTranslation(rayEnd);
+
+
             MyClosestConvexResultCallback convResultCallback = new MyClosestConvexResultCallback(ref rayStart, ref rayEnd);
 
-            // Create a sphere shape with the specified radius
-            using (SphereShape sphereShape = new SphereShape(radius))
-            {
+            // Set the callback to respond only to static objects
+            convResultCallback.FlagToRespond = CollisionFlags.StaticObject;
 
-                Matrix4x4 start = Matrix4x4.CreateTranslation(rayStart);
-                Matrix4x4 end = Matrix4x4.CreateTranslation(rayEnd);
-
-
-                
-
-                // Set the callback to respond only to static objects
-                convResultCallback.FlagToRespond = CollisionFlags.StaticObject;
-
-                // Perform the sphere sweep
-                world.ConvexSweepTest(sphereShape, start, end, convResultCallback);
-
-            }
+            // Perform the sphere sweep
+            world.ConvexSweepTest(sphereShape, start, end, convResultCallback);
 
             return convResultCallback;
         }
@@ -460,8 +455,6 @@ namespace RetroEngine
             // Perform the sphere sweep
             world.ConvexSweepTest(sphereShape, start, end, convResultCallback);
 
-            // Dispose of the sphere shape to release resources
-            sphereShape.Dispose();
 
             return convResultCallback;
         }

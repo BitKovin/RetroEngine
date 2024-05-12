@@ -100,6 +100,8 @@ namespace RetroEngine
             ImGui.SliderFloat("Saturation", ref Graphics.Saturation, -1, 2);
             ImGui.InputFloat("Saturation ", ref Graphics.Saturation);
 
+            
+
             ImGui.End();
 
             ImGui.Checkbox("dev menu", ref GameMain.Instance.DevMenuEnabled);
@@ -150,6 +152,8 @@ namespace RetroEngine
             var statsResults = Stats.GetResults();
 
             ImGui.Begin("Stats");
+
+            ImGui.Text("time dif: " + (Time.deltaTimeDifference*1000).ToString());
 
             ImGui.Text($"{Stats.RenderedMehses} meshes were rendered");
             ImGui.Text($"{LightManager.FinalPointLights.Count} point lights are active");

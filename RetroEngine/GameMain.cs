@@ -263,7 +263,7 @@ namespace RetroEngine
         {
             float newDeltaTime = (float)Math.Min(gameTime.ElapsedGameTime.TotalSeconds, 0.04d);
 
-            Time.DeltaTime = newDeltaTime;
+            //Time.DeltaTime = newDeltaTime;
 
             Time.AddFrameTime(newDeltaTime);
 

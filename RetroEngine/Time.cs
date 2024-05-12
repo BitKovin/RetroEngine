@@ -32,6 +32,8 @@ namespace RetroEngine
 
             avg /= (float)frames.Count;
 
+            deltaTimeDifference = Math.Abs(avg - DeltaTime);
+
             DeltaTime = avg;
         }
 

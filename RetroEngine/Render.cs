@@ -479,7 +479,7 @@ namespace RetroEngine
 
         public bool renderShadow()
         {
-            return !shadowPassRenderDelay.Wait() || Level.ChangingLevel;
+            return true;// !shadowPassRenderDelay.Wait() || Level.ChangingLevel;
         }
 
         internal void RenderShadowMap(List<StaticMesh> renderList)
