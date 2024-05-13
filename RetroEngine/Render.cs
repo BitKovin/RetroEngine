@@ -75,6 +75,7 @@ namespace RetroEngine
         public Effect MiscEffect;
 
         public Effect ShadowMapEffect;
+        public Effect ShadowMapMaskedEffect;
 
         public Effect fxaaEffect;
 
@@ -119,6 +120,7 @@ namespace RetroEngine
 
 
             ShadowMapEffect = GameMain.content.Load<Effect>("ShadowMap");
+            ShadowMapMaskedEffect = GameMain.content.Load<Effect>("ShadowMapMasked");
             fxaaEffect = GameMain.content.Load<Effect>("fxaa");
             maxDepth = GameMain.content.Load<Effect>("maxDepth");
             //PostProcessingEffect = GameMain.content.Load<Effect>("PostProcessing");

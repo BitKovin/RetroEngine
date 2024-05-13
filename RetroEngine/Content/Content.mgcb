@@ -111,12 +111,6 @@
 /processorParam:DebugMode=Auto
 /build:ParticleUnifiedOutput.fx
 
-#begin ParticleUnifiedOutput.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/build:ParticleUnifiedOutput.fx
-
 #begin ReflectionPath.fx
 /importer:EffectImporter
 /processor:EffectProcessor
@@ -134,6 +128,12 @@
 /processor:EffectProcessor
 /processorParam:DebugMode=Optimize
 /build:ShadowMap.fx
+
+#begin ShadowMapMasked.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:ShadowMapMasked.fx
 
 #begin ssao.fx
 /importer:EffectImporter

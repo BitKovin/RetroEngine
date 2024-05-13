@@ -423,6 +423,11 @@ namespace RetroEngine
             // Load the custom effect
             Effect effect = GameMain.Instance.render.ShadowMapEffect;
 
+            if (Masked || Transperent)
+            {
+                effect = GameMain.Instance.render.ShadowMapMaskedEffect;
+
+            }
 
             if (frameStaticMeshData.model is not null)
             {
@@ -450,7 +455,10 @@ namespace RetroEngine
                         else
                             Graphics.LightViewProjection = frameStaticMeshData.LightView * frameStaticMeshData.LightProjection;
 
+                        MeshPartData meshPartData = meshPart.Tag as MeshPartData;
 
+                        if(Masked||Transperent)
+                            UpdateTextureParamIfNeeded(effect, "Texture", FindTexture(meshPartData.textureName));
 
                         // Set effect parameters
                         effect.Parameters["World"].SetValue(frameStaticMeshData.World);
