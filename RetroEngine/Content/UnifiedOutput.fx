@@ -73,6 +73,9 @@ PixelOutput PixelShaderFunction(PixelInput input)
     float3 textureColor = ColorRGBTA.xyz;
 	float textureAlpha = tex2D(TextureSampler, input.TexCoord).w;
     
+    if (textureAlpha < 0.01)
+        discard;
+
     float3 pixelNormal = ApplyNormalTexture(textureNormal, input.Normal, input.Tangent);
     
     

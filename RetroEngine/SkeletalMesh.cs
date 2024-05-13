@@ -380,6 +380,7 @@ namespace RetroEngine
 
         public override void DrawDepth()
         {
+
             if (Render.IgnoreFrustrumCheck == false)
                 if (frameStaticMeshData.InFrustrum == false) return;
 
@@ -422,6 +423,7 @@ namespace RetroEngine
                             if (texture.GetType() == typeof(RenderTargetCube))
                                 effect.Parameters["Texture"].SetValue(AssetRegistry.LoadTextureFromFile("engine/textures/white.png"));
                         }
+
                         effect.Techniques[0].Passes[0].Apply();
 
                         graphicsDevice.DrawIndexedPrimitives(

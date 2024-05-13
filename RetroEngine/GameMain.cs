@@ -122,20 +122,20 @@ namespace RetroEngine
             //_graphics.IsFullScreen = true;
             _graphics.ApplyChanges();
 
-            
-            
+
+
             render = new Render();
 
             LevelObjectFactory.InitializeTypeCache();
             ParticleSystemFactory.InitializeTypeCache();
 
-            if(AllowAsyncAssetLoading)
+            if (AllowAsyncAssetLoading)
                 AssetRegistry.StartAsyncAssetLoader();
         }
 
         public static bool CanLoadAssetsOnThisThread()
         {
-            if(AllowAsyncAssetLoading)
+            if (AllowAsyncAssetLoading)
                 return true;
 
             return RenderThread == Thread.CurrentThread;
@@ -221,17 +221,17 @@ namespace RetroEngine
             }
             curentLevel.WaitForVisualUpdate();
 
-            foreach(IDisposable disposable in pendingDispose)
+            foreach (IDisposable disposable in pendingDispose)
             {
                 disposable?.Dispose();
             }
             pendingDispose.Clear();
 
             var physicsTask = Task.Factory.StartNew(() => { Physics.Simulate(); });
-            
+
 
             PerformReservedTimeTasks();
-            
+
 
             foreach (UiElement elem in UiElement.Viewport.childs)
                 elem.Update();
@@ -291,8 +291,8 @@ namespace RetroEngine
             curentLevel.AsyncUpdate();
             Stats.StopRecord("Level AsyncUpdate");
 
-            if(Graphics.LowLatency)
-            WaitForFramePresent();
+            if (Graphics.LowLatency)
+                WaitForFramePresent();
 
             Input.UpdateMouse();
 
@@ -316,15 +316,15 @@ namespace RetroEngine
         {
             Stopwatch sw = Stopwatch.StartNew();
             ReservedTimeTasks();
-            if(ReservedTaskMinTime > 0)
-            while(sw.Elapsed.TotalSeconds<ReservedTaskMinTime)
-            {
-            }
+            if (ReservedTaskMinTime > 0)
+                while (sw.Elapsed.TotalSeconds < ReservedTaskMinTime)
+                {
+                }
         }
 
         void ReservedTimeTasks()
         {
-            if(AllowAsyncAssetLoading == false)
+            if (AllowAsyncAssetLoading == false)
                 curentLevel?.LoadAssets();
 
             Stats.StartRecord("render preparation");
@@ -354,15 +354,15 @@ namespace RetroEngine
 
             Stats.StartRecord("Render");
 
-            
+
 
             RenderTarget2D frame = render.StartRenderLevel(curentLevel);
 
-            
+
 
             GraphicsDevice.SetRenderTarget(null);
 
-            
+
 
             Rectangle screenRectangle = new Rectangle(0, 0, (int)(render.GetScreenResolution().X), (int)(render.GetScreenResolution().Y));
 
@@ -408,31 +408,32 @@ namespace RetroEngine
             if (pendingGraphicsUpdate)
                 _graphics.ApplyChanges();
 
-            if(SkipFrames>0)
+            if (SkipFrames > 0)
             {
                 SkipFrames--;
                 LoadingScreen.Draw();
                 return;
             }
 
-            
+
 
             if (AllowAsyncAssetLoading)
             {
                 presentingFrame = true;
                 presentFrameTask = Task.Factory.StartNew(() => { PresentFrame(); });
-            }else
+            }
+            else
             {
                 PresentFrame();
             }
 
 
-                //Level.GetCurrent().EndOcclusionCheck();
+            //Level.GetCurrent().EndOcclusionCheck();
 
 
             Stats.StartRecord("frame change");
 
-            
+
 
         }
 
@@ -453,7 +454,7 @@ namespace RetroEngine
         {
             if (presentingFrame == false) return;
 
-            while (presentingFrame) 
+            while (presentingFrame)
             {
                 if (presentFrameTask == null) return;
                 if (presentFrameTask.IsCompletedSuccessfully) return;
@@ -465,7 +466,7 @@ namespace RetroEngine
 
         protected override void EndDraw()
         {
-            
+
         }
 
         public object GetView(System.Type type)
@@ -523,7 +524,7 @@ namespace RetroEngine
 
             double elapsedSeconds = stopwatch.Elapsed.TotalSeconds;
 
-            while(elapsedSeconds < 1f/20f)
+            while (elapsedSeconds < 1f / 20f)
             {
                 elapsedSeconds = stopwatch.Elapsed.TotalSeconds;
             }
@@ -534,7 +535,7 @@ namespace RetroEngine
 
         public virtual void OnLevelChanged()
         {
-            Time.gameTime = 0;
+            //Time.gameTime = 0;
             render.shadowPassRenderDelay = new Delay();
         }
 

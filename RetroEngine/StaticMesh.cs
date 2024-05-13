@@ -1045,6 +1045,8 @@ namespace RetroEngine
         public virtual void RenderPreparation()
         {
 
+            WorldMatrix = GetWorldMatrix();
+
             frameStaticMeshData.Projection = Camera.projection;
             frameStaticMeshData.ProjectionViewmodel = Camera.projectionViewmodel;
             frameStaticMeshData.model = model;
@@ -1075,7 +1077,7 @@ namespace RetroEngine
 
             if (model is null) return;
 
-            WorldMatrix = GetWorldMatrix();
+            //WorldMatrix = GetWorldMatrix();
 
             foreach (ModelMesh mesh in model.Meshes)
             {

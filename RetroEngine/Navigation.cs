@@ -19,6 +19,8 @@ namespace RetroEngine
 
         static List<NavPoint> navPoints = new List<NavPoint>();
 
+        static List<PathfindingQuery> removeList = new List<PathfindingQuery>();
+
         internal static List<PathfindingQuery> pathfindingQueries = new List<PathfindingQuery>();
 
         public static void ClearNavData()
@@ -43,21 +45,21 @@ namespace RetroEngine
 
         static void UpdateCycle()
         {
-            while(true)
+            while (true)
             {
 
                 ProcessingPathfinding = false;
 
                 if (waitingToFinish)
                 {
-                    Thread.Sleep(2);
+                    Thread.Sleep(10);
                     waitingToFinish = false;
                     continue;
                 }
 
                 if (Level.ChangingLevel)
                 {
-                    Thread.Sleep(1);
+                    Thread.Sleep(10);
                     continue;
                 }
 
@@ -65,22 +67,23 @@ namespace RetroEngine
 
                 ParallelOptions options = new ParallelOptions();
                 options.MaxDegreeOfParallelism = 8;
+                List<PathfindingQuery> queries;
+                lock (pathfindingQueries)
+                {
+                    int n = Math.Max(pathfindingQueries.Count, Math.Min(8, pathfindingQueries.Count * 3));
 
-
-                int n = Math.Max(pathfindingQueries.Count, Math.Min(8, pathfindingQueries.Count * 3));
-
-                List<PathfindingQuery> queries = pathfindingQueries.GetRange(0, Math.Min(pathfindingQueries.Count, n));
-
-                List<PathfindingQuery> removeList = new List<PathfindingQuery>();
-
-                foreach (PathfindingQuery item in queries) { 
+                    queries = pathfindingQueries.GetRange(0, Math.Min(pathfindingQueries.Count, n));
+                }
+                foreach (PathfindingQuery item in queries)
+                {
                     item?.Execute();
                     removeList.Add(item);
                 }
-
-                foreach (PathfindingQuery query in removeList)
-                    pathfindingQueries.Remove(query);
-
+                lock (pathfindingQueries)
+                {
+                    foreach (PathfindingQuery query in removeList)
+                        pathfindingQueries.Remove(query);
+                }
                 Thread.Sleep(1);
 
                 ProcessingPathfinding = false;
@@ -95,7 +98,7 @@ namespace RetroEngine
 
             waitingToFinish = true;
 
-            while(ProcessingPathfinding)
+            while (ProcessingPathfinding)
             {
 
             }
@@ -106,7 +109,7 @@ namespace RetroEngine
 
             if (UpdateTask == null)
             {
-                    UpdateTask = Task.Factory.StartNew(() => { UpdateCycle(); });
+                UpdateTask = Task.Factory.StartNew(() => { UpdateCycle(); });
             }
             else
             {
@@ -138,11 +141,11 @@ namespace RetroEngine
             List<Vector3> points = startPoint.GetPathNext(new List<NavPoint>(), target, ref it, query);
             List<Vector3> result = new List<Vector3>(points);
 
-            for(int i = points.Count -1; i >=0; i--)
+            for (int i = points.Count - 1; i >= 0; i--)
             {
                 var hit = Physics.SphereTraceForStatic(start.ToNumerics(), points[i].ToNumerics(), 0.3f);
 
-                if(hit.HasHit == false)
+                if (hit.HasHit == false)
                 {
                     result.RemoveRange(0, i); break;
                 }
@@ -171,9 +174,9 @@ namespace RetroEngine
 
             foreach (var point in navPoints)
             {
-               var hit = Physics.SphereTraceForStatic(start.ToNumerics(), point.Position.ToNumerics(), 0.3f);
-                
-                if(hit.HasHit == false)
+                var hit = Physics.SphereTraceForStatic(start.ToNumerics(), point.Position.ToNumerics(), 0.3f);
+
+                if (hit.HasHit == false)
                     return point;
 
             }
@@ -222,8 +225,10 @@ namespace RetroEngine
             endLocation = target;
 
             deathDelay.AddDelay(3);
-
-            Navigation.pathfindingQueries.Add(this);
+            lock (Navigation.pathfindingQueries)
+            {
+                Navigation.pathfindingQueries.Add(this);
+            }
             return;
 
             task = Task.Run(() => { Process(start, target); });
@@ -238,17 +243,17 @@ namespace RetroEngine
                 return;
             }
 
-            
+
 
         }
 
-        void ProcessPoint(NavPoint point,Vector3 pos)
+        void ProcessPoint(NavPoint point, Vector3 pos)
         {
             var hit = Physics.SphereTraceForStatic(pos.ToNumerics(), point.Position.ToNumerics(), 0.3f);
 
             if (hit.HasHit) return;
 
-            if(VisibleLocations.ContainsKey(point) == false)
+            if (VisibleLocations.ContainsKey(point) == false)
                 VisibleLocations.Add(point, new List<Vector3>());
 
             if (VisibleLocationsFromPoint.ContainsKey(point.Position) == false)
@@ -262,19 +267,20 @@ namespace RetroEngine
         internal void Execute()
         {
             Process(startLocation, endLocation);
+            //Thread.Sleep(1);
         }
 
         void Process(Vector3 start, Vector3 target)
         {
 
             start = Navigation.ProjectToGround(start);
-            target = Navigation.ProjectToGround(target);    
+            target = Navigation.ProjectToGround(target);
 
             var hit = Physics.SphereTraceForStatic(start.ToPhysics(), target.ToPhysics(), 0.3f);
 
-            if(hit.HasHit == false)
+            if (hit.HasHit == false)
             {
-                OnPathFound?.Invoke(new List<Vector3>() { target});
+                OnPathFound?.Invoke(new List<Vector3>() { target });
                 return;
             }
 

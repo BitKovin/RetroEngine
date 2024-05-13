@@ -129,32 +129,42 @@ namespace RetroEngine.Particles
 
         void DrawRibbon()
         {
-            GraphicsDevice _graphicsDevice = GameMain.Instance.GraphicsDevice;
-            GenerateBuffers(finalizedParticles);
+            
+                GraphicsDevice _graphicsDevice = GameMain.Instance.GraphicsDevice;
+                GenerateBuffers(finalizedParticles);
 
-            if (vertexBuffer == null || indexBuffer==null || vertexBuffer.IsDisposed || indexBuffer.IsDisposed)
+                if (vertexBuffer == null || indexBuffer == null || vertexBuffer.IsDisposed || indexBuffer.IsDisposed)
                 { Console.WriteLine("empty vertex buffer"); return; }
 
 
-            Effect effect = Shader;
+                Effect effect = Shader;
 
-            SetupBlending();
-            ApplyShaderParams(effect,null);
+                SetupBlending();
+                ApplyShaderParams(effect, null);
 
 
-            _graphicsDevice.SetVertexBuffer(vertexBuffer);
-            _graphicsDevice.Indices = indexBuffer;
+                _graphicsDevice.SetVertexBuffer(vertexBuffer);
+                _graphicsDevice.Indices = indexBuffer;
 
-            effect.CurrentTechnique.Passes[0].Apply();
+            if (vertexBuffer == null) return;
+
+            
 
 
             Stats.RenderedMehses++;
-            if (vertexBuffer == null || indexBuffer == null || vertexBuffer.IsDisposed || indexBuffer.IsDisposed)
-            { Console.WriteLine("empty vertex buffer"); return; }
-            if(destroyed == false)
-            _graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, vertexBuffer.VertexCount);
-            
-                
+            if (vertexBuffer == null) return;
+            lock (vertexBuffer)
+            {
+                if (vertexBuffer == null || indexBuffer == null || vertexBuffer.IsDisposed || indexBuffer.IsDisposed)
+                { Console.WriteLine("empty vertex buffer"); return; }
+
+                if (destroyed == false)
+                {
+                    effect.CurrentTechnique.Passes[0].Apply();
+                    _graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, vertexBuffer.VertexCount);
+                }
+
+            }
 
         }
 

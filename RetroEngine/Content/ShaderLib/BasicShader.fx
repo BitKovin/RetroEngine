@@ -110,6 +110,12 @@ float ShadowMapResolutionVeryClose;
 
 #endif
 
+#ifndef MAX_POINT_LIGHTS_SHADOWS
+
+#define MAX_POINT_LIGHTS_SHADOWS 5
+
+#endif
+
 #ifdef OPENGL
 #define MAX_POINT_LIGHTS 6
 #endif
@@ -736,7 +742,7 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
 float GetPointLightDepth(int i, float3 worldPos)
 {
     
-    if (i>= 6)
+    if (i>= MAX_POINT_LIGHTS_SHADOWS)
         return 10000;
 
     // Get the direction from the world position to the light position

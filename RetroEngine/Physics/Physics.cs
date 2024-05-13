@@ -51,9 +51,9 @@ namespace RetroEngine
 
             removeList.Clear();
 
-            
 
-            if (dynamicsWorld != null )
+
+            if (dynamicsWorld != null)
             {
                 dynamicsWorld.Dispose();
                 dynamicsWorld = null;
@@ -67,15 +67,15 @@ namespace RetroEngine
 
             // Create a collision configuration and dispatcher
             var collisionConfig = new DefaultCollisionConfiguration();
-            collisionConfig.SetConvexConvexMultipointIterations(1,1);
-            collisionConfig.SetPlaneConvexMultipointIterations(1,1);
+            collisionConfig.SetConvexConvexMultipointIterations(1, 1);
+            collisionConfig.SetPlaneConvexMultipointIterations(1, 1);
             dispatcher = new CollisionDispatcher(collisionConfig);
 
             // Create a broadphase and a solver
             broadphase = new DbvtBroadphase();
 
             solver = new SequentialImpulseConstraintSolver();
-            
+
 
             // Create the dynamics world
             dynamicsWorld = new DiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfig);
@@ -93,9 +93,9 @@ namespace RetroEngine
         public static void ResetWorld()
         {
 
-            
 
-            foreach(RigidBody body in staticBodies)
+
+            foreach (RigidBody body in staticBodies)
             {
                 staticWorld.RemoveCollisionObject(body);
                 body.CollisionShape?.Dispose();
@@ -127,35 +127,45 @@ namespace RetroEngine
 
         }
 
-        public static void PerformContactCheck(CollisionObject collisionObject, CollisionCallback callback) 
+        public static void PerformContactCheck(CollisionObject collisionObject, CollisionCallback callback)
         {
 
             try
             {
                 if (collisionObject is null) return;
 
-                dynamicsWorld.ContactTest(collisionObject, callback);
+                lock (dynamicsWorld)
+                {
+                    dynamicsWorld.ContactTest(collisionObject, callback);
+                }
             }
-            catch(Exception e) { Logger.Log(e.Message); }
+            catch (Exception e) { Logger.Log(e.Message); }
         }
 
         public static void Simulate()
         {
-           
-            foreach(StaticRigidBody staticRigidBody in staticBodies)
+            lock (staticWorld)
             {
-                staticRigidBody.UpdateFromParrent();
+                foreach (StaticRigidBody staticRigidBody in staticBodies)
+                {
+                    staticRigidBody.UpdateFromParrent();
+                }
             }
-
-            if (GameMain.Instance.paused == false)
-                dynamicsWorld.StepSimulation(Time.DeltaTime * Time.TimeScale, steps, Math.Max(1 / 60f, Time.DeltaTime));
+            lock (dynamicsWorld)
+            {
+                if (GameMain.Instance.paused == false)
+                    dynamicsWorld.StepSimulation(Time.DeltaTime * Time.TimeScale, steps, Math.Max(1 / 30f, Time.DeltaTime));
+            }
         }
 
         public static void Remove(CollisionObject collisionObject)
         {
-            if(collisionObject is null) return;
+            if (collisionObject is null) return;
 
-            dynamicsWorld.RemoveCollisionObject(collisionObject);
+            lock (dynamicsWorld)
+            {
+                dynamicsWorld.RemoveCollisionObject(collisionObject);
+            }
             collisionObjects.Remove(collisionObject);
             collisionObject.UserObject = null;
             collisionObject.CollisionShape.Dispose();
@@ -167,8 +177,11 @@ namespace RetroEngine
         {
             if (body is null) return;
 
-            dynamicsWorld.RemoveRigidBody(body);
-            dynamicsWorld.CollisionObjectArray.Remove(body);
+            lock (dynamicsWorld)
+            {
+                dynamicsWorld.RemoveRigidBody(body);
+                dynamicsWorld.CollisionObjectArray.Remove(body);
+            }
             collisionObjects.Remove(body);
             body.ClearForces();
 
@@ -297,7 +310,7 @@ namespace RetroEngine
 
 
             // Create a sphere shape
-            var sphereShape = new BoxShape(size/2);
+            var sphereShape = new BoxShape(size / 2);
             sphereShape.UserObject = new CollisionShapeData();
             var motionState = new DefaultMotionState(Matrix4x4.CreateTranslation(0, 0, 0));
 
@@ -325,7 +338,7 @@ namespace RetroEngine
         }
 
 
-        public static RigidBody CreateFromShape(Entity entity, Vector3 size,CollisionShape shape, float mass = 1, CollisionFlags collisionFlags = CollisionFlags.None)
+        public static RigidBody CreateFromShape(Entity entity, Vector3 size, CollisionShape shape, float mass = 1, CollisionFlags collisionFlags = CollisionFlags.None)
         {
             RigidBody RigidBody;
 
@@ -344,7 +357,7 @@ namespace RetroEngine
             RigidBody.UserObject = entity;
 
             dynamicsWorld.AddRigidBody(RigidBody);
-            if(collisionFlags == CollisionFlags.StaticObject && entity.Static) 
+            if (collisionFlags == CollisionFlags.StaticObject && entity.Static)
             {
 
                 var staticBody = new RetroEngine.StaticRigidBody(boxRigidBodyInfo);
@@ -353,8 +366,10 @@ namespace RetroEngine
                 staticBody.SetParrent(RigidBody);
 
                 staticBodies.Add(staticBody);
-
-                staticWorld.AddRigidBody(staticBody);
+                lock (staticWorld)
+                {
+                    staticWorld.AddRigidBody(staticBody);
+                }
             }
 
 
@@ -369,12 +384,12 @@ namespace RetroEngine
         }
 
 
-        public static RigidBody CreateCharacterCapsule(Entity entity, float HalfHeight,float radius, float mass = 1, CollisionFlags collisionFlags = CollisionFlags.None)
+        public static RigidBody CreateCharacterCapsule(Entity entity, float HalfHeight, float radius, float mass = 1, CollisionFlags collisionFlags = CollisionFlags.None)
         {
             RigidBody RigidBody;
 
             // Create a sphere shape
-            var Shape = new CapsuleShape(radius,HalfHeight);
+            var Shape = new CapsuleShape(radius, HalfHeight);
             Shape.UserObject = new CollisionShapeData();
             var motionState = new DefaultMotionState(Matrix4x4.CreateTranslation(0, 0, 0));
 
@@ -391,7 +406,7 @@ namespace RetroEngine
             RigidBody.Friction = 0f;
             RigidBody.SetDamping(0.1f, 0.1f);
             RigidBody.Restitution = 0f;
-            
+
 
             collisionObjects.Add(RigidBody);
 
@@ -403,12 +418,14 @@ namespace RetroEngine
             CollisionWorld world = dynamicsWorld;
 
             MyClosestRayResultCallback rayCallback = new MyClosestRayResultCallback(ref rayStart, ref rayEnd);
-            if(ignoreList is not null)
+            if (ignoreList is not null)
                 rayCallback.ignoreList = ignoreList;
 
-            // Perform the ray cast
-            world.RayTest(rayStart, rayEnd, rayCallback);
-
+            lock (dynamicsWorld)
+            {
+                // Perform the ray cast
+                world.RayTest(rayStart, rayEnd, rayCallback);
+            }
             return rayCallback;
 
 
@@ -416,6 +433,7 @@ namespace RetroEngine
 
         public static MyClosestConvexResultCallback SphereTraceForStatic(Vector3 rayStart, Vector3 rayEnd, float radius = 0.5f)
         {
+
             CollisionWorld world = staticWorld;
 
             // Create a sphere shape with the specified radius
@@ -429,9 +447,10 @@ namespace RetroEngine
 
             // Set the callback to respond only to static objects
             convResultCallback.FlagToRespond = CollisionFlags.StaticObject;
-
-            // Perform the sphere sweep
-            world.ConvexSweepTest(sphereShape, start, end, convResultCallback);
+            lock (staticWorld)
+            {
+                world.ConvexSweepTest(sphereShape, start, end, convResultCallback);
+            }
 
             return convResultCallback;
         }
@@ -452,9 +471,11 @@ namespace RetroEngine
             if (ignoreList is not null)
                 convResultCallback.ignoreList = ignoreList;
 
-            // Perform the sphere sweep
-            world.ConvexSweepTest(sphereShape, start, end, convResultCallback);
-
+            lock (staticWorld)
+            {
+                // Perform the sphere sweep
+                world.ConvexSweepTest(sphereShape, start, end, convResultCallback);
+            }
 
             return convResultCallback;
         }
@@ -467,9 +488,11 @@ namespace RetroEngine
 
             rayCallback.FlagToRespond = CollisionFlags.StaticObject;
 
-            // Perform the ray cast
-            world.RayTest(rayStart, rayEnd, rayCallback);
-
+            lock (staticWorld)
+            {
+                // Perform the ray cast
+                world.RayTest(rayStart, rayEnd, rayCallback);
+            }
             return rayCallback;
 
 
@@ -479,7 +502,7 @@ namespace RetroEngine
         public static CollisionShape CreateCollisionShapeFromModel(Model model, float scale = 1.0f, CollisionShapeData shapeData = null, bool complex = false)
         {
 
-            if(shapeData == null)
+            if (shapeData == null)
                 shapeData = new CollisionShapeData();
 
             // Create a compound shape to hold multiple child collision shapes
@@ -550,8 +573,8 @@ namespace RetroEngine
             for (int i = 0; i < indices.Length; i += 3)
             {
                 var vertex0 = vertices[indices[i]].Position.ToPhysics();
-                var vertex1 = vertices[indices[i+1]].Position.ToPhysics();
-                var vertex2 = vertices[indices[i+2]].Position.ToPhysics();
+                var vertex1 = vertices[indices[i + 1]].Position.ToPhysics();
+                var vertex2 = vertices[indices[i + 2]].Position.ToPhysics();
                 triangleMesh.AddTriangle(vertex0, vertex1, vertex2, true);  // Assume triangles are not welded
             }
 
@@ -585,12 +608,12 @@ namespace RetroEngine
 
             public override void Draw3DText(ref Vector3 location, string textString)
             {
-                
+
             }
 
             public override void ReportErrorWarning(string warningString)
             {
-                
+
             }
 
             public override void DrawLine(ref Vector3 from, ref Vector3 to, ref Vector3 color)

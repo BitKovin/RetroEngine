@@ -140,16 +140,6 @@ namespace RetroEngine.Skeletal
         /// <summary>
         /// As stated
         /// </summary>
-        void SetEffect(Effect effect, Texture2D t, Matrix world, Matrix view, Matrix projection)
-        {
-            this.effect = effect;
-            //texture = t;
-            this.effect.Parameters["TextureA"].SetValue(t);
-            this.effect.Parameters["World"].SetValue(world);
-            this.effect.Parameters["View"].SetValue(view);
-            this.effect.Parameters["Projection"].SetValue(projection);
-            this.effect.Parameters["Bones"].SetValue(globalShaderMatrixs);
-        }
 
         /// <summary>
         /// As stated
@@ -358,21 +348,6 @@ namespace RetroEngine.Skeletal
         /// <summary>
         /// Sets the global final bone matrices to the shader and draws it.
         /// </summary>
-        public void Draw(GraphicsDevice gd, Matrix world)
-        {
-            effect.Parameters["Bones"].SetValue(globalShaderMatrixs);
-            foreach (RiggedModelMesh m in meshes)
-            {
-                if (m.texture != null)
-                    effect.Parameters["TextureA"].SetValue(m.texture);
-                // We will add in the mesh transform to the world thru the mesh we could do it to every single bone but this way saves a bunch of matrix multiplys. 
-                //effect.Parameters["World"].SetValue(world * m.MeshCombinedFinalTransformMg);
-                effect.Parameters["World"].SetValue(world * m.nodeRefContainingAnimatedTransform.CombinedTransformMg); // same thing
-                var e = effect.CurrentTechnique;
-                e.Passes[0].Apply();
-                gd.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, m.vertices, 0, m.vertices.Length, m.indices, 0, m.indices.Length / 3, VertexData.VertexDeclaration);
-            }
-        }
 
         public void Destroy()
         {

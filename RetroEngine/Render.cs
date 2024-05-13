@@ -443,9 +443,9 @@ namespace RetroEngine
                     OcclusionEffect.Parameters["Viewmodel"].SetValue(false);
 
                     if (mesh.Viewmodel)
-                        OcclusionEffect.Parameters["ViewProjection"].SetValue(Camera.view * Camera.finalizedProjectionViewmodel);
+                        OcclusionEffect.Parameters["ViewProjection"].SetValue(Camera.finalizedView * Camera.finalizedProjectionViewmodel);
                     else
-                        OcclusionEffect.Parameters["ViewProjection"].SetValue(Camera.view * Camera.finalizedProjection);
+                        OcclusionEffect.Parameters["ViewProjection"].SetValue(Camera.finalizedView * Camera.finalizedProjection);
                     mesh.StartOcclusionTest();
 
                 

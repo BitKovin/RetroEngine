@@ -57,7 +57,7 @@ namespace RetroEngine.Particles
 
         public void Start()
         {
-            for (int i = 0; i < InitialSpawnCount; i++) 
+            for (int i = 0; i < InitialSpawnCount; i++)
             {
                 Particle particle = GetNewParticle();
 
@@ -72,18 +72,18 @@ namespace RetroEngine.Particles
 
             elapsedTime += Time.DeltaTime;
 
-            if(elapsedTime>Duration)
+            if (elapsedTime > Duration)
                 Emitting = false;
 
             float spawnInterval = 1f / SpawnRate;
 
-            if(SpawnRate>0 && Emitting)
-            while (elapsedTime >= spawnInterval)
-            {
-                Particle particle = GetNewParticle();
-                particles.Add(particle);
-                elapsedTime -= spawnInterval;
-            }
+            if (SpawnRate > 0 && Emitting)
+                while (elapsedTime >= spawnInterval)
+                {
+                    Particle particle = GetNewParticle();
+                    particles.Add(particle);
+                    elapsedTime -= spawnInterval;
+                }
 
             List<Particle> toRemove = new List<Particle>();
 
@@ -104,7 +104,7 @@ namespace RetroEngine.Particles
                 }
             }
 
-            foreach(Particle particle in toRemove)
+            foreach (Particle particle in toRemove)
             {
                 particles.Remove(particle);
             }
@@ -135,19 +135,19 @@ namespace RetroEngine.Particles
 
             particle.Collided = false;
 
-            if(particle.HasCollision == false) return particle;
+            if (particle.HasCollision == false) return particle;
 
             var hit = Physics.SphereTraceForStatic(oldPos.ToPhysics(), particle.position.ToPhysics(), particle.CollisionRadius);
 
-            if(hit.HasHit == false) return particle;
+            if (hit.HasHit == false) return particle;
 
             particle.Collided = true;
 
             particle.position = hit.HitPointWorld;
 
-            if(Vector3.Dot(particle.velocity, hit.HitNormalWorld)<0)
+            if (Vector3.Dot(particle.velocity, hit.HitNormalWorld) < 0)
 
-            particle.velocity = Vector3.Reflect(particle.velocity * particle.BouncePower, hit.HitNormalWorld);
+                particle.velocity = Vector3.Reflect(particle.velocity * particle.BouncePower, hit.HitNormalWorld);
             return particle;
 
         }
@@ -155,7 +155,7 @@ namespace RetroEngine.Particles
         public virtual Particle GetNewParticle()
         {
             currentId++;
-            return new Particle {position = Position, id = currentId, texturePath = TexturePath };
+            return new Particle { position = Position, id = currentId, texturePath = TexturePath };
         }
 
         public override void RenderPreparation()
@@ -185,7 +185,8 @@ namespace RetroEngine.Particles
                                                 Matrix.CreateTranslation(particle.position);
 
                 return worldMatrix;
-            }else
+            }
+            else
             {
                 Matrix worldMatrix = Matrix.CreateScale(particle.Scale) *
                                 Matrix.CreateRotationX(particle.globalRotation.X / 180 * (float)Math.PI) *
@@ -204,8 +205,8 @@ namespace RetroEngine.Particles
                 particleModel = GetModelFromPath("models/particle.obj");
             }
 
-            if(Camera.frustum.Contains(new BoundingSphere(Position, BoundingRadius))!= ContainmentType.Disjoint)
-            DrawParticles();
+            if (Camera.frustum.Contains(new BoundingSphere(Position, BoundingRadius)) != ContainmentType.Disjoint)
+                DrawParticles();
 
             //GameMain.Instance.render.particlesToDraw.AddRange(finalizedParticles);
         }
@@ -223,10 +224,15 @@ namespace RetroEngine.Particles
             //GameMain.Instance.render.particlesToDraw.AddRange(finalizedParticles);
         }
 
+        public override void DrawDepth()
+        {
+            
+        }
+
         public static void LoadRenderEmitter()
         {
-                RenderEmitter.model = particleModel;
-                RenderEmitter.RenderPreparation();
+            RenderEmitter.model = particleModel;
+            RenderEmitter.RenderPreparation();
         }
 
         VertexBuffer instanceBuffer;
@@ -234,7 +240,7 @@ namespace RetroEngine.Particles
         public void DrawParticles()
         {
             if (instanceBuffer != null)
-            DrawInstanced(instanceBuffer, instanceData.Length);
+                DrawInstanced(instanceBuffer, instanceData.Length);
 
         }
 
@@ -316,7 +322,7 @@ namespace RetroEngine.Particles
                         bindings[0] = new VertexBufferBinding(meshPart.VertexBuffer);
                         bindings[1] = new VertexBufferBinding(instanceBuffer, 0, 1);
 
-                       
+
 
                         MeshPartData meshPartData = meshPart.Tag as MeshPartData;
 
@@ -350,7 +356,7 @@ namespace RetroEngine.Particles
             foreach (var particle in particleList)
             {
                 texture = AssetRegistry.LoadTextureFromFile(particle.texturePath);
-                
+
                 frameStaticMeshData.model = (particle.customModelPath == null) ? particleModel : GetModelFromPath(particle.customModelPath);
                 frameStaticMeshData.World = GetWorldForParticle(particle);
                 frameStaticMeshData.Transparency = particle.transparency;
@@ -423,7 +429,7 @@ namespace RetroEngine.Particles
             GetModelFromPath("models/particle.obj");
 
             texture = AssetRegistry.LoadTextureFromFile(TexturePath);
-            if(ModelPath is not null)
+            if (ModelPath is not null)
                 GetModelFromPath(ModelPath);
         }
 
@@ -450,10 +456,10 @@ namespace RetroEngine.Particles
 
         public override Vector3 GetClosestToCameraPosition()
         {
-
+            if (finalizedParticles == null) return Vector3.Zero;
             if (finalizedParticles.Count == 0) return Vector3.Zero;
 
-            List<Particle> particles = finalizedParticles.OrderBy(p => Vector3.Distance( p.position, Camera.position)).ToList();
+            List<Particle> particles = finalizedParticles.OrderBy(p => Vector3.Distance(p.position, Camera.position)).ToList();
 
             return particles[0].position;
 

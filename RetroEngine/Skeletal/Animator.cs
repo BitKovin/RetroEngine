@@ -25,11 +25,14 @@ namespace RetroEngine.Skeletal
 
             if(loaded == false) return;
 
-            foreach (var animation in AnimationsToUpdate)
+            lock (AnimationsToUpdate)
             {
-                animation.SetInterpolationEnabled(InterpolateAnimations);
-                animation.UpdateFinalPose = UpdateVisual;
-                animation.Update(Time.DeltaTime * Speed);
+                foreach (var animation in AnimationsToUpdate)
+                {
+                    animation.SetInterpolationEnabled(InterpolateAnimations);
+                    animation.UpdateFinalPose = UpdateVisual;
+                    animation.Update(Time.DeltaTime * Speed);
+                }
             }
         }
 
@@ -63,7 +66,10 @@ namespace RetroEngine.Skeletal
             
             animation.LoadFromFile(path);
             animation.PlayAnimation(index, loop);
-            AnimationsToUpdate.Add(animation);
+            lock (AnimationsToUpdate)
+            {
+                AnimationsToUpdate.Add(animation);
+            }
 
             animation.UpdateFinalPose = false;
             animation.SetInterpolationEnabled(interpolation);
@@ -79,13 +85,18 @@ namespace RetroEngine.Skeletal
 
             animation.LoadFromFile(path);
             animation.SetAnimation(index);
-            AnimationsToUpdate.Add(animation);
+            
 
             animation.UpdateFinalPose = false;
             animation.SetInterpolationEnabled(interpolation);
 
             animation.BlendIn = BlendIn;
             animation.BlendOut = BlendOut;
+
+            lock (AnimationsToUpdate)
+            {
+                AnimationsToUpdate.Add(animation);
+            }
 
             return animation;
         }

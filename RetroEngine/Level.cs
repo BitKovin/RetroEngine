@@ -86,7 +86,7 @@ namespace RetroEngine
             if (name.EndsWith(".map") == false)
                 name += ".map";
 
-            if(force == false)
+            if (force == false)
             {
                 pendingLevelChange = name;
                 ChangingLevel = true;
@@ -128,7 +128,7 @@ namespace RetroEngine
 
             Navigation.ClearNavData();
             NPCBase.ResetStaticData();
-            
+
             AssetRegistry.AllowGeneratingMipMaps = true;
 
             LoadingScreen.Update(0.1f);
@@ -161,8 +161,8 @@ namespace RetroEngine
             AssetRegistry.WaitForAssetsToLoad();
 
             Navigation.RebuildConnectionsData();
-            
-            
+
+
 
             AssetRegistry.AllowGeneratingMipMaps = false;
 
@@ -190,26 +190,26 @@ namespace RetroEngine
 
             int id = 0;
 
-            if(LayerIds.TryGetValue(name, out id))
+            if (LayerIds.TryGetValue(name, out id))
             {
                 return id;
             }
-            
+
             return -1;
 
         }
 
-        
-        public void SetLayerVisibility(string name,bool value)
+
+        public void SetLayerVisibility(string name, bool value)
         {
 
             int id = TryGetLayerId(name);
 
             SetLayerVisibility(id, value);
-            
+
         }
 
-        
+
         public void SetLayerVisibility(int id, bool value)
         {
             if (value)
@@ -224,7 +224,7 @@ namespace RetroEngine
 
         public void UpdatePending()
         {
-            foreach(Entity entity in pendingAddEntity)
+            foreach (Entity entity in pendingAddEntity)
             {
                 entities.Add(entity);
             }
@@ -242,12 +242,13 @@ namespace RetroEngine
 
         public virtual void Update()
         {
-            
-
-            Entity[] list = entities.ToArray();
-
+            Entity[] list;
+            lock (entities)
+            {
+                list = entities.ToArray();
+            }
             foreach (Entity entity in list)
-                if(entity.UpdateWhilePaused&&GameMain.Instance.paused|| GameMain.Instance.paused == false)
+                if (entity.UpdateWhilePaused && GameMain.Instance.paused || GameMain.Instance.paused == false)
                     entity.Update();
         }
 
@@ -255,17 +256,17 @@ namespace RetroEngine
         {
 
             ParallelOptions options = new ParallelOptions();
-            options.MaxDegreeOfParallelism = Environment.ProcessorCount-1;
+            options.MaxDegreeOfParallelism = Environment.ProcessorCount - 1;
 
-            Entity[] list = entities.ToArray();
+            lock (entities)
+            {
+                Entity[] list = entities.ToArray();
+            }
 
             Parallel.ForEach(entities, options, entity =>
             {
-                try
-                {
-                    if (entity.UpdateWhilePaused && GameMain.Instance.paused || GameMain.Instance.paused == false)
-                        entity.AsyncUpdate();
-                }catch(Exception ex) { Console.WriteLine(ex.ToString()); }
+                if (entity.UpdateWhilePaused && GameMain.Instance.paused || GameMain.Instance.paused == false)
+                    entity.AsyncUpdate();
             });
         }
 
@@ -274,6 +275,7 @@ namespace RetroEngine
         public virtual void StartVisualUpdate()
         {
             visualUpdateTask = Task.Factory.StartNew(VisualUpdate);
+            //VisualUpdate();
         }
 
         public virtual void WaitForVisualUpdate()
@@ -281,7 +283,7 @@ namespace RetroEngine
 
             Stats.StartRecord("WaitForVisualUpdate");
 
-            if(visualUpdateTask!=null)
+            if (visualUpdateTask != null)
                 visualUpdateTask.Wait();
 
             Stats.StopRecord("WaitForVisualUpdate");
@@ -294,13 +296,17 @@ namespace RetroEngine
             Stats.StartRecord("VisualUpdate");
 
             ParallelOptions options = new ParallelOptions();
-            options.MaxDegreeOfParallelism = Environment.ProcessorCount;
+            options.MaxDegreeOfParallelism = Environment.ProcessorCount - 2;
+            Entity[] list;
 
-            Entity[] list = entities.ToArray();
-
-            Parallel.ForEach(entities, options, entity =>
+            lock (entities)
             {
-                if(entity!=null)
+                list = entities.ToArray();
+            }
+
+            Parallel.ForEach(list, options, entity =>
+            {
+                if (entity != null)
                     entity.VisualUpdate();
             });
 
@@ -334,7 +340,7 @@ namespace RetroEngine
 
             ParallelOptions options = new ParallelOptions();
             options.MaxDegreeOfParallelism = Environment.ProcessorCount;
-            
+
             Entity[] list = entities.ToArray();
 
             Parallel.ForEach(list, entity =>
@@ -359,8 +365,8 @@ namespace RetroEngine
             });
 
             renderList.Clear();
-            
-            
+
+
             List<StaticMesh> transperentMeshes = new List<StaticMesh>();
 
             allMeshes.Clear();
@@ -374,9 +380,9 @@ namespace RetroEngine
                     foreach (StaticMesh mesh in ent.meshes)
                     {
 
-                        if(mesh.Visible == false) continue;
+                        if (mesh.Visible == false) continue;
 
-                        if(mesh.inFrustrum == false && mesh.CastShadows == false) continue;
+                        if (mesh.inFrustrum == false && mesh.CastShadows == false) continue;
 
                         if (mesh.Transperent)
                             transperentMeshes.Add(mesh);
@@ -417,7 +423,7 @@ namespace RetroEngine
 
         public void PerformOcclusionCheck()
         {
-            if(OcclusionCullingEnabled)
+            if (OcclusionCullingEnabled)
                 OcclusionCullingStart();
         }
 
