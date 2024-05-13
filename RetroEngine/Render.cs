@@ -276,7 +276,6 @@ namespace RetroEngine
 
             ShadowMapEffect.Parameters["close"].SetValue(false);
             RenderShadowMapClose(renderList);
-
             RenderShadowMap(renderList);
             ShadowMapEffect.Parameters["close"].SetValue(true);
             RenderShadowMapVeryClose(renderList);
@@ -479,7 +478,7 @@ namespace RetroEngine
 
         public bool renderShadow()
         {
-            return true;// !shadowPassRenderDelay.Wait() || Level.ChangingLevel;
+            return !shadowPassRenderDelay.Wait() || Level.ChangingLevel;
         }
 
         internal void RenderShadowMap(List<StaticMesh> renderList)
@@ -956,7 +955,7 @@ namespace RetroEngine
         void DrawShadowQuad(SpriteBatch spriteBatch, Texture2D inputTexture)
         {
             // Create a rectangle covering the entire screen
-            Rectangle screenRectangle = new Rectangle(0, 0, shadowMap.Width, shadowMap.Height);
+            Rectangle screenRectangle = new Rectangle(0, 0, Graphics.shadowMapResolution, Graphics.shadowMapResolution);
 
             // Draw the full-screen quad using SpriteBatch
             spriteBatch.Draw(inputTexture, screenRectangle, Color.White);

@@ -77,7 +77,7 @@ namespace RetroEngine
 
         internal static int SkipFrames = 0;
 
-        public static float ReservedTaskMinTime = 0.000f;
+        public static float ReservedTaskMinTime = 0.001f;
 
         public static float ReservedTaskPresentMinTime = 0.001f;
 

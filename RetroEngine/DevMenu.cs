@@ -154,6 +154,7 @@ namespace RetroEngine
             ImGui.Begin("Stats");
 
             ImGui.Text("time dif: " + (Time.deltaTimeDifference*1000).ToString());
+            ImGui.Text("time dif%: " + ((int)(Time.deltaTimeDifference/Time.DeltaTime * 100)).ToString());
 
             ImGui.Text($"{Stats.RenderedMehses} meshes were rendered");
             ImGui.Text($"{LightManager.FinalPointLights.Count} point lights are active");
