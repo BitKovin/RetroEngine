@@ -232,7 +232,7 @@ namespace RetroEngine.Skeletal
                         currentAnimationFrameTime = 0.0001f;
                     }
                 }
-
+                if (UpdateVisual == false) return;
                 // use the precalculated frame time lookups.
                 if (UseStaticGeneratedFrames)
                 {

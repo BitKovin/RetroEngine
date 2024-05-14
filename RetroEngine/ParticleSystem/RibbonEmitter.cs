@@ -31,9 +31,7 @@ namespace RetroEngine.Particles
         public void GenerateBuffers(List<Particle> particles)
         {
             vertexBuffer?.Dispose();
-            vertexBuffer = null;
             indexBuffer?.Dispose();
-            indexBuffer = null;
             if (particles == null) return;
            
             if (particles.Count < 2)
