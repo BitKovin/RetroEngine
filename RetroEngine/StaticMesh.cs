@@ -1093,7 +1093,7 @@ namespace RetroEngine
                 }
 
             }
-            isRendered = inFrustrum && !occluded;
+            isRendered = inFrustrum && !occluded || GameMain.SkipFrames>0;
             frameStaticMeshData.IsRendered = isRendered;
 
         }

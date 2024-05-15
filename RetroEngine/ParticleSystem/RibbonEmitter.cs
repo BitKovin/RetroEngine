@@ -121,8 +121,6 @@ namespace RetroEngine.Particles
 
             GameMain.pendingDispose.Add(vertexBuffer);
             GameMain.pendingDispose.Add(indexBuffer);
-            vertexBuffer = null;
-            indexBuffer = null;
         }
 
         void DrawRibbon()

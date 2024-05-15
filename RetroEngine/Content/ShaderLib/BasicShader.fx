@@ -1023,6 +1023,7 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
         
         weight = clamp(weight, -500000, 5);
         
+
         if (SampledDepth < currentDepth - 0.025 && facingCamera == false)
         {
             return float4(0, 0, 0, 0);
@@ -1039,7 +1040,7 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
         {
 
             outCoords = coords;
-            step /= 2;
+            step /= 1.5;
             factor = lerp(factor, 1, 0.5);
             weight += 1;
             
