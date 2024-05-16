@@ -264,7 +264,7 @@ namespace RetroEngine
 
             InitRenderTargetIfNeed(ref postProcessingOutput);
 
-            
+            GameMain.Instance.WaitForFramePresent();
 
             if (outputPath!=null)
             DownsampleToTexture(outputPath, oldFrame);

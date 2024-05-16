@@ -306,7 +306,7 @@ namespace RetroEngine
 
             if (RiggedModel is null) return;
 
-            finalizedBones = new List<Matrix>(RiggedModel.globalShaderMatrixs).ToArray();
+            RiggedModel.globalShaderMatrixs.CopyTo(finalizedBones, 0);
 
         }
 
