@@ -233,7 +233,7 @@ namespace RetroEngine
                 Vector3[] LightPos = new Vector3[LightManager.MAX_POINT_LIGHTS];
                 Vector3[] LightColor = new Vector3[LightManager.MAX_POINT_LIGHTS];
                 float[] LightRadius = new float[LightManager.MAX_POINT_LIGHTS];
-                int[] LightRes = new int[LightManager.MAX_POINT_LIGHTS];
+                float[] LightRes = new float[LightManager.MAX_POINT_LIGHTS];
                 RenderTargetCube[] LightMaps = new RenderTargetCube[LightManager.MAX_POINT_LIGHTS];
 
                 LightManager.FinalPointLights = LightManager.FinalPointLights.OrderBy(l => Vector3.Distance(l.Position, useAvgVertexPosition? avgVertexPosition : Position)).ToList();

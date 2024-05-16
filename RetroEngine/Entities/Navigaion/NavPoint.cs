@@ -63,11 +63,9 @@ namespace RetroEngine.Entities.Navigaion
                     return new List<Vector3> { target};
             }
 
-            if (totalItterations > 100)
+            if (totalItterations > 300)
             {
                 output = PointsToPositions(history);
-
-
 
                 Vector3 closest = output.OrderByDescending(pos => Vector3.Distance(pos, target)).ToArray()[0];
 
@@ -84,20 +82,7 @@ namespace RetroEngine.Entities.Navigaion
             if (history.Count>MaxDepth)
             {
                 return new List<Vector3>();
-                output = PointsToPositions(history);
-
                 
-
-                Vector3 closest = output.OrderByDescending(pos => Vector3.Distance(pos, target)).ToArray()[0];
-
-                List <Vector3> result = new List<Vector3>();
-
-                foreach (Vector3 p in output)
-                {
-                    result.Add(p);
-                    if (Vector3.Distance(p, target) < 0.1f) 
-                        return result;
-                }
             }
 
             connected = connected.OrderByDescending(point => Vector3.Dot((point.Position - Position).Normalized(), (target - point.Position).Normalized())).ToList();
@@ -105,9 +90,6 @@ namespace RetroEngine.Entities.Navigaion
             myHistory.Add(this);
 
             bool hited = false;
-
-            
-
             var hit = Physics.SphereTraceForStatic(Position.ToNumerics(), target.ToNumerics(), 0.3f);
 
             hited = hit.HasHit;

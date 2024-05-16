@@ -130,7 +130,7 @@ namespace RetroEngine
         public static List<Vector3> FindPath(Vector3 start, Vector3 target, PathfindingQuery query = null)
         {
 
-            target = Navigation.ProjectToGround(target);
+            target = ProjectToGround(target);
 
             int it = 0;
 
@@ -225,7 +225,7 @@ namespace RetroEngine
             startLocation = start;
             endLocation = target;
 
-            deathDelay.AddDelay(3);
+            
             lock (Navigation.pathfindingQueries)
             {
                 Navigation.pathfindingQueries.Add(this);
@@ -267,6 +267,7 @@ namespace RetroEngine
 
         internal void Execute()
         {
+            deathDelay.AddDelay(3);
             Process(startLocation, endLocation);
             //Thread.Sleep(1);
         }

@@ -112,7 +112,7 @@ float ShadowMapResolutionVeryClose;
 
 #ifndef MAX_POINT_LIGHTS_SHADOWS
 
-#define MAX_POINT_LIGHTS_SHADOWS 5
+#define MAX_POINT_LIGHTS_SHADOWS 6
 
 #endif
 
@@ -123,7 +123,7 @@ float ShadowMapResolutionVeryClose;
 float3 LightPositions[MAX_POINT_LIGHTS];
 float3 LightColors[MAX_POINT_LIGHTS];
 float LightRadiuses[MAX_POINT_LIGHTS];
-int LightResolutions[MAX_POINT_LIGHTS];
+float LightResolutions[MAX_POINT_LIGHTS];
 
 texture PointLightCubemap1;
 sampler PointLightCubemap1Sampler = sampler_state
@@ -739,7 +739,7 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
 }
 
 
-float GetPointLightDepth(int i, float3 worldPos)
+float GetPointLightDepth(int i, float3 worldPos, float3 offset)
 {
     
     if (i>= MAX_POINT_LIGHTS_SHADOWS)
@@ -749,9 +749,9 @@ float GetPointLightDepth(int i, float3 worldPos)
         float3 lightDir = LightPositions[i] - worldPos;
 
     // Normalize the light direction
-    lightDir = normalize(lightDir);
+    lightDir = normalize(lightDir) + offset;
 
-    float depth = 0.05;
+    float depth = 0.00;
     
     lightDir *= float3(1, -1, -1);
     
@@ -779,7 +779,7 @@ float GetPointLightDepth(int i, float3 worldPos)
     if(depth == 0)
         return 10000;
     
-    depth += depth / (LightResolutions[i]*2) + 0.02;
+    depth += depth / (LightResolutions[i]*2) + 0.04;
 
     return depth;
 }
@@ -791,11 +791,41 @@ float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal, float ro
     float3 lightVector = LightPositions[i] - pixelInput.MyPosition;
     float distanceToLight = length(lightVector);
     
-    float ShadowDistance = GetPointLightDepth(i, pixelInput.MyPosition);
+    float offsetScale = 1/(LightResolutions[i]/5);
+    float notShadow = 1;
+    if(LightResolutions[i]>10)
+    {
+
+    float ShadowDistance = GetPointLightDepth(i, pixelInput.MyPosition,float3(0,0,0));
+    float ShadowDistance1 = GetPointLightDepth(i, pixelInput.MyPosition,float3(-1,0,0)*offsetScale);
+    float ShadowDistance2 = GetPointLightDepth(i, pixelInput.MyPosition,float3(1,0,0)*offsetScale);
+    float ShadowDistance3 = GetPointLightDepth(i, pixelInput.MyPosition,float3(0,1,0)*offsetScale);
+    float ShadowDistance4 = GetPointLightDepth(i, pixelInput.MyPosition,float3(0,-1,0)*offsetScale);
+    float ShadowDistance5 = GetPointLightDepth(i, pixelInput.MyPosition,float3(0,0,1)*offsetScale);
+    float ShadowDistance6 = GetPointLightDepth(i, pixelInput.MyPosition,float3(0,0,-1)*offsetScale);
     
-    if (distanceToLight>ShadowDistance)
-        return float3(0, 0, 0);
+    float distFactor = 0.94;
     
+    notShadow = 0;
+    if (distanceToLight*distFactor>ShadowDistance)
+        notShadow += 1;
+    if (distanceToLight*distFactor>ShadowDistance1)
+        notShadow += 1;
+    if (distanceToLight*distFactor>ShadowDistance2)
+        notShadow += 1;
+    if (distanceToLight*distFactor>ShadowDistance3)
+        notShadow += 1;
+    if (distanceToLight*distFactor>ShadowDistance4)
+        notShadow += 1;
+    if (distanceToLight*distFactor>ShadowDistance5)
+        notShadow += 1;
+    if (distanceToLight*distFactor>ShadowDistance6)
+        notShadow += 1;
+    
+    notShadow/=7;
+    notShadow = 1-notShadow;
+
+    }
     float dist = (distanceToLight / LightRadiuses[i]);
     float intense = saturate(1.0 - dist*dist);
     float3 dirToSurface = normalize(lightVector);
@@ -813,7 +843,7 @@ float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal, float ro
     
     float3 l = LightColors[i] * intense;
     
-    return l + intense * specular;
+    return (l + intense * specular)*notShadow;
 }
 
 float3 CalculatePointLightSpeculars(int i, PixelInput pixelInput, float3 normal, float roughness, float metalic)

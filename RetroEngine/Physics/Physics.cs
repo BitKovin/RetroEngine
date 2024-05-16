@@ -52,7 +52,6 @@ namespace RetroEngine
             removeList.Clear();
 
 
-
             if (dynamicsWorld != null)
             {
                 dynamicsWorld.Dispose();
@@ -87,7 +86,6 @@ namespace RetroEngine
             staticBodies.Clear();
 
             dynamicsWorld.DebugDrawer = new DebugDrawer(GameMain.Instance.GraphicsDevice);
-
         }
 
         public static void ResetWorld()
@@ -196,7 +194,6 @@ namespace RetroEngine
 
         public static void Update()
         {
-            //Simulate();
 
             for (int i = 0; i < dynamicsWorld.NumCollisionObjects; i++)
             {

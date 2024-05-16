@@ -66,7 +66,7 @@ namespace RetroEngine.Game
 
             //Render.LUT = AssetRegistry.LoadTextureFromFile("engine/textures/Sin Shitty.png_out.png", generateMipMaps: false);   
 
-            for (int i = 1; i <= 40; i++)
+            for (int i = 1; i <= 0; i++)
             {
                 Entity npc = new NPCBase();
                 npc.Position = new Vector3(0, i*2.2f + 2, 0);
