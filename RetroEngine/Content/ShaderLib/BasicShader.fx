@@ -779,7 +779,7 @@ float GetPointLightDepth(int i, float3 worldPos, float3 offset)
     if(depth == 0)
         return 10000;
     
-    depth += depth / (LightResolutions[i]*2) + 0.04;
+    depth += depth / (LightResolutions[i]*3) + 0.04;
 
     return depth;
 }
@@ -791,7 +791,8 @@ float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal, float ro
     float3 lightVector = LightPositions[i] - pixelInput.MyPosition;
     float distanceToLight = length(lightVector);
     
-    float offsetScale = 1/(LightResolutions[i]/5);
+    float offsetScale = 1/(LightResolutions[i]/4);
+    offsetScale*=lerp(abs(dot(normal, normalize(lightVector))),1,0.2);
     float notShadow = 1;
     if(LightResolutions[i]>10)
     {
@@ -804,7 +805,11 @@ float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal, float ro
     float ShadowDistance5 = GetPointLightDepth(i, pixelInput.MyPosition,float3(0,0,1)*offsetScale);
     float ShadowDistance6 = GetPointLightDepth(i, pixelInput.MyPosition,float3(0,0,-1)*offsetScale);
     
-    float distFactor = 0.94;
+    float distFactor = 0.98;
+    
+    distFactor = lerp(distFactor, 1, abs(dot(normal, normalize(lightVector))));
+    
+    distFactor = saturate(distFactor);
     
     notShadow = 0;
     if (distanceToLight*distFactor>ShadowDistance)
