@@ -1,6 +1,8 @@
 ﻿using BulletSharp;
 using Microsoft.Xna.Framework;
 using RetroEngine.Entities;
+using RetroEngine.Game.Entities.Player;
+using RetroEngine.Skeletal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +20,8 @@ namespace RetroEngine.Game.Entities.Weapons
         Delay attackDelay = new Delay();
 
         SoundPlayer fireSoundPlayer;
+
+        Animation TpFire = new Animation();
 
         public weapon_shotgunNew()
         {
@@ -46,10 +50,27 @@ namespace RetroEngine.Game.Entities.Weapons
         {
             base.Update();
 
-            mesh.Update(Time.DeltaTime);
+            if (((ICharacter)player).isFirstPerson())
+            {
+                mesh.Update(Time.DeltaTime);
+            }
+            else
+            {
+                TpFire.Update(Time.DeltaTime);
+            }
 
             if (Input.GetAction("attack").Holding())
                 Shoot();
+
+
+            MathHelper.Transform transform = new MathHelper.Transform();
+
+            transform.Rotation.Z = -Camera.rotation.X + 5;
+
+            TpFire.SetBoneLocalTransformModification("spine_02", transform.ToMatrix());
+
+            arms.Visible = ((ICharacter)player).isFirstPerson();
+            mesh.Viewmodel = ((ICharacter)player).isFirstPerson();
         }
 
         public override void Destroy()
@@ -71,6 +92,15 @@ namespace RetroEngine.Game.Entities.Weapons
 
             arms.PastePose(mesh.GetPose());
 
+            ICharacter character = ((ICharacter)player);
+
+            if (character.isFirstPerson() == false)
+            {
+                mesh.Position = character.GetSkeletalMesh().Position;
+                mesh.Rotation = character.GetSkeletalMesh().Rotation;
+                //mesh.PastePose(character.GetSkeletalMesh().GetPose());
+            }
+
             fireSoundPlayer.Position = Camera.position;
         }
 
@@ -85,7 +115,7 @@ namespace RetroEngine.Game.Entities.Weapons
             fireSoundPlayer.Play(true);
 
             mesh.PlayAnimation(0,false);
-
+            TpFire.PlayAnimation(0,false);
 
             for (float y = -3; y <= 3; y += 2f)
                 for (float x = -3; x <= 3; x += 2f)
@@ -142,6 +172,18 @@ namespace RetroEngine.Game.Entities.Weapons
 
         }
 
+        public override AnimationPose ApplyWeaponAnimation(AnimationPose inPose)
+        {
+
+            AnimationPose pose = inPose;
+
+            pose.LayeredBlend(TpFire.GetBoneByName("spine_03"), TpFire.GetPoseLocal());
+
+            mesh.PastePoseLocal(inPose);
+
+            return pose;
+        }
+
         void LoadVisual()
         {
             mesh.Scale = new Vector3(1f);
@@ -155,7 +197,7 @@ namespace RetroEngine.Game.Entities.Weapons
             mesh.textureSearchPaths.Add("textures/weapons/shotgun_new/");
             mesh.textureSearchPaths.Add("textures/weapons/general/");
 
-
+            TpFire.LoadFromFile("models/weapons/shotgun.fbx");
 
             mesh.CastShadows = false;
             mesh.PreloadTextures();

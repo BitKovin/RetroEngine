@@ -127,7 +127,7 @@ namespace RetroEngine
             return animationPose;
         }
 
-        public AnimationPose GetPoseLocal()
+        public virtual AnimationPose GetPoseLocal()
         {
 
             if (RiggedModel == null) return new AnimationPose();
@@ -145,7 +145,7 @@ namespace RetroEngine
             return animationPose;
         }
 
-        public void PastePose(AnimationPose animPose)
+        public virtual void PastePose(AnimationPose animPose)
         {
             if (RiggedModel == null) return;
 
@@ -178,6 +178,8 @@ namespace RetroEngine
         {
             if (RiggedModel == null) return;
 
+            //RiggedModel.animationPose.BoneOverrides = new Dictionary<string, BonePoseBlend>();
+
             var pose = animPose.Pose;
 
             if (pose == null) return;
@@ -198,10 +200,12 @@ namespace RetroEngine
             RiggedModel.animationPose = animPose;
 
             RiggedModel.UpdatePose();
+            
         }
 
         public RiggedModelNode GetBoneByName(string name)
         {
+            if(RiggedModel!=null)
             foreach(var bone in RiggedModel.flatListToBoneNodes)
             {
                 if(bone.name == name)
@@ -516,7 +520,7 @@ namespace RetroEngine
             //isRendered = Camera.frustum.Contains(boundingSphere.Transform(base.GetWorldMatrix())) != ContainmentType.Disjoint;
             isRendered = false;
             isRenderedShadow = false;
-
+            frameStaticMeshData.IsRendered = isRendered;
             if (Visible == false) return;
 
             inFrustrum = false;

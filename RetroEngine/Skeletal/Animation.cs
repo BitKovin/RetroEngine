@@ -98,6 +98,13 @@ namespace RetroEngine.Skeletal
             RiggedModel.overrideAnimationFrameTime = -1;
         }
 
+        public override AnimationPose GetPoseLocal()
+        {
+            var pose = base.GetPoseLocal();
+            pose.BoneOverrides = new Dictionary<string, BonePoseBlend>();
+            return pose;
+        }
+
 
         public override void DrawUnified()
         {

@@ -12,9 +12,9 @@ namespace RetroEngine.Game.Entities.Player
     internal class PlayerUI
     {
 
-        PlayerCharacter player;
+        Entity player;
 
-        public PlayerUI(PlayerCharacter plr) { player = plr; }
+        public PlayerUI(Entity plr) { player = plr; }
 
         Image crosshair = new Image();
         Text health = new Text();
@@ -62,7 +62,7 @@ namespace RetroEngine.Game.Entities.Player
         {
             if (loaded == false) return;
 
-            health.text = ((Vector3)player.body.LinearVelocity).XZ().Length().ToString();
+            health.text = ((Vector3)((ICharacter)player).GetPhysicsBody().LinearVelocity).XZ().Length().ToString();
 
             fps.text = ((int)(1f / Time.DeltaTime)).ToString();
 
@@ -90,10 +90,10 @@ namespace RetroEngine.Game.Entities.Player
         {
 
             Vector3 cameraPosWithOffset = Camera.position + Camera.rotation.GetUpVector() * crosshairOffset.Y + Camera.rotation.GetRightVector() * crosshairOffset.X + Camera.rotation.GetForwardVector() * crosshairOffset.Z;
+            cameraPosWithOffset = Camera.position;
 
 
-
-            var hit = Physics.LineTrace(cameraPosWithOffset.ToPhysics(), (cameraPosWithOffset + Camera.rotation.GetForwardVector() * 100).ToPhysics(), new List<CollisionObject>() {player.body });
+            var hit = Physics.LineTrace(cameraPosWithOffset.ToPhysics(), (cameraPosWithOffset + Camera.rotation.GetForwardVector() * 100).ToPhysics(), new List<CollisionObject>() {((ICharacter)player).GetPhysicsBody() });
 
             Vector3 crosshairPos = cameraPosWithOffset + Camera.rotation.GetForwardVector() * 100;
 

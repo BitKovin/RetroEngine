@@ -16,8 +16,8 @@ using BulletSharp.SoftBody;
 namespace RetroEngine.Game.Entities.Player
 {
 
-    [LevelObject("info_player_start")]
-    public class PlayerCharacter : Entity, ICharacter
+    //[LevelObject("info_player_start")]
+    public class ThirdPersonPlayerCharacter : Entity, ICharacter
     {
 
         Button buttonUp = new Button();
@@ -72,7 +72,7 @@ namespace RetroEngine.Game.Entities.Player
 
         StaticMesh testCube = new StaticMesh();
 
-        public PlayerCharacter() : base()
+        public ThirdPersonPlayerCharacter() : base()
         {
             if (GameMain.platform == Platform.Mobile)
             {
@@ -117,7 +117,6 @@ namespace RetroEngine.Game.Entities.Player
 
             bodyMesh.textureSearchPaths.Add("textures/weapons/arms/");
 
-            bodyMesh.Scale = new Vector3(1.15f);
 
             PlayerBodyAnimator.LoadAssets();
 
@@ -125,7 +124,7 @@ namespace RetroEngine.Game.Entities.Player
 
             testCube.LoadFromFile("models/cube.obj");
             testCube.texture = AssetRegistry.LoadTextureFromFile("cat.png");
-            testCube.Scale = new Vector3(1);
+            testCube.Scale = new Vector3(0.1f);
             meshes.Add(testCube);
 
             Weapon.PreloadAllWeapons();
@@ -142,6 +141,9 @@ namespace RetroEngine.Game.Entities.Player
 
 
             Camera.rotation = new Vector3(0, data.GetPropertyFloat("angle") - 90, 0);
+
+            Camera.position += Camera.rotation.GetForwardVector() * -10;
+            Camera.position += Camera.rotation.GetUpVector();
 
         }
 
@@ -235,44 +237,6 @@ namespace RetroEngine.Game.Entities.Player
             PlayerBodyAnimator.MovementDirection = dir;
             
 
-            MathHelper.Transform hide = new MathHelper.Transform();
-            hide.Scale = Vector3.Zero;
-            MathHelper.Transform show = new MathHelper.Transform();
-
-            Matrix showR = new Matrix();
-            Matrix showL = new Matrix();
-
-            if (currentWeapon == null)
-            {
-                showR = showL = show.ToMatrix();
-            }else
-            {
-                if(currentWeapon.ShowHandR)
-                {
-                    showR = show.ToMatrix();
-                }
-                else
-                {
-                    showR = hide.ToMatrix();
-                }
-
-                if (currentWeapon.ShowHandL)
-                {
-                    showL = show.ToMatrix();
-                }
-                else
-                {
-                    showL = hide.ToMatrix();
-                }
-
-            }
-
-            bodyMesh.SetBoneMeshTransformModification("upperarm_r",showR);
-            bodyMesh.SetBoneMeshTransformModification("upperarm_l", showL);
-            bodyMesh.SetBoneMeshTransformModification("head", hide.ToMatrix());
-
-            
-
         }
 
         public override void VisualUpdate()
@@ -280,6 +244,14 @@ namespace RetroEngine.Game.Entities.Player
             base.VisualUpdate();
 
             var pose = PlayerBodyAnimator.GetResultPose();
+
+            if(currentWeapon!=null)
+            {
+                pose = currentWeapon.ApplyWeaponAnimation(pose);
+                
+            }
+
+            
 
             bodyMesh.PastePoseLocal(pose);
 
@@ -473,8 +445,7 @@ namespace RetroEngine.Game.Entities.Player
 
             Vector3 pos = ProjectToGround(Position) + dir  + new Vector3(0,1f,0);
 
-            if (pos == Vector3.Zero)
-                return;
+            
 
             var hit = Physics.SphereTrace(pos.ToNumerics(), (pos - new Vector3(0, 0.85f, 0)).ToNumerics(), new List<CollisionObject>() { body },0.05f);
 
@@ -489,8 +460,6 @@ namespace RetroEngine.Game.Entities.Player
 
             if (hitPoint == Vector3.Zero)
                 return;
-
-            Console.WriteLine(hitPoint);
 
             testCube.Position = hitPoint;
 
@@ -514,9 +483,6 @@ namespace RetroEngine.Game.Entities.Player
         {
             var hit = Physics.LineTrace(pos.ToNumerics(), (pos - new Vector3(0, 100000000, 0)).ToNumerics(), new List<CollisionObject>() { body });
 
-            if(hit.HasHit == false)
-                return Vector3.Zero;
-
             return hit.HitPointWorld;
 
         }
@@ -527,12 +493,31 @@ namespace RetroEngine.Game.Entities.Player
             
             UpdatePlayerInput();
 
+            
+
             bodyMesh.Position = interpolatedPosition - Camera.rotation.GetForwardVector().XZ().Normalized() * 0.25f - new Vector3(0, 1.05f, 0);
             bodyMesh.Rotation = new Vector3(0, Camera.rotation.Y, 0);
 
-            MathHelper.Transform t = bodyMesh.GetBoneMatrix("head").DecomposeMatrix();
+            //MathHelper.Transform t = bodyMesh.GetBoneMatrix("head").DecomposeMatrix();
 
-            Camera.position = t.Position + Camera.rotation.GetForwardVector().XZ().Normalized() * 0.35f;
+            Vector3 forward = Camera.rotation.GetForwardVector().XZ().Normalized();
+
+            Camera.position = interpolatedPosition;
+            Camera.position += -forward*0.4f;
+
+            Vector3 startPos = interpolatedPosition + Vector3.Up;
+
+            Vector3 targetCameraPos = Camera.position + new Vector3(0,0.5f,0);
+
+            targetCameraPos += Camera.rotation.GetForwardVector() * -2.5f;
+            targetCameraPos += Camera.rotation.GetUpVector()*0.4f;
+            targetCameraPos += Camera.rotation.GetRightVector() * 0.1f;
+
+            var hit = Physics.SphereTrace(startPos.ToPhysics(), targetCameraPos.ToPhysics(), radius: 0.3f, ignoreList: new List<CollisionObject> {body });
+            if (hit.HasHit)
+                Camera.position = hit.HitPointWorld + hit.HitNormalWorld*0.3f;
+            else
+                Camera.position = targetCameraPos;
 
             if (currentWeapon is not null)
             {
@@ -654,6 +639,7 @@ namespace RetroEngine.Game.Entities.Player
             }
 
         }
+
         public float GetHealth()
         {
             return Health;
@@ -671,13 +657,12 @@ namespace RetroEngine.Game.Entities.Player
 
         public bool isFirstPerson()
         {
-            return true;
+            return false;
         }
 
         public SkeletalMesh GetSkeletalMesh()
         {
             return bodyMesh;
         }
-
     }
 }

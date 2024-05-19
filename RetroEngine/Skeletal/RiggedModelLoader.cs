@@ -365,7 +365,7 @@ namespace RetroEngine.Skeletal
             // model structure creation building here.
             Point indexPair = SearchSceneMeshBonesForName(curAssimpNode.Name, scene);
             // if the y value here is more then -1 this is then in fact a actual bone in the scene.
-            if (indexPair.Y > -1)
+            if (indexPair.Y > -1 || true)
             {
                 if (startupNodeTreeConsoleInfo)
                     Console.Write("  Is a Bone.  ");

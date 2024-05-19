@@ -27,7 +27,7 @@ namespace RetroEngine.Game.Entities.Weapons
     {
 
         protected WeaponData data;
-        protected PlayerCharacter player;
+        protected Entity player;
 
         protected double DrawTime = 0.35f;
 
@@ -45,7 +45,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
         public bool ShowHandL = true;
 
-        public static Weapon CreateFromData(WeaponData data, PlayerCharacter owner = null)
+        public static Weapon CreateFromData(WeaponData data, Entity owner = null)
         {
             Weapon weapon = Activator.CreateInstance(data.weaponType) as Weapon;
 
@@ -100,6 +100,10 @@ namespace RetroEngine.Game.Entities.Weapons
 
         }
 
+        public virtual AnimationPose ApplyWeaponAnimation(AnimationPose inPose)
+        {
+            return inPose;
+        }
 
         void UpdateSway()
         {

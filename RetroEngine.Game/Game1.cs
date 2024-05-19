@@ -34,7 +34,7 @@ namespace RetroEngine.Game
             //MakeFullscreen();
 
 
-            Level.LoadFromFile("test2");
+            Level.LoadFromFile("test");
 
 
         }

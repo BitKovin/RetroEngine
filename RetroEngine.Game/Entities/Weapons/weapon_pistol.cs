@@ -1,6 +1,8 @@
 ﻿using BulletSharp;
 using Microsoft.Xna.Framework;
 using RetroEngine.Entities;
+using RetroEngine.Game.Entities.Player;
+using RetroEngine.Skeletal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +23,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
         float aim = 0;
 
-
+        Animation pistolAnimation = new Animation();
         public override void Start()
         {
             base.Start();
@@ -44,10 +46,26 @@ namespace RetroEngine.Game.Entities.Weapons
         {
             base.Update();
 
-            mesh.Update(Time.DeltaTime*1.2f);
+            if (((ICharacter)player).isFirstPerson())
+            {
+                mesh.Update(Time.DeltaTime * 1.2f);
+            }
+            else
+            {
+                pistolAnimation.Update(Time.DeltaTime);
+            }
+            MathHelper.Transform transform = new MathHelper.Transform();
+
+            transform.Rotation.Z = -Camera.rotation.X + 5;
+
+            pistolAnimation.SetBoneLocalTransformModification("spine_02", transform.ToMatrix());
 
             if (Input.GetAction("attack").Holding())
                 Shoot();
+
+
+            arms.Visible = ((ICharacter)player).isFirstPerson();
+            mesh.Viewmodel = ((ICharacter)player).isFirstPerson();
 
             UpdateAim();
 
@@ -101,6 +119,15 @@ namespace RetroEngine.Game.Entities.Weapons
 
             arms.PastePose(mesh.GetPose());
 
+            ICharacter character = ((ICharacter)player);
+
+            if (character.isFirstPerson() == false)
+            {
+                mesh.Position = character.GetSkeletalMesh().Position;
+                mesh.Rotation = character.GetSkeletalMesh().Rotation;
+                //mesh.PastePose(character.GetSkeletalMesh().GetPose());
+            }
+
             fireSoundPlayer.Position = Camera.position;
         }
 
@@ -116,6 +143,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             mesh.PlayAnimation(0,false);
 
+            pistolAnimation.PlayAnimation(0,false);
 
             Bullet bullet = new Bullet();
             bullet.ignore.Add(player);
@@ -163,6 +191,17 @@ namespace RetroEngine.Game.Entities.Weapons
 
         }
 
+        public override AnimationPose ApplyWeaponAnimation(AnimationPose inPose)
+        {
+
+            AnimationPose pose = inPose;
+
+            pose.LayeredBlend(pistolAnimation.GetBoneByName("spine_03"), pistolAnimation.GetPoseLocal());
+
+            mesh.PastePoseLocal(inPose);
+
+            return pose;
+        }
         void LoadVisual()
         {
             mesh.Scale = new Vector3(1f);
@@ -187,6 +226,8 @@ namespace RetroEngine.Game.Entities.Weapons
             arms.Viewmodel = true;
             arms.UseAlternativeRotationCalculation = true;
 
+            pistolAnimation.LoadFromFile("models/weapons/pistol3.fbx");
+            pistolAnimation.SetAnimation(0);
 
             mesh.SetInterpolationEnabled(true);
             

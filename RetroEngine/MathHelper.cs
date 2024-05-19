@@ -36,20 +36,21 @@ namespace RetroEngine
 
         public static Vector3 GetUpVector(this Vector3 rot)
         {
-            if (rot.X == 0)
-                rot.X = 0.00001f;
+            float epsilon = 0.00001f;
+            rot.X = Math.Abs(rot.X) < epsilon ? epsilon : rot.X;
 
-            double X = Math.Sin((rot.Y) / 180d * Math.PI);
-            double Y = -Math.Tan((rot.X+90f) / 180d * Math.PI);
-            double Z = Math.Cos((rot.Y) / 180d * Math.PI);
+            double X = Math.Sin(rot.Y * Math.PI / 180.0);
+            double Y = -Math.Tan((rot.X + 90.0) * Math.PI / 180.0);
+            double Z = Math.Cos(rot.Y * Math.PI / 180.0);
 
             Vector3 rotation = new Vector3((float)X, (float)Y, (float)Z);
             rotation = Vector3.Normalize(rotation);
 
-            if(rot.X>=0)
-                rotation = rotation * -1f;
+            // Ensure correct direction of the up vector
+            if (rot.X >= 0)
+                rotation = -rotation;
 
-            return rotation * -1f;
+            return -rotation;
         }
 
         public static Vector3 XZ(this Vector3 vector)
@@ -69,16 +70,13 @@ namespace RetroEngine
         }
         public static Vector3 RotateVector(this Vector3 vector, Vector3 axis, float angleInDegrees)
         {
-            // Convert angle to radians
-            float angleInRadians = angleInDegrees/180f * 3.141f;
+            float angleInRadians = MathHelper.ToRadians(angleInDegrees);
 
-            // Create a rotation matrix
+            // Create a rotation matrix around the given axis
             Matrix rotationMatrix = Matrix.CreateFromAxisAngle(axis, angleInRadians);
 
             // Apply the rotation matrix to the vector
-            Vector3 rotatedVector = Vector3.Transform(vector, rotationMatrix);
-
-            return rotatedVector;
+            return Vector3.Transform(vector, rotationMatrix);
         }
 
         public static float ToDegrees(float radians)

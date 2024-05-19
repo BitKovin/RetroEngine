@@ -89,7 +89,7 @@ namespace RetroEngine.Skeletal
         /// <summary>
         /// Uses static animation frames instead of interpolated frames.
         /// </summary>
-        public bool UseStaticGeneratedFrames = true;
+        public bool UseStaticGeneratedFrames = false;
 
         // mainly for testing to step thru each frame.
         public float overrideAnimationFrameTime = -1;

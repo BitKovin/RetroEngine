@@ -36,7 +36,6 @@
   <ItemGroup>
     <Folder Include="Content\ShaderLib\" />
     <Folder Include="Properties\PublishProfiles\" />
-    <Folder Include="Skeletal\NewFolder\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Libs\MonoGame.ImGuiNet\Monogame.ImGuiNet.csproj" />
