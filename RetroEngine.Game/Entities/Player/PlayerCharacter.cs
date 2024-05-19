@@ -72,6 +72,8 @@ namespace RetroEngine.Game.Entities.Player
 
         StaticMesh testCube = new StaticMesh();
 
+        bool thirdPerson = false;
+
         public PlayerCharacter() : base()
         {
             if (GameMain.platform == Platform.Mobile)
@@ -117,7 +119,7 @@ namespace RetroEngine.Game.Entities.Player
 
             bodyMesh.textureSearchPaths.Add("textures/weapons/arms/");
 
-            bodyMesh.Scale = new Vector3(1.15f);
+            //bodyMesh.Scale = new Vector3(1.15f);
 
             PlayerBodyAnimator.LoadAssets();
 
@@ -216,6 +218,9 @@ namespace RetroEngine.Game.Entities.Player
 
             if (Input.GetAction("lastSlot").Pressed())
                 SwitchToSlot(lastSlot);
+
+            if (Input.GetAction("view").Pressed())
+                thirdPerson = ! thirdPerson;
         }
 
         public override void AsyncUpdate()
@@ -271,7 +276,12 @@ namespace RetroEngine.Game.Entities.Player
             bodyMesh.SetBoneMeshTransformModification("upperarm_l", showL);
             bodyMesh.SetBoneMeshTransformModification("head", hide.ToMatrix());
 
-            
+            if(thirdPerson)
+            {
+                bodyMesh.SetBoneMeshTransformModification("upperarm_r", show.ToMatrix());
+                bodyMesh.SetBoneMeshTransformModification("upperarm_l", show.ToMatrix());
+                bodyMesh.SetBoneMeshTransformModification("head", show.ToMatrix());
+            }
 
         }
 
@@ -280,6 +290,12 @@ namespace RetroEngine.Game.Entities.Player
             base.VisualUpdate();
 
             var pose = PlayerBodyAnimator.GetResultPose();
+
+            if (currentWeapon != null && thirdPerson)
+            {
+                pose = currentWeapon.ApplyWeaponAnimation(pose);
+
+            }
 
             bodyMesh.PastePoseLocal(pose);
 
@@ -521,6 +537,35 @@ namespace RetroEngine.Game.Entities.Player
 
         }
 
+        void FirstPersonCameraUpdate()
+        {
+            MathHelper.Transform t = bodyMesh.GetBoneMatrix("head").DecomposeMatrix();
+
+            Camera.position = t.Position + Camera.rotation.GetForwardVector().XZ().Normalized() * 0.35f;
+        }
+
+        void ThirdPersonCameraUpdate()
+        {
+            Vector3 forward = Camera.rotation.GetForwardVector().XZ().Normalized();
+
+            Camera.position = interpolatedPosition;
+            Camera.position += -forward * 0.4f;
+
+            Vector3 startPos = interpolatedPosition + Vector3.Up;
+
+            Vector3 targetCameraPos = Camera.position + new Vector3(0, 0.5f, 0);
+
+            targetCameraPos += Camera.rotation.GetForwardVector() * -2.5f;
+            targetCameraPos += Camera.rotation.GetUpVector() * 0.4f;
+            targetCameraPos += Camera.rotation.GetRightVector() * 0.1f;
+
+            var hit = Physics.SphereTrace(startPos.ToPhysics(), targetCameraPos.ToPhysics(), radius: 0.3f, ignoreList: new List<CollisionObject> { body });
+            if (hit.HasHit)
+                Camera.position = hit.HitPointWorld + hit.HitNormalWorld * 0.3f;
+            else
+                Camera.position = targetCameraPos;
+        }
+
         public override void LateUpdate()
         {
 
@@ -530,13 +575,22 @@ namespace RetroEngine.Game.Entities.Player
             bodyMesh.Position = interpolatedPosition - Camera.rotation.GetForwardVector().XZ().Normalized() * 0.25f - new Vector3(0, 1.05f, 0);
             bodyMesh.Rotation = new Vector3(0, Camera.rotation.Y, 0);
 
-            MathHelper.Transform t = bodyMesh.GetBoneMatrix("head").DecomposeMatrix();
+            
 
-            Camera.position = t.Position + Camera.rotation.GetForwardVector().XZ().Normalized() * 0.35f;
+            
+
+            if(thirdPerson)
+            {
+                ThirdPersonCameraUpdate();
+            }
+            else
+            {
+                FirstPersonCameraUpdate();
+            }
 
             if (currentWeapon is not null)
             {
-                currentWeapon.Position = Camera.position + bob * 0.05f*currentWeapon.BobScale + Camera.rotation.GetForwardVector() * Camera.rotation.X / 2000f;
+                currentWeapon.Position = Camera.position + bob * 0.05f * currentWeapon.BobScale + Camera.rotation.GetForwardVector() * Camera.rotation.X / 2000f;
                 currentWeapon.Rotation = Camera.rotation + new Vector3(0, 0, (float)Math.Sin(bobProgress * -1 * bobSpeed) * -1.5f) * currentWeapon.BobScale;
             }
 
@@ -671,7 +725,7 @@ namespace RetroEngine.Game.Entities.Player
 
         public bool isFirstPerson()
         {
-            return true;
+            return thirdPerson == false;
         }
 
         public SkeletalMesh GetSkeletalMesh()

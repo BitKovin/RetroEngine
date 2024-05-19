@@ -930,10 +930,10 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness, float me
     
     
     
-    float3 globalLight = GlobalBrightness * GlobalLightColor * lerp(1, 0.5, dot(normal, float3(0, -1, 0)));
+    float3 globalLight = GlobalBrightness * GlobalLightColor * lerp(1, 0.6, max(dot(normal, float3(0, -1, 0)),0));
     
     light = max(light, 0);
-    light += globalLight;
+    
     
     
 
@@ -943,12 +943,14 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness, float me
 
     }
     
-    light -= (1 - ao);
+    //light -= (1 - ao);
     
     light += specular;
     
     light = max(light, 0);
     
+    light += globalLight;
+
     return light;
     
 }

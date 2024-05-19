@@ -219,6 +219,8 @@ namespace RetroEngine
         {
             if (RiggedModel is null) return;
 
+            RiggedModel.animationPose.BoneOverrides = new Dictionary<string, BonePoseBlend>();
+
             RiggedModel.UpdateVisual = isRendered;
             RiggedModel.Update(deltaTime);
         }

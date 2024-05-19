@@ -34,7 +34,7 @@ namespace RetroEngine.Game
             //MakeFullscreen();
 
 
-            Level.LoadFromFile("test");
+            Level.LoadFromFile("test2");
 
 
         }
@@ -94,6 +94,8 @@ namespace RetroEngine.Game
             Input.AddAction("slot3").AddKeyboardKey(Keys.D3);
 
             Input.AddAction("lastSlot").AddKeyboardKey(Keys.Q);
+
+            Input.AddAction("view").AddKeyboardKey(Keys.B);
 
             Input.AddAction("test").AddKeyboardKey(Keys.R);
             Input.AddAction("test2").AddKeyboardKey(Keys.E);
