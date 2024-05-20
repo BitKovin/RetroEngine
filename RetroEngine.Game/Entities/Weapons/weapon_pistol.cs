@@ -52,13 +52,27 @@ namespace RetroEngine.Game.Entities.Weapons
             }
             else
             {
+
+                float targetRot = Camera.rotation.X + 5;
+
+                MathHelper.Transform transformBig = new MathHelper.Transform();
+                transformBig.Rotation.X = MathHelper.Lerp(0, targetRot, 0.6f);
+
+                MathHelper.Transform transformSmall = new MathHelper.Transform();
+                transformSmall.Rotation.X = MathHelper.Lerp(0, targetRot, 0.4f);
+
+                pistolAnimation.SetBoneMeshTransformModification("spine_03", transformSmall.ToMatrix());
+                pistolAnimation.SetBoneMeshTransformModification("upperarm_l", transformBig.ToMatrix());
+                //pistolAnimation.SetBoneMeshTransformModification("head", transformSmall.ToMatrix());
+                pistolAnimation.SetBoneMeshTransformModification("upperarm_r", transformBig.ToMatrix());
+
                 pistolAnimation.Update(Time.DeltaTime);
             }
-            MathHelper.Transform transform = new MathHelper.Transform();
 
-            transform.Rotation.Z = -Camera.rotation.X + 5;
+            
 
-            pistolAnimation.SetBoneLocalTransformModification("spine_02", transform.ToMatrix());
+            //pistolAnimation.SetBoneMeshTransformModification("spine_02", transform.ToMatrix());
+            
 
             if (Input.GetAction("attack").Holding())
                 Shoot();
@@ -196,17 +210,17 @@ namespace RetroEngine.Game.Entities.Weapons
 
             AnimationPose pose = inPose;
 
-            pose.LayeredBlend(pistolAnimation.GetBoneByName("spine_03"), pistolAnimation.GetPoseLocal());
+            pose.LayeredBlend(pistolAnimation.GetBoneByName("spine_02"), pistolAnimation.GetPoseLocal());
+
 
             mesh.PastePoseLocal(inPose);
-
             return pose;
         }
         void LoadVisual()
         {
             mesh.Scale = new Vector3(1f);
 
-            mesh.LoadFromFile("models/weapons/pistol2.fbx");
+            mesh.LoadFromFile("models/weapons/pistol_tp.fbx");
 
             arms.LoadFromFile("models/weapons/arms.fbx");
             arms.textureSearchPaths.Add("textures/weapons/arms/");
@@ -226,7 +240,7 @@ namespace RetroEngine.Game.Entities.Weapons
             arms.Viewmodel = true;
             arms.UseAlternativeRotationCalculation = true;
 
-            pistolAnimation.LoadFromFile("models/weapons/pistol3.fbx");
+            pistolAnimation.LoadFromFile("models/weapons/pistol_tp.fbx");
             pistolAnimation.SetAnimation(0);
 
             mesh.SetInterpolationEnabled(true);

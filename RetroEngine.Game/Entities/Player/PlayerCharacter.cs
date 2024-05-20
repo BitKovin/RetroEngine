@@ -115,7 +115,7 @@ namespace RetroEngine.Game.Entities.Player
         {
             base.LoadAssets();
 
-            bodyMesh.LoadFromFile("models/player_body.FBX");
+            bodyMesh.LoadFromFile("models/player_model_full.FBX");
 
             bodyMesh.textureSearchPaths.Add("textures/weapons/arms/");
 
@@ -553,10 +553,10 @@ namespace RetroEngine.Game.Entities.Player
 
             Vector3 startPos = interpolatedPosition + Vector3.Up;
 
-            Vector3 targetCameraPos = Camera.position + new Vector3(0, 0.5f, 0);
+            Vector3 targetCameraPos = Camera.position + new Vector3(0, 0.4f, 0);
 
-            targetCameraPos += Camera.rotation.GetForwardVector() * -2.5f;
-            targetCameraPos += Camera.rotation.GetUpVector() * 0.4f;
+            targetCameraPos += Camera.rotation.GetForwardVector() * -2f;
+            targetCameraPos += Camera.rotation.GetUpVector() * 0.5f;
             targetCameraPos += Camera.rotation.GetRightVector() * 0.1f;
 
             var hit = Physics.SphereTrace(startPos.ToPhysics(), targetCameraPos.ToPhysics(), radius: 0.3f, ignoreList: new List<CollisionObject> { body });

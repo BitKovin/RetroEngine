@@ -105,6 +105,8 @@ namespace RetroEngine
 
             additionalMeshOffsets.Add(name, tranform);
 
+
+
         }
 
 
@@ -220,6 +222,9 @@ namespace RetroEngine
             if (RiggedModel is null) return;
 
             RiggedModel.animationPose.BoneOverrides = new Dictionary<string, BonePoseBlend>();
+
+            RiggedModel.additionalMeshOffsets = additionalMeshOffsets;
+            RiggedModel.additionalLocalOffsets = additionalLocalOffsets;
 
             RiggedModel.UpdateVisual = isRendered;
             RiggedModel.Update(deltaTime);

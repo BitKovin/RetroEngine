@@ -280,6 +280,8 @@ namespace RetroEngine.Skeletal
 
             Matrix additionalMesh = Matrix.Identity;
 
+            
+
             if (additionalMeshOffsets.ContainsKey(node.name))
             {
                 additionalMesh = additionalMeshOffsets[node.name];
@@ -290,7 +292,16 @@ namespace RetroEngine.Skeletal
             if (node.parent != null)
             {
 
-                var localTransform = node.LocalTransformMg * additionalLocal * node.parent.CombinedTransformMg;
+                Matrix parrentRotation = Matrix.Identity;
+                Matrix parrentLocation = Matrix.Identity;
+
+                MathHelper.Transform trans = node.parent.CombinedTransformMg.DecomposeMatrix();
+                Vector3 pos = trans.Position;
+                trans.Position = Vector3.Zero;
+                parrentRotation = trans.ToMatrix();
+                parrentLocation = new MathHelper.Transform { Position = pos }.ToMatrix();
+
+                var localTransform = node.LocalTransformMg * additionalLocal * parrentRotation * additionalMesh * parrentLocation;
 
                 if (animationPose.BoneOverrides.ContainsKey(node.name))
                 {
@@ -309,7 +320,7 @@ namespace RetroEngine.Skeletal
 
                 }
 
-                node.CombinedTransformMg = additionalMesh * localTransform;
+                node.CombinedTransformMg = localTransform;
                 node.LocalFinalTransformMg = node.CombinedTransformMg * Matrix.Invert(node.parent.CombinedTransformMg);
             }
             else
