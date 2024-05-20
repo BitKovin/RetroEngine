@@ -19,7 +19,7 @@ namespace RetroEngine
         private static DiscreteDynamicsWorld staticWorld;
         private static List<StaticRigidBody> staticBodies = new List<StaticRigidBody>();
 
-        private static int steps = 1;
+        private static int steps = 3;
 
         static List<CollisionObject> removeList = new List<CollisionObject>();
 

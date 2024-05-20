@@ -432,6 +432,26 @@ namespace RetroEngine.Skeletal
             animationRunning = false;
         }
 
+        public void SetAnimation(string name)
+        {
+            timeStart = AnimationTime;
+
+            int index = 0;
+
+            for (int i = 0; i < originalAnimations.Count; i++)
+            {
+                var anim = originalAnimations[i];
+                if (anim.animationName.ToLower() == name.ToLower())
+                {
+                    index = i;
+                    break;
+                }
+
+                currentAnimation = index;
+                animationRunning = false;
+            }
+        }
+
         public void StopAnimation()
         {
             animationRunning = false;

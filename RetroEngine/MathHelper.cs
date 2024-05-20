@@ -68,6 +68,12 @@ namespace RetroEngine
         {
             return Vector2.Lerp(new Vector2(a), new Vector2(b), progress).X;
         }
+
+        public static float Saturate(float a)
+        {
+            return Math.Clamp(a, 0f, 1f);
+        }
+
         public static Vector3 RotateVector(this Vector3 vector, Vector3 axis, float angleInDegrees)
         {
             float angleInRadians = MathHelper.ToRadians(angleInDegrees);

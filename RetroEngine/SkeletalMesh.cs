@@ -252,6 +252,12 @@ namespace RetroEngine
             RiggedModel.SetAnimation(id);
         }
 
+        public void SetAnimation(string name = "")
+        {
+            if (RiggedModel is null) return;
+            RiggedModel.SetAnimation(name);
+        }
+
         public Matrix GetBoneMatrix(int id)
         {
             if (RiggedModel == null) return Matrix.Identity;
@@ -573,6 +579,19 @@ namespace RetroEngine
         public Dictionary<string, BonePoseBlend> BoneOverrides = new Dictionary<string, BonePoseBlend>();
 
         public AnimationPose() { }
+
+        public AnimationPose(AnimationPose original) 
+        {
+            foreach(var key in original.Pose.Keys)
+            {
+                Pose.Add(key, original.Pose[key]);
+            }
+
+            foreach(var key in original.BoneOverrides.Keys)
+            {
+                BoneOverrides.Add(key, original.BoneOverrides[key]);
+            }
+        }
 
         public void LayeredBlend(RiggedModelNode node, AnimationPose pose, float progress = 1, bool meshSpaceRotation = true)
         {

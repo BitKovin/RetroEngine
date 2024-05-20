@@ -232,10 +232,14 @@ namespace RetroEngine
 
             PerformReservedTimeTasks();
 
+            lock (UiElement.Viewport.childs)
+            {
 
-            foreach (UiElement elem in UiElement.Viewport.childs)
-                elem.Update();
+                var lits = new List<UiElement>(UiElement.Viewport.childs);
 
+                foreach (UiElement elem in lits)
+                    elem.Update();
+            }
             Camera.ViewportUpdate();
 
             Input.Update();

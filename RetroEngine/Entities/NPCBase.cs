@@ -149,7 +149,7 @@ namespace RetroEngine.Entities
 
             MathHelper.Transform transform = new MathHelper.Transform();
 
-            transform.Rotation = new Vector3(angleDif, 0, 0);
+            transform.Rotation = new Vector3(0, angleDif, 0);
 
             mesh.SetBoneMeshTransformModification("spine_02", transform.ToMatrix());
 

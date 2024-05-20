@@ -24,6 +24,8 @@ namespace RetroEngine.Game.Entities.Weapons
 
         float aim = 0;
 
+        float aimAnimation = 0;
+
         Animation pistolAnimation = new Animation();
         public override void Start()
         {
@@ -57,7 +59,7 @@ namespace RetroEngine.Game.Entities.Weapons
                 float targetRot = Camera.rotation.X;
 
                 MathHelper.Transform transformBig = new MathHelper.Transform();
-                transformBig.Rotation.X = MathHelper.Lerp(0, targetRot, 0.6f);
+                transformBig.Rotation.X = MathHelper.Lerp(0, targetRot, 0.6f) * MathHelper.Saturate(aimAnimation);
 
                 MathHelper.Transform transformSmall = new MathHelper.Transform();
                 transformSmall.Rotation.X = MathHelper.Lerp(0, targetRot, 0.4f);
@@ -70,10 +72,12 @@ namespace RetroEngine.Game.Entities.Weapons
                 pistolAnimation.Update(Time.DeltaTime);
             }
 
-            
+
 
             //pistolAnimation.SetBoneMeshTransformModification("spine_02", transform.ToMatrix());
-            
+
+            aimAnimation -= Time.DeltaTime*2;
+            aimAnimation = MathF.Max(0, aimAnimation);
 
             if (Input.GetAction("attack").Holding())
                 Shoot();
@@ -175,10 +179,7 @@ namespace RetroEngine.Game.Entities.Weapons
             ICharacter character = ((ICharacter)player);
             if (character.isFirstPerson()==false)
             {
-                if(r)
                 startPos = meshTp.GetBoneMatrix("muzzle_r").DecomposeMatrix().Position;
-                else
-                startPos = meshTp.GetBoneMatrix("muzzle_l").DecomposeMatrix().Position;
 
                 r = !r;
             }
@@ -193,6 +194,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             Level.GetCurrent().AddEntity(bullet);
 
+            aimAnimation = 3;
 
             bullet.Position = startPos;
 
@@ -225,10 +227,12 @@ namespace RetroEngine.Game.Entities.Weapons
 
             AnimationPose pose = inPose;
 
+            AnimationPose p = new AnimationPose(pose);
+
             pose.LayeredBlend(pistolAnimation.GetBoneByName("spine_02"), pistolAnimation.GetPoseLocal());
+            pose.LayeredBlend(pistolAnimation.GetBoneByName("clavicle_l"), p);
 
-
-            meshTp.PastePoseLocal(inPose);
+            meshTp.PastePoseLocal(pose);
             return pose;
         }
         void LoadVisual()
@@ -238,7 +242,6 @@ namespace RetroEngine.Game.Entities.Weapons
             mesh.LoadFromFile("models/weapons/pistol2.fbx");
 
             arms.LoadFromFile("models/weapons/arms.fbx");
-            arms.textureSearchPaths.Add("textures/weapons/arms/");
 
             mesh.textureSearchPaths.Add("textures/weapons/arms/");
             mesh.textureSearchPaths.Add("textures/weapons/pistol/");
@@ -255,7 +258,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             meshTp.textureSearchPaths.Add("textures/weapons/pistol/");
             meshTp.textureSearchPaths.Add("textures/weapons/general/");
-
+            meshTp.SetBoneLocalTransformModification("weapon_l", new Matrix());
             meshTp.PreloadTextures();
 
             arms.CastShadows = false;

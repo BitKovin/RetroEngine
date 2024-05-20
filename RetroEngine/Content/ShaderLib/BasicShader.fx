@@ -60,8 +60,8 @@ sampler ReflectionTextureSampler = sampler_state
 {
     texture = <ReflectionTexture>;
 
-    MinFilter = Linear;
-    MagFilter = Linear;
+    MinFilter = Anisotropic;
+    MagFilter = Anisotropic;
     AddressU = Clamp;
     AddressV = Clamp;
 };

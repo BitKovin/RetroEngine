@@ -128,7 +128,7 @@ namespace RetroEngine.Game.Entities.Player
             testCube.LoadFromFile("models/cube.obj");
             testCube.texture = AssetRegistry.LoadTextureFromFile("cat.png");
             testCube.Scale = new Vector3(1);
-            meshes.Add(testCube);
+            //meshes.Add(testCube);
 
             Weapon.PreloadAllWeapons();
             PlayerUI.Load();
@@ -171,7 +171,7 @@ namespace RetroEngine.Game.Entities.Player
 
             weapons.Add(new WeaponData { weaponType = typeof(weapon_pistol), ammo = 1 });
             weapons.Add(new WeaponData { weaponType = typeof(weapon_shotgunNew), ammo = 50 });
-            weapons.Add(new WeaponData { weaponType = typeof(weapon_hammer), ammo = 50 });
+            weapons.Add(new WeaponData { weaponType = typeof(weapon_pistol_double), ammo = 50 });
 
             interpolatedPosition = Position;
 
