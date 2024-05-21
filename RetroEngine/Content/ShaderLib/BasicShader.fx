@@ -805,7 +805,7 @@ float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal, float ro
     float ShadowDistance5 = GetPointLightDepth(i, pixelInput.MyPosition,float3(0,0,1)*offsetScale);
     float ShadowDistance6 = GetPointLightDepth(i, pixelInput.MyPosition,float3(0,0,-1)*offsetScale);
     
-    float distFactor = 0.98;
+    float distFactor = 0.97;
     
     distFactor = lerp(distFactor, 1, abs(dot(normal, normalize(lightVector))));
     

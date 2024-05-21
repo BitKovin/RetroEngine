@@ -593,19 +593,19 @@ namespace RetroEngine
             }
         }
 
-        public void LayeredBlend(RiggedModelNode node, AnimationPose pose, float progress = 1, bool meshSpaceRotation = true)
+        public void LayeredBlend(RiggedModelNode node, AnimationPose pose, float progress = 1, float meshSpaceRotation = 1)
         {
             if (node == null) return;
             ApplyNodeChildrenOnPose(node, pose, progress);
 
-            if(meshSpaceRotation)
+            if(meshSpaceRotation>0.01)
             {
 
                 var newTransform = node.LocalTransformMg * node.parent.CombinedTransformMg;
 
                 if (BoneOverrides.ContainsKey(node.name) == false)
                 {
-                    BoneOverrides.TryAdd(node.name, new BonePoseBlend { progress = progress, transform = newTransform });
+                    BoneOverrides.TryAdd(node.name, new BonePoseBlend { progress = progress* meshSpaceRotation, transform = newTransform });
                 }else
                 {
                     var oldTransform = BoneOverrides[node.name].transform.DecomposeMatrix();
@@ -617,7 +617,7 @@ namespace RetroEngine
 
                     overr.transform = MathHelper.Transform.Lerp(oldTransform, newTransform.DecomposeMatrix(), progress).ToMatrix();
 
-                    overr.progress = progress;
+                    overr.progress = progress* meshSpaceRotation;
 
                     BoneOverrides[node.name] = overr;
 

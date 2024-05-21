@@ -175,6 +175,14 @@ namespace RetroEngine
 
         }
 
+        protected override void EndRun()
+        {
+            base.EndRun();
+
+            Environment.Exit(Environment.ExitCode);
+
+        }
+
         protected override void Update(GameTime gameTime)
         {
 

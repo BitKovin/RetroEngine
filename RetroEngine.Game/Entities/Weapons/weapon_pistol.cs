@@ -229,7 +229,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             AnimationPose p = new AnimationPose(pose);
 
-            pose.LayeredBlend(pistolAnimation.GetBoneByName("spine_02"), pistolAnimation.GetPoseLocal());
+            pose.LayeredBlend(pistolAnimation.GetBoneByName("spine_02"), pistolAnimation.GetPoseLocal(), 1, MathHelper.Saturate(aimAnimation));
             pose.LayeredBlend(pistolAnimation.GetBoneByName("clavicle_l"), p);
 
             meshTp.PastePoseLocal(pose);

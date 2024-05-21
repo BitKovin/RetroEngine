@@ -189,7 +189,7 @@ namespace RetroEngine.Game.Entities.Weapons
                 r = !r;
             }
 
-            Vector3 endPos = Camera.position + Camera.rotation.GetForwardVector() * 100 + Camera.rotation.GetRightVector() * x + Camera.rotation.GetUpVector() * y;
+            Vector3 endPos = Camera.position + Camera.rotation.GetForwardVector() * 50 + Camera.rotation.GetRightVector() * x + Camera.rotation.GetUpVector() * y;
 
             bulletRotation = MathHelper.FindLookAtRotation(startPos, endPos);
 
@@ -234,7 +234,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             AnimationPose weaponPose = Animation.LerpPose(pistolAnimationIdle.GetPoseLocal(), pistolAnimationAim.GetPoseLocal(), MathHelper.Saturate(aimAnimation));
 
-            pose.LayeredBlend(pistolAnimationAim.GetBoneByName("spine_02"), weaponPose);
+            pose.LayeredBlend(pistolAnimationAim.GetBoneByName("spine_02"), weaponPose,1, MathHelper.Saturate(aimAnimation));
 
             meshTp.PastePoseLocal(pose);
             return pose;
