@@ -42,7 +42,7 @@ namespace RetroEngine
 
         public static Platform platform;
 
-        public static UiElement UIManger = new UiElement();
+        public static UiElement UIManger = new UiViewport();
 
         public static GameTime time;
 
@@ -240,14 +240,10 @@ namespace RetroEngine
 
             PerformReservedTimeTasks();
 
-            lock (UiElement.Viewport.childs)
-            {
+            
 
-                var lits = new List<UiElement>(UiElement.Viewport.childs);
-
-                foreach (UiElement elem in lits)
-                    elem.Update();
-            }
+            UiElement.Viewport.Update();
+            
             Camera.ViewportUpdate();
 
             Input.Update();

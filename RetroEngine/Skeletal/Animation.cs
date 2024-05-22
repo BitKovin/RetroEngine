@@ -42,7 +42,6 @@ namespace RetroEngine.Skeletal
 
                 result.Pose[key] = MathHelper.Transform.Lerp(transformA,transformB, factor).ToMatrix();
 
-
             }
 
             foreach (var key in result.BoneOverrides.Keys)

@@ -33,21 +33,18 @@ namespace RetroEngine.Game.Entities.Player
             crosshair.baseColor = new Color(1f, 1f, 1f) * 2f;
             crosshair.SetTexture("ui/crosshair.png");
 
-            crosshair.originH = Origin.CenterH;
-            crosshair.originV = Origin.CenterV;
+            crosshair.Pivot = new Vector2(0.5f, 0.5f);
             crosshair.size = new Vector2(10, 10);
             crosshair.position = -crosshair.size/2;
             UiElement.Viewport.childs.Add(crosshair);
 
-            health.originH = Origin.Left;
-            health.originV = Origin.Bottom;
+            health.Pivot = new Vector2(0, 1);
             health.position = new Vector2(10,-50);
             health.FontSize = 24;
             health.AlignProgress = new Vector2(0.0f, 0.5f);
             UiElement.Viewport.childs.Add(health);
 
-            fps.originH = Origin.Left;
-            fps.originV = Origin.Top;
+            fps.Pivot = new Vector2(0, 0);
             fps.position = new Vector2(10, 50);
             fps.FontSize = 24;
             fps.AlignProgress = new Vector2(0.0f, 0.5f);

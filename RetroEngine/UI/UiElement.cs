@@ -23,18 +23,14 @@ namespace RetroEngine.UI
     public static class Origins
     {
         public static Vector2 Top = new Vector2();
-        public static Vector2 Bottom = new Vector2(0, Constants.ResolutionY);
+        public static Vector2 Bottom = new Vector2(0, 1);
         public static Vector2 Left = new Vector2();
-        public static Vector2 Right = new Vector2(Constants.ResolutionY*Camera.HtW, 0);
-        public static Vector2 CenterH = new Vector2(Constants.ResolutionY*Camera.HtW/2,0);
-        public static Vector2 CenterV = new Vector2(0, Constants.ResolutionY/2);
+        public static Vector2 Right = new Vector2(1, 0);
+        public static Vector2 CenterH = new Vector2(0.5f,0);
+        public static Vector2 CenterV = new Vector2(0, 0.5f);
 
         public static Vector2 Get(Origin origin)
         {
-
-        Right = new Vector2(Constants.ResolutionY * Camera.HtW, 0);
-        CenterH = new Vector2(Constants.ResolutionY * Camera.HtW / 2, 0);
-        CenterV = new Vector2(0, Constants.ResolutionY / 2);
 
             switch (origin)
             {
@@ -79,12 +75,14 @@ namespace RetroEngine.UI
         public Vector2 position = new Vector2();
         public float rotation = 0;
 
-        public Origin originH;
-        public Origin originV;
+        public Vector2 Pivot = new Vector2();
 
         public Vector2 relativeOrigin = new Vector2();
 
         protected Vector2 origin;
+
+        protected Vector2 ParrentTopLeft;
+        protected Vector2 ParrentBottomRight;
 
         public UiElement()
         {
@@ -94,10 +92,14 @@ namespace RetroEngine.UI
         {
             float ScaleY = GameMain.Instance.Window.ClientBounds.Height / Constants.ResolutionY;
             float HtV = ((float)GameMain.Instance.Window.ClientBounds.Width) / ((float)GameMain.Instance.Window.ClientBounds.Height);
-            Origins.Right = new Vector2(Constants.ResolutionY * HtV, 0);
 
 
-            origin = Origins.Get(originH) + Origins.Get(originV);
+            Vector2 TopLeft = position - size*Pivot;
+            Vector2 BottomRight = position + size * (Vector2.One - Pivot);
+
+            origin = GetOrigin();
+
+            
 
             if (GameMain.platform == Platform.Desktop)
             {
@@ -129,6 +131,28 @@ namespace RetroEngine.UI
                 }
             }
 
+            lock (childs)
+            {
+                var list = childs.ToArray();
+
+                foreach (UiElement element in list)
+                {
+                    lock (element)
+                    {
+                        element.ParrentTopLeft = TopLeft;
+                        element.ParrentBottomRight = BottomRight;
+                        element.Update();
+                    }
+                }
+            }
+
+        }
+
+        public virtual Vector2 GetOrigin()
+        {
+            return new Vector2(
+                MathHelper.Lerp(ParrentTopLeft.X, ParrentBottomRight.X, Pivot.X),
+                MathHelper.Lerp(ParrentTopLeft.Y, ParrentBottomRight.Y, Pivot.Y));
         }
 
         public static Vector2 WorldToScreenSpace(Vector3 pos)

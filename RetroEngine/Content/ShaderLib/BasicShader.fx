@@ -1077,7 +1077,7 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
         {
 
             outCoords = coords;
-            step /= 1.5;
+            step /= 1.3;
             factor = lerp(factor, 1, 0.5);
             weight += 1;
             

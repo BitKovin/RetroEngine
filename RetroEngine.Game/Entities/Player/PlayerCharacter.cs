@@ -92,7 +92,7 @@ namespace RetroEngine.Game.Entities.Player
                 buttonRotate = new Button();
                 buttonRotate.position = new Vector2(-200, 601);
                 buttonRotate.size = new Vector2(100, 100);
-                buttonRotate.originH = Origin.Right;
+                buttonRotate.Pivot = new Vector2(1,0);
                 UiElement.Viewport.childs.Add(buttonRotate);
             }
 
@@ -604,7 +604,7 @@ namespace RetroEngine.Game.Entities.Player
         void Jump()
         {
             
-            if (onGround || true)
+            if (onGround)
             {
                 body.LinearVelocity = new Vector3(body.LinearVelocity.X, 12, body.LinearVelocity.Z).ToNumerics();
                 jumpDelay.AddDelay(0.1f);

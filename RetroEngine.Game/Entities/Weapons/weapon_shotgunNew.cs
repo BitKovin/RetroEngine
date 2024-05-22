@@ -63,11 +63,18 @@ namespace RetroEngine.Game.Entities.Weapons
                 Shoot();
 
 
-            MathHelper.Transform transform = new MathHelper.Transform();
+            float targetRot = Camera.rotation.X;
 
-            transform.Rotation.Z = -Camera.rotation.X + 5;
+            MathHelper.Transform transformBig = new MathHelper.Transform();
+            transformBig.Rotation.X = MathHelper.Lerp(0, targetRot, 0.6f);
 
-            TpFire.SetBoneLocalTransformModification("spine_02", transform.ToMatrix());
+            MathHelper.Transform transformSmall = new MathHelper.Transform();
+            transformSmall.Rotation.X = MathHelper.Lerp(0, targetRot, 0.4f);
+
+            TpFire.SetBoneMeshTransformModification("spine_03", transformSmall.ToMatrix());
+            TpFire.SetBoneMeshTransformModification("upperarm_l", transformBig.ToMatrix());
+            //pistolAnimation.SetBoneMeshTransformModification("head", transformSmall.ToMatrix());
+            TpFire.SetBoneMeshTransformModification("upperarm_r", transformBig.ToMatrix());
 
             arms.Visible = ((ICharacter)player).isFirstPerson();
             mesh.Viewmodel = ((ICharacter)player).isFirstPerson();

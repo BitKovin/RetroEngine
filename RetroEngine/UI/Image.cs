@@ -34,6 +34,7 @@ namespace RetroEngine.UI
             mainRectangle.Location = new Point((int)position.X + (int)origin.X, (int)position.Y + (int)origin.Y);
             mainRectangle.Size = new Point((int)size.X, (int)size.Y);
 
+
             spriteBatch.Draw(tex, mainRectangle, baseColor);
 
             base.Draw(gameTime, spriteBatch);
