@@ -26,6 +26,8 @@ namespace RetroEngine
 
         protected AnimationPose animationPose = new AnimationPose();
 
+        public bool UpdatePose = true;
+
         public SkeletalMesh()
         {
             CastShadows = true;
@@ -226,7 +228,7 @@ namespace RetroEngine
             RiggedModel.additionalMeshOffsets = additionalMeshOffsets;
             RiggedModel.additionalLocalOffsets = additionalLocalOffsets;
 
-            RiggedModel.UpdateVisual = isRendered;
+            RiggedModel.UpdateVisual = isRendered && UpdatePose;
             RiggedModel.Update(deltaTime);
         }
 

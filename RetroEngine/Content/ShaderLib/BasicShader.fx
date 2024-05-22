@@ -388,7 +388,7 @@ PixelInput DefaultVertexShaderFunction(VertexInput input)
 
 void DepthDiscard(float depth, PixelInput input)
 {
-    if (depth < input.MyPixelPosition.z - 0.02)
+    if (depth < input.MyPixelPosition.z - 0.015)
         discard;
 }
 

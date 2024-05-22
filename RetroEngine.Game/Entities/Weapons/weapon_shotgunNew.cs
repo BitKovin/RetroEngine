@@ -50,14 +50,9 @@ namespace RetroEngine.Game.Entities.Weapons
         {
             base.Update();
 
-            if (((ICharacter)player).isFirstPerson())
-            {
-                mesh.Update(Time.DeltaTime);
-            }
-            else
-            {
-                TpFire.Update(Time.DeltaTime);
-            }
+            mesh.Update(Time.DeltaTime);
+            TpFire.Update(Time.DeltaTime);
+            
 
             if (Input.GetAction("attack").Holding())
                 Shoot();
@@ -78,6 +73,8 @@ namespace RetroEngine.Game.Entities.Weapons
 
             arms.Visible = ((ICharacter)player).isFirstPerson();
             mesh.Viewmodel = ((ICharacter)player).isFirstPerson();
+            mesh.UpdatePose = ((ICharacter)player).isFirstPerson();
+            TpFire.UpdatePose = ((ICharacter)player).isFirstPerson() == false;
         }
 
         public override void Destroy()
