@@ -92,7 +92,7 @@ namespace RetroEngine.Game.Entities.Player
                 buttonRotate = new Button();
                 buttonRotate.position = new Vector2(-200, 601);
                 buttonRotate.size = new Vector2(100, 100);
-                buttonRotate.Pivot = new Vector2(1,0);
+                buttonRotate.Origin = new Vector2(1,0);
                 UiElement.Viewport.childs.Add(buttonRotate);
             }
 

@@ -73,7 +73,7 @@ namespace RetroEngine.UI
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             Rectangle mainRectangle = new Rectangle();
-            mainRectangle.Location = new Point((int)position.X+ (int)origin.X, (int)position.Y+ (int)origin.Y);
+            mainRectangle.Location = new Point((int)position.X+ (int)offset.X, (int)position.Y+ (int)offset.Y);
             mainRectangle.Size = new Point((int)size.X, (int)size.Y);
 
             spriteBatch.Draw(tex, mainRectangle, hovering ? hoveringColor : baseColor);

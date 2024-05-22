@@ -75,11 +75,13 @@ namespace RetroEngine.UI
         public Vector2 position = new Vector2();
         public float rotation = 0;
 
+        public Vector2 Origin = new Vector2();
+
         public Vector2 Pivot = new Vector2();
 
         public Vector2 relativeOrigin = new Vector2();
 
-        protected Vector2 origin;
+        protected Vector2 offset;
 
         protected Vector2 ParrentTopLeft;
         protected Vector2 ParrentBottomRight;
@@ -94,10 +96,10 @@ namespace RetroEngine.UI
             float HtV = ((float)GameMain.Instance.Window.ClientBounds.Width) / ((float)GameMain.Instance.Window.ClientBounds.Height);
 
 
-            Vector2 TopLeft = position - size*Pivot;
-            Vector2 BottomRight = position + size * (Vector2.One - Pivot);
+            Vector2 TopLeft = position - size*Origin;
+            Vector2 BottomRight = position + size * (Vector2.One - Origin);
 
-            origin = GetOrigin();
+            offset = GetOrigin() + GetSize()*Pivot;
 
             
 
@@ -105,7 +107,7 @@ namespace RetroEngine.UI
             {
 
                 col.size = new Point((int)size.X, (int)size.Y);
-                col.position = new Vector2((int)position.X + (int)origin.X, (int)position.Y + (int)origin.Y);
+                col.position = new Vector2((int)position.X + (int)offset.X, (int)position.Y + (int)offset.Y);
                 Collision2D mouseCol = new Collision2D();
                 mouseCol.size = new Point(2, 2);
                 mouseCol.position = new Vector2((int)Input.MousePos.X, (int)Input.MousePos.Y);
@@ -121,7 +123,7 @@ namespace RetroEngine.UI
                     pos = touch.Position / ScaleY;
 
                     col.size = new Point((int)size.X, (int)size.Y);
-                    col.position = new Vector2((int)position.X+ (int)origin.X, (int)position.Y+(int)origin.Y);
+                    col.position = new Vector2((int)position.X+ (int)offset.X, (int)position.Y+(int)offset.Y);
                     Collision2D mouseCol = new Collision2D();
                     mouseCol.size = new Point(2, 2);
                     mouseCol.position = new Vector2((int)pos.X, (int)pos.Y);
@@ -151,8 +153,13 @@ namespace RetroEngine.UI
         public virtual Vector2 GetOrigin()
         {
             return new Vector2(
-                MathHelper.Lerp(ParrentTopLeft.X, ParrentBottomRight.X, Pivot.X),
-                MathHelper.Lerp(ParrentTopLeft.Y, ParrentBottomRight.Y, Pivot.Y));
+                MathHelper.Lerp(ParrentTopLeft.X, ParrentBottomRight.X, Origin.X),
+                MathHelper.Lerp(ParrentTopLeft.Y, ParrentBottomRight.Y, Origin.Y));
+        }
+
+        public virtual Vector2 GetSize()
+        {
+            return size;
         }
 
         public static Vector2 WorldToScreenSpace(Vector3 pos)

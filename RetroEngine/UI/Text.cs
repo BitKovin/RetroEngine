@@ -27,7 +27,7 @@ namespace RetroEngine.UI
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            Vector2 pos = new Vector2(position.X + origin.X, position.Y + origin.Y);
+            Vector2 pos = new Vector2(position.X + offset.X, position.Y + offset.Y);
 
             Vector2 textSize = Font.MeasureString(text) * AlignProgress;
 
