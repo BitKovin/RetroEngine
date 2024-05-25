@@ -116,6 +116,7 @@ namespace RetroEngine
 
             ormTexture = AssetRegistry.LoadTextureFromFile("engine/textures/defaultORM.png");
 
+            if(GameMain.CompatibilityMode == false)
             OcclusionQuery = new OcclusionQuery(GameMain.Instance.GraphicsDevice);
 
             Shader = GameMain.Instance.DefaultShader;
@@ -620,11 +621,11 @@ namespace RetroEngine
             oclusionCulling = true;
 
 
-            OcclusionQuery.Begin();
+            OcclusionQuery?.Begin();
 
             DrawDepth();
 
-            OcclusionQuery.End();
+            OcclusionQuery?.End();
         }
 
         public void EndOcclusionTest()
@@ -634,6 +635,7 @@ namespace RetroEngine
 
             if (oclusionCulling == false) return;
 
+            if (OcclusionQuery == null) return;
 
             if (OcclusionQuery.GraphicsDevice == null) return;
             while (OcclusionQuery.IsComplete == false)

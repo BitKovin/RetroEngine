@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using RetroEngine.UI;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -85,7 +86,7 @@ namespace RetroEngine
         {
             HtW = (float)GameMain.Instance.Window.ClientBounds.Width / (float)GameMain.Instance.Window.ClientBounds.Height;
 
-            float ScaleY = (float)GameMain.Instance.Window.ClientBounds.Height / Constants.ResolutionY;
+            float ScaleY = (float)GameMain.Instance.Window.ClientBounds.Height / UiViewport.GetViewportHeight();
 
             var scale = Matrix.CreateScale(ScaleY, ScaleY, 1);
 

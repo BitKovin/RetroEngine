@@ -92,7 +92,7 @@ namespace RetroEngine.UI
 
         public virtual void Update()
         {
-            float ScaleY = GameMain.Instance.Window.ClientBounds.Height / Constants.ResolutionY;
+            float ScaleY = GameMain.Instance.Window.ClientBounds.Height / UiViewport.GetViewportHeight();
             float HtV = ((float)GameMain.Instance.Window.ClientBounds.Width) / ((float)GameMain.Instance.Window.ClientBounds.Height);
 
 
@@ -174,8 +174,8 @@ namespace RetroEngine.UI
                 projectedPosition.Y / projectedPosition.W);
 
             // Map to the screen coordinates
-            float halfScreenWidth = Constants.ResolutionY * Camera.HtW / 2f;
-            float halfScreenHeight = Constants.ResolutionY / 2f;
+            float halfScreenWidth = UiViewport.GetViewportHeight() * Camera.HtW / 2f;
+            float halfScreenHeight = UiViewport.GetViewportHeight() / 2f;
 
             screenSpacePosition.X = halfScreenWidth + halfScreenWidth * screenSpacePosition.X;
             screenSpacePosition.Y = halfScreenHeight - halfScreenHeight * screenSpacePosition.Y;

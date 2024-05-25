@@ -14,6 +14,7 @@ namespace RetroEngine.Game.Entities.Weapons
     internal class weapon_shotgunNew : Weapon
     {
         SkeletalMesh mesh = new SkeletalMesh();
+        SkeletalMesh meshTp = new SkeletalMesh();
 
         SkeletalMesh arms = new SkeletalMesh();
 
@@ -73,7 +74,8 @@ namespace RetroEngine.Game.Entities.Weapons
 
             arms.Visible = ((ICharacter)player).isFirstPerson();
             mesh.Viewmodel = ((ICharacter)player).isFirstPerson();
-            mesh.UpdatePose = ((ICharacter)player).isFirstPerson();
+            mesh.Visible = ((ICharacter)player).isFirstPerson();
+            meshTp.Visible = !mesh.Visible;
             TpFire.UpdatePose = ((ICharacter)player).isFirstPerson() == false;
         }
 
@@ -100,8 +102,8 @@ namespace RetroEngine.Game.Entities.Weapons
 
             if (character.isFirstPerson() == false)
             {
-                mesh.Position = character.GetSkeletalMesh().Position;
-                mesh.Rotation = character.GetSkeletalMesh().Rotation;
+                meshTp.Position = character.GetSkeletalMesh().Position;
+                meshTp.Rotation = character.GetSkeletalMesh().Rotation;
                 //mesh.PastePose(character.GetSkeletalMesh().GetPose());
             }
 
@@ -183,7 +185,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             pose.LayeredBlend(TpFire.GetBoneByName("spine_03"), TpFire.GetPoseLocal());
 
-            mesh.PastePoseLocal(inPose);
+            meshTp.PastePoseLocal(pose);
 
             return pose;
         }
@@ -202,6 +204,12 @@ namespace RetroEngine.Game.Entities.Weapons
             mesh.textureSearchPaths.Add("textures/weapons/general/");
 
             TpFire.LoadFromFile("models/weapons/shotgun.fbx");
+
+            meshTp.LoadFromFile("models/weapons/shotgun.fbx");
+            meshTp.textureSearchPaths.Add("textures/weapons/arms/");
+            meshTp.textureSearchPaths.Add("textures/weapons/shotgun_new/");
+            meshTp.textureSearchPaths.Add("textures/weapons/general/");
+            meshTp.PreloadTextures();
 
             mesh.CastShadows = false;
             mesh.PreloadTextures();
@@ -222,6 +230,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             meshes.Add(mesh);
             meshes.Add(arms);
+            meshes.Add(meshTp);
             //new Bullet().LoadAssetsIfNeeded();
 
         }

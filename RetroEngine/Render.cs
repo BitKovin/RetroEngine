@@ -96,8 +96,6 @@ namespace RetroEngine
 
         SamplerState samplerState = new SamplerState();
 
-        public static OcclusionQuery occlusionQuery;
-
         public static float ResolutionScale = 1f;
 
         bool dirtySampler = true;
@@ -141,7 +139,6 @@ namespace RetroEngine
 
             TonemapperEffect = GameMain.content.Load<Effect>("Tonemap");
 
-            occlusionQuery = new OcclusionQuery(GameMain.Instance.GraphicsDevice);
 
             ReflectionEffect = AssetRegistry.GetShaderFromName("ReflectionPath");
             ReflectionResultEffect = GameMain.content.Load<Effect>("ReflectionResult");

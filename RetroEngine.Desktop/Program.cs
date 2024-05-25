@@ -2,17 +2,43 @@
 using Microsoft.Xna.Framework;
 using RetroEngine;
 using SharpDX.DirectInput;
+using System;
+using System.IO;
+using System.Runtime.InteropServices;
 
 internal class Program
 {
+
+    [DllImport("User32.dll", CharSet = CharSet.Unicode)]
+    public static extern int MessageBox(IntPtr h, string m, string c, int type);
+
     private static void Main(string[] args)
     {
+        GameMain.CompatibilityMode = true;
         using var game = new RetroEngine.Game.Game();
         RetroEngine.GameMain.platform = RetroEngine.Platform.Desktop;
         Input.MouseMoveCalculatorObject = new WindowsInputCalculator();
         LightManager.MAX_POINT_LIGHTS = 6;
         Graphics.EnableSSR = false;
+
+#if RELEASE
+        try
+        {
+            game.Run();
+        }
+        catch (Exception ex)
+        {
+            var stream = File.CreateText("_crash_" + DateTime.Now.ToString().Replace("/", ".").Replace(":", "-") + ".txt");
+            stream.Write(ex.ToString());
+            stream.Close();
+
+            MessageBox((IntPtr)0, ex.Message + "\nAn error occurred during work of the engine. If problem appears on unmodified version of the game on supported hardware, please contact developer. \nFile with error callstack was created. \n\ncallstack: \n" + ex.ToString(), "Platform is not supported", 0);
+
+
+        }
+#else
         game.Run();
+#endif
     }
 
     class WindowsInputCalculator : Input.MouseMoveCalculator

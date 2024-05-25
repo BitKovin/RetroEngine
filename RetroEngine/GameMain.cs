@@ -83,6 +83,8 @@ namespace RetroEngine
 
         internal static List<IDisposable> pendingDispose = new List<IDisposable>();
 
+        public static bool CompatibilityMode = false;
+
         public GameMain()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -91,8 +93,14 @@ namespace RetroEngine
             Instance = this;
             curentLevel = new Level();
             UiElement.Viewport = UIManger;
-            _graphics.GraphicsProfile = GraphicsProfile.HiDef;
-
+            if (CompatibilityMode)
+            {
+                _graphics.GraphicsProfile = GraphicsProfile.Reach;
+            }
+            else
+            {
+                _graphics.GraphicsProfile = GraphicsProfile.HiDef;
+            }
             RenderThread = Thread.CurrentThread;
 
         }
