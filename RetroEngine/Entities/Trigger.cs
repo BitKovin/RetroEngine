@@ -39,8 +39,6 @@ namespace RetroEngine.Entities
 
             if (collidedEntity is null) return;
 
-            Console.WriteLine(collidedEntity.GetType().Name);
-
             if (collidedEntity.Tags.Contains(collideToTag))
             {
                 entities.Add(collidedEntity);

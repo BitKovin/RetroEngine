@@ -1,81 +1,69 @@
 ﻿using BulletSharp;
+using RetroEngine.Game.Entities.Player;
 using RetroEngine.Map;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace RetroEngine.Game.Entities.Weapons
 {
-    internal class WeaponPickup : Entity
+
+    [LevelObject("weaponPickup")]
+    internal class WeaponPickup : Trigger
     {
-        CollisionCallback collisionCallback = new CollisionCallback();
 
-        string collideToTag = "player";
-
-        List<Entity> entities = new List<Entity>();
-
-        public override void Start()
-        {
-            base.Start();
-
-            foreach (RigidBody body in bodies)
-            {
-
-                body.CollisionFlags = BulletSharp.CollisionFlags.NoContactResponse;
-                body.UserIndex = (int)RayFlags.NoRayTest;
-            }
-            collisionCallback.CollisionEvent += TriggerEntered;
-
-            //meshes[0].Transperent = true;
-        }
-
-        private void TriggerEntered(BulletSharp.CollisionObjectWrapper thisObject, BulletSharp.CollisionObjectWrapper collidedObject, Entity collidedEntity, BulletSharp.ManifoldPoint contactPoint)
-        {
-
-            if (collidedEntity is null) return;
-
-
-            if (collidedEntity.Tags.Contains(collideToTag))
-            {
-                entities.Add(collidedEntity);
-            }
-
-        }
+        string typeName = "weapon_pistol_double";
 
         public override void FromData(EntityData data)
         {
             base.FromData(data);
 
+            RigidBody TriggerBody = Physics.CreateSphere(this, 0, 1, CollisionFlags.StaticObject| CollisionFlags.NoContactResponse);
+
+            TriggerBody.SetPosition(Position);
+            bodies.Add(TriggerBody);
+
+            typeName = data.GetPropertyString("type", "weapon_pistol_double");
 
         }
 
-        public override void Update()
+        public override void OnTriggerEnter(Entity entity)
         {
-            base.Update();
+            base.OnTriggerEnter(entity);
 
-            List<Entity> oldEntities = new List<Entity>(entities);
-            entities.Clear();
+            if (entity.Tags.Contains("player") == false) return;
 
-            foreach (RigidBody body in bodies)
+            PlayerCharacter character = (PlayerCharacter)entity;
+
+            Assembly asm = typeof(Weapon).Assembly;
+            Type type = asm.GetType(typeof(Weapon).Namespace+"."+typeName);
+            if(type==null)
             {
-
-                Physics.PerformContactCheck(body, collisionCallback);
+                Logger.Log($"weapon with type name of {typeName} not found");
+                return;
             }
-            foreach (Entity entity in entities)
-            {
-                if (entity is null) continue;
+            WeaponData weaponData = WeaponData.FromType(type);
 
-                if (oldEntities.Contains(entity) == false)
-                    OnTriggerEnter(entity);
+            character.AddWeapon(weaponData);
 
-            }
+            Destroy();
+
         }
 
-        public virtual void OnTriggerEnter(Entity entity)
+        protected override void LoadAssets()
         {
+            base.LoadAssets();
+
+            StaticMesh staticMesh = new StaticMesh();
+            staticMesh.LoadFromFile("models/cube.obj");
+            staticMesh.texture = AssetRegistry.LoadTextureFromFile("cat.png");
+            meshes.Add(staticMesh);
+            staticMesh.Position = Position;
 
         }
+
     }
 }

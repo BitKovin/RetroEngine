@@ -24,8 +24,6 @@ namespace RetroEngine.Game.Entities
         {
             base.OnTriggerEnter(entity);
 
-            Console.WriteLine(entity.Position.ToString());
-
         }
 
     }

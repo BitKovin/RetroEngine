@@ -15,12 +15,20 @@ namespace RetroEngine.Game.Entities.Weapons
     {
 
         public Type weaponType;
-        public int ammo = 50;
+        public int ammo = 0;
 
         public WeaponData() 
         {
 
         }
+
+        public static WeaponData FromType(Type type)
+        {
+            WeaponData data = new WeaponData();
+            data.weaponType = type;
+            return data;
+        }
+
     }
     
     public class Weapon : Entity

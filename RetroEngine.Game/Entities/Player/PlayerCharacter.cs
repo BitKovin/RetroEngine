@@ -168,9 +168,9 @@ namespace RetroEngine.Game.Entities.Player
             stepSoundPlayer.SetSound(AssetRegistry.LoadSoundFromFile("sounds/step.wav"));
             stepSoundPlayer.Volume = 0.5f;
 
-            weapons.Add(new WeaponData { weaponType = typeof(weapon_pistol), ammo = 1 });
-            weapons.Add(new WeaponData { weaponType = typeof(weapon_shotgunNew), ammo = 50 });
-            weapons.Add(new WeaponData { weaponType = typeof(weapon_pistol_double), ammo = 50 });
+            //weapons.Add(new WeaponData { weaponType = typeof(weapon_pistol), ammo = 1 });
+            //weapons.Add(new WeaponData { weaponType = typeof(weapon_shotgunNew), ammo = 50 });
+            //weapons.Add(new WeaponData { weaponType = typeof(weapon_pistol_double), ammo = 50 });
 
             interpolatedPosition = Position;
 
@@ -683,9 +683,10 @@ namespace RetroEngine.Game.Entities.Player
             return vel;
         }
 
-        void SwitchToSlot(int slot)
+        void SwitchToSlot(int slot, bool forceChange = false)
         {
-            if (slot == currentSlot) return;
+            if(forceChange == false)
+                if (slot == currentSlot) return;
 
             if (weapons.Count > slot && slot >= 0)
             {
@@ -716,6 +717,13 @@ namespace RetroEngine.Game.Entities.Player
             }
 
         }
+
+        public void AddWeapon(WeaponData weaponData)
+        {
+            weapons.Add(weaponData);
+                SwitchToSlot(weapons.Count - 1);
+        }
+
         public float GetHealth()
         {
             return Health;
