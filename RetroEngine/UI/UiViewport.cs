@@ -26,7 +26,7 @@ namespace RetroEngine.UI
 
         public static float GetViewportHeight()
         {
-            return Constants.UI_RESOLUTION * UiScale;
+            return Constants.UI_RESOLUTION / UiScale;
         }
 
     }

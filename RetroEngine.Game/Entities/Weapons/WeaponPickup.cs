@@ -6,16 +6,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RetroEngine.Entities
+namespace RetroEngine.Game.Entities.Weapons
 {
-    public class TriggerBase : Entity
+    internal class WeaponPickup : Entity
     {
-
         CollisionCallback collisionCallback = new CollisionCallback();
 
         string collideToTag = "player";
-
-        string target = "";
 
         List<Entity> entities = new List<Entity>();
 
@@ -30,7 +27,7 @@ namespace RetroEngine.Entities
                 body.UserIndex = (int)RayFlags.NoRayTest;
             }
             collisionCallback.CollisionEvent += TriggerEntered;
-            collisionCallback.owner = this;
+
             //meshes[0].Transperent = true;
         }
 
@@ -39,7 +36,6 @@ namespace RetroEngine.Entities
 
             if (collidedEntity is null) return;
 
-            Console.WriteLine(collidedEntity.GetType().Name);
 
             if (collidedEntity.Tags.Contains(collideToTag))
             {
@@ -52,7 +48,6 @@ namespace RetroEngine.Entities
         {
             base.FromData(data);
 
-            target = data.GetPropertyString("targetname");
 
         }
 
@@ -82,6 +77,5 @@ namespace RetroEngine.Entities
         {
 
         }
-
     }
 }

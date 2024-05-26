@@ -403,7 +403,7 @@ namespace RetroEngine
             RigidBody.Friction = 0f;
             RigidBody.SetDamping(0.1f, 0.1f);
             RigidBody.Restitution = 0f;
-
+            RigidBody.CollisionShape = Shape;
 
             collisionObjects.Add(RigidBody);
 

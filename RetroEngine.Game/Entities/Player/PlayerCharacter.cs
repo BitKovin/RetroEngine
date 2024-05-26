@@ -11,7 +11,6 @@ using RetroEngine.Game.Entities;
 using RetroEngine.Map;
 using RetroEngine.Game.Entities.Weapons;
 using RetroEngine.Entities;
-using BulletSharp.SoftBody;
 
 namespace RetroEngine.Game.Entities.Player
 {

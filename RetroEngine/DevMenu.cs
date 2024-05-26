@@ -1,5 +1,6 @@
 ﻿using ImGuiNET;
 using RetroEngine.Map;
+using RetroEngine.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -60,6 +61,8 @@ namespace RetroEngine
             ImGui.End();
 
             ImGui.Begin("Graphics");
+
+            ImGui.SliderFloat("ui scale", ref UiViewport.UiScale, 0.5f, 4);
 
             ImGui.SliderFloat("resolution scale", ref Render.ResolutionScale, 0.2f, 6);
 
