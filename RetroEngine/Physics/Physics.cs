@@ -152,7 +152,10 @@ namespace RetroEngine
             lock (dynamicsWorld)
             {
                 if (GameMain.Instance.paused == false)
-                    dynamicsWorld.StepSimulation(Time.DeltaTime * Time.TimeScale, steps, Math.Max(1 / 30f, Time.DeltaTime));
+                {
+                    for(int i = 0; i<steps; i++)
+                    dynamicsWorld.StepSimulation(Time.DeltaTime * Time.TimeScale / steps, 5, Math.Max(1 / 30f, Time.DeltaTime)/steps);
+                }
             }
         }
 
