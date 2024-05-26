@@ -72,7 +72,7 @@ namespace RetroEngine
                     }
                     texturesHistory.Add(path);
 
-                    Console.WriteLine($"loaded texture. Current texture cache: {textures.Count}");
+                    Logger.Log($"loaded texture {path}. Current texture cache: {textures.Count}");
 
                     return (Texture2D)textures[path];
                 }
@@ -80,7 +80,7 @@ namespace RetroEngine
             catch (Exception ex)
             {
                 if(!ignoreErrors)
-                    Console.WriteLine("Failed to load texture: " + ex.Message);
+                    Logger.Log("Failed to load texture: " + ex.Message);
                 nullTextures.Add(path);
                 return null;
             }
@@ -274,8 +274,6 @@ namespace RetroEngine
 
                     SoundEffect soundEffect = SoundEffect.FromStream(stream);
 
-                    Console.WriteLine($"sound duration: {soundEffect.Duration}");
-
                     sounds.Add(path, soundEffect);
 
                     return sounds[path];
@@ -284,7 +282,7 @@ namespace RetroEngine
             catch (Exception ex)
             {
                 // Handle any exceptions that occur during texture loading
-                Console.WriteLine("Failed to load sound: " + ex.Message);
+                Logger.Log("Failed to load sound: " + ex.Message);
                 return null;
             }
 

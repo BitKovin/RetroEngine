@@ -661,7 +661,7 @@ namespace RetroEngine
             {
                 foreach (string item in textureSearchPaths)
                 {
-                    output = AssetRegistry.LoadTextureFromFile(item + name, false);
+                    output = AssetRegistry.LoadTextureFromFile(item + name, true);
                     if (output != null)
                     {
                         textures.TryAdd(item + name, output);
@@ -848,6 +848,8 @@ namespace RetroEngine
             {
                 return loadedModels[filePath];
             }
+
+            Console.WriteLine("loading model: " + filePath);
 
             Assimp.Scene scene;
             Assimp.AssimpContext importer = new Assimp.AssimpContext();

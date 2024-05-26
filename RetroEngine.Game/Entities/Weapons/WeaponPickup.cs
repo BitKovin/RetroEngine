@@ -1,4 +1,5 @@
 ﻿using BulletSharp;
+using Microsoft.Xna.Framework;
 using RetroEngine.Game.Entities.Player;
 using RetroEngine.Map;
 using System;
@@ -17,11 +18,13 @@ namespace RetroEngine.Game.Entities.Weapons
 
         string typeName = "weapon_pistol_double";
 
+        StaticMesh staticMesh = new StaticMesh();
+
         public override void FromData(EntityData data)
         {
             base.FromData(data);
 
-            RigidBody TriggerBody = Physics.CreateSphere(this, 0, 1, CollisionFlags.StaticObject| CollisionFlags.NoContactResponse);
+            RigidBody TriggerBody = Physics.CreateSphere(this, 0, 0.5f, CollisionFlags.StaticObject| CollisionFlags.NoContactResponse);
 
             TriggerBody.SetPosition(Position);
             bodies.Add(TriggerBody);
@@ -53,11 +56,20 @@ namespace RetroEngine.Game.Entities.Weapons
 
         }
 
+        public override void AsyncUpdate()
+        {
+            base.AsyncUpdate();
+
+            staticMesh.Position = Position + ((float)Math.Sin((Time.gameTime - SpawnTime)*3)) * Vector3.Up * 0.3f;
+
+            staticMesh.Rotation = new Vector3(0, (float)(Time.gameTime - SpawnTime) * 100,0);
+
+        }
+
         protected override void LoadAssets()
         {
             base.LoadAssets();
 
-            StaticMesh staticMesh = new StaticMesh();
             staticMesh.LoadFromFile("models/cube.obj");
             staticMesh.texture = AssetRegistry.LoadTextureFromFile("cat.png");
             meshes.Add(staticMesh);

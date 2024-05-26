@@ -216,7 +216,7 @@ namespace RetroEngine
 
             ScreenWidth = GraphicsDevice.PresentationParameters.Bounds.Width;
 
-
+            curentLevel.WaitForVisualUpdate();
             if (AsyncGameThread)
             {
                 if (gameTask is null)
@@ -235,14 +235,21 @@ namespace RetroEngine
             {
                 UpdateTime(gameTime);
             }
-            curentLevel.WaitForVisualUpdate();
+            
 
-            foreach (IDisposable disposable in pendingDispose)
+            lock(pendingDispose)
             {
-                disposable?.Dispose();
-            }
-            pendingDispose.Clear();
 
+                var list = pendingDispose.ToArray();
+
+                foreach (IDisposable disposable in list)
+                {
+                    disposable?.Dispose();
+                }
+
+                pendingDispose.Clear();
+
+            }
             var physicsTask = Task.Factory.StartNew(() => { Physics.Simulate(); });
 
 
