@@ -505,7 +505,6 @@ namespace RetroEngine.Game.Entities.Player
             if (hitPoint == Vector3.Zero)
                 return;
 
-            Console.WriteLine(hitPoint);
 
             testCube.Position = hitPoint;
 
