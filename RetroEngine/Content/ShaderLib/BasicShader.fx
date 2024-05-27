@@ -739,22 +739,15 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
 }
 
 
-float GetPointLightDepth(int i, float3 worldPos, float3 offset)
+float GetPointLightDepth(int i, float3 lightDir)
 {
-    
-    if (i>= MAX_POINT_LIGHTS_SHADOWS)
+    if (i >= MAX_POINT_LIGHTS_SHADOWS)
         return 10000;
 
-    // Get the direction from the world position to the light position
-        float3 lightDir = LightPositions[i] - worldPos;
-
-    // Normalize the light direction
-    lightDir = normalize(lightDir) + offset;
-
     float depth = 0.00;
-    
+
     lightDir *= float3(1, -1, -1);
-    
+
     if (i == 0)
         depth = texCUBE(PointLightCubemap1Sampler, lightDir).r;
     else if (i == 1)
@@ -767,19 +760,11 @@ float GetPointLightDepth(int i, float3 worldPos, float3 offset)
         depth = texCUBE(PointLightCubemap5Sampler, lightDir).r;
     else if (i == 5)
         depth = texCUBE(PointLightCubemap6Sampler, lightDir).r;
-	/*else if (i == 6)
-		depth = texCUBE(PointLightCubemap7Sampler, lightDir).r;
-	else if (i == 7)
-		depth = texCUBE(PointLightCubemap8Sampler, lightDir).r;
-	else if (i == 8)
-		depth = texCUBE(PointLightCubemap9Sampler, lightDir).r;
-	else if (i == 9)
-		depth = texCUBE(PointLightCubemap10Sampler, lightDir).r;*/
-    
-    if(depth == 0)
+
+    if (depth == 0)
         return 10000;
-    
-    depth += depth / (LightResolutions[i]*3) + 0.04;
+
+    depth += depth / (LightResolutions[i] * 3) + 0.04;
 
     return depth;
 }
@@ -787,68 +772,60 @@ float GetPointLightDepth(int i, float3 worldPos, float3 offset)
 
 float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal, float roughness, float metalic)
 {
-    
     float3 lightVector = LightPositions[i] - pixelInput.MyPosition;
     float distanceToLight = length(lightVector);
-    
-    float offsetScale = 1/(LightResolutions[i]/4);
-    offsetScale*=lerp(abs(dot(normal, normalize(lightVector))),1,0.2);
+
+    float offsetScale = 1 / (LightResolutions[i] / 60);
+    //offsetScale *= lerp(abs(dot(normal, normalize(lightVector))), 1, 0.5);
     float notShadow = 1;
-    if(LightResolutions[i]>10)
+
+    if (LightResolutions[i] > 10)
     {
+        float3 lightDir = normalize(lightVector);
+        float shadowBias = 0.05;  // Adjust this bias for your specific scene
 
-    float ShadowDistance = GetPointLightDepth(i, pixelInput.MyPosition,float3(0,0,0));
-    float ShadowDistance1 = GetPointLightDepth(i, pixelInput.MyPosition,float3(-1,0,0)*offsetScale);
-    float ShadowDistance2 = GetPointLightDepth(i, pixelInput.MyPosition,float3(1,0,0)*offsetScale);
-    float ShadowDistance3 = GetPointLightDepth(i, pixelInput.MyPosition,float3(0,1,0)*offsetScale);
-    float ShadowDistance4 = GetPointLightDepth(i, pixelInput.MyPosition,float3(0,-1,0)*offsetScale);
-    float ShadowDistance5 = GetPointLightDepth(i, pixelInput.MyPosition,float3(0,0,1)*offsetScale);
-    float ShadowDistance6 = GetPointLightDepth(i, pixelInput.MyPosition,float3(0,0,-1)*offsetScale);
-    
-    float distFactor = 0.97;
-    
-    distFactor = lerp(distFactor, 1, abs(dot(normal, normalize(lightVector))));
-    
-    distFactor = saturate(distFactor);
-    
-    notShadow = 0;
-    if (distanceToLight*distFactor>ShadowDistance)
-        notShadow += 1;
-    if (distanceToLight*distFactor>ShadowDistance1)
-        notShadow += 1;
-    if (distanceToLight*distFactor>ShadowDistance2)
-        notShadow += 1;
-    if (distanceToLight*distFactor>ShadowDistance3)
-        notShadow += 1;
-    if (distanceToLight*distFactor>ShadowDistance4)
-        notShadow += 1;
-    if (distanceToLight*distFactor>ShadowDistance5)
-        notShadow += 1;
-    if (distanceToLight*distFactor>ShadowDistance6)
-        notShadow += 1;
-    
-    notShadow/=7;
-    notShadow = 1-notShadow;
+        // Calculate tangent and bitangent vectors
+        float3 up = abs(normal.y) < 0.999 ? float3(0, 1, 0) : float3(1, 0, 0);
+        float3 tangent = normalize(cross(up, normal));
+        float3 bitangent = cross(normal, tangent);
 
+        // PCF sampling
+        int samples = 0;
+        float shadowFactor = 0.0;
+
+        const int radius = 2;
+
+        const int step = 2;
+
+        for (int x = -2; x <= 2; x+=step)
+        {
+            for (int y = -2; y <= 2; y+=step)
+            {
+                float3 offset = (tangent * x + bitangent * y) * shadowBias * offsetScale;
+                float shadowDepth = GetPointLightDepth(i, lightDir + offset);
+                shadowFactor += distanceToLight < shadowDepth ? 1.0 : 0.0;
+                samples++;
+            }
+        }
+
+        shadowFactor /= samples;
+        notShadow = shadowFactor;
     }
+
     float dist = (distanceToLight / LightRadiuses[i]);
-    float intense = saturate(1.0 - dist*dist);
+    float intense = saturate(1.0 - dist * dist);
     float3 dirToSurface = normalize(lightVector);
-    
-    
+
     if (isParticle)
         dirToSurface = normal;
-    
-    
-    intense *= saturate(dot(normal, dirToSurface));
 
+    intense *= saturate(dot(normal, dirToSurface));
     float3 specular = CalculateSpecular(pixelInput.MyPosition, normal, -dirToSurface, roughness, metalic);
-    
+
     intense = max(intense, 0);
-    
     float3 l = LightColors[i] * intense;
-    
-    return (l + intense * specular)*notShadow;
+
+    return (l + intense * specular) * notShadow;
 }
 
 float3 CalculatePointLightSpeculars(int i, PixelInput pixelInput, float3 normal, float roughness, float metalic)
