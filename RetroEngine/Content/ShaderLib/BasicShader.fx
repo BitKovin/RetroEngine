@@ -775,7 +775,10 @@ float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal, float ro
     float3 lightVector = LightPositions[i] - pixelInput.MyPosition;
     float distanceToLight = length(lightVector);
 
-    float offsetScale = 1 / (LightResolutions[i] / 60);
+    if(distanceToLight> LightRadiuses[i])
+        return float3(0,0,0);
+
+    float offsetScale = 1 / (LightResolutions[i] / 60) / lerp(distanceToLight,1, 0.7);
     //offsetScale *= lerp(abs(dot(normal, normalize(lightVector))), 1, 0.5);
     float notShadow = 1;
 
@@ -795,11 +798,11 @@ float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal, float ro
 
         const int radius = 2;
 
-        const int step = 2;
+        const float step = 2;
 
-        for (int x = -2; x <= 2; x+=step)
+        for (float x = -radius; x <= radius; x+=step)
         {
-            for (int y = -2; y <= 2; y+=step)
+            for (float y = -radius; y <= radius; y+=step)
             {
                 float3 offset = (tangent * x + bitangent * y) * shadowBias * offsetScale;
                 float shadowDepth = GetPointLightDepth(i, lightDir + offset);
