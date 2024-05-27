@@ -4,6 +4,7 @@ using RetroEngine;
 using SharpDX.DirectInput;
 using System;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 
 internal class Program
@@ -14,12 +15,16 @@ internal class Program
 
     private static void Main(string[] args)
     {
-        GameMain.CompatibilityMode = true;
         using var game = new RetroEngine.Game.Game();
         RetroEngine.GameMain.platform = RetroEngine.Platform.Desktop;
         Input.MouseMoveCalculatorObject = new WindowsInputCalculator();
         LightManager.MAX_POINT_LIGHTS = 6;
         Graphics.EnableSSR = false;
+
+        if(args.Contains("compatibility") || args.Contains("-compatibility") || args.Contains("comp") || args.Contains("-comp"))
+        {
+            GameMain.CompatibilityMode = true;
+        }
 
 #if RELEASE
         try
@@ -32,7 +37,7 @@ internal class Program
             stream.Write(ex.ToString());
             stream.Close();
 
-            MessageBox((IntPtr)0, ex.Message + "\nAn error occurred during work of the engine. If problem appears on unmodified version of the game on supported hardware, please contact developer. \nFile with error callstack was created. \n\ncallstack: \n" + ex.ToString(), "Platform is not supported", 0);
+            MessageBox((IntPtr)0, ex.Message + "\nAn error occurred during work of the engine. If problem appears on unmodified version of the game on supported hardware, please contact developer. \nFile with error callstack was created. \n\ncallstack: \n" + ex.ToString(), ex.Message, 0);
 
 
         }
