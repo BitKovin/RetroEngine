@@ -304,7 +304,7 @@ namespace RetroEngine
             graphics.GraphicsDevice.SetRenderTarget(null);
 
             if(Input.GetAction("test2").Holding())
-                return ssaoOutput;
+                return DepthPrepathOutput;
 
             return outputPath;
 

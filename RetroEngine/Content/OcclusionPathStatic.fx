@@ -16,6 +16,8 @@ float3 CameraPos;
 
 bool pointDistance;
 
+bool black;
+
 struct VertexShaderInput
 {
     float4 Position : POSITION0;
@@ -65,7 +67,8 @@ struct PS_Out
 float4 MainPS(VertexShaderOutput input) : SV_TARGET
 {
 
-    PS_Out output = (PS_Out)0;
+    if (black)
+        return(0,0,0,1);
 
     float depth = input.MyPosition.z;
 

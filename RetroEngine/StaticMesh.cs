@@ -528,9 +528,6 @@ namespace RetroEngine
 
                                 effect.Parameters["World"].SetValue(frameStaticMeshData.World);
 
-
-                                
-
                                 effect.Parameters["Masked"]?.SetValue(Masked);
                                 if (Masked)
                                 {

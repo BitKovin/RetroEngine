@@ -166,7 +166,10 @@ namespace RetroEngine.Entities.Light
         {
             lightData.Position = Position;
 
-            
+            if(Dynamic)
+            lightVisibilityCheckMesh.Scale = new Vector3(lightData.Radius);
+            lightVisibilityCheckMesh.Position = lightData.Position;
+
             lightSphere.Radius = lightData.Radius;
 
             if (IsBoundingSphereInFrustum(lightSphere) || Level.ChangingLevel)
@@ -261,8 +264,7 @@ namespace RetroEngine.Entities.Light
                 if (cameraDist >= DynamicUpdateDystance)
                     return;
 
-                if (lightVisibilityCheckMesh.IsVisible() == false && cameraDist>lightData.Radius*1.3f)
-                    return;
+                Console.WriteLine(lightVisibilityCheckMesh.IsVisible());
 
                 BoundingSphere boundingSphere = new BoundingSphere(lightData.Position, lightData.Radius);
 
