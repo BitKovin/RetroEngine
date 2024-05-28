@@ -46,6 +46,8 @@ namespace RetroEngine.Entities.Light
 
         internal RenderTargetCube renderTargetCube;
 
+        LightVisibilityCheckMesh lightVisibilityCheckMesh = new LightVisibilityCheckMesh();
+
         public override void FromData(EntityData data)
         {
             base.FromData(data);
@@ -77,7 +79,7 @@ namespace RetroEngine.Entities.Light
             //meshes.Add(mesh);
             //mesh.Visible = false;
 
-            DynamicUpdateDystance = (lightData.Radius + 10) * 5;
+            DynamicUpdateDystance = (lightData.Radius + 10) * 6;
 
             lightData.shadowData = this;
         }
@@ -255,8 +257,11 @@ namespace RetroEngine.Entities.Light
 
             if (isDynamic())
             {
+                float cameraDist = Vector3.Distance(Camera.finalizedPosition, Position);
+                if (cameraDist >= DynamicUpdateDystance)
+                    return;
 
-                if (Vector3.Distance(Camera.position, Position) >= DynamicUpdateDystance)
+                if (lightVisibilityCheckMesh.IsVisible() == false && cameraDist>lightData.Radius*1.3f)
                     return;
 
                 BoundingSphere boundingSphere = new BoundingSphere(lightData.Position, lightData.Radius);
@@ -334,7 +339,16 @@ namespace RetroEngine.Entities.Light
             return Matrix.Identity;
         }
 
-        
+        protected override void LoadAssets()
+        {
+            base.LoadAssets();
+
+            lightVisibilityCheckMesh.LoadFromFile("engine/models/pointLightVisibility.fbx");
+            lightVisibilityCheckMesh.texture = GameMain.Instance.render.black;
+            meshes.Add(lightVisibilityCheckMesh);
+
+        }
+
 
     }
 }

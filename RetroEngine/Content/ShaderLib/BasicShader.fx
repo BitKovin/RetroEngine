@@ -448,47 +448,6 @@ float3 ApplyNormalTexture(float3 sampledNormalColor, float3 worldNormal, float3 
     return worldNormalFromTexture;
 }
 
-float DistributionGGX(float3 N, float3 H, float a)
-{
-    float a2 = a * a;
-    float NdotH = max(dot(N, H), 0.0);
-    float NdotH2 = NdotH * NdotH;
-	
-    float nom = a2;
-    float denom = (NdotH2 * (a2 - 1.0) + 1.0);
-    denom = PI * denom * denom;
-	
-    return nom / denom;
-}
-
-PBRData CalculatePBR(float3 normal, float roughness, float metallic, float3 worldPos)
-{
-    PBRData output;
-    
-    roughness = clamp(roughness, 0.001f, 1);
-    
-    float3 reflectDir = reflect(normalize(viewPos - worldPos), normal);
-    
-    float3 viewDir = normalize(viewPos - worldPos);
-    float3 halfwayDir = normalize(-LightDirection + viewDir);
-    
-    halfwayDir *= DistributionGGX(normal, halfwayDir, roughness);
-    
-    //float specular = saturate(pow(max(dot(halfwayDir, normal), 0.0), 32));
-
-    float specular = pow(max(dot(normal, halfwayDir), 0.0), 1.5) / 4;
-    
-    float fresnelReflectance = metallic + (1.0 - metallic) * pow(1.0 - roughness, 5.0);
-    float reflectionAmount = fresnelReflectance * pow(roughness, 4.0);
-    
-    output.reflectiveness = reflectionAmount;
-    
-    output.specular = specular * GlobalLightColor;
-    
-    
-    return output;
-
-}
 
 float GeometrySmith(float3 N, float3 V, float3 L, float roughness)
 {
@@ -504,32 +463,43 @@ float FresnelSchlick(float cosTheta, float metallic)
     return metallic + (1.0 - metallic) * pow(1.0 - cosTheta, 5.0);
 }
 
-float CalculateSpecular(float3 worldPos,float3 normal, float3 lightDir, float roughness, float metallic)
+float DistributionGGX(float3 N, float3 H, float a)
 {
-    
+    float a2 = a * a;
+    float NdotH = max(dot(N, H), 0.0);
+    float NdotH2 = NdotH * NdotH;
+
+    float nom = a2;
+    float denom = (NdotH2 * (a2 - 1.0) + 1.0);
+    denom = PI * denom * denom;
+
+    return nom / denom;
+}
+
+float CalculateSpecular(float3 worldPos, float3 normal, float3 lightDir, float roughness, float metallic) {
+    // Common calculations
     float3 vDir = normalize(viewPos - worldPos);
-    
-    lightDir *= -1;
-    
+    lightDir *= -1.0f;
     float3 halfwayDir = normalize(vDir + lightDir);
     float NdotH = saturate(dot(normal, halfwayDir));
     float NdotV = saturate(dot(normal, vDir));
+    float NdotL = saturate(dot(normal, lightDir));
 
-    float specular = 0.0;
+    // GGX BRDF (distribution and visibility)
+    float roughnessSq = roughness * roughness;
+    float D = DistributionGGX(normal, halfwayDir, roughnessSq);
+    float G = GeometrySmith(normal, vDir, lightDir, roughnessSq);
 
-    if (NdotH > 0.0)
-    {
-        float roughnessSq = lerp(roughness * roughness, roughness, 0.5);
-        float D = DistributionGGX(normal, halfwayDir, roughnessSq);
-        float G = GeometrySmith(normal, vDir, lightDir, roughnessSq);
-        float F = FresnelSchlick(NdotV, metallic);
+    // Fresnel term (reflectivity based on metallic and viewing angle)
+    float F = FresnelSchlick(NdotV, metallic);
 
-        specular = D * G / (4 * NdotV * saturate(dot(normal, lightDir)) + 0.001) * lerp(F,1,0.3);
-    }
+    // Calculate specular based on BRDF components and energy conservation
+    float specular = D * G * F / (4.0f * NdotV * NdotL + 0.001f);
 
-    specular = max(specular,0);
-    
-    return specular * 1;
+    // Clamp specular to prevent negative values
+    specular = max(specular, 0.0f);
+
+    return specular;
 }
 
 float SampleShadowMap(sampler2D shadowMap, float2 coords, float compare)
@@ -925,6 +895,7 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness, float me
     
     
     float3 globalLight = GlobalBrightness * GlobalLightColor * lerp(1, 0.6, max(dot(normal, float3(0, -1, 0)),0));
+    globalLight*=ao;
     
     light = max(light, 0);
     
