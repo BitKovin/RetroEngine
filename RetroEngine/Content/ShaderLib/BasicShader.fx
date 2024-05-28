@@ -677,11 +677,12 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
     if (tex2D(ShadowMapSampler,lightCoords.xy).r<0.01)
         return 0;
     
+
     if (lightCoords.x >= 0 && lightCoords.x <= 1 && lightCoords.y >= 0 && lightCoords.y <= 1)
     {
         
             
-        if (dist < 8 && abs(dot(input.Normal, -LightDirection))>0.3)
+        if (dist < 8 ) //&& abs(dot(input.TangentNormal, -LightDirection))>0.3
         {
             if (lightCoordsVeryClose.x >= 0 && lightCoordsVeryClose.x <= 1 && lightCoordsVeryClose.y >= 0 && lightCoordsVeryClose.y <= 1)
             {
@@ -778,11 +779,18 @@ float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal, float ro
     if(distanceToLight> LightRadiuses[i])
         return float3(0,0,0);
 
-    float offsetScale = 1 / (LightResolutions[i] / 60) / lerp(distanceToLight,1, 0.7);
-    //offsetScale *= lerp(abs(dot(normal, normalize(lightVector))), 1, 0.5);
+    
+
+    float offsetScale = 1 / (LightResolutions[i] / 40) / lerp(distanceToLight,1, 0.7);
+    offsetScale *= lerp(abs(dot(normal, normalize(lightVector))), 0.7, 1);
     float notShadow = 1;
 
-    if (LightResolutions[i] > 10)
+    if(dot(pixelInput.TangentNormal, normalize(lightVector))<0.01)
+    {
+        notShadow = 0;
+    }
+
+    if (LightResolutions[i] > 10 && notShadow>0)
     {
         float3 lightDir = normalize(lightVector);
         float shadowBias = 0.05;  // Adjust this bias for your specific scene
@@ -879,8 +887,14 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness, float me
     lightCoordsVeryClose.y = 1.0f - lightCoordsVeryClose.y;
 
     
-    shadow += GetShadow(lightCoords,lightCoordsClose,lightCoordsVeryClose, input);
     
+    if(dot(normal, -LightDirection)<0.01)
+    {
+        shadow+=1;
+    }else
+    {
+    shadow += GetShadow(lightCoords,lightCoordsClose,lightCoordsVeryClose, input);
+    }
     
     
     shadow += 1 - max(0, dot(normal, normalize(-LightDirection) * 1));
