@@ -264,12 +264,15 @@ namespace RetroEngine.Entities.Light
                 if (cameraDist >= DynamicUpdateDystance)
                     return;
 
-                Console.WriteLine(lightVisibilityCheckMesh.IsVisible());
 
                 BoundingSphere boundingSphere = new BoundingSphere(lightData.Position, lightData.Radius);
 
                 if (Camera.frustum.Contains(boundingSphere) == ContainmentType.Disjoint)
                     return;
+
+                if (lightVisibilityCheckMesh.IsVisible() == false && cameraDist > lightData.Radius * 1.2) 
+                    return;
+
 
             }
 

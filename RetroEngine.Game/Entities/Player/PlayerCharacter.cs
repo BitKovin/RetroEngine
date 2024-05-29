@@ -720,7 +720,7 @@ namespace RetroEngine.Game.Entities.Player
         public void AddWeapon(WeaponData weaponData)
         {
             weapons.Add(weaponData);
-                SwitchToSlot(weapons.Count - 1);
+                SwitchToSlot(weapons.Count - 1,true);
         }
 
         public float GetHealth()
