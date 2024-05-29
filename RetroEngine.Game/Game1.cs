@@ -70,6 +70,7 @@ namespace RetroEngine.Game
             {
                 Entity npc = new NPCBase();
                 npc.Position = new Vector3(0, i*2.2f + 2, 0);
+                npc.Start();
                 Level.GetCurrent().AddEntity(npc);
             }
 

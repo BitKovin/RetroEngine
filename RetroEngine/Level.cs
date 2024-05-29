@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RetroEngine;
 using RetroEngine.Entities;
 using RetroEngine.Map;
+using RetroEngine.SaveSystem;
 using RetroEngine.UI;
 using SharpFont;
 using System;
@@ -21,6 +22,8 @@ namespace RetroEngine
         public List<Entity> entities;
 
         internal int entityID = 0;
+
+        internal List<int> DeletedIds = new List<int>();
 
         List<StaticMesh> renderList = new List<StaticMesh>();
 
@@ -93,10 +96,12 @@ namespace RetroEngine
                 return;
             }
 
-            AssetRegistry.ConstantCache.Clear();
-            AssetRegistry.ClearAllTextures();
-            StaticMesh.ClearCache();
-
+            if (SaveManager.HasPendingLoad() ==false) 
+            {
+                AssetRegistry.ConstantCache.Clear();
+                AssetRegistry.ClearAllTextures();
+                StaticMesh.ClearCache();
+            }
             Time.DeltaTime = 0;
 
             Navigation.WaitForProcess();
@@ -144,7 +149,6 @@ namespace RetroEngine
 
             LoadingScreen.Update(0.7f);
 
-            GameMain.Instance.OnLevelChanged();
 
             Physics.Update();
 
@@ -171,6 +175,10 @@ namespace RetroEngine
 
             StaticMesh.loadedScenes.Clear();
 
+            GameMain.Instance.OnLevelChanged();
+
+            GameMain.Instance.curentLevel.LoadAssets();
+            AssetRegistry.WaitForAssetsToLoad();
             GameMain.SkipFrames = 2;
 
             GC.Collect();
@@ -354,7 +362,8 @@ namespace RetroEngine
 
                         foreach (StaticMesh mesh in entity.meshes)
                             if (entity is not null)
-
+                            {
+                                if(entity.loadedAssets)
                                 if (mesh is not null)
                                 {
                                     if (mesh.destroyed) continue;
@@ -362,6 +371,7 @@ namespace RetroEngine
 
                                     mesh.RenderPreparation();
                                 }
+                            }
                     }
             });
 

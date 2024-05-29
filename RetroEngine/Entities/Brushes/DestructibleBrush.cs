@@ -20,6 +20,8 @@ namespace RetroEngine.Entities.Brushes
         public DestructibleBrush() 
         {
             mergeBrushes = true;
+
+            SaveGame = true;
         }
 
         public override void FromData(EntityData data)

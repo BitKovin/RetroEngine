@@ -115,6 +115,14 @@ namespace RetroEngine.Game.Entities.Weapons
                 DecreaseAim();
             }
 
+            if(Input.GetAction("attack2").Pressed())
+            {
+                BoxDynamic boxDynamic = new BoxDynamic();
+                boxDynamic.Position = Camera.position + Camera.rotation.GetForwardVector()*2;
+                boxDynamic.Start();
+                Level.GetCurrent().AddEntity(boxDynamic);
+            }
+
             aim = Math.Clamp(aim, 0, 1);
 
             Offset = Vector3.Lerp(Vector3.Zero, new Vector3(-0.052488543f, 0.07340118f, -0.12f), aim);

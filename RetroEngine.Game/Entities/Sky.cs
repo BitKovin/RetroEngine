@@ -17,9 +17,10 @@ namespace RetroEngine.Game.Entities
 
             mesh.LoadFromFile("models/sky.obj");
             mesh.texture = AssetRegistry.LoadCubeTextureFromFile("textures/sky/sky.jpg");
-            meshes.Add(mesh);
             mesh.Static = true;
             mesh.Shader = AssetRegistry.GetShaderFromName("CubeMapVisualizer");
+
+            meshes.Add(mesh);
         }
 
         public override void FinalizeFrame()

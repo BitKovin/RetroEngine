@@ -10,15 +10,27 @@ namespace RetroEngine.SaveSystem
 {
     public static class SaveManager
     {
+
+        internal static LevelSaveData pendingLoadData;
+
+        public static bool HasPendingLoad()
+        {
+            return pendingLoadData.levelName != null;
+        }
+
         public static LevelSaveData GetCurrentLevelSaveData()
         {
-
             LevelSaveData saveData = new LevelSaveData();
+            lock (Level.GetCurrent())
+            {
 
-            saveData.levelName = Level.GetCurrent().Name;
+                saveData.levelName = Level.GetCurrent().Name;
 
-            saveData.entities = GetEntitySaveDatas();
+                saveData.entities = GetEntitySaveDatas();
 
+                saveData.entityId = Level.GetCurrent().entityID;
+                saveData.deletedIDs = new List<int>(Level.GetCurrent().DeletedIds);
+            }
             return saveData;
 
         }
@@ -93,6 +105,19 @@ namespace RetroEngine.SaveSystem
 
         public static void LoadGameFromData(LevelSaveData levelSaveData)
         {
+
+            Level.GetCurrent().entityID = levelSaveData.entityId;
+
+            foreach(int id in levelSaveData.deletedIDs)
+            {
+                Entity targetEntity = Level.GetCurrent().FindEntityById(id);
+
+                if (targetEntity == null) continue;
+
+                targetEntity.Destroy();
+
+            }
+
             foreach(var entity in levelSaveData.entities)
             {
                 Entity targetEntity = Level.GetCurrent().FindEntityByName(entity.Name);
@@ -100,9 +125,18 @@ namespace RetroEngine.SaveSystem
                 if(targetEntity==null)
                     targetEntity = Level.GetCurrent().FindEntityById(entity.id);
 
-                if(targetEntity == null)
+                if (targetEntity == null)
                 {
-                    Logger.Log($"failed to find entity with name '{entity.Name} and id '{entity.id}''");
+                    targetEntity = LevelObjectFactory.CreateByTechnicalName(entity.className);
+                    Level.GetCurrent().AddEntity(targetEntity);
+                    targetEntity.Start();
+                    targetEntity.LoadAssetsIfNeeded();
+
+                }
+
+                if (targetEntity == null)
+                {
+                    Logger.Log($"failed to find or create entity with name '{entity.Name} and id '{entity.id}''");
                     continue;
                 }
 
@@ -116,15 +150,22 @@ namespace RetroEngine.SaveSystem
 
             LevelSaveData levelSaveData = GetLevelSaveDataFromFile(path);
 
-            if (levelSaveData.levelName == "")
-            {
+            pendingLoadData = levelSaveData;
 
-                Logger.Log("failed to load save game");
+            Level.LoadFromFile(levelSaveData.levelName);
+
+        }
+
+        internal static void LoadSaveIfPending()
+        {
+            if (pendingLoadData.levelName == "" || pendingLoadData.levelName == null)
+            {
                 return;
             }
 
-            LoadGameFromData(levelSaveData);
+            LoadGameFromData(pendingLoadData);
 
+            pendingLoadData = new LevelSaveData();
         }
 
     }
@@ -143,6 +184,8 @@ namespace RetroEngine.SaveSystem
     {
         public string levelName;
         public List<EntitySaveData> entities;
+        public int entityId;
+        public List<int> deletedIDs;
     }
 
 }

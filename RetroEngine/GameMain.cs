@@ -560,6 +560,9 @@ namespace RetroEngine
         {
             //Time.gameTime = 0;
             render.shadowPassRenderDelay = new Delay();
+
+            SaveSystem.SaveManager.LoadSaveIfPending();
+
         }
 
     }

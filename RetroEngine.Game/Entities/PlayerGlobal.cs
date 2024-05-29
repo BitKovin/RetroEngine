@@ -34,19 +34,20 @@ namespace RetroEngine.Game.Entities
                 GameMain.Instance.paused = !GameMain.Instance.paused;
 
             }
-
-            if (Input.GetAction("test").Pressed())
+            if (GameMain.Instance.paused == false)
             {
-                SaveSystem.SaveManager.SaveGame();
+                if (Input.GetAction("test").Pressed())
+                {
+                    SaveSystem.SaveManager.SaveGame();
 
+                }
+
+                if (Input.GetAction("test2").Pressed())
+                {
+                    SaveSystem.SaveManager.LoadGameFromPath(AssetRegistry.ROOT_PATH + "save.sav");
+
+                }
             }
-
-            if(Input.GetAction("test2").Pressed())
-            {
-                SaveSystem.SaveManager.LoadGameFromPath(AssetRegistry.ROOT_PATH + "save.sav");
-
-            }
-
 
         }
 

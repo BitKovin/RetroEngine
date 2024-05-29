@@ -45,7 +45,7 @@ namespace RetroEngine
 
         bool pendingDestroy = false;
 
-        public int Id;
+        public int Id = -1;
 
         public float Health = 0;
 
@@ -209,6 +209,13 @@ namespace RetroEngine
             }
 
             meshes.Clear();
+
+            if(SaveGame)
+            lock(Level.GetCurrent().DeletedIds)
+            {
+                Level.GetCurrent().DeletedIds.Add(Id);
+                Logger.Log("Deleted entity with id " + Id.ToString());
+            }
 
             GameMain.Instance.curentLevel.entities.Remove(this);
             Dispose();
