@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Framework;
 using RetroEngine;
 using RetroEngine.Map;
+using static Assimp.Metadata;
 
 namespace RetroEngine
 {
@@ -29,7 +30,7 @@ namespace RetroEngine
         public bool UpdateWhilePaused = false;
         public bool LateUpdateWhilePaused = false;
 
-        public string name;
+        public string name = "";
 
         public List<string> Tags = new List<string>();
 
@@ -49,6 +50,7 @@ namespace RetroEngine
 
         public bool mergeBrushes = false;
 
+
         public Entity()
         {
 
@@ -58,7 +60,6 @@ namespace RetroEngine
         public virtual void Start()
         {
             SpawnTime = Time.gameTime;
-            Id = Level.GetCurrent().GetNextEntityID();
         }
 
         public virtual void Update()
@@ -72,6 +73,8 @@ namespace RetroEngine
         {
             Layer = (int)data.GetPropertyFloat("_tb_layer");
             name = data.GetPropertyString("name");
+
+
         }
 
         public virtual void AsyncUpdate()
@@ -90,6 +93,42 @@ namespace RetroEngine
         }
 
         public virtual void VisualUpdate()
+        {
+
+        }
+
+        public SaveSystem.EntitySaveData GetSaveData()
+        {
+
+            SaveSystem.EntitySaveData saveData = new SaveSystem.EntitySaveData();
+
+            saveData.Name = name;
+            saveData.id = Id;
+            saveData.className = "";
+            System.Reflection.MemberInfo info = this.GetType();
+            object[] attributes = info.GetCustomAttributes(true);
+
+            for (int i = 0; i < attributes.Length; i++)
+            {
+                if (attributes[i] is LevelObjectAttribute)
+                {
+                    saveData.className = ((LevelObjectAttribute)attributes[i]).TechnicalName;
+                    break;
+                }
+            }
+
+            saveData = SaveData(saveData);
+
+            return saveData;
+
+        }
+
+        protected virtual SaveSystem.EntitySaveData SaveData(SaveSystem.EntitySaveData baseData)
+        {
+            return baseData;
+        }
+
+        public virtual void LoadData(SaveSystem.EntitySaveData Data)
         {
 
         }

@@ -35,6 +35,13 @@ namespace RetroEngine.Game.Entities
 
             }
 
+            if (Input.GetAction("test").Pressed())
+            {
+                SaveSystem.SaveManager.SaveGame();
+
+            }
+
+
         }
 
     }

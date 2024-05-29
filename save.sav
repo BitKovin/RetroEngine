@@ -1,0 +1,475 @@
+{
+  "levelName": "test2.map",
+  "entities": [
+    {
+      "Name": "",
+      "className": "worldspawn",
+      "id": -1
+    },
+    {
+      "Name": "",
+      "className": "info_player_start",
+      "id": 0
+    },
+    {
+      "Name": "",
+      "className": "info.navpoint",
+      "id": 1
+    },
+    {
+      "Name": "",
+      "className": "info.navpoint",
+      "id": 2
+    },
+    {
+      "Name": "",
+      "className": "info.navpoint",
+      "id": 3
+    },
+    {
+      "Name": "",
+      "className": "info.navpoint",
+      "id": 4
+    },
+    {
+      "Name": "",
+      "className": "destructible",
+      "id": 5
+    },
+    {
+      "Name": "",
+      "className": "destructible",
+      "id": 6
+    },
+    {
+      "Name": "",
+      "className": "static_mesh",
+      "id": 7
+    },
+    {
+      "Name": "",
+      "className": "static_mesh",
+      "id": 8
+    },
+    {
+      "Name": "",
+      "className": "light_point",
+      "id": 9
+    },
+    {
+      "Name": "",
+      "className": "groupBrush",
+      "id": 10
+    },
+    {
+      "Name": "",
+      "className": "light_point",
+      "id": 11
+    },
+    {
+      "Name": "",
+      "className": "light_point",
+      "id": 12
+    },
+    {
+      "Name": "",
+      "className": "light_point",
+      "id": 13
+    },
+    {
+      "Name": "",
+      "className": "light_point",
+      "id": 14
+    },
+    {
+      "Name": "",
+      "className": "light_point",
+      "id": 15
+    },
+    {
+      "Name": "",
+      "className": "light_point",
+      "id": 16
+    },
+    {
+      "Name": "",
+      "className": "light_point",
+      "id": 17
+    },
+    {
+      "Name": "",
+      "className": "light_point",
+      "id": 18
+    },
+    {
+      "Name": "",
+      "className": "light_point",
+      "id": 19
+    },
+    {
+      "Name": "",
+      "className": "light_point",
+      "id": 20
+    },
+    {
+      "Name": "",
+      "className": "light_point",
+      "id": 21
+    },
+    {
+      "Name": "",
+      "className": "light_point",
+      "id": 22
+    },
+    {
+      "Name": "",
+      "className": "light_point",
+      "id": 23
+    },
+    {
+      "Name": "",
+      "className": "light_point",
+      "id": 24
+    },
+    {
+      "Name": "",
+      "className": "light_point",
+      "id": 25
+    },
+    {
+      "Name": "",
+      "className": "light_point",
+      "id": 26
+    },
+    {
+      "Name": "",
+      "className": "cubeMap",
+      "id": 27
+    },
+    {
+      "Name": "",
+      "className": "cubeMap",
+      "id": 28
+    },
+    {
+      "Name": "",
+      "className": "cubeMap",
+      "id": 29
+    },
+    {
+      "Name": "",
+      "className": "light_point",
+      "id": 30
+    },
+    {
+      "Name": "",
+      "className": "ent_cat_point",
+      "id": 31
+    },
+    {
+      "Name": "",
+      "className": "info.navpoint",
+      "id": 32
+    },
+    {
+      "Name": "",
+      "className": "cubeMap",
+      "id": 33
+    },
+    {
+      "Name": "",
+      "className": "light_point",
+      "id": 34
+    },
+    {
+      "Name": "",
+      "className": "light_point",
+      "id": 35
+    },
+    {
+      "Name": "",
+      "className": "cubeMap",
+      "id": 36
+    },
+    {
+      "Name": "",
+      "className": "light_point",
+      "id": 37
+    },
+    {
+      "Name": "",
+      "className": "light_point",
+      "id": 38
+    },
+    {
+      "Name": "",
+      "className": "light_point",
+      "id": 39
+    },
+    {
+      "Name": "",
+      "className": "light_point",
+      "id": 40
+    },
+    {
+      "Name": "",
+      "className": "light_point",
+      "id": 41
+    },
+    {
+      "Name": "",
+      "className": "light_point",
+      "id": 42
+    },
+    {
+      "Name": "",
+      "className": "light_point",
+      "id": 43
+    },
+    {
+      "Name": "",
+      "className": "light_point",
+      "id": 44
+    },
+    {
+      "Name": "",
+      "className": "light_point",
+      "id": 45
+    },
+    {
+      "Name": "",
+      "className": "light_point",
+      "id": 46
+    },
+    {
+      "Name": "",
+      "className": "light_point",
+      "id": 47
+    },
+    {
+      "Name": "",
+      "className": "light_point",
+      "id": 48
+    },
+    {
+      "Name": "",
+      "className": "cubeMap",
+      "id": 49
+    },
+    {
+      "Name": "",
+      "className": "light_point",
+      "id": 50
+    },
+    {
+      "Name": "",
+      "className": "light_point",
+      "id": 51
+    },
+    {
+      "Name": "",
+      "className": "light_point",
+      "id": 52
+    },
+    {
+      "Name": "",
+      "className": "light_point",
+      "id": 53
+    },
+    {
+      "Name": "",
+      "className": "light_point",
+      "id": 54
+    },
+    {
+      "Name": "",
+      "className": "light_point",
+      "id": 55
+    },
+    {
+      "Name": "",
+      "className": "light_point",
+      "id": 56
+    },
+    {
+      "Name": "",
+      "className": "light_point",
+      "id": 57
+    },
+    {
+      "Name": "",
+      "className": "light_point",
+      "id": 58
+    },
+    {
+      "Name": "",
+      "className": "light_point",
+      "id": 59
+    },
+    {
+      "Name": "",
+      "className": "cubeMap",
+      "id": 60
+    },
+    {
+      "Name": "",
+      "className": "light_point",
+      "id": 61
+    },
+    {
+      "Name": "",
+      "className": "light_point",
+      "id": 62
+    },
+    {
+      "Name": "",
+      "className": "light_point",
+      "id": 63
+    },
+    {
+      "Name": "",
+      "className": "light_point",
+      "id": 64
+    },
+    {
+      "Name": "",
+      "className": "light_point",
+      "id": 65
+    },
+    {
+      "Name": "",
+      "className": "trigger",
+      "id": 66
+    },
+    {
+      "Name": "",
+      "className": "light_point",
+      "id": 67
+    },
+    {
+      "Name": "",
+      "className": "weaponPickup",
+      "id": 68
+    },
+    {
+      "Name": "",
+      "className": "func_group",
+      "id": 69
+    },
+    {
+      "Name": "",
+      "className": "info.navpoint",
+      "id": 70
+    },
+    {
+      "Name": "",
+      "className": "info.navpoint",
+      "id": 71
+    },
+    {
+      "Name": "",
+      "className": "info.navpoint",
+      "id": 72
+    },
+    {
+      "Name": "",
+      "className": "info.navpoint",
+      "id": 73
+    },
+    {
+      "Name": "",
+      "className": "info.navpoint",
+      "id": 74
+    },
+    {
+      "Name": "",
+      "className": "info.navpoint",
+      "id": 75
+    },
+    {
+      "Name": "",
+      "className": "info.navpoint",
+      "id": 76
+    },
+    {
+      "Name": "",
+      "className": "info.navpoint",
+      "id": 77
+    },
+    {
+      "Name": "",
+      "className": "info.navpoint",
+      "id": 78
+    },
+    {
+      "Name": "",
+      "className": "info.navpoint",
+      "id": 79
+    },
+    {
+      "Name": "",
+      "className": "info.navpoint",
+      "id": 80
+    },
+    {
+      "Name": "",
+      "className": "info.navpoint",
+      "id": 81
+    },
+    {
+      "Name": "",
+      "className": "info.navpoint",
+      "id": 82
+    },
+    {
+      "Name": "",
+      "className": "info.navpoint",
+      "id": 83
+    },
+    {
+      "Name": "",
+      "className": "",
+      "id": 84
+    },
+    {
+      "Name": "",
+      "className": "",
+      "id": 85
+    },
+    {
+      "Name": "",
+      "className": "",
+      "id": 86
+    },
+    {
+      "Name": "",
+      "className": "",
+      "id": 87
+    },
+    {
+      "Name": "",
+      "className": "",
+      "id": 88
+    },
+    {
+      "Name": "",
+      "className": "",
+      "id": 89
+    },
+    {
+      "Name": "",
+      "className": "",
+      "id": 90
+    },
+    {
+      "Name": "",
+      "className": "",
+      "id": 91
+    },
+    {
+      "Name": "",
+      "className": "",
+      "id": 92
+    }
+  ]
+}

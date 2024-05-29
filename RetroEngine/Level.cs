@@ -20,7 +20,7 @@ namespace RetroEngine
     {
         public List<Entity> entities;
 
-        int entityID = 0;
+        internal int entityID = 0;
 
         List<StaticMesh> renderList = new List<StaticMesh>();
 
@@ -132,6 +132,7 @@ namespace RetroEngine
             AssetRegistry.AllowGeneratingMipMaps = true;
 
             LoadingScreen.Update(0.1f);
+
 
             MapData mapData = MapParser.MapParser.ParseMap(path);
 
@@ -480,8 +481,37 @@ namespace RetroEngine
         public Entity AddEntity(Entity ent)
         {
             entities.Add(ent);
-
+            ent.Id = entityID;
+            entityID += 1;
             return ent;
+        }
+
+        public Entity FindEntityByName(string name)
+        {
+            lock (entities)
+            {
+                var list = entities.ToArray();
+                foreach (Entity ent in entities)
+                {
+                    if(ent.name==name)
+                        return ent;
+                }
+            }
+            return null;
+        }
+
+        public Entity FindEntityById(int id)
+        {
+            lock (entities)
+            {
+                var list = entities.ToArray();
+                foreach (Entity ent in entities)
+                {
+                    if (ent.Id == id)
+                        return ent;
+                }
+            }
+            return null;
         }
 
         public void Dispose()

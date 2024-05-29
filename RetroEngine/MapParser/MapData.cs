@@ -54,6 +54,8 @@ namespace RetroEngine.Map
 
             }
 
+            level.entityID = 0;
+
             foreach (EntityData ent in Entities)
             {
 
@@ -68,7 +70,7 @@ namespace RetroEngine.Map
                     if (entity is null)
                         entity = new Entity();
 
-                    entity.name = ent.Classname;
+
 
                     List<BrushFaceMesh> faces = new List<BrushFaceMesh>();
 
@@ -144,7 +146,7 @@ namespace RetroEngine.Map
                     else
                         entity.meshes.AddRange(faces);
 
-                    level.entities.Add(entity);
+                    level.AddEntity(entity);
                     entity.FromData(ent);
                 }
                 else
@@ -157,9 +159,11 @@ namespace RetroEngine.Map
                         entity.Position = position;
                     }
 
+                    
+
                     entity.FromData(ent);
 
-                    level.entities.Add(entity);
+                    level.AddEntity(entity);
                     //entity.Start();
                 }
 
