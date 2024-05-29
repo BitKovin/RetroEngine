@@ -270,7 +270,9 @@ namespace RetroEngine.Entities.Light
                 if (Camera.frustum.Contains(boundingSphere) == ContainmentType.Disjoint)
                     return;
 
-                if (lightVisibilityCheckMesh.IsVisible() == false && cameraDist > lightData.Radius * 1.2) 
+                Console.WriteLine(lightVisibilityCheckMesh.IsVisible());
+
+                if (lightVisibilityCheckMesh.IsVisible() == false && cameraDist > lightData.Radius * 1.2 && false) 
                     return;
 
 

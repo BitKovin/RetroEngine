@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Reflection.Metadata;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using BulletSharp;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -18,8 +21,10 @@ namespace RetroEngine
 
         public bool Static = false;
 
+        [JsonInclude]
         public Vector3 Position;
 
+        [JsonInclude]
         public Vector3 Rotation;
 
         public List<StaticMesh> meshes = new List<StaticMesh>();
@@ -49,6 +54,8 @@ namespace RetroEngine
         public int Layer = 0;
 
         public bool mergeBrushes = false;
+
+        public bool SaveGame = false;
 
 
         public Entity()
@@ -117,7 +124,15 @@ namespace RetroEngine
                 }
             }
 
-            saveData = SaveData(saveData);
+            JsonSerializerOptions options = new JsonSerializerOptions();
+
+            foreach(var conv in Helpers.JsonConverters.GetAll())
+                options.Converters.Add(conv);
+            ;
+
+            saveData.saveData = JsonSerializer.Serialize(this, options);
+
+            //saveData = SaveData(saveData);
 
             return saveData;
 
@@ -130,6 +145,38 @@ namespace RetroEngine
 
         public virtual void LoadData(SaveSystem.EntitySaveData Data)
         {
+            JsonSerializerOptions options = new JsonSerializerOptions();
+
+            foreach (var conv in Helpers.JsonConverters.GetAll())
+                options.Converters.Add(conv);
+            
+            Entity ent = JsonSerializer.Deserialize(Data.saveData, this.GetType(), options) as Entity;
+            if(ent == null)
+            {
+                Logger.Log("failed to deserialize entity");
+                return;
+            }
+
+            // Copy data from ent to this, only if the field/property has [JsonInclude] attribute
+            Type type = this.GetType();
+            foreach (var field in type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
+            {
+                if (field.GetCustomAttribute<JsonIncludeAttribute>() != null)
+                {
+                    var value = field.GetValue(ent);
+                    field.SetValue(this, value);
+                }
+            }
+
+            /*
+            foreach (var property in type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
+            {
+                if (property.GetCustomAttribute<JsonIncludeAttribute>() != null && property.CanWrite)
+                {
+                    var value = property.GetValue(ent);
+                    property.SetValue(this, value);
+                }
+            }*/
 
         }
 

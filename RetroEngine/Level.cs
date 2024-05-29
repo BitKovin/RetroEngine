@@ -488,6 +488,9 @@ namespace RetroEngine
 
         public Entity FindEntityByName(string name)
         {
+            if (name == null || name == "")
+                return null;
+
             lock (entities)
             {
                 var list = entities.ToArray();

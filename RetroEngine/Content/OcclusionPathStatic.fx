@@ -68,7 +68,7 @@ float4 MainPS(VertexShaderOutput input) : SV_TARGET
 {
 
     if (black)
-        return(0,0,0,1);
+        return(0,0,0,0.000000000000000000000000000001);
 
     float depth = input.MyPosition.z;
 

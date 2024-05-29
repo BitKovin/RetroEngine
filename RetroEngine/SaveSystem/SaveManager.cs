@@ -58,6 +58,7 @@ namespace RetroEngine.SaveSystem
                 {
                     lock(entity)
                     {
+                        if (entity.SaveGame == false) continue;
                         EntitySaveData data = entity.GetSaveData();
                         saveData.Add(data);
                     }
@@ -67,6 +68,65 @@ namespace RetroEngine.SaveSystem
             return saveData;
         }
 
+        public static LevelSaveData GetLevelSaveDataFromFile(string path)
+        {
+            if(File.Exists(path) == false)
+            {
+                Logger.Log($"save file with location: {path} not found");
+                return new LevelSaveData();
+            }
+            string text = File.ReadAllText(path);
+
+            JsonSerializerOptions options = new JsonSerializerOptions();
+
+            options.IncludeFields = true;
+
+#if DEBUG
+            options.WriteIndented = true;
+#endif
+
+            LevelSaveData levelSaveData = JsonSerializer.Deserialize<LevelSaveData>(text, options);
+
+            return levelSaveData;
+
+        }
+
+        public static void LoadGameFromData(LevelSaveData levelSaveData)
+        {
+            foreach(var entity in levelSaveData.entities)
+            {
+                Entity targetEntity = Level.GetCurrent().FindEntityByName(entity.Name);
+
+                if(targetEntity==null)
+                    targetEntity = Level.GetCurrent().FindEntityById(entity.id);
+
+                if(targetEntity == null)
+                {
+                    Logger.Log($"failed to find entity with name '{entity.Name} and id '{entity.id}''");
+                    continue;
+                }
+
+                targetEntity.LoadData(entity);
+
+            }
+        }
+
+        public static void LoadGameFromPath(string path)
+        {
+
+            LevelSaveData levelSaveData = GetLevelSaveDataFromFile(path);
+
+            if (levelSaveData.levelName == "")
+            {
+
+                Logger.Log("failed to load save game");
+                return;
+            }
+
+            LoadGameFromData(levelSaveData);
+
+        }
+
     }
 
     public struct EntitySaveData
@@ -74,6 +134,9 @@ namespace RetroEngine.SaveSystem
         public string Name;
         public string className;
         public int id;
+
+        public string saveData;
+
     }
 
     public struct LevelSaveData

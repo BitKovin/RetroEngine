@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Audio;
 using RetroEngine.Audio;
 using Microsoft.Xna.Framework;
 using RetroEngine.Entities;
+using RetroEngine.SaveSystem;
 
 namespace RetroEngine.Game.Entities
 {
@@ -30,6 +31,7 @@ namespace RetroEngine.Game.Entities
 
             mesh.LoadFromFile("models/cube.obj");
 
+            SaveGame = true;
 
             mesh.texture = AssetRegistry.LoadTextureFromFile("textures/foil.png");
             mesh.normalTexture = AssetRegistry.LoadTextureFromFile("textures/foil_n.png");
@@ -74,6 +76,16 @@ namespace RetroEngine.Game.Entities
 
             mesh.Position = Position;
             mesh.Rotation = Rotation;
+
+        }
+
+        public override void LoadData(EntitySaveData Data)
+        {
+            Console.WriteLine(Position);
+            base.LoadData(Data);
+            Console.WriteLine(Position);
+
+            body.SetPosition(Position);
 
         }
 

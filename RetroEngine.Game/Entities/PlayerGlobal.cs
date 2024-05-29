@@ -41,6 +41,12 @@ namespace RetroEngine.Game.Entities
 
             }
 
+            if(Input.GetAction("test2").Pressed())
+            {
+                SaveSystem.SaveManager.LoadGameFromPath(AssetRegistry.ROOT_PATH + "save.sav");
+
+            }
+
 
         }
 
