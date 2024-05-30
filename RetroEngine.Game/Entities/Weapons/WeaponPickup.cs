@@ -13,12 +13,17 @@ namespace RetroEngine.Game.Entities.Weapons
 {
 
     [LevelObject("weaponPickup")]
-    internal class WeaponPickup : Trigger
+    public class WeaponPickup : Trigger
     {
 
         string typeName = "weapon_pistol_double";
 
         StaticMesh staticMesh = new StaticMesh();
+
+        public WeaponPickup()
+        {
+            SaveGame = true;
+        }
 
         public override void FromData(EntityData data)
         {

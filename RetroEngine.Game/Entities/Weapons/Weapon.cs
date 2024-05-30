@@ -6,15 +6,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace RetroEngine.Game.Entities.Weapons
 {
 
+    [JsonSerializable(typeof(WeaponData))]
     public class WeaponData
     {
-
+        [JsonInclude]
         public Type weaponType;
+        [JsonInclude]
         public int ammo = 0;
 
         public WeaponData() 

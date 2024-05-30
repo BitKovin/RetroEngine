@@ -56,7 +56,7 @@ namespace RetroEngine.Game
 
         public override void OnLevelChanged()
         {
-            base.OnLevelChanged();
+            
 
             Level.GetCurrent().AddEntity(new Entities.Player.PlayerGlobal());
 
@@ -72,7 +72,7 @@ namespace RetroEngine.Game
                 npc.Start();
                 Level.GetCurrent().AddEntity(npc);
             }
-
+            base.OnLevelChanged();
         }
 
         void CreateInputActions()

@@ -13,7 +13,32 @@ namespace RetroEngine.Helpers
     {
         public static List<JsonConverter> GetAll()
         {
-            return new List<JsonConverter> {new Vector3Converter() };
+            return new List<JsonConverter> {new Vector3Converter(), new TypeConverter() };
+        }
+    }
+
+    public class TypeConverter : JsonConverter<Type>
+    {
+        public override Type Read(
+            ref Utf8JsonReader reader,
+            Type typeToConvert,
+            JsonSerializerOptions options
+            )
+        {
+            string assemblyQualifiedName = reader.GetString();
+            return Type.GetType(assemblyQualifiedName);
+            //throw new NotSupportedException();
+        }
+
+        public override void Write(
+            Utf8JsonWriter writer,
+            Type value,
+            JsonSerializerOptions options
+            )
+        {
+            string assemblyQualifiedName = value.AssemblyQualifiedName;
+            // Use this with caution, since you are disclosing type information.
+            writer.WriteStringValue(assemblyQualifiedName);
         }
     }
 

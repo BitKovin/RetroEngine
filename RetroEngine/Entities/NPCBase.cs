@@ -1,26 +1,31 @@
 ﻿using BulletSharp;
 using Microsoft.Xna.Framework;
+using RetroEngine.SaveSystem;
 using RetroEngine.Skeletal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using static RetroEngine.MathHelper;
 
 namespace RetroEngine.Entities
 {
+    [LevelObject("npc_base")]
     public class NPCBase : Entity
     {
-
-        Vector3 MoveDirection = Vector3.Zero;
-        Vector3 DesiredMoveDirection = Vector3.Zero;
+        [JsonInclude]
+        public Vector3 MoveDirection = Vector3.Zero;
+        [JsonInclude]
+        public Vector3 DesiredMoveDirection = Vector3.Zero;
 
         SkeletalMesh mesh = new SkeletalMesh();
 
         TestAnimator animator = new TestAnimator();
 
-        float speed = 5f;
+        [JsonInclude]
+        public float speed = 5f;
 
         float maxSpeed = 5;
 
@@ -30,7 +35,8 @@ namespace RetroEngine.Entities
         static List<NPCBase> currentUpdateNPCs = new List<NPCBase>();
         static int currentUpdateIndex = 0;
 
-        Vector3 targetLocation = Vector3.Zero;
+        [JsonInclude]
+        public Vector3 targetLocation = Vector3.Zero;
 
         RigidBody body;
 
@@ -47,6 +53,11 @@ namespace RetroEngine.Entities
         protected float AnimationDistance = 60;
         protected float ShadowDistance = 20;
         protected bool AnimationAlwaysUpdateTime = true;
+
+        public NPCBase()
+        {
+            SaveGame = true;
+        }
 
         public override void Start()
         {
@@ -305,6 +316,26 @@ namespace RetroEngine.Entities
                     }
                 currentUpdateNPCs.Add(npcList[currentUpdateIndex]);
             }
+        }
+
+
+
+        protected override EntitySaveData SaveData(EntitySaveData baseData)
+        {
+
+
+            return base.SaveData(baseData);
+
+
+
+        }
+
+        public override void LoadData(EntitySaveData Data)
+        {
+            base.LoadData(Data);
+
+            body.SetPosition(Position);
+
         }
 
         public static void ResetStaticData()

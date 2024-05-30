@@ -112,6 +112,9 @@ namespace RetroEngine
             saveData.Name = name;
             saveData.id = Id;
             saveData.className = "";
+
+            saveData = SaveData(saveData);
+
             System.Reflection.MemberInfo info = this.GetType();
             object[] attributes = info.GetCustomAttributes(true);
 
@@ -130,9 +133,9 @@ namespace RetroEngine
                 options.Converters.Add(conv);
             ;
 
-            saveData.saveData = JsonSerializer.Serialize(this, options);
+            saveData.saveData = JsonSerializer.Serialize(this,this.GetType(), options);
 
-            //saveData = SaveData(saveData);
+            
 
             return saveData;
 

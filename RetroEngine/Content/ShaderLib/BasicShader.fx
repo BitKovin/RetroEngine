@@ -755,7 +755,7 @@ float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal, float ro
     offsetScale *= lerp(abs(dot(normal, normalize(lightVector))), 0.7, 1);
     float notShadow = 1;
 
-    if(dot(pixelInput.TangentNormal, normalize(lightVector))<0.01)
+    if(dot(normal, normalize(lightVector))<0.01)
     {
         notShadow = 0;
     }

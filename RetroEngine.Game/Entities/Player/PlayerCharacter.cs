@@ -11,6 +11,8 @@ using RetroEngine.Game.Entities;
 using RetroEngine.Map;
 using RetroEngine.Game.Entities.Weapons;
 using RetroEngine.Entities;
+using System.Text.Json.Serialization;
+using RetroEngine.SaveSystem;
 
 namespace RetroEngine.Game.Entities.Player
 {
@@ -38,7 +40,8 @@ namespace RetroEngine.Game.Entities.Player
         float airAcceleration = 40;
         bool tryLimit = false;
 
-        Vector3 velocity = new Vector3();
+        [JsonInclude]
+        public Vector3 velocity = new Vector3();
 
         float bobProgress = 0;
 
@@ -54,11 +57,14 @@ namespace RetroEngine.Game.Entities.Player
 
         bool onGround = false;
 
-        List<WeaponData> weapons = new List<WeaponData>();
+        [JsonInclude]
+        public List<WeaponData> weapons = new List<WeaponData>();
 
         public Weapon currentWeapon;
-        int currentSlot = -1;
-        int lastSlot = -1;
+        [JsonInclude]
+        public int currentSlot = -1;
+        [JsonInclude]
+        public int lastSlot = -1;
 
         float bobSpeed = 8;
 
@@ -71,7 +77,8 @@ namespace RetroEngine.Game.Entities.Player
 
         StaticMesh testCube = new StaticMesh();
 
-        bool thirdPerson = false;
+        [JsonInclude]
+        public bool thirdPerson = false;
 
         public PlayerCharacter() : base()
         {
@@ -102,6 +109,8 @@ namespace RetroEngine.Game.Entities.Player
             Input.CenterCursor();
 
             PlayerUI = new PlayerUI(this);
+
+            SaveGame = true;
 
         }
 
@@ -721,6 +730,29 @@ namespace RetroEngine.Game.Entities.Player
         {
             weapons.Add(weaponData);
                 SwitchToSlot(weapons.Count - 1,true);
+        }
+
+        protected override EntitySaveData SaveData(EntitySaveData baseData)
+        {
+
+            Rotation = Camera.rotation;
+
+            velocity = body.LinearVelocity;
+
+            return base.SaveData(baseData);
+
+        }
+
+        public override void LoadData(EntitySaveData Data)
+        {
+            base.LoadData(Data);
+
+            SwitchToSlot(currentSlot, true);
+            body.LinearVelocity = velocity.ToPhysics();
+
+            body.SetPosition(Position);
+            Camera.rotation = Rotation;
+
         }
 
         public float GetHealth()
