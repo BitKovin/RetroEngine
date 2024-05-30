@@ -52,6 +52,8 @@ namespace RetroEngine.Entities
                     visibleLayers.Add(layer);
             }
 
+            Level.GetCurrent().AddEntity(new Sky());
+
 
         }
 

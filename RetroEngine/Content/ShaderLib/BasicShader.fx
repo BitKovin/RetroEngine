@@ -776,7 +776,7 @@ float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal, float ro
 
         const int radius = 2;
 
-        const float step = 2;
+        const float step = 0.66666666666665;
 
         for (float x = -radius; x <= radius; x+=step)
         {

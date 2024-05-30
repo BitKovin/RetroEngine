@@ -129,7 +129,7 @@ namespace RetroEngine.Game.Entities.Player
             testCube.Scale = new Vector3(1);
             //meshes.Add(testCube);
 
-            Weapon.PreloadAllWeapons();
+            //Weapon.PreloadAllWeapons();
             PlayerUI.Load();
         }
 

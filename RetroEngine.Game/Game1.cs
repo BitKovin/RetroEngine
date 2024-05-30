@@ -58,9 +58,8 @@ namespace RetroEngine.Game
         {
             base.OnLevelChanged();
 
-            Level.GetCurrent().AddEntity(new PlayerGlobal());
+            Level.GetCurrent().AddEntity(new Entities.Player.PlayerGlobal());
 
-            Level.GetCurrent().AddEntity(new Sky());
 
             //PostProcessStep.StepsAfter.Add(new TestPP());
 
@@ -100,6 +99,9 @@ namespace RetroEngine.Game
 
             Input.AddAction("test").AddKeyboardKey(Keys.R);
             Input.AddAction("test2").AddKeyboardKey(Keys.E);
+
+            Input.AddAction("qSave").AddKeyboardKey(Keys.F5);
+            Input.AddAction("qLoad").AddKeyboardKey(Keys.F8);
         }
 
     }

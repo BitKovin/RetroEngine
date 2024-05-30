@@ -96,7 +96,7 @@ namespace RetroEngine
                 return;
             }
 
-            if (SaveManager.HasPendingLoad() ==false) 
+            if (name == GetCurrent().Name) 
             {
                 AssetRegistry.ConstantCache.Clear();
                 AssetRegistry.ClearAllTextures();

@@ -115,7 +115,7 @@ namespace RetroEngine.Entities
             Matrix view = Camera.view;
             Matrix projection = Camera.projection;
 
-
+            RenderFace(CubeMapFace.PositiveX);
             RenderFace(CubeMapFace.PositiveX);
             RenderFace(CubeMapFace.NegativeX);
             RenderFace(CubeMapFace.PositiveY);

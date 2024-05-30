@@ -5,13 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RetroEngine.Game.Entities
+namespace RetroEngine.Game.Entities.Player
 {
     public class PlayerGlobal : Entity
     {
 
-        public PlayerGlobal() 
-        { 
+        public PlayerGlobal()
+        {
             UpdateWhilePaused = true;
             LateUpdateWhilePaused = true;
         }
@@ -36,13 +36,13 @@ namespace RetroEngine.Game.Entities
             }
             if (GameMain.Instance.paused == false)
             {
-                if (Input.GetAction("test").Pressed())
+                if (Input.GetAction("qSave").Pressed())
                 {
                     SaveSystem.SaveManager.SaveGame();
 
                 }
 
-                if (Input.GetAction("test2").Pressed())
+                if (Input.GetAction("qLoad").Pressed())
                 {
                     SaveSystem.SaveManager.LoadGameFromPath(AssetRegistry.ROOT_PATH + "save.sav");
 
