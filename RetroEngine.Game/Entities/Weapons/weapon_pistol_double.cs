@@ -138,6 +138,14 @@ namespace RetroEngine.Game.Entities.Weapons
             fireSoundPlayer.Destroy(2);
         }
 
+        public override void FinalizeFrame()
+        {
+            base.FinalizeFrame();
+
+            Console.WriteLine(meshTp.VisiblePixels);
+
+        }
+
         public override void LateUpdate()
         {
             base.LateUpdate();
@@ -240,9 +248,9 @@ namespace RetroEngine.Game.Entities.Weapons
 
             AnimationPose pose = inPose;
 
-            AnimationPose weaponPose = Animation.LerpPose(pistolAnimationIdle.GetPoseLocal(), pistolAnimationAim.GetPoseLocal(), MathHelper.Saturate(aimAnimation));
+            AnimationPose weaponPose = Animation.LerpPose(pistolAnimationIdle.GetPoseLocal(), pistolAnimationAim.GetPoseLocal(), 0);
 
-            pose.LayeredBlend(pistolAnimationAim.GetBoneByName("spine_02"), weaponPose,1, MathHelper.Saturate(aimAnimation));
+            pose.LayeredBlend(pistolAnimationAim.GetBoneByName("spine_02"), weaponPose,1, 0);
 
             meshTp.PastePoseLocal(pose);
             return pose;

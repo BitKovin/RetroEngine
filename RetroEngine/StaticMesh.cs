@@ -95,7 +95,7 @@ namespace RetroEngine
 
         public bool Static = false;
 
-        internal bool occluded = false;
+        public bool occluded = false;
         internal bool inFrustrum = true;
 
         public Effect Shader;
@@ -110,6 +110,11 @@ namespace RetroEngine
         protected Matrix WorldMatrix;
 
         internal bool destroyed = false;
+
+        public int VisiblePixels = 0;
+
+
+        public bool DisableOcclusionCulling = false;
 
         public StaticMesh()
         {
@@ -615,6 +620,14 @@ namespace RetroEngine
 
             if (inFrustrum == false) return;
 
+
+            if(DisableOcclusionCulling)
+            {
+                DrawDepth();
+                return;
+            }
+
+
             oclusionCulling = true;
 
 
@@ -632,6 +645,12 @@ namespace RetroEngine
 
             if (oclusionCulling == false) return;
 
+            if(DisableOcclusionCulling == true)
+            {
+                occluded = false;
+                return;
+            }
+
             if (OcclusionQuery == null) return;
 
             if (OcclusionQuery.GraphicsDevice == null) return;
@@ -641,6 +660,8 @@ namespace RetroEngine
             }
 
             occluded = OcclusionQuery.PixelCount < 2;
+
+            VisiblePixels = OcclusionQuery.PixelCount;
 
             oclusionCulling = false;
         }

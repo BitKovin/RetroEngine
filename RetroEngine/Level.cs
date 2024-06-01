@@ -82,7 +82,7 @@ namespace RetroEngine
         public static void LoadFromFile(string name, bool force = false)
         {
             LoadingScreen.Progress = 0;
-            LoadingScreen.Draw();
+            //LoadingScreen.Draw();
 
             //StaticMesh.textures.Clear();
 
@@ -352,8 +352,8 @@ namespace RetroEngine
 
             Entity[] list = entities.ToArray();
 
-            Parallel.ForEach(list, entity =>
-            {
+            foreach(Entity entity in list)
+            { 
                 if (entity != null)
                     if (renderLayers.Contains(entity.Layer))
                     {
@@ -373,7 +373,7 @@ namespace RetroEngine
                                 }
                             }
                     }
-            });
+            }
 
             renderList.Clear();
 

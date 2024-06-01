@@ -112,7 +112,7 @@ float4 MainPS(VertexShaderOutput input) : SV_TARGET
         depth = distance(input.WorldPos, CameraPos);
     
     
-    if (tex2D(TextureSampler, input.TexCoords).a < 0.99&& Masked)
+    if (Masked && tex2D(TextureSampler, input.TexCoords).a < 0.99)
         discard;
 
     return float4(depth, 0, 0, 1);

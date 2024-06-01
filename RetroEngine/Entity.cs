@@ -79,7 +79,7 @@ namespace RetroEngine
         public virtual void FromData(EntityData data)
         {
             Layer = (int)data.GetPropertyFloat("_tb_layer");
-            name = data.GetPropertyString("name");
+            name = data.GetPropertyString("targetname");
 
 
         }

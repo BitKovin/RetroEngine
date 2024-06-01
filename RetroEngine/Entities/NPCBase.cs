@@ -239,6 +239,12 @@ namespace RetroEngine.Entities
 
         }
 
+        public override void FinalizeFrame()
+        {
+            base.FinalizeFrame();
+
+        }
+
         void UpdateMovementDirection()
         {
             body.Activate();

@@ -152,7 +152,7 @@ namespace RetroEngine.SaveSystem
 
             pendingLoadData = levelSaveData;
 
-            Level.LoadFromFile(levelSaveData.levelName);
+            Level.LoadFromFile(levelSaveData.levelName, false);
 
         }
 

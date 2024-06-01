@@ -38,6 +38,7 @@ namespace RetroEngine.Particles
 
         public float SpawnRate = 0;
 
+
         public ParticleEmitter()
         {
             CastShadows = false;
@@ -48,6 +49,8 @@ namespace RetroEngine.Particles
             OverrideBlendState = BlendState.NonPremultiplied;
 
             Shader = AssetRegistry.GetShaderFromName("ParticleUnifiedOutput");
+
+            DisableOcclusionCulling = true;
 
         }
 

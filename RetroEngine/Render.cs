@@ -697,7 +697,7 @@ namespace RetroEngine
 
             SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
 
-            ReflectionEffect.Parameters["enableSSR"].SetValue(Graphics.EnableSSR);
+            ReflectionEffect.Parameters["enableSSR"]?.SetValue(Graphics.EnableSSR);
             ReflectionEffect.Parameters["NormalTexture"]?.SetValue(normalPath);
             ReflectionEffect.Parameters["FrameTexture"]?.SetValue(DeferredOutput);
             ReflectionEffect.Parameters["PositionTexture"]?.SetValue(positionPath);
@@ -770,14 +770,18 @@ namespace RetroEngine
             graphics.GraphicsDevice.SetRenderTarget(ssaoOutput);
 
             SSAOEffect.Parameters["NormalTexture"]?.SetValue(normalPath);
-            SSAOEffect.Parameters["DepthTexture"]?.SetValue(DepthPrepathOutput);
+            SSAOEffect.Parameters["DepthTexture"].SetValue(DepthPrepathOutput);
+            SSAOEffect.Parameters["PosTexture"]?.SetValue(positionPath);
+            SSAOEffect.Parameters["viewPos"]?.SetValue(Camera.finalizedPosition);
+
             SSAOEffect.Parameters["screenWidth"]?.SetValue(ssaoOutput.Width);
             SSAOEffect.Parameters["screenHeight"]?.SetValue(ssaoOutput.Height);
             SSAOEffect.Parameters["ssaoRadius"]?.SetValue(0.5f);
             SSAOEffect.Parameters["ssaoBias"]?.SetValue(0.025f);
             SSAOEffect.Parameters["ssaoIntensity"]?.SetValue(1);
 
-            SSAOEffect.Parameters["proj"]?.SetValue(Camera.finalizedProjection);
+            SSAOEffect.Parameters["Projection"]?.SetValue(Camera.finalizedProjection);
+            SSAOEffect.Parameters["View"]?.SetValue(Camera.finalizedView);
 
             SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
 

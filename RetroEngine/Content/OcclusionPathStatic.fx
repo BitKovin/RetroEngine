@@ -16,7 +16,7 @@ float3 CameraPos;
 
 bool pointDistance;
 
-bool black;
+bool black = false;
 
 struct VertexShaderInput
 {
@@ -67,18 +67,17 @@ struct PS_Out
 float4 MainPS(VertexShaderOutput input) : SV_TARGET
 {
 
-    if (black)
-        return(0,0,0,0.000000000000000000000000000001);
+    
 
     float depth = input.MyPosition.z;
 
     if (pointDistance)
         depth = distance(input.WorldPos, CameraPos);
 
-    if (tex2D(TextureSampler, input.TexCoords).a < 0.99&& Masked)
+    if (Masked && tex2D(TextureSampler, input.TexCoords).a < 0.99)
         discard;
 
-    return float4(depth, 0, 0, 1);
+    return float4(depth, 0, 0, black? 0:1);
 }
 
 technique NormalColorDrawing

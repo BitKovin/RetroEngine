@@ -400,6 +400,8 @@ namespace RetroEngine
         public override void DrawDepth()
         {
 
+
+
             if (Render.IgnoreFrustrumCheck == false)
                 if (frameStaticMeshData.InFrustrum == false) return;
 
@@ -445,11 +447,7 @@ namespace RetroEngine
 
                         effect.Techniques[0].Passes[0].Apply();
 
-                        graphicsDevice.DrawIndexedPrimitives(
-                            PrimitiveType.TriangleList,
-                            meshPart.VertexOffset,
-                            meshPart.StartIndex,
-                            meshPart.PrimitiveCount);
+                        meshPart.Draw(graphicsDevice);
 
                     }
             }
@@ -457,8 +455,7 @@ namespace RetroEngine
 
         public override void DrawUnified()
         {
-            if(Viewmodel == false)
-            if(frameStaticMeshData.IsRendered == false || occluded) { return; }
+            if(frameStaticMeshData.IsRendered == false) { return; }
 
             GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
             // Load the custom effect
@@ -553,7 +550,7 @@ namespace RetroEngine
 
             }
 
-            isRendered = inFrustrum&& (occluded==false) || Viewmodel || GameMain.SkipFrames>0;
+            isRendered = inFrustrum && !occluded || Viewmodel || GameMain.SkipFrames > 0;
             frameStaticMeshData.IsRendered = isRendered;
         }
 
