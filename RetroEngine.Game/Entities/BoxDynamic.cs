@@ -26,22 +26,26 @@ namespace RetroEngine.Game.Entities
         RigidBody body;
 
         public BoxDynamic() : base()
-        {
-            
-
-            mesh.LoadFromFile("models/cube.obj");
+        {            
 
             SaveGame = true;
+
+        }
+
+        protected override void LoadAssets()
+        {
+            base.LoadAssets();
+
+            mesh.LoadFromFile("models/cube.obj");
 
             mesh.texture = AssetRegistry.LoadTextureFromFile("textures/foil.png");
             mesh.normalTexture = AssetRegistry.LoadTextureFromFile("textures/foil_n.png");
             mesh.ormTexture = AssetRegistry.LoadTextureFromFile("textures/foil_orm.png");
-            //mesh.Transperent = true;
-            //mesh.Transparency = 1f;
 
             mesh.CastShadows = true;
 
             meshes.Add(mesh);
+
         }
 
 

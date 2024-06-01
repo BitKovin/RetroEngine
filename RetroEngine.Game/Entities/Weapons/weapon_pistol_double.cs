@@ -142,8 +142,6 @@ namespace RetroEngine.Game.Entities.Weapons
         {
             base.FinalizeFrame();
 
-            Console.WriteLine(meshTp.VisiblePixels);
-
         }
 
         public override void LateUpdate()
@@ -248,9 +246,9 @@ namespace RetroEngine.Game.Entities.Weapons
 
             AnimationPose pose = inPose;
 
-            AnimationPose weaponPose = Animation.LerpPose(pistolAnimationIdle.GetPoseLocal(), pistolAnimationAim.GetPoseLocal(), 0);
+            AnimationPose weaponPose = Animation.LerpPose(pistolAnimationIdle.GetPoseLocal(), pistolAnimationAim.GetPoseLocal(), MathHelper.Saturate(aimAnimation));
 
-            pose.LayeredBlend(pistolAnimationAim.GetBoneByName("spine_02"), weaponPose,1, 0);
+            pose.LayeredBlend(pistolAnimationAim.GetBoneByName("spine_02"), weaponPose,1, MathHelper.Saturate(aimAnimation));
 
             meshTp.PastePoseLocal(pose);
             return pose;

@@ -29,6 +29,13 @@ namespace RetroEngine.Entities
 
         public static void Preload(string systemName)
         {
+
+            if (GameMain.CanLoadAssetsOnThisThread() == false)
+            {
+                Logger.Log("can't preload particle system on this thread");
+                return;
+            }
+
             var sys = ParticleSystemFactory.CreateByTechnicalName(systemName);
 
             if (sys == null) return;
