@@ -11,129 +11,59 @@ namespace RetroEngine.Entities
 {
     public class SoundPlayer : Entity, IDisposable
     {
-        SoundEffectInstance soundEffectInstance;
 
-        public float MaxDistance = 10;
-        public float MinDistance = 1;
+        AudioClip AudioClip;
 
         public float Volume = 1;
+
         public float Pitch = 1;
 
-        bool _looped;
+        public float MaxDistance = 10;
 
-        bool playing = false;
-
-        public bool IsLooped { get { return _looped; } set { if (soundEffectInstance != null) { soundEffectInstance.IsLooped = value; } _looped = value; } }
-
-        bool paused;
-
-        public SoundPlayer() { }
-
-        bool pendingPlay = false;
-        Delay pendingPlayDelay = new Delay();
-
-        SoundEffect _sound;
+        public float MinDistance = 1;
 
         public override void LateUpdate()
         {
             base.LateUpdate();
 
-            if(soundEffectInstance == null) return;
+            AudioClip.Volume = Volume;
+            AudioClip.Pitch = Pitch;
+            AudioClip.Position = Position;
 
-            soundEffectInstance.Pitch = 1 - Pitch;
+            AudioClip.MaxDistance = MaxDistance;
+            AudioClip.MinDistance = MinDistance;
 
-            if (pendingPlay && !pendingPlayDelay.Wait())
-            {
-                soundEffectInstance.Play();
-                pendingPlay = false;
-            }
-
-            soundEffectInstance.ApplyPosition(Position, MaxDistance, MinDistance, Volume);
-
-            if (Vector3.Distance(Camera.position, Position) > MaxDistance * 2f)
-            {
-                if (soundEffectInstance.State != SoundState.Stopped)
-                {
-                    soundEffectInstance.Stop();
-                }
-                return;
-            }
-            soundEffectInstance.IsLooped = IsLooped;
-
-            if (paused) 
-            {
-                soundEffectInstance.Pause();
-            }
-            else if(playing)
-            {
-                if (IsLooped)
-                {
-                    try
-                    {
-                        soundEffectInstance.Play();
-                    }
-                    catch (Exception ex) { Console.WriteLine(ex); }
-                }
-                
-
-            }
+            AudioClip.Update();
 
 
         }
 
-        public void SetSound(SoundEffect sound)
+        public void SetSound(AudioClip clip)
         {
-            if (sound != null)
-            {
-                soundEffectInstance = sound.CreateInstance();
-                soundEffectInstance.IsLooped = IsLooped;
-                _sound = sound;
-            }
+            AudioClip?.Dispose();
+            AudioClip = clip;
         }
 
         public void Play(bool fromStart = false)
         {
-            paused = false;
-            playing = true;
-
-            LateUpdate();
-
-            
-
-            if(fromStart)
-            {
-                soundEffectInstance?.Stop(true);
-            }
-            try
-            {
-                SetSound(_sound);
-                LateUpdate();
-                pendingPlay = true;
-            }
-            catch (Exception ex ) { Console.WriteLine(ex); }
+            AudioClip.Play();
         }
 
         public void Stop()
         {
-            soundEffectInstance?.Stop(true);
-            playing = false;
+            AudioClip.Stop();
         }
 
         public void Pause()
         {
-            paused = true;
-            soundEffectInstance?.Pause();
+            AudioClip.Pause();
         }
 
         public override void Destroy()
         {
             base.Destroy();
 
-            soundEffectInstance?.Stop(true);
-            soundEffectInstance?.Dispose();
-            soundEffectInstance = null;
-            _sound = null;
-            GC.SuppressFinalize(this);
+            AudioClip?.Dispose();   
 
         }
 

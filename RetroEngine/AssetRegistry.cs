@@ -13,6 +13,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
 using System.Threading;
 using RetroEngine.Graphic;
+using RetroEngine.Audio;
 
 namespace RetroEngine
 {
@@ -260,10 +261,10 @@ namespace RetroEngine
         }
 
 
-        public static SoundEffect LoadSoundFromFile(string path)
+        public static AudioClip LoadSoundFromFile(string path)
         {
             if (sounds.ContainsKey(path))
-                return sounds[path];
+                return new Audio.AudioClipLegacy(sounds[path]);
 
             string filePpath = FindPathForFile(path);
 
@@ -276,7 +277,7 @@ namespace RetroEngine
 
                     sounds.Add(path, soundEffect);
 
-                    return sounds[path];
+                    return new Audio.AudioClipLegacy(sounds[path]);
                 }
             }
             catch (Exception ex)
