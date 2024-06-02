@@ -22,15 +22,15 @@ namespace RetroEngine.Audio
 
         public static INativeFmodLibrary nativeFmodLibrary;
 
+        public static bool UseFmod = true;
+
         public static void Init()
         {
             listener = new AudioListener();
 
+            if (UseFmod == false) return;
 
             FmodManager.Init(nativeFmodLibrary, FmodInitMode.CoreAndStudio, AssetRegistry.ROOT_PATH);
-
-
-
             listener3D = new Listener3D();
         }
 
@@ -47,7 +47,7 @@ namespace RetroEngine.Audio
             listener.Velocity = Camera.velocity;
 
 
-            
+            if (UseFmod == false) return;
             listener3D.SetAttributes(SoundManager.listener.Position, Camera.velocity, SoundManager.listener.Forward, -SoundManager.listener.Up);
 
             FmodManager.Update();

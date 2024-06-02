@@ -196,7 +196,7 @@ namespace RetroEngine.Game.Entities.Player
 
             FirstTick = false;
 
-            
+            Camera.velocity = body.LinearVelocity;
 
         }
 

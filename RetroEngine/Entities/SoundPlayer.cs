@@ -26,6 +26,8 @@ namespace RetroEngine.Entities
         {
             base.LateUpdate();
 
+            if (AudioClip == null) return;
+
             AudioClip.Volume = Volume;
             AudioClip.Pitch = Pitch;
             AudioClip.Position = Position;
@@ -46,17 +48,20 @@ namespace RetroEngine.Entities
 
         public void Play(bool fromStart = false)
         {
+            if (AudioClip == null) return;
             LateUpdate();
             AudioClip.Play(fromStart);
         }
 
         public void Stop()
         {
+            if (AudioClip == null) return;
             AudioClip.Stop();
         }
 
         public void Pause()
         {
+            if (AudioClip == null) return;
             AudioClip.Pause();
         }
 

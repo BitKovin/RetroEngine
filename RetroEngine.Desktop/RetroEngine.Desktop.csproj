@@ -48,4 +48,51 @@
     <Message Text="Restoring dotnet tools" Importance="High" />
     <Exec Command="dotnet tool restore" />
   </Target>
+  
+  <ItemGroup>
+    <FrameworkAssemblies Remove="fmodstudioL.dll" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PrivateSdkAssemblies Remove="fmodstudioL.dll" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <FrameworkAssemblies Remove="fmod.dll" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PrivateSdkAssemblies Remove="fmod.dll" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <FrameworkAssemblies Remove="fmodL.dll" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PrivateSdkAssemblies Remove="fmodL.dll" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <FrameworkAssemblies Remove="fmodstudio.dll" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PrivateSdkAssemblies Remove="fmodstudio.dll" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <None Update="fmod.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="fmodL.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="fmodstudio.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="fmodstudioL.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>

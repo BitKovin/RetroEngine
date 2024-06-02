@@ -296,6 +296,12 @@ namespace RetroEngine
         public static AudioClipFmod LoadSoundFmodFromFile(string path)
         {
 
+            if(SoundManager.UseFmod == false)
+            {
+                Logger.Log("tried to load FMOD sound " + path);
+                return null;
+            }
+
             string filePath = FindPathForFile(path);
 
             return new AudioClipFmod(CoreSystem.LoadSoundFromStream(AssetRegistry.GetFileStreamFromPath(filePath)));

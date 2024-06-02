@@ -31,7 +31,8 @@ namespace RetroEngine.Audio
         {
             base.Update();
 
-            channel.DopplerLevel3D = 0;
+            channel.Pitch = Pitch;
+            sound.Pitch = Pitch;
 
             Apply3D();
         }
