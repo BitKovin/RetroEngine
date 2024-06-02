@@ -14,6 +14,9 @@ using Microsoft.Xna.Framework;
 using System.Threading;
 using RetroEngine.Graphic;
 using RetroEngine.Audio;
+using BulletSharp;
+using FmodForFoxes;
+using System.Runtime.InteropServices;
 
 namespace RetroEngine
 {
@@ -23,6 +26,7 @@ namespace RetroEngine
         static Dictionary<string, Texture> textures = new Dictionary<string, Texture>();
 
         static Dictionary<string, SoundEffect> sounds = new Dictionary<string, SoundEffect>();
+        static Dictionary<string, FMOD.Sound> soundsFmod = new Dictionary<string, FMOD.Sound>();
 
         static Dictionary<string, Shader> effects = new Dictionary<string, Shader>();
         static Dictionary<string, Shader> effectsPP = new Dictionary<string, Shader>();
@@ -266,11 +270,11 @@ namespace RetroEngine
             if (sounds.ContainsKey(path))
                 return new Audio.AudioClipLegacy(sounds[path]);
 
-            string filePpath = FindPathForFile(path);
+            string filePath = FindPathForFile(path);
 
             try
             {
-                using (Stream stream = GetFileStreamFromPath(filePpath))
+                using (Stream stream = GetFileStreamFromPath(filePath))
                 {
 
                     SoundEffect soundEffect = SoundEffect.FromStream(stream);
@@ -287,6 +291,50 @@ namespace RetroEngine
                 return null;
             }
 
+        }
+
+        public static AudioClipFmod LoadSoundFmodFromFile(string path)
+        {
+
+            string filePath = FindPathForFile(path);
+
+            return new AudioClipFmod(CoreSystem.LoadSoundFromStream(AssetRegistry.GetFileStreamFromPath(filePath)));
+
+            
+
+            using (var stream = GetFileStreamFromPath(filePath))
+            {
+
+                // File is opened as a stream, so we need to read it to the end.
+                var buffer = new byte[16 * 1024];
+                byte[] bufferRes;
+                using (var ms = new MemoryStream())
+                {
+                    int read;
+                    while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
+                    {
+                        ms.Write(buffer, 0, read);
+                    }
+                    bufferRes = ms.ToArray();
+                }
+
+
+                // Internal FMOD pointer points to this memory, so we don't want it to go anywhere.
+                var handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
+
+                var info = new FMOD.CREATESOUNDEXINFO();
+                info.length = (uint)buffer.Length;
+                info.cbsize = Marshal.SizeOf(info);
+
+                FmodForFoxes.CoreSystem.Native.createStream(
+                        buffer,
+                        FMOD.MODE.OPENMEMORY | FMOD.MODE.CREATESTREAM,
+                        ref info,
+                        out FMOD.Sound newSound
+                );
+
+                return new AudioClipFmod(new Sound(newSound, buffer, handle));
+            }
         }
 
         public static void ClearTexturesIfNeeded()
@@ -358,7 +406,7 @@ namespace RetroEngine
                         {
                             loading = true;
                         }
-                }catch (Exception e) {}
+                }catch (Exception) {}
 
                 if(loading)
                 {

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using RetroEngine;
+using RetroEngine.Audio;
 using RetroEngine.Windows;
 using System;
 using System.IO;
@@ -16,7 +17,7 @@ internal class Program
 
     private static void Main(string[] args)
     {
-
+        SoundManager.nativeFmodLibrary = new FmodForFoxes.DesktopNativeFmodLibrary();
         Game game = new GameWindows();
 #if RELEASE
         try

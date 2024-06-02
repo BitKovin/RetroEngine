@@ -38,6 +38,7 @@
     <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Libs\FmodForFoxes\FmodForFoxes.csproj" />
     <ProjectReference Include="..\Libs\MonoGame.ImGuiNet\Monogame.ImGuiNet.csproj" />
   </ItemGroup>
   <ItemGroup>

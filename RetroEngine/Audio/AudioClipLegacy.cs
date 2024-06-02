@@ -45,9 +45,9 @@ namespace RetroEngine.Audio
                 pendingPlay = false;
             }
 
-            soundEffectInstance.ApplyPosition(Position, MaxDistance, MinDistance, Volume);
+            Apply3D();
 
-            if (Vector3.Distance(Camera.position, Position) > MaxDistance * 2f)
+            if (Vector3.Distance(Camera.position, Position) > (MaxDistance+5 * 2f))
             {
                 if (soundEffectInstance.State != SoundState.Stopped)
                 {
@@ -131,6 +131,58 @@ namespace RetroEngine.Audio
             _sound = null;
             GC.SuppressFinalize(this);
 
+        }
+
+        public override void Apply3D()
+        {
+            if (soundEffectInstance is null) return;
+
+            float distance = Vector3.Distance(SoundManager.listener.Position, Position);
+
+            float n = 2.5f;
+
+            distance -= MinDistance;
+
+            distance = Math.Max(distance, 0f);
+
+            MaxDistance -= MinDistance;
+
+            float x = (distance / MaxDistance);
+
+            // Calculate the attenuation factor based on the inverse square law
+            float attenuation = (1f - x) / ((x * 8 + (1 / n)) * n);
+
+            // Set the volume and pitch based on attenuation
+            float maxVolume = 1.0f; // Adjust this value for maximum volume
+            float minVolume = 0.0f; // Adjust this value for minimum volume
+            float volume = minVolume + (maxVolume - minVolume) * attenuation * Volume;
+
+
+            Vector3 toEmitter = SoundManager.listener.Position - Position;
+
+            toEmitter.Normalize();
+
+            if (distance > 0.2f)
+                volume /= ((Vector3.Dot(SoundManager.listener.Forward, toEmitter) + 1) / 4f) + 1;
+
+            Vector3 right = Vector3.Cross(SoundManager.listener.Up, SoundManager.listener.Forward);
+
+            right.Normalize();
+
+            float pan = Vector3.Dot(toEmitter, right);
+
+            pan /= 1.333f;
+
+            pan = Math.Clamp(pan, -1.0f, 1.0f);
+
+            if (float.IsNaN(pan))
+                pan = 0f;
+
+            if(float.IsNaN(volume))
+                volume = 0f;
+
+            soundEffectInstance.Volume = Math.Clamp(volume, 0, 1);
+            soundEffectInstance.Pan = pan;
         }
 
     }

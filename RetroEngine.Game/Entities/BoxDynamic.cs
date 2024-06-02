@@ -22,6 +22,7 @@ namespace RetroEngine.Game.Entities
 
         public Vector3 scale = new Vector3(1);
 
+        SoundPlayer soundPlayer;
 
         RigidBody body;
 
@@ -29,6 +30,13 @@ namespace RetroEngine.Game.Entities
         {            
 
             SaveGame = true;
+
+            soundPlayer = (SoundPlayer)Level.GetCurrent().AddEntity(new SoundPlayer());
+            soundPlayer.SetSound(AssetRegistry.LoadSoundFmodFromFile("sounds/test.wav"));
+            soundPlayer.Volume = 1f;
+            
+            
+            soundPlayer.Position = Position;
 
         }
 
@@ -48,6 +56,14 @@ namespace RetroEngine.Game.Entities
 
         }
 
+        public override void OnDamaged(float damage, Entity causer = null, Entity weapon = null)
+        {
+            base.OnDamaged(damage, causer, weapon);
+
+            soundPlayer.Position = Position;
+            soundPlayer.Play();
+
+        }
 
         public override void Start()
         {

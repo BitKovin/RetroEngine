@@ -7,6 +7,7 @@ using System;
 using System.Threading;
 using System.Windows.Forms;
 using System.IO;
+using RetroEngine.Audio;
 
 internal class Program
 {
@@ -15,7 +16,7 @@ internal class Program
     public static extern int MessageBox(IntPtr h, string m, string c, int type);
     private static void Main(string[] args)
     {
-
+        SoundManager.nativeFmodLibrary = new FmodForFoxes.DesktopNativeFmodLibrary();
         Game game = new GameWindows();
 #if RELEASE
         try

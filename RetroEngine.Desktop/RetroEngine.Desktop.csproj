@@ -35,6 +35,7 @@
     <PackageReference Include="SharpDX.DirectInput" Version="4.0.1" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Libs\FmodForFoxes.Desktop\FmodForFoxes.Desktop.csproj" />
     <ProjectReference Include="..\RetroEngine.Game\RetroEngine.Game.csproj" />
   </ItemGroup>
 

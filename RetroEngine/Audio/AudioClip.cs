@@ -19,6 +19,10 @@ namespace RetroEngine.Audio
         public float Volume = 1;
         public float Pitch = 1;
 
+        public Vector3 Velocity;
+
+        public bool Is3D = true;
+
         public void Dispose()
         {
             Destroy();
@@ -37,7 +41,10 @@ namespace RetroEngine.Audio
 
         public virtual void Pause() { }
 
+        public virtual void Apply3D()
+        {
 
+        }
 
     }
 }

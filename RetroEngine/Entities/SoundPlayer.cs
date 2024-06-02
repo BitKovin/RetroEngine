@@ -46,7 +46,8 @@ namespace RetroEngine.Entities
 
         public void Play(bool fromStart = false)
         {
-            AudioClip.Play();
+            LateUpdate();
+            AudioClip.Play(fromStart);
         }
 
         public void Stop()

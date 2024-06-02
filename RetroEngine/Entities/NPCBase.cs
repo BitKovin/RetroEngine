@@ -46,7 +46,7 @@ namespace RetroEngine.Entities
 
         PathfindingQuery pathfindingQuery = new PathfindingQuery();
 
-         SoundPlayer deathSoundPlayer;
+        SoundPlayer deathSoundPlayer;
 
         protected float AnimationInterpolationDistance = 10;
         protected float AnimationComplexDistance = 30;
@@ -122,7 +122,7 @@ namespace RetroEngine.Entities
             sm.Scale =new Vector3(0.7f);
 
             deathSoundPlayer = (SoundPlayer)Level.GetCurrent().AddEntity(new SoundPlayer());
-            deathSoundPlayer.SetSound(AssetRegistry.LoadSoundFromFile("sounds/mew.wav"));
+            deathSoundPlayer.SetSound(AssetRegistry.LoadSoundFmodFromFile("sounds/mew2.wav"));
             deathSoundPlayer.Volume = 1f;
 
             animator.LoadAssets();

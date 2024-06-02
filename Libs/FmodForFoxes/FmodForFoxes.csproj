@@ -4,7 +4,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<PackageTags>Monogame, FMOD, Audio, Music, ChaiFoxes.FMODAudio</PackageTags>
-		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 		<PackageOutputPath>..\..\package\</PackageOutputPath>
 		<OutputPath>..\..\bin\$(Configuration)</OutputPath>
 		<AppendTargetFrameworkToOutputPath>False</AppendTargetFrameworkToOutputPath>

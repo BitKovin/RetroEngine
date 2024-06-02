@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FmodForFoxes;
+using System.Runtime.InteropServices;
 
 namespace RetroEngine.Audio
 {
@@ -14,11 +16,27 @@ namespace RetroEngine.Audio
 
         static AudioEmitter emitter;
 
-        private static AudioListener listener;
+        internal static AudioListener listener;
+
+        static Listener3D listener3D;
+
+        public static INativeFmodLibrary nativeFmodLibrary;
 
         public static void Init()
         {
             listener = new AudioListener();
+
+
+            FmodManager.Init(nativeFmodLibrary, FmodInitMode.CoreAndStudio, AssetRegistry.ROOT_PATH);
+
+
+
+            listener3D = new Listener3D();
+        }
+
+        public static void Shutdown() 
+        {
+            FmodManager.Unload();
         }
 
         public static void Update()
@@ -27,57 +45,13 @@ namespace RetroEngine.Audio
             listener.Up = Camera.rotation.GetUpVector();
             listener.Forward = Camera.rotation.GetForwardVector();
             listener.Velocity = Camera.velocity;
-        }
-
-        public static void ApplyPosition(this SoundEffectInstance soundEffectInstance, Vector3 position, float MaxDistance = 10, float MinDistance = 1, float Volume = 1)
-        {
-            if (soundEffectInstance is null) return;
-
-            float distance = Vector3.Distance(listener.Position, position);
-
-            float n = 2.5f;
-
-            distance -= MinDistance;
-
-            distance = Math.Max(distance, 0f);
-
-            MaxDistance -= MinDistance;
-
-            float x = (distance / MaxDistance);
-
-            // Calculate the attenuation factor based on the inverse square law
-            float attenuation = (1f-x) / ((x*8 + (1/n))*n);
-
-            // Set the volume and pitch based on attenuation
-            float maxVolume = 1.0f; // Adjust this value for maximum volume
-            float minVolume = 0.0f; // Adjust this value for minimum volume
-            float volume = minVolume + (maxVolume - minVolume) * attenuation * Volume;
 
 
-            Vector3 toEmitter =  listener.Position - position;
+            
+            listener3D.SetAttributes(SoundManager.listener.Position, Camera.velocity, SoundManager.listener.Forward, -SoundManager.listener.Up);
 
-            toEmitter.Normalize();
+            FmodManager.Update();
 
-            if(distance>0.2f)
-                volume /= ((Vector3.Dot(listener.Forward, toEmitter) + 1) / 4f) + 1;
-
-            Vector3 right = Vector3.Cross(listener.Up, listener.Forward);
-
-            right.Normalize();
-
-            float pan = Vector3.Dot(toEmitter, right);
-
-            pan /= 1.333f;
-
-            pan = Math.Clamp(pan, -1.0f, 1.0f);
-
-            if (float.IsNaN(pan))
-                pan = 0f;
-
-
-            soundEffectInstance.Volume = Math.Clamp(volume,0,1);
-            soundEffectInstance.Pan = pan;
-            //soundEffectInstance.Apply3D(listener, emitter);
         }
 
     }

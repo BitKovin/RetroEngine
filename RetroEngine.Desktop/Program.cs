@@ -1,6 +1,7 @@
 ﻿
 using Microsoft.Xna.Framework;
 using RetroEngine;
+using RetroEngine.Audio;
 using SharpDX.DirectInput;
 using System;
 using System.IO;
@@ -15,6 +16,9 @@ internal class Program
 
     private static void Main(string[] args)
     {
+
+        SoundManager.nativeFmodLibrary = new FmodForFoxes.DesktopNativeFmodLibrary();
+
         using var game = new RetroEngine.Game.Game();
         RetroEngine.GameMain.platform = RetroEngine.Platform.Desktop;
         Input.MouseMoveCalculatorObject = new WindowsInputCalculator();

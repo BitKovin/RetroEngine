@@ -18,6 +18,7 @@
     <PackageReference Include="SharpDX.DirectInput" Version="4.0.1" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Libs\FmodForFoxes.Desktop\FmodForFoxes.Desktop.csproj" />
     <ProjectReference Include="..\RetroEngine.Game\RetroEngine.Game.csproj" />
   </ItemGroup>
   <ItemGroup>
@@ -44,6 +45,18 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Update="fmod.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="fmodL.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="fmodstudio.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="fmodstudioL.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
