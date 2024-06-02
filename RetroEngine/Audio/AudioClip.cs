@@ -23,6 +23,8 @@ namespace RetroEngine.Audio
 
         public bool Is3D = true;
 
+        public bool Loop = false;
+
         public void Dispose()
         {
             Destroy();

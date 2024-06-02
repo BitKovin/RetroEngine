@@ -39,6 +39,8 @@ namespace RetroEngine.Audio
 
             soundEffectInstance.Pitch = 1 - Pitch;
 
+            soundEffectInstance.IsLooped = Loop;
+
             if (pendingPlay && !pendingPlayDelay.Wait())
             {
                 soundEffectInstance.Play();

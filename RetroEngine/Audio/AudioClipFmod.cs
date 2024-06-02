@@ -41,14 +41,27 @@ namespace RetroEngine.Audio
         {
             base.Apply3D();
 
-            sound.Is3D = true;
+            
             channel.Is3D = true;
 
+            
+            channel.Pitch = Pitch;
+
+            
+            channel.Loops = Loop ? -1 : 0;
 
             Apply3DData(channel);
-            Apply3DData(sound);
+            
 
             ApplyDistance();
+        }
+        void ApplyStartSoundData()
+        {
+            sound.Is3D = true;
+            sound.Pitch = Pitch;
+            sound.Loops = Loop ? -1 : 0;
+            sound.Volume = 0;
+            Apply3DData(sound);
         }
 
         void ApplyDistance()
@@ -74,7 +87,6 @@ namespace RetroEngine.Audio
             float minVolume = 0.0f; // Adjust this value for minimum volume
             float volume = minVolume + (maxVolume - minVolume) * attenuation * Volume;
 
-            sound.Volume = volume;
             channel.Volume = volume;
 
 
@@ -110,7 +122,7 @@ namespace RetroEngine.Audio
 
 
             
-
+            ApplyStartSoundData();
             channel = sound.Play();
 
         }
@@ -126,8 +138,6 @@ namespace RetroEngine.Audio
         protected override void Destroy()
         {
             base.Destroy();
-
-            sound.Dispose();
 
         }
 

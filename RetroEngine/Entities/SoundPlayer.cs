@@ -18,9 +18,11 @@ namespace RetroEngine.Entities
 
         public float Pitch = 1;
 
-        public float MaxDistance = 10;
+        public float MaxDistance = 50;
 
-        public float MinDistance = 1;
+        public float MinDistance = 2;
+
+        public bool Loop = false;
 
         public override void LateUpdate()
         {
@@ -34,6 +36,9 @@ namespace RetroEngine.Entities
 
             AudioClip.MaxDistance = MaxDistance;
             AudioClip.MinDistance = MinDistance;
+
+            AudioClip.Loop = Loop;
+
 
             AudioClip.Update();
 
