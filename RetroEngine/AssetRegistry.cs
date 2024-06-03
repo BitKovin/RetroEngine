@@ -47,6 +47,7 @@ namespace RetroEngine
 
         static bool loadingAssets = false;
 
+
         public static Texture2D LoadTextureFromFile(string path, bool ignoreErrors = false, bool generateMipMaps = true)
         {
 
@@ -272,6 +273,10 @@ namespace RetroEngine
 
         public static AudioClip LoadSoundFromFile(string path)
         {
+
+            if(SoundManager.UseFmod)
+                return LoadSoundFmodFromFile(path);
+
             if (sounds.ContainsKey(path))
                 return new Audio.AudioClipLegacy(sounds[path]);
 

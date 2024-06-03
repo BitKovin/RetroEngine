@@ -41,7 +41,6 @@
 
   <ItemGroup>
     <MonoGameContentReference Include="..\RetroEngine\Content\Content.mgcb" />
-    <MonoGameContentReference Include="..\RetroEngine.Game\Content\Content.mgcb" />
   </ItemGroup>
   
   <Target Name="RestoreDotnetTools" BeforeTargets="Restore">

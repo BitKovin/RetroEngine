@@ -12,7 +12,7 @@ namespace RetroEngine.Entities
     public class SoundPlayer : Entity, IDisposable
     {
 
-        AudioClip AudioClip;
+        public AudioClip AudioClip;
 
         public float Volume = 1;
 

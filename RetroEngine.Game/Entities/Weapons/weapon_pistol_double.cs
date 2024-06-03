@@ -35,7 +35,8 @@ namespace RetroEngine.Game.Entities.Weapons
 
             fireSoundPlayer = Level.GetCurrent().AddEntity(new SoundPlayer()) as SoundPlayer;
             fireSoundPlayer.SetSound(AssetRegistry.LoadSoundFromFile("sounds/pistol_fire.wav"));
-            fireSoundPlayer.Volume = 0.1f;
+            fireSoundPlayer.AudioClip.Is3D = false;
+            fireSoundPlayer.Volume = 0.15f;
 
         }
 
@@ -165,7 +166,7 @@ namespace RetroEngine.Game.Entities.Weapons
                 //mesh.PastePose(character.GetSkeletalMesh().GetPose());
             }
 
-            fireSoundPlayer.Position = Camera.position;
+            fireSoundPlayer.Position = Camera.position + Camera.rotation.GetForwardVector()*0.2f;
         }
         bool r;
         void Shoot()
@@ -278,6 +279,8 @@ namespace RetroEngine.Game.Entities.Weapons
             meshTp.textureSearchPaths.Add("textures/weapons/general/");
 
             meshTp.PreloadTextures();
+
+            meshTp.DisableOcclusionCulling = true;
 
             arms.CastShadows = false;
             arms.PreloadTextures();

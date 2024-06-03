@@ -25,6 +25,8 @@ namespace RetroEngine.Audio
 
         public bool Loop = false;
 
+        public bool ApplyDistanceVolume = true;
+
         public void Dispose()
         {
             Destroy();

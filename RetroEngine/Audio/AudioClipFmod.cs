@@ -42,7 +42,7 @@ namespace RetroEngine.Audio
             base.Apply3D();
 
             
-            channel.Is3D = true;
+            channel.Is3D = Is3D;
 
             
             channel.Pitch = Pitch;
@@ -66,6 +66,10 @@ namespace RetroEngine.Audio
 
         void ApplyDistance()
         {
+
+            if (ApplyDistanceVolume == false)
+                return;
+
             float distance = Vector3.Distance(SoundManager.listener.Position, Position);
 
             float n = 2.5f;
