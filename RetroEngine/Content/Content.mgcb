@@ -13,142 +13,203 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin BloomSampler.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Optimize
-/build:BloomSampler.fx
-
-#begin box.fbx
-/importer:FbxImporter
-/processor:ModelProcessor
-/processorParam:ColorKeyColor=0,0,0,0
-/processorParam:ColorKeyEnabled=True
-/processorParam:DefaultEffect=BasicEffect
-/processorParam:GenerateMipmaps=True
-/processorParam:GenerateTangentFrames=False
-/processorParam:PremultiplyTextureAlpha=True
-/processorParam:PremultiplyVertexColors=True
-/processorParam:ResizeTexturesToPowerOfTwo=False
-/processorParam:RotationX=0
-/processorParam:RotationY=0
-/processorParam:RotationZ=0
-/processorParam:Scale=1
-/processorParam:SwapWindingOrder=False
-/processorParam:TextureFormat=Compressed
-/build:box.fbx
-
-#begin ColorOutput.fx
+#begin ../../GameData/Shaders/BloomSampler.fx
 /importer:EffectImporter
 /processor:EffectProcessor
 /processorParam:DebugMode=Auto
-/build:ColorOutput.fx;UnlitOutput.fx
+/processorParam:Defines=
+/build:../../GameData/Shaders/BloomSampler.fx;Shaders/BloomSampler.fx
 
-#begin ComposedColor.fx
+#begin ../../GameData/Shaders/ColorOutput.fx
 /importer:EffectImporter
 /processor:EffectProcessor
 /processorParam:DebugMode=Auto
-/build:ComposedColor.fx
+/processorParam:Defines=
+/build:../../GameData/Shaders/ColorOutput.fx;Shaders/ColorOutput.fx
 
-#begin CubeMapVisualizer.fx
+#begin ../../GameData/Shaders/ComposedColor.fx
 /importer:EffectImporter
 /processor:EffectProcessor
 /processorParam:DebugMode=Auto
-/build:CubeMapVisualizer.fx
+/processorParam:Defines=
+/build:../../GameData/Shaders/ComposedColor.fx;Shaders/ComposedColor.fx
 
-#begin DeferredShading.fx
+#begin ../../GameData/Shaders/CubeMapVisualizer.fx
 /importer:EffectImporter
 /processor:EffectProcessor
 /processorParam:DebugMode=Auto
-/build:DeferredShading.fx
+/processorParam:Defines=
+/build:../../GameData/Shaders/CubeMapVisualizer.fx;Shaders/CubeMapVisualizer.fx
 
-#begin File.fx
+#begin ../../GameData/Shaders/DeferredLighting.fx
 /importer:EffectImporter
 /processor:EffectProcessor
 /processorParam:DebugMode=Auto
-/build:File.fx
+/processorParam:Defines=
+/build:../../GameData/Shaders/DeferredLighting.fx;Shaders/DeferredLighting.fx
 
-#begin Font.spritefont
+#begin ../../GameData/Shaders/DeferredShading.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/processorParam:Defines=
+/build:../../GameData/Shaders/DeferredShading.fx;Shaders/DeferredShading.fx
+
+#begin ../../GameData/Shaders/File.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/processorParam:Defines=
+/build:../../GameData/Shaders/File.fx;Shaders/File.fx
+
+#begin ../../GameData/Shaders/FinalColor.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/processorParam:Defines=
+/build:../../GameData/Shaders/FinalColor.fx;Shaders/FinalColor.fx
+
+#begin ../../GameData/Shaders/fxaa.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/processorParam:Defines=
+/build:../../GameData/Shaders/fxaa.fx;Shaders/fxaa.fx
+
+#begin ../../GameData/Shaders/GPathesOutput.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/processorParam:Defines=
+/build:../../GameData/Shaders/GPathesOutput.fx;Shaders/GPathesOutput.fx
+
+#begin ../../GameData/Shaders/MaxDepth.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/processorParam:Defines=
+/build:../../GameData/Shaders/MaxDepth.fx;Shaders/MaxDepth.fx
+
+#begin ../../GameData/Shaders/MiscOutput.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/processorParam:Defines=
+/build:../../GameData/Shaders/MiscOutput.fx;Shaders/MiscOutput.fx
+
+#begin ../../GameData/Shaders/NormalOutput.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/processorParam:Defines=
+/build:../../GameData/Shaders/NormalOutput.fx;Shaders/NormalOutput.fx
+
+#begin ../../GameData/Shaders/OcclusionPath.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/processorParam:Defines=
+/build:../../GameData/Shaders/OcclusionPath.fx;Shaders/OcclusionPath.fx
+
+#begin ../../GameData/Shaders/OcclusionPathStatic.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/processorParam:Defines=
+/build:../../GameData/Shaders/OcclusionPathStatic.fx;Shaders/OcclusionPathStatic.fx
+
+#begin ../../GameData/Shaders/ParticleUnifiedOutput.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/processorParam:Defines=
+/build:../../GameData/Shaders/ParticleUnifiedOutput.fx;Shaders/ParticleUnifiedOutput.fx
+
+#begin ../../GameData/Shaders/PostProcessing.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/processorParam:Defines=
+/build:../../GameData/Shaders/PostProcessing.fx;Shaders/PostProcessing.fx
+
+#begin ../../GameData/Shaders/ReflectionPath.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/processorParam:Defines=
+/build:../../GameData/Shaders/ReflectionPath.fx;Shaders/ReflectionPath.fx
+
+#begin ../../GameData/Shaders/ReflectionResult.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/processorParam:Defines=
+/build:../../GameData/Shaders/ReflectionResult.fx;Shaders/ReflectionResult.fx
+
+#begin ../../GameData/Shaders/ShadowMap.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/processorParam:Defines=
+/build:../../GameData/Shaders/ShadowMap.fx;Shaders/ShadowMap.fx
+
+#begin ../../GameData/Shaders/ShadowMapMasked.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/processorParam:Defines=
+/build:../../GameData/Shaders/ShadowMapMasked.fx;Shaders/ShadowMapMasked.fx
+
+#begin ../../GameData/Shaders/SimpleEffect.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/processorParam:Defines=
+/build:../../GameData/Shaders/SimpleEffect.fx;Shaders/SimpleEffect.fx
+
+#begin ../../GameData/Shaders/ssao.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/processorParam:Defines=
+/build:../../GameData/Shaders/ssao.fx;Shaders/ssao.fx
+
+#begin ../../GameData/Shaders/TestPostProcessEffect.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/processorParam:Defines=
+/build:../../GameData/Shaders/TestPostProcessEffect.fx;Shaders/TestPostProcessEffect.fx
+
+#begin ../../GameData/Shaders/Tonemap.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/processorParam:Defines=
+/build:../../GameData/Shaders/Tonemap.fx;Shaders/Tonemap.fx
+
+#begin ../../GameData/Shaders/UnifiedOutput.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/processorParam:Defines=
+/build:../../GameData/Shaders/UnifiedOutput.fx;Shaders/UnifiedOutput.fx
+
+#begin ../../GameData/Shaders/Unlit.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/processorParam:Defines=
+/build:../../GameData/Shaders/Unlit.fx;Shaders/Unlit.fx
+
+#begin ../../GameData/Fonts/Font.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
-/build:Font.spritefont
+/build:../../GameData/Fonts/Font.spritefont;Fonts/Font.spritefont
 
-#begin fxaa.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Optimize
-/build:fxaa.fx
-
-#begin GPathesOutput.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/build:GPathesOutput.fx
-
-#begin MaxDepth.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/build:MaxDepth.fx
-
-#begin OcclusionPath.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Optimize
-/build:OcclusionPath.fx
-
-#begin OcclusionPathStatic.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/build:OcclusionPathStatic.fx
-
-#begin ParticleUnifiedOutput.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/build:ParticleUnifiedOutput.fx
-
-#begin ReflectionPath.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/build:ReflectionPath.fx
-
-#begin ReflectionResult.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/build:ReflectionResult.fx
-
-#begin ShadowMap.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Optimize
-/build:ShadowMap.fx
-
-#begin ShadowMapMasked.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/build:ShadowMapMasked.fx
-
-#begin ssao.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/build:ssao.fx
-
-#begin Tonemap.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Optimize
-/build:Tonemap.fx
-
-#begin UnifiedOutput.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Optimize
-/build:UnifiedOutput.fx
+#begin ../../GameData/test.fbx
+/importer:
+/processor:
+/copy:../../GameData/test.fbx;test.fbx

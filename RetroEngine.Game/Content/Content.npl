@@ -1,20 +1,10 @@
 {
-	"root": "../../GameData/",
+	"root": "",
 	"references": [
 
 	],
 
 	"content": {
-
-		"GameData": {
-			"path": "*.*",
-			"recursive": "false",
-			"action": "copy",
-			"importer": null,
-			"processor": null,
-			"watch": []
-		},
-
 		"shaders": {
 			"path": "Shaders/*.fx",
 			"recursive": "False",
@@ -27,7 +17,6 @@
 			},
 			"watch": []
 		},
-
 		"fonts": {
 			"path": "Fonts/*.spritefont",
 			"recursive": "false",

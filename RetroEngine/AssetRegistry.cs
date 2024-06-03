@@ -37,7 +37,7 @@ namespace RetroEngine
 
         static List<string> nullTextures= new List<string>();
 
-        public const string ROOT_PATH = "../../../../";
+        public const string ROOT_PATH = "Content/";
 
         const int MaxTexturesInMemory = 5000;
 
@@ -231,7 +231,10 @@ namespace RetroEngine
 
         public static Effect GetShaderFromName(string path)
         {
-            if(effects.ContainsKey(path))
+
+            path = "Shaders/" + path;
+
+            if (effects.ContainsKey(path))
             {
                 return effects[path];
             }
@@ -252,7 +255,7 @@ namespace RetroEngine
                 return effectsPP[path];
             }
 
-            var effect = GameMain.content.Load<Effect>(path);
+            var effect = GameMain.content.Load<Effect>("Shaders/" + path);
 
             effectsPP.Add(path, new Shader(effect));
             effect.Dispose();
@@ -354,23 +357,25 @@ namespace RetroEngine
             }
         }
 
+        const string assetsRoot = "";
+
         public static string FindPathForFile(string path)
         {
 
             string directory = Path.GetDirectoryName(path);
             string fileName = Path.GetFileName(path);
 
-            if (File.Exists(ROOT_PATH + "GameData/" + path))
-                return ROOT_PATH + "GameData/" + path;
+            if (File.Exists(ROOT_PATH + assetsRoot + path))
+                return ROOT_PATH + assetsRoot + path;
 
-            if (File.Exists(ROOT_PATH + "GameData/textures/" + path))
-                return ROOT_PATH + "GameData/textures/" + path;
+            if (File.Exists(ROOT_PATH + assetsRoot + "textures/" + path))
+                return ROOT_PATH + assetsRoot + "textures/" + path;
 
-            if (File.Exists(ROOT_PATH + "GameData/textures/brushes/" + path))
-                return ROOT_PATH + "GameData/textures/brushes/" + path;
+            if (File.Exists(ROOT_PATH + assetsRoot + "textures/brushes/" + path))
+                return ROOT_PATH + assetsRoot + "textures/brushes/" + path;
 
-            if (File.Exists(ROOT_PATH + "GameData/maps/" + path))
-                return ROOT_PATH + "GameData/maps/" + path;
+            if (File.Exists(ROOT_PATH + assetsRoot + "maps/" + path))
+                return ROOT_PATH + assetsRoot + "maps/" + path;
 
 
             return path;

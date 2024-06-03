@@ -117,31 +117,31 @@ namespace RetroEngine
             //MiscEffect = GameMain.content.Load<Effect>("MiscOutput");
 
 
-            ShadowMapEffect = GameMain.content.Load<Effect>("ShadowMap");
-            ShadowMapMaskedEffect = GameMain.content.Load<Effect>("ShadowMapMasked");
-            fxaaEffect = GameMain.content.Load<Effect>("fxaa");
-            maxDepth = GameMain.content.Load<Effect>("maxDepth");
+            ShadowMapEffect = GameMain.content.Load<Effect>("Shaders/ShadowMap");
+            ShadowMapMaskedEffect = GameMain.content.Load<Effect>("Shaders/ShadowMapMasked");
+            fxaaEffect = GameMain.content.Load<Effect>("Shaders/fxaa");
+            maxDepth = GameMain.content.Load<Effect>("Shaders/maxDepth");
             //PostProcessingEffect = GameMain.content.Load<Effect>("PostProcessing");
             //ColorEffect = GameMain.content.Load<Effect>("ColorOutput");
             //ParticleColorEffect = GameMain.content.Load<Effect>("ParticleColorOutput");
-            SSAOEffect = GameMain.content.Load<Effect>("ssao");
-            BuffersEffect = GameMain.content.Load<Effect>("GPathesOutput");
+            SSAOEffect = GameMain.content.Load<Effect>("Shaders/ssao");
+            BuffersEffect = GameMain.content.Load<Effect>("Shaders/GPathesOutput");
 
-            DeferredEffect = GameMain.content.Load<Effect>("DeferredShading");
+            DeferredEffect = GameMain.content.Load<Effect>("Shaders/DeferredShading");
 
-            ComposeEffect = GameMain.content.Load<Effect>("ComposedColor");
+            ComposeEffect = GameMain.content.Load<Effect>("Shaders/ComposedColor");
 
-            BloomEffect = GameMain.content.Load<Effect>("BloomSampler");
+            BloomEffect = GameMain.content.Load<Effect>("Shaders/BloomSampler");
 
-            OcclusionEffect = GameMain.content.Load<Effect>("OcclusionPath");
-            OcclusionStaticEffect = GameMain.content.Load<Effect>("OcclusionPathStatic");
+            OcclusionEffect = GameMain.content.Load<Effect>("Shaders/OcclusionPath");
+            OcclusionStaticEffect = GameMain.content.Load<Effect>("Shaders/OcclusionPathStatic");
 
 
-            TonemapperEffect = GameMain.content.Load<Effect>("Tonemap");
+            TonemapperEffect = GameMain.content.Load<Effect>("Shaders/Tonemap");
 
 
             ReflectionEffect = AssetRegistry.GetShaderFromName("ReflectionPath");
-            ReflectionResultEffect = GameMain.content.Load<Effect>("ReflectionResult");
+            ReflectionResultEffect = GameMain.content.Load<Effect>("Shaders/ReflectionResult");
 
             
 

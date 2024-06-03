@@ -31,10 +31,10 @@
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.1.303">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Nopipeline.Task" Version="2.2.0" />
     <PackageReference Include="RhuBulletSharp" Version="1.0.3" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Content\ShaderLib\" />
     <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
   <ItemGroup>

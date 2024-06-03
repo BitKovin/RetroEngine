@@ -25,22 +25,23 @@
 /processorParam:TextureFormat=Color
 /build:cat.png
 
-#begin SimpleEffect.fx
+#begin Shaders/SimpleEffect.fx
 /importer:EffectImporter
 /processor:EffectProcessor
 /processorParam:DebugMode=Auto
 /processorParam:Defines=
-/build:SimpleEffect.fx
+/build:Shaders/SimpleEffect.fx
 
-#begin TestPostProcessEffect.fx
+#begin Shaders/TestPostProcessEffect.fx
 /importer:EffectImporter
 /processor:EffectProcessor
 /processorParam:DebugMode=Auto
-/build:TestPostProcessEffect.fx
+/processorParam:Defines=
+/build:Shaders/TestPostProcessEffect.fx
 
-#begin Unlit.fx
+#begin Shaders/Unlit.fx
 /importer:EffectImporter
 /processor:EffectProcessor
 /processorParam:DebugMode=Auto
-/build:Unlit.fx
-
+/processorParam:Defines=
+/build:Shaders/Unlit.fx
