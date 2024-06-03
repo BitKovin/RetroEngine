@@ -6,14 +6,7 @@
 
 	"content": {
 
-		"GameData": {
-			"path": "*.*",
-			"recursive": "false",
-			"action": "copy",
-			"importer": null,
-			"processor": null,
-			"watch": []
-		},
+
 
 		"shaders": {
 			"path": "Shaders/*.fx",

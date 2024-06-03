@@ -1,6 +1,6 @@
 ﻿#define NO_SPECULAR
 
-#include "../../RetroEngine/Content/Shaders/ShaderLib/BasicShader.fx"
+#include "ShaderLib/BasicShader.fx"
 
 texture Texture;
 sampler TextureSampler = sampler_state

@@ -13,6 +13,13 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin ../../GameData/Fonts/Font.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:../../GameData/Fonts/Font.spritefont;Fonts/Font.spritefont
+
 #begin ../../GameData/Shaders/BloomSampler.fx
 /importer:EffectImporter
 /processor:EffectProcessor
@@ -202,14 +209,2437 @@
 /processorParam:Defines=
 /build:../../GameData/Shaders/Unlit.fx;Shaders/Unlit.fx
 
-#begin ../../GameData/Fonts/Font.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:../../GameData/Fonts/Font.spritefont;Fonts/Font.spritefont
-
 #begin ../../GameData/test.fbx
 /importer:
 /processor:
 /copy:../../GameData/test.fbx;test.fbx
+
+#begin ../../GameData/Fonts/dos.ttf
+/importer:
+/processor:
+/copy:../../GameData/Fonts/dos.ttf;Fonts/dos.ttf
+
+#begin ../../GameData/maps/e1m1.map
+/importer:
+/processor:
+/copy:../../GameData/maps/e1m1.map;maps/e1m1.map
+
+#begin ../../GameData/maps/e1m1.mtl
+/importer:
+/processor:
+/copy:../../GameData/maps/e1m1.mtl;maps/e1m1.mtl
+
+#begin ../../GameData/maps/e1m1.obj
+/importer:
+/processor:
+/copy:../../GameData/maps/e1m1.obj;maps/e1m1.obj
+
+#begin ../../GameData/maps/MAP01.MAP
+/importer:
+/processor:
+/copy:../../GameData/maps/MAP01.MAP;maps/MAP01.MAP
+
+#begin ../../GameData/maps/qkdme1m1.map
+/importer:
+/processor:
+/copy:../../GameData/maps/qkdme1m1.map;maps/qkdme1m1.map
+
+#begin ../../GameData/maps/test.map
+/importer:
+/processor:
+/copy:../../GameData/maps/test.map;maps/test.map
+
+#begin ../../GameData/maps/test.mtl
+/importer:
+/processor:
+/copy:../../GameData/maps/test.mtl;maps/test.mtl
+
+#begin ../../GameData/maps/test.obj
+/importer:
+/processor:
+/copy:../../GameData/maps/test.obj;maps/test.obj
+
+#begin ../../GameData/maps/test2.map
+/importer:
+/processor:
+/copy:../../GameData/maps/test2.map;maps/test2.map
+
+#begin ../../GameData/maps/test2.mtl
+/importer:
+/processor:
+/copy:../../GameData/maps/test2.mtl;maps/test2.mtl
+
+#begin ../../GameData/maps/test2.obj
+/importer:
+/processor:
+/copy:../../GameData/maps/test2.obj;maps/test2.obj
+
+#begin ../../GameData/maps/test3.map
+/importer:
+/processor:
+/copy:../../GameData/maps/test3.map;maps/test3.map
+
+#begin ../../GameData/maps/test3.mtl
+/importer:
+/processor:
+/copy:../../GameData/maps/test3.mtl;maps/test3.mtl
+
+#begin ../../GameData/maps/test3.obj
+/importer:
+/processor:
+/copy:../../GameData/maps/test3.obj;maps/test3.obj
+
+#begin ../../GameData/models/cube.mtl
+/importer:
+/processor:
+/copy:../../GameData/models/cube.mtl;models/cube.mtl
+
+#begin ../../GameData/models/cube.obj
+/importer:
+/processor:
+/copy:../../GameData/models/cube.obj;models/cube.obj
+
+#begin ../../GameData/models/npc_base.mtl
+/importer:
+/processor:
+/copy:../../GameData/models/npc_base.mtl;models/npc_base.mtl
+
+#begin ../../GameData/models/npc_base.obj
+/importer:
+/processor:
+/copy:../../GameData/models/npc_base.obj;models/npc_base.obj
+
+#begin ../../GameData/models/particle.mtl
+/importer:
+/processor:
+/copy:../../GameData/models/particle.mtl;models/particle.mtl
+
+#begin ../../GameData/models/particle.obj
+/importer:
+/processor:
+/copy:../../GameData/models/particle.obj;models/particle.obj
+
+#begin ../../GameData/models/player_body.FBX
+/importer:
+/processor:
+/copy:../../GameData/models/player_body.FBX;models/player_body.FBX
+
+#begin ../../GameData/models/player_model_full.fbx
+/importer:
+/processor:
+/copy:../../GameData/models/player_model_full.fbx;models/player_model_full.fbx
+
+#begin ../../GameData/models/skeletal_test.fbx
+/importer:
+/processor:
+/copy:../../GameData/models/skeletal_test.fbx;models/skeletal_test.fbx
+
+#begin ../../GameData/models/skeletal_test2.fbx
+/importer:
+/processor:
+/copy:../../GameData/models/skeletal_test2.fbx;models/skeletal_test2.fbx
+
+#begin ../../GameData/models/sky.mtl
+/importer:
+/processor:
+/copy:../../GameData/models/sky.mtl;models/sky.mtl
+
+#begin ../../GameData/models/sky.obj
+/importer:
+/processor:
+/copy:../../GameData/models/sky.obj;models/sky.obj
+
+#begin ../../GameData/models/sphere.mtl
+/importer:
+/processor:
+/copy:../../GameData/models/sphere.mtl;models/sphere.mtl
+
+#begin ../../GameData/models/sphere.obj
+/importer:
+/processor:
+/copy:../../GameData/models/sphere.obj;models/sphere.obj
+
+#begin ../../GameData/models/test.obj
+/importer:
+/processor:
+/copy:../../GameData/models/test.obj;models/test.obj
+
+#begin ../../GameData/Sounds/mew.wav
+/importer:
+/processor:
+/copy:../../GameData/Sounds/mew.wav;Sounds/mew.wav
+
+#begin ../../GameData/Sounds/mew2.wav
+/importer:
+/processor:
+/copy:../../GameData/Sounds/mew2.wav;Sounds/mew2.wav
+
+#begin ../../GameData/Sounds/pistol_fire.wav
+/importer:
+/processor:
+/copy:../../GameData/Sounds/pistol_fire.wav;Sounds/pistol_fire.wav
+
+#begin ../../GameData/Sounds/step.wav
+/importer:
+/processor:
+/copy:../../GameData/Sounds/step.wav;Sounds/step.wav
+
+#begin ../../GameData/Sounds/test.mp3
+/importer:
+/processor:
+/copy:../../GameData/Sounds/test.mp3;Sounds/test.mp3
+
+#begin ../../GameData/Sounds/test.wav
+/importer:
+/processor:
+/copy:../../GameData/Sounds/test.wav;Sounds/test.wav
+
+#begin ../../GameData/Sounds/test2.wav
+/importer:
+/processor:
+/copy:../../GameData/Sounds/test2.wav;Sounds/test2.wav
+
+#begin ../../GameData/sourceAssets/hammer.blend
+/importer:
+/processor:
+/copy:../../GameData/sourceAssets/hammer.blend;sourceAssets/hammer.blend
+
+#begin ../../GameData/sourceAssets/hammer.blend1
+/importer:
+/processor:
+/copy:../../GameData/sourceAssets/hammer.blend1;sourceAssets/hammer.blend1
+
+#begin ../../GameData/sourceAssets/lmg.blend
+/importer:
+/processor:
+/copy:../../GameData/sourceAssets/lmg.blend;sourceAssets/lmg.blend
+
+#begin ../../GameData/sourceAssets/lmg.blend1
+/importer:
+/processor:
+/copy:../../GameData/sourceAssets/lmg.blend1;sourceAssets/lmg.blend1
+
+#begin ../../GameData/sourceAssets/pistol.blend
+/importer:
+/processor:
+/copy:../../GameData/sourceAssets/pistol.blend;sourceAssets/pistol.blend
+
+#begin ../../GameData/sourceAssets/pistol.blend1
+/importer:
+/processor:
+/copy:../../GameData/sourceAssets/pistol.blend1;sourceAssets/pistol.blend1
+
+#begin ../../GameData/sourceAssets/pistol_new.blend
+/importer:
+/processor:
+/copy:../../GameData/sourceAssets/pistol_new.blend;sourceAssets/pistol_new.blend
+
+#begin ../../GameData/sourceAssets/pistol_new.blend1
+/importer:
+/processor:
+/copy:../../GameData/sourceAssets/pistol_new.blend1;sourceAssets/pistol_new.blend1
+
+#begin ../../GameData/sourceAssets/pistol_new_.blend
+/importer:
+/processor:
+/copy:../../GameData/sourceAssets/pistol_new_.blend;sourceAssets/pistol_new_.blend
+
+#begin ../../GameData/sourceAssets/pistol_new_.blend1
+/importer:
+/processor:
+/copy:../../GameData/sourceAssets/pistol_new_.blend1;sourceAssets/pistol_new_.blend1
+
+#begin ../../GameData/sourceAssets/pistol_new_2.blend
+/importer:
+/processor:
+/copy:../../GameData/sourceAssets/pistol_new_2.blend;sourceAssets/pistol_new_2.blend
+
+#begin ../../GameData/sourceAssets/revolver.blend
+/importer:
+/processor:
+/copy:../../GameData/sourceAssets/revolver.blend;sourceAssets/revolver.blend
+
+#begin ../../GameData/sourceAssets/revolver.blend1
+/importer:
+/processor:
+/copy:../../GameData/sourceAssets/revolver.blend1;sourceAssets/revolver.blend1
+
+#begin ../../GameData/sourceAssets/shotgun.blend
+/importer:
+/processor:
+/copy:../../GameData/sourceAssets/shotgun.blend;sourceAssets/shotgun.blend
+
+#begin ../../GameData/sourceAssets/shotgun.blend1
+/importer:
+/processor:
+/copy:../../GameData/sourceAssets/shotgun.blend1;sourceAssets/shotgun.blend1
+
+#begin ../../GameData/sourceAssets/shotgun_new.blend
+/importer:
+/processor:
+/copy:../../GameData/sourceAssets/shotgun_new.blend;sourceAssets/shotgun_new.blend
+
+#begin ../../GameData/sourceAssets/shotgun_new.blend1
+/importer:
+/processor:
+/copy:../../GameData/sourceAssets/shotgun_new.blend1;sourceAssets/shotgun_new.blend1
+
+#begin ../../GameData/sourceAssets/shotgun_new.fbx
+/importer:
+/processor:
+/copy:../../GameData/sourceAssets/shotgun_new.fbx;sourceAssets/shotgun_new.fbx
+
+#begin ../../GameData/textures/foil.png
+/importer:
+/processor:
+/copy:../../GameData/textures/foil.png;textures/foil.png
+
+#begin ../../GameData/textures/foil_n.png
+/importer:
+/processor:
+/copy:../../GameData/textures/foil_n.png;textures/foil_n.png
+
+#begin ../../GameData/textures/foil_orm.png
+/importer:
+/processor:
+/copy:../../GameData/textures/foil_orm.png;textures/foil_orm.png
+
+#begin ../../GameData/textures/testUV.png
+/importer:
+/processor:
+/copy:../../GameData/textures/testUV.png;textures/testUV.png
+
+#begin ../../GameData/Animations/human/idle.fbx
+/importer:
+/processor:
+/copy:../../GameData/Animations/human/idle.fbx;Animations/human/idle.fbx
+
+#begin ../../GameData/Animations/human/run_b.fbx
+/importer:
+/processor:
+/copy:../../GameData/Animations/human/run_b.fbx;Animations/human/run_b.fbx
+
+#begin ../../GameData/Animations/human/run_f.fbx
+/importer:
+/processor:
+/copy:../../GameData/Animations/human/run_f.fbx;Animations/human/run_f.fbx
+
+#begin ../../GameData/Animations/human/run_l.fbx
+/importer:
+/processor:
+/copy:../../GameData/Animations/human/run_l.fbx;Animations/human/run_l.fbx
+
+#begin ../../GameData/Animations/human/run_r.fbx
+/importer:
+/processor:
+/copy:../../GameData/Animations/human/run_r.fbx;Animations/human/run_r.fbx
+
+#begin ../../GameData/engine/models/pointLightVisibility.fbx
+/importer:
+/processor:
+/copy:../../GameData/engine/models/pointLightVisibility.fbx;engine/models/pointLightVisibility.fbx
+
+#begin ../../GameData/engine/textures/black.png
+/importer:
+/processor:
+/copy:../../GameData/engine/textures/black.png;engine/textures/black.png
+
+#begin ../../GameData/engine/textures/defaultORM.png
+/importer:
+/processor:
+/copy:../../GameData/engine/textures/defaultORM.png;engine/textures/defaultORM.png
+
+#begin ../../GameData/engine/textures/lut.png
+/importer:
+/processor:
+/copy:../../GameData/engine/textures/lut.png;engine/textures/lut.png
+
+#begin ../../GameData/engine/textures/Sin Shitty.png_out.png
+/importer:
+/processor:
+/copy:../../GameData/engine/textures/Sin Shitty.png_out.png;engine/textures/Sin Shitty.png_out.png
+
+#begin ../../GameData/engine/textures/white.png
+/importer:
+/processor:
+/copy:../../GameData/engine/textures/white.png;engine/textures/white.png
+
+#begin ../../GameData/maps/autosave/e1m1.1.map
+/importer:
+/processor:
+/copy:../../GameData/maps/autosave/e1m1.1.map;maps/autosave/e1m1.1.map
+
+#begin ../../GameData/maps/autosave/e1m1.2.map
+/importer:
+/processor:
+/copy:../../GameData/maps/autosave/e1m1.2.map;maps/autosave/e1m1.2.map
+
+#begin ../../GameData/maps/autosave/e1m1.3.map
+/importer:
+/processor:
+/copy:../../GameData/maps/autosave/e1m1.3.map;maps/autosave/e1m1.3.map
+
+#begin ../../GameData/maps/autosave/e1m1.4.map
+/importer:
+/processor:
+/copy:../../GameData/maps/autosave/e1m1.4.map;maps/autosave/e1m1.4.map
+
+#begin ../../GameData/maps/autosave/e1m1.5.map
+/importer:
+/processor:
+/copy:../../GameData/maps/autosave/e1m1.5.map;maps/autosave/e1m1.5.map
+
+#begin ../../GameData/maps/autosave/e1m1.6.map
+/importer:
+/processor:
+/copy:../../GameData/maps/autosave/e1m1.6.map;maps/autosave/e1m1.6.map
+
+#begin ../../GameData/maps/autosave/test.1.map
+/importer:
+/processor:
+/copy:../../GameData/maps/autosave/test.1.map;maps/autosave/test.1.map
+
+#begin ../../GameData/maps/autosave/test.2.map
+/importer:
+/processor:
+/copy:../../GameData/maps/autosave/test.2.map;maps/autosave/test.2.map
+
+#begin ../../GameData/maps/autosave/test2.1.map
+/importer:
+/processor:
+/copy:../../GameData/maps/autosave/test2.1.map;maps/autosave/test2.1.map
+
+#begin ../../GameData/maps/autosave/test2.10.map
+/importer:
+/processor:
+/copy:../../GameData/maps/autosave/test2.10.map;maps/autosave/test2.10.map
+
+#begin ../../GameData/maps/autosave/test2.11.map
+/importer:
+/processor:
+/copy:../../GameData/maps/autosave/test2.11.map;maps/autosave/test2.11.map
+
+#begin ../../GameData/maps/autosave/test2.12.map
+/importer:
+/processor:
+/copy:../../GameData/maps/autosave/test2.12.map;maps/autosave/test2.12.map
+
+#begin ../../GameData/maps/autosave/test2.13.map
+/importer:
+/processor:
+/copy:../../GameData/maps/autosave/test2.13.map;maps/autosave/test2.13.map
+
+#begin ../../GameData/maps/autosave/test2.14.map
+/importer:
+/processor:
+/copy:../../GameData/maps/autosave/test2.14.map;maps/autosave/test2.14.map
+
+#begin ../../GameData/maps/autosave/test2.15.map
+/importer:
+/processor:
+/copy:../../GameData/maps/autosave/test2.15.map;maps/autosave/test2.15.map
+
+#begin ../../GameData/maps/autosave/test2.16.map
+/importer:
+/processor:
+/copy:../../GameData/maps/autosave/test2.16.map;maps/autosave/test2.16.map
+
+#begin ../../GameData/maps/autosave/test2.17.map
+/importer:
+/processor:
+/copy:../../GameData/maps/autosave/test2.17.map;maps/autosave/test2.17.map
+
+#begin ../../GameData/maps/autosave/test2.18.map
+/importer:
+/processor:
+/copy:../../GameData/maps/autosave/test2.18.map;maps/autosave/test2.18.map
+
+#begin ../../GameData/maps/autosave/test2.19.map
+/importer:
+/processor:
+/copy:../../GameData/maps/autosave/test2.19.map;maps/autosave/test2.19.map
+
+#begin ../../GameData/maps/autosave/test2.20.map
+/importer:
+/processor:
+/copy:../../GameData/maps/autosave/test2.20.map;maps/autosave/test2.20.map
+
+#begin ../../GameData/maps/autosave/test2.21.map
+/importer:
+/processor:
+/copy:../../GameData/maps/autosave/test2.21.map;maps/autosave/test2.21.map
+
+#begin ../../GameData/maps/autosave/test3.1.map
+/importer:
+/processor:
+/copy:../../GameData/maps/autosave/test3.1.map;maps/autosave/test3.1.map
+
+#begin ../../GameData/maps/autosave/test3.2.map
+/importer:
+/processor:
+/copy:../../GameData/maps/autosave/test3.2.map;maps/autosave/test3.2.map
+
+#begin ../../GameData/models/effects/explosionSphere.mtl
+/importer:
+/processor:
+/copy:../../GameData/models/effects/explosionSphere.mtl;models/effects/explosionSphere.mtl
+
+#begin ../../GameData/models/effects/explosionSphere.obj
+/importer:
+/processor:
+/copy:../../GameData/models/effects/explosionSphere.obj;models/effects/explosionSphere.obj
+
+#begin ../../GameData/models/particles/wood.mtl
+/importer:
+/processor:
+/copy:../../GameData/models/particles/wood.mtl;models/particles/wood.mtl
+
+#begin ../../GameData/models/particles/wood.obj
+/importer:
+/processor:
+/copy:../../GameData/models/particles/wood.obj;models/particles/wood.obj
+
+#begin ../../GameData/models/tools/cubemap.mtl
+/importer:
+/processor:
+/copy:../../GameData/models/tools/cubemap.mtl;models/tools/cubemap.mtl
+
+#begin ../../GameData/models/tools/cubemap.obj
+/importer:
+/processor:
+/copy:../../GameData/models/tools/cubemap.obj;models/tools/cubemap.obj
+
+#begin ../../GameData/models/tools/radius.mtl
+/importer:
+/processor:
+/copy:../../GameData/models/tools/radius.mtl;models/tools/radius.mtl
+
+#begin ../../GameData/models/tools/radius.obj
+/importer:
+/processor:
+/copy:../../GameData/models/tools/radius.obj;models/tools/radius.obj
+
+#begin ../../GameData/models/ui/crosshair.mtl
+/importer:
+/processor:
+/copy:../../GameData/models/ui/crosshair.mtl;models/ui/crosshair.mtl
+
+#begin ../../GameData/models/ui/crosshair.obj
+/importer:
+/processor:
+/copy:../../GameData/models/ui/crosshair.obj;models/ui/crosshair.obj
+
+#begin ../../GameData/models/weapons/arms.fbx
+/importer:
+/processor:
+/copy:../../GameData/models/weapons/arms.fbx;models/weapons/arms.fbx
+
+#begin ../../GameData/models/weapons/pistol.fbx
+/importer:
+/processor:
+/copy:../../GameData/models/weapons/pistol.fbx;models/weapons/pistol.fbx
+
+#begin ../../GameData/models/weapons/pistol2.fbx
+/importer:
+/processor:
+/copy:../../GameData/models/weapons/pistol2.fbx;models/weapons/pistol2.fbx
+
+#begin ../../GameData/models/weapons/pistol3.fbx
+/importer:
+/processor:
+/copy:../../GameData/models/weapons/pistol3.fbx;models/weapons/pistol3.fbx
+
+#begin ../../GameData/models/weapons/pistol_tp.fbx
+/importer:
+/processor:
+/copy:../../GameData/models/weapons/pistol_tp.fbx;models/weapons/pistol_tp.fbx
+
+#begin ../../GameData/models/weapons/revolver.fbx
+/importer:
+/processor:
+/copy:../../GameData/models/weapons/revolver.fbx;models/weapons/revolver.fbx
+
+#begin ../../GameData/models/weapons/revolver_fire.fbx
+/importer:
+/processor:
+/copy:../../GameData/models/weapons/revolver_fire.fbx;models/weapons/revolver_fire.fbx
+
+#begin ../../GameData/models/weapons/shotgun.fbx
+/importer:
+/processor:
+/copy:../../GameData/models/weapons/shotgun.fbx;models/weapons/shotgun.fbx
+
+#begin ../../GameData/Shaders/ShaderLib/BasicShader.fx
+/importer:
+/processor:
+/copy:../../GameData/Shaders/ShaderLib/BasicShader.fx;Shaders/ShaderLib/BasicShader.fx
+
+#begin ../../GameData/sourceAssets/thirdPerson/pistols.blend
+/importer:
+/processor:
+/copy:../../GameData/sourceAssets/thirdPerson/pistols.blend;sourceAssets/thirdPerson/pistols.blend
+
+#begin ../../GameData/sourceAssets/thirdPerson/pistols.blend1
+/importer:
+/processor:
+/copy:../../GameData/sourceAssets/thirdPerson/pistols.blend1;sourceAssets/thirdPerson/pistols.blend1
+
+#begin ../../GameData/sourceAssets/thirdPerson/pistols.casc
+/importer:
+/processor:
+/copy:../../GameData/sourceAssets/thirdPerson/pistols.casc;sourceAssets/thirdPerson/pistols.casc
+
+#begin ../../GameData/sourceAssets/thirdPerson/pistols.fbx
+/importer:
+/processor:
+/copy:../../GameData/sourceAssets/thirdPerson/pistols.fbx;sourceAssets/thirdPerson/pistols.fbx
+
+#begin ../../GameData/textures/brushes/brick.png
+/importer:
+/processor:
+/copy:../../GameData/textures/brushes/brick.png;textures/brushes/brick.png
+
+#begin ../../GameData/textures/brushes/brickPBR.png
+/importer:
+/processor:
+/copy:../../GameData/textures/brushes/brickPBR.png;textures/brushes/brickPBR.png
+
+#begin ../../GameData/textures/brushes/brickPBR_n.png
+/importer:
+/processor:
+/copy:../../GameData/textures/brushes/brickPBR_n.png;textures/brushes/brickPBR_n.png
+
+#begin ../../GameData/textures/brushes/brickPBR_orm.png
+/importer:
+/processor:
+/copy:../../GameData/textures/brushes/brickPBR_orm.png;textures/brushes/brickPBR_orm.png
+
+#begin ../../GameData/textures/brushes/bricks.png
+/importer:
+/processor:
+/copy:../../GameData/textures/brushes/bricks.png;textures/brushes/bricks.png
+
+#begin ../../GameData/textures/brushes/cat.png
+/importer:
+/processor:
+/copy:../../GameData/textures/brushes/cat.png;textures/brushes/cat.png
+
+#begin ../../GameData/textures/brushes/grass.png
+/importer:
+/processor:
+/copy:../../GameData/textures/brushes/grass.png;textures/brushes/grass.png
+
+#begin ../../GameData/textures/brushes/ground_pbr.png
+/importer:
+/processor:
+/copy:../../GameData/textures/brushes/ground_pbr.png;textures/brushes/ground_pbr.png
+
+#begin ../../GameData/textures/brushes/ground_pbr_n.png
+/importer:
+/processor:
+/copy:../../GameData/textures/brushes/ground_pbr_n.png;textures/brushes/ground_pbr_n.png
+
+#begin ../../GameData/textures/brushes/ground_pbr_orm.png
+/importer:
+/processor:
+/copy:../../GameData/textures/brushes/ground_pbr_orm.png;textures/brushes/ground_pbr_orm.png
+
+#begin ../../GameData/textures/brushes/mask_test_m.png
+/importer:
+/processor:
+/copy:../../GameData/textures/brushes/mask_test_m.png;textures/brushes/mask_test_m.png
+
+#begin ../../GameData/textures/brushes/mirror.png
+/importer:
+/processor:
+/copy:../../GameData/textures/brushes/mirror.png;textures/brushes/mirror.png
+
+#begin ../../GameData/textures/brushes/mirror_orm.png
+/importer:
+/processor:
+/copy:../../GameData/textures/brushes/mirror_orm.png;textures/brushes/mirror_orm.png
+
+#begin ../../GameData/textures/brushes/trigger.png
+/importer:
+/processor:
+/copy:../../GameData/textures/brushes/trigger.png;textures/brushes/trigger.png
+
+#begin ../../GameData/textures/brushes/trigger_t.png
+/importer:
+/processor:
+/copy:../../GameData/textures/brushes/trigger_t.png;textures/brushes/trigger_t.png
+
+#begin ../../GameData/textures/brushes/__TB_empty.png
+/importer:
+/processor:
+/copy:../../GameData/textures/brushes/__TB_empty.png;textures/brushes/__TB_empty.png
+
+#begin ../../GameData/textures/particles/smoke.png
+/importer:
+/processor:
+/copy:../../GameData/textures/particles/smoke.png;textures/particles/smoke.png
+
+#begin ../../GameData/textures/particles/trail.png
+/importer:
+/processor:
+/copy:../../GameData/textures/particles/trail.png;textures/particles/trail.png
+
+#begin ../../GameData/textures/particles/wood.png
+/importer:
+/processor:
+/copy:../../GameData/textures/particles/wood.png;textures/particles/wood.png
+
+#begin ../../GameData/textures/sky/sky.png
+/importer:
+/processor:
+/copy:../../GameData/textures/sky/sky.png;textures/sky/sky.png
+
+#begin ../../GameData/textures/sky/sky_back.jpg
+/importer:
+/processor:
+/copy:../../GameData/textures/sky/sky_back.jpg;textures/sky/sky_back.jpg
+
+#begin ../../GameData/textures/sky/sky_bottom.jpg
+/importer:
+/processor:
+/copy:../../GameData/textures/sky/sky_bottom.jpg;textures/sky/sky_bottom.jpg
+
+#begin ../../GameData/textures/sky/sky_front.jpg
+/importer:
+/processor:
+/copy:../../GameData/textures/sky/sky_front.jpg;textures/sky/sky_front.jpg
+
+#begin ../../GameData/textures/sky/sky_left.jpg
+/importer:
+/processor:
+/copy:../../GameData/textures/sky/sky_left.jpg;textures/sky/sky_left.jpg
+
+#begin ../../GameData/textures/sky/sky_right.jpg
+/importer:
+/processor:
+/copy:../../GameData/textures/sky/sky_right.jpg;textures/sky/sky_right.jpg
+
+#begin ../../GameData/textures/sky/sky_top.jpg
+/importer:
+/processor:
+/copy:../../GameData/textures/sky/sky_top.jpg;textures/sky/sky_top.jpg
+
+#begin ../../GameData/textures/ui/crosshair.png
+/importer:
+/processor:
+/copy:../../GameData/textures/ui/crosshair.png;textures/ui/crosshair.png
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_1.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_1.mtl;Animations/Hammer/Attack/frame_1.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_1.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_1.obj;Animations/Hammer/Attack/frame_1.obj
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_10.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_10.mtl;Animations/Hammer/Attack/frame_10.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_10.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_10.obj;Animations/Hammer/Attack/frame_10.obj
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_11.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_11.mtl;Animations/Hammer/Attack/frame_11.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_11.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_11.obj;Animations/Hammer/Attack/frame_11.obj
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_12.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_12.mtl;Animations/Hammer/Attack/frame_12.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_12.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_12.obj;Animations/Hammer/Attack/frame_12.obj
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_13.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_13.mtl;Animations/Hammer/Attack/frame_13.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_13.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_13.obj;Animations/Hammer/Attack/frame_13.obj
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_14.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_14.mtl;Animations/Hammer/Attack/frame_14.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_14.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_14.obj;Animations/Hammer/Attack/frame_14.obj
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_15.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_15.mtl;Animations/Hammer/Attack/frame_15.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_15.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_15.obj;Animations/Hammer/Attack/frame_15.obj
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_16.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_16.mtl;Animations/Hammer/Attack/frame_16.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_16.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_16.obj;Animations/Hammer/Attack/frame_16.obj
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_17.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_17.mtl;Animations/Hammer/Attack/frame_17.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_17.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_17.obj;Animations/Hammer/Attack/frame_17.obj
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_18.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_18.mtl;Animations/Hammer/Attack/frame_18.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_18.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_18.obj;Animations/Hammer/Attack/frame_18.obj
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_19.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_19.mtl;Animations/Hammer/Attack/frame_19.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_19.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_19.obj;Animations/Hammer/Attack/frame_19.obj
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_2.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_2.mtl;Animations/Hammer/Attack/frame_2.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_2.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_2.obj;Animations/Hammer/Attack/frame_2.obj
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_20.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_20.mtl;Animations/Hammer/Attack/frame_20.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_20.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_20.obj;Animations/Hammer/Attack/frame_20.obj
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_21.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_21.mtl;Animations/Hammer/Attack/frame_21.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_21.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_21.obj;Animations/Hammer/Attack/frame_21.obj
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_22.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_22.mtl;Animations/Hammer/Attack/frame_22.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_22.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_22.obj;Animations/Hammer/Attack/frame_22.obj
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_23.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_23.mtl;Animations/Hammer/Attack/frame_23.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_23.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_23.obj;Animations/Hammer/Attack/frame_23.obj
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_24.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_24.mtl;Animations/Hammer/Attack/frame_24.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_24.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_24.obj;Animations/Hammer/Attack/frame_24.obj
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_25.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_25.mtl;Animations/Hammer/Attack/frame_25.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_25.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_25.obj;Animations/Hammer/Attack/frame_25.obj
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_26.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_26.mtl;Animations/Hammer/Attack/frame_26.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_26.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_26.obj;Animations/Hammer/Attack/frame_26.obj
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_27.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_27.mtl;Animations/Hammer/Attack/frame_27.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_27.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_27.obj;Animations/Hammer/Attack/frame_27.obj
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_28.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_28.mtl;Animations/Hammer/Attack/frame_28.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_28.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_28.obj;Animations/Hammer/Attack/frame_28.obj
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_29.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_29.mtl;Animations/Hammer/Attack/frame_29.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_29.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_29.obj;Animations/Hammer/Attack/frame_29.obj
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_3.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_3.mtl;Animations/Hammer/Attack/frame_3.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_3.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_3.obj;Animations/Hammer/Attack/frame_3.obj
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_30.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_30.mtl;Animations/Hammer/Attack/frame_30.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_30.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_30.obj;Animations/Hammer/Attack/frame_30.obj
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_31.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_31.mtl;Animations/Hammer/Attack/frame_31.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_31.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_31.obj;Animations/Hammer/Attack/frame_31.obj
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_32.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_32.mtl;Animations/Hammer/Attack/frame_32.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_32.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_32.obj;Animations/Hammer/Attack/frame_32.obj
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_33.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_33.mtl;Animations/Hammer/Attack/frame_33.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_33.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_33.obj;Animations/Hammer/Attack/frame_33.obj
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_34.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_34.mtl;Animations/Hammer/Attack/frame_34.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_34.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_34.obj;Animations/Hammer/Attack/frame_34.obj
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_35.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_35.mtl;Animations/Hammer/Attack/frame_35.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_35.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_35.obj;Animations/Hammer/Attack/frame_35.obj
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_36.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_36.mtl;Animations/Hammer/Attack/frame_36.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_36.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_36.obj;Animations/Hammer/Attack/frame_36.obj
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_37.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_37.mtl;Animations/Hammer/Attack/frame_37.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_37.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_37.obj;Animations/Hammer/Attack/frame_37.obj
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_38.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_38.mtl;Animations/Hammer/Attack/frame_38.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_38.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_38.obj;Animations/Hammer/Attack/frame_38.obj
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_39.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_39.mtl;Animations/Hammer/Attack/frame_39.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_39.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_39.obj;Animations/Hammer/Attack/frame_39.obj
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_4.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_4.mtl;Animations/Hammer/Attack/frame_4.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_4.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_4.obj;Animations/Hammer/Attack/frame_4.obj
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_40.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_40.mtl;Animations/Hammer/Attack/frame_40.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_40.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_40.obj;Animations/Hammer/Attack/frame_40.obj
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_41.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_41.mtl;Animations/Hammer/Attack/frame_41.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_41.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_41.obj;Animations/Hammer/Attack/frame_41.obj
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_42.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_42.mtl;Animations/Hammer/Attack/frame_42.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_42.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_42.obj;Animations/Hammer/Attack/frame_42.obj
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_43.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_43.mtl;Animations/Hammer/Attack/frame_43.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_43.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_43.obj;Animations/Hammer/Attack/frame_43.obj
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_44.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_44.mtl;Animations/Hammer/Attack/frame_44.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_44.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_44.obj;Animations/Hammer/Attack/frame_44.obj
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_45.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_45.mtl;Animations/Hammer/Attack/frame_45.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_45.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_45.obj;Animations/Hammer/Attack/frame_45.obj
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_46.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_46.mtl;Animations/Hammer/Attack/frame_46.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_46.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_46.obj;Animations/Hammer/Attack/frame_46.obj
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_47.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_47.mtl;Animations/Hammer/Attack/frame_47.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_47.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_47.obj;Animations/Hammer/Attack/frame_47.obj
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_48.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_48.mtl;Animations/Hammer/Attack/frame_48.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_48.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_48.obj;Animations/Hammer/Attack/frame_48.obj
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_49.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_49.mtl;Animations/Hammer/Attack/frame_49.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_49.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_49.obj;Animations/Hammer/Attack/frame_49.obj
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_5.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_5.mtl;Animations/Hammer/Attack/frame_5.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_5.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_5.obj;Animations/Hammer/Attack/frame_5.obj
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_50.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_50.mtl;Animations/Hammer/Attack/frame_50.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_50.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_50.obj;Animations/Hammer/Attack/frame_50.obj
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_6.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_6.mtl;Animations/Hammer/Attack/frame_6.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_6.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_6.obj;Animations/Hammer/Attack/frame_6.obj
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_7.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_7.mtl;Animations/Hammer/Attack/frame_7.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_7.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_7.obj;Animations/Hammer/Attack/frame_7.obj
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_8.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_8.mtl;Animations/Hammer/Attack/frame_8.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_8.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_8.obj;Animations/Hammer/Attack/frame_8.obj
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_9.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_9.mtl;Animations/Hammer/Attack/frame_9.mtl
+
+#begin ../../GameData/Animations/Hammer/Attack/frame_9.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Hammer/Attack/frame_9.obj;Animations/Hammer/Attack/frame_9.obj
+
+#begin ../../GameData/Animations/LMG/Fire/frame_1.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_1.mtl;Animations/LMG/Fire/frame_1.mtl
+
+#begin ../../GameData/Animations/LMG/Fire/frame_1.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_1.obj;Animations/LMG/Fire/frame_1.obj
+
+#begin ../../GameData/Animations/LMG/Fire/frame_10.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_10.mtl;Animations/LMG/Fire/frame_10.mtl
+
+#begin ../../GameData/Animations/LMG/Fire/frame_10.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_10.obj;Animations/LMG/Fire/frame_10.obj
+
+#begin ../../GameData/Animations/LMG/Fire/frame_11.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_11.mtl;Animations/LMG/Fire/frame_11.mtl
+
+#begin ../../GameData/Animations/LMG/Fire/frame_11.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_11.obj;Animations/LMG/Fire/frame_11.obj
+
+#begin ../../GameData/Animations/LMG/Fire/frame_12.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_12.mtl;Animations/LMG/Fire/frame_12.mtl
+
+#begin ../../GameData/Animations/LMG/Fire/frame_12.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_12.obj;Animations/LMG/Fire/frame_12.obj
+
+#begin ../../GameData/Animations/LMG/Fire/frame_13.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_13.mtl;Animations/LMG/Fire/frame_13.mtl
+
+#begin ../../GameData/Animations/LMG/Fire/frame_13.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_13.obj;Animations/LMG/Fire/frame_13.obj
+
+#begin ../../GameData/Animations/LMG/Fire/frame_14.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_14.mtl;Animations/LMG/Fire/frame_14.mtl
+
+#begin ../../GameData/Animations/LMG/Fire/frame_14.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_14.obj;Animations/LMG/Fire/frame_14.obj
+
+#begin ../../GameData/Animations/LMG/Fire/frame_15.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_15.mtl;Animations/LMG/Fire/frame_15.mtl
+
+#begin ../../GameData/Animations/LMG/Fire/frame_15.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_15.obj;Animations/LMG/Fire/frame_15.obj
+
+#begin ../../GameData/Animations/LMG/Fire/frame_16.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_16.mtl;Animations/LMG/Fire/frame_16.mtl
+
+#begin ../../GameData/Animations/LMG/Fire/frame_16.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_16.obj;Animations/LMG/Fire/frame_16.obj
+
+#begin ../../GameData/Animations/LMG/Fire/frame_17.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_17.mtl;Animations/LMG/Fire/frame_17.mtl
+
+#begin ../../GameData/Animations/LMG/Fire/frame_17.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_17.obj;Animations/LMG/Fire/frame_17.obj
+
+#begin ../../GameData/Animations/LMG/Fire/frame_18.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_18.mtl;Animations/LMG/Fire/frame_18.mtl
+
+#begin ../../GameData/Animations/LMG/Fire/frame_18.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_18.obj;Animations/LMG/Fire/frame_18.obj
+
+#begin ../../GameData/Animations/LMG/Fire/frame_19.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_19.mtl;Animations/LMG/Fire/frame_19.mtl
+
+#begin ../../GameData/Animations/LMG/Fire/frame_19.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_19.obj;Animations/LMG/Fire/frame_19.obj
+
+#begin ../../GameData/Animations/LMG/Fire/frame_2.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_2.mtl;Animations/LMG/Fire/frame_2.mtl
+
+#begin ../../GameData/Animations/LMG/Fire/frame_2.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_2.obj;Animations/LMG/Fire/frame_2.obj
+
+#begin ../../GameData/Animations/LMG/Fire/frame_20.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_20.mtl;Animations/LMG/Fire/frame_20.mtl
+
+#begin ../../GameData/Animations/LMG/Fire/frame_20.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_20.obj;Animations/LMG/Fire/frame_20.obj
+
+#begin ../../GameData/Animations/LMG/Fire/frame_21.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_21.mtl;Animations/LMG/Fire/frame_21.mtl
+
+#begin ../../GameData/Animations/LMG/Fire/frame_21.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_21.obj;Animations/LMG/Fire/frame_21.obj
+
+#begin ../../GameData/Animations/LMG/Fire/frame_22.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_22.mtl;Animations/LMG/Fire/frame_22.mtl
+
+#begin ../../GameData/Animations/LMG/Fire/frame_22.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_22.obj;Animations/LMG/Fire/frame_22.obj
+
+#begin ../../GameData/Animations/LMG/Fire/frame_23.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_23.mtl;Animations/LMG/Fire/frame_23.mtl
+
+#begin ../../GameData/Animations/LMG/Fire/frame_23.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_23.obj;Animations/LMG/Fire/frame_23.obj
+
+#begin ../../GameData/Animations/LMG/Fire/frame_24.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_24.mtl;Animations/LMG/Fire/frame_24.mtl
+
+#begin ../../GameData/Animations/LMG/Fire/frame_24.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_24.obj;Animations/LMG/Fire/frame_24.obj
+
+#begin ../../GameData/Animations/LMG/Fire/frame_25.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_25.mtl;Animations/LMG/Fire/frame_25.mtl
+
+#begin ../../GameData/Animations/LMG/Fire/frame_25.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_25.obj;Animations/LMG/Fire/frame_25.obj
+
+#begin ../../GameData/Animations/LMG/Fire/frame_26.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_26.mtl;Animations/LMG/Fire/frame_26.mtl
+
+#begin ../../GameData/Animations/LMG/Fire/frame_26.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_26.obj;Animations/LMG/Fire/frame_26.obj
+
+#begin ../../GameData/Animations/LMG/Fire/frame_27.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_27.mtl;Animations/LMG/Fire/frame_27.mtl
+
+#begin ../../GameData/Animations/LMG/Fire/frame_27.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_27.obj;Animations/LMG/Fire/frame_27.obj
+
+#begin ../../GameData/Animations/LMG/Fire/frame_28.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_28.mtl;Animations/LMG/Fire/frame_28.mtl
+
+#begin ../../GameData/Animations/LMG/Fire/frame_28.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_28.obj;Animations/LMG/Fire/frame_28.obj
+
+#begin ../../GameData/Animations/LMG/Fire/frame_29.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_29.mtl;Animations/LMG/Fire/frame_29.mtl
+
+#begin ../../GameData/Animations/LMG/Fire/frame_29.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_29.obj;Animations/LMG/Fire/frame_29.obj
+
+#begin ../../GameData/Animations/LMG/Fire/frame_3.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_3.mtl;Animations/LMG/Fire/frame_3.mtl
+
+#begin ../../GameData/Animations/LMG/Fire/frame_3.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_3.obj;Animations/LMG/Fire/frame_3.obj
+
+#begin ../../GameData/Animations/LMG/Fire/frame_30.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_30.mtl;Animations/LMG/Fire/frame_30.mtl
+
+#begin ../../GameData/Animations/LMG/Fire/frame_30.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_30.obj;Animations/LMG/Fire/frame_30.obj
+
+#begin ../../GameData/Animations/LMG/Fire/frame_4.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_4.mtl;Animations/LMG/Fire/frame_4.mtl
+
+#begin ../../GameData/Animations/LMG/Fire/frame_4.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_4.obj;Animations/LMG/Fire/frame_4.obj
+
+#begin ../../GameData/Animations/LMG/Fire/frame_5.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_5.mtl;Animations/LMG/Fire/frame_5.mtl
+
+#begin ../../GameData/Animations/LMG/Fire/frame_5.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_5.obj;Animations/LMG/Fire/frame_5.obj
+
+#begin ../../GameData/Animations/LMG/Fire/frame_6.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_6.mtl;Animations/LMG/Fire/frame_6.mtl
+
+#begin ../../GameData/Animations/LMG/Fire/frame_6.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_6.obj;Animations/LMG/Fire/frame_6.obj
+
+#begin ../../GameData/Animations/LMG/Fire/frame_7.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_7.mtl;Animations/LMG/Fire/frame_7.mtl
+
+#begin ../../GameData/Animations/LMG/Fire/frame_7.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_7.obj;Animations/LMG/Fire/frame_7.obj
+
+#begin ../../GameData/Animations/LMG/Fire/frame_8.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_8.mtl;Animations/LMG/Fire/frame_8.mtl
+
+#begin ../../GameData/Animations/LMG/Fire/frame_8.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_8.obj;Animations/LMG/Fire/frame_8.obj
+
+#begin ../../GameData/Animations/LMG/Fire/frame_9.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_9.mtl;Animations/LMG/Fire/frame_9.mtl
+
+#begin ../../GameData/Animations/LMG/Fire/frame_9.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/LMG/Fire/frame_9.obj;Animations/LMG/Fire/frame_9.obj
+
+#begin ../../GameData/Animations/Pistol/Fire/frame_0001.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Pistol/Fire/frame_0001.mtl;Animations/Pistol/Fire/frame_0001.mtl
+
+#begin ../../GameData/Animations/Pistol/Fire/frame_0001.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Pistol/Fire/frame_0001.obj;Animations/Pistol/Fire/frame_0001.obj
+
+#begin ../../GameData/Animations/Pistol/Fire/frame_0002.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Pistol/Fire/frame_0002.mtl;Animations/Pistol/Fire/frame_0002.mtl
+
+#begin ../../GameData/Animations/Pistol/Fire/frame_0002.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Pistol/Fire/frame_0002.obj;Animations/Pistol/Fire/frame_0002.obj
+
+#begin ../../GameData/Animations/Pistol/Fire/frame_0003.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Pistol/Fire/frame_0003.mtl;Animations/Pistol/Fire/frame_0003.mtl
+
+#begin ../../GameData/Animations/Pistol/Fire/frame_0003.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Pistol/Fire/frame_0003.obj;Animations/Pistol/Fire/frame_0003.obj
+
+#begin ../../GameData/Animations/Pistol/Fire/frame_0004.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Pistol/Fire/frame_0004.mtl;Animations/Pistol/Fire/frame_0004.mtl
+
+#begin ../../GameData/Animations/Pistol/Fire/frame_0004.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Pistol/Fire/frame_0004.obj;Animations/Pistol/Fire/frame_0004.obj
+
+#begin ../../GameData/Animations/Pistol/Fire/frame_0005.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Pistol/Fire/frame_0005.mtl;Animations/Pistol/Fire/frame_0005.mtl
+
+#begin ../../GameData/Animations/Pistol/Fire/frame_0005.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Pistol/Fire/frame_0005.obj;Animations/Pistol/Fire/frame_0005.obj
+
+#begin ../../GameData/Animations/Pistol/Fire/frame_0006.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Pistol/Fire/frame_0006.mtl;Animations/Pistol/Fire/frame_0006.mtl
+
+#begin ../../GameData/Animations/Pistol/Fire/frame_0006.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Pistol/Fire/frame_0006.obj;Animations/Pistol/Fire/frame_0006.obj
+
+#begin ../../GameData/Animations/Pistol/Fire/frame_0007.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Pistol/Fire/frame_0007.mtl;Animations/Pistol/Fire/frame_0007.mtl
+
+#begin ../../GameData/Animations/Pistol/Fire/frame_0007.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Pistol/Fire/frame_0007.obj;Animations/Pistol/Fire/frame_0007.obj
+
+#begin ../../GameData/Animations/Pistol/Fire/frame_0008.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Pistol/Fire/frame_0008.mtl;Animations/Pistol/Fire/frame_0008.mtl
+
+#begin ../../GameData/Animations/Pistol/Fire/frame_0008.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Pistol/Fire/frame_0008.obj;Animations/Pistol/Fire/frame_0008.obj
+
+#begin ../../GameData/Animations/Pistol/Fire/frame_0009.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Pistol/Fire/frame_0009.mtl;Animations/Pistol/Fire/frame_0009.mtl
+
+#begin ../../GameData/Animations/Pistol/Fire/frame_0009.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Pistol/Fire/frame_0009.obj;Animations/Pistol/Fire/frame_0009.obj
+
+#begin ../../GameData/Animations/Pistol/Fire/frame_0010.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Pistol/Fire/frame_0010.mtl;Animations/Pistol/Fire/frame_0010.mtl
+
+#begin ../../GameData/Animations/Pistol/Fire/frame_0010.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Pistol/Fire/frame_0010.obj;Animations/Pistol/Fire/frame_0010.obj
+
+#begin ../../GameData/Animations/Revolver/Fire/frame_1.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Revolver/Fire/frame_1.mtl;Animations/Revolver/Fire/frame_1.mtl
+
+#begin ../../GameData/Animations/Revolver/Fire/frame_1.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Revolver/Fire/frame_1.obj;Animations/Revolver/Fire/frame_1.obj
+
+#begin ../../GameData/Animations/Revolver/Fire/frame_10.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Revolver/Fire/frame_10.mtl;Animations/Revolver/Fire/frame_10.mtl
+
+#begin ../../GameData/Animations/Revolver/Fire/frame_10.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Revolver/Fire/frame_10.obj;Animations/Revolver/Fire/frame_10.obj
+
+#begin ../../GameData/Animations/Revolver/Fire/frame_11.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Revolver/Fire/frame_11.mtl;Animations/Revolver/Fire/frame_11.mtl
+
+#begin ../../GameData/Animations/Revolver/Fire/frame_11.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Revolver/Fire/frame_11.obj;Animations/Revolver/Fire/frame_11.obj
+
+#begin ../../GameData/Animations/Revolver/Fire/frame_12.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Revolver/Fire/frame_12.mtl;Animations/Revolver/Fire/frame_12.mtl
+
+#begin ../../GameData/Animations/Revolver/Fire/frame_12.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Revolver/Fire/frame_12.obj;Animations/Revolver/Fire/frame_12.obj
+
+#begin ../../GameData/Animations/Revolver/Fire/frame_13.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Revolver/Fire/frame_13.mtl;Animations/Revolver/Fire/frame_13.mtl
+
+#begin ../../GameData/Animations/Revolver/Fire/frame_13.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Revolver/Fire/frame_13.obj;Animations/Revolver/Fire/frame_13.obj
+
+#begin ../../GameData/Animations/Revolver/Fire/frame_14.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Revolver/Fire/frame_14.mtl;Animations/Revolver/Fire/frame_14.mtl
+
+#begin ../../GameData/Animations/Revolver/Fire/frame_14.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Revolver/Fire/frame_14.obj;Animations/Revolver/Fire/frame_14.obj
+
+#begin ../../GameData/Animations/Revolver/Fire/frame_2.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Revolver/Fire/frame_2.mtl;Animations/Revolver/Fire/frame_2.mtl
+
+#begin ../../GameData/Animations/Revolver/Fire/frame_2.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Revolver/Fire/frame_2.obj;Animations/Revolver/Fire/frame_2.obj
+
+#begin ../../GameData/Animations/Revolver/Fire/frame_3.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Revolver/Fire/frame_3.mtl;Animations/Revolver/Fire/frame_3.mtl
+
+#begin ../../GameData/Animations/Revolver/Fire/frame_3.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Revolver/Fire/frame_3.obj;Animations/Revolver/Fire/frame_3.obj
+
+#begin ../../GameData/Animations/Revolver/Fire/frame_4.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Revolver/Fire/frame_4.mtl;Animations/Revolver/Fire/frame_4.mtl
+
+#begin ../../GameData/Animations/Revolver/Fire/frame_4.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Revolver/Fire/frame_4.obj;Animations/Revolver/Fire/frame_4.obj
+
+#begin ../../GameData/Animations/Revolver/Fire/frame_5.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Revolver/Fire/frame_5.mtl;Animations/Revolver/Fire/frame_5.mtl
+
+#begin ../../GameData/Animations/Revolver/Fire/frame_5.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Revolver/Fire/frame_5.obj;Animations/Revolver/Fire/frame_5.obj
+
+#begin ../../GameData/Animations/Revolver/Fire/frame_6.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Revolver/Fire/frame_6.mtl;Animations/Revolver/Fire/frame_6.mtl
+
+#begin ../../GameData/Animations/Revolver/Fire/frame_6.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Revolver/Fire/frame_6.obj;Animations/Revolver/Fire/frame_6.obj
+
+#begin ../../GameData/Animations/Revolver/Fire/frame_7.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Revolver/Fire/frame_7.mtl;Animations/Revolver/Fire/frame_7.mtl
+
+#begin ../../GameData/Animations/Revolver/Fire/frame_7.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Revolver/Fire/frame_7.obj;Animations/Revolver/Fire/frame_7.obj
+
+#begin ../../GameData/Animations/Revolver/Fire/frame_8.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Revolver/Fire/frame_8.mtl;Animations/Revolver/Fire/frame_8.mtl
+
+#begin ../../GameData/Animations/Revolver/Fire/frame_8.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Revolver/Fire/frame_8.obj;Animations/Revolver/Fire/frame_8.obj
+
+#begin ../../GameData/Animations/Revolver/Fire/frame_9.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Revolver/Fire/frame_9.mtl;Animations/Revolver/Fire/frame_9.mtl
+
+#begin ../../GameData/Animations/Revolver/Fire/frame_9.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Revolver/Fire/frame_9.obj;Animations/Revolver/Fire/frame_9.obj
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_1.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_1.mtl;Animations/Shotgun/Fire/frame_1.mtl
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_1.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_1.obj;Animations/Shotgun/Fire/frame_1.obj
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_10.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_10.mtl;Animations/Shotgun/Fire/frame_10.mtl
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_10.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_10.obj;Animations/Shotgun/Fire/frame_10.obj
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_11.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_11.mtl;Animations/Shotgun/Fire/frame_11.mtl
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_11.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_11.obj;Animations/Shotgun/Fire/frame_11.obj
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_12.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_12.mtl;Animations/Shotgun/Fire/frame_12.mtl
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_12.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_12.obj;Animations/Shotgun/Fire/frame_12.obj
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_13.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_13.mtl;Animations/Shotgun/Fire/frame_13.mtl
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_13.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_13.obj;Animations/Shotgun/Fire/frame_13.obj
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_14.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_14.mtl;Animations/Shotgun/Fire/frame_14.mtl
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_14.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_14.obj;Animations/Shotgun/Fire/frame_14.obj
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_15.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_15.mtl;Animations/Shotgun/Fire/frame_15.mtl
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_15.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_15.obj;Animations/Shotgun/Fire/frame_15.obj
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_16.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_16.mtl;Animations/Shotgun/Fire/frame_16.mtl
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_16.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_16.obj;Animations/Shotgun/Fire/frame_16.obj
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_17.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_17.mtl;Animations/Shotgun/Fire/frame_17.mtl
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_17.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_17.obj;Animations/Shotgun/Fire/frame_17.obj
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_18.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_18.mtl;Animations/Shotgun/Fire/frame_18.mtl
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_18.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_18.obj;Animations/Shotgun/Fire/frame_18.obj
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_19.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_19.mtl;Animations/Shotgun/Fire/frame_19.mtl
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_19.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_19.obj;Animations/Shotgun/Fire/frame_19.obj
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_2.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_2.mtl;Animations/Shotgun/Fire/frame_2.mtl
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_2.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_2.obj;Animations/Shotgun/Fire/frame_2.obj
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_20.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_20.mtl;Animations/Shotgun/Fire/frame_20.mtl
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_20.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_20.obj;Animations/Shotgun/Fire/frame_20.obj
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_21.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_21.mtl;Animations/Shotgun/Fire/frame_21.mtl
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_21.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_21.obj;Animations/Shotgun/Fire/frame_21.obj
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_22.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_22.mtl;Animations/Shotgun/Fire/frame_22.mtl
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_22.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_22.obj;Animations/Shotgun/Fire/frame_22.obj
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_23.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_23.mtl;Animations/Shotgun/Fire/frame_23.mtl
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_23.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_23.obj;Animations/Shotgun/Fire/frame_23.obj
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_24.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_24.mtl;Animations/Shotgun/Fire/frame_24.mtl
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_24.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_24.obj;Animations/Shotgun/Fire/frame_24.obj
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_25.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_25.mtl;Animations/Shotgun/Fire/frame_25.mtl
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_25.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_25.obj;Animations/Shotgun/Fire/frame_25.obj
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_26.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_26.mtl;Animations/Shotgun/Fire/frame_26.mtl
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_26.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_26.obj;Animations/Shotgun/Fire/frame_26.obj
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_27.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_27.mtl;Animations/Shotgun/Fire/frame_27.mtl
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_27.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_27.obj;Animations/Shotgun/Fire/frame_27.obj
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_28.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_28.mtl;Animations/Shotgun/Fire/frame_28.mtl
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_28.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_28.obj;Animations/Shotgun/Fire/frame_28.obj
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_29.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_29.mtl;Animations/Shotgun/Fire/frame_29.mtl
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_29.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_29.obj;Animations/Shotgun/Fire/frame_29.obj
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_3.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_3.mtl;Animations/Shotgun/Fire/frame_3.mtl
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_3.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_3.obj;Animations/Shotgun/Fire/frame_3.obj
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_30.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_30.mtl;Animations/Shotgun/Fire/frame_30.mtl
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_30.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_30.obj;Animations/Shotgun/Fire/frame_30.obj
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_4.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_4.mtl;Animations/Shotgun/Fire/frame_4.mtl
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_4.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_4.obj;Animations/Shotgun/Fire/frame_4.obj
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_5.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_5.mtl;Animations/Shotgun/Fire/frame_5.mtl
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_5.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_5.obj;Animations/Shotgun/Fire/frame_5.obj
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_6.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_6.mtl;Animations/Shotgun/Fire/frame_6.mtl
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_6.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_6.obj;Animations/Shotgun/Fire/frame_6.obj
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_7.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_7.mtl;Animations/Shotgun/Fire/frame_7.mtl
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_7.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_7.obj;Animations/Shotgun/Fire/frame_7.obj
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_8.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_8.mtl;Animations/Shotgun/Fire/frame_8.mtl
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_8.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_8.obj;Animations/Shotgun/Fire/frame_8.obj
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_9.mtl
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_9.mtl;Animations/Shotgun/Fire/frame_9.mtl
+
+#begin ../../GameData/Animations/Shotgun/Fire/frame_9.obj
+/importer:
+/processor:
+/copy:../../GameData/Animations/Shotgun/Fire/frame_9.obj;Animations/Shotgun/Fire/frame_9.obj
+
+#begin ../../GameData/models/enviroment/door/door.FBX
+/importer:
+/processor:
+/copy:../../GameData/models/enviroment/door/door.FBX;models/enviroment/door/door.FBX
+
+#begin ../../GameData/models/enviroment/door/door.mtl
+/importer:
+/processor:
+/copy:../../GameData/models/enviroment/door/door.mtl;models/enviroment/door/door.mtl
+
+#begin ../../GameData/models/enviroment/door/door.obj
+/importer:
+/processor:
+/copy:../../GameData/models/enviroment/door/door.obj;models/enviroment/door/door.obj
+
+#begin ../../GameData/models/enviroment/door/door.png
+/importer:
+/processor:
+/copy:../../GameData/models/enviroment/door/door.png;models/enviroment/door/door.png
+
+#begin ../../GameData/models/enviroment/door/door_n.png
+/importer:
+/processor:
+/copy:../../GameData/models/enviroment/door/door_n.png;models/enviroment/door/door_n.png
+
+#begin ../../GameData/models/enviroment/door/door_n2.png
+/importer:
+/processor:
+/copy:../../GameData/models/enviroment/door/door_n2.png;models/enviroment/door/door_n2.png
+
+#begin ../../GameData/models/enviroment/door/door_orm.png
+/importer:
+/processor:
+/copy:../../GameData/models/enviroment/door/door_orm.png;models/enviroment/door/door_orm.png
+
+#begin ../../GameData/models/weapons/bullet/bullet.mtl
+/importer:
+/processor:
+/copy:../../GameData/models/weapons/bullet/bullet.mtl;models/weapons/bullet/bullet.mtl
+
+#begin ../../GameData/models/weapons/bullet/bullet.obj
+/importer:
+/processor:
+/copy:../../GameData/models/weapons/bullet/bullet.obj;models/weapons/bullet/bullet.obj
+
+#begin ../../GameData/models/weapons/bullet/bullet.png
+/importer:
+/processor:
+/copy:../../GameData/models/weapons/bullet/bullet.png;models/weapons/bullet/bullet.png
+
+#begin ../../GameData/models/weapons/bullet/bullet_em.png
+/importer:
+/processor:
+/copy:../../GameData/models/weapons/bullet/bullet_em.png;models/weapons/bullet/bullet_em.png
+
+#begin ../../GameData/Sounds/weapons/hammer/hit.wav
+/importer:
+/processor:
+/copy:../../GameData/Sounds/weapons/hammer/hit.wav;Sounds/weapons/hammer/hit.wav
+
+#begin ../../GameData/Sounds/weapons/hammer/swoosh.wav
+/importer:
+/processor:
+/copy:../../GameData/Sounds/weapons/hammer/swoosh.wav;Sounds/weapons/hammer/swoosh.wav
+
+#begin ../../GameData/textures/weapons/arms/gloves.png
+/importer:
+/processor:
+/copy:../../GameData/textures/weapons/arms/gloves.png;textures/weapons/arms/gloves.png
+
+#begin ../../GameData/textures/weapons/arms/gloves_n.PNG
+/importer:
+/processor:
+/copy:../../GameData/textures/weapons/arms/gloves_n.PNG;textures/weapons/arms/gloves_n.PNG
+
+#begin ../../GameData/textures/weapons/arms/gloves_orm.png
+/importer:
+/processor:
+/copy:../../GameData/textures/weapons/arms/gloves_orm.png;textures/weapons/arms/gloves_orm.png
+
+#begin ../../GameData/textures/weapons/arms/head.PNG
+/importer:
+/processor:
+/copy:../../GameData/textures/weapons/arms/head.PNG;textures/weapons/arms/head.PNG
+
+#begin ../../GameData/textures/weapons/arms/jacket.png
+/importer:
+/processor:
+/copy:../../GameData/textures/weapons/arms/jacket.png;textures/weapons/arms/jacket.png
+
+#begin ../../GameData/textures/weapons/arms/jacket_.png
+/importer:
+/processor:
+/copy:../../GameData/textures/weapons/arms/jacket_.png;textures/weapons/arms/jacket_.png
+
+#begin ../../GameData/textures/weapons/arms/jacket_2.png
+/importer:
+/processor:
+/copy:../../GameData/textures/weapons/arms/jacket_2.png;textures/weapons/arms/jacket_2.png
+
+#begin ../../GameData/textures/weapons/arms/jacket_n.PNG
+/importer:
+/processor:
+/copy:../../GameData/textures/weapons/arms/jacket_n.PNG;textures/weapons/arms/jacket_n.PNG
+
+#begin ../../GameData/textures/weapons/arms/jacket_orm.png
+/importer:
+/processor:
+/copy:../../GameData/textures/weapons/arms/jacket_orm.png;textures/weapons/arms/jacket_orm.png
+
+#begin ../../GameData/textures/weapons/arms/pants.png
+/importer:
+/processor:
+/copy:../../GameData/textures/weapons/arms/pants.png;textures/weapons/arms/pants.png
+
+#begin ../../GameData/textures/weapons/arms/pants_n.png
+/importer:
+/processor:
+/copy:../../GameData/textures/weapons/arms/pants_n.png;textures/weapons/arms/pants_n.png
+
+#begin ../../GameData/textures/weapons/arms/shirt.PNG
+/importer:
+/processor:
+/copy:../../GameData/textures/weapons/arms/shirt.PNG;textures/weapons/arms/shirt.PNG
+
+#begin ../../GameData/textures/weapons/arms/shirt_n.PNG
+/importer:
+/processor:
+/copy:../../GameData/textures/weapons/arms/shirt_n.PNG;textures/weapons/arms/shirt_n.PNG
+
+#begin ../../GameData/textures/weapons/arms/shoes.PNG
+/importer:
+/processor:
+/copy:../../GameData/textures/weapons/arms/shoes.PNG;textures/weapons/arms/shoes.PNG
+
+#begin ../../GameData/textures/weapons/general/muzzle.png
+/importer:
+/processor:
+/copy:../../GameData/textures/weapons/general/muzzle.png;textures/weapons/general/muzzle.png
+
+#begin ../../GameData/textures/weapons/general/muzzle2.png
+/importer:
+/processor:
+/copy:../../GameData/textures/weapons/general/muzzle2.png;textures/weapons/general/muzzle2.png
+
+#begin ../../GameData/textures/weapons/general/muzzle_em.png
+/importer:
+/processor:
+/copy:../../GameData/textures/weapons/general/muzzle_em.png;textures/weapons/general/muzzle_em.png
+
+#begin ../../GameData/textures/weapons/hammer/hammer.png
+/importer:
+/processor:
+/copy:../../GameData/textures/weapons/hammer/hammer.png;textures/weapons/hammer/hammer.png
+
+#begin ../../GameData/textures/weapons/lmg/bits_m_Base_Color.png
+/importer:
+/processor:
+/copy:../../GameData/textures/weapons/lmg/bits_m_Base_Color.png;textures/weapons/lmg/bits_m_Base_Color.png
+
+#begin ../../GameData/textures/weapons/lmg/body_m_Base_Color.png
+/importer:
+/processor:
+/copy:../../GameData/textures/weapons/lmg/body_m_Base_Color.png;textures/weapons/lmg/body_m_Base_Color.png
+
+#begin ../../GameData/textures/weapons/lmg/bulletsandcasings_Base_Color.png
+/importer:
+/processor:
+/copy:../../GameData/textures/weapons/lmg/bulletsandcasings_Base_Color.png;textures/weapons/lmg/bulletsandcasings_Base_Color.png
+
+#begin ../../GameData/textures/weapons/lmg/lambert1_Base_Color.png
+/importer:
+/processor:
+/copy:../../GameData/textures/weapons/lmg/lambert1_Base_Color.png;textures/weapons/lmg/lambert1_Base_Color.png
+
+#begin ../../GameData/textures/weapons/pistol/pistol.png
+/importer:
+/processor:
+/copy:../../GameData/textures/weapons/pistol/pistol.png;textures/weapons/pistol/pistol.png
+
+#begin ../../GameData/textures/weapons/pistol/pistol_orm.png
+/importer:
+/processor:
+/copy:../../GameData/textures/weapons/pistol/pistol_orm.png;textures/weapons/pistol/pistol_orm.png
+
+#begin ../../GameData/textures/weapons/pistol/pistol_special.png
+/importer:
+/processor:
+/copy:../../GameData/textures/weapons/pistol/pistol_special.png;textures/weapons/pistol/pistol_special.png
+
+#begin ../../GameData/textures/weapons/pistol/pistol_special_n.png
+/importer:
+/processor:
+/copy:../../GameData/textures/weapons/pistol/pistol_special_n.png;textures/weapons/pistol/pistol_special_n.png
+
+#begin ../../GameData/textures/weapons/pistol/pistol_special_orm.png
+/importer:
+/processor:
+/copy:../../GameData/textures/weapons/pistol/pistol_special_orm.png;textures/weapons/pistol/pistol_special_orm.png
+
+#begin ../../GameData/textures/weapons/Revolver/revolver.png
+/importer:
+/processor:
+/copy:../../GameData/textures/weapons/Revolver/revolver.png;textures/weapons/Revolver/revolver.png
+
+#begin ../../GameData/textures/weapons/shotgun/shotgun.png
+/importer:
+/processor:
+/copy:../../GameData/textures/weapons/shotgun/shotgun.png;textures/weapons/shotgun/shotgun.png
+
+#begin ../../GameData/textures/weapons/shotgun_new/shotgun.png
+/importer:
+/processor:
+/copy:../../GameData/textures/weapons/shotgun_new/shotgun.png;textures/weapons/shotgun_new/shotgun.png
+
+#begin ../../GameData/textures/weapons/shotgun_new/shotgun_orm.png
+/importer:
+/processor:
+/copy:../../GameData/textures/weapons/shotgun_new/shotgun_orm.png;textures/weapons/shotgun_new/shotgun_orm.png
+
+#begin ../../GameData/textures/weapons/shotgun_new/shotgun_orm2.png
+/importer:
+/processor:
+/copy:../../GameData/textures/weapons/shotgun_new/shotgun_orm2.png;textures/weapons/shotgun_new/shotgun_orm2.png
+
+#begin ../../GameData/models/weapons/animations/pistolTP/pistols.fbx
+/importer:
+/processor:
+/copy:../../GameData/models/weapons/animations/pistolTP/pistols.fbx;models/weapons/animations/pistolTP/pistols.fbx
+
+#begin ../../GameData/obj/Windows/net7.0-windows/Content/.mgcontent
+/importer:
+/processor:
+/copy:../../GameData/obj/Windows/net7.0-windows/Content/.mgcontent;obj/Windows/net7.0-windows/Content/.mgcontent
+
+#begin ../../GameData/obj/Windows/net7.0-windows/Content/.mgstats
+/importer:
+/processor:
+/copy:../../GameData/obj/Windows/net7.0-windows/Content/.mgstats;obj/Windows/net7.0-windows/Content/.mgstats
+
+#begin ../../GameData/textures/weapons/arms/old/gloves.PNG
+/importer:
+/processor:
+/copy:../../GameData/textures/weapons/arms/old/gloves.PNG;textures/weapons/arms/old/gloves.PNG
+
+#begin ../../GameData/textures/weapons/arms/old/jacket.png
+/importer:
+/processor:
+/copy:../../GameData/textures/weapons/arms/old/jacket.png;textures/weapons/arms/old/jacket.png
+
+#begin ../../GameData/textures/weapons/arms/old/shirt.PNG
+/importer:
+/processor:
+/copy:../../GameData/textures/weapons/arms/old/shirt.PNG;textures/weapons/arms/old/shirt.PNG
+
+#begin ../../GameData/obj/Windows/net7.0-windows/Content/Shaders/BloomSampler.mgcontent
+/importer:
+/processor:
+/copy:../../GameData/obj/Windows/net7.0-windows/Content/Shaders/BloomSampler.mgcontent;obj/Windows/net7.0-windows/Content/Shaders/BloomSampler.mgcontent
+
+#begin ../../GameData/obj/Windows/net7.0-windows/Content/Shaders/ColorOutput.mgcontent
+/importer:
+/processor:
+/copy:../../GameData/obj/Windows/net7.0-windows/Content/Shaders/ColorOutput.mgcontent;obj/Windows/net7.0-windows/Content/Shaders/ColorOutput.mgcontent
+
+#begin ../../GameData/obj/Windows/net7.0-windows/Content/Shaders/ComposedColor.mgcontent
+/importer:
+/processor:
+/copy:../../GameData/obj/Windows/net7.0-windows/Content/Shaders/ComposedColor.mgcontent;obj/Windows/net7.0-windows/Content/Shaders/ComposedColor.mgcontent
+
+#begin ../../GameData/obj/Windows/net7.0-windows/Content/Shaders/CubeMapVisualizer.mgcontent
+/importer:
+/processor:
+/copy:../../GameData/obj/Windows/net7.0-windows/Content/Shaders/CubeMapVisualizer.mgcontent;obj/Windows/net7.0-windows/Content/Shaders/CubeMapVisualizer.mgcontent
+
+#begin ../../GameData/obj/Windows/net7.0-windows/Content/Shaders/DeferredLighting.mgcontent
+/importer:
+/processor:
+/copy:../../GameData/obj/Windows/net7.0-windows/Content/Shaders/DeferredLighting.mgcontent;obj/Windows/net7.0-windows/Content/Shaders/DeferredLighting.mgcontent
+
+#begin ../../GameData/obj/Windows/net7.0-windows/Content/Shaders/DeferredShading.mgcontent
+/importer:
+/processor:
+/copy:../../GameData/obj/Windows/net7.0-windows/Content/Shaders/DeferredShading.mgcontent;obj/Windows/net7.0-windows/Content/Shaders/DeferredShading.mgcontent
+
+#begin ../../GameData/obj/Windows/net7.0-windows/Content/Shaders/File.mgcontent
+/importer:
+/processor:
+/copy:../../GameData/obj/Windows/net7.0-windows/Content/Shaders/File.mgcontent;obj/Windows/net7.0-windows/Content/Shaders/File.mgcontent
+
+#begin ../../GameData/obj/Windows/net7.0-windows/Content/Shaders/FinalColor.mgcontent
+/importer:
+/processor:
+/copy:../../GameData/obj/Windows/net7.0-windows/Content/Shaders/FinalColor.mgcontent;obj/Windows/net7.0-windows/Content/Shaders/FinalColor.mgcontent
+
+#begin ../../GameData/obj/Windows/net7.0-windows/Content/Shaders/fxaa.mgcontent
+/importer:
+/processor:
+/copy:../../GameData/obj/Windows/net7.0-windows/Content/Shaders/fxaa.mgcontent;obj/Windows/net7.0-windows/Content/Shaders/fxaa.mgcontent
+
+#begin ../../GameData/obj/Windows/net7.0-windows/Content/Shaders/GPathesOutput.mgcontent
+/importer:
+/processor:
+/copy:../../GameData/obj/Windows/net7.0-windows/Content/Shaders/GPathesOutput.mgcontent;obj/Windows/net7.0-windows/Content/Shaders/GPathesOutput.mgcontent
+
+#begin ../../GameData/obj/Windows/net7.0-windows/Content/Shaders/MaxDepth.mgcontent
+/importer:
+/processor:
+/copy:../../GameData/obj/Windows/net7.0-windows/Content/Shaders/MaxDepth.mgcontent;obj/Windows/net7.0-windows/Content/Shaders/MaxDepth.mgcontent
+
+#begin ../../GameData/obj/Windows/net7.0-windows/Content/Shaders/MiscOutput.mgcontent
+/importer:
+/processor:
+/copy:../../GameData/obj/Windows/net7.0-windows/Content/Shaders/MiscOutput.mgcontent;obj/Windows/net7.0-windows/Content/Shaders/MiscOutput.mgcontent
+
+#begin ../../GameData/obj/Windows/net7.0-windows/Content/Shaders/NormalOutput.mgcontent
+/importer:
+/processor:
+/copy:../../GameData/obj/Windows/net7.0-windows/Content/Shaders/NormalOutput.mgcontent;obj/Windows/net7.0-windows/Content/Shaders/NormalOutput.mgcontent
+
+#begin ../../GameData/obj/Windows/net7.0-windows/Content/Shaders/OcclusionPath.mgcontent
+/importer:
+/processor:
+/copy:../../GameData/obj/Windows/net7.0-windows/Content/Shaders/OcclusionPath.mgcontent;obj/Windows/net7.0-windows/Content/Shaders/OcclusionPath.mgcontent
+
+#begin ../../GameData/obj/Windows/net7.0-windows/Content/Shaders/OcclusionPathStatic.mgcontent
+/importer:
+/processor:
+/copy:../../GameData/obj/Windows/net7.0-windows/Content/Shaders/OcclusionPathStatic.mgcontent;obj/Windows/net7.0-windows/Content/Shaders/OcclusionPathStatic.mgcontent
+
+#begin ../../GameData/obj/Windows/net7.0-windows/Content/Shaders/ParticleUnifiedOutput.mgcontent
+/importer:
+/processor:
+/copy:../../GameData/obj/Windows/net7.0-windows/Content/Shaders/ParticleUnifiedOutput.mgcontent;obj/Windows/net7.0-windows/Content/Shaders/ParticleUnifiedOutput.mgcontent
+
+#begin ../../GameData/obj/Windows/net7.0-windows/Content/Shaders/PostProcessing.mgcontent
+/importer:
+/processor:
+/copy:../../GameData/obj/Windows/net7.0-windows/Content/Shaders/PostProcessing.mgcontent;obj/Windows/net7.0-windows/Content/Shaders/PostProcessing.mgcontent
+
+#begin ../../GameData/obj/Windows/net7.0-windows/Content/Shaders/ReflectionPath.mgcontent
+/importer:
+/processor:
+/copy:../../GameData/obj/Windows/net7.0-windows/Content/Shaders/ReflectionPath.mgcontent;obj/Windows/net7.0-windows/Content/Shaders/ReflectionPath.mgcontent
+
+#begin ../../GameData/obj/Windows/net7.0-windows/Content/Shaders/ReflectionResult.mgcontent
+/importer:
+/processor:
+/copy:../../GameData/obj/Windows/net7.0-windows/Content/Shaders/ReflectionResult.mgcontent;obj/Windows/net7.0-windows/Content/Shaders/ReflectionResult.mgcontent
+
+#begin ../../GameData/obj/Windows/net7.0-windows/Content/Shaders/ShadowMap.mgcontent
+/importer:
+/processor:
+/copy:../../GameData/obj/Windows/net7.0-windows/Content/Shaders/ShadowMap.mgcontent;obj/Windows/net7.0-windows/Content/Shaders/ShadowMap.mgcontent
+
+#begin ../../GameData/obj/Windows/net7.0-windows/Content/Shaders/ShadowMapMasked.mgcontent
+/importer:
+/processor:
+/copy:../../GameData/obj/Windows/net7.0-windows/Content/Shaders/ShadowMapMasked.mgcontent;obj/Windows/net7.0-windows/Content/Shaders/ShadowMapMasked.mgcontent
+
+#begin ../../GameData/obj/Windows/net7.0-windows/Content/Shaders/ssao.mgcontent
+/importer:
+/processor:
+/copy:../../GameData/obj/Windows/net7.0-windows/Content/Shaders/ssao.mgcontent;obj/Windows/net7.0-windows/Content/Shaders/ssao.mgcontent
+
+#begin ../../GameData/obj/Windows/net7.0-windows/Content/Shaders/Tonemap.mgcontent
+/importer:
+/processor:
+/copy:../../GameData/obj/Windows/net7.0-windows/Content/Shaders/Tonemap.mgcontent;obj/Windows/net7.0-windows/Content/Shaders/Tonemap.mgcontent
+
+#begin ../../GameData/obj/Windows/net7.0-windows/Content/Shaders/UnifiedOutput.mgcontent
+/importer:
+/processor:
+/copy:../../GameData/obj/Windows/net7.0-windows/Content/Shaders/UnifiedOutput.mgcontent;obj/Windows/net7.0-windows/Content/Shaders/UnifiedOutput.mgcontent

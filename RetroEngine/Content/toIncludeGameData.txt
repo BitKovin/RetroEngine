@@ -1,0 +1,8 @@
+		"GameData": {
+			"path": "*.*",
+			"recursive": "true",
+			"action": "copy",
+			"importer": null,
+			"processor": null,
+			"watch": []
+		},

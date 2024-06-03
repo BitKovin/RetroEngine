@@ -37,7 +37,7 @@ namespace RetroEngine
 
         static List<string> nullTextures= new List<string>();
 
-        public const string ROOT_PATH = "Content/";
+        public const string ROOT_PATH = "../../../../";
 
         const int MaxTexturesInMemory = 5000;
 
@@ -357,7 +357,7 @@ namespace RetroEngine
             }
         }
 
-        const string assetsRoot = "";
+        const string assetsRoot = "GameData/";
 
         public static string FindPathForFile(string path)
         {
