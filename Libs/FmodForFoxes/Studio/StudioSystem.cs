@@ -29,10 +29,21 @@ namespace FmodForFoxes.Studio
 			return new Bank(bank);
 		}
 
-		/// <summary>
-		/// Retrieves an event via internal path, i.e. "event:/UI/Cancel", or ID string, i.e. "{2a3e48e6-94fc-4363-9468-33d2dd4d7b00}".
-		/// </summary>
-		public static EventDescription GetEvent(string path)
+        public static Bank LoadBankFromStream(Stream stream, FMOD.Studio.LOAD_BANK_FLAGS flags)
+        {
+            Native.loadBankMemory(
+                FileLoader.LoadStreamAsBuffer(stream),
+                flags,
+                out FMOD.Studio.Bank bank
+            );
+
+            return new Bank(bank);
+        }
+
+        /// <summary>
+        /// Retrieves an event via internal path, i.e. "event:/UI/Cancel", or ID string, i.e. "{2a3e48e6-94fc-4363-9468-33d2dd4d7b00}".
+        /// </summary>
+        public static EventDescription GetEvent(string path)
 		{
 			Native.getEvent(path, out FMOD.Studio.EventDescription eventDescription);
 			return new EventDescription(eventDescription);

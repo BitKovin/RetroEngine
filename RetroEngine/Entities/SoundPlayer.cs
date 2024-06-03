@@ -18,9 +18,9 @@ namespace RetroEngine.Entities
 
         public float Pitch = 1;
 
-        public float MaxDistance = 50;
+        public float MaxDistance = 30;
 
-        public float MinDistance = 2;
+        public float MinDistance = 1;
 
         public bool Loop = false;
 
@@ -74,6 +74,7 @@ namespace RetroEngine.Entities
         {
             base.Destroy();
 
+            AudioClip?.Stop();
             AudioClip?.Dispose();   
 
         }

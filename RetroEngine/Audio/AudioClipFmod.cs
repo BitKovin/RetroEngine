@@ -80,7 +80,7 @@ namespace RetroEngine.Audio
 
 
             // Calculate the attenuation factor based on the inverse square law
-            float attenuation = (1f - x) / ((x * 8 + (1 / n)) * n);
+            float attenuation = (1f - x) / ((x * 6 + (1 / n)) * n);
 
             // Set the volume and pitch based on attenuation
             float maxVolume = 1.0f; // Adjust this value for maximum volume
@@ -124,7 +124,7 @@ namespace RetroEngine.Audio
             
             ApplyStartSoundData();
             channel = sound.Play();
-
+            Update();
         }
 
         public override void Stop()

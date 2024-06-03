@@ -152,4 +152,3 @@
 /processor:EffectProcessor
 /processorParam:DebugMode=Optimize
 /build:UnifiedOutput.fx
-

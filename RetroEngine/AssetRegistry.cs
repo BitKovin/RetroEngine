@@ -17,6 +17,7 @@ using RetroEngine.Audio;
 using BulletSharp;
 using FmodForFoxes;
 using System.Runtime.InteropServices;
+using FmodForFoxes.Studio;
 
 namespace RetroEngine
 {
@@ -27,6 +28,7 @@ namespace RetroEngine
 
         static Dictionary<string, SoundEffect> sounds = new Dictionary<string, SoundEffect>();
         static Dictionary<string, Sound> soundsFmod = new Dictionary<string, Sound>();
+        static Dictionary<string, Bank> fmodBanks = new Dictionary<string, Bank>();
 
         static Dictionary<string, Shader> effects = new Dictionary<string, Shader>();
         static Dictionary<string, Shader> effectsPP = new Dictionary<string, Shader>();
@@ -321,6 +323,17 @@ namespace RetroEngine
             return new AudioClipFmod(sound);
 
             
+        }
+
+        public static Bank LoadFmodBankIntoMemory(string path)
+        {
+            if(fmodBanks.ContainsKey(path))
+                return fmodBanks[path];
+
+            string filePath = FindPathForFile(path);
+
+            return StudioSystem.LoadBankFromStream(GetFileStreamFromPath(filePath), FMOD.Studio.LOAD_BANK_FLAGS.NORMAL);
+
         }
 
         public static void ClearTexturesIfNeeded()

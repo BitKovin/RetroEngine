@@ -32,7 +32,7 @@ namespace RetroEngine.Audio
 
         protected virtual void Destroy()
         {
-
+            Stop();
         }
 
         public virtual void Update() { }
