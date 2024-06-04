@@ -47,6 +47,7 @@ namespace FmodForFoxes
             info.length = (uint)buffer.Length;
             info.cbsize = Marshal.SizeOf(info);
 
+
             Native.createSound(
                     buffer,
                     FMOD.MODE.OPENMEMORY | FMOD.MODE.CREATESAMPLE,

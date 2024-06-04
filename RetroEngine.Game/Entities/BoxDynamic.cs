@@ -26,16 +26,24 @@ namespace RetroEngine.Game.Entities
 
         RigidBody body;
 
+        FmodEventInstance FmodEventInstance;
+
         public BoxDynamic() : base()
         {            
 
             SaveGame = true;
 
             soundPlayer = (SoundPlayer)Level.GetCurrent().AddEntity(new SoundPlayer());
-            soundPlayer.SetSound(AssetRegistry.LoadSoundFmodFromFile("sounds/test.wav"));
-            soundPlayer.Volume = 1f;
-            
-            
+
+            AssetRegistry.LoadFmodBankIntoMemory("Sounds/banks/Master.bank");
+            AssetRegistry.LoadFmodBankIntoMemory("Sounds/banks/Master.strings.bank");
+            AssetRegistry.LoadFmodBankIntoMemory("Sounds/banks/Dialogue_EN.bank");
+            AssetRegistry.LoadFmodBankIntoMemory("Sounds/banks/SFX.bank");
+
+            FmodEventInstance = FmodEventInstance.Create("event:/Character/Dialogue");
+            //FmodEventInstance.SetProgrammerSound("welcome", AssetRegistry.LoadSoundFmodNativeFromFile("sounds/test.wav"));
+            soundPlayer.SetSound(FmodEventInstance);
+
             soundPlayer.Position = Position;
 
         }

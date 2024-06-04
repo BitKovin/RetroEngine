@@ -47,7 +47,10 @@ float CalculateSSAO(float2 texCoord, float depth, float3 normal)
     for (float l = 0; l <= radius; l += radius / steps)
         for (float angle = 0.0; angle < 6.283; angle += 0.5)
         {
-            float2 offset = l * float2(cos(angle), sin(angle));
+
+            float sampleL = l * lerp(1, 0.1, depth/50);
+
+            float2 offset = sampleL * float2(cos(angle), sin(angle));
             float2 sampleCoord = texCoord + offset;
 
             if (sampleCoord.x > 1 || sampleCoord.y > 1 || sampleCoord.x < 0 || sampleCoord.y < 0)
@@ -55,7 +58,7 @@ float CalculateSSAO(float2 texCoord, float depth, float3 normal)
 
             float sampleDepth = tex2D(DepthTextureSampler, sampleCoord).r;
 
-            float depthDifference = -0.5;// sampleDepth - sampleDepth + bias;
+            float depthDifference = -0.6;// sampleDepth - sampleDepth + bias;
 
             if (depth > sampleDepth + bias && (depth - sampleDepth) < 1)
                 depthDifference = 1;

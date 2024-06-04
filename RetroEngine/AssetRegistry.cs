@@ -303,6 +303,34 @@ namespace RetroEngine
 
         }
 
+        public static Sound LoadSoundFmodNativeFromFile(string path)
+        {
+
+            if (SoundManager.UseFmod == false)
+            {
+                Logger.Log("tried to load FMOD sound " + path);
+                return null;
+            }
+
+
+
+            Sound sound;
+
+            if (soundsFmod.ContainsKey(path))
+            {
+                sound = soundsFmod[path];
+            }
+            else
+            {
+                string filePath = FindPathForFile(path);
+                sound = CoreSystem.LoadSoundFromStream(AssetRegistry.GetFileStreamFromPath(filePath));
+                soundsFmod.TryAdd(path, sound);
+            }
+
+            return sound;
+        }
+
+
         public static AudioClipFmod LoadSoundFmodFromFile(string path)
         {
 
@@ -312,23 +340,7 @@ namespace RetroEngine
                 return null;
             }
 
-            
-
-            Sound sound;
-
-            if(soundsFmod.ContainsKey(path))
-            {
-                sound = soundsFmod[path];
-            }
-            else 
-            {
-                string filePath = FindPathForFile(path);
-                sound = CoreSystem.LoadSoundFromStream(AssetRegistry.GetFileStreamFromPath(filePath));
-                soundsFmod.TryAdd(path, sound);
-            }
-
-
-            return new AudioClipFmod(sound);
+            return new AudioClipFmod(LoadSoundFmodNativeFromFile(path));
 
             
         }
@@ -340,9 +352,14 @@ namespace RetroEngine
 
             string filePath = FindPathForFile(path);
 
-            return StudioSystem.LoadBankFromStream(GetFileStreamFromPath(filePath), FMOD.Studio.LOAD_BANK_FLAGS.NORMAL);
+
+            Bank bank = StudioSystem.LoadBankFromStream(GetFileStreamFromPath(filePath), FMOD.Studio.LOAD_BANK_FLAGS.NORMAL);
+            bank.LoadSampleData();
+
+            return bank;
 
         }
+
 
         public static void ClearTexturesIfNeeded()
         {

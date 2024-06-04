@@ -674,6 +674,8 @@ namespace FMOD.Studio
             GCHandle pinnedArray = GCHandle.Alloc(buffer, GCHandleType.Pinned);
             IntPtr pointer = pinnedArray.AddrOfPinnedObject();
             RESULT result = FMOD_Studio_System_LoadBankMemory(this.handle, pointer, buffer.Length, LOAD_MEMORY_MODE.LOAD_MEMORY, flags, out bank.handle);
+
+
             pinnedArray.Free();
             return result;
         }

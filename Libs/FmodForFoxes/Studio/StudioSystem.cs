@@ -20,6 +20,8 @@ namespace FmodForFoxes.Studio
 		/// </summary>
 		public static Bank LoadBank(string path, FMOD.Studio.LOAD_BANK_FLAGS flags)
 		{
+
+
 			Native.loadBankMemory(
 				FileLoader.LoadFileAsBuffer(path),
 				flags,
@@ -31,6 +33,8 @@ namespace FmodForFoxes.Studio
 
         public static Bank LoadBankFromStream(Stream stream, FMOD.Studio.LOAD_BANK_FLAGS flags)
         {
+
+
             Native.loadBankMemory(
                 FileLoader.LoadStreamAsBuffer(stream),
                 flags,

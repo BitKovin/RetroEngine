@@ -778,7 +778,7 @@ namespace RetroEngine
             SSAOEffect.Parameters["screenHeight"]?.SetValue(ssaoOutput.Height);
             SSAOEffect.Parameters["ssaoRadius"]?.SetValue(0.5f);
             SSAOEffect.Parameters["ssaoBias"]?.SetValue(0.025f);
-            SSAOEffect.Parameters["ssaoIntensity"]?.SetValue(1);
+            SSAOEffect.Parameters["ssaoIntensity"]?.SetValue(1.1f);
 
             SSAOEffect.Parameters["Projection"]?.SetValue(Camera.finalizedProjection);
             SSAOEffect.Parameters["View"]?.SetValue(Camera.finalizedView);

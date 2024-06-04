@@ -19,7 +19,6 @@ namespace RetroEngine.Audio
 
         Channel channel = new Channel();
 
-
         public AudioClipFmod(Sound _sound) 
         {
             sound = _sound;
@@ -130,6 +129,8 @@ namespace RetroEngine.Audio
             channel = sound.Play();
             Update();
         }
+
+
 
         public override void Stop()
         {

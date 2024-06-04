@@ -1,5 +1,5 @@
-﻿using Assimp.Unmanaged;
-using BulletSharp;
+﻿using BulletSharp;
+using FmodForFoxes.Studio;
 using Microsoft.Xna.Framework;
 using RetroEngine.Entities;
 using RetroEngine.Game.Entities.Player;
@@ -23,6 +23,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
         SoundPlayer fireSoundPlayer;
 
+
         float aim = 0;
 
         float aimAnimation = 0;
@@ -38,6 +39,7 @@ namespace RetroEngine.Game.Entities.Weapons
             fireSoundPlayer.AudioClip.Is3D = false;
             fireSoundPlayer.Volume = 0.15f;
 
+
         }
 
         protected override void LoadAssets()
@@ -45,6 +47,7 @@ namespace RetroEngine.Game.Entities.Weapons
             base.LoadAssets();
 
             LoadVisual();
+
 
         }
 
