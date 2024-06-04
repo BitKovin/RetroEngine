@@ -354,12 +354,33 @@ namespace RetroEngine
 
 
             Bank bank = StudioSystem.LoadBankFromStream(GetFileStreamFromPath(filePath), FMOD.Studio.LOAD_BANK_FLAGS.NORMAL);
-            bank.LoadSampleData();
+
+            fmodBanks.Add(path, bank);
 
             return bank;
 
         }
 
+        public static void UnloadBanks()
+        {
+            lock (fmodBanks)
+            {
+
+                List<string> unloaded = new List<string>();
+
+                foreach(string name in fmodBanks.Keys)
+                {
+                    if (name.ToLower().StartsWith("master")) continue;
+
+                    fmodBanks[name].Unload();
+                    unloaded.Add(name); 
+                }
+
+                foreach(string name in unloaded)
+                    fmodBanks.Remove(name);
+
+            }
+        }
 
         public static void ClearTexturesIfNeeded()
         {

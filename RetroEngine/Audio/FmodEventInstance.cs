@@ -32,6 +32,7 @@ namespace RetroEngine.Audio
 
             ProgrammerSoundCallbackDelegate = new FMOD.Studio.EVENT_CALLBACK(ProgrammerSoundCallback);
 
+
             EventInstance.SetCallback(ProgrammerSoundCallbackDelegate, FMOD.Studio.EVENT_CALLBACK_TYPE.CREATE_PROGRAMMER_SOUND | FMOD.Studio.EVENT_CALLBACK_TYPE.DESTROY_PROGRAMMER_SOUND);
         }
 
@@ -54,6 +55,11 @@ namespace RetroEngine.Audio
 
         }
 
+        public void SetParameter(string name,float value)
+        {
+            EventInstance.SetParameterValue(name, value);
+        }
+
         public override void Update()
         {
             base.Update();
@@ -66,6 +72,8 @@ namespace RetroEngine.Audio
             }
 
             EventInstance.Pitch = Pitch;
+            EventInstance.Volume = Volume;
+
 
             Apply3D();
 
@@ -127,15 +135,10 @@ namespace RetroEngine.Audio
 
                 if(sound == null)
                 {
-                    FMOD.Studio.SOUND_INFO dialogueSoundInfo;
-                    var keyResult = StudioSystem.Native.getSoundInfo(soundName, out dialogueSoundInfo);
-                    if (keyResult != FMOD.RESULT.OK)
-                    {
-                        return FMOD.RESULT.ERR_FILE_NOTFOUND;
-                    }
-                    FMOD.Sound dialogueSound;
-                    var soundResult = CoreSystem.Native.createSound(dialogueSoundInfo.name_or_data, dialogueSoundInfo.mode, ref dialogueSoundInfo.exinfo, out dialogueSound);
-                    if (soundResult == FMOD.RESULT.OK)
+
+                    var dialogueSound = GetSoundByName(soundName, out var dialogueSoundInfo);
+
+                    if (dialogueSound.hasHandle())
                     {
                         soundInfo.sound = dialogueSound.handle;
                         soundInfo.subsoundIndex = dialogueSoundInfo.subsoundindex;
@@ -166,10 +169,31 @@ namespace RetroEngine.Audio
             return FMOD.RESULT.OK;
         }
 
+        List<FMOD.Sound> loadedSounds = new List<FMOD.Sound>();
+
+        FMOD.Sound GetSoundByName(string name, out FMOD.Studio.SOUND_INFO soundInfo)
+        {
+            FMOD.Studio.SOUND_INFO dialogueSoundInfo;
+            var keyResult = StudioSystem.Native.getSoundInfo(SoundTableKey, out dialogueSoundInfo);
+            soundInfo = dialogueSoundInfo;
+            if (keyResult != FMOD.RESULT.OK)
+            {
+                return new FMOD.Sound();
+            }
+            FMOD.Sound dialogueSound;
+            var soundResult = CoreSystem.Native.createSound(dialogueSoundInfo.name_or_data, dialogueSoundInfo.mode, ref dialogueSoundInfo.exinfo, out dialogueSound);
+            lock (loadedSounds)
+            {
+                loadedSounds.Add(dialogueSound);
+            }
+            return dialogueSound;
+        }
+
         public static FmodEventInstance Create(string name)
         {
             var e = StudioSystem.GetEvent(name);
 
+            e.LoadSampleData();
 
             var instance = e.CreateInstance();
 

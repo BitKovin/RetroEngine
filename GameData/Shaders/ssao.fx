@@ -37,7 +37,7 @@ float CalculateSSAO(float2 texCoord, float depth, float3 normal)
     const float radius = 0.06;
     const float bias = ssaoBias;
 
-    const float steps = 10;
+    const float steps = 13;
 
     float rotation = 1;
 
@@ -48,9 +48,10 @@ float CalculateSSAO(float2 texCoord, float depth, float3 normal)
         for (float angle = 0.0; angle < 6.283; angle += 0.5)
         {
 
-            float sampleL = l * lerp(1, 0.1, depth/50);
+            float sampleL = l * lerp(1, 0.2, depth/50);
 
             float2 offset = sampleL * float2(cos(angle), sin(angle));
+            offset*= float2(1,1.5);
             float2 sampleCoord = texCoord + offset;
 
             if (sampleCoord.x > 1 || sampleCoord.y > 1 || sampleCoord.x < 0 || sampleCoord.y < 0)

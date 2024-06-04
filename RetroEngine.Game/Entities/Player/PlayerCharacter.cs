@@ -13,6 +13,7 @@ using RetroEngine.Game.Entities.Weapons;
 using RetroEngine.Entities;
 using System.Text.Json.Serialization;
 using RetroEngine.SaveSystem;
+using RetroEngine.Audio;
 
 namespace RetroEngine.Game.Entities.Player
 {
@@ -54,6 +55,7 @@ namespace RetroEngine.Game.Entities.Player
         bool FirstTick = true;
 
         SoundPlayer stepSoundPlayer;
+        FmodEventInstance stepSound;
 
         bool onGround = false;
 
@@ -174,8 +176,11 @@ namespace RetroEngine.Game.Entities.Player
             bodies.Add(body);
 
             stepSoundPlayer = Level.GetCurrent().AddEntity(new SoundPlayer()) as SoundPlayer;
-            stepSoundPlayer.SetSound(AssetRegistry.LoadSoundFromFile("sounds/step.wav"));
-            stepSoundPlayer.Volume = 0.5f;
+            stepSound = FmodEventInstance.Create("event:/Character/Player Footsteps");
+            stepSoundPlayer.SetSound(stepSound);
+            stepSoundPlayer.Volume = 0.1f;
+
+            stepSound.SetParameter("Surface", 1);
 
             //weapons.Add(new WeaponData { weaponType = typeof(weapon_pistol), ammo = 1 });
             //weapons.Add(new WeaponData { weaponType = typeof(weapon_shotgunNew), ammo = 50 });
@@ -433,7 +438,7 @@ namespace RetroEngine.Game.Entities.Player
 
             Camera.roll = cameraRoll;
 
-            stepSoundPlayer.Position = Position;
+            stepSoundPlayer.Position = interpolatedPosition - Vector3.Up;
 
         }
 

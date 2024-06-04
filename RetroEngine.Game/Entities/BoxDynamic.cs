@@ -41,6 +41,7 @@ namespace RetroEngine.Game.Entities
             AssetRegistry.LoadFmodBankIntoMemory("Sounds/banks/SFX.bank");
 
             FmodEventInstance = FmodEventInstance.Create("event:/Character/Dialogue");
+            FmodEventInstance.SoundTableKey = "welcome";
             //FmodEventInstance.SetProgrammerSound("welcome", AssetRegistry.LoadSoundFmodNativeFromFile("sounds/test.wav"));
             soundPlayer.SetSound(FmodEventInstance);
 
@@ -104,6 +105,8 @@ namespace RetroEngine.Game.Entities
 
             mesh.Position = Position;
             mesh.Rotation = Rotation;
+
+            soundPlayer.Position = Position;
 
         }
 

@@ -100,6 +100,7 @@ namespace RetroEngine
             {
                 AssetRegistry.ConstantCache.Clear();
                 AssetRegistry.ClearAllTextures();
+                AssetRegistry.UnloadBanks();
                 StaticMesh.ClearCache();
             }
             Time.DeltaTime = 0;
