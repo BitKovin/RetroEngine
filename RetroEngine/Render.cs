@@ -304,7 +304,7 @@ namespace RetroEngine
             graphics.GraphicsDevice.SetRenderTarget(null);
 
             if(Input.GetAction("test2").Holding())
-                return ssaoOutput;
+                return reflection;
 
             return outputPath;
 
@@ -702,6 +702,7 @@ namespace RetroEngine
             ReflectionEffect.Parameters["FrameTexture"]?.SetValue(DeferredOutput);
             ReflectionEffect.Parameters["PositionTexture"]?.SetValue(positionPath);
             ReflectionEffect.Parameters["FactorTexture"]?.SetValue(ReflectivenessOutput);
+            ReflectionEffect.Parameters["ScreenHeight"]?.SetValue(reflection.Height);
 
             spriteBatch.Begin(effect: ReflectionEffect, blendState: BlendState.NonPremultiplied);
 

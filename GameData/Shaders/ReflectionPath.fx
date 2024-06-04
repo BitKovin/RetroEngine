@@ -30,6 +30,99 @@ struct VertexShaderOutput
 
 bool enableSSR;
 
+float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 normal, float3 vDir)
+{
+    
+    float Step = 0.01;
+    
+    const int steps = 160;
+    
+    float4 outColor = float4(0, 0, 0, 0);
+    
+    float3 selectedCoords;
+    
+    float3 dir = normalize(direction);
+    
+    float3 pos = position;
+    
+    float2 coords;
+    
+    float2 outCoords;
+    
+    float weight = -0.3;
+   
+    float factor = 1.15;
+    
+    bool facingCamera = false; dot(vDir, direction) < 0;
+    
+    
+    float disToCamera = length(viewPos - position);
+    
+    for (int i = 0; i < steps; i++)
+    {
+        
+        float3 offset = dir * (Step) * disToCamera / 30 + dir * 0.02 * disToCamera;
+        
+        
+        
+        float dist = WorldToClip(pos + offset).z;
+        
+        
+        
+        selectedCoords = pos + offset;
+        
+        coords = WorldToScreen(selectedCoords);
+
+        float SampledDepth = SampleMaxDepth(coords);
+
+        bool inScreen = coords.x > 0.001 && coords.x < 0.999 && coords.y > 0.001 && coords.y < 0.999;
+        
+        
+
+        if (SampledDepth < currentDepth - 0.25 && facingCamera == false)
+        {
+            return float4(0, 0, 0, 0);
+
+            Step /= 1.2;
+            factor = lerp(factor, 1, 0.5);
+            weight-=3;
+
+        }
+        
+        if (inScreen == false || SampledDepth>10000)
+        {
+            Step == 0.02;
+            factor = lerp(factor, 1, 0.5);
+        }
+        
+        if (SampledDepth + 0.25 < dist && (SampledDepth > dist - 1 || facingCamera == false))
+        {
+
+            Step /= 1.1;
+            factor = lerp(factor, 1, 0.5);
+
+            outCoords = coords;
+            
+            weight += 1;
+            
+            
+            continue;
+
+        }
+
+        Step *= factor;
+    }
+    
+    weight = step(2,weight);
+
+    //weight = saturate(weight);
+
+    outColor = float4(tex2D(FrameTextureSampler, coords).rgb,  weight);
+    
+    return outColor;
+    
+}
+
 float4 MainPS(VertexShaderOutput input) : COLOR
 {
 	
