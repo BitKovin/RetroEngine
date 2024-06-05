@@ -1051,12 +1051,12 @@ float3 ApplyReflection(float3 inColor, float3 albedo, PixelInput input,float3 no
     return lerp(inColor, reflectionColor, reflectiveness);*/
 }
 
-float3 ApplyReflectionOnSurface(float3 color,float2 screenCoords, float reflectiveness)
+float3 ApplyReflectionOnSurface(float3 color,float3 albedo,float2 screenCoords, float reflectiveness)
 {
 
     float3 reflection = tex2D(ReflectionTextureSampler, screenCoords).rgb;
 
     float lum = CalcLuminance(reflection);
 
-    return lerp(color, reflection * color, saturate(reflectiveness/2 * lum + reflectiveness));
+    return lerp(color, reflection * albedo, saturate(reflectiveness/2 * lum + reflectiveness));
 }
