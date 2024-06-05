@@ -45,7 +45,7 @@ float CalculateSSAO(float2 texCoord, float depth, float3 normal)
         return 0;
 
     for (float l = 0; l <= radius; l += radius / steps)
-        for (float angle = 0.0; angle < 6.283; angle += 0.5)
+        for (float angle = 0.0; angle < 6.283; angle += 0.7853)
         {
 
             float sampleL = l * lerp(1, 0.2, depth/50);

@@ -175,7 +175,7 @@ namespace RetroEngine
             content = Content;
             // TODO: use this.Content to load your game content here
 
-            DefaultFont = Content.Load<SpriteFont>("Fonts/Font"); // Use the name of your sprite font file here instead of 'Score'.
+            DefaultFont = Content.Load<SpriteFont>("Fonts/Font");
 
             curentLevel.Start();
 

@@ -28,22 +28,22 @@
 
 @PointClass base(PointEntity) color(255 51 204) = ent_cat_point : "Cat" []
 
-@SolidClass = trigger : "Trigger"
+@SolidClass base(Entity) = trigger : "Trigger"
 [
 	target(string) : "Target Tag" : ""
 ]
 
-@baseclass size(-8 -8 -8, 8 8 48) color(70 70 255) = NavPoint []
+@baseclass base(Entity) size(-8 -8 -8, 8 8 48) color(70 70 255) = NavPoint []
 
 @PointClass base(NavPoint) = info.navpoint : "Nav Point" []
 
-@SolidClass = destructible : "Destructible Brush"
+@SolidClass base(Entity) = destructible : "Destructible Brush"
 [
 	health(float) : "Health" : "30"
 	paricleSystem(string) : "Paricle System" : "destructionWood"
 ]
 
-@SolidClass = groupBrush : "Group Brush"
+@SolidClass base(Entity) = groupBrush : "Group Brush"
 [
 ]
 

@@ -57,10 +57,20 @@ namespace RetroEngine
 
         public bool SaveGame = false;
 
-
+        public string ClassName = "";
         public Entity()
         {
+            System.Reflection.MemberInfo info = this.GetType();
+            object[] attributes = info.GetCustomAttributes(true);
 
+            for (int i = 0; i < attributes.Length; i++)
+            {
+                if (attributes[i] is LevelObjectAttribute)
+                {
+                    ClassName = ((LevelObjectAttribute)attributes[i]).TechnicalName;
+                    break;
+                }
+            }
         }
 
 
@@ -115,23 +125,14 @@ namespace RetroEngine
 
             saveData = SaveData(saveData);
 
-            System.Reflection.MemberInfo info = this.GetType();
-            object[] attributes = info.GetCustomAttributes(true);
-
-            for (int i = 0; i < attributes.Length; i++)
-            {
-                if (attributes[i] is LevelObjectAttribute)
-                {
-                    saveData.className = ((LevelObjectAttribute)attributes[i]).TechnicalName;
-                    break;
-                }
-            }
+            
 
             JsonSerializerOptions options = new JsonSerializerOptions();
 
             foreach(var conv in Helpers.JsonConverters.GetAll())
                 options.Converters.Add(conv);
-            ;
+
+            saveData.className = ClassName;
 
             saveData.saveData = JsonSerializer.Serialize(this,this.GetType(), options);
 
@@ -213,13 +214,29 @@ namespace RetroEngine
 
             meshes.Clear();
 
-            if(SaveGame)
-            lock(Level.GetCurrent().DeletedIds)
+            if (SaveGame)
             {
-                Level.GetCurrent().DeletedIds.Add(Id);
-                Logger.Log("Deleted entity with id " + Id.ToString());
-            }
 
+                if (name != null && name != "")
+                {
+
+                    lock (Level.GetCurrent().DeletedNames)
+                    {
+                        Level.GetCurrent().DeletedNames.Add(name);
+                        Logger.Log("Deleted entity with name " + name);
+                    }
+
+                }
+                else
+                {
+
+                    lock (Level.GetCurrent().DeletedIds)
+                    {
+                        Level.GetCurrent().DeletedIds.Add(Id);
+                        Logger.Log("Deleted entity with id " + Id.ToString());
+                    }
+                }
+            }
             GameMain.Instance.curentLevel.entities.Remove(this);
             Dispose();
         }

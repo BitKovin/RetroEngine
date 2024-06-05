@@ -30,6 +30,7 @@ namespace RetroEngine.SaveSystem
 
                 saveData.entityId = Level.GetCurrent().entityID;
                 saveData.deletedIDs = new List<int>(Level.GetCurrent().DeletedIds);
+                saveData.deletedNames = new List<string>(Level.GetCurrent().DeletedNames);
             }
             return saveData;
 
@@ -114,11 +115,25 @@ namespace RetroEngine.SaveSystem
 
                 if (targetEntity == null) continue;
 
+                if (targetEntity.SaveGame == false) continue;
+
                 targetEntity.Destroy();
 
             }
 
-            foreach(var entity in levelSaveData.entities)
+            foreach (string name in levelSaveData.deletedNames)
+            {
+                Entity targetEntity = Level.GetCurrent().FindEntityByName(name);
+
+                if (targetEntity == null) continue;
+
+                if (targetEntity.SaveGame == false) continue;
+
+                targetEntity.Destroy();
+
+            }
+
+            foreach (var entity in levelSaveData.entities)
             {
                 Entity targetEntity = Level.GetCurrent().FindEntityByName(entity.Name);
 
@@ -186,6 +201,7 @@ namespace RetroEngine.SaveSystem
         public List<EntitySaveData> entities;
         public int entityId;
         public List<int> deletedIDs;
+        public List<string> deletedNames;
     }
 
 }

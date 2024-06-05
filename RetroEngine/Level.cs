@@ -25,6 +25,9 @@ namespace RetroEngine
 
         internal List<int> DeletedIds = new List<int>();
 
+
+        internal List<string> DeletedNames = new List<string>();
+
         List<StaticMesh> renderList = new List<StaticMesh>();
 
         List<Entity> pendingAddEntity = new List<Entity>();

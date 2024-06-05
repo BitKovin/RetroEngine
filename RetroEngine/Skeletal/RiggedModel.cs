@@ -276,14 +276,27 @@ namespace RetroEngine.Skeletal
 
             if (node.parent != null)
             {
-                var parentTransform = node.parent.CombinedTransformMg.DecomposeMatrix();
-                Vector3 parentPosition = parentTransform.Position;
-                parentTransform.Position = Vector3.Zero;
 
-                Matrix parentRotation = parentTransform.ToMatrix();
-                Matrix parentLocation = new MathHelper.Transform { Position = parentPosition }.ToMatrix();
 
-                var localTransform = node.LocalTransformMg * additionalLocal * parentRotation * additionalMesh * parentLocation;
+                Matrix localTransform;
+
+                if (additionalMesh != Matrix.Identity)
+                {
+
+                    var parentTransform = node.parent.CombinedTransformMg.DecomposeMatrix();
+                    Vector3 parentPosition = parentTransform.Position;
+                    parentTransform.Position = Vector3.Zero;
+
+                    Matrix parentRotation = parentTransform.ToMatrix();
+                    Matrix parentLocation = new MathHelper.Transform { Position = parentPosition }.ToMatrix();
+
+                    localTransform = node.LocalTransformMg * additionalLocal * parentRotation * additionalMesh * parentLocation;
+                }
+                else
+                {
+                    localTransform = node.LocalTransformMg * additionalLocal * node.parent.CombinedTransformMg;
+                }
+
 
                 if (animationPose.BoneOverrides.TryGetValue(node.name, out var boneOverride))
                 {
@@ -718,8 +731,8 @@ namespace RetroEngine.Skeletal
 
             public void SetAnimationFpsCreateFrames(int animationFramesPerSecond, RiggedModel model, bool loopAnimation)
             {
-                Console.WriteLine("________________________________________________________");
-                Console.WriteLine("Animation name: " + animationName + "  DurationInSeconds: " + DurationInSeconds + "  DurationInSecondsLooping: " + DurationInSecondsLooping);
+                //Console.WriteLine("________________________________________________________");
+                //Console.WriteLine("Animation name: " + animationName + "  DurationInSeconds: " + DurationInSeconds + "  DurationInSecondsLooping: " + DurationInSecondsLooping);
                 fps = animationFramesPerSecond;
                 TotalFrames = (int)(DurationInSeconds * animationFramesPerSecond);
                 TicksPerFramePerSecond = TicksPerSecond / animationFramesPerSecond;
@@ -736,8 +749,6 @@ namespace RetroEngine.Skeletal
                     animatedNodes[i].frameOrientations = new Matrix[TotalFrames];
                     animatedNodes[i].frameOrientationTimes = new double[TotalFrames];
 
-                    // print name of node as we loop
-                    Console.WriteLine("name " + animatedNodes[i].nodeName);
 
                     // Loop destination frames.
                     for (int j = 0; j < TotalFrames; j++)

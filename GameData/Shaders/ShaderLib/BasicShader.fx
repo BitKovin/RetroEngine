@@ -562,6 +562,10 @@ float GetShadowClose(float3 lightCoords, PixelInput input)
         return 1 - SampleShadowMap(ShadowMapCloseSampler, lightCoords.xy, currentDepth + bias);
 
         float texelSize = size / resolution; // Assuming ShadowMapSize is the size of your shadow map texture
+
+        //return 1 - SampleShadowMapLinear(ShadowMapCloseSampler, lightCoords.xy, currentDepth + bias,float2(texelSize, texelSize));
+
+        
         
         for (int i = -numSamples; i <= numSamples; ++i)
         {

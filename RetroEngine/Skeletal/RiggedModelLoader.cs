@@ -269,7 +269,7 @@ namespace RetroEngine.Skeletal
                 {
                     if (i == m.MaterialIndex)
                     {
-                        Console.WriteLine("  Materials[" + i + "]   get material textures");
+                        //Console.WriteLine("  Materials[" + i + "]   get material textures");
                         var material = scene.Materials[i];
                         var t = material.GetAllMaterialTextures();
 
