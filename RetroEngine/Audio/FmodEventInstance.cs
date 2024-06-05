@@ -176,10 +176,12 @@ namespace RetroEngine.Audio
             FMOD.Studio.SOUND_INFO dialogueSoundInfo;
             var keyResult = StudioSystem.Native.getSoundInfo(SoundTableKey, out dialogueSoundInfo);
             soundInfo = dialogueSoundInfo;
+
             if (keyResult != FMOD.RESULT.OK)
             {
                 return new FMOD.Sound();
             }
+
             FMOD.Sound dialogueSound;
             var soundResult = CoreSystem.Native.createSound(dialogueSoundInfo.name_or_data, dialogueSoundInfo.mode, ref dialogueSoundInfo.exinfo, out dialogueSound);
             lock (loadedSounds)

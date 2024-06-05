@@ -35,10 +35,12 @@ namespace RetroEngine.Game.Entities
 
             soundPlayer = (SoundPlayer)Level.GetCurrent().AddEntity(new SoundPlayer());
 
+
             AssetRegistry.LoadFmodBankIntoMemory("Sounds/banks/Master.bank");
             AssetRegistry.LoadFmodBankIntoMemory("Sounds/banks/Master.strings.bank");
             AssetRegistry.LoadFmodBankIntoMemory("Sounds/banks/Dialogue_EN.bank");
             AssetRegistry.LoadFmodBankIntoMemory("Sounds/banks/SFX.bank");
+
 
             FmodEventInstance = FmodEventInstance.Create("event:/Character/Dialogue");
             FmodEventInstance.SoundTableKey = "welcome";

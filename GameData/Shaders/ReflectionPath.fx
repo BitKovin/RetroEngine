@@ -35,7 +35,7 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
     
     float Step = 0.01;
     
-    const int steps = 160;
+    const int steps = 100;
     
     float4 outColor = float4(0, 0, 0, 0);
     
@@ -51,7 +51,7 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
     
     float weight = -0.3;
    
-    float factor = 1.15;
+    float factor = 1.2;
     
     bool facingCamera = false; dot(vDir, direction) < 0;
     
@@ -95,10 +95,10 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
             factor = lerp(factor, 1, 0.5);
         }
         
-        if (SampledDepth + 0.25 < dist && (SampledDepth > dist - 1 || facingCamera == false))
+        if (SampledDepth + 0.025 < dist && (SampledDepth > dist - 1 || facingCamera == false))
         {
 
-            Step /= 1.1;
+            Step /= 1.2;
             factor = lerp(factor, 1, 0.5);
 
             outCoords = coords;
@@ -111,6 +111,7 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
         }
 
         Step *= factor;
+        Step += 0.01;
     }
     
     weight = step(2,weight);
