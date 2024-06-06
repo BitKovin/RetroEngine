@@ -386,11 +386,14 @@ namespace RetroEngine
             }
         }
 
-        public void RenderLevelGeometryDepth(List<StaticMesh> renderList, bool OnlyStatic = false, bool onlyShadowCasters = false)
+        public void RenderLevelGeometryDepth(List<StaticMesh> renderList, bool OnlyStatic = false, bool onlyShadowCasters = false, RasterizerState rasterizerState = null)
         {
             graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 
+            if(rasterizerState == null)
             graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
+            else
+                graphics.GraphicsDevice.RasterizerState = rasterizerState;
 
             graphics.GraphicsDevice.BlendState = BlendState.Opaque;
 
@@ -883,7 +886,7 @@ namespace RetroEngine
 
             BloomEffect.Parameters["screenWidth"].SetValue(bloomSample.Width);
             BloomEffect.Parameters["screenHeight"].SetValue(bloomSample.Height);
-            BloomEffect.Parameters["offset"].SetValue(0.75f);
+            BloomEffect.Parameters["offset"].SetValue(0.85f);
 
 
             SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;

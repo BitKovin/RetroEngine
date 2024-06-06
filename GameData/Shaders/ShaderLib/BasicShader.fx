@@ -516,7 +516,7 @@ float CalculateSpecular(float3 worldPos, float3 normal, float3 lightDir, float r
     // Clamp specular to prevent negative values
     specular = max(specular, 0.0f);
 
-    return specular*1.1;
+    return specular*1.05;
 }
 
 float SampleShadowMap(sampler2D shadowMap, float2 coords, float compare)
@@ -786,7 +786,7 @@ float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal, float ro
         return float3(0,0,0);
     
 
-    float offsetScale = 1 / (LightResolutions[i] / 40) / lerp(distanceToLight,1, 0.7);
+    float offsetScale = 1 / (LightResolutions[i] / 40);// / lerp(distanceToLight,1, 0.7);
     offsetScale *= lerp(abs(dot(normal, normalize(lightVector))), 0.7, 1);
     float notShadow = 1;
 
@@ -794,6 +794,10 @@ float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal, float ro
     {
         return float3(0,0,0);
     }
+
+    float distFactor = 1; // 0.96
+
+    distFactor = lerp(distFactor, 1, abs(dot(normal, normalize(lightVector))));
 
     if (LightResolutions[i] > 10 && notShadow>0)
     {
@@ -822,14 +826,16 @@ float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal, float ro
         bool simpleShadows = false;
 
 #ifdef SIMPLE_SHADOWS
-        simpleShadows = true;
+        simpleShadows = false;
 #endif
+
+        float bias = -1/LightResolutions[i] * distanceToLight;
 
         if(simpleShadows)
         {
 
             float shadowDepth = GetPointLightDepth(i, lightDir);
-            notShadow = distanceToLight < shadowDepth ? 1.0 : 0.0;
+            notShadow = distanceToLight * distFactor + bias < shadowDepth ? 1.0 : 0.0;
 
         }else
         {
@@ -838,9 +844,13 @@ float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal, float ro
         {
             for (float y = -radius; y <= radius; y+=step)
             {
+
+                if(length(float2(x,y))>1.1*radius)
+                    continue;
+
                 float3 offset = (tangent * x + bitangent * y) * shadowBias * offsetScale;
                 float shadowDepth = GetPointLightDepth(i, lightDir + offset);
-                shadowFactor += distanceToLight < shadowDepth ? 1.0 : 0.0;
+                shadowFactor += distanceToLight * distFactor + bias < shadowDepth ? 1.0 : 0.0;
                 samples++;
             }
         }

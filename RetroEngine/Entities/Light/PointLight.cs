@@ -320,7 +320,6 @@ namespace RetroEngine.Entities.Light
             GameMain.Instance.render.RenderLevelGeometryDepth(l, OnlyStatic: !isDynamic(), onlyShadowCasters: true);
 
             GameMain.Instance.render.BoundingSphere.Radius = 0;
-
             graphicsDevice.SetRenderTarget(null);
         }
 
