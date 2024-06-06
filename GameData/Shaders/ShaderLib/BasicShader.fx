@@ -18,18 +18,30 @@ texture ShadowMap;
 sampler ShadowMapSampler = sampler_state
 {
     texture = <ShadowMap>;
+    MinFilter = Point;
+    MagFilter = Point;
+    AddressU = Clamp;
+    AddressV = Clamp;
 };
 
 texture ShadowMapClose;
 sampler ShadowMapCloseSampler = sampler_state
 {
     texture = <ShadowMapClose>;
+    MinFilter = Point;
+    MagFilter = Point;
+    AddressU = Clamp;
+    AddressV = Clamp;
 };
 
 texture ShadowMapVeryClose;
 sampler ShadowMapVeryCloseSampler = sampler_state
 {
     texture = <ShadowMapVeryClose>;
+    MinFilter = Point;
+    MagFilter = Point;
+    AddressU = Clamp;
+    AddressV = Clamp;
 };
 
 texture DepthTexture;
@@ -60,8 +72,8 @@ sampler ReflectionTextureSampler = sampler_state
 {
     texture = <ReflectionTexture>;
 
-    MinFilter = Anisotropic;
-    MagFilter = Anisotropic;
+    MinFilter = Linear;
+    MagFilter = Linear;
     AddressU = Clamp;
     AddressV = Clamp;
 };
@@ -634,6 +646,10 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input)
         {
             for (int j = -numSamples; j <= numSamples; ++j)
             {
+
+                if(length(float2(i, j)>1.1))
+                    continue;
+
                 float2 offsetCoords = lightCoords.xy + float2(i, j) * texelSize;
                 float closestDepth;
                 closestDepth = SampleShadowMapLinear(ShadowMapVeryCloseSampler, offsetCoords, currentDepth - bias, float2(texelSize, texelSize));
@@ -768,7 +784,6 @@ float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal, float ro
 
     if(distanceToLight> LightRadiuses[i])
         return float3(0,0,0);
-
     
 
     float offsetScale = 1 / (LightResolutions[i] / 40) / lerp(distanceToLight,1, 0.7);
@@ -777,7 +792,7 @@ float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal, float ro
 
     if(dot(normal, normalize(lightVector))<0.01)
     {
-        notShadow = 0;
+        return float3(0,0,0);
     }
 
     if (LightResolutions[i] > 10 && notShadow>0)
@@ -936,7 +951,7 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness, float me
     
     
     
-    float3 globalLight = GlobalBrightness * GlobalLightColor * lerp(1, 0.6, max(dot(normal, float3(0, -1, 0)),0));
+    float3 globalLight = GlobalBrightness * GlobalLightColor * lerp(1, 0.4, max(dot(normal, float3(0, -1, 0)),0));
     globalLight*=ao;
     
     light = max(light, 0);
