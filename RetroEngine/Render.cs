@@ -322,7 +322,7 @@ namespace RetroEngine
             samplerState.AddressV = TextureAddressMode.Wrap;
             samplerState.AddressW = TextureAddressMode.Wrap;
 
-            samplerState.MipMapLevelOfDetailBias = -10;
+            samplerState.MipMapLevelOfDetailBias = -7;
             samplerState.MaxAnisotropy = 16;
 
             int i = 0;

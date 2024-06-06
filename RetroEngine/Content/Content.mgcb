@@ -634,41 +634,6 @@
 /processor:
 /copy:../../GameData/maps/autosave/test2.14.map;maps/autosave/test2.14.map
 
-#begin ../../GameData/maps/autosave/test2.15.map
-/importer:
-/processor:
-/copy:../../GameData/maps/autosave/test2.15.map;maps/autosave/test2.15.map
-
-#begin ../../GameData/maps/autosave/test2.16.map
-/importer:
-/processor:
-/copy:../../GameData/maps/autosave/test2.16.map;maps/autosave/test2.16.map
-
-#begin ../../GameData/maps/autosave/test2.17.map
-/importer:
-/processor:
-/copy:../../GameData/maps/autosave/test2.17.map;maps/autosave/test2.17.map
-
-#begin ../../GameData/maps/autosave/test2.18.map
-/importer:
-/processor:
-/copy:../../GameData/maps/autosave/test2.18.map;maps/autosave/test2.18.map
-
-#begin ../../GameData/maps/autosave/test2.19.map
-/importer:
-/processor:
-/copy:../../GameData/maps/autosave/test2.19.map;maps/autosave/test2.19.map
-
-#begin ../../GameData/maps/autosave/test2.20.map
-/importer:
-/processor:
-/copy:../../GameData/maps/autosave/test2.20.map;maps/autosave/test2.20.map
-
-#begin ../../GameData/maps/autosave/test2.21.map
-/importer:
-/processor:
-/copy:../../GameData/maps/autosave/test2.21.map;maps/autosave/test2.21.map
-
 #begin ../../GameData/maps/autosave/test3.1.map
 /importer:
 /processor:

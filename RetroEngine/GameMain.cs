@@ -126,6 +126,9 @@ namespace RetroEngine
 
             _graphics.SynchronizeWithVerticalRetrace = false;
 
+
+            _graphics.PreferMultiSampling = false;
+
             //if (platform == Platform.Mobile)
             //_graphics.IsFullScreen = true;
             _graphics.ApplyChanges();
