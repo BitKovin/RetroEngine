@@ -42,6 +42,8 @@ namespace RetroEngine.Game
         protected override void Update(GameTime gameTime)
         {
 
+            
+
             if (Graphics.DefaultUnlit)
             {
                 DefaultShader = AssetRegistry.GetShaderFromName("Unlit");
@@ -50,6 +52,7 @@ namespace RetroEngine.Game
             {
                 DefaultShader = null;
             }
+            //DefaultShader = AssetRegistry.GetShaderFromName("SimpleEffect");
 
             base.Update(gameTime);
         }
@@ -65,7 +68,7 @@ namespace RetroEngine.Game
 
             //Render.LUT = AssetRegistry.LoadTextureFromFile("engine/textures/Sin Shitty.png_out.png", generateMipMaps: false);   
 
-            for (int i = 1; i <= 10; i++)
+            for (int i = 1; i <= 0; i++)
             {
                 Entity npc = new NPCBase();
                 npc.Position = new Vector3(0, i*2.2f + 2, 0);

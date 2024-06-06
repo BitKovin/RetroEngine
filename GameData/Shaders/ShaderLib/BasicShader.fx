@@ -477,6 +477,11 @@ float DistributionGGX(float3 N, float3 H, float a)
 }
 
 float CalculateSpecular(float3 worldPos, float3 normal, float3 lightDir, float roughness, float metallic) {
+
+    #ifdef NO_SPECULAR
+        return 0;
+    #endif
+    
     // Common calculations
     float3 vDir = normalize(viewPos - worldPos);
     lightDir *= -1.0f;
@@ -781,7 +786,7 @@ float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal, float ro
         const int radius = 2;
 
         float step = 0.66666666666665;
-
+        
 #if OPENGL
         step = radius;
 #endif
