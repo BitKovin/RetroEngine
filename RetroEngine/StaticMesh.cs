@@ -307,25 +307,22 @@ namespace RetroEngine
 
         public virtual bool IntersectsBoubndingSphere(BoundingSphere sphere)
         {
-            bool intersects = false;
-
             if (frameStaticMeshData.model is not null)
             {
 
                 foreach (ModelMesh mesh in frameStaticMeshData.model.Meshes)
                 {
-
-                    if (mesh.BoundingSphere.Intersects(sphere))
+                    
+                    if (mesh.BoundingSphere.Transform(WorldMatrix).Intersects(sphere))
                     {
-                        intersects = true;
-                        break;
+                        return true;
                     }
 
 
                 }
             }
 
-            return intersects;
+            return false;
         }
 
 

@@ -21,6 +21,8 @@ float ssaoRadius = 0.1;
 float ssaoBias = 0.01;
 float ssaoIntensity = 1.0;
 
+bool Enabled;
+
 // Function to convert normal from 0-1 to -1 to 1
 float3 DecodeNormal(float3 normal)
 {
@@ -37,7 +39,7 @@ float CalculateSSAO(float2 texCoord, float depth, float3 normal)
     const float radius = 0.06;
     const float bias = ssaoBias;
 
-    const float steps = 13;
+    const float steps = 10;
 
     float rotation = 1;
 
@@ -142,7 +144,8 @@ float ao = 0;
 
 float sampleRadius = 2;
 
-ao += CalculateSSAO(texCoord, depth, DecodeNormal(normal));
+if(Enabled)
+    ao += CalculateSSAO(texCoord, depth, DecodeNormal(normal));
 
 
 // Apply AO to the final color

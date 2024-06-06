@@ -1,4 +1,6 @@
-﻿#include "ShaderLib/BasicShader.fx"
+﻿#define SIMPLE_SHADOWS
+
+#include "ShaderLib/BasicShader.fx"
 
 texture Texture;
 sampler TextureSampler = sampler_state

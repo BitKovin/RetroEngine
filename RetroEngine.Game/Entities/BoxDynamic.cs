@@ -57,9 +57,9 @@ namespace RetroEngine.Game.Entities
 
             mesh.LoadFromFile("models/cube.obj");
 
-            mesh.texture = AssetRegistry.LoadTextureFromFile("textures/foil.png");
-            mesh.normalTexture = AssetRegistry.LoadTextureFromFile("textures/foil_n.png");
-            mesh.ormTexture = AssetRegistry.LoadTextureFromFile("textures/foil_orm.png");
+            mesh.texture = AssetRegistry.LoadTextureFromFile("textures/brushes/cat.png");
+            //mesh.normalTexture = AssetRegistry.LoadTextureFromFile("textures/foil_n.png");
+            //mesh.ormTexture = AssetRegistry.LoadTextureFromFile("textures/foil_orm.png");
 
             mesh.CastShadows = true;
 
@@ -116,7 +116,6 @@ namespace RetroEngine.Game.Entities
         {
             Console.WriteLine(Position);
             base.LoadData(Data);
-            Console.WriteLine(Position);
 
             body.SetPosition(Position);
 

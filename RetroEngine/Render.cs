@@ -276,13 +276,14 @@ namespace RetroEngine
             graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 
-
-            ShadowMapEffect.Parameters["close"].SetValue(false);
-            RenderShadowMapClose(renderList);
-            RenderShadowMap(renderList);
-            ShadowMapEffect.Parameters["close"].SetValue(true);
-            RenderShadowMapVeryClose(renderList);
-            
+            if (Graphics.DirectLighting > 0.0001)
+            {
+                ShadowMapEffect.Parameters["close"].SetValue(false);
+                RenderShadowMapClose(renderList);
+                RenderShadowMap(renderList);
+                ShadowMapEffect.Parameters["close"].SetValue(true);
+                RenderShadowMapVeryClose(renderList);
+            }
             graphics.GraphicsDevice.RasterizerState = Graphics.DisableBackFaceCulling? RasterizerState.CullNone : RasterizerState.CullNone;
 
             InitSampler(25);
@@ -296,6 +297,7 @@ namespace RetroEngine
 
             RenderForwardPath(renderList);
             
+
 
             graphics.GraphicsDevice.BlendState = BlendState.Opaque;
 
@@ -783,6 +785,8 @@ namespace RetroEngine
 
             SSAOEffect.Parameters["Projection"]?.SetValue(Camera.finalizedProjection);
             SSAOEffect.Parameters["View"]?.SetValue(Camera.finalizedView);
+
+            SSAOEffect.Parameters["Enabled"].SetValue(Graphics.EnableSSAO);
 
             SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
 

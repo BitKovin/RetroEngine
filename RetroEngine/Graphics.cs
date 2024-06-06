@@ -23,6 +23,8 @@ namespace RetroEngine
         public static float SSRResolutionScale = 0.7f;
         public static bool EnableSSR = true;
 
+        public static bool EnableSSAO = true;
+
         public static float Brightness = 1;
         public static float Gamma = 2.4f;
         public static float Exposure = 0.35f;
@@ -32,8 +34,8 @@ namespace RetroEngine
         public static Matrix LightViewProjectionClose;
         public static Matrix LightViewProjectionVeryClose;
         public static float LightDistance = 300;
-        public static float CloseLightDistance = 63;
-        public static float VeryCloseLightDistance = 17;
+        public static float CloseLightDistance = 51;
+        public static float VeryCloseLightDistance = 21;
 
         public static bool EnablePostPocessing = true;
         public static bool TextureFiltration = true;

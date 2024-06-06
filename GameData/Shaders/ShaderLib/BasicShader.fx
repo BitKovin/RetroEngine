@@ -568,8 +568,9 @@ float GetShadowClose(float3 lightCoords, PixelInput input)
 
         float texelSize = size / resolution; // Assuming ShadowMapSize is the size of your shadow map texture
 
-        //return 1 - SampleShadowMapLinear(ShadowMapCloseSampler, lightCoords.xy, currentDepth + bias,float2(texelSize, texelSize));
-
+    #ifdef SIMPLE_SHADOWS
+        return 1 - SampleShadowMapLinear(ShadowMapCloseSampler, lightCoords.xy, currentDepth + bias,float2(texelSize, texelSize));
+    #endif
         
         
         for (int i = -numSamples; i <= numSamples; ++i)
@@ -612,6 +613,9 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input)
         float b = 0.0004;
         
         float bias = b * (1 - saturate(dot(input.Normal, -LightDirection))) + b / 2.0f;
+
+        
+
         resolution = ShadowMapResolutionClose;
         
         //bias -= max(dot(input.Normal, float3(0,1,0)),0) * b/2;
@@ -622,6 +626,10 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input)
         
         float texelSize = size / resolution; // Assuming ShadowMapSize is the size of your shadow map texture
         
+        #ifdef SIMPLE_SHADOWS
+        return 1 - SampleShadowMapLinear(ShadowMapVeryCloseSampler, lightCoords.xy, currentDepth - bias, float2(texelSize, texelSize));
+        #endif
+
         for (int i = -numSamples; i <= numSamples; ++i)
         {
             for (int j = -numSamples; j <= numSamples; ++j)
@@ -648,6 +656,9 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
 {
     float shadow = 0;
     
+    if(DirectBrightness<0.00001)
+        return 0;
+
     float dist = distance(viewPos, input.MyPosition);
     
     if (dist > 200)
@@ -661,7 +672,7 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
     {
         
             
-        if (dist < 8 ) //&& abs(dot(input.TangentNormal, -LightDirection))>0.3
+        if (dist < 10 ) //&& abs(dot(input.TangentNormal, -LightDirection))>0.3
         {
             if (lightCoordsVeryClose.x >= 0 && lightCoordsVeryClose.x <= 1 && lightCoordsVeryClose.y >= 0 && lightCoordsVeryClose.y <= 1)
             {
@@ -669,7 +680,7 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
             }
         }
         
-        if (dist < 31)
+        if (dist < 25)
         {
             if (lightCoordsClose.x >= 0 && lightCoordsClose.x <= 1 && lightCoordsClose.y >= 0 && lightCoordsClose.y <= 1)
             {
@@ -786,10 +797,27 @@ float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal, float ro
         const int radius = 2;
 
         float step = 0.66666666666665;
-        
+
 #if OPENGL
         step = radius;
 #endif
+
+        step = radius;
+
+        bool simpleShadows = false;
+
+#ifdef SIMPLE_SHADOWS
+        simpleShadows = true;
+#endif
+
+        if(simpleShadows)
+        {
+
+            float shadowDepth = GetPointLightDepth(i, lightDir);
+            notShadow = distanceToLight < shadowDepth ? 1.0 : 0.0;
+
+        }else
+        {
 
         for (float x = -radius; x <= radius; x+=step)
         {
@@ -801,9 +829,10 @@ float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal, float ro
                 samples++;
             }
         }
-
+        
         shadowFactor /= samples;
         notShadow = shadowFactor;
+        }
     }
 
     float dist = (distanceToLight / LightRadiuses[i]);
