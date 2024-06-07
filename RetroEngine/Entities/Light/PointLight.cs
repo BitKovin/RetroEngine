@@ -105,19 +105,19 @@ namespace RetroEngine.Entities.Light
 
             float dist = Vector3.Distance(Camera.position, Position);
 
-            if (dist < (lightData.Radius + 1) * 2)
+            if (dist < (lightData.Radius + 2) * 2)
             {
                 SetLightResolution(resolution);
             }
-            if(dist > (lightData.Radius + 3) * 2)
+            if(dist > (lightData.Radius + 2) * 2)
             {
-                SetLightResolution((int)((float)resolution/1.2f));
+                SetLightResolution((int)((float)resolution/1.5f));
             }
-            if (dist > (lightData.Radius+6) * 3)
+            if (dist > (lightData.Radius+3) * 3)
             {
-                SetLightResolution((int)((float)resolution / 1.5));
+                SetLightResolution((int)((float)resolution / 2));
             }
-            if (dist > (lightData.Radius + 7) * 5)
+            if (dist > (lightData.Radius + 4) * 5)
             {
                 SetLightResolution(resolution / 3);
             }

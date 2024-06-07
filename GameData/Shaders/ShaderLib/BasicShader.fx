@@ -516,7 +516,7 @@ float CalculateSpecular(float3 worldPos, float3 normal, float3 lightDir, float r
     // Clamp specular to prevent negative values
     specular = max(specular, 0.0f);
 
-    return specular*1.05;
+    return specular;
 }
 
 float SampleShadowMap(sampler2D shadowMap, float2 coords, float compare)
