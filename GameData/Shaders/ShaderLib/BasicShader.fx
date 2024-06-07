@@ -821,17 +821,20 @@ float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal, float ro
         step = radius;
 #endif
 
-        step = radius;
+            
 
         bool simpleShadows = false;
 
 #ifdef SIMPLE_SHADOWS
-        simpleShadows = false;
+        simpleShadows = true;
 #endif
 
         float bias = -1/LightResolutions[i] * distanceToLight;
 
         if(simpleShadows)
+            step = radius;
+
+        if(simpleShadows&&false)
         {
 
             float shadowDepth = GetPointLightDepth(i, lightDir);
