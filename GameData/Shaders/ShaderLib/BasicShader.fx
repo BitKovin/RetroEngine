@@ -519,6 +519,11 @@ float CalculateSpecular(float3 worldPos, float3 normal, float3 lightDir, float r
     return specular;
 }
 
+float3 offset_lookup(sampler2D map, float4 loc, float2 offset, float texelSize)
+{
+    return tex2Dproj(map, float4(loc.xy+offset*texelSize * loc.w,loc.z, loc.w));
+}
+
 float SampleShadowMap(sampler2D shadowMap, float2 coords, float compare)
 {
     
@@ -639,7 +644,7 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input)
         float texelSize = size / resolution; // Assuming ShadowMapSize is the size of your shadow map texture
         
         #ifdef SIMPLE_SHADOWS
-        return 1 - SampleShadowMapLinear(ShadowMapVeryCloseSampler, lightCoords.xy, currentDepth - bias, float2(texelSize, texelSize));
+        //return 1 - SampleShadowMapLinear(ShadowMapVeryCloseSampler, lightCoords.xy, currentDepth - bias, float2(texelSize, texelSize));
         #endif
 
         for (int i = -numSamples; i <= numSamples; ++i)
@@ -680,9 +685,7 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
     if (dist > 200)
         return 0;
     
-    if (tex2D(ShadowMapSampler,lightCoords.xy).r<0.01)
-        return 0;
-    
+
 
     if (lightCoords.x >= 0 && lightCoords.x <= 1 && lightCoords.y >= 0 && lightCoords.y <= 1)
     {
@@ -704,6 +707,9 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
             }
         }
         
+    if (tex2D(ShadowMapSampler,lightCoords.xy).r<0.01)
+        return 0;
+
         float currentDepth = lightCoords.z * 2 - 1;
 
         float resolution = 1;
@@ -1124,5 +1130,5 @@ float3 ApplyReflectionOnSurface(float3 color,float3 albedo,float2 screenCoords, 
 
     float lum = CalcLuminance(reflection);
 
-    return lerp(color, reflection * albedo, saturate(reflectiveness/2 * lum + reflectiveness));
+    return lerp(color, reflection * albedo, saturate(reflectiveness/2 * 0 + reflectiveness));
 }
