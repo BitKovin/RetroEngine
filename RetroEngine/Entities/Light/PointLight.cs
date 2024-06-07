@@ -37,7 +37,7 @@ namespace RetroEngine.Entities.Light
 
         static bool finalizedFrame = false;
 
-        int resolution;
+        public int resolution;
 
         public bool Dynamic = false;
         public bool CastShadows = true;
@@ -109,17 +109,17 @@ namespace RetroEngine.Entities.Light
             {
                 SetLightResolution(resolution);
             }
-            if(dist > (lightData.Radius + 1) * 2)
+            if(dist > (lightData.Radius + 3) * 2)
             {
-                SetLightResolution((int)((float)resolution/1.5f));
+                SetLightResolution((int)((float)resolution/1.2f));
             }
-            if (dist > (lightData.Radius+2) * 3)
+            if (dist > (lightData.Radius+6) * 3)
             {
-                SetLightResolution((int)((float)resolution / 2));
+                SetLightResolution((int)((float)resolution / 1.5));
             }
-            if (dist > (lightData.Radius + 2) * 5)
+            if (dist > (lightData.Radius + 7) * 5)
             {
-                SetLightResolution(resolution / 4);
+                SetLightResolution(resolution / 3);
             }
 
             finalizedFrame = false;

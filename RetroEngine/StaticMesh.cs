@@ -281,7 +281,7 @@ namespace RetroEngine
                     LightPos[i] = objectLights[i].Position;
                     LightColor[i] = objectLights[i].Color;
                     LightRadius[i] = objectLights[i].Radius;
-                    LightRes[i] = objectLights[i].Resolution;
+                    LightRes[i] = objectLights[i].shadowData.resolution;
                     LightMaps[i] = objectLights[i].shadowData.renderTargetCube;
                 }
 
