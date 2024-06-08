@@ -585,9 +585,9 @@ float GetShadowClose(float3 lightCoords, PixelInput input)
 
         float texelSize = size / resolution; // Assuming ShadowMapSize is the size of your shadow map texture
 
-    #ifdef SIMPLE_SHADOWS
-        return 1 - SampleShadowMapLinear(ShadowMapCloseSampler, lightCoords.xy, currentDepth + bias,float2(texelSize, texelSize));
-    #endif
+    // #ifdef SIMPLE_SHADOWS
+    //     return 1 - SampleShadowMapLinear(ShadowMapCloseSampler, lightCoords.xy, currentDepth + bias,float2(texelSize, texelSize));
+    // #endif
         
         
         for (int i = -numSamples; i <= numSamples; ++i)
@@ -647,6 +647,8 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input)
         //return 1 - SampleShadowMapLinear(ShadowMapVeryCloseSampler, lightCoords.xy, currentDepth - bias, float2(texelSize, texelSize));
         #endif
 
+        
+
         for (int i = -numSamples; i <= numSamples; ++i)
         {
             for (int j = -numSamples; j <= numSamples; ++j)
@@ -690,11 +692,23 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
     if (lightCoords.x >= 0 && lightCoords.x <= 1 && lightCoords.y >= 0 && lightCoords.y <= 1)
     {
         
+        
+        float currentDepth = lightCoords.z * 2 - 1;
             
         if (dist < 10 ) //&& abs(dot(input.TangentNormal, -LightDirection))>0.3
         {
             if (lightCoordsVeryClose.x >= 0 && lightCoordsVeryClose.x <= 1 && lightCoordsVeryClose.y >= 0 && lightCoordsVeryClose.y <= 1)
             {
+                
+                // float texelSize = 1/ShadowMapResolutionClose;
+
+                // float corner = GetShadowClose(lightCoordsClose, input);
+
+                // if(corner>0.99)
+                //     return 1;
+                // if(corner<0.01)
+                //     return 0;
+
                 return GetShadowVeryClose(lightCoordsVeryClose, input);
             }
         }
@@ -710,7 +724,6 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
     if (tex2D(ShadowMapSampler,lightCoords.xy).r<0.01)
         return 0;
 
-        float currentDepth = lightCoords.z * 2 - 1;
 
         float resolution = 1;
         
