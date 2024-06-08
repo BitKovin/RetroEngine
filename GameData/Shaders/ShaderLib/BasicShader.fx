@@ -585,9 +585,9 @@ float GetShadowClose(float3 lightCoords, PixelInput input)
 
         float texelSize = size / resolution; // Assuming ShadowMapSize is the size of your shadow map texture
 
-    // #ifdef SIMPLE_SHADOWS
-    //     return 1 - SampleShadowMapLinear(ShadowMapCloseSampler, lightCoords.xy, currentDepth + bias,float2(texelSize, texelSize));
-    // #endif
+    
+        return 1 - SampleShadowMapLinear(ShadowMapCloseSampler, lightCoords.xy, currentDepth + bias,float2(texelSize, texelSize));
+    
         
         
         for (int i = -numSamples; i <= numSamples; ++i)
@@ -700,14 +700,8 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
             if (lightCoordsVeryClose.x >= 0 && lightCoordsVeryClose.x <= 1 && lightCoordsVeryClose.y >= 0 && lightCoordsVeryClose.y <= 1)
             {
                 
-                // float texelSize = 1/ShadowMapResolutionClose;
+                float texelSize = 1/ShadowMapResolutionClose;
 
-                // float corner = GetShadowClose(lightCoordsClose, input);
-
-                // if(corner>0.99)
-                //     return 1;
-                // if(corner<0.01)
-                //     return 0;
 
                 return GetShadowVeryClose(lightCoordsVeryClose, input);
             }
