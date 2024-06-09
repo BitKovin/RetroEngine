@@ -136,6 +136,7 @@ float3 LightPositions[MAX_POINT_LIGHTS];
 float3 LightColors[MAX_POINT_LIGHTS];
 float LightRadiuses[MAX_POINT_LIGHTS];
 float LightResolutions[MAX_POINT_LIGHTS];
+float4 LightDirections[MAX_POINT_LIGHTS];
 
 texture PointLightCubemap1;
 sampler PointLightCubemap1Sampler = sampler_state
@@ -799,6 +800,20 @@ float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal, float ro
         return float3(0,0,0);
     
 
+    // Calculate the dot product between the normalized light vector and light direction
+    float lightDot = dot(normalize(-lightVector), normalize(LightDirections[i].xyz));
+
+    // Define the inner and outer angles of the spotlight in radians
+    float innerConeAngle = LightDirections[i].w;
+    float outerConeAngle = innerConeAngle - 0.1; // Adjust this value to control the smoothness
+
+    // Calculate the smooth transition factor using smoothstep
+    float dirFactor = smoothstep(outerConeAngle, innerConeAngle, lightDot);
+
+
+    if(dirFactor<=0.001)
+        return 0;
+
     float offsetScale = 1 / (LightResolutions[i] / 40);// / lerp(distanceToLight,1, 0.7);
     offsetScale *= lerp(abs(dot(normal, normalize(lightVector))), 0.7, 1);
     float notShadow = 1;
@@ -889,7 +904,7 @@ float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal, float ro
     intense = max(intense, 0);
     float3 l = LightColors[i] * intense;
 
-    return (l + intense * specular) * notShadow;
+    return (l + intense * specular) * notShadow * dirFactor;
 }
 
 float3 CalculatePointLightSpeculars(int i, PixelInput pixelInput, float3 normal, float roughness, float metalic)

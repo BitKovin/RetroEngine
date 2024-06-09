@@ -64,9 +64,7 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
         float3 offset = dir * (Step) * disToCamera / 30 + dir * 0.02 * disToCamera;
         
         
-        
         float dist = WorldToClip(pos + offset).z;
-        
         
         
         selectedCoords = pos + offset;
@@ -83,7 +81,7 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
         {
             return float4(0, 0, 0, 0);
 
-            Step /= 1.2;
+            Step /= factor;
             factor = lerp(factor, 1, 0.5);
             weight-=3;
 
@@ -98,7 +96,7 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
         if (SampledDepth + 0.025 < dist && (SampledDepth > dist - 1 || facingCamera == false))
         {
 
-            Step /= 1.2;
+            Step /= factor;
             factor = lerp(factor, 1, 0.5);
 
             outCoords = coords;

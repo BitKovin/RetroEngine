@@ -144,9 +144,10 @@ float ao = 0;
 
 float sampleRadius = 2;
 
+#if OPENGL == FALSE
 if(Enabled)
     ao += CalculateSSAO(texCoord, depth, DecodeNormal(normal));
-
+#endif
 
 // Apply AO to the final color
 float finalColor = 1 - ao;

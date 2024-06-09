@@ -14,6 +14,7 @@ using RetroEngine.Entities;
 using System.Text.Json.Serialization;
 using RetroEngine.SaveSystem;
 using RetroEngine.Audio;
+using RetroEngine.Entities.Light;
 
 namespace RetroEngine.Game.Entities.Player
 {
@@ -81,6 +82,8 @@ namespace RetroEngine.Game.Entities.Player
 
         [JsonInclude]
         public bool thirdPerson = false;
+
+        PointLight PlayerLight;
 
         public PlayerCharacter() : base()
         {
@@ -187,6 +190,14 @@ namespace RetroEngine.Game.Entities.Player
             //weapons.Add(new WeaponData { weaponType = typeof(weapon_pistol_double), ammo = 50 });
 
             interpolatedPosition = Position;
+
+            PlayerLight = Level.GetCurrent().AddEntity(new PointLight()) as PointLight;
+            PlayerLight.CastShadows = true;
+            PlayerLight.Start();
+
+            PlayerLight.MinDot = 0.85f;
+            PlayerLight.radius = 20;
+            PlayerLight.Intensity = 1;
 
         }
 
@@ -615,12 +626,19 @@ namespace RetroEngine.Game.Entities.Player
                 currentWeapon.Rotation = Camera.rotation + new Vector3(0, 0, (float)Math.Sin(bobProgress * -1 * bobSpeed) * -1.5f) * currentWeapon.BobScale;
             }
 
+            UpdatePlayerLight();
             PlayerUI.Update();
 
             cylinder.Position = Position + Camera.rotation.GetForwardVector().XZ() * 3;
         }
 
         Delay jumpDelay = new Delay();
+
+        void UpdatePlayerLight()
+        {
+            PlayerLight.Position = interpolatedPosition + Vector3.Up * 0.5f + Camera.rotation.GetRightVector()*0.3f;
+            PlayerLight.Rotation = Camera.rotation;
+        }
 
         void Jump()
         {

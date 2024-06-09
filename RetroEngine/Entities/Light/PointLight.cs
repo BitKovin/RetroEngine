@@ -25,6 +25,10 @@ namespace RetroEngine.Entities.Light
         public PointLight() 
         {
             LateUpdateWhilePaused = true;
+
+            lightData.shadowData = this;
+
+            graphicsDevice = GameMain.Instance.GraphicsDevice;
         }
 
         LightManager.PointLightData lightData = new LightManager.PointLightData();
@@ -37,10 +41,18 @@ namespace RetroEngine.Entities.Light
 
         static bool finalizedFrame = false;
 
-        public int resolution;
+        public int resolution = 512;
 
-        public bool Dynamic = false;
-        public bool CastShadows = true;
+        public float radius = 10;
+        public float MinDot = -1f;
+
+        public bool Dynamic = true;
+        public bool CastShadows = false;
+
+        public Vector3 Color = Vector3.One;
+        public float Intensity = 2f;
+
+        public float Priority = 1;
 
         float DynamicUpdateDystance;
 
@@ -52,18 +64,16 @@ namespace RetroEngine.Entities.Light
         {
             base.FromData(data);
 
-            float intens = data.GetPropertyFloat("intensity", 1);
+            Intensity = data.GetPropertyFloat("intensity", 1);
 
-            lightData.Color = data.GetPropertyVector("light_color", new Vector3(1,1,1)) * intens;
-            lightData.Radius = data.GetPropertyFloat("radius", 5);
+            Color = data.GetPropertyVector("light_color", Color);
+            radius = data.GetPropertyFloat("radius", 5);
+
+            lightData.Radius = radius;
 
             Dynamic = data.GetPropertyBool("dynamic");
 
-            lights.Add(this);
-
-            graphicsDevice = GameMain.Instance.GraphicsDevice;
-
-
+            
             resolution = 256;
 
             resolution = (int)data.GetPropertyFloat("resolution", 256);
@@ -79,14 +89,15 @@ namespace RetroEngine.Entities.Light
             //meshes.Add(mesh);
             //mesh.Visible = false;
 
-            DynamicUpdateDystance = (lightData.Radius + 10) * 6;
+            
 
-            lightData.shadowData = this;
         }
 
         public override void Start()
         {
             base.Start();
+
+            lights.Add(this);
 
             if (Level.ChangingLevel == false) return;
 
@@ -94,7 +105,9 @@ namespace RetroEngine.Entities.Light
 
             mesh.Visible = true;
             mesh.Position = Position;
+
             
+
             mesh.Shader = AssetRegistry.GetShaderFromName("CubeMapVisualizer");
 
         }
@@ -102,6 +115,8 @@ namespace RetroEngine.Entities.Light
         public override void Update()
         {
             base.Update();
+
+            Rotation += new Vector3(0, Time.DeltaTime * 300, 0);
 
             float dist = Vector3.Distance(Camera.position, Position);
 
@@ -165,14 +180,24 @@ namespace RetroEngine.Entities.Light
         public override void LateUpdate()
         {
             lightData.Position = Position;
+            lightData.Radius = radius;
 
-            if(Dynamic)
+            lightData.Color = Color * Intensity;
+
+            lightData.MinDot = MinDot;
+            lightData.Direction = Rotation.GetForwardVector();
+
+
+
             lightVisibilityCheckMesh.Scale = new Vector3(lightData.Radius);
             lightVisibilityCheckMesh.Position = lightData.Position;
 
             lightSphere.Radius = lightData.Radius;
 
-            if (IsBoundingSphereInFrustum(lightSphere) || Level.ChangingLevel)
+            float cameraDist = Vector3.Distance(Camera.finalizedPosition, Position);
+            bool visible = (lightVisibilityCheckMesh.IsVisible() == false && cameraDist > lightData.Radius * 1.2)==false;
+
+            if ((IsBoundingSphereInFrustum(lightSphere) && visible) || Level.ChangingLevel)
             LightManager.AddPointLight(lightData);
         }
 
@@ -256,10 +281,17 @@ namespace RetroEngine.Entities.Light
                 return;
             }
 
+
+
             if (CastShadows == false) return;
+
+
 
             if (isDynamic())
             {
+
+                DynamicUpdateDystance = (lightData.Radius + 10) * 6;
+
                 float cameraDist = Vector3.Distance(Camera.finalizedPosition, Position);
                 if (cameraDist >= DynamicUpdateDystance)
                     return;
@@ -271,6 +303,7 @@ namespace RetroEngine.Entities.Light
                     return;
 
 
+
                 if (lightVisibilityCheckMesh.IsVisible() == false && cameraDist > lightData.Radius * 1.2) 
                     return;
 
@@ -278,6 +311,8 @@ namespace RetroEngine.Entities.Light
             }
 
             if (CastShadows == false) return;
+
+
 
             RetroEngine.Render.IgnoreFrustrumCheck = true;
             
@@ -304,7 +339,7 @@ namespace RetroEngine.Entities.Light
             var l = Level.GetCurrent().GetAllOpaqueMeshes();
 
             graphicsDevice.SetRenderTarget(renderTargetCube, face);
-            graphicsDevice.Clear(Color.Black);
+            graphicsDevice.Clear(Microsoft.Xna.Framework.Color.Black);
 
             GameMain.Instance.render.BoundingSphere.Radius = lightData.Radius;
             GameMain.Instance.render.BoundingSphere.Center = lightData.Position;

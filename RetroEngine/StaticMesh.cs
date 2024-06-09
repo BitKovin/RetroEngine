@@ -240,9 +240,11 @@ namespace RetroEngine
                 Vector3[] LightColor = new Vector3[LightManager.MAX_POINT_LIGHTS];
                 float[] LightRadius = new float[LightManager.MAX_POINT_LIGHTS];
                 float[] LightRes = new float[LightManager.MAX_POINT_LIGHTS];
+                Vector4[] LightDir = new Vector4[LightManager.MAX_POINT_LIGHTS];
                 RenderTargetCube[] LightMaps = new RenderTargetCube[LightManager.MAX_POINT_LIGHTS];
 
-                LightManager.FinalPointLights = LightManager.FinalPointLights.OrderBy(l => Vector3.Distance(l.Position, useAvgVertexPosition? avgVertexPosition : Position)).ToList();
+
+                LightManager.FinalPointLights = LightManager.FinalPointLights.OrderBy(l => Vector3.Distance(l.Position, useAvgVertexPosition? avgVertexPosition : Position) / l.shadowData.Priority).ToList();
 
                 List<LightManager.PointLightData> objectLights = new List<LightManager.PointLightData>();
 
@@ -265,6 +267,7 @@ namespace RetroEngine
                 for (int i = 0; i < LightManager.FinalPointLights.Count && filledLights < LightManager.MAX_POINT_LIGHTS; i++)
                 {
                     if (LightManager.FinalPointLights[i].shadowData.CastShadows == true) continue;
+
                     bool intersects = IntersectsBoubndingSphere(new BoundingSphere { Radius = LightManager.FinalPointLights[i].Radius, Center = LightManager.FinalPointLights[i].Position });
 
                     if (intersects == false) continue;
@@ -282,6 +285,12 @@ namespace RetroEngine
                     LightColor[i] = objectLights[i].Color;
                     LightRadius[i] = objectLights[i].Radius;
                     LightRes[i] = objectLights[i].shadowData.resolution;
+
+                    if (objectLights[i].shadowData.CastShadows == false)
+                        LightRes[i] = 0;
+
+                    LightDir[i] = new Vector4(objectLights[i].Direction, objectLights[i].MinDot);
+
                     LightMaps[i] = objectLights[i].shadowData.renderTargetCube;
                 }
 
@@ -289,6 +298,7 @@ namespace RetroEngine
                 effect.Parameters["LightColors"]?.SetValue(LightColor);
                 effect.Parameters["LightRadiuses"]?.SetValue(LightRadius);
                 effect.Parameters["LightResolutions"]?.SetValue(LightRes);
+                effect.Parameters["LightDirections"]?.SetValue(LightDir);
 
                 effect.Parameters["PointLightCubemap1"]?.SetValue(LightMaps[0]);
                 effect.Parameters["PointLightCubemap2"]?.SetValue(LightMaps[1]);

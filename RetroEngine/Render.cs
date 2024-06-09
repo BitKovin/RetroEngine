@@ -776,7 +776,7 @@ namespace RetroEngine
             graphics.GraphicsDevice.SetRenderTarget(ssaoOutput);
 
             SSAOEffect.Parameters["NormalTexture"]?.SetValue(normalPath);
-            SSAOEffect.Parameters["DepthTexture"].SetValue(DepthPrepathOutput);
+            SSAOEffect.Parameters["DepthTexture"]?.SetValue(DepthPrepathOutput);
             SSAOEffect.Parameters["PosTexture"]?.SetValue(positionPath);
             SSAOEffect.Parameters["viewPos"]?.SetValue(Camera.finalizedPosition);
 
@@ -789,7 +789,7 @@ namespace RetroEngine
             SSAOEffect.Parameters["Projection"]?.SetValue(Camera.finalizedProjection);
             SSAOEffect.Parameters["View"]?.SetValue(Camera.finalizedView);
 
-            SSAOEffect.Parameters["Enabled"].SetValue(Graphics.EnableSSAO);
+            SSAOEffect.Parameters["Enabled"]?.SetValue(Graphics.EnableSSAO);
 
             SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
 
