@@ -226,7 +226,7 @@ namespace RetroEngine.Game.Entities.Weapons
             mesh.SetInterpolationEnabled(true);
             
 
-            Console.WriteLine("loaded pistol");
+            Console.WriteLine("loaded shotgun");
 
             meshes.Add(mesh);
             meshes.Add(arms);

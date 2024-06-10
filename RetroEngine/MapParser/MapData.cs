@@ -85,14 +85,17 @@ namespace RetroEngine.Map
 
                     foreach (BrushData brush in ent.Brushes)
                     {
-                        foreach (var face in BrushFaceMesh.GetFacesFromPath(Path.Replace(".map", ".obj"), "entity" + ent.name + "_" + "brush" + brush.Name))
+
+                        var loadedFaces = BrushFaceMesh.GetMergedFacesFromPath(Path.Replace(".map", ".obj"), "entity" + ent.name + "_" + "brush" + brush.Name);
+
+                        foreach (var face in loadedFaces)
                         {
-                            var shape = Physics.CreateCollisionShapeFromModel(face.model, shapeData: new Physics.CollisionShapeData { surfaceType = face.textureName });
+                            var shape = Physics.CreateCollisionShapeFromModel(face.model, shapeData: new Physics.CollisionShapeData { surfaceType = face.textureName }, complex: true);
                             RigidBody rigidBody = Physics.CreateFromShape(entity, Vector3.One.ToPhysics(), shape, collisionFlags: BulletSharp.CollisionFlags.StaticObject);
                             entity.bodies.Add(rigidBody);
                         }
 
-                        foreach (var face in BrushFaceMesh.GetMergedFacesFromPath(Path.Replace(".map", ".obj"), "entity" + ent.name + "_" + "brush" + brush.Name))
+                        foreach (var face in loadedFaces)
                         {
                             faces.Add(face);
                             face.PreloadTextures();
