@@ -307,6 +307,9 @@ namespace RetroEngine
             graphics.GraphicsDevice.SetRenderTarget(null);
 
 
+            if (Input.GetAction("test").Holding())
+                return ssaoOutput;
+
             return outputPath;
 
         }
@@ -783,7 +786,7 @@ namespace RetroEngine
             SSAOEffect.Parameters["screenHeight"]?.SetValue(ssaoOutput.Height);
             SSAOEffect.Parameters["ssaoRadius"]?.SetValue(0.5f);
             SSAOEffect.Parameters["ssaoBias"]?.SetValue(0.025f);
-            SSAOEffect.Parameters["ssaoIntensity"]?.SetValue(1.1f);
+            SSAOEffect.Parameters["ssaoIntensity"]?.SetValue(1.2f);
 
             SSAOEffect.Parameters["Projection"]?.SetValue(Camera.finalizedProjection);
             SSAOEffect.Parameters["View"]?.SetValue(Camera.finalizedView);

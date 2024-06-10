@@ -58,6 +58,9 @@ namespace RetroEngine
         public bool SaveGame = false;
 
         public string ClassName = "";
+
+        public int StartOrder = 0;
+
         public Entity()
         {
             System.Reflection.MemberInfo info = this.GetType();
@@ -124,7 +127,9 @@ namespace RetroEngine
 
             SaveSystem.EntitySaveData saveData = new SaveSystem.EntitySaveData();
 
+            if(Level.GetCurrent().FindEntityByName(name)==this)
             saveData.Name = name;
+
             saveData.id = Id;
             saveData.className = "";
 

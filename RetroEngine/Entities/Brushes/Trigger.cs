@@ -46,10 +46,13 @@ namespace RetroEngine.Entities
 
             if (entity.Tags.Contains("player"))
             {
-                Entity targetEntity = Level.GetCurrent().FindEntityByName(target);
-                if (targetEntity != null)
+                var ents = Level.GetCurrent().FindAllEntitiesWithName(target);
+                foreach (var ent in ents)
                 {
-                    targetEntity.OnAction(enterAction);
+                    if (ent != null)
+                    {
+                        ent.OnAction(enterAction);
+                    }
                 }
             }
 

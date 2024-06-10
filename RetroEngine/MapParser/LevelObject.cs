@@ -16,6 +16,7 @@ namespace RetroEngine
         public LevelObjectAttribute(string technicalName)
         {
             TechnicalName = technicalName;
+
         }
     }
 

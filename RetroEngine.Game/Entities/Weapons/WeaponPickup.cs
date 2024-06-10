@@ -14,7 +14,7 @@ namespace RetroEngine.Game.Entities.Weapons
 {
 
     [LevelObject("weaponPickup")]
-    public class WeaponPickup : Trigger
+    public class WeaponPickup : TriggerBase
     {
 
         string typeName = "weapon_pistol_double";

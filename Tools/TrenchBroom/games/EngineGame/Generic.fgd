@@ -28,6 +28,11 @@
 
 @PointClass base(PointEntity) color(255 51 204) = ent_cat_point : "Cat" []
 
+@PointClass base(PointEntity) color(255 50 200) = spawner : "Spawner" 
+[
+	className(string) : "Class Name" : "npc_base"
+]
+
 @SolidClass base(Entity) = trigger : "Trigger"
 [
 	target(string) : "Target Name" : ""

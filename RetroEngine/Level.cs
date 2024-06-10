@@ -246,7 +246,7 @@ namespace RetroEngine
 
         public virtual void StartEnities()
         {
-            Entity[] list = entities.ToArray();
+            Entity[] list = entities.OrderBy(e=> e.StartOrder).ToArray();
             foreach (Entity entity in list)
             {
                 entity.Start();
@@ -494,6 +494,7 @@ namespace RetroEngine
 
         public Entity AddEntity(Entity ent)
         {
+            if (ent == null) return null;
             entities.Add(ent);
             ent.Id = entityID;
             entityID += 1;
@@ -502,19 +503,31 @@ namespace RetroEngine
 
         public Entity FindEntityByName(string name)
         {
-            if (name == null || name == "")
+            var ents = FindAllEntitiesWithName(name);
+
+            if(ents.Length!=1)
                 return null;
+
+            return ents[0];
+        }
+
+        public Entity[] FindAllEntitiesWithName(string name)
+        {
+            if (name == null || name == "")
+                return new Entity[] { };
+
+            List<Entity> result = new List<Entity>();
 
             lock (entities)
             {
                 var list = entities.ToArray();
                 foreach (Entity ent in entities)
                 {
-                    if(ent.name==name)
-                        return ent;
+                    if (ent.name == name)
+                        result.Add(ent);
                 }
             }
-            return null;
+            return result.ToArray();
         }
 
         public Entity FindEntityById(int id)

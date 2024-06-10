@@ -197,7 +197,7 @@ namespace RetroEngine.Game.Entities.Player
 
             PlayerLight = Level.GetCurrent().AddEntity(new PointLight()) as PointLight;
             PlayerLight.CastShadows = true;
-            PlayerLight.Start();
+
 
             PlayerLight.enabled = true;
 
@@ -205,6 +205,7 @@ namespace RetroEngine.Game.Entities.Player
             PlayerLight.radius = 20;
             PlayerLight.Intensity = 1;
 
+            PlayerLight.Start();
         }
 
 
@@ -647,7 +648,13 @@ namespace RetroEngine.Game.Entities.Player
 
         void UpdatePlayerLight()
         {
-            PlayerLight.Position = interpolatedPosition + Vector3.Up * 0.5f + Camera.rotation.GetRightVector()*0.3f;
+
+            MathHelper.Transform t = bodyMesh.GetBoneMatrix("spine_03").DecomposeMatrix();
+
+            PlayerLight.Position = t.Position
+                + Camera.rotation.GetForwardVector().XZ().Normalized() * 0.2f
+                + Camera.rotation.GetRightVector() * -0.1f
+                + Vector3.Up * 0.1f;
             PlayerLight.Rotation = Camera.rotation;
         }
 

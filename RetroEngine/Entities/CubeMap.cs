@@ -41,11 +41,13 @@ namespace RetroEngine.Entities
             map = new RenderTargetCube(graphicsDevice, resolution, false, SurfaceFormat.Color, DepthFormat.Depth24);
 
             mesh.LoadFromFile("models/cube.obj");
-            //meshes.Add(mesh);
+            meshes.Add(mesh);
             mesh.Visible = false;
 
             boundingSphere.Center = Position;
             boundingSphere.Radius = data.GetPropertyFloat("radius", 5);
+
+            StartOrder = 10;
 
         }
 
@@ -114,6 +116,9 @@ namespace RetroEngine.Entities
             Vector3 startPos = Camera.position;
             Matrix view = Camera.view;
             Matrix projection = Camera.projection;
+
+            PointLight.LateUpdateAll();
+            PointLight.DrawDirtyPointLights();
 
             RenderFace(CubeMapFace.PositiveX);
             RenderFace(CubeMapFace.PositiveX);

@@ -29,6 +29,9 @@ namespace RetroEngine.Entities.Light
             lightData.shadowData = this;
 
             graphicsDevice = GameMain.Instance.GraphicsDevice;
+
+            StartOrder = -1;
+
         }
 
         LightManager.PointLightData lightData = new LightManager.PointLightData();
@@ -280,7 +283,7 @@ namespace RetroEngine.Entities.Light
 
             InitRenderTargetIfNeeded();
 
-            if (isDynamic() == false && dirty == false)
+            if (isDynamic() == false && dirty == false && Level.ChangingLevel==false)
             {
                 return;
             }
@@ -291,7 +294,7 @@ namespace RetroEngine.Entities.Light
 
 
 
-            if (isDynamic())
+            if (isDynamic() && Level.ChangingLevel == false)
             {
 
                 DynamicUpdateDystance = (lightData.Radius + 10) * 6;
@@ -319,7 +322,10 @@ namespace RetroEngine.Entities.Light
 
 
             RetroEngine.Render.IgnoreFrustrumCheck = true;
-            
+
+
+            lightData.Radius = radius;
+
             RenderFace(CubeMapFace.PositiveX);
             RenderFace(CubeMapFace.NegativeX);
             RenderFace(CubeMapFace.PositiveY);
@@ -335,6 +341,8 @@ namespace RetroEngine.Entities.Light
 
         void RenderFace(CubeMapFace face)
         {
+
+
 
             var view = GetViewForFace(face);
             var projection = Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.ToRadians(90f), 1, 0.005f, lightData.Radius*1.5f);

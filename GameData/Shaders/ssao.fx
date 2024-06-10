@@ -50,7 +50,7 @@ float CalculateSSAO(float2 texCoord, float depth, float3 normal)
         for (float angle = 0.0; angle < 6.283; angle += 0.7853)
         {
 
-            float sampleL = l * lerp(1, 0.2, depth/50);
+            float sampleL = l * lerp(1, 0.1, depth/50);
 
             float2 offset = sampleL * float2(cos(angle), sin(angle));
             offset*= float2(1,1.5);
@@ -61,7 +61,7 @@ float CalculateSSAO(float2 texCoord, float depth, float3 normal)
 
             float sampleDepth = tex2D(DepthTextureSampler, sampleCoord).r;
 
-            float depthDifference = -0.75;// sampleDepth - sampleDepth + bias;
+            float depthDifference = -0.72;// sampleDepth - sampleDepth + bias;
 
             if (depth > sampleDepth + bias && (depth - sampleDepth) < 1)
                 depthDifference = 1;

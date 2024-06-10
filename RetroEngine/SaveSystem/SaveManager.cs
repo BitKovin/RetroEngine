@@ -187,12 +187,15 @@ namespace RetroEngine.SaveSystem
 
     public struct EntitySaveData
     {
-        public string Name;
-        public string className;
-        public int id;
+        public string Name = "";
+        public string className = "";
+        public int id = 0;
 
-        public string saveData;
+        public string saveData ="";
 
+        public EntitySaveData()
+        {
+        }
     }
 
     public struct LevelSaveData
