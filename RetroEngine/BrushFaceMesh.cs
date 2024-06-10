@@ -136,8 +136,6 @@ namespace RetroEngine
                     var tangent = mesh.Tangents[i];
                     var textureCoord = mesh.HasTextureCoords(0) ? mesh.TextureCoordinateChannels[0][i] : new Assimp.Vector3D(0, 0, 0);
 
-                    if (normal.X > 0)
-                        tangent *= -1;
 
                     // Negate the x-coordinate to correct mirroring
                     vertices.Add(new VertexData

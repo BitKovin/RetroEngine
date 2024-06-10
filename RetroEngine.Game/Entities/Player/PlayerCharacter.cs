@@ -69,6 +69,8 @@ namespace RetroEngine.Game.Entities.Player
         [JsonInclude]
         public int lastSlot = -1;
 
+        public bool flashlightEnabled = false;
+
         float bobSpeed = 8;
 
         PlayerUI PlayerUI;
@@ -143,6 +145,8 @@ namespace RetroEngine.Game.Entities.Player
             testCube.Scale = new Vector3(1);
             //meshes.Add(testCube);
 
+            AssetRegistry.LoadFmodBankIntoMemory("sounds/banks/sfx.bank");
+
             Weapon.PreloadAllWeapons();
             PlayerUI.Load();
         }
@@ -195,6 +199,8 @@ namespace RetroEngine.Game.Entities.Player
             PlayerLight.CastShadows = true;
             PlayerLight.Start();
 
+            PlayerLight.enabled = true;
+
             PlayerLight.MinDot = 0.85f;
             PlayerLight.radius = 20;
             PlayerLight.Intensity = 1;
@@ -245,6 +251,10 @@ namespace RetroEngine.Game.Entities.Player
 
             if (Input.GetAction("view").Pressed())
                 thirdPerson = ! thirdPerson;
+
+            if(Input.GetAction("test2").Pressed())
+                flashlightEnabled = ! flashlightEnabled;
+
         }
 
         public override void AsyncUpdate()
@@ -260,6 +270,7 @@ namespace RetroEngine.Game.Entities.Player
 
             Vector2 dir = new Vector2(Dx, Dy);
 
+            PlayerLight.enabled = flashlightEnabled;
 
             PlayerBodyAnimator.MovementDirection = dir;
             

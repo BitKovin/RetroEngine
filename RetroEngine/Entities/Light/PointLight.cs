@@ -56,6 +56,8 @@ namespace RetroEngine.Entities.Light
 
         float DynamicUpdateDystance;
 
+        public bool enabled = true;
+
         internal RenderTargetCube renderTargetCube;
 
         LightVisibilityCheckMesh lightVisibilityCheckMesh = new LightVisibilityCheckMesh();
@@ -193,6 +195,8 @@ namespace RetroEngine.Entities.Light
             lightVisibilityCheckMesh.Position = lightData.Position;
 
             lightSphere.Radius = lightData.Radius;
+
+            if (enabled == false) return;
 
             float cameraDist = Vector3.Distance(Camera.finalizedPosition, Position);
             bool visible = (lightVisibilityCheckMesh.IsVisible() == false && cameraDist > lightData.Radius * 1.2)==false;

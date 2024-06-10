@@ -30,7 +30,12 @@
 
 @SolidClass base(Entity) = trigger : "Trigger"
 [
-	target(string) : "Target Tag" : ""
+	target(string) : "Target Name" : ""
+
+	onEnterAction(string) : "On Enter" : "trigger_enter"
+
+	onExitAction(string) : "On Exit" : "trigger_exit"
+
 ]
 
 @baseclass base(Entity) size(-8 -8 -8, 8 8 48) color(70 70 255) = NavPoint []
@@ -41,6 +46,12 @@
 [
 	health(float) : "Health" : "30"
 	paricleSystem(string) : "Paricle System" : "destructionWood"
+]
+
+@SolidClass base(Entity) = movebleBrush : "Moveable Brush"
+[
+	targetLocation(Vector3) : "Target Location" : "0 3 0"
+	time(float) : "Time" : "2"
 ]
 
 @SolidClass base(Entity) = groupBrush : "Group Brush"

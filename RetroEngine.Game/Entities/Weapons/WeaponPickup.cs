@@ -1,5 +1,6 @@
 ﻿using BulletSharp;
 using Microsoft.Xna.Framework;
+using RetroEngine.Entities;
 using RetroEngine.Game.Entities.Player;
 using RetroEngine.Map;
 using System;

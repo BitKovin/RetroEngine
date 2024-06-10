@@ -114,6 +114,11 @@ namespace RetroEngine
 
         }
 
+        public virtual void OnAction(string action)
+        {
+
+        }
+
         public SaveSystem.EntitySaveData GetSaveData()
         {
 

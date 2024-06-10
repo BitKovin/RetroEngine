@@ -163,6 +163,7 @@ namespace RetroEngine
             //effect.Parameters["viewDir"]?.SetValue(Camera.finalizedForward);
             effect.Parameters["viewPos"]?.SetValue(Camera.finalizedPosition);
 
+
             effect.Parameters["DirectBrightness"]?.SetValue(Graphics.DirectLighting);
             effect.Parameters["GlobalBrightness"]?.SetValue(Graphics.GlobalLighting);
             effect.Parameters["LightDirection"]?.SetValue(Graphics.LightDirection.Normalized());
@@ -305,8 +306,6 @@ namespace RetroEngine
             PerformPostProcessing();
             graphics.GraphicsDevice.SetRenderTarget(null);
 
-            if(Input.GetAction("test2").Holding())
-                return reflection;
 
             return outputPath;
 
@@ -522,7 +521,7 @@ namespace RetroEngine
             // Iterate through meshes and draw shadows
             foreach (StaticMesh mesh in renderList)
             {
-                if(mesh.Static == true)
+                //if(mesh.Static == true)
                     mesh.DrawShadow();
             }
 

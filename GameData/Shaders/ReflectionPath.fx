@@ -35,7 +35,7 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
     
     float Step = 0.015;
     
-    const int steps = 60;
+    const int steps = 40;
     
     float4 outColor = float4(0, 0, 0, 0);
     
@@ -51,7 +51,7 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
     
     float weight = -0.3;
    
-    float factor = 1.3;
+    float factor = 1.4;
     
     bool facingCamera = false; dot(vDir, direction) < 0;
     

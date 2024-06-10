@@ -33,8 +33,9 @@ namespace RetroEngine.Game
         {
             //MakeFullscreen();
 
-
-            Level.LoadFromFile("test2");
+            AssetRegistry.LoadFmodBankIntoMemory("Sounds/banks/Master.bank");
+            AssetRegistry.LoadFmodBankIntoMemory("Sounds/banks/Master.strings.bank");
+            Level.LoadFromFile("demo");
 
 
         }

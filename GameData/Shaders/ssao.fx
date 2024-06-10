@@ -61,7 +61,7 @@ float CalculateSSAO(float2 texCoord, float depth, float3 normal)
 
             float sampleDepth = tex2D(DepthTextureSampler, sampleCoord).r;
 
-            float depthDifference = -0.6;// sampleDepth - sampleDepth + bias;
+            float depthDifference = -0.75;// sampleDepth - sampleDepth + bias;
 
             if (depth > sampleDepth + bias && (depth - sampleDepth) < 1)
                 depthDifference = 1;

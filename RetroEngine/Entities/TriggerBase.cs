@@ -13,9 +13,7 @@ namespace RetroEngine.Entities
 
         CollisionCallback collisionCallback = new CollisionCallback();
 
-        string collideToTag = "player";
-
-        string target = "";
+        public string collideToTag = "player";
 
         List<Entity> entities = new List<Entity>();
 
@@ -46,14 +44,6 @@ namespace RetroEngine.Entities
 
         }
 
-        public override void FromData(EntityData data)
-        {
-            base.FromData(data);
-
-            target = data.GetPropertyString("targetname");
-
-        }
-
         public override void Update()
         {
             base.Update();
@@ -66,6 +56,15 @@ namespace RetroEngine.Entities
 
                 Physics.PerformContactCheck(body, collisionCallback);
             }
+
+            foreach (var entity in oldEntities)
+            {
+                if (entity is null) continue;
+
+                if (entities.Contains(entity) == false)
+                    OnTriggerExit(entity);
+            }
+
             foreach (Entity entity in entities)
             {
                 if (entity is null) continue;
@@ -77,6 +76,10 @@ namespace RetroEngine.Entities
         }
 
         public virtual void OnTriggerEnter(Entity entity)
+        {
+        }
+
+        public virtual void OnTriggerExit(Entity entity)
         {
 
         }
