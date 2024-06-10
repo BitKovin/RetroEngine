@@ -111,6 +111,9 @@ namespace RetroEngine.Entities
         void Render()
         {
 
+            if(Destroyed)
+                return;
+
             PointLight.UpdateAll();
 
             Vector3 startPos = Camera.position;
@@ -118,7 +121,6 @@ namespace RetroEngine.Entities
             Matrix projection = Camera.projection;
 
             PointLight.LateUpdateAll();
-            PointLight.DrawDirtyPointLights();
 
             RenderFace(CubeMapFace.PositiveX);
             RenderFace(CubeMapFace.PositiveX);

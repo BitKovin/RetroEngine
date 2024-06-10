@@ -61,6 +61,8 @@ namespace RetroEngine
 
         public int StartOrder = 0;
 
+        public bool Destroyed = false;
+
         public Entity()
         {
             System.Reflection.MemberInfo info = this.GetType();
@@ -211,6 +213,8 @@ namespace RetroEngine
 
         public virtual void Destroy()
         {
+
+            Destroyed = true;
 
             foreach(RigidBody rigidBody in bodies)
             {

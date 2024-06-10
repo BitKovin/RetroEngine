@@ -86,7 +86,7 @@ namespace RetroEngine.Entities.Light
             CastShadows = data.GetPropertyBool("shadows",true);
 
             if (CastShadows == false)
-                resolution = 2;
+                resolution = 5;
 
             lightData.Resolution = resolution;
 
@@ -94,7 +94,9 @@ namespace RetroEngine.Entities.Light
             //meshes.Add(mesh);
             //mesh.Visible = false;
 
-            
+            lightData.shadowData = this;
+            graphicsDevice = GameMain.Instance.GraphicsDevice;
+
 
         }
 
@@ -171,6 +173,7 @@ namespace RetroEngine.Entities.Light
             lights.Remove(this);
 
             renderTargetCube?.Dispose();
+
 
         }
 
@@ -277,9 +280,8 @@ namespace RetroEngine.Entities.Light
         void Render()
         {
 
-
-            if (GameMain.SkipFrames > 0)
-                InitRenderTarget();
+            if (Destroyed)
+                return;
 
             InitRenderTargetIfNeeded();
 

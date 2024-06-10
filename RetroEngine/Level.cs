@@ -189,6 +189,8 @@ namespace RetroEngine
 
             LoadingScreen.Update(1f);
 
+            GetCurrent().RenderPreparation();
+
             ChangingLevel = false;
 
         }
