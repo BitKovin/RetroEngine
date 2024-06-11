@@ -24,6 +24,7 @@ namespace RetroEngine.Audio
             sound = _sound;
             sound.LowPass = 1;
             sound.ChannelGroup = group;
+            sound.Volume = 0;
         }
 
         public override void Update()
