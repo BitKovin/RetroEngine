@@ -22,7 +22,6 @@ namespace RetroEngine.Audio
 
         public bool IsLooped { get { return _looped; } set { if (soundEffectInstance != null) { soundEffectInstance.IsLooped = value; } _looped = value; } }
 
-        bool paused;
 
         bool pendingPlay = false;
         Delay pendingPlayDelay = new Delay();
@@ -59,7 +58,7 @@ namespace RetroEngine.Audio
             }
             soundEffectInstance.IsLooped = IsLooped;
 
-            if (paused)
+            if (isPaused())
             {
                 soundEffectInstance.Pause();
             }
@@ -91,7 +90,7 @@ namespace RetroEngine.Audio
 
         public override void Play(bool fromStart = false)
         {
-            paused = false;
+            Paused = false;
             playing = true;
 
             Update();
@@ -115,12 +114,6 @@ namespace RetroEngine.Audio
         {
             soundEffectInstance?.Stop(true);
             playing = false;
-        }
-
-        public override void Pause()
-        {
-            paused = true;
-            soundEffectInstance?.Pause();
         }
 
         protected override void Destroy()

@@ -47,14 +47,6 @@ namespace RetroEngine.Audio
 
         }
 
-        public override void Pause()
-        {
-            base.Pause();
-
-            EventInstance.Paused = true;
-
-        }
-
         public void SetParameter(string name,float value)
         {
             EventInstance.SetParameterValue(name, value);
@@ -73,7 +65,7 @@ namespace RetroEngine.Audio
 
             EventInstance.Pitch = Pitch;
             EventInstance.Volume = Volume;
-
+            EventInstance.Paused = isPaused();
 
             Apply3D();
 

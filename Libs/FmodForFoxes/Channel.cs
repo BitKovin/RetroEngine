@@ -415,6 +415,7 @@ namespace FmodForFoxes
 			TrackPositionTimeunit = FMOD.TIMEUNIT.MS;
 		}
 
+
 		public void Pause() =>
 			Native.setPaused(true);
 

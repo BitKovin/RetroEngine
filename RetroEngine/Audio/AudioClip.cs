@@ -27,11 +27,25 @@ namespace RetroEngine.Audio
 
         public bool ApplyDistanceVolume = true;
 
+        public bool Paused = false;
+
+        public bool IsUISound = false;
+
         public void Dispose()
         {
             Destroy();
         }
 
+        protected virtual bool isPaused()
+        {
+
+            if(IsUISound)
+            {
+                return Paused;
+            }
+
+            return Paused || GameMain.Instance.paused;
+        }
         protected virtual void Destroy()
         {
             Stop();
@@ -39,11 +53,10 @@ namespace RetroEngine.Audio
 
         public virtual void Update() { }
 
-        public virtual void Play(bool fromStart = false) { }
+        public virtual void Play(bool fromStart = true) { }
 
         public virtual void Stop() { }
 
-        public virtual void Pause() { }
 
         public virtual void Apply3D()
         {

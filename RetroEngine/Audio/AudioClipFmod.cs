@@ -34,6 +34,8 @@ namespace RetroEngine.Audio
             channel.Pitch = Pitch;
             sound.Pitch = Pitch;
 
+            channel.Paused = isPaused();
+
             Apply3D();
         }
 
@@ -144,14 +146,6 @@ namespace RetroEngine.Audio
         protected override void Destroy()
         {
             base.Destroy();
-
-        }
-
-        public override void Pause()
-        {
-            base.Pause();
-
-            channel.Pause();
 
         }
 

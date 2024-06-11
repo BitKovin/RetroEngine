@@ -24,6 +24,16 @@ namespace RetroEngine.Entities
 
         public bool Loop = false;
 
+        public bool Paused = false;
+
+        public bool IsUiSound = false;
+        public bool Is3DSound = true;
+
+        public SoundPlayer()
+        {
+            LateUpdateWhilePaused = true;
+        }
+
         public override void LateUpdate()
         {
             base.LateUpdate();
@@ -33,6 +43,11 @@ namespace RetroEngine.Entities
             AudioClip.Volume = Volume;
             AudioClip.Pitch = Pitch;
             AudioClip.Position = Position;
+
+            AudioClip.Is3D = Is3DSound;
+            AudioClip.IsUISound = IsUiSound;
+
+            AudioClip.Paused = Paused;
 
             AudioClip.MaxDistance = MaxDistance;
             AudioClip.MinDistance = MinDistance;
@@ -62,12 +77,6 @@ namespace RetroEngine.Entities
         {
             if (AudioClip == null) return;
             AudioClip.Stop();
-        }
-
-        public void Pause()
-        {
-            if (AudioClip == null) return;
-            AudioClip.Pause();
         }
 
         public override void Destroy()
