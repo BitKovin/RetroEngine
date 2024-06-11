@@ -2,6 +2,7 @@
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <OutputType>Library</OutputType>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <IsAotCompatible>True</IsAotCompatible>

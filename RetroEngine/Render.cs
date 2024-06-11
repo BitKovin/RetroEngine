@@ -285,7 +285,7 @@ namespace RetroEngine
                 ShadowMapEffect.Parameters["close"].SetValue(true);
                 RenderShadowMapVeryClose(renderList);
             }
-            graphics.GraphicsDevice.RasterizerState = Graphics.DisableBackFaceCulling? RasterizerState.CullNone : RasterizerState.CullNone;
+            graphics.GraphicsDevice.RasterizerState = Graphics.DisableBackFaceCulling? RasterizerState.CullCounterClockwise : RasterizerState.CullNone;
 
             InitSampler(25);
 

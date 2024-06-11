@@ -1,4 +1,4 @@
-﻿#define SIMPLE_SHADOWS
+﻿//#define SIMPLE_SHADOWS
 
 #include "ShaderLib/BasicShader.fx"
 

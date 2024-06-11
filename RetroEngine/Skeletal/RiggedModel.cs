@@ -276,19 +276,17 @@ namespace RetroEngine.Skeletal
 
             if (node.parent != null)
             {
-
-
                 Matrix localTransform;
 
                 if (additionalMesh != Matrix.Identity)
                 {
-
+                    // Decompose parent transform once and reuse
                     var parentTransform = node.parent.CombinedTransformMg.DecomposeMatrix();
                     Vector3 parentPosition = parentTransform.Position;
                     parentTransform.Position = Vector3.Zero;
 
                     Matrix parentRotation = parentTransform.ToMatrix();
-                    Matrix parentLocation = new MathHelper.Transform { Position = parentPosition }.ToMatrix();
+                    Matrix parentLocation = Matrix.CreateTranslation(parentPosition);
 
                     localTransform = node.LocalTransformMg * additionalLocal * parentRotation * additionalMesh * parentLocation;
                 }
@@ -297,13 +295,13 @@ namespace RetroEngine.Skeletal
                     localTransform = node.LocalTransformMg * additionalLocal * node.parent.CombinedTransformMg;
                 }
 
-
                 if (animationPose.BoneOverrides.TryGetValue(node.name, out var boneOverride))
                 {
-                    MathHelper.Transform currentTransform = localTransform.DecomposeMatrix();
-                    MathHelper.Transform startTransform = currentTransform;
+                    // Decompose transforms once and reuse
+                    var currentTransform = localTransform.DecomposeMatrix();
+                    var startTransform = currentTransform;
+                    var overrideTransform = boneOverride.transform.DecomposeMatrix();
 
-                    MathHelper.Transform overrideTransform = boneOverride.transform.DecomposeMatrix();
                     currentTransform.Rotation = overrideTransform.Rotation;
                     currentTransform.RotationQuaternion = overrideTransform.RotationQuaternion;
 
@@ -312,7 +310,7 @@ namespace RetroEngine.Skeletal
                 }
 
                 node.CombinedTransformMg = localTransform;
-                node.LocalFinalTransformMg = node.CombinedTransformMg * Matrix.Invert(node.parent.CombinedTransformMg);
+                node.LocalFinalTransformMg = localTransform * Matrix.Invert(node.parent.CombinedTransformMg);
             }
             else
             {
@@ -326,9 +324,9 @@ namespace RetroEngine.Skeletal
             }
 
             // Call children
-            foreach (RiggedModelNode child in node.children)
+            for (int i = 0; i < node.children.Count; i++)
             {
-                IterateUpdate(child);
+                IterateUpdate(node.children[i]);
             }
         }
 
@@ -765,7 +763,7 @@ namespace RetroEngine.Skeletal
             /// <summary>
             /// ToDo when we are looping back i think i need to artificially increase the duration in order to get a slightly smoother animation from back to front.
             /// </summary>
-            public Matrix Interpolate(double animTime, RiggedAnimationNodes nodeAnim, bool loopAnimation)
+            public unsafe Matrix Interpolate(double animTime, RiggedAnimationNodes nodeAnim, bool loopAnimation)
             {
                 double durationSecs = loopAnimation ? DurationInSecondsLooping : DurationInSeconds;
 
@@ -773,61 +771,52 @@ namespace RetroEngine.Skeletal
                 animTime %= durationSecs;
                 if (animTime < 0) animTime += durationSecs;
 
+                // Cache counts
+                int qrotCount = nodeAnim.qrotTime.Count;
+                int posCount = nodeAnim.positionTime.Count;
+                int scaleCount = nodeAnim.scaleTime.Count;
+
                 // Interpolation indices and times
                 int qIndex1 = 0, qIndex2 = 0, pIndex1 = 0, pIndex2 = 0, sIndex1 = 0, sIndex2 = 0;
                 double tq1 = 0, tq2 = 0, tp1 = 0, tp2 = 0, ts1 = 0, ts2 = 0;
 
-                // Interpolation values
-                Quaternion q1, q2;
-                Vector3 p1, p2, s1, s2;
-
-                // Find quaternion keyframes
-                for (int i = nodeAnim.qrotTime.Count - 1; i >= 0; i--)
+                // Find keyframes for quaternion, position, and scale in one loop
+                fixed (double* qrotTimes = nodeAnim.qrotTime.ToArray(), posTimes = nodeAnim.positionTime.ToArray(), scaleTimes = nodeAnim.scaleTime.ToArray())
                 {
-                    if (animTime >= nodeAnim.qrotTime[i])
+                    for (int i = 0; i < qrotCount || i < posCount || i < scaleCount; i++)
                     {
-                        qIndex1 = i;
-                        qIndex2 = (i + 1) % nodeAnim.qrotTime.Count;
-                        break;
+                        if (i < qrotCount && animTime >= qrotTimes[i])
+                        {
+                            qIndex1 = i;
+                            qIndex2 = (i + 1) % qrotCount;
+                            tq1 = qrotTimes[qIndex1];
+                            tq2 = qrotTimes[qIndex2] > tq1 ? qrotTimes[qIndex2] : qrotTimes[qIndex2] + durationSecs;
+                        }
+
+                        if (i < posCount && animTime >= posTimes[i])
+                        {
+                            pIndex1 = i;
+                            pIndex2 = (i + 1) % posCount;
+                            tp1 = posTimes[pIndex1];
+                            tp2 = posTimes[pIndex2] > tp1 ? posTimes[pIndex2] : posTimes[pIndex2] + durationSecs;
+                        }
+
+                        if (i < scaleCount && animTime >= scaleTimes[i])
+                        {
+                            sIndex1 = i;
+                            sIndex2 = (i + 1) % scaleCount;
+                            ts1 = scaleTimes[sIndex1];
+                            ts2 = scaleTimes[sIndex2] > ts1 ? scaleTimes[sIndex2] : scaleTimes[sIndex2] + durationSecs;
+                        }
                     }
                 }
 
-                tq1 = nodeAnim.qrotTime[qIndex1];
-                tq2 = nodeAnim.qrotTime[qIndex2] > tq1 ? nodeAnim.qrotTime[qIndex2] : nodeAnim.qrotTime[qIndex2] + durationSecs;
-                q1 = nodeAnim.qrot[qIndex1];
-                q2 = nodeAnim.qrot[qIndex2];
-
-                // Find position keyframes
-                for (int i = nodeAnim.positionTime.Count - 1; i >= 0; i--)
-                {
-                    if (animTime >= nodeAnim.positionTime[i])
-                    {
-                        pIndex1 = i;
-                        pIndex2 = (i + 1) % nodeAnim.positionTime.Count;
-                        break;
-                    }
-                }
-
-                tp1 = nodeAnim.positionTime[pIndex1];
-                tp2 = nodeAnim.positionTime[pIndex2] > tp1 ? nodeAnim.positionTime[pIndex2] : nodeAnim.positionTime[pIndex2] + durationSecs;
-                p1 = nodeAnim.position[pIndex1];
-                p2 = nodeAnim.position[pIndex2];
-
-                // Find scale keyframes
-                for (int i = nodeAnim.scaleTime.Count - 1; i >= 0; i--)
-                {
-                    if (animTime >= nodeAnim.scaleTime[i])
-                    {
-                        sIndex1 = i;
-                        sIndex2 = (i + 1) % nodeAnim.scaleTime.Count;
-                        break;
-                    }
-                }
-
-                ts1 = nodeAnim.scaleTime[sIndex1];
-                ts2 = nodeAnim.scaleTime[sIndex2] > ts1 ? nodeAnim.scaleTime[sIndex2] : nodeAnim.scaleTime[sIndex2] + durationSecs;
-                s1 = nodeAnim.scale[sIndex1];
-                s2 = nodeAnim.scale[sIndex2];
+                Quaternion q1 = nodeAnim.qrot[qIndex1];
+                Quaternion q2 = nodeAnim.qrot[qIndex2];
+                Vector3 p1 = nodeAnim.position[pIndex1];
+                Vector3 p2 = nodeAnim.position[pIndex2];
+                Vector3 s1 = nodeAnim.scale[sIndex1];
+                Vector3 s2 = nodeAnim.scale[sIndex2];
 
                 // Interpolate quaternion
                 float tqi = (float)((animTime - tq1) / (tq2 - tq1));
@@ -841,12 +830,10 @@ namespace RetroEngine.Skeletal
                 float tsi = (float)((animTime - ts1) / (ts2 - ts1));
                 Vector3 s = Vector3.Lerp(s1, s2, tsi);
 
-                // Combine transforms
-                Matrix ms = Matrix.CreateScale(s);
-                Matrix mr = Matrix.CreateFromQuaternion(q);
-                Matrix mt = Matrix.CreateTranslation(p);
+                // Combine transforms directly
+                Matrix transform = Matrix.CreateScale(s) * Matrix.CreateFromQuaternion(q) * Matrix.CreateTranslation(p);
 
-                return mr * ms * mt;
+                return transform;
             }
 
             public double GetInterpolationTimeRatio(double s, double e, double val)
