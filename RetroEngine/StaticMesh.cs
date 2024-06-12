@@ -113,6 +113,7 @@ namespace RetroEngine
 
         public int VisiblePixels = 0;
 
+        public bool TwoSided = false;
 
         public bool DisableOcclusionCulling = false;
 
@@ -256,7 +257,7 @@ namespace RetroEngine
                 for (int i = 0; i < LightManager.FinalPointLights.Count && filledLights < 6; i++)
                 {
                     if (LightManager.FinalPointLights[i].shadowData.CastShadows == false) continue;
-                    bool intersects = IntersectsBoubndingSphere(new BoundingSphere { Radius = LightManager.FinalPointLights[i].Radius, Center = LightManager.FinalPointLights[i].Position });
+                    bool intersects = IntersectsBoundingSphere(new BoundingSphere { Radius = LightManager.FinalPointLights[i].Radius, Center = LightManager.FinalPointLights[i].Position });
 
                     if (intersects == false) continue;
 
@@ -275,7 +276,7 @@ namespace RetroEngine
                     if (filled.Contains(i))
                         continue;
 
-                    bool intersects = IntersectsBoubndingSphere(new BoundingSphere { Radius = LightManager.FinalPointLights[i].Radius, Center = LightManager.FinalPointLights[i].Position });
+                    bool intersects = IntersectsBoundingSphere(new BoundingSphere { Radius = LightManager.FinalPointLights[i].Radius, Center = LightManager.FinalPointLights[i].Position });
 
                     if (intersects == false) continue;
 
@@ -322,7 +323,7 @@ namespace RetroEngine
 
         }
 
-        public virtual bool IntersectsBoubndingSphere(BoundingSphere sphere)
+        public virtual bool IntersectsBoundingSphere(BoundingSphere sphere)
         {
             if (frameStaticMeshData.model is not null)
             {
@@ -379,7 +380,7 @@ namespace RetroEngine
             else
             {
                 graphicsDevice.DepthStencilState = DepthStencilState.Default;
-                graphicsDevice.RasterizerState = RasterizerState.CullNone;
+                graphicsDevice.RasterizerState = Graphics.DisableBackFaceCulling || TwoSided? RasterizerState.CullNone : RasterizerState.CullClockwise;
             }
 
         }
@@ -531,7 +532,7 @@ namespace RetroEngine
             if (Transperent)
                 Masked = true;
 
-            if (GameMain.Instance.render.BoundingSphere.Radius == 0 || IntersectsBoubndingSphere(GameMain.Instance.render.BoundingSphere))
+            if (GameMain.Instance.render.BoundingSphere.Radius == 0 || IntersectsBoundingSphere(GameMain.Instance.render.BoundingSphere))
 
                 if (frameStaticMeshData.model is not null)
                 {
@@ -948,9 +949,10 @@ namespace RetroEngine
                     // Iterate through the face and create triangles
                     for (int i = 1; i < face.IndexCount - 1; i++)
                     {
-                        indices.Add(face.Indices[0]);
-                        indices.Add(face.Indices[i]);
+                        
                         indices.Add(face.Indices[i + 1]);
+                        indices.Add(face.Indices[i]);
+                        indices.Add(face.Indices[0]);
                     }
                 }
 

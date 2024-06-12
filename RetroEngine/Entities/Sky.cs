@@ -38,6 +38,11 @@ namespace RetroEngine.Entities
     internal class SkyMesh : StaticMesh
     {
 
+        internal SkyMesh()
+        {
+            TwoSided = true;
+        }
+
         public override void UpdateCulling()
         {
             isRendered = true;

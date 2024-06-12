@@ -51,7 +51,7 @@ namespace RetroEngine.Entities
         protected float AnimationInterpolationDistance = 10;
         protected float AnimationComplexDistance = 30;
         protected float AnimationDistance = 60;
-        protected float ShadowDistance = 20;
+        protected float ShadowDistance = 40;
         protected bool AnimationAlwaysUpdateTime = true;
 
         public NPCBase()

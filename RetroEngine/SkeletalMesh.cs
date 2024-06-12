@@ -26,6 +26,8 @@ namespace RetroEngine
 
         protected AnimationPose animationPose = new AnimationPose();
 
+        public SkeletalMesh ParrentBounds; 
+
         public bool UpdatePose = true;
 
         public SkeletalMesh()
@@ -424,7 +426,7 @@ namespace RetroEngine
                 if (!Masked)
                     effect.Techniques[0].Passes[0].Apply();
 
-                if (GameMain.Instance.render.BoundingSphere.Radius == 0 || IntersectsBoubndingSphere(GameMain.Instance.render.BoundingSphere))
+                if (GameMain.Instance.render.BoundingSphere.Radius == 0 || IntersectsBoundingSphere(GameMain.Instance.render.BoundingSphere))
                     foreach (RiggedModel.RiggedModelMesh meshPart in RiggedModel.meshes)
                     {
                         // Set the vertex buffer and index buffer for this mesh part
@@ -514,14 +516,16 @@ namespace RetroEngine
             }
         }
 
-        public override bool IntersectsBoubndingSphere(BoundingSphere sphere)
+        public override bool IntersectsBoundingSphere(BoundingSphere sphere)
         {
             bool intersects = false;
 
             if (RiggedModel is not null)
             {
-
                 intersects = boundingSphere.Transform(base.GetWorldMatrix()).Intersects(sphere);
+
+                if(ParrentBounds!=null)   
+                    intersects = intersects || ParrentBounds.IntersectsBoundingSphere(sphere);
             }
 
             return intersects;
@@ -531,7 +535,7 @@ namespace RetroEngine
         {
             //isRendered = Camera.frustum.Contains(boundingSphere.Transform(base.GetWorldMatrix())) != ContainmentType.Disjoint;
             isRendered = false;
-            isRenderedShadow = false;
+            isRenderedShadow = true;
             frameStaticMeshData.IsRendered = isRendered;
             if (Visible == false) return;
 
@@ -543,6 +547,10 @@ namespace RetroEngine
             {
                 inFrustrum = true;
             }
+
+            if(ParrentBounds!=null)
+            if(Camera.frustum.Contains(ParrentBounds.boundingSphere.Transform(base.GetWorldMatrix())) != ContainmentType.Disjoint)
+                    inFrustrum = true;
 
             if (Graphics.DirectionalLightFrustrum.Contains(boundingSphere.Transform(base.GetWorldMatrix())) != ContainmentType.Disjoint)
             {

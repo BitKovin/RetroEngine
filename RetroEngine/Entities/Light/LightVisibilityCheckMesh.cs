@@ -57,7 +57,7 @@ namespace RetroEngine.Entities.Light
             if (Transperent)
                 Masked = true;
 
-            if (GameMain.Instance.render.BoundingSphere.Radius == 0 || IntersectsBoubndingSphere(GameMain.Instance.render.BoundingSphere))
+            if (GameMain.Instance.render.BoundingSphere.Radius == 0 || IntersectsBoundingSphere(GameMain.Instance.render.BoundingSphere))
 
                 if (frameStaticMeshData.model is not null)
                 {

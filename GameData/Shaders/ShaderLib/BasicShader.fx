@@ -324,21 +324,38 @@ float4x4 GetBoneTransforms(VertexInput input)
     return mbones;
 }
 
-float3 GetTangentNormal(float3 worldNormal, float3 worldTangent, float3 bitangent)
+float3 ApplyNormalTexture(float3 sampledNormalColor, float3 worldNormal, float3 worldTangent, float3 bitangent)
 {
     
-    float3 normalMapSample = float3(0, 0, 1);
+    if (length(sampledNormalColor) < 0.1f)
+        sampledNormalColor = float3(0.5, 0.5, 1);
     
+    
+    sampledNormalColor *= float3(1, 1, 1);
+    
+    worldNormal = normalize(worldNormal);
+    worldTangent = normalize(worldTangent);
 
+    float3 normalMapSample = sampledNormalColor * 2.0 - 1.0;
+    
+    normalMapSample *= float3(-1, -1, 1);
+    
+    normalMapSample *= 1;
+    
+    
     float3x3 tangentToWorld = float3x3(worldTangent, bitangent, worldNormal);
 
     // Transform the normal from tangent space to world space
     float3 worldNormalFromTexture = mul(normalMapSample, tangentToWorld);
-
-    // Normalize the final normal
+    
     worldNormalFromTexture = normalize(worldNormalFromTexture);
 
     return worldNormalFromTexture;
+}
+
+float3 GetTangentNormal(float3 worldNormal, float3 worldTangent, float3 bitangent)
+{
+    return ApplyNormalTexture(float3(0.5,0.5,1),worldNormal, worldTangent, bitangent);
 }
 
 PixelInput DefaultVertexShaderFunction(VertexInput input)
@@ -434,33 +451,7 @@ float4 SampleCubemap(samplerCUBE s, float3 coords)
     return texCUBE(s, coords * float3(-1,1,1));
 }
 
-float3 ApplyNormalTexture(float3 sampledNormalColor, float3 worldNormal, float3 worldTangent, float3 bitangent)
-{
-    
-    if (length(sampledNormalColor) < 0.1f)
-        sampledNormalColor = float3(0.5, 0.5, 1);
-    
-    
-    sampledNormalColor *= float3(1, 1, 1);
-    
-    worldNormal = normalize(worldNormal);
-    worldTangent = normalize(worldTangent);
 
-    float3 normalMapSample = sampledNormalColor * 2.0 - 1.0;
-    
-    normalMapSample *= float3(-1, -1, 1);
-    
-    normalMapSample *= 1;
-    
-    float3x3 tangentToWorld = float3x3(worldTangent, bitangent, worldNormal);
-
-    // Transform the normal from tangent space to world space
-    float3 worldNormalFromTexture = mul(normalMapSample, tangentToWorld);
-    
-    worldNormalFromTexture = normalize(worldNormalFromTexture);
-
-    return worldNormalFromTexture;
-}
 
 
 float GeometrySmith(float3 N, float3 V, float3 L, float roughness)

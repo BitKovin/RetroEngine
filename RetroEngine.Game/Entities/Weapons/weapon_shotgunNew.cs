@@ -37,6 +37,9 @@ namespace RetroEngine.Game.Entities.Weapons
             fireSoundPlayer.SetSound(AssetRegistry.LoadSoundFromFile("sounds/pistol_fire.wav"));
             fireSoundPlayer.Volume = 0.1f;
 
+
+            meshTp.ParrentBounds = ((PlayerCharacter)player).GetSkeletalMesh();
+
         }
 
         protected override void LoadAssets()
@@ -209,6 +212,8 @@ namespace RetroEngine.Game.Entities.Weapons
             meshTp.textureSearchPaths.Add("textures/weapons/arms/");
             meshTp.textureSearchPaths.Add("textures/weapons/shotgun_new/");
             meshTp.textureSearchPaths.Add("textures/weapons/general/");
+            meshTp.DisableOcclusionCulling = true;
+
             meshTp.PreloadTextures();
 
             mesh.CastShadows = false;

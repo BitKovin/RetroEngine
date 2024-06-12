@@ -128,9 +128,12 @@ namespace RetroEngine.Skeletal
             //
             // load the file at path to the scene
             //
+            
 
                 scene = new Scene();
                 var importer = new AssimpContext();
+
+
                 try
                 {
                     //Console.WriteLine("(not sure this works) Model scale: " + importer.Scale);
@@ -144,7 +147,7 @@ namespace RetroEngine.Skeletal
                                             | PostProcessSteps.Triangulate
                                             | PostProcessSteps.ImproveCacheLocality
                                             | PostProcessSteps.FlipUVs
-                                            | PostProcessSteps.FixInFacingNormals
+                                            | PostProcessSteps.GenerateSmoothNormals
                                             | PostProcessSteps.OptimizeMeshes
                                             
                                             //| PostProcessSteps.GlobalScale

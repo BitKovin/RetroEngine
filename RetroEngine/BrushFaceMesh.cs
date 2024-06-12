@@ -686,7 +686,7 @@ namespace RetroEngine
             return new BoundingBox(min, max);
         }
 
-        public override bool IntersectsBoubndingSphere(BoundingSphere sphere)
+        public override bool IntersectsBoundingSphere(BoundingSphere sphere)
         {
             return BoundingBox.Intersects(sphere);
         }
