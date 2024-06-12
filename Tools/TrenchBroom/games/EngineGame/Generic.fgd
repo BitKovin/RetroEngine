@@ -13,11 +13,10 @@
 @BaseClass = Entity 
 [ 
 	targetname(string) : "targetname" : ""
+	unique(bool) : "unique" : "false"
 ]
 
-@baseclass size(-16 -16 -24, 16 16 32) color(0 255 0) = PlayerClass []
-
-@PointClass base(PlayerClass, Entity) = info_player_start : "Player 1 start" 
+@PointClass base(Entity) size(-16 -16 -24, 16 16 32) color(0 255 0) = info_player_start : "Player 1 start" 
 [
 	angle(float) : "Angle" : "0"
 ]
@@ -28,7 +27,7 @@
 
 @PointClass base(PointEntity) color(255 51 204) = ent_cat_point : "Cat" []
 
-@PointClass base(PointEntity) color(255 50 200) = spawner : "Spawner" 
+@PointClass base(PointEntity) size(-16 -16 -32, 16 16 16) color(255 50 200) = spawner : "Spawner" 
 [
 	className(string) : "Class Name" : "npc_base"
 ]
@@ -43,9 +42,7 @@
 
 ]
 
-@baseclass base(Entity) size(-8 -8 -8, 8 8 48) color(70 70 255) = NavPoint []
-
-@PointClass base(NavPoint) = info.navpoint : "Nav Point" []
+@PointClass base(Entity) size(-8 -8 -8, 8 8 48) color(70 70 255) = info.navpoint : "Nav Point" []
 
 @SolidClass base(Entity) = destructible : "Destructible Brush"
 [
@@ -63,8 +60,7 @@
 [
 ]
 
-@baseclass size(-15 -15 -15, 15 15 15) color(255 200 0) model({ "path": "models/tools/radius.obj", "scale": radius * 32 * 2}) = PointLight []
-@PointClass base(PointLight) = light_point : "Light" 
+@PointClass base(Entity) size(-15 -15 -15, 15 15 15) color(255 200 0) model({ "path": "models/tools/radius.obj", "scale": radius * 32 * 2}) = light_point : "Light" 
 [
 	light_color(Vector3) : "Color" : "1 1 1"
 	radius(float) : "Radius" : "5"
@@ -75,7 +71,7 @@
 
 ]
 
-@PointClass base(PointLight) = cubeMap : "Cube Map" 
+@PointClass size(-15 -15 -15, 15 15 15) color(255 255 255) base(PointLight) = cubeMap : "Cube Map" 
 [
 	radius(float) : "Radius" : "5"
 	resolution(int) : "Resolution" : "512"
@@ -87,8 +83,7 @@
 	type(string) : "Type" : "weapon_pistol_double"
 ]
 
-@baseclass size(-5 -5 -5, 5 5 5) color(255 0 0) model({ "path": path, "scale": scale * 32}) = StaticMesh []
-@PointClass base(StaticMesh) = static_mesh: "Mesh" 
+@PointClass base(Entity) size(-5 -5 -5, 5 5 5) color(255 0 0) model({ "path": path, "scale": scale * 32}) = static_mesh: "Mesh" 
 [
 	path(string) : "Path" : "models/test.obj"
 	texture(string): "Texture" : ""

@@ -83,7 +83,10 @@ PixelInput VertexShaderFunction(VertexInput input, float4 row1: BLENDINDICES1, f
     output.Tangent = mul(input.Tangent, (float3x3)BonesWorld);
     output.Tangent = normalize(output.Tangent);
 
-    output.TangentNormal = GetTangentNormal(output.Normal, output.Tangent);
+    output.BiTangent = mul(input.BiTangent, (float3x3)BonesWorld);
+    output.BiTangent = normalize(output.BiTangent);
+
+    output.TangentNormal = GetTangentNormal(output.Normal, output.Tangent, output.BiTangent);
 
 
     output.lightPos = mul(worldPos, ShadowMapViewProjection);
@@ -131,12 +134,12 @@ PixelOutput PixelShaderFunction(PixelInput input)
     float3 textureColor = tex.xyz * input.Color.rgb;
 	float textureAlpha = tex.w * input.Color.a;
     
-    float3 pixelNormal = ApplyNormalTexture(textureNormal, input.Normal, input.Tangent);
+    float3 pixelNormal = ApplyNormalTexture(textureNormal, input.Normal, input.Tangent, input.BiTangent);
     
     
     float3 albedo = textureColor;
     
-    float3 light = CalculateLight(input, pixelNormal, roughness, metalic, ao);
+    float3 light = CalculateLight(input, pixelNormal, roughness, metalic, ao, albedo);
     
     
 	textureColor *= light;

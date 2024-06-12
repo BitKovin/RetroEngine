@@ -96,7 +96,7 @@ namespace RetroEngine
         {
             Layer = (int)data.GetPropertyFloat("_tb_layer");
             name = data.GetPropertyString("targetname");
-
+            SaveAsUnique = data.GetPropertyBool("unique",SaveAsUnique);
 
         }
 

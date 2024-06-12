@@ -518,14 +518,14 @@ namespace RetroEngine.Skeletal
                 // tangents
                 for (int k = 0; k < mesh.Tangents.Count; k++)
                 {
-                    var f = mesh.Tangents[k];
+                    var f = -mesh.Tangents[k];
                     v[k].Tangent = new Vector3(f.X, f.Y, f.Z);
                 }
                 // bi tangents  
                 for (int k = 0; k < mesh.BiTangents.Count; k++)
                 {
-                    var f = mesh.BiTangents[k];
-                    v[k].Tangent = f.ToMg();
+                    var f = -mesh.BiTangents[k];
+                    v[k].BiTangent = f.ToMg();
                 }
 
                 // A mesh may contain 0 to AI_MAX_NUMBER_OF_COLOR_SETS vertex colors per vertex. NULL if not present. Each array is mNumVertices in size if present. 

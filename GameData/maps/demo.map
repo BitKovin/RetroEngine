@@ -277,8 +277,8 @@
 // entity 12
 {
 "classname" "light_point"
-"origin" "719 4465 3071"
-"radius" "10"
+"origin" "703 4513 3071"
+"radius" "15"
 "intensity" "0.5"
 }
 // entity 13
@@ -345,7 +345,7 @@
 // entity 20
 {
 "classname" "spawner"
-"origin" "980 556 16"
+"origin" "996 540 32"
 "targetname" "spawner_g1"
 }
 // entity 21

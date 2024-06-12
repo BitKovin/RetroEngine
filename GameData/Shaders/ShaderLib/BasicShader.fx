@@ -256,6 +256,7 @@ struct VertexInput
     float3 Normal : NORMAL0; // Add normal input
     float2 TexCoord : TEXCOORD0;
     float3 Tangent : TANGENT0;
+    float3 BiTangent : TANGENT1;
     
     float4 BlendIndices : BLENDINDICES0;
     float4 BlendWeights : BLENDWEIGHT0;
@@ -268,7 +269,7 @@ struct PixelInput
 {
     float4 Position : SV_POSITION;
     float2 TexCoord : TEXCOORD0;
-    float3 Normal : TEXCOORD1; // Pass normal to pixel shader
+    float3 Normal : TEXCOORD1; 
     float4 lightPos : TEXCOORD2;
     float4 lightPosClose : TEXCOORD3;
     float3 MyPosition : TEXCOORD4;
@@ -276,6 +277,7 @@ struct PixelInput
     float3 Tangent : TEXCOORD6;
     float3 TangentNormal : TEXCOORD7;
     float4 lightPosVeryClose : TEXCOORD8;
+    float3 BiTangent : TEXCOORD9;
     float4 Color : COLOR0;
 };
 
@@ -322,14 +324,12 @@ float4x4 GetBoneTransforms(VertexInput input)
     return mbones;
 }
 
-float3 GetTangentNormal(float3 worldNormal, float3 worldTangent)
+float3 GetTangentNormal(float3 worldNormal, float3 worldTangent, float3 bitangent)
 {
     
     float3 normalMapSample = float3(0, 0, 1);
     
-    
-    // Create the tangent space matrix as before
-    float3 bitangent = cross(worldNormal, worldTangent);
+
     float3x3 tangentToWorld = float3x3(worldTangent, bitangent, worldNormal);
 
     // Transform the normal from tangent space to world space
@@ -383,7 +383,10 @@ PixelInput DefaultVertexShaderFunction(VertexInput input)
     output.Tangent = mul(input.Tangent, (float3x3) BonesWorld);
     output.Tangent = normalize(output.Tangent);
 
-    output.TangentNormal = GetTangentNormal(output.Normal, output.Tangent);
+    output.BiTangent = mul(input.BiTangent, (float3x3) BonesWorld);
+    output.BiTangent = normalize(output.BiTangent);
+
+    output.TangentNormal = GetTangentNormal(output.Normal, output.Tangent,output.BiTangent);
     
     if (dot(output.TangentNormal, normalize(output.MyPosition - viewPos)) > 0)
         output.TangentNormal *= -1;
@@ -414,7 +417,7 @@ float SampleDepth(float2 coords)
 float SampleMaxDepth(float2 screenCoords)
 {
     
-    float2 texelSize = 0.3 / float2(ScreenWidth, ScreenHeight);
+    float2 texelSize = 0.4 / float2(ScreenWidth, ScreenHeight);
     
     float d = SampleDepth(screenCoords);
     float d1 = SampleDepth(screenCoords + texelSize);
@@ -431,7 +434,7 @@ float4 SampleCubemap(samplerCUBE s, float3 coords)
     return texCUBE(s, coords * float3(-1,1,1));
 }
 
-float3 ApplyNormalTexture(float3 sampledNormalColor, float3 worldNormal, float3 worldTangent)
+float3 ApplyNormalTexture(float3 sampledNormalColor, float3 worldNormal, float3 worldTangent, float3 bitangent)
 {
     
     if (length(sampledNormalColor) < 0.1f)
@@ -449,8 +452,6 @@ float3 ApplyNormalTexture(float3 sampledNormalColor, float3 worldNormal, float3 
     
     normalMapSample *= 1;
     
-    // Create the tangent space matrix as before
-    float3 bitangent = cross(worldNormal, worldTangent);
     float3x3 tangentToWorld = float3x3(worldTangent, bitangent, worldNormal);
 
     // Transform the normal from tangent space to world space
@@ -471,7 +472,7 @@ float GeometrySmith(float3 N, float3 V, float3 L, float roughness)
     return GGXV * GGXL;
 }
 
-float FresnelSchlick(float cosTheta, float metallic)
+float FresnelSchlick(float cosTheta, float3 metallic)
 {
     return metallic + (1.0 - metallic) * pow(1.0 - cosTheta, 5.0);
 }
@@ -489,35 +490,43 @@ float DistributionGGX(float3 N, float3 H, float a)
     return nom / denom;
 }
 
-float CalculateSpecular(float3 worldPos, float3 normal, float3 lightDir, float roughness, float metallic) {
+float CalculateSpecular(float3 worldPos, float3 normal, float3 lightDir, float roughness, float metallic, float3 albedo) {
 
-    #ifdef NO_SPECULAR
-        return 0;
-    #endif
-    
-    // Common calculations
-    float3 vDir = normalize(viewPos - worldPos);
-    lightDir *= -1.0f;
-    float3 halfwayDir = normalize(vDir + lightDir);
-    float NdotH = saturate(dot(normal, halfwayDir));
-    float NdotV = saturate(dot(normal, vDir));
-    float NdotL = saturate(dot(normal, lightDir));
+#ifdef NO_SPECULAR
+    return 0;
+#endif
 
-    // GGX BRDF (distribution and visibility)
-    float roughnessSq = roughness * roughness;
-    float D = DistributionGGX(normal, halfwayDir, roughnessSq);
-    float G = GeometrySmith(normal, vDir, lightDir, roughnessSq);
+// Common calculations
+float3 vDir = normalize(viewPos - worldPos);
+lightDir *= -1.0f;
+float3 halfwayDir = normalize(vDir + lightDir);
+float NdotH = saturate(dot(normal, halfwayDir));
+float NdotV = saturate(dot(normal, vDir));
+float NdotL = saturate(dot(normal, lightDir));
 
-    // Fresnel term (reflectivity based on metallic and viewing angle)
-    float F = FresnelSchlick(NdotV, metallic);
+// GGX BRDF (distribution and visibility)
+float roughnessSq = roughness * roughness;
+float D = DistributionGGX(normal, halfwayDir, roughnessSq);
+float G = GeometrySmith(normal, vDir, lightDir, roughnessSq);
 
-    // Calculate specular based on BRDF components and energy conservation
-    float specular = D * G * F / (4.0f * NdotV * NdotL + 0.001f);
+// Fresnel term (reflectivity based on metallic and viewing angle)
+// Here F0 should be defined based on the material's base reflectance
+float3 F0 = lerp(float3(0.04f, 0.04f, 0.04f), albedo, metallic);
+float3 F = FresnelSchlick(NdotH, F0);
 
-    // Clamp specular to prevent negative values
-    specular = max(specular, 0.0f);
+// Calculate specular based on BRDF components and energy conservation
+float3 kS = F; // Reflectance at normal incidence
+float3 kD = 1.0f - kS; // Diffuse reflection component
 
-    return specular;
+// Energy conservation: diffuse is reduced by metallic term
+kD *= 1.0f - metallic;
+
+float3 specular = (D * G * F) / (4.0f * NdotV * NdotL + 0.001f);
+
+// Clamp specular to prevent negative values (shouldn't be necessary with the proper calculation)
+specular = max(specular, 0.0f);
+
+return specular;
 }
 
 float3 offset_lookup(sampler2D map, float4 loc, float2 offset, float texelSize)
@@ -791,7 +800,7 @@ float GetPointLightDepth(int i, float3 lightDir)
 }
 
 
-float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal, float roughness, float metalic)
+float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal, float roughness, float metalic, float3 albedo)
 {
     float3 lightVector = LightPositions[i] - pixelInput.MyPosition;
     float distanceToLight = length(lightVector);
@@ -899,7 +908,7 @@ float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal, float ro
         dirToSurface = normal;
 
     intense *= saturate(dot(normal, dirToSurface));
-    float3 specular = CalculateSpecular(pixelInput.MyPosition, normal, -dirToSurface, roughness, metalic);
+    float3 specular = CalculateSpecular(pixelInput.MyPosition, normal, -dirToSurface, roughness, metalic, albedo);
 
     intense = max(intense, 0);
     float3 l = LightColors[i] * intense;
@@ -907,36 +916,7 @@ float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal, float ro
     return (l + intense * specular) * notShadow * dirFactor;
 }
 
-float3 CalculatePointLightSpeculars(int i, PixelInput pixelInput, float3 normal, float roughness, float metalic)
-{
-    
-#ifdef NO_SPECULAR
-    
-    return float3(0,0,0);
-    
-#endif
-
-    float3 lightVector = LightPositions[i] - pixelInput.MyPosition;
-    float distanceToLight = length(lightVector);
-    float intense = saturate(1.0 - distanceToLight / LightRadiuses[i]);
-    float3 dirToSurface = normalize(lightVector);
-
-    
-    if (isParticle)
-        dirToSurface = normal;
-    
-    if (Viewmodel == false)
-        if (dot(dirToSurface, pixelInput.Normal) < 0)
-            return float3(0, 0, 0);
-    
-    intense *= 1;
-
-    float3 specular = CalculateSpecular(pixelInput.MyPosition,normal, -dirToSurface, roughness, metalic);
-    
-    return LightColors[i] * max(intense, 0) * specular;
-}
-
-float3 CalculateLight(PixelInput input, float3 normal, float roughness, float metalic, float ao)
+float3 CalculateLight(PixelInput input, float3 normal, float roughness, float metalic, float ao, float3 albedo)
 {
     float3 lightCoords = input.lightPos.xyz / input.lightPos.w;
 
@@ -974,14 +954,14 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness, float me
     
     float specular = 0;
     
-    specular = CalculateSpecular(input.MyPosition, normal, normalize(LightDirection), roughness, metalic) * DirectBrightness;
+    specular = CalculateSpecular(input.MyPosition, normal, normalize(LightDirection), roughness, metalic, albedo) * DirectBrightness;
     
     specular *= max(1 - shadow, 0);
     
     float3 globalSpecularDir = normalize(-normal + float3(0,-5,0) + LightDirection);
     
 
-    specular += CalculateSpecular(input.MyPosition, normal, globalSpecularDir, roughness, metalic) * 0.02 ;
+    specular += CalculateSpecular(input.MyPosition, normal, globalSpecularDir, roughness, metalic, albedo) * 0.02 ;
     
     if (isParticle)
         normal = -LightDirection;
@@ -1002,7 +982,7 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness, float me
 
     for (int i = 0; i < MAX_POINT_LIGHTS; i++)
     {
-        light += CalculatePointLight(i, input, normal, roughness, metalic);
+        light += CalculatePointLight(i, input, normal, roughness, metalic, albedo);
 
     }
     

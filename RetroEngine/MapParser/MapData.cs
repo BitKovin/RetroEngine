@@ -206,7 +206,7 @@ namespace RetroEngine.Map
             {
                 string[] parts = Properties[name].Replace(".",",").Split(" ");
 
-                return new Vector3(float.Parse(parts[0]) * -1, float.Parse(parts[2]), float.Parse(parts[1])) / MapData.UnitSize;
+                return new Vector3(float.Parse(parts[0]), float.Parse(parts[2]), float.Parse(parts[1])*-1) / MapData.UnitSize;
             }catch(Exception)
             {
                 return Vector3.Zero;

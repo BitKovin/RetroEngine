@@ -160,7 +160,7 @@ namespace RetroEngine.Game.Entities.Player
             Camera.position = Position = OldCameraPos = data.GetPropertyVectorPosition("origin");
 
 
-            Camera.rotation = new Vector3(0, data.GetPropertyFloat("angle") - 90, 0);
+            Camera.rotation = new Vector3(0, data.GetPropertyFloat("angle") + 90, 0);
 
         }
 

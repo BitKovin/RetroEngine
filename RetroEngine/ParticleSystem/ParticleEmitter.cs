@@ -149,8 +149,10 @@ namespace RetroEngine.Particles
             particle.position = hit.HitPointWorld;
 
             if (Vector3.Dot(particle.velocity, hit.HitNormalWorld) < 0)
-
+            {
                 particle.velocity = Vector3.Reflect(particle.velocity * particle.BouncePower, hit.HitNormalWorld);
+                particle.position = hit.HitPointWorld + hit.HitNormalWorld*(particle.CollisionRadius+0.02f);
+            }
             return particle;
 
         }

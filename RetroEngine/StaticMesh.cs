@@ -956,8 +956,8 @@ namespace RetroEngine
                 {
                     var vertex = mesh.Vertices[i];
                     var normal = mesh.Normals[i];
-                    var tangent = mesh.Tangents[i];
-
+                    var tangent = -mesh.Tangents[i];
+                    var BiTangent = -mesh.BiTangents[i];
 
 
                     var textureCoord = mesh.HasTextureCoords(0) ? mesh.TextureCoordinateChannels[0][i] : new Assimp.Vector3D(0, 0, 0);
@@ -965,10 +965,11 @@ namespace RetroEngine
                     // Negate the x-coordinate to correct mirroring
                     vertices.Add(new VertexData
                     {
-                        Position = new Vector3(-vertex.X, vertex.Y, vertex.Z), // Negate x-coordinate
-                        Normal = new Vector3(-normal.X, normal.Y, normal.Z),
+                        Position = new Vector3(vertex.X, vertex.Y, vertex.Z), // Negate x-coordinate
+                        Normal = new Vector3(normal.X, normal.Y, normal.Z),
                         TextureCoordinate = new Vector2(textureCoord.X, textureCoord.Y),
-                        Tangent = new Vector3(-tangent.X, tangent.Y, tangent.Z)
+                        Tangent = new Vector3(tangent.X, tangent.Y, tangent.Z),
+                        BiTangent = new Vector3(BiTangent.X, BiTangent.Y, BiTangent.Z)
                     });
                 }
 

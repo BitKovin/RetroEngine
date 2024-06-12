@@ -21,8 +21,7 @@ namespace RetroEngine
 
         static Assimp.PostProcessSteps PostProcessSteps = Assimp.PostProcessSteps.Triangulate | 
             Assimp.PostProcessSteps.FixInFacingNormals | 
-            Assimp.PostProcessSteps.CalculateTangentSpace | 
-            Assimp.PostProcessSteps.MakeLeftHanded;
+            Assimp.PostProcessSteps.CalculateTangentSpace;
 
         public BrushFaceMesh(Model model, Texture2D texture, string textureName = "")
         {
@@ -284,11 +283,12 @@ namespace RetroEngine
                 {
                     var vertex = mesh.Vertices[i];
                     var normal = mesh.Normals[i];
-                    var tangent = mesh.Tangents[i];
+                    var tangent = -mesh.Tangents[i];
+                    var biTangent = -mesh.BiTangents[i];
 
                     if(Vector3D.Dot(normal, new Vector3D(-1,1,1))>0)
                     {
-                        tangent *= -1;
+                        tangent *= 1;
                     }else
                     {
                         tangent *= 1;
@@ -298,10 +298,11 @@ namespace RetroEngine
 
                     // Negate the x-coordinate to correct mirroring
                     vertices.Add(new VertexData {
-                        Position = new Vector3(-vertex.X / unitSize, vertex.Y / unitSize, vertex.Z / unitSize), // Negate x-coordinate
-                        Normal = new Vector3(-normal.X, normal.Y, normal.Z),
+                        Position = new Vector3(vertex.X / unitSize, vertex.Y / unitSize, vertex.Z / unitSize), // Negate x-coordinate
+                        Normal = new Vector3(normal.X, normal.Y, normal.Z),
                         TextureCoordinate = new Vector2(textureCoord.X, 1-textureCoord.Y),
-                        Tangent = new Vector3(-tangent.X, tangent.Y, tangent.Z)
+                        Tangent = new Vector3(tangent.X, tangent.Y, tangent.Z),
+                        BiTangent = new Vector3(biTangent.X, biTangent.Y, biTangent.Z)
                     });
                 }
 
