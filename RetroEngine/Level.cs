@@ -23,7 +23,7 @@ namespace RetroEngine
 
         internal int entityID = 0;
 
-        internal List<int> DeletedIds = new List<int>();
+        internal List<string> DeletedIds = new List<string>();
 
 
         internal List<string> DeletedNames = new List<string>();
@@ -498,9 +498,27 @@ namespace RetroEngine
         {
             if (ent == null) return null;
             entities.Add(ent);
-            ent.Id = entityID;
+            ent.Id = GetIdForNewEntity(ent) ;
             entityID += 1;
             return ent;
+        }
+
+        Dictionary<Type, int> typeCounter = new Dictionary<Type, int>();
+
+        string GetIdForNewEntity(Entity entity)
+        {
+
+            Type type = entity.GetType();
+
+            if(typeCounter.ContainsKey(type))
+            {
+                typeCounter[type]++;
+                return entity.ClassName + "-" + entity.name + "-" + typeCounter[type].ToString();
+            }
+
+            typeCounter.Add(type, 0);
+            return entity.ClassName + "-" + entity.name + "-" + typeCounter[type].ToString();
+
         }
 
         public Entity FindEntityByName(string name)
@@ -532,7 +550,7 @@ namespace RetroEngine
             return result.ToArray();
         }
 
-        public Entity FindEntityById(int id)
+        public Entity FindEntityById(string id)
         {
             lock (entities)
             {

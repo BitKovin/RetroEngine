@@ -45,7 +45,7 @@ namespace RetroEngine
 
         bool pendingDestroy = false;
 
-        public int Id = -1;
+        public string Id = "";
 
         public float Health = 0;
 
@@ -56,6 +56,7 @@ namespace RetroEngine
         public bool mergeBrushes = false;
 
         public bool SaveGame = false;
+        public bool SaveAsUnique = false;
 
         public string ClassName = "";
 
@@ -231,7 +232,7 @@ namespace RetroEngine
             if (SaveGame)
             {
 
-                if (name != null && name != "")
+                if (name != null && name != "" && SaveAsUnique)
                 {
 
                     lock (Level.GetCurrent().DeletedNames)

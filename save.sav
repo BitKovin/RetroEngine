@@ -1,1 +1,175 @@
-{"levelName":"test2.map","entities":[{"Name":"","className":"info_player_start","id":2,"saveData":"{\u0022velocity\u0022:{\u0022X\u0022:-0,\u0022Y\u0022:3.2186508E-06,\u0022Z\u0022:-0},\u0022weapons\u0022:[{\u0022weaponType\u0022:\u0022RetroEngine.Game.Entities.Weapons.weapon_pistol_double, RetroEngine.Game, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0022,\u0022ammo\u0022:0}],\u0022currentSlot\u0022:0,\u0022lastSlot\u0022:-1,\u0022thirdPerson\u0022:false,\u0022Position\u0022:{\u0022X\u0022:-11.486104,\u0022Y\u0022:1.5399998,\u0022Z\u0022:8.188356},\u0022Rotation\u0022:{\u0022X\u0022:11.899935,\u0022Y\u0022:-683.036,\u0022Z\u0022:0}}"},{"Name":"plank_2","className":"destructible","id":7,"saveData":"{\u0022Position\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0}}"},{"Name":"plank_1","className":"destructible","id":8,"saveData":"{\u0022Position\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0}}"},{"Name":"","className":"ent_cat_point","id":34,"saveData":"{\u0022Position\u0022:{\u0022X\u0022:-7.4428034,\u0022Y\u0022:1.0400004,\u0022Z\u0022:4.654148},\u0022Rotation\u0022:{\u0022X\u0022:-8.4181855E-05,\u0022Y\u0022:25.407087,\u0022Z\u0022:-8.468484E-05}}"},{"Name":"","className":"npc_base","id":89,"saveData":"{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.7378538,\u0022Y\u0022:0.103719436,\u0022Z\u0022:-0.6607977},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.7684514,\u0022Y\u0022:0.12401798,\u0022Z\u0022:-0.6277754},\u0022speed\u0022:0,\u0022targetLocation\u0022:{\u0022X\u0022:-11.444835,\u0022Y\u0022:2.1945376,\u0022Z\u0022:8.24322},\u0022Position\u0022:{\u0022X\u0022:-9.826171,\u0022Y\u0022:1.5399998,\u0022Z\u0022:9.428975},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0}}"},{"Name":"","className":"npc_base","id":90,"saveData":"{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.40228325,\u0022Y\u0022:0.119576514,\u0022Z\u0022:-0.90557504},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.37163836,\u0022Y\u0022:0.14851178,\u0022Z\u0022:-0.91642183},\u0022speed\u0022:0,\u0022targetLocation\u0022:{\u0022X\u0022:-11.444835,\u0022Y\u0022:2.1945376,\u0022Z\u0022:8.24322},\u0022Position\u0022:{\u0022X\u0022:-10.877414,\u0022Y\u0022:1.5399997,\u0022Z\u0022:9.644417},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0}}"},{"Name":"","className":"npc_base","id":91,"saveData":"{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.24209724,\u0022Y\u0022:0.08256702,\u0022Z\u0022:-0.96326166},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.17513599,\u0022Y\u0022:0.097321056,\u0022Z\u0022:-0.9797224},\u0022speed\u0022:0,\u0022targetLocation\u0022:{\u0022X\u0022:-11.444835,\u0022Y\u0022:2.1945376,\u0022Z\u0022:8.24322},\u0022Position\u0022:{\u0022X\u0022:-11.151311,\u0022Y\u0022:1.5399997,\u0022Z\u0022:10.606176},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0}}"},{"Name":"","className":"npc_base","id":92,"saveData":"{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.536717,\u0022Y\u0022:0.08030144,\u0022Z\u0022:-0.8385065},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.523827,\u0022Y\u0022:0.09410766,\u0022Z\u0022:-0.8466103},\u0022speed\u0022:0,\u0022targetLocation\u0022:{\u0022X\u0022:-11.444835,\u0022Y\u0022:2.1945376,\u0022Z\u0022:8.24322},\u0022Position\u0022:{\u0022X\u0022:-10.181034,\u0022Y\u0022:1.5399998,\u0022Z\u0022:10.363898},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0}}"},{"Name":"","className":"ent_cat_point","id":106,"saveData":"{\u0022Position\u0022:{\u0022X\u0022:-10.458367,\u0022Y\u0022:1.0385604,\u0022Z\u0022:8.645737},\u0022Rotation\u0022:{\u0022X\u0022:0.7186175,\u0022Y\u0022:-44.46199,\u0022Z\u0022:0.009452825}}"},{"Name":"","className":"ent_cat_point","id":108,"saveData":"{\u0022Position\u0022:{\u0022X\u0022:-9.084276,\u0022Y\u0022:1.0381458,\u0022Z\u0022:8.617289},\u0022Rotation\u0022:{\u0022X\u0022:1.0805131,\u0022Y\u0022:-48.157673,\u0022Z\u0022:-1.9356557}}"},{"Name":"","className":"ent_cat_point","id":110,"saveData":"{\u0022Position\u0022:{\u0022X\u0022:-7.3693867,\u0022Y\u0022:1.0400002,\u0022Z\u0022:10.935632},\u0022Rotation\u0022:{\u0022X\u0022:50.227547,\u0022Y\u0022:-7.171698E-05,\u0022Z\u0022:-89.999916}}"},{"Name":"","className":"ent_cat_point","id":112,"saveData":"{\u0022Position\u0022:{\u0022X\u0022:-8.6738205,\u0022Y\u0022:1.0398141,\u0022Z\u0022:7.511531},\u0022Rotation\u0022:{\u0022X\u0022:-90.08495,\u0022Y\u0022:-42.55321,\u0022Z\u0022:0.044950485}}"}],"entityId":113,"deletedIDs":[71],"deletedNames":[]}
+{
+  "levelName": "test2.map",
+  "entities": [
+    {
+      "Name": "",
+      "className": "info_player_start",
+      "id": "info_player_start--0",
+      "saveData": "{\u0022velocity\u0022:{\u0022X\u0022:0,\u0022Y\u0022:-0.0009546876,\u0022Z\u0022:0},\u0022weapons\u0022:[{\u0022weaponType\u0022:\u0022RetroEngine.Game.Entities.Weapons.weapon_pistol_double, RetroEngine.Game, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0022,\u0022ammo\u0022:0}],\u0022currentSlot\u0022:0,\u0022lastSlot\u0022:0,\u0022thirdPerson\u0022:false,\u0022Position\u0022:{\u0022X\u0022:33.0607,\u0022Y\u0022:1.952928,\u0022Z\u0022:13.337712},\u0022Rotation\u0022:{\u0022X\u0022:6.4334025,\u0022Y\u0022:-97.03392,\u0022Z\u0022:0}}"
+    },
+    {
+      "Name": "plank_2",
+      "className": "destructible",
+      "id": "destructible--0",
+      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0}}"
+    },
+    {
+      "Name": "",
+      "className": "ent_cat_point",
+      "id": "ent_cat_point--0",
+      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:-7.5020304,\u0022Y\u0022:1,\u0022Z\u0022:4.9931674},\u0022Rotation\u0022:{\u0022X\u0022:1.6058739E-05,\u0022Y\u0022:0.0020313102,\u0022Z\u0022:-3.4768713E-05}}"
+    },
+    {
+      "Name": "",
+      "className": "weaponPickup",
+      "id": "weaponPickup--1",
+      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:-5.125,\u0022Y\u0022:1.125,\u0022Z\u0022:5.625},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0}}"
+    },
+    {
+      "Name": "",
+      "className": "npc_base",
+      "id": "npc_base--4",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.7947719,\u0022Y\u0022:0.26287904,\u0022Z\u0022:0.547008},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.7952413,\u0022Y\u0022:0.2630264,\u0022Z\u0022:0.54626775},\u0022speed\u0022:0,\u0022targetLocation\u0022:{\u0022X\u0022:32.99275,\u0022Y\u0022:2.6074982,\u0022Z\u0022:13.329305},\u0022Position\u0022:{\u0022X\u0022:30.946049,\u0022Y\u0022:1.4999998,\u0022Z\u0022:11.922965},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0}}"
+    },
+    {
+      "Name": "",
+      "className": "npc_base",
+      "id": "npc_base--8",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.5102636,\u0022Y\u0022:0.1986414,\u0022Z\u0022:0.83671623},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.5179101,\u0022Y\u0022:0.19987312,\u0022Z\u0022:0.831757},\u0022speed\u0022:0,\u0022targetLocation\u0022:{\u0022X\u0022:32.99275,\u0022Y\u0022:2.6074982,\u0022Z\u0022:13.329305},\u0022Position\u0022:{\u0022X\u0022:31.592701,\u0022Y\u0022:1.6383573,\u0022Z\u0022:11.096283},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0}}"
+    },
+    {
+      "Name": "",
+      "className": "npc_base",
+      "id": "npc_base--9",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.550262,\u0022Y\u0022:0.2620636,\u0022Z\u0022:0.79267967},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.5618055,\u0022Y\u0022:0.26332998,\u0022Z\u0022:0.7842397},\u0022speed\u0022:0,\u0022targetLocation\u0022:{\u0022X\u0022:32.99275,\u0022Y\u0022:2.6074982,\u0022Z\u0022:13.329305},\u0022Position\u0022:{\u0022X\u0022:32.045162,\u0022Y\u0022:1.7353145,\u0022Z\u0022:12.01999},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0}}"
+    },
+    {
+      "Name": "",
+      "className": "ent_cat_point",
+      "id": "ent_cat_point--1",
+      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:-8.895867,\u0022Y\u0022:1.0000001,\u0022Z\u0022:-5.7253456},\u0022Rotation\u0022:{\u0022X\u0022:6.8998547E-06,\u0022Y\u0022:0.0037528789,\u0022Z\u0022:7.6682874E-05}}"
+    },
+    {
+      "Name": "",
+      "className": "ent_cat_point",
+      "id": "ent_cat_point--2",
+      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:-8.756627,\u0022Y\u0022:1.0000001,\u0022Z\u0022:0.47909233},\u0022Rotation\u0022:{\u0022X\u0022:8.534244E-06,\u0022Y\u0022:0.003828057,\u0022Z\u0022:4.4727563E-05}}"
+    },
+    {
+      "Name": "",
+      "className": "ent_cat_point",
+      "id": "ent_cat_point--3",
+      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:-2.9608142,\u0022Y\u0022:0.99999994,\u0022Z\u0022:1.6888949},\u0022Rotation\u0022:{\u0022X\u0022:180,\u0022Y\u0022:-22.747267,\u0022Z\u0022:179.99998}}"
+    },
+    {
+      "Name": "",
+      "className": "ent_cat_point",
+      "id": "ent_cat_point--4",
+      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:-4.7895193,\u0022Y\u0022:0.99999994,\u0022Z\u0022:-1.2524929},\u0022Rotation\u0022:{\u0022X\u0022:1.05507725E-05,\u0022Y\u0022:2.0526886,\u0022Z\u0022:-5.4436718E-05}}"
+    },
+    {
+      "Name": "",
+      "className": "ent_cat_point",
+      "id": "ent_cat_point--5",
+      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:-5.2348247,\u0022Y\u0022:0.99997395,\u0022Z\u0022:-0.22651668},\u0022Rotation\u0022:{\u0022X\u0022:-0.003736024,\u0022Y\u0022:-0.3425954,\u0022Z\u0022:-0.0011795809}}"
+    },
+    {
+      "Name": "",
+      "className": "ent_cat_point",
+      "id": "ent_cat_point--6",
+      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:-4.392694,\u0022Y\u0022:0.99999994,\u0022Z\u0022:1.4977767},\u0022Rotation\u0022:{\u0022X\u0022:-7.631647E-06,\u0022Y\u0022:-31.140297,\u0022Z\u0022:1.417674E-05}}"
+    },
+    {
+      "Name": "",
+      "className": "ent_cat_point",
+      "id": "ent_cat_point--7",
+      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:-8.819056,\u0022Y\u0022:0.9999997,\u0022Z\u0022:1.4881321},\u0022Rotation\u0022:{\u0022X\u0022:-1.9862357E-05,\u0022Y\u0022:-0.12846941,\u0022Z\u0022:-9.260203E-05}}"
+    },
+    {
+      "Name": "",
+      "className": "ent_cat_point",
+      "id": "ent_cat_point--8",
+      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:-5.4395556,\u0022Y\u0022:0.9999999,\u0022Z\u0022:0.8779796},\u0022Rotation\u0022:{\u0022X\u0022:1.8282101E-06,\u0022Y\u0022:-11.110864,\u0022Z\u0022:-2.4345422E-07}}"
+    },
+    {
+      "Name": "",
+      "className": "ent_cat_point",
+      "id": "ent_cat_point--9",
+      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:-6.62824,\u0022Y\u0022:1.0000001,\u0022Z\u0022:-0.21653591},\u0022Rotation\u0022:{\u0022X\u0022:1.5852656E-05,\u0022Y\u0022:0.0034596138,\u0022Z\u0022:3.3594075E-05}}"
+    },
+    {
+      "Name": "",
+      "className": "ent_cat_point",
+      "id": "ent_cat_point--10",
+      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:-6.530847,\u0022Y\u0022:0.9999998,\u0022Z\u0022:1.3719615},\u0022Rotation\u0022:{\u0022X\u0022:8.004489E-06,\u0022Y\u0022:0.020301875,\u0022Z\u0022:1.6291287E-05}}"
+    },
+    {
+      "Name": "",
+      "className": "ent_cat_point",
+      "id": "ent_cat_point--11",
+      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:-8.47451,\u0022Y\u0022:0.9999998,\u0022Z\u0022:2.4998672},\u0022Rotation\u0022:{\u0022X\u0022:-8.667507E-06,\u0022Y\u0022:-1.3558084,\u0022Z\u0022:2.3283092E-05}}"
+    },
+    {
+      "Name": "",
+      "className": "ent_cat_point",
+      "id": "ent_cat_point--12",
+      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:-7.4946475,\u0022Y\u0022:0.99999976,\u0022Z\u0022:3.303109},\u0022Rotation\u0022:{\u0022X\u0022:5.8656096E-05,\u0022Y\u0022:-1.8844185,\u0022Z\u0022:0.0002742701}}"
+    },
+    {
+      "Name": "",
+      "className": "ent_cat_point",
+      "id": "ent_cat_point--13",
+      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:-9.275085,\u0022Y\u0022:1.0000002,\u0022Z\u0022:3.4809992},\u0022Rotation\u0022:{\u0022X\u0022:6.8633462E-06,\u0022Y\u0022:-1.4632101,\u0022Z\u0022:4.7283203E-05}}"
+    },
+    {
+      "Name": "",
+      "className": "ent_cat_point",
+      "id": "ent_cat_point--14",
+      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:-9.5824795,\u0022Y\u0022:1,\u0022Z\u0022:4.607252},\u0022Rotation\u0022:{\u0022X\u0022:1.547408E-05,\u0022Y\u0022:0.0016788292,\u0022Z\u0022:-3.4360604E-05}}"
+    },
+    {
+      "Name": "",
+      "className": "ent_cat_point",
+      "id": "ent_cat_point--15",
+      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:-10.269477,\u0022Y\u0022:0.9999998,\u0022Z\u0022:3.0375764},\u0022Rotation\u0022:{\u0022X\u0022:5.2977317E-05,\u0022Y\u0022:-0.93005145,\u0022Z\u0022:-0.00014244033}}"
+    },
+    {
+      "Name": "",
+      "className": "ent_cat_point",
+      "id": "ent_cat_point--16",
+      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:-9.951661,\u0022Y\u0022:0.99999994,\u0022Z\u0022:1.6715282},\u0022Rotation\u0022:{\u0022X\u0022:9.852217E-06,\u0022Y\u0022:0.0018080848,\u0022Z\u0022:-3.6796846E-05}}"
+    },
+    {
+      "Name": "",
+      "className": "ent_cat_point",
+      "id": "ent_cat_point--17",
+      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:-10.455459,\u0022Y\u0022:1,\u0022Z\u0022:0.65143925},\u0022Rotation\u0022:{\u0022X\u0022:8.146585E-06,\u0022Y\u0022:0.001957559,\u0022Z\u0022:-4.7263242E-05}}"
+    },
+    {
+      "Name": "",
+      "className": "ent_cat_point",
+      "id": "ent_cat_point--18",
+      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:31.169596,\u0022Y\u0022:0.9999997,\u0022Z\u0022:13.392892},\u0022Rotation\u0022:{\u0022X\u0022:90.00151,\u0022Y\u0022:46.281055,\u0022Z\u0022:0.0016010077}}"
+    },
+    {
+      "Name": "",
+      "className": "ent_cat_point",
+      "id": "ent_cat_point--19",
+      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:31.074945,\u0022Y\u0022:1.9999745,\u0022Z\u0022:13.795881},\u0022Rotation\u0022:{\u0022X\u0022:0.0066128867,\u0022Y\u0022:-0.088612296,\u0022Z\u0022:0.0030455345}}"
+    }
+  ],
+  "entityId": 235,
+  "deletedIDs": [
+    "weaponPickup--0",
+    "npc_base--5",
+    "npc_base--2",
+    "npc_base--6",
+    "npc_base--1",
+    "npc_base--3",
+    "npc_base--0",
+    "npc_base--7"
+  ],
+  "deletedNames": [
+    "plank_1"
+  ]
+}
