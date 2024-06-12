@@ -283,8 +283,8 @@ namespace RetroEngine
                 {
                     var vertex = mesh.Vertices[i];
                     var normal = mesh.Normals[i];
-                    var tangent = -mesh.Tangents[i];
-                    var biTangent = -mesh.BiTangents[i];
+                    var tangent = mesh.Tangents[i];
+                    var biTangent = mesh.BiTangents[i];
 
                     if(Vector3D.Dot(normal, new Vector3D(-1,1,1))>0)
                     {

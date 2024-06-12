@@ -518,13 +518,13 @@ namespace RetroEngine.Skeletal
                 // tangents
                 for (int k = 0; k < mesh.Tangents.Count; k++)
                 {
-                    var f = -mesh.Tangents[k];
+                    var f = mesh.Tangents[k];
                     v[k].Tangent = new Vector3(f.X, f.Y, f.Z);
                 }
                 // bi tangents  
                 for (int k = 0; k < mesh.BiTangents.Count; k++)
                 {
-                    var f = -mesh.BiTangents[k];
+                    var f = mesh.BiTangents[k];
                     v[k].BiTangent = f.ToMg();
                 }
 

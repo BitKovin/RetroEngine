@@ -439,6 +439,8 @@ namespace RetroEngine
         {
             if (!CastShadows || !isRenderedShadow) return;
 
+            if (!CastShadows) return;
+
             GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
             // Load the custom effect
             Effect effect = GameMain.Instance.render.ShadowMapEffect;
@@ -956,8 +958,8 @@ namespace RetroEngine
                 {
                     var vertex = mesh.Vertices[i];
                     var normal = mesh.Normals[i];
-                    var tangent = -mesh.Tangents[i];
-                    var BiTangent = -mesh.BiTangents[i];
+                    var tangent = mesh.Tangents[i];
+                    var BiTangent = mesh.BiTangents[i];
 
 
                     var textureCoord = mesh.HasTextureCoords(0) ? mesh.TextureCoordinateChannels[0][i] : new Assimp.Vector3D(0, 0, 0);

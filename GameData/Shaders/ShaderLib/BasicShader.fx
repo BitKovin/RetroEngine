@@ -256,7 +256,7 @@ struct VertexInput
     float3 Normal : NORMAL0; // Add normal input
     float2 TexCoord : TEXCOORD0;
     float3 Tangent : TANGENT0;
-    float3 BiTangent : TANGENT1;
+    float3 BiTangent : BINORMAL0;
     
     float4 BlendIndices : BLENDINDICES0;
     float4 BlendWeights : BLENDWEIGHT0;
@@ -269,15 +269,15 @@ struct PixelInput
 {
     float4 Position : SV_POSITION;
     float2 TexCoord : TEXCOORD0;
-    float3 Normal : TEXCOORD1; 
-    float4 lightPos : TEXCOORD2;
-    float4 lightPosClose : TEXCOORD3;
-    float3 MyPosition : TEXCOORD4;
-    float4 MyPixelPosition : TEXCOORD5;
-    float3 Tangent : TEXCOORD6;
-    float3 TangentNormal : TEXCOORD7;
-    float4 lightPosVeryClose : TEXCOORD8;
-    float3 BiTangent : TEXCOORD9;
+    float3 Normal : NORMAL0; 
+    float4 lightPos : TEXCOORD1;
+    float4 lightPosClose : TEXCOORD2;
+    float3 MyPosition : TEXCOORD3;
+    float4 MyPixelPosition : TEXCOORD4;
+    float3 Tangent : TANGENT0;
+    float3 TangentNormal : TEXCOORD5;
+    float4 lightPosVeryClose : TEXCOORD6;
+    float3 BiTangent : BINORMAL0;
     float4 Color : COLOR0;
 };
 
