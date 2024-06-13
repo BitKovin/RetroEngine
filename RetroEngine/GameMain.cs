@@ -134,7 +134,6 @@ namespace RetroEngine
             _graphics.ApplyChanges();
 
 
-
             render = new Render();
 
             LevelObjectFactory.InitializeTypeCache();
@@ -527,16 +526,23 @@ namespace RetroEngine
             }
         }
 
-        public void MakeFullscreen()
+        public void SetFullscreen(bool value)
         {
             _graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
             _graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
 
+            if(value)
+                Window.Position = new Point(0, 0);
+
+            _graphics.IsFullScreen = value;
+            Fullscreen = value;
+
             //_graphics.ApplyChanges();
 
-            pendingGraphicsUpdate = true;
+            //pendingGraphicsUpdate = true;
 
-            Fullscreen = true;
+
+
         }
 
         public virtual void GameInitialized()

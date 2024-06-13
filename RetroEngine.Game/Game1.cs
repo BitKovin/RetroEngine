@@ -31,8 +31,6 @@ namespace RetroEngine.Game
 
         public override void GameInitialized()
         {
-            //MakeFullscreen();
-
             AssetRegistry.LoadFmodBankIntoMemory("Sounds/banks/Master.bank");
             AssetRegistry.LoadFmodBankIntoMemory("Sounds/banks/Master.strings.bank");
             Level.LoadFromFile("test2");
@@ -43,7 +41,8 @@ namespace RetroEngine.Game
         protected override void Update(GameTime gameTime)
         {
 
-            
+            if(Input.GetAction("fullscreen").Pressed())
+                SetFullscreen(!Fullscreen);
 
             if (Graphics.DefaultUnlit)
             {
@@ -106,6 +105,8 @@ namespace RetroEngine.Game
 
             Input.AddAction("qSave").AddKeyboardKey(Keys.F5);
             Input.AddAction("qLoad").AddKeyboardKey(Keys.F8);
+
+            Input.AddAction("fullscreen").AddKeyboardKey(Keys.F11);
         }
 
     }

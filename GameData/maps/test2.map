@@ -10879,7 +10879,7 @@
 "path" "models/npc_base.obj"
 "scale" "1"
 "texture" "textures/brushes/bricks.png"
-"angles" "55 109 150"
+"angles" "-33 -120 -75"
 }
 // entity 9
 {

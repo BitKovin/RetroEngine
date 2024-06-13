@@ -612,7 +612,6 @@ namespace RetroEngine.Game.Entities.Player
         public override void LateUpdate()
         {
 
-            Console.WriteLine(Camera.rotation.GetForwardVector());
             
             UpdatePlayerInput();
 

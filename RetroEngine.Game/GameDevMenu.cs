@@ -16,12 +16,6 @@ namespace RetroEngine.Game
         {
             base.Update();
 
-            ImGui.Begin("game");
-
-            ImGui.DragFloat3("sm rot", ref StaticMeshEntity.testRot);
-
-            ImGui.End();
-
         }
 
     }
