@@ -105,32 +105,36 @@ namespace RetroEngine
             return new Vector3(pitch, yaw, 0);
         }
 
-        public static Vector3 ToEulerAnglesDegrees(this Quaternion quaternion)
+        public static Vector3 ToEulerAnglesDegrees(this Quaternion q)
         {
-            float pitch, yaw, roll;
+            Vector3 angles = new();
 
-            // Calculate pitch (x-axis rotation)
-            float sinPitchCosYaw = 2 * (quaternion.W * quaternion.X + quaternion.Y * quaternion.Z);
-            float cosPitchCosYaw = 1 - 2 * (quaternion.X * quaternion.X + quaternion.Y * quaternion.Y);
-            pitch = MathHelper.ToDegrees((float)Math.Atan2(sinPitchCosYaw, cosPitchCosYaw));
+            // roll / x
+            double sinr_cosp = 2 * (q.W * q.X + q.Y * q.Z);
+            double cosr_cosp = 1 - 2 * (q.X * q.X + q.Y * q.Y);
+            angles.X = (float)Math.Atan2(sinr_cosp, cosr_cosp);
 
-            // Calculate yaw (y-axis rotation)
-            float sinYaw = 2 * (quaternion.W * quaternion.Y - quaternion.Z * quaternion.X);
-            if (Math.Abs(sinYaw) >= 1)
+            // pitch / y
+            double sinp = 2 * (q.W * q.Y - q.Z * q.X);
+            if (Math.Abs(sinp) >= 1)
             {
-                yaw = MathHelper.ToDegrees((float)Math.CopySign(Math.PI / 2, sinYaw)); // use 90 degrees if out of range
+                angles.Y = (float)Math.CopySign(Math.PI / 2, sinp);
             }
             else
             {
-                yaw = MathHelper.ToDegrees((float)Math.Asin(sinYaw));
+                angles.Y = (float)Math.Asin(sinp);
             }
 
-            // Calculate roll (z-axis rotation)
-            float sinRollCosYaw = 2 * (quaternion.W * quaternion.Z + quaternion.X * quaternion.Y);
-            float cosRollCosYaw = 1 - 2 * (quaternion.Y * quaternion.Y + quaternion.Z * quaternion.Z);
-            roll = MathHelper.ToDegrees((float)Math.Atan2(sinRollCosYaw, cosRollCosYaw));
+            // yaw / z
+            double siny_cosp = 2 * (q.W * q.Z + q.X * q.Y);
+            double cosy_cosp = 1 - 2 * (q.Y * q.Y + q.Z * q.Z);
+            angles.Z = (float)Math.Atan2(siny_cosp, cosy_cosp);
 
-            return new Vector3(pitch, yaw, roll);
+            angles.X = ToDegrees(angles.X);
+            angles.Y = ToDegrees(angles.Y);
+            angles.Z = ToDegrees(angles.Z);
+
+            return angles;
         }
 
 
@@ -168,16 +172,43 @@ namespace RetroEngine
 
         }
 
-        public static float ClampAngle(float angle)
+        public static float NormalizeAngle(float angle)
         {
 
             float a = angle;
 
-            if (a < -180)
+            while (a < -180)
                 a += 360;
 
-            if (a > 180)
+            while (a > 180)
                 a -= 360;
+
+            return a;
+        }
+
+        public static float NonZeroAngle(float angle)
+        {
+            if (angle % 90 == 0)
+            {
+                angle += 0.0001f;
+            }
+
+            return angle;
+        }
+
+        public static Vector3 NormalizeAngles(this Vector3 a)
+        {
+            a.X = NormalizeAngle(a.X);
+            a.Y = NormalizeAngle(a.Y);
+            a.Z = NormalizeAngle(a.Z);
+            return a;
+        }
+
+        public static Vector3 NonZeroAngles(this Vector3 a)
+        {
+            a.X = NonZeroAngle(a.X);
+            a.Y = NonZeroAngle(a.Y);
+            a.Z = NonZeroAngle(a.Z);
 
             return a;
         }
@@ -199,9 +230,9 @@ namespace RetroEngine
 
             rotationDegrees = ToEulerAnglesDegrees(rotation);
 
-            rotationDegrees.X = ClampAngle(rotationDegrees.X);
-            rotationDegrees.Y = ClampAngle(rotationDegrees.Y);
-            rotationDegrees.Z = ClampAngle(rotationDegrees.Z);
+            rotationDegrees.X = NormalizeAngle(rotationDegrees.X);
+            rotationDegrees.Y = NormalizeAngle(rotationDegrees.Y);
+            rotationDegrees.Z = NormalizeAngle(rotationDegrees.Z);
 
             return new Transform
             {

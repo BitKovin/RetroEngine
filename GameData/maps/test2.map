@@ -10875,11 +10875,11 @@
 // entity 8
 {
 "classname" "static_mesh"
-"origin" "-140.903 -7.0081 75.9635"
+"origin" "-141.995 8.21093 81.89"
 "path" "models/npc_base.obj"
 "scale" "1"
 "texture" "textures/brushes/bricks.png"
-"angle" "-120"
+"angles" "55 109 150"
 }
 // entity 9
 {
@@ -10888,7 +10888,7 @@
 "path" "models/npc_base.obj"
 "scale" "1"
 "texture" "textures/brushes/bricks.png"
-"angle" "355"
+"angles" "0 0 0"
 }
 // entity 10
 {

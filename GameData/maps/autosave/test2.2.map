@@ -10761,12 +10761,12 @@
 }
 // brush 1148
 {
-( 432 -224 208 ) ( 432 -368 208 ) ( 432 -368 16 ) brushes/brickPBR 191.99976 0 180 0.15 -0.15
-( 432 -368 208 ) ( 480 -368 208 ) ( 480 -368 16 ) brushes/brickPBR -63.999756 0 180 0.15 -0.15
+( 432 -224 208 ) ( 432 -368 208 ) ( 432 -368 16 ) brushes/brickPBR 191.99976 0 180 0.15 0.15
+( 432 -368 208 ) ( 480 -368 208 ) ( 480 -368 16 ) brushes/brickPBR -63.999756 0 180 0.15 0.15
 ( 480 -368 16 ) ( 480 -224 16 ) ( 432 -224 16 ) brushes/brickPBR -63.999756 -191.99976 180 0.15 0.15
 ( 432 -224 208 ) ( 480 -224 208 ) ( 480 -368 208 ) brushes/brickPBR -63.999756 -191.99976 180 0.15 0.15
-( 480 -224 16 ) ( 480 -224 208 ) ( 432 -224 208 ) brushes/brickPBR -63.999756 0 180 0.15 -0.15
-( 480 -368 208 ) ( 480 -224 208 ) ( 480 -224 16 ) brushes/brickPBR 191.99976 0 180 0.15 -0.15
+( 480 -224 16 ) ( 480 -224 208 ) ( 432 -224 208 ) brushes/brickPBR -63.999756 0 180 0.15 0.15
+( 480 -368 208 ) ( 480 -224 208 ) ( 480 -224 16 ) brushes/brickPBR 191.99976 0 180 0.15 0.15
 }
 // brush 1149
 {
@@ -10779,12 +10779,12 @@
 }
 // brush 1150
 {
-( -11856 11072 16 ) ( -11856 -9184 16 ) ( -11856 -9184 -16 ) brushes/__TB_empty 0 0 0 0.17 0.17
-( -11856 -9184 16 ) ( 7984 -9184 16 ) ( 7984 -9184 -16 ) brushes/__TB_empty 0 0 0 0.17 0.17
-( 7984 -9184 -16 ) ( 7984 11072 -16 ) ( -11856 11072 -16 ) brushes/__TB_empty 0 0 0 0.17 0.17
-( -11856 11072 16 ) ( 7984 11072 16 ) ( 7984 -9184 16 ) brushes/__TB_empty 0 0 0 0.17 0.17
-( 7984 11072 -16 ) ( 7984 11072 16 ) ( -11856 11072 16 ) brushes/__TB_empty 0 0 0 0.17 0.17
-( 7984 -9184 16 ) ( 7984 11072 16 ) ( 7984 11072 -16 ) brushes/__TB_empty 0 0 0 0.17 0.17
+( -11856 11072 16 ) ( -11856 -9184 16 ) ( -11856 -9184 -16 ) brushes/ground_pbr 0 0 0 0.17 0.17
+( -11856 -9184 16 ) ( 7984 -9184 16 ) ( 7984 -9184 -16 ) brushes/ground_pbr 0 0 0 0.17 0.17
+( 7984 -9184 -16 ) ( 7984 11072 -16 ) ( -11856 11072 -16 ) brushes/ground_pbr 0 0 0 0.17 0.17
+( -11856 11072 16 ) ( 7984 11072 16 ) ( 7984 -9184 16 ) brushes/ground_pbr 0 0 0 0.17 0.17
+( 7984 11072 -16 ) ( 7984 11072 16 ) ( -11856 11072 16 ) brushes/ground_pbr 0 0 0 0.17 0.17
+( 7984 -9184 16 ) ( 7984 11072 16 ) ( 7984 11072 -16 ) brushes/ground_pbr 0 0 0 0.17 0.17
 }
 // brush 1151
 {
@@ -10875,11 +10875,11 @@
 // entity 8
 {
 "classname" "static_mesh"
-"origin" "-140.903 -7.0081 75.9635"
+"origin" "-141.995 8.21093 81.89"
 "path" "models/npc_base.obj"
 "scale" "1"
 "texture" "textures/brushes/bricks.png"
-"angle" "-120"
+"angles" "90 -90 -90"
 }
 // entity 9
 {
@@ -10888,7 +10888,7 @@
 "path" "models/npc_base.obj"
 "scale" "1"
 "texture" "textures/brushes/bricks.png"
-"angle" "355"
+"angles" "0 0 0"
 }
 // entity 10
 {
@@ -11407,91 +11407,98 @@
 }
 // entity 70
 {
+"classname" "weaponPickup"
+"origin" "164 180 36"
+"type" "weapon_shotgunNew"
+"targetname" ""
+}
+// entity 71
+{
 "classname" "func_group"
 "_tb_type" "_tb_layer"
 "_tb_name" "navigation"
 "_tb_id" "1"
 "_tb_layer_sort_index" "0"
 }
-// entity 71
+// entity 72
 {
 "classname" "info.navpoint"
 "origin" "216 -584 24"
 "_tb_layer" "1"
 }
-// entity 72
+// entity 73
 {
 "classname" "info.navpoint"
 "origin" "-600 -840 24"
 "_tb_layer" "1"
 }
-// entity 73
+// entity 74
 {
 "classname" "info.navpoint"
 "origin" "840 -168 24"
 "_tb_layer" "1"
 }
-// entity 74
+// entity 75
 {
 "classname" "info.navpoint"
 "origin" "280 216 24"
 "_tb_layer" "1"
 }
-// entity 75
+// entity 76
 {
 "classname" "info.navpoint"
 "origin" "-184 456 24"
 "_tb_layer" "1"
 }
-// entity 76
+// entity 77
 {
 "classname" "info.navpoint"
 "origin" "648 744 24"
 "_tb_layer" "1"
 }
-// entity 77
+// entity 78
 {
 "classname" "info.navpoint"
 "origin" "856 -824 24"
 "_tb_layer" "1"
 }
-// entity 78
+// entity 79
 {
 "classname" "info.navpoint"
 "origin" "-184 -584 24"
 "_tb_layer" "1"
 }
-// entity 79
+// entity 80
 {
 "classname" "info.navpoint"
 "origin" "824 -520 24"
 "_tb_layer" "1"
 }
-// entity 80
+// entity 81
 {
 "classname" "info.navpoint"
 "origin" "-488 536 24"
 "_tb_layer" "1"
 }
-// entity 81
+// entity 82
 {
 "classname" "info.navpoint"
 "origin" "-632 -184 24"
 "_tb_layer" "1"
 }
-// entity 82
+// entity 83
 {
 "classname" "info.navpoint"
 "origin" "-808 -504 24"
 "_tb_layer" "1"
 }
-// entity 83
+// entity 84
 {
 "classname" "info.navpoint"
 "origin" "-88 72 24"
 "_tb_layer" "1"
 }
-// entity 84
+// entity 85
 {
 "classname" "info.navpoint"
 "origin" "-264 72 24"

@@ -1,4 +1,5 @@
 ﻿using BulletSharp;
+using Microsoft.Xna.Framework;
 using RetroEngine.Map;
 using System;
 using System.Collections.Generic;
@@ -27,9 +28,28 @@ namespace RetroEngine.Entities
             meshes.Add(mesh);
             texturePath = data.GetPropertyString("texture");
             mesh.Position = Position;
-            mesh.Scale = new Microsoft.Xna.Framework.Vector3(data.GetPropertyFloat("scale", 1));
+            mesh.Scale = new Vector3(data.GetPropertyFloat("scale", 1));
 
-            mesh.Rotation = new Microsoft.Xna.Framework.Vector3(0, 180+data.GetPropertyFloat("angle"),0);
+
+            Vector3 importRot = (data.GetPropertyVector("angles", Vector3.Zero) + new Vector3(0, 180, 0)).NormalizeAngles().NonZeroAngles() / 180 * (float)Math.PI;
+
+            Matrix rotM = Matrix.CreateRotationX(-importRot.Z) *
+                            Matrix.CreateRotationZ(importRot.X) *
+                            Matrix.CreateRotationY(importRot.Y);
+
+            Vector3 rotation = rotM.DecomposeMatrix().Rotation;
+
+
+
+
+            mesh.Rotation = rotation;
+            
+        }
+
+        public override void Update()
+        {
+            base.Update();
+
         }
 
         protected override void LoadAssets()
