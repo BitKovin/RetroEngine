@@ -6,6 +6,7 @@ using System.Xml.Linq;
 using System.Collections.Generic;
 using BulletSharp.SoftBody;
 using static RetroEngine.Skeletal.RiggedModel;
+using BulletSharp;
 
 
 namespace RetroEngine
@@ -30,6 +31,8 @@ namespace RetroEngine
 
         public bool UpdatePose = true;
 
+        public List<HitboxInfo> hitboxes = new List<HitboxInfo>();
+        
         public SkeletalMesh()
         {
             CastShadows = true;
@@ -576,6 +579,54 @@ namespace RetroEngine
 
         }
 
+        public void ClearHitboxBodies()
+        {
+            foreach(HitboxInfo hitbox in hitboxes)
+            {
+                Physics.Remove(hitbox.RigidBodyRef);
+
+                hitbox.RigidBodyRef = null;
+
+            }
+
+        }
+
+        public void CreateHitboxBodies(Entity owner)
+        {
+            foreach (HitboxInfo hitbox in hitboxes)
+            {
+                RigidBody body = Physics.CreateBox(owner, hitbox.Size, 0, CollisionFlags.NoContactResponse);
+
+                body.UserIndex = (int)Physics.BodyType.HitBox;
+
+                hitbox.RigidBodyRef = body;
+
+
+            }
+        }
+
+        public void UpdateHitboxes()
+        {
+
+            foreach (HitboxInfo hitbox in hitboxes)
+            {
+                if (hitbox.RigidBodyRef == null) continue;
+
+                var matrix = Matrix.CreateRotationZ(hitbox.Rotation.Z / 180 * (float)Math.PI) *
+                            Matrix.CreateRotationX(hitbox.Rotation.X / 180 * (float)Math.PI) *
+                            Matrix.CreateRotationY(hitbox.Rotation.Y / 180 * (float)Math.PI) *
+                    Matrix.CreateTranslation(hitbox.Position) * GetBoneMatrix(hitbox.Bone);
+
+                var boneTrans = matrix.DecomposeMatrix();
+
+                hitbox.RigidBodyRef.SetPosition(boneTrans.Position);
+                hitbox.RigidBodyRef.SetRotation(boneTrans.Rotation);
+
+            }
+
+        }
+
+
     }
 
 
@@ -662,9 +713,23 @@ namespace RetroEngine
             }
         }
 
+
+
     }
 
-    
+    public class HitboxInfo
+    {
+
+        public string Bone = "";
+
+        public System.Numerics.Vector3 Position;
+        public System.Numerics.Vector3 Rotation;
+
+        public System.Numerics.Vector3 Size;
+
+        public RigidBody RigidBodyRef;
+
+    }
 
     public struct BonePoseBlend
     {

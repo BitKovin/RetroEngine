@@ -19,7 +19,7 @@ namespace RetroEngine.Game
         {
             base.LoadContent();
 
-            Input.CenterCursor();
+            //Input.CenterCursor();
             CreateInputActions();
             devMenu = new GameDevMenu();
             devMenu.Init();

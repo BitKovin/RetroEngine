@@ -23,6 +23,9 @@ namespace RetroEngine
 
         public static Vector3 GetRightVector(this Vector3 rot)
         {
+
+            rot = NonZeroAngles(rot);
+
             double X = Math.Sin((rot.Y + 90) / 180d * Math.PI);
             double Y = 0;//-Math.Tan(rot.X / 180d * Math.PI);
             double Z = Math.Cos((rot.Y + 90) / 180d * Math.PI);

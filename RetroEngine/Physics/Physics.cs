@@ -195,6 +195,12 @@ namespace RetroEngine
 
         }
 
+        public enum BodyType 
+        {
+            MainBody = 0,
+            HitBox = 1
+        }
+
         public static void Update()
         {
 
@@ -211,20 +217,42 @@ namespace RetroEngine
                         continue;
                     }
 
-                    if (colObj.IsActive == false) continue;
+                    BodyType bodyType = (BodyType)colObj.UserIndex;
 
-                    Entity ent = (Entity)colObj.UserObject;
+                    switch (bodyType) 
+                    {
+                        case BodyType.MainBody:
 
-                    Vector3 pos = colObj.WorldTransform.Translation;
+                            if (colObj.IsActive == false) continue;
 
-                    ent.Position = new Microsoft.Xna.Framework.Vector3((float)pos.X, (float)pos.Y, (float)pos.Z);
 
-                    Matrix4x4 rotationMatrix = rigidBody.WorldTransform.GetBasis();
-                    Quaternion rotation = Quaternion.CreateFromRotationMatrix(rotationMatrix);
 
-                    Vector3 rotationEulerAngles = ToEulerAngles(rotation);
+                            Entity ent = (Entity)colObj.UserObject;
 
-                    ent.Rotation = new Microsoft.Xna.Framework.Vector3((float)rotationEulerAngles.X, (float)rotationEulerAngles.Y, (float)rotationEulerAngles.Z);
+                            Vector3 pos = colObj.WorldTransform.Translation;
+
+                            ent.Position = new Microsoft.Xna.Framework.Vector3((float)pos.X, (float)pos.Y, (float)pos.Z);
+
+                            Matrix4x4 rotationMatrix = rigidBody.WorldTransform.GetBasis();
+                            Quaternion rotation = Quaternion.CreateFromRotationMatrix(rotationMatrix);
+
+                            Vector3 rotationEulerAngles = ToEulerAngles(rotation);
+
+                            ent.Rotation = new Microsoft.Xna.Framework.Vector3((float)rotationEulerAngles.X, (float)rotationEulerAngles.Y, (float)rotationEulerAngles.Z);
+
+                            break;
+
+                        case BodyType.HitBox:
+
+
+
+                            break;
+
+
+                    }
+
+
+                    
 
                 }
             }
