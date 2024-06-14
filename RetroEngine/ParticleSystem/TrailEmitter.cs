@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 namespace RetroEngine.Particles
 {
 
-    public class RibbonEmitter : ParticleEmitter
+    public class TrailEmitter : ParticleEmitter
     {
 
         VertexBuffer vertexBuffer;
         IndexBuffer indexBuffer;
 
-        public RibbonEmitter():base()
+        public TrailEmitter():base()
         {
             Shader = AssetRegistry.GetShaderFromName("UnifiedOutput");
             isParticle = true;
@@ -47,26 +47,19 @@ namespace RetroEngine.Particles
             for (int i = 0; i < particles.Count; i++)
             {
                 Particle particle = particles[i];
-                Vector3 p1 = particle.position;
 
-                Vector3 dir;
+                Vector3 p = particle.position;
 
-                if(i<particles.Count-1)
-                {
-                    dir = Vector3.Normalize(particles[i].position - particles[i+1].position);
-                }else
-                {
-                    dir = Vector3.Normalize(particles[i-1].position - particles[i].position);
-                }
+                Vector3 halfSize = particle.globalRotation.GetForwardVector() * particle.Scale/2;
 
-                Vector3 cameraForward = p1 - Camera.position;
-                cameraForward.Normalize();
-                Vector3 perp = Vector3.Cross(dir, cameraForward);
-                perp.Normalize();
+                Vector3 p1 = p + halfSize;
+
+                Vector3 p2 = p - halfSize;
+
 
                 // Calculate vertices for the quad
-                Vector3 topLeft = p1 + perp * (particle.Scale / 2);
-                Vector3 topRight = p1 - perp * (particle.Scale / 2);
+                Vector3 topLeft = p1;
+                Vector3 topRight = p2;
 
                 // Calculate texture coordinates
                 float texCoordX = (float)i / (particles.Count - 1);
@@ -126,10 +119,10 @@ namespace RetroEngine.Particles
         void DrawRibbon()
         {
             GraphicsDevice _graphicsDevice = GameMain.Instance.GraphicsDevice;
-
+            
             lock (this)
             {
-
+                
                 GenerateBuffers(finalizedParticles);
 
                 if (vertexBuffer == null || indexBuffer == null || vertexBuffer.IsDisposed || indexBuffer.IsDisposed)
@@ -147,6 +140,9 @@ namespace RetroEngine.Particles
                 _graphicsDevice.Indices = indexBuffer;
 
                 if (vertexBuffer == null) return;
+
+
+
 
                 Stats.RenderedMehses++;
                 if (vertexBuffer == null) return;
@@ -167,6 +163,17 @@ namespace RetroEngine.Particles
                 effect.Parameters["isParticle"].SetValue(false);
 
             }
+        }
+
+        public override Particle GetNewParticle()
+        {
+
+            Particle particle = base.GetNewParticle();
+
+            particle.Scale = ParticleSizeMultiplier;
+
+            return particle;
+
         }
 
         public override void RenderPreparation()

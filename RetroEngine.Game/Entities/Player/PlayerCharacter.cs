@@ -15,6 +15,7 @@ using System.Text.Json.Serialization;
 using RetroEngine.SaveSystem;
 using RetroEngine.Audio;
 using RetroEngine.Entities.Light;
+using RetroEngine.Game.Effects.Particles;
 
 namespace RetroEngine.Game.Entities.Player
 {
@@ -87,6 +88,7 @@ namespace RetroEngine.Game.Entities.Player
 
         PointLight PlayerLight;
 
+        particle_system_meleeTrail meleeTrail;
         public PlayerCharacter() : base()
         {
             if (GameMain.platform == Platform.Mobile)
@@ -129,6 +131,10 @@ namespace RetroEngine.Game.Entities.Player
         protected override void LoadAssets()
         {
             base.LoadAssets();
+
+            meleeTrail = ParticleSystemFactory.CreateByTechnicalName("meleeTrail") as particle_system_meleeTrail;
+
+            Level.GetCurrent().AddEntity(meleeTrail);
 
             bodyMesh.LoadFromFile("models/player_model_full.FBX");
 
@@ -220,6 +226,8 @@ namespace RetroEngine.Game.Entities.Player
             FirstTick = false;
 
             Camera.velocity = body.LinearVelocity;
+
+            meleeTrail.SetTrailTransform(bodyMesh.GetBoneMatrix("upperarm_r").DecomposeMatrix().Position, bodyMesh.GetBoneMatrix("hand_r").DecomposeMatrix().Position);
 
         }
 

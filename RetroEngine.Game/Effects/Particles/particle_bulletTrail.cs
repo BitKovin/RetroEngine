@@ -10,19 +10,19 @@ using System.Threading.Tasks;
 namespace RetroEngine.Game.Effects.Particles
 {
 
-    [ParticleSystem("trail")]
-    public class particle_system_trail : ParticleSystem
+    [ParticleSystem("bulletTrail")]
+    public class particle_system_bulletTrail : ParticleSystem
     {
 
-        public particle_system_trail()
+        public particle_system_bulletTrail()
         {
-            emitters.Add(new particle_trail());
+            emitters.Add(new particle_bulletTrail());
         }
 
     }
-    public class particle_trail : RibbonEmitter
+    public class particle_bulletTrail : RibbonEmitter
     {
-        public particle_trail():base()
+        public particle_bulletTrail():base()
         {
             TexturePath = "particles/trail.png";
 

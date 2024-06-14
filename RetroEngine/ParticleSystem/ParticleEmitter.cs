@@ -38,6 +38,7 @@ namespace RetroEngine.Particles
 
         public float SpawnRate = 0;
 
+        public float ParticleSizeMultiplier = 1;
 
         public ParticleEmitter()
         {
@@ -160,7 +161,7 @@ namespace RetroEngine.Particles
         public virtual Particle GetNewParticle()
         {
             currentId++;
-            return new Particle { position = Position, id = currentId, texturePath = TexturePath };
+            return new Particle { position = Position, id = currentId, texturePath = TexturePath, globalRotation = Rotation };
         }
 
         public override void RenderPreparation()
@@ -470,9 +471,15 @@ namespace RetroEngine.Particles
 
         }
 
+        public override bool IntersectsBoundingSphere(BoundingSphere sphere)
+        {
+            return new BoundingSphere(Position, BoundingRadius).Intersects(sphere);
+        }
+
         public struct Particle
         {
             public Vector3 position = new Vector3();
+            public Vector3 position2 = new Vector3(); //used for trails
             public Vector3 velocity = new Vector3();
 
             public Vector3 globalRotation = new Vector3();

@@ -245,6 +245,9 @@ namespace RetroEngine
 
         public static Matrix ToMatrix(this Transform transform)
         {
+
+            transform.Rotation = transform.Rotation.NonZeroAngles();
+
             return Matrix.CreateScale(transform.Scale) *
                                 Matrix.CreateRotationX(transform.Rotation.X / 180 * (float)Math.PI) *
                                 Matrix.CreateRotationY(transform.Rotation.Y / 180 * (float)Math.PI) *

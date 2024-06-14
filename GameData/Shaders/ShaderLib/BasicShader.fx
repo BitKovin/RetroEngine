@@ -800,6 +800,9 @@ float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal, float ro
         return float3(0,0,0);
     
 
+    if(isParticle)
+        normal = normalize(lightVector);
+
     // Calculate the dot product between the normalized light vector and light direction
     float lightDot = dot(normalize(-lightVector), normalize(LightDirections[i].xyz));
 
@@ -862,7 +865,7 @@ float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal, float ro
         if(simpleShadows)
             step = radius;
 
-        if(simpleShadows&&false)
+        if(simpleShadows&&false || isParticle)
         {
 
             float shadowDepth = GetPointLightDepth(i, lightDir);
@@ -895,9 +898,6 @@ float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal, float ro
     float intense = saturate(1.0 - dist * dist);
     float3 dirToSurface = normalize(lightVector);
 
-    if (isParticle)
-        dirToSurface = normal;
-
     intense *= saturate(dot(normal, dirToSurface));
     float3 specular = CalculateSpecular(pixelInput.MyPosition, normal, -dirToSurface, roughness, metalic, albedo);
 
@@ -925,7 +925,8 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness, float me
     lightCoordsVeryClose = (lightCoordsVeryClose + 1.0f) / 2.0f;
     lightCoordsVeryClose.y = 1.0f - lightCoordsVeryClose.y;
 
-    
+    if (isParticle)
+        normal = -LightDirection;
     
     if(dot(normal, -LightDirection)<0.01)
     {
@@ -954,8 +955,7 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness, float me
 
     specular += CalculateSpecular(input.MyPosition, normal, globalSpecularDir, roughness, metalic, albedo) * 0.02 ;
     
-    if (isParticle)
-        normal = -LightDirection;
+
     
     float3 light = DirectBrightness * GlobalLightColor; // Example light direction;
     

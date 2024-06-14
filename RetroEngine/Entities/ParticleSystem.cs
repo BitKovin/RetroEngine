@@ -13,6 +13,8 @@ namespace RetroEngine.Entities
 
         public List <ParticleEmitter> emitters = new List <ParticleEmitter>();
 
+        public float ParticleSizeMultiplier = 1;
+
         public ParticleSystem() { }
 
         public override void Start()
@@ -76,19 +78,24 @@ namespace RetroEngine.Entities
 
         public override void AsyncUpdate()
         {
-            base.VisualUpdate();
+            base.AsyncUpdate();
 
             List<ParticleEmitter> list = new List<ParticleEmitter>(emitters);
 
-            foreach (var emitter in list)
+            lock(list)
+            lock (emitters)
             {
-                if (emitter.destroyed)
-                    emitters.Remove(emitter);
+                foreach (var emitter in list)
+                {
+                    if (emitter.destroyed)
+                        emitters.Remove(emitter);
 
-                emitter.Position = Position;
-                emitter.Update();
+                    emitter.Position = Position;
+                    emitter.Rotation = Rotation;
+                    emitter.ParticleSizeMultiplier = ParticleSizeMultiplier;
+                    emitter.Update();
+                }
             }
-
         }
 
         protected override void LoadAssets()
@@ -106,6 +113,16 @@ namespace RetroEngine.Entities
             ParticleSystem system = ParticleSystemFactory.CreateByTechnicalName(name);
             Level.GetCurrent().AddEntity(system);
             return system;
+        }
+
+        public virtual void SetTrailTransform(Vector3 p1, Vector3 p2)
+        {
+            Position = (p1 + p2)/2;
+
+            Rotation = MathHelper.FindLookAtRotation(p1, p2);
+
+            ParticleSizeMultiplier = Vector3.Distance(p1,p2);
+
         }
 
         public override void Destroy()

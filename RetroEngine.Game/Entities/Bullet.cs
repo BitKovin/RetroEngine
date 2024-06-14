@@ -81,7 +81,7 @@ namespace RetroEngine.Game.Entities
 
             OldPos = Position;
 
-            trail = ParticleSystem.Create("trail");
+            trail = ParticleSystem.Create("bulletTrail");
             trail.Position = Position;
             trail.Start();
 
