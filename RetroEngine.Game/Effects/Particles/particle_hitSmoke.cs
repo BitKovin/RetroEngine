@@ -27,7 +27,7 @@ namespace RetroEngine.Game.Effects.Particles
             TexturePath = "textures/particles/smoke.png";
 
             InitialSpawnCount = 10;
-            //SpawnRate = 1000;
+            SpawnRate = 0;
             BoundingRadius = 3;
 
             

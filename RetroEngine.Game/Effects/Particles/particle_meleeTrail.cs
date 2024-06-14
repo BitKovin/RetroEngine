@@ -77,7 +77,6 @@ namespace RetroEngine.Game.Effects.Particles
 
             particle.position2 = pos2;
 
-            particle.Scale = 1f;
 
             particle.BouncePower = 0.1f;
 

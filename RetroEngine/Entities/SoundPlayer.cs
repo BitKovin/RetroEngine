@@ -49,8 +49,8 @@ namespace RetroEngine.Entities
 
             AudioClip.Paused = Paused;
 
-            AudioClip.MaxDistance = MaxDistance;
-            AudioClip.MinDistance = MinDistance;
+            AudioClip.MaxDistance = Math.Max(MaxDistance, 0.2f);
+            AudioClip.MinDistance = Math.Max(MinDistance,0.2f);
 
             AudioClip.Loop = Loop;
 

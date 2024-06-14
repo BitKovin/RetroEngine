@@ -80,9 +80,10 @@ namespace RetroEngine.Audio
 
             distance = Math.Max(distance, 0f);
 
-            MaxDistance -= MinDistance;
+            float maxDistance = MaxDistance;
+            maxDistance -= MinDistance;
 
-            float x = (distance / MaxDistance);
+            float x = (distance / maxDistance);
 
 
             // Calculate the attenuation factor based on the inverse square law
@@ -100,8 +101,8 @@ namespace RetroEngine.Audio
 
         void Apply3DData(I3DControl control)
         {
-            control.MinDistance3D = MinDistance;
-            control.MaxDistance3D = MaxDistance;
+            control.MinDistance3D = MinDistance+1;
+            control.MaxDistance3D = MaxDistance+1;
             
 
             control.Velocity3D = Velocity;
@@ -126,8 +127,6 @@ namespace RetroEngine.Audio
 
             channel.Stop();
 
-
-            
             ApplyStartSoundData();
             channel = sound.Play();
             Update();

@@ -80,49 +80,46 @@ namespace RetroEngine.Particles
                 Emitting = false;
 
             float spawnInterval = 1f / SpawnRate;
+            lock (particles)
+            {
+                if (SpawnRate > 0 && Emitting)
+                    while (elapsedTime >= spawnInterval)
+                    {
+                        Particle particle = GetNewParticle();
+                        particles.Add(particle);
+                        elapsedTime -= spawnInterval;
+                    }
 
-            if (SpawnRate > 0 && Emitting)
-                while (elapsedTime >= spawnInterval)
+                
+
+                int n = particles.Count;
+                for (int i = 0; i < n; i++)
                 {
-                    Particle particle = GetNewParticle();
-                    particles.Add(particle);
-                    elapsedTime -= spawnInterval;
+
+                    Particle particle = particles[i];
+
+                    particle.lifeTime += Time.DeltaTime;
+
+                    if (particle.lifeTime >= particle.deathTime)
+                    {
+                        particle.destroyed = true;
+                        particles[i] = particle;
+                    }
                 }
 
-            List<Particle> toRemove = new List<Particle>();
+                particles = particles.Where(p=> p.destroyed ==false).ToList();
 
-            int n = particles.Count;
-            for (int i = 0; i < n; i++)
-            {
-
-                Particle particle = particles[i];
-
-                particle.lifeTime += Time.DeltaTime;
-
-                particles[i] = particle;
-
-                if (particle.lifeTime >= particle.deathTime)
+                for (int i = 0; i < particles.Count; i++)
                 {
-                    toRemove.Add(particle);
-                    particles[i] = particle;
+                    particles[i] = UpdateParticle(particles[i]);
                 }
-            }
 
-            foreach (Particle particle in toRemove)
-            {
-                particles.Remove(particle);
-            }
+                finalizedParticles = new List<Particle>(particles);
 
-            for (int i = 0; i < particles.Count; i++)
-            {
-                particles[i] = UpdateParticle(particles[i]);
-            }
-
-            finalizedParticles = new List<Particle>(particles);
-
-            if (Emitting == false && particles.Count == 0)
-            {
-                destroyed = true;
+                if (Emitting == false && particles.Count == 0)
+                {
+                    destroyed = true;
+                }
             }
         }
 
@@ -206,7 +203,7 @@ namespace RetroEngine.Particles
         public override void DrawUnified()
         {
             if (destroyed) return;
-            if (particleModel == null)
+            if (particleModel == null || particleModel.Meshes[0].MeshParts[0].IndexBuffer.IsDisposed)
             {
                 particleModel = GetModelFromPath("models/particle.obj");
             }
@@ -323,6 +320,8 @@ namespace RetroEngine.Particles
                         // Set the vertex buffer and index buffer for this mesh part
                         //graphicsDevice.SetVertexBuffer(meshPart.VertexBuffer);
                         graphicsDevice.Indices = meshPart.IndexBuffer;
+
+                        if (meshPart.IndexBuffer.IsDisposed) return;
 
                         var bindings = new VertexBufferBinding[2];
                         bindings[0] = new VertexBufferBinding(meshPart.VertexBuffer);
@@ -476,7 +475,7 @@ namespace RetroEngine.Particles
             return new BoundingSphere(Position, BoundingRadius).Intersects(sphere);
         }
 
-        public struct Particle
+        public class Particle
         {
             public Vector3 position = new Vector3();
             public Vector3 position2 = new Vector3(); //used for trails
@@ -509,6 +508,8 @@ namespace RetroEngine.Particles
             public float BouncePower = 0.8f;
 
             public bool Collided = false;
+
+            public bool destroyed = false;
 
             public Particle()
             {

@@ -1025,7 +1025,6 @@ namespace RetroEngine
                 }
             }
             loadedModels.Clear();
-
             loadedScenes.Clear();
         }
         public virtual void PreloadTextures()

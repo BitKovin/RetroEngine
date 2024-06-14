@@ -271,10 +271,10 @@ namespace RetroEngine
         }
 
 
-        public static AudioClip LoadSoundFromFile(string path)
+        public static AudioClip LoadSoundFromFile(string path, bool legacyOnly = false)
         {
 
-            if(SoundManager.UseFmod)
+            if(SoundManager.UseFmod && legacyOnly == false)
                 return LoadSoundFmodFromFile(path);
 
             if (sounds.ContainsKey(path))

@@ -127,8 +127,7 @@ namespace RetroEngine.Particles
         {
             GraphicsDevice _graphicsDevice = GameMain.Instance.GraphicsDevice;
 
-            lock (this)
-            {
+            
 
                 GenerateBuffers(finalizedParticles);
 
@@ -166,7 +165,7 @@ namespace RetroEngine.Particles
 
                 effect.Parameters["isParticle"].SetValue(false);
 
-            }
+            
         }
 
         public override void RenderPreparation()
