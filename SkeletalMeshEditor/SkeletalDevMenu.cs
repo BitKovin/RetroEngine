@@ -20,7 +20,38 @@ namespace SkeletalMeshEditor
 
         public override void Update()
         {
-            base.Update();
+            //base.Update();
+
+            // Inside your rendering loop or where you handle ImGui rendering
+            ImGui.PushStyleColor(ImGuiCol.DockingEmptyBg, new Vector4(0));
+            ImGui.PushStyleColor(ImGuiCol.WindowBg, new Vector4(0));
+            ImGui.DockSpaceOverViewport();
+            ImGui.PopStyleColor(2);
+
+            ImGui.BeginMainMenuBar();
+
+            if (ImGui.BeginMenu("File"))
+            {
+
+                if (ImGui.Button("New"))
+                {
+                    SkeletalMeshPreview.skeletalMesh.ClearHitboxBodies();
+                    SkeletalMeshPreview.skeletalMesh.hitboxes = new List<HitboxInfo>();
+                }
+
+                if (ImGui.Button("Open"))
+                {
+                    SkeletalMeshPreview.skeletalMesh.LoadMeshMetaFromFile(path);
+                    SkeletalMeshPreview.skeletalMesh.ReloadHitboxes(SkeletalMeshPreview.instance);
+                }
+
+                if (ImGui.Button("Save"))
+                    SkeletalMeshPreview.skeletalMesh.SaveMeshMetaToFile(path);
+
+
+                ImGui.EndMenu();
+            }
+            ImGui.EndMainMenuBar();
 
             ImGui.Begin("Skeletal Editor");
             ImGui.Text(Camera.position.ToString());

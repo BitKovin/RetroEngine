@@ -95,7 +95,7 @@ namespace RetroEngine
 
         }
 
-        public static Stream GetFileStreamFromPath(string path)
+        public static FileStream GetFileStreamFromPath(string path)
         {
             return File.OpenRead(path);
         }

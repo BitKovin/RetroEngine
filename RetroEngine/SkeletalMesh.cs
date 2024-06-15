@@ -7,6 +7,10 @@ using System.Collections.Generic;
 using BulletSharp.SoftBody;
 using static RetroEngine.Skeletal.RiggedModel;
 using BulletSharp;
+using System.Text.Json.Serialization;
+using System.IO;
+using System.Text.Json;
+using System.Linq;
 
 
 namespace RetroEngine
@@ -426,6 +430,8 @@ namespace RetroEngine
             if (RiggedModel != null)
             {
 
+                graphicsDevice.RasterizerState = Graphics.DisableBackFaceCulling || TwoSided ? RasterizerState.CullNone : RasterizerState.CullClockwise;
+
                 if (!Masked)
                     effect.Techniques[0].Passes[0].Apply();
 
@@ -579,6 +585,12 @@ namespace RetroEngine
 
         }
 
+        public void ReloadHitboxes(Entity entity)
+        {
+            ClearHitboxBodies();
+            CreateHitboxBodies(entity);
+        }
+
         public void ClearHitboxBodies()
         {
             foreach(HitboxInfo hitbox in hitboxes)
@@ -623,6 +635,57 @@ namespace RetroEngine
                 hitbox.RigidBodyRef.SetRotation(boneTrans.Rotation);
 
             }
+
+        }
+
+
+        public void LoadMeshMetaFromFile(string path)
+        {
+            path = AssetRegistry.FindPathForFile(path);
+
+            if (File.Exists(path + ".skeletaldata") == false) return; 
+
+            var stream = AssetRegistry.GetFileStreamFromPath(path + ".skeletaldata");
+
+            var reader = new StreamReader(stream);
+
+            string text = reader.ReadToEnd();
+
+            JsonSerializerOptions options = new JsonSerializerOptions();
+
+            foreach (var conv in Helpers.JsonConverters.GetAll())
+                options.Converters.Add(conv);
+
+            SkeletalMeshMeta meta = JsonSerializer.Deserialize<SkeletalMeshMeta>(text, options);
+
+            hitboxes = meta.hitboxes.ToList();
+
+        }
+
+        public void SaveMeshMetaToFile(string path)
+        {
+            SkeletalMeshMeta meta = new SkeletalMeshMeta();
+
+            meta.hitboxes = hitboxes.ToArray();
+
+            JsonSerializerOptions options = new JsonSerializerOptions();
+
+            foreach (var conv in Helpers.JsonConverters.GetAll())
+                options.Converters.Add(conv);
+
+            string text = JsonSerializer.Serialize(meta, options);
+
+            path = AssetRegistry.FindPathForFile(path);
+
+            File.WriteAllText(path + ".skeletaldata", text);
+
+        }
+
+        public struct SkeletalMeshMeta
+        {
+
+            [JsonInclude]
+            public HitboxInfo[] hitboxes;
 
         }
 
@@ -714,17 +777,19 @@ namespace RetroEngine
         }
 
 
-
     }
 
     public class HitboxInfo
     {
-
+        [JsonInclude]
         public string Bone = "";
 
+        [JsonInclude]
         public System.Numerics.Vector3 Position;
+        [JsonInclude]
         public System.Numerics.Vector3 Rotation;
 
+        [JsonInclude]
         public System.Numerics.Vector3 Size;
 
         public RigidBody RigidBodyRef;

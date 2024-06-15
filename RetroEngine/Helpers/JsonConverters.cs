@@ -13,7 +13,7 @@ namespace RetroEngine.Helpers
     {
         public static List<JsonConverter> GetAll()
         {
-            return new List<JsonConverter> {new Vector3Converter(), new TypeConverter() };
+            return new List<JsonConverter> { new Vector3Converter(), new TypeConverter(), new SystemVector3Converter() };
         }
     }
 
@@ -43,52 +43,103 @@ namespace RetroEngine.Helpers
     }
 
     public class Vector3Converter : JsonConverter<Microsoft.Xna.Framework.Vector3>
-{
-    public override Microsoft.Xna.Framework.Vector3 Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        if (reader.TokenType != JsonTokenType.StartObject)
-            throw new JsonException();
-
-        float x = 0, y = 0, z = 0;
-
-        while (reader.Read())
+        public override Microsoft.Xna.Framework.Vector3 Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            if (reader.TokenType == JsonTokenType.EndObject)
-                return new Microsoft.Xna.Framework.Vector3(x, y, z);
-
-            if (reader.TokenType != JsonTokenType.PropertyName)
+            if (reader.TokenType != JsonTokenType.StartObject)
                 throw new JsonException();
 
-            string propertyName = reader.GetString();
+            float x = 0, y = 0, z = 0;
 
-            reader.Read();
-
-            switch (propertyName)
+            while (reader.Read())
             {
-                case "X":
-                    x = reader.GetSingle();
-                    break;
-                case "Y":
-                    y = reader.GetSingle();
-                    break;
-                case "Z":
-                    z = reader.GetSingle();
-                    break;
-                default:
+                if (reader.TokenType == JsonTokenType.EndObject)
+                    return new Microsoft.Xna.Framework.Vector3(x, y, z);
+
+                if (reader.TokenType != JsonTokenType.PropertyName)
                     throw new JsonException();
+
+                string propertyName = reader.GetString();
+
+                reader.Read();
+
+                switch (propertyName)
+                {
+                    case "X":
+                        x = reader.GetSingle();
+                        break;
+                    case "Y":
+                        y = reader.GetSingle();
+                        break;
+                    case "Z":
+                        z = reader.GetSingle();
+                        break;
+                    default:
+                        throw new JsonException();
+                }
             }
+
+            throw new JsonException();
         }
 
-        throw new JsonException();
+        public override void Write(Utf8JsonWriter writer, Microsoft.Xna.Framework.Vector3 value, JsonSerializerOptions options)
+        {
+            writer.WriteStartObject();
+            writer.WriteNumber("X", value.X);
+            writer.WriteNumber("Y", value.Y);
+            writer.WriteNumber("Z", value.Z);
+            writer.WriteEndObject();
+        }
     }
 
-    public override void Write(Utf8JsonWriter writer, Microsoft.Xna.Framework.Vector3 value, JsonSerializerOptions options)
+    public class SystemVector3Converter : JsonConverter<System.Numerics.Vector3>
     {
-        writer.WriteStartObject();
-        writer.WriteNumber("X", value.X);
-        writer.WriteNumber("Y", value.Y);
-        writer.WriteNumber("Z", value.Z);
-        writer.WriteEndObject();
+        public override System.Numerics.Vector3 Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            if (reader.TokenType != JsonTokenType.StartObject)
+                throw new JsonException();
+
+            float x = 0, y = 0, z = 0;
+
+            while (reader.Read())
+            {
+                if (reader.TokenType == JsonTokenType.EndObject)
+                    return new System.Numerics.Vector3(x, y, z);
+
+                if (reader.TokenType != JsonTokenType.PropertyName)
+                    throw new JsonException();
+
+                string propertyName = reader.GetString();
+
+                reader.Read();
+
+                switch (propertyName)
+                {
+                    case "X":
+                        x = reader.GetSingle();
+                        break;
+                    case "Y":
+                        y = reader.GetSingle();
+                        break;
+                    case "Z":
+                        z = reader.GetSingle();
+                        break;
+                    default:
+                        throw new JsonException();
+                }
+            }
+
+            throw new JsonException();
+        }
+
+        public override void Write(Utf8JsonWriter writer, System.Numerics.Vector3 value, JsonSerializerOptions options)
+        {
+            writer.WriteStartObject();
+            writer.WriteNumber("X", value.X);
+            writer.WriteNumber("Y", value.Y);
+            writer.WriteNumber("Z", value.Z);
+            writer.WriteEndObject();
+        }
     }
-}
+
 }

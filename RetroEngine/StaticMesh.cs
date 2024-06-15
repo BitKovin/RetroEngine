@@ -534,6 +534,7 @@ namespace RetroEngine
 
             graphicsDevice.RasterizerState = Graphics.DisableBackFaceCulling || TwoSided ? RasterizerState.CullNone : RasterizerState.CullClockwise;
 
+
             if (GameMain.Instance.render.BoundingSphere.Radius == 0 || IntersectsBoundingSphere(GameMain.Instance.render.BoundingSphere))
 
                 if (frameStaticMeshData.model is not null)
