@@ -38,6 +38,7 @@ sampler ORMTextureSampler = sampler_state
 
 PixelInput VertexShaderFunction(VertexInput input)
 {
+    //return (PixelInput)0;
     return DefaultVertexShaderFunction(input);
 }
 
@@ -55,6 +56,7 @@ PixelOutput PixelShaderFunction(PixelInput input)
     DepthDiscard(depthIn,input);
     
     PixelOutput output = (PixelOutput)0;
+    
     
     float Depth = input.MyPixelPosition.z;
     
@@ -88,13 +90,14 @@ PixelOutput PixelShaderFunction(PixelInput input)
     
 	textureColor *= light;
     
+    
     //textureColor = ApplyReflection(textureColor, albedo, input, pixelNormal, roughness, metalic);
     
     light -= 1.1;
     light = saturate(light/30);
     textureColor += light;
     
-    textureColor += tex2D(EmissiveTextureSampler, input.TexCoord).rgb * EmissionPower * tex2D(EmissiveTextureSampler, input.TexCoord).a;
+    textureColor += tex2D(EmissiveTextureSampler, input.TexCoord).rgb * EmissionPower * 2 * tex2D(EmissiveTextureSampler, input.TexCoord).a;
     
     textureAlpha *= Transparency;
     
@@ -112,7 +115,7 @@ PixelOutput PixelShaderFunction(PixelInput input)
     
     
     
-    output.Normal = float4((normalize(lerp(pixelNormal, input.TangentNormal, 0.0)) + 1) / 2, pbs);
+    output.Normal = float4((pixelNormal + 1) / 2, pbs);
     output.Position = float4(input.MyPosition - viewPos, pbs);
     
     

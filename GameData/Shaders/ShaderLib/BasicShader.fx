@@ -250,6 +250,9 @@ float depthScale = 1.0f;
 float ScreenHeight;
 float ScreenWidth;
 
+float SSRHeight;
+float SSRWidth;
+
 struct VertexInput
 {
     float4 Position : SV_POSITION0;
@@ -265,19 +268,18 @@ struct VertexInput
 
 };
 
-struct PixelInput
+struct PixelInput //only color and texcoords or opengl might freak out
 {
     float4 Position : SV_POSITION;
     float2 TexCoord : TEXCOORD0;
-    float3 Normal : NORMAL0; 
+    float3 Normal : TEXCOORD8; 
     float4 lightPos : TEXCOORD1;
     float4 lightPosClose : TEXCOORD2;
     float3 MyPosition : TEXCOORD3;
     float4 MyPixelPosition : TEXCOORD4;
-    float3 Tangent : TANGENT0;
-    float3 TangentNormal : TEXCOORD5;
+    float3 Tangent : TEXCOORD5;
     float4 lightPosVeryClose : TEXCOORD6;
-    float3 BiTangent : BINORMAL0;
+    float3 BiTangent : TEXCOORD7;
     float4 Color : COLOR0;
 };
 
@@ -402,11 +404,6 @@ PixelInput DefaultVertexShaderFunction(VertexInput input)
 
     output.BiTangent = mul(input.BiTangent, (float3x3) BonesWorld);
     output.BiTangent = normalize(output.BiTangent);
-
-    output.TangentNormal = GetTangentNormal(output.Normal, output.Tangent,output.BiTangent);
-    
-    if (dot(output.TangentNormal, normalize(output.MyPosition - viewPos)) > 0)
-        output.TangentNormal *= -1;
     
 
     output.lightPos = mul(worldPos, ShadowMapViewProjection);
@@ -907,6 +904,30 @@ float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal, float ro
     return (l + intense * specular) * notShadow * dirFactor;
 }
 
+float3 CalculateSsrSpecular(PixelInput input, float3 normal, float roughness, float metalic, float3 albedo)
+{
+    
+    float3 vDir = normalize(input.MyPosition - viewPos);
+
+    float lightDir = -reflect(vDir, normal);
+
+    float intens = CalculateSpecular(input.MyPosition, normal, lightDir, roughness+0.1, metalic, albedo);
+
+    
+
+    float2 screenCoords = input.MyPixelPosition.xyz / input.MyPixelPosition.w;
+    
+    screenCoords = (screenCoords + 1.0f) / 2.0f;
+
+    screenCoords.y = 1.0f - screenCoords.y;
+
+    float2 texel = 1 / float2(SSRWidth, SSRHeight);
+
+    float3 color = tex2D(ReflectionTextureSampler, screenCoords).rgb - 0.9;
+
+    return saturate(color * intens * dot(lightDir, -normal));
+}
+
 float3 CalculateLight(PixelInput input, float3 normal, float roughness, float metalic, float ao, float3 albedo)
 {
     float3 lightCoords = input.lightPos.xyz / input.lightPos.w;
@@ -984,6 +1005,8 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness, float me
     light = max(light, 0);
     
     light += globalLight;
+
+    light += CalculateSsrSpecular(input, normal, roughness, metalic, albedo);
 
     return light;
     
@@ -1121,7 +1144,13 @@ float3 ApplyReflectionOnSurface(float3 color,float3 albedo,float2 screenCoords, 
 
     float3 reflection = tex2D(ReflectionTextureSampler, screenCoords).rgb;
 
-    float lum = CalcLuminance(reflection);
+    float2 texel = float2(1/SSRWidth, 1/SSRHeight);
+
+    reflection += tex2D(ReflectionTextureSampler, screenCoords + float2(texel.x,0)).rgb;
+    reflection += tex2D(ReflectionTextureSampler, screenCoords + float2(-texel.x,0)).rgb;
+    reflection += tex2D(ReflectionTextureSampler, screenCoords + float2(0,texel.y)).rgb;
+    reflection += tex2D(ReflectionTextureSampler, screenCoords + float2(0,texel.y)).rgb;
+    reflection/=5;
 
     return lerp(color, reflection * albedo, saturate(reflectiveness/2 * 0 + reflectiveness));
 }

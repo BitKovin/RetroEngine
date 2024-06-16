@@ -223,6 +223,12 @@ namespace RetroEngine
             effect.Parameters["ScreenHeight"]?.SetValue(DeferredOutput.Height);
             effect.Parameters["ScreenWidth"]?.SetValue(DeferredOutput.Width);
 
+            if (reflection != null)
+            {
+                effect.Parameters["SSRHeight"]?.SetValue(reflection.Width);
+                effect.Parameters["SSRWidth"]?.SetValue(reflection.Height);
+            }
+
             effect.ApplyValues();
 
         }
@@ -694,7 +700,7 @@ namespace RetroEngine
         RenderTarget2D reflection;
         void PerformReflection()
         {
-            InitSizedRenderTargetIfNeed(ref reflection, (int)(GetScreenResolution().Y*Graphics.SSRResolutionScale));
+            InitSizedRenderTargetIfNeed(ref reflection, (int)(GetScreenResolution().Y*Graphics.SSRResolutionScale), surfaceFormat: SurfaceFormat.HalfVector4);
 
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, reflection.Width, reflection.Height);
 
@@ -784,6 +790,7 @@ namespace RetroEngine
 
             SSAOEffect.Parameters["screenWidth"]?.SetValue(ssaoOutput.Width);
             SSAOEffect.Parameters["screenHeight"]?.SetValue(ssaoOutput.Height);
+
             SSAOEffect.Parameters["ssaoRadius"]?.SetValue(0.5f);
             SSAOEffect.Parameters["ssaoBias"]?.SetValue(0.025f);
             SSAOEffect.Parameters["ssaoIntensity"]?.SetValue(1.2f);
@@ -1106,7 +1113,7 @@ namespace RetroEngine
                 }
         }
 
-        void InitSizedRenderTargetIfNeed(ref RenderTarget2D target, float height, DepthFormat depthFormat = DepthFormat.None)
+        void InitSizedRenderTargetIfNeed(ref RenderTarget2D target, float height, DepthFormat depthFormat = DepthFormat.None, SurfaceFormat surfaceFormat = SurfaceFormat.Rgba64)
         {
 
             float ratio = ((float)GetScreenResolution().X) / ((float)GetScreenResolution().Y);
@@ -1125,7 +1132,7 @@ namespace RetroEngine
                         width,
                         (int)height,
                         false, // No mipmaps
-                        SurfaceFormat.Rgba64, // Color format
+                        surfaceFormat, // Color format
                         depthFormat); // Depth format
                 }
         }

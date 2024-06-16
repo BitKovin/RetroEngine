@@ -319,6 +319,7 @@ namespace RetroEngine
                 effect.Parameters["PointLightCubemap9"]?.SetValue(LightMaps[8]);
                 effect.Parameters["PointLightCubemap10"]?.SetValue(LightMaps[9]);
 
+
             }
 
         }

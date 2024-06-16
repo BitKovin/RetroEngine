@@ -86,7 +86,6 @@ PixelInput VertexShaderFunction(VertexInput input, float4 row1: BLENDINDICES1, f
     output.BiTangent = mul(input.BiTangent, (float3x3)BonesWorld);
     output.BiTangent = normalize(output.BiTangent);
 
-    output.TangentNormal = GetTangentNormal(output.Normal, output.Tangent, output.BiTangent);
 
 
     output.lightPos = mul(worldPos, ShadowMapViewProjection);
@@ -168,7 +167,8 @@ PixelOutput PixelShaderFunction(PixelInput input)
     
     output.Color = float4(textureColor, textureAlpha);
     
-    output.Normal = float4((normalize(lerp(pixelNormal, input.TangentNormal, 0.0)) + 1) / 2, pbs);
+
+    output.Normal = float4((pixelNormal + 1) / 2, pbs);
     output.Position = float4(input.MyPosition - viewPos, pbs);
     
     
