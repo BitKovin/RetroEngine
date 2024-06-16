@@ -14,7 +14,7 @@ namespace RetroEngine
     public class Physics
     {
 
-        private static DiscreteDynamicsWorld dynamicsWorld;
+        internal static DiscreteDynamicsWorld dynamicsWorld;
 
         private static DiscreteDynamicsWorld staticWorld;
         private static List<StaticRigidBody> staticBodies = new List<StaticRigidBody>();
@@ -198,69 +198,74 @@ namespace RetroEngine
         public enum BodyType 
         {
             MainBody = 0,
-            HitBox = 1
+            HitBox = 1,
+            World = 2,
+            All
         }
 
         public static void Update()
         {
-
-            for (int i = 0; i < dynamicsWorld.NumCollisionObjects; i++)
+            lock (dynamicsWorld)
             {
-                CollisionObject colObj = dynamicsWorld.CollisionObjectArray[i];
-
-                // Check if the collision object is a rigid body
-                if (colObj is RigidBody rigidBody)
+                for (int i = 0; i < dynamicsWorld.CollisionObjectArray.Count; i++)
                 {
-                    if (colObj.UserObject is null)
+                    CollisionObject colObj = null;
+                    try
                     {
-                        dynamicsWorld.RemoveRigidBody((RigidBody)colObj);
-                        continue;
-                    }
-                    if (colObj.UserIndex2 == -1)
-                        colObj.UserIndex2 = 0;
+                        colObj = dynamicsWorld.CollisionObjectArray[i];
 
-                    BodyType bodyType = (BodyType)colObj.UserIndex2;
-
-                    
-
-                    switch (bodyType) 
+                    } catch(Exception ex) { Console.WriteLine(ex); }
+                    // Check if the collision object is a rigid body
+                    if (colObj is RigidBody rigidBody)
                     {
-                        case BodyType.MainBody:
+                        if (colObj.UserObject is null)
+                        {
+                            dynamicsWorld.RemoveRigidBody((RigidBody)colObj);
+                            continue;
+                        }
+                        if (colObj.UserIndex2 == -1)
+                            colObj.UserIndex2 = 0;
 
-                            if (colObj.IsActive == false) continue;
-
-
-
-                            Entity ent = (Entity)colObj.UserObject;
-
-                            Vector3 pos = colObj.WorldTransform.Translation;
-
-                            ent.Position = new Microsoft.Xna.Framework.Vector3((float)pos.X, (float)pos.Y, (float)pos.Z);
-
-                            Matrix4x4 rotationMatrix = rigidBody.WorldTransform.GetBasis();
-                            Quaternion rotation = Quaternion.CreateFromRotationMatrix(rotationMatrix);
-
-                            Vector3 rotationEulerAngles = ToEulerAngles(rotation);
-
-                            ent.Rotation = new Microsoft.Xna.Framework.Vector3((float)rotationEulerAngles.X, (float)rotationEulerAngles.Y, (float)rotationEulerAngles.Z);
-
-                            break;
-
-                        case BodyType.HitBox:
+                        BodyType bodyType = (BodyType)colObj.UserIndex2;
 
 
 
-                            break;
+                        switch (bodyType)
+                        {
+                            case BodyType.World:
+                            case BodyType.MainBody:
 
+                                if (colObj.IsActive == false) continue;
+
+
+
+                                Entity ent = (Entity)colObj.UserObject;
+
+                                Vector3 pos = colObj.WorldTransform.Translation;
+
+                                ent.Position = new Microsoft.Xna.Framework.Vector3((float)pos.X, (float)pos.Y, (float)pos.Z);
+
+                                Matrix4x4 rotationMatrix = rigidBody.WorldTransform.GetBasis();
+                                Quaternion rotation = Quaternion.CreateFromRotationMatrix(rotationMatrix);
+
+                                Vector3 rotationEulerAngles = ToEulerAngles(rotation);
+
+                                ent.Rotation = new Microsoft.Xna.Framework.Vector3((float)rotationEulerAngles.X, (float)rotationEulerAngles.Y, (float)rotationEulerAngles.Z);
+
+                                break;
+
+                            case BodyType.HitBox:
+
+
+
+                                break;
+
+
+                        }
 
                     }
-
-
-                    
-
                 }
             }
-
         }
 
         public static Vector3 ToEulerAngles(Quaternion quaternion)
@@ -325,7 +330,8 @@ namespace RetroEngine
 
             RigidBody.UserObject = entity;
 
-            dynamicsWorld.AddRigidBody(RigidBody);
+            lock(dynamicsWorld)
+                dynamicsWorld.AddRigidBody(RigidBody);
 
             RigidBody.Friction = 0.5f;
             RigidBody.SetDamping(0.1f, 0.1f);
@@ -358,6 +364,7 @@ namespace RetroEngine
 
             RigidBody.UserObject = entity;
 
+            lock(dynamicsWorld)
             dynamicsWorld.AddRigidBody(RigidBody);
 
             RigidBody.Friction = 1f;
@@ -370,7 +377,7 @@ namespace RetroEngine
         }
 
 
-        public static RigidBody CreateFromShape(Entity entity, Vector3 size, CollisionShape shape, float mass = 1, CollisionFlags collisionFlags = CollisionFlags.None)
+        public static RigidBody CreateFromShape(Entity entity, Vector3 size, CollisionShape shape, float mass = 1, CollisionFlags collisionFlags = CollisionFlags.None, BodyType bodyType = BodyType.MainBody)
         {
             RigidBody RigidBody;
 
@@ -388,7 +395,9 @@ namespace RetroEngine
 
             RigidBody.UserObject = entity;
 
+            lock(dynamicsWorld)
             dynamicsWorld.AddRigidBody(RigidBody);
+
             if (collisionFlags == CollisionFlags.StaticObject && entity.Static)
             {
 
@@ -405,7 +414,7 @@ namespace RetroEngine
             }
 
 
-
+            RigidBody.UserIndex2 = (int) bodyType;
             RigidBody.Friction = 1f;
             RigidBody.SetDamping(0.1f, 0.1f);
             RigidBody.Restitution = 0.1f;
@@ -435,6 +444,7 @@ namespace RetroEngine
 
             RigidBody.UserIndex = (int)RayFlags.NoRayTest;
 
+            lock(dynamicsWorld)
             dynamicsWorld.AddRigidBody(RigidBody);
 
             RigidBody.Friction = 0f;
@@ -447,11 +457,12 @@ namespace RetroEngine
             return RigidBody;
         }
 
-        public static ClosestRayResultCallback LineTrace(Vector3 rayStart, Vector3 rayEnd, List<CollisionObject> ignoreList = null)
+        public static ClosestRayResultCallback LineTrace(Vector3 rayStart, Vector3 rayEnd, List<CollisionObject> ignoreList = null, BodyType bodyType = BodyType.All)
         {
             CollisionWorld world = dynamicsWorld;
 
             MyClosestRayResultCallback rayCallback = new MyClosestRayResultCallback(ref rayStart, ref rayEnd);
+            rayCallback.BodyTypeMask = bodyType;
             if (ignoreList is not null)
                 rayCallback.ignoreList = ignoreList;
 
@@ -489,7 +500,7 @@ namespace RetroEngine
             return convResultCallback;
         }
 
-        public static MyClosestConvexResultCallback SphereTrace(Vector3 rayStart, Vector3 rayEnd, List<CollisionObject> ignoreList = null, float radius = 0.5f)
+        public static MyClosestConvexResultCallback SphereTrace(Vector3 rayStart, Vector3 rayEnd, float radius = 0.5f, List<CollisionObject> ignoreList = null, BodyType bodyType = BodyType.All)
         {
             CollisionWorld world = dynamicsWorld;
 
@@ -501,6 +512,7 @@ namespace RetroEngine
 
 
             MyClosestConvexResultCallback convResultCallback = new MyClosestConvexResultCallback(ref rayStart, ref rayEnd);
+            convResultCallback.BodyTypeMask = bodyType;
 
             if (ignoreList is not null)
                 convResultCallback.ignoreList = ignoreList;

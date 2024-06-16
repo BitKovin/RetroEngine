@@ -17,7 +17,7 @@ namespace RetroEngine
 
         internal static int ActiveQueries = 0;
 
-        static List<NavPoint> navPoints = new List<NavPoint>();
+        internal static List<NavPoint> navPoints = new List<NavPoint>();
 
         static List<PathfindingQuery> removeList = new List<PathfindingQuery>();
 
@@ -64,6 +64,8 @@ namespace RetroEngine
                 }
 
                 ProcessingPathfinding = true;
+
+                
 
                 ParallelOptions options = new ParallelOptions();
                 options.MaxDegreeOfParallelism = 8;
@@ -144,7 +146,7 @@ namespace RetroEngine
 
             for (int i = points.Count - 1; i >= 0; i--)
             {
-                var hit = Physics.SphereTraceForStatic(start.ToNumerics(), points[i].ToNumerics(), 0.3f);
+                var hit = Physics.LineTrace(start.ToNumerics(), points[i].ToNumerics(), bodyType: Physics.BodyType.World);
 
                 if (hit.HasHit == false)
                 {
@@ -250,7 +252,7 @@ namespace RetroEngine
 
         void ProcessPoint(NavPoint point, Vector3 pos)
         {
-            var hit = Physics.SphereTraceForStatic(pos.ToNumerics(), point.Position.ToNumerics(), 0.3f);
+            var hit = Physics.SphereTrace(pos.ToNumerics(), point.Position.ToNumerics(), 0.3f, bodyType: Physics.BodyType.World);
 
             if (hit.HasHit) return;
 
@@ -278,7 +280,7 @@ namespace RetroEngine
             start = Navigation.ProjectToGround(start);
             target = Navigation.ProjectToGround(target);
 
-            var hit = Physics.SphereTraceForStatic(start.ToPhysics(), target.ToPhysics(), 0.3f);
+            var hit = Physics.SphereTrace(start.ToPhysics(), target.ToPhysics(), 0.3f, bodyType: Physics.BodyType.World);
 
             if (hit.HasHit == false)
             {

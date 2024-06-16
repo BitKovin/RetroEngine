@@ -16,6 +16,8 @@ namespace RetroEngine
         static List<float> frames = new List<float>();
         static int framesCount = 0;
 
+        public static int FrameCount = 0;
+
         public static void AddFrameTime(float time)
         {
             if(frames.Count>framesCount)
@@ -35,6 +37,7 @@ namespace RetroEngine
             deltaTimeDifference = Math.Abs(avg - DeltaTime);
 
             DeltaTime = avg;
+            FrameCount++;
         }
 
     }

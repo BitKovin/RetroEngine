@@ -88,7 +88,7 @@ namespace RetroEngine.Game.Entities.Player
 
         PointLight PlayerLight;
 
-        particle_system_meleeTrail meleeTrail;
+        //particle_system_meleeTrail meleeTrail;
         public PlayerCharacter() : base()
         {
             if (GameMain.platform == Platform.Mobile)
@@ -132,9 +132,9 @@ namespace RetroEngine.Game.Entities.Player
         {
             base.LoadAssets();
 
-            meleeTrail = ParticleSystemFactory.CreateByTechnicalName("meleeTrail") as particle_system_meleeTrail;
+            //meleeTrail = ParticleSystemFactory.CreateByTechnicalName("meleeTrail") as particle_system_meleeTrail;
 
-            Level.GetCurrent().AddEntity(meleeTrail);
+            //Level.GetCurrent().AddEntity(meleeTrail);
 
             bodyMesh.LoadFromFile("models/player_model_full.FBX");
 
@@ -227,7 +227,7 @@ namespace RetroEngine.Game.Entities.Player
 
             Camera.velocity = body.LinearVelocity;
 
-            meleeTrail.SetTrailTransform(bodyMesh.GetBoneMatrix("upperarm_r").DecomposeMatrix().Position, bodyMesh.GetBoneMatrix("hand_r").DecomposeMatrix().Position);
+            //meleeTrail.SetTrailTransform(bodyMesh.GetBoneMatrix("upperarm_r").DecomposeMatrix().Position, bodyMesh.GetBoneMatrix("hand_r").DecomposeMatrix().Position);
 
         }
 
@@ -536,7 +536,7 @@ namespace RetroEngine.Game.Entities.Player
             if (pos == Vector3.Zero)
                 return;
 
-            var hit = Physics.SphereTrace(pos.ToNumerics(), (pos - new Vector3(0, 0.85f, 0)).ToNumerics(), new List<CollisionObject>() { body },0.05f);
+            var hit = Physics.SphereTrace(pos.ToNumerics(), (pos - new Vector3(0, 0.85f, 0)).ToNumerics(),0.5f, new List<CollisionObject>() { body });
 
             if (hit.HasHit == false)
                 return;

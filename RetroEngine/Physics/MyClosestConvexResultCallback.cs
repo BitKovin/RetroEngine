@@ -5,6 +5,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using static RetroEngine.Physics;
 
 namespace RetroEngine
 {
@@ -18,6 +19,9 @@ namespace RetroEngine
         public CollisionFlags FlagToRespond = CollisionFlags.None;
 
         public List<CollisionObject> ignoreList = new List<CollisionObject>();
+
+
+        public Physics.BodyType BodyTypeMask = Physics.BodyType.All;
 
         public override bool NeedsCollision(BroadphaseProxy proxy0)
         {
@@ -36,7 +40,19 @@ namespace RetroEngine
                     }
                 }
 
-                if(FlagToRespond!= CollisionFlags.None)
+                if (collisionObject.UserIndex2 > -1)
+                {
+
+                    Physics.BodyType bodyType = (Physics.BodyType)collisionObject.UserIndex2;
+
+                    if (BodyTypeMask.HasFlag(Physics.BodyType.All) == false)
+                        if (BodyTypeMask.HasFlag(bodyType) == false)
+                        {
+                            return false; // Exclude this object from the collision test
+                        }
+                }
+
+                if (FlagToRespond!= CollisionFlags.None)
                     if(collisionObject.CollisionFlags.HasFlag(FlagToRespond) == false)
                     {
                         return false; // Exclude this object from the collision test

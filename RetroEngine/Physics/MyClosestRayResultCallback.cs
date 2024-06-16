@@ -23,6 +23,8 @@ namespace RetroEngine
 
         public CollisionFlags FlagToRespond = CollisionFlags.None;
 
+        public Physics.BodyType BodyTypeMask = Physics.BodyType.All;
+
         public List<CollisionObject> ignoreList = new List<CollisionObject>();
 
         public override bool NeedsCollision(BroadphaseProxy proxy0)
@@ -34,6 +36,18 @@ namespace RetroEngine
 
                 RayFlags rayFlags = (RayFlags)collisionObject.UserIndex;
 
+
+                Physics.BodyType bodyType = (Physics.BodyType)collisionObject.UserIndex2;
+
+                if (collisionObject.UserIndex2 > -1)
+                {
+                    if(BodyTypeMask.HasFlag(Physics.BodyType.All) == false)
+                    if (BodyTypeMask.HasFlag(bodyType) == false)
+                    {
+                        return false; // Exclude this object from the collision test
+                    }
+                }
+
                 if (collisionObject.UserIndex > -1)
                 {
                     if (rayFlags.HasFlag(RayFlags.NoRayTest))
@@ -42,7 +56,7 @@ namespace RetroEngine
                     }
                 }
 
-                if(FlagToRespond!= CollisionFlags.None)
+                if (FlagToRespond!= CollisionFlags.None)
                     if(collisionObject.CollisionFlags.HasFlag(FlagToRespond) == false)
                     {
                         return false; // Exclude this object from the collision test

@@ -12,17 +12,32 @@ namespace RetroEngine.Entities.Navigaion
     public class NavPoint : Entity
     {
 
+        public List<NavPoint> staticConnected = new List<NavPoint>();
         public List<NavPoint> connected = new List<NavPoint>();
 
-        int MaxDepth = 30;
+        int MaxDepth = 40;
+
+        int spawnedId = 0;
 
         public override void Start()
         {
             base.Start();
 
             SnapToGround();
-
+            spawnedId = Navigation.navPoints.Count;
             Navigation.AddPoint(this);
+        }
+
+        public override void AsyncUpdate()
+        {
+            base.AsyncUpdate();
+
+            int total = Navigation.navPoints.Count;
+
+            if ((Time.FrameCount % total) != spawnedId) return;
+
+            UpdateInternalConnected();
+
         }
 
         public void SnapToGround()
@@ -40,12 +55,34 @@ namespace RetroEngine.Entities.Navigaion
             {
                 if (p == this) continue;
 
-                var hit = Physics.LineTraceForStatic(Position.ToNumerics(), p.Position.ToNumerics());
+                var hit = Physics.LineTraceForStatic(Position.ToPhysics(), p.Position.ToPhysics());
 
                 if (hit.HasHit) continue; 
                 connected.Add(p);
 
             }
+
+            staticConnected = new List<NavPoint>(connected);
+
+        }
+
+        void UpdateInternalConnected()
+        {
+            List<NavPoint> newConnected = new List<NavPoint>();
+
+
+            foreach (NavPoint p in staticConnected)
+            {
+                if (p == this) continue;
+
+                var hit = Physics.LineTrace(Position.ToPhysics(), p.Position.ToPhysics(), bodyType: Physics.BodyType.World);
+
+                if (hit.HasHit) continue;
+                newConnected.Add(p);
+
+            }
+
+            connected = newConnected;
 
         }
 
@@ -90,12 +127,10 @@ namespace RetroEngine.Entities.Navigaion
             myHistory.Add(this);
 
             bool hited = false;
-            var hit = Physics.SphereTraceForStatic(Position.ToNumerics(), target.ToNumerics(), 0.3f);
+            var hit = Physics.SphereTrace(Position.ToNumerics(), target.ToNumerics(), 0.3f);
 
             hited = hit.HasHit;
 
-            
-            
 
             if (hited)
             {

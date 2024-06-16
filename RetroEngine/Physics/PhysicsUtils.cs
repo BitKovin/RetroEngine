@@ -20,8 +20,11 @@ namespace RetroEngine
             Matrix newTransform = Matrix.CreateFromQuaternion(rotation) * Matrix.CreateTranslation(newPosition);
 
 
-            // Update the body's world transform directly to apply the transformation
-            body.WorldTransform = newTransform.ToNumerics();
+            lock (body) lock (Physics.dynamicsWorld)
+                {
+                    // Update the body's world transform directly to apply the transformation
+                    body.WorldTransform = newTransform.ToNumerics();
+                }
         }
 
         public static void SetRotation(this RigidBody body, Quaternion newRotation)
@@ -30,10 +33,12 @@ namespace RetroEngine
             // Create a new motion state with the updated position and current rotation
             Matrix newTransform = Matrix.CreateFromQuaternion(newRotation) * Matrix.CreateTranslation(body.WorldTransform.Translation);
 
-
-            // Update the body's world transform directly to apply the transformation
-            body.WorldTransform = newTransform.ToNumerics();
-            body.MotionState.WorldTransform = newTransform.ToNumerics();
+            lock (body) lock (Physics.dynamicsWorld)
+                {
+                    // Update the body's world transform directly to apply the transformation
+                    body.WorldTransform = newTransform.ToNumerics();
+                    body.MotionState.WorldTransform = newTransform.ToNumerics();
+                }
         }
 
         public static void SetRotation(this RigidBody body, Vector3 Rotation)
