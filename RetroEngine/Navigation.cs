@@ -87,6 +87,7 @@ namespace RetroEngine
                 {
                     item?.Execute();
                     removeList.Add(item);
+                    Thread.Sleep(1);
                 }
                 lock (pathfindingQueries)
                 {
