@@ -104,7 +104,7 @@ namespace RetroEngine.Entities
             base.LoadAssets();
 
             mesh.LoadFromFile("models/skeletal_test.fbx");
-
+            mesh.ReloadHitboxes(this);
 
             mesh.texture = AssetRegistry.LoadTextureFromFile("cat.png");
 
@@ -171,7 +171,7 @@ namespace RetroEngine.Entities
             
             float distance = Vector3.Distance(Position, targetLocation);
 
-            
+            mesh.UpdateHitboxes();
 
 
             if(distance > 3) 
@@ -192,7 +192,7 @@ namespace RetroEngine.Entities
             MoveDirection = Vector3.Lerp(MoveDirection, DesiredMoveDirection, Time.DeltaTime * 3);
 
 
-            mesh.Position = Position - new Vector3(0, 1.1f, 0);
+            mesh.Position = Position - new Vector3(0, 1f, 0);
 
             mesh.Rotation = new Vector3(0, MathHelper.FindLookAtRotation(Vector3.Zero, MoveDirection).Y, 0);
 

@@ -216,8 +216,12 @@ namespace RetroEngine
                         dynamicsWorld.RemoveRigidBody((RigidBody)colObj);
                         continue;
                     }
+                    if (colObj.UserIndex2 == -1)
+                        colObj.UserIndex2 = 0;
 
-                    BodyType bodyType = (BodyType)colObj.UserIndex;
+                    BodyType bodyType = (BodyType)colObj.UserIndex2;
+
+                    
 
                     switch (bodyType) 
                     {
@@ -428,6 +432,8 @@ namespace RetroEngine
             RigidBody.CollisionFlags = collisionFlags;
 
             RigidBody.UserObject = entity;
+
+            RigidBody.UserIndex = (int)RayFlags.NoRayTest;
 
             dynamicsWorld.AddRigidBody(RigidBody);
 

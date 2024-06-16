@@ -73,6 +73,8 @@ namespace RetroEngine
 
             additionalMeshOffsets = RiggedModel.additionalMeshOffsets;
 
+            LoadMeshMetaFromFile(path);
+
             RiggedModel.overrideAnimationFrameTime = -1;
         }
 
@@ -287,6 +289,9 @@ namespace RetroEngine
 
         public Matrix GetBoneMatrix(string name)
         {
+
+            
+
             if (RiggedModel == null) return Matrix.Identity;
 
             if(namesToBones.ContainsKey(name))
@@ -573,7 +578,7 @@ namespace RetroEngine
 
         public override void Destroyed()
         {
-
+            ClearHitboxBodies();
             if (RiggedModel == null) return;
             //namesToBones = null;
             RiggedModel.Destroy();
@@ -609,7 +614,7 @@ namespace RetroEngine
             {
                 RigidBody body = Physics.CreateBox(owner, hitbox.Size, 0, CollisionFlags.NoContactResponse);
 
-                body.UserIndex = (int)Physics.BodyType.HitBox;
+                body.UserIndex2 = (int)Physics.BodyType.HitBox;
 
                 hitbox.RigidBodyRef = body;
 
@@ -659,6 +664,7 @@ namespace RetroEngine
             SkeletalMeshMeta meta = JsonSerializer.Deserialize<SkeletalMeshMeta>(text, options);
 
             hitboxes = meta.hitboxes.ToList();
+
 
         }
 
