@@ -23,6 +23,8 @@ namespace RetroEngine
 
         internal static List<PathfindingQuery> pathfindingQueries = new List<PathfindingQuery>();
 
+        internal static List<PathfindingQuery> PendingPathfindingQueries = new List<PathfindingQuery>();
+
         public static void ClearNavData()
         {
             navPoints.Clear();
@@ -65,6 +67,11 @@ namespace RetroEngine
 
                 ProcessingPathfinding = true;
 
+                lock (PendingPathfindingQueries) lock(pathfindingQueries)
+                {
+                    pathfindingQueries.AddRange(PendingPathfindingQueries);
+                    PendingPathfindingQueries.Clear();
+                }
                 
 
                 ParallelOptions options = new ParallelOptions();
@@ -84,7 +91,9 @@ namespace RetroEngine
                 lock (pathfindingQueries)
                 {
                     foreach (PathfindingQuery query in removeList)
+                    {
                         pathfindingQueries.Remove(query);
+                    }
                 }
                 removeList.Clear();
                 Thread.Sleep(1);
@@ -230,7 +239,7 @@ namespace RetroEngine
             
             lock (Navigation.pathfindingQueries)
             {
-                Navigation.pathfindingQueries.Add(this);
+                Navigation.PendingPathfindingQueries.Add(this);
             }
             return;
 

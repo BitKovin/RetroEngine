@@ -127,7 +127,13 @@ namespace RetroEngine.Entities.Navigaion
             myHistory.Add(this);
 
             bool hited = false;
-            var hit = Physics.SphereTrace(Position.ToNumerics(), target.ToNumerics(), 0.3f);
+
+            var staticHit = Physics.SphereTraceForStatic(Position.ToNumerics(), target.ToNumerics(), 0.3f);
+
+            var hit = staticHit;
+
+            if (hit.HasHit == false)
+                hit = Physics.SphereTrace(Position.ToNumerics(), target.ToNumerics(), 0.3f, bodyType: Physics.BodyType.World);
 
             hited = hit.HasHit;
 

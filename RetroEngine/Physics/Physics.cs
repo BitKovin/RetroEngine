@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Numerics;
+using System.Threading;
 
 
 namespace RetroEngine
@@ -459,6 +460,16 @@ namespace RetroEngine
 
         public static ClosestRayResultCallback LineTrace(Vector3 rayStart, Vector3 rayEnd, List<CollisionObject> ignoreList = null, BodyType bodyType = BodyType.All)
         {
+
+            if(Thread.CurrentThread != GameMain.RenderThread && Thread.CurrentThread != GameMain.GameThread)
+            {
+                var preHit = LineTraceForStatic(rayStart, rayEnd);
+                if(preHit.HasHit == false)
+                {
+                    return new MyClosestRayResultCallback(ref rayStart, ref rayEnd);
+                }
+            }
+
             CollisionWorld world = dynamicsWorld;
 
             MyClosestRayResultCallback rayCallback = new MyClosestRayResultCallback(ref rayStart, ref rayEnd);
@@ -478,6 +489,7 @@ namespace RetroEngine
 
         public static MyClosestConvexResultCallback SphereTraceForStatic(Vector3 rayStart, Vector3 rayEnd, float radius = 0.5f)
         {
+
 
             CollisionWorld world = staticWorld;
 
@@ -502,6 +514,16 @@ namespace RetroEngine
 
         public static MyClosestConvexResultCallback SphereTrace(Vector3 rayStart, Vector3 rayEnd, float radius = 0.5f, List<CollisionObject> ignoreList = null, BodyType bodyType = BodyType.All)
         {
+
+            if (Thread.CurrentThread != GameMain.RenderThread && Thread.CurrentThread != GameMain.GameThread)
+            {
+                var preHit = SphereTraceForStatic(rayStart, rayEnd, radius);
+                if (preHit.HasHit == false)
+                {
+                    return new MyClosestConvexResultCallback(ref rayStart, ref rayEnd);
+                }
+            }
+
             CollisionWorld world = dynamicsWorld;
 
             // Create a sphere shape with the specified radius
@@ -517,7 +539,7 @@ namespace RetroEngine
             if (ignoreList is not null)
                 convResultCallback.ignoreList = ignoreList;
 
-            lock (staticWorld)
+            lock (dynamicsWorld)
             {
                 // Perform the sphere sweep
                 world.ConvexSweepTest(sphereShape, start, end, convResultCallback);

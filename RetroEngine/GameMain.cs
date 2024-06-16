@@ -63,6 +63,7 @@ namespace RetroEngine
         bool wasFocused = true;
 
         public static Thread RenderThread;
+        public static Thread GameThread;
 
         public static bool AsyncGameThread = true;
 
@@ -298,7 +299,7 @@ namespace RetroEngine
         void GameLogic()
         {
 
-
+            GameThread = Thread.CurrentThread;
 
             Stats.StartRecord("GameLogic");
 
