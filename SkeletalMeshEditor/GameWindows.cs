@@ -33,6 +33,8 @@ namespace RetroEngine.Windows
 
             Graphics.DrawPhysics = true;
 
+            Graphics.LightDistanceMultiplier = 0.4f;
+
             Graphics.DisableBackFaceCulling = true;
 
             CreateInputActions();

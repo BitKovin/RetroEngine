@@ -1,4 +1,5 @@
 ﻿using RetroEngine;
+using RetroEngine.Skeletal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,8 @@ namespace SkeletalMeshEditor
     {
 
         public static SkeletalMesh skeletalMesh = new SkeletalMesh();
+
+        public static Animation Animation;
 
         public static SkeletalMeshPreview instance;
 
@@ -33,8 +36,16 @@ namespace SkeletalMeshEditor
             base.Update();
 
             skeletalMesh.Update(Time.DeltaTime);
-            skeletalMesh.UpdateHitboxes();
+
             skeletalMesh.UpdatePose = true;
+
+            if(Animation!=null)
+            {
+                Animation.Update(Time.DeltaTime);
+                skeletalMesh.PastePoseLocal(Animation.GetPoseLocal());
+            }
+
+            skeletalMesh.UpdateHitboxes();
         }
 
 

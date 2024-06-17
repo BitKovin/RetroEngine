@@ -15,6 +15,9 @@ namespace SkeletalMeshEditor
         
 
         static string path = "models/skeletal_test.fbx";
+        static int animId = 0;
+
+        static string animationPath = "Animations/human/rest.fbx";
 
         static int selectedHitbox = 0;
 
@@ -54,7 +57,6 @@ namespace SkeletalMeshEditor
             ImGui.EndMainMenuBar();
 
             ImGui.Begin("Skeletal Editor");
-            ImGui.Text(Camera.position.ToString());
             ImGui.InputText("file path: ",ref path, 60);
             if(ImGui.Button("Load"))
             {
@@ -84,6 +86,22 @@ namespace SkeletalMeshEditor
             {
                 SkeletalMeshPreview.skeletalMesh.ClearHitboxBodies();
                 SkeletalMeshPreview.skeletalMesh.CreateHitboxBodies(SkeletalMeshPreview.instance);
+            }
+
+            ImGui.Spacing();
+            ImGui.Spacing();
+            ImGui.Spacing();
+            ImGui.Spacing();
+            ImGui.Text("Animation Player");
+
+            ImGui.InputText("animation file path: ", ref animationPath, 70);
+            ImGui.InputInt("animation Index: ", ref animId);
+
+            if (ImGui.Button("Load Animaion"))
+            {
+                SkeletalMeshPreview.Animation = new RetroEngine.Skeletal.Animation();
+                SkeletalMeshPreview.Animation.LoadFromFile(animationPath);
+                SkeletalMeshPreview.Animation.PlayAnimation(animId);
             }
 
             ImGui.End();

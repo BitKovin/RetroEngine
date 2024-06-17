@@ -337,6 +337,7 @@ namespace RetroEngine.Skeletal
             for (int i = 0; i < meshes.Length; i++)
             {
                 if(originalAnimations.Count>0)
+                    if(originalAnimations.Count> CurrentPlayingAnimationIndex)
                 // This feels errr is hacky.
                 //meshes[i].nodeRefContainingAnimatedTransform.CombinedTransformMg = meshes[i].nodeRefContainingAnimatedTransform.LocalTransformMg * meshes[i].nodeRefContainingAnimatedTransform.InvOffsetMatrixMg;
                 if (originalAnimations[CurrentPlayingAnimationIndex].animatedNodes.Count > 1)

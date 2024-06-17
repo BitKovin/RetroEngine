@@ -95,6 +95,7 @@ float3 viewPos;
 
 matrix InverseViewProjection;
 
+float LightDistanceMultiplier;
 float DirectBrightness;
 float GlobalBrightness;
 float3 LightDirection;
@@ -576,7 +577,7 @@ float GetShadowClose(float3 lightCoords, PixelInput input)
         
         float size = 1;
         
-        bias *= 1;
+        bias *= (LightDistanceMultiplier+1)/2;
         
         if(abs(dot(input.Normal, -LightDirection)) <= 0.3)
         return 1 - SampleShadowMap(ShadowMapCloseSampler, lightCoords.xy, currentDepth + bias);
@@ -629,7 +630,7 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input)
         
         float bias = b * (1 - saturate(dot(input.Normal, -LightDirection))) + b / 2.0f;
 
-        
+        bias *= (LightDistanceMultiplier+1)/2;
 
         resolution = ShadowMapResolutionClose;
         
@@ -680,7 +681,7 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
     if(DirectBrightness<0.00001)
         return 0;
 
-    float dist = distance(viewPos, input.MyPosition);
+    float dist = distance(viewPos, input.MyPosition) / LightDistanceMultiplier;
     
     if (dist > 200)
         return 0;
@@ -725,7 +726,7 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
         float bias = ShadowBias * (1 - saturate(dot(input.Normal, -LightDirection))) + ShadowBias / 2.0f;
         resolution = ShadowMapResolution;
         
-        bias *= 1;
+        bias *= (LightDistanceMultiplier+1)/2;
 
         return 1 - SampleShadowMap(ShadowMapSampler, lightCoords.xy, currentDepth + bias);
         

@@ -30,6 +30,7 @@ namespace RetroEngine
         public static float Exposure = 0.35f;
         public static float Saturation = 0;
 
+        public static float LightDistanceMultiplier = 1;
         public static Matrix LightViewProjection;
         public static Matrix LightViewProjectionClose;
         public static Matrix LightViewProjectionVeryClose;
@@ -89,33 +90,33 @@ namespace RetroEngine
         public static Matrix GetLightProjection()
         {
 
-            return Matrix.CreateOrthographic(LightDistance, LightDistance, -LightDistance, LightDistance);
+            return Matrix.CreateOrthographic(LightDistance* LightDistanceMultiplier, LightDistance* LightDistanceMultiplier, -LightDistance * LightDistanceMultiplier, LightDistance * LightDistanceMultiplier);
         }
 
         public static Matrix GetCloseLightProjection()
         {
 
-            return Matrix.CreateOrthographic(CloseLightDistance, CloseLightDistance, -100, 100);
+            return Matrix.CreateOrthographic(CloseLightDistance * LightDistanceMultiplier, CloseLightDistance * LightDistanceMultiplier, -100, 100);
         }
 
         public static Matrix GetVeryCloseLightProjection()
         {
 
-            return Matrix.CreateOrthographic(VeryCloseLightDistance, VeryCloseLightDistance, -100, 100);
+            return Matrix.CreateOrthographic(VeryCloseLightDistance * LightDistanceMultiplier, VeryCloseLightDistance * LightDistanceMultiplier, -100, 100);
         }
 
         public static Matrix GetLightView()
         {
-            return Matrix.CreateLookAt(GetCameraPositionByPixelGrid(LightDistance), GetCameraPositionByPixelGrid(LightDistance) + LightDirection, new Vector3(0,0,1));
+            return Matrix.CreateLookAt(GetCameraPositionByPixelGrid(LightDistance * LightDistanceMultiplier), GetCameraPositionByPixelGrid(LightDistance * LightDistanceMultiplier) + LightDirection, new Vector3(0,0,1));
         }
 
         public static Matrix GetLightViewClose()
         {
-            return Matrix.CreateLookAt(GetCameraPositionByPixelGrid(CloseLightDistance/1.5f), GetCameraPositionByPixelGrid(CloseLightDistance / 1.5f) + LightDirection, new Vector3(0, 0, 1));
+            return Matrix.CreateLookAt(GetCameraPositionByPixelGrid(CloseLightDistance * LightDistanceMultiplier / 1.5f), GetCameraPositionByPixelGrid(CloseLightDistance * LightDistanceMultiplier / 1.5f) + LightDirection, new Vector3(0, 0, 1));
         }
         public static Matrix GetLightViewVeryClose()
         {
-            return Matrix.CreateLookAt(GetCameraPositionByPixelGrid(VeryCloseLightDistance / 1.5f), GetCameraPositionByPixelGrid(VeryCloseLightDistance / 1.5f) + LightDirection, new Vector3(0, 0, 1));
+            return Matrix.CreateLookAt(GetCameraPositionByPixelGrid(VeryCloseLightDistance * LightDistanceMultiplier / 1.5f), GetCameraPositionByPixelGrid(VeryCloseLightDistance * LightDistanceMultiplier / 1.5f) + LightDirection, new Vector3(0, 0, 1));
         }
 
         static Vector3 GetCameraPositionByPixelGrid(float lightDistance)

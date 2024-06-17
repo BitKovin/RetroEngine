@@ -223,6 +223,8 @@ namespace RetroEngine
             effect.Parameters["ScreenHeight"]?.SetValue(DeferredOutput.Height);
             effect.Parameters["ScreenWidth"]?.SetValue(DeferredOutput.Width);
 
+            effect.Parameters["LightDistanceMultiplier"]?.SetValue(Graphics.LightDistanceMultiplier) ;
+
             if (reflection != null)
             {
                 effect.Parameters["SSRHeight"]?.SetValue(reflection.Width);

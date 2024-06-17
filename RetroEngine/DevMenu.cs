@@ -49,6 +49,8 @@ namespace RetroEngine
 
             ImGui.Begin("lighting");
 
+            ImGui.DragFloat("light distance", ref Graphics.LightDistanceMultiplier, 0.005f, 0.03f);
+
             ImGui.SliderFloat("shadow bias", ref Graphics.ShadowBias, -0.005f, 0.005f);
 
             ImGui.SliderFloat("light direction X", ref Graphics.LightDirection.X, -1, 1);
