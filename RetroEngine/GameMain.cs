@@ -72,7 +72,8 @@ namespace RetroEngine
         public bool DevMenuEnabled = true;
 
         Stopwatch stopwatch = new Stopwatch();
-        public bool LimitFPS = false;
+
+        public static float MaxFPS = 0;
 
         ImFontPtr font;
 
@@ -553,11 +554,11 @@ namespace RetroEngine
 
         private void LimitFrameRate()
         {
-            if (LimitFPS == false) return;
+            if (MaxFPS<1) return;
 
             double elapsedSeconds = stopwatch.Elapsed.TotalSeconds;
 
-            while (elapsedSeconds < 1f / 20f)
+            while (elapsedSeconds < 1f / MaxFPS)
             {
                 elapsedSeconds = stopwatch.Elapsed.TotalSeconds;
             }

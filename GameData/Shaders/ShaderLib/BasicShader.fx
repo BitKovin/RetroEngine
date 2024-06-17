@@ -577,6 +577,8 @@ float GetShadowClose(float3 lightCoords, PixelInput input)
         
         float size = 1;
         
+        bias *=1.3;
+
         bias *= (LightDistanceMultiplier+1)/2;
         
         if(abs(dot(input.Normal, -LightDirection)) <= 0.3)
@@ -626,7 +628,7 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input)
 
         int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)
 
-        float b = 0.0004;
+        float b = 0.0005;
         
         float bias = b * (1 - saturate(dot(input.Normal, -LightDirection))) + b / 2.0f;
 
@@ -683,7 +685,7 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
 
     float dist = distance(viewPos, input.MyPosition) / LightDistanceMultiplier;
     
-    if (dist > 200)
+    if (dist > 140)
         return 0;
     
 

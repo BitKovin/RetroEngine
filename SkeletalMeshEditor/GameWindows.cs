@@ -19,6 +19,7 @@ namespace RetroEngine.Windows
         public GameWindows() 
         {
             AllowAsyncAssetLoading = true;
+
         }
 
 
@@ -33,7 +34,9 @@ namespace RetroEngine.Windows
 
             Graphics.DrawPhysics = true;
 
-            Graphics.LightDistanceMultiplier = 0.4f;
+            MaxFPS = 140;
+
+            Graphics.LightDistanceMultiplier = 0.5f;
 
             Graphics.DisableBackFaceCulling = true;
 
