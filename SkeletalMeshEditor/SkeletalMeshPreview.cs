@@ -11,7 +11,7 @@ namespace SkeletalMeshEditor
     internal class SkeletalMeshPreview : Entity
     {
 
-        public static SkeletalMesh skeletalMesh = new SkeletalMesh();
+        public SkeletalMesh skeletalMesh = new SkeletalMesh();
 
         public static Animation Animation;
 
@@ -20,15 +20,7 @@ namespace SkeletalMeshEditor
         public SkeletalMeshPreview()
         {
             meshes.Add(skeletalMesh);
-            instance= this;
-        }
-
-        public override void Start()
-        {
-            base.Start();
-
-            meshes.Add(skeletalMesh);
-
+            instance =  this;
         }
 
         public override void Update()

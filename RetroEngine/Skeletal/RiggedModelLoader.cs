@@ -163,6 +163,8 @@ namespace RetroEngine.Skeletal
                     scene = null;
                 }
             
+            if(scene == null)return null;
+
             return CreateModel(filepathorname);
         }
 

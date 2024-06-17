@@ -38,18 +38,18 @@ namespace SkeletalMeshEditor
 
                 if (ImGui.Button("New"))
                 {
-                    SkeletalMeshPreview.skeletalMesh.ClearHitboxBodies();
-                    SkeletalMeshPreview.skeletalMesh.hitboxes = new List<HitboxInfo>();
+                    SkeletalMeshPreview.instance.skeletalMesh.ClearHitboxBodies();
+                    SkeletalMeshPreview.instance.skeletalMesh.hitboxes = new List<HitboxInfo>();
                 }
 
                 if (ImGui.Button("Open"))
                 {
-                    SkeletalMeshPreview.skeletalMesh.LoadMeshMetaFromFile(path);
-                    SkeletalMeshPreview.skeletalMesh.ReloadHitboxes(SkeletalMeshPreview.instance);
+                    SkeletalMeshPreview.instance.skeletalMesh.LoadMeshMetaFromFile(path);
+                    SkeletalMeshPreview.instance.skeletalMesh.ReloadHitboxes(SkeletalMeshPreview.instance);
                 }
 
                 if (ImGui.Button("Save"))
-                    SkeletalMeshPreview.skeletalMesh.SaveMeshMetaToFile(path);
+                    SkeletalMeshPreview.instance.skeletalMesh.SaveMeshMetaToFile(path);
 
 
                 ImGui.EndMenu();
@@ -60,8 +60,13 @@ namespace SkeletalMeshEditor
             ImGui.InputText("file path: ",ref path, 60);
             if(ImGui.Button("Load"))
             {
-                SkeletalMeshPreview.skeletalMesh.LoadFromFile(path);
-                SkeletalMeshPreview.skeletalMesh.texture = AssetRegistry.LoadTextureFromFile("__TB_empty.png");
+
+                SkeletalMeshPreview.instance?.Destroy();
+
+                Level.GetCurrent().AddEntity(new SkeletalMeshPreview());
+
+                SkeletalMeshPreview.instance.skeletalMesh.LoadFromFile(path);
+                SkeletalMeshPreview.instance.skeletalMesh.texture = AssetRegistry.LoadTextureFromFile("__TB_empty.png");
             }
 
             ImGui.Spacing();
@@ -72,20 +77,20 @@ namespace SkeletalMeshEditor
             ImGui.ListBox("hitboxes", ref selectedHitbox, names, names.Length);
 
             if (ImGui.Button("Add"))
-                SkeletalMeshPreview.skeletalMesh.hitboxes.Add(new HitboxInfo());
+                SkeletalMeshPreview.instance.skeletalMesh.hitboxes.Add(new HitboxInfo());
 
-            if (SkeletalMeshPreview.skeletalMesh.hitboxes.Count > selectedHitbox)
+            if (SkeletalMeshPreview.instance.skeletalMesh.hitboxes.Count > selectedHitbox)
             {
                 ImGui.SameLine();
                 if (ImGui.Button("Remove"))
-                    SkeletalMeshPreview.skeletalMesh.hitboxes.RemoveAt(selectedHitbox);
+                    SkeletalMeshPreview.instance.skeletalMesh.hitboxes.RemoveAt(selectedHitbox);
             }
             ImGui.Spacing();
             ImGui.Spacing();
             if(ImGui.Button("refreshHitboxes") || Input.GetAction("r").Pressed())
             {
-                SkeletalMeshPreview.skeletalMesh.ClearHitboxBodies();
-                SkeletalMeshPreview.skeletalMesh.CreateHitboxBodies(SkeletalMeshPreview.instance);
+                SkeletalMeshPreview.instance.skeletalMesh.ClearHitboxBodies();
+                SkeletalMeshPreview.instance.skeletalMesh.CreateHitboxBodies(SkeletalMeshPreview.instance);
             }
 
             ImGui.Spacing();
@@ -114,10 +119,10 @@ namespace SkeletalMeshEditor
         void HitboxEditor()
         {
 
-            if (SkeletalMeshPreview.skeletalMesh.hitboxes.Count <= selectedHitbox)
+            if (SkeletalMeshPreview.instance.skeletalMesh.hitboxes.Count <= selectedHitbox)
                 return;
 
-            HitboxInfo hitbox = SkeletalMeshPreview.skeletalMesh.hitboxes[selectedHitbox];
+            HitboxInfo hitbox = SkeletalMeshPreview.instance.skeletalMesh.hitboxes[selectedHitbox];
 
             ImGui.Begin("hitbox editor");
 
@@ -130,8 +135,8 @@ namespace SkeletalMeshEditor
 
             if(oldSize!= hitbox.Size)
             {
-                SkeletalMeshPreview.skeletalMesh.ClearHitboxBodies();
-                SkeletalMeshPreview.skeletalMesh.CreateHitboxBodies(SkeletalMeshPreview.instance);
+                SkeletalMeshPreview.instance.skeletalMesh.ClearHitboxBodies();
+                SkeletalMeshPreview.instance.skeletalMesh.CreateHitboxBodies(SkeletalMeshPreview.instance);
             }
 
             oldSize = hitbox.Size;
@@ -143,7 +148,7 @@ namespace SkeletalMeshEditor
             List<string> names = new List<string>();
 
             int i = 0;
-            foreach(HitboxInfo hitbox in SkeletalMeshPreview.skeletalMesh.hitboxes)
+            foreach(HitboxInfo hitbox in SkeletalMeshPreview.instance.skeletalMesh.hitboxes)
             {
                 names.Add(i.ToString() + "   " + hitbox.Bone);
 
