@@ -1,6 +1,7 @@
 ﻿using BulletSharp;
 using Microsoft.Xna.Framework;
 using RetroEngine.Entities;
+using RetroEngine.PhysicsSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -126,7 +127,7 @@ namespace RetroEngine.Game.Entities
                 return;
             }
 
-            var hit = Physics.LineTrace(OldPos.ToNumerics(), Position.ToNumerics(), ignoreObjects, Physics.BodyType.HitTest);
+            var hit = Physics.LineTrace(OldPos.ToNumerics(), Position.ToNumerics(), ignoreObjects, PhysicsSystem.BodyType.HitTest);
 
             if (hit.HasHit)
             {

@@ -11,6 +11,7 @@ using System.Text.Json.Serialization;
 using System.IO;
 using System.Text.Json;
 using System.Linq;
+using RetroEngine.PhysicsSystem;
 
 
 namespace RetroEngine
@@ -612,9 +613,9 @@ namespace RetroEngine
         {
             foreach (HitboxInfo hitbox in hitboxes)
             {
-                RigidBody body = Physics.CreateBox(owner, hitbox.Size, 0, CollisionFlags.NoContactResponse);
+                RigidBody body = Physics.CreateBox(owner, hitbox.Size, 0);
 
-                body.UserIndex2 = (int)Physics.BodyType.HitBox;
+                body.UserIndex2 = (int)BodyType.HitBox;
 
                 hitbox.RigidBodyRef = body;
 

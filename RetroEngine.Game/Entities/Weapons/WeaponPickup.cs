@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using RetroEngine.Entities;
 using RetroEngine.Game.Entities.Player;
 using RetroEngine.Map;
+using RetroEngine.PhysicsSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;

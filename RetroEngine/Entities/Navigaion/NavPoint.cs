@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using RetroEngine.PhysicsSystem;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -75,7 +76,7 @@ namespace RetroEngine.Entities.Navigaion
             {
                 if (p == this) continue;
 
-                var hit = Physics.LineTrace(Position.ToPhysics(), p.Position.ToPhysics(), bodyType: Physics.BodyType.World);
+                var hit = Physics.LineTrace(Position.ToPhysics(), p.Position.ToPhysics(), bodyType: PhysicsSystem.BodyType.World);
 
                 if (hit.HasHit) continue;
                 newConnected.Add(p);
@@ -133,7 +134,7 @@ namespace RetroEngine.Entities.Navigaion
             var hit = staticHit;
 
             if (hit.HasHit == false)
-                hit = Physics.SphereTrace(Position.ToNumerics(), target.ToNumerics(), 0.3f, bodyType: Physics.BodyType.World);
+                hit = Physics.SphereTrace(Position.ToNumerics(), target.ToNumerics(), 0.3f, bodyType: PhysicsSystem.BodyType.World);
 
             hited = hit.HasHit;
 

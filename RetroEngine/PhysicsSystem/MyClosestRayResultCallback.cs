@@ -5,23 +5,21 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
-using static RetroEngine.Physics;
 
 namespace RetroEngine
 {
 
-    public class MyClosestConvexResultCallback : ClosestConvexResultCallback
+    public class MyClosestRayResultCallback : ClosestRayResultCallback
     {
-        public MyClosestConvexResultCallback(ref Vector3 rayFromWorld, ref Vector3 rayToWorld) : base(ref rayFromWorld, ref rayToWorld)
+        public MyClosestRayResultCallback(ref Vector3 rayFromWorld, ref Vector3 rayToWorld) : base(ref rayFromWorld, ref rayToWorld)
         {
         }
 
         public CollisionFlags FlagToRespond = CollisionFlags.None;
 
+        public PhysicsSystem.BodyType BodyTypeMask = PhysicsSystem.BodyType.All;
+
         public List<CollisionObject> ignoreList = new List<CollisionObject>();
-
-
-        public Physics.BodyType BodyTypeMask = Physics.BodyType.All;
 
         public override bool NeedsCollision(BroadphaseProxy proxy0)
         {
@@ -30,21 +28,22 @@ namespace RetroEngine
             {
                 if (ignoreList.Contains(proxy0.ClientObject)) return false;
 
-                
+
+                PhysicsSystem.BodyType bodyType = (PhysicsSystem.BodyType)collisionObject.UserIndex2;
 
                 if (collisionObject.UserIndex2 > -1)
                 {
 
-                    Physics.BodyType bodyType = (Physics.BodyType)collisionObject.UserIndex2;
-
-                    if (bodyType.HasFlag(Physics.BodyType.NoRayTest))
+                    if(bodyType.HasFlag(PhysicsSystem.BodyType.NoRayTest))
                         return false;
 
-                        if (BodyTypeMask.HasFlag(bodyType) == false)
-                        {
-                            return false; // Exclude this object from the collision test
-                        }
+                    if (BodyTypeMask.HasFlag(bodyType) == false)
+                    {
+                        return false; // Exclude this object from the collision test
+                    }
                 }
+
+                
 
                 if (FlagToRespond!= CollisionFlags.None)
                     if(collisionObject.CollisionFlags.HasFlag(FlagToRespond) == false)

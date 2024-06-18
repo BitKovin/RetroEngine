@@ -10,8 +10,24 @@ using System.Numerics;
 using System.Threading;
 
 
-namespace RetroEngine
+namespace RetroEngine.PhysicsSystem
 {
+
+    [Flags]
+    public enum BodyType
+    {
+        None = 0,
+        MainBody = 1 << 0,          // 1
+        HitBox = 1 << 1,            // 2
+        World = 1 << 2,             // 4
+        CharacterCapsule = 1 << 3,  // 8
+        NoRayTest = 1 << 4,         // 16
+
+        All = MainBody | HitBox | World | CharacterCapsule | NoRayTest,
+        HitTest = All & ~CharacterCapsule,
+        CollisionTest = All & ~HitBox
+    }
+
     public class Physics
     {
 
@@ -26,6 +42,7 @@ namespace RetroEngine
 
         static List<CollisionObject> collisionObjects = new List<CollisionObject>();
 
+        static CollisionFilterCallback collisionFilterCallback = new CollisionFilterCallback();
 
 
         static SequentialImpulseConstraintSolver solver;
@@ -69,10 +86,15 @@ namespace RetroEngine
             var collisionConfig = new DefaultCollisionConfiguration();
             collisionConfig.SetConvexConvexMultipointIterations(1, 1);
             collisionConfig.SetPlaneConvexMultipointIterations(1, 1);
+
             dispatcher = new CollisionDispatcher(collisionConfig);
+
+
 
             // Create a broadphase and a solver
             broadphase = new DbvtBroadphase();
+
+            
 
             solver = new SequentialImpulseConstraintSolver();
 
@@ -82,6 +104,7 @@ namespace RetroEngine
             dynamicsWorld.Gravity = new Vector3(0, -9.81f, 0); // Set gravity
             dynamicsWorld.DispatchInfo.UseContinuous = true;
 
+            broadphase.OverlappingPairCache.SetOverlapFilterCallback(collisionFilterCallback);
 
             staticWorld = new DiscreteDynamicsWorld(new CollisionDispatcher(new DefaultCollisionConfiguration()), new DbvtBroadphase(), new SequentialImpulseConstraintSolver(), new DefaultCollisionConfiguration());
             staticBodies.Clear();
@@ -196,19 +219,6 @@ namespace RetroEngine
 
         }
 
-        [Flags]
-        public enum BodyType
-        {
-            None = 0,
-            MainBody = 1 << 0,          // 1
-            HitBox = 1 << 1,            // 2
-            World = 1 << 2,             // 4
-            CharacterCapsule = 1 << 3,  // 8
-            NoRayTest = 1 << 4,         // 16
-            All = MainBody | HitBox | World | CharacterCapsule | NoRayTest,
-            HitTest = All & ~CharacterCapsule
-        }
-
         public static void Update()
         {
             lock (dynamicsWorld)
@@ -230,7 +240,10 @@ namespace RetroEngine
                             continue;
                         }
                         if (colObj.UserIndex2 == -1)
-                            colObj.UserIndex2 = 0;
+                            colObj.UserIndex2 = (int)BodyType.MainBody;
+
+                        if (colObj.UserIndex == -1)
+                            colObj.UserIndex = (int)BodyType.CollisionTest;
 
                         BodyType bodyType = (BodyType)colObj.UserIndex2;
 

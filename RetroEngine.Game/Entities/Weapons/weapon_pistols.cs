@@ -2,6 +2,7 @@
 using BulletSharp;
 using Microsoft.Xna.Framework;
 using RetroEngine.Entities;
+using RetroEngine.PhysicsSystem;
 using System;
 using System.Collections;
 using System.Collections.Generic;

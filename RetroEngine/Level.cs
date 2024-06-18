@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RetroEngine;
 using RetroEngine.Entities;
 using RetroEngine.Map;
+using RetroEngine.PhysicsSystem;
 using RetroEngine.SaveSystem;
 using RetroEngine.UI;
 using SharpFont;

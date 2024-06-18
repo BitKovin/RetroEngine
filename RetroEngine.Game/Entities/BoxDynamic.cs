@@ -11,6 +11,7 @@ using RetroEngine.Audio;
 using Microsoft.Xna.Framework;
 using RetroEngine.Entities;
 using RetroEngine.SaveSystem;
+using RetroEngine.PhysicsSystem;
 
 namespace RetroEngine.Game.Entities
 {

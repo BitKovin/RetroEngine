@@ -3,6 +3,7 @@ using FmodForFoxes.Studio;
 using Microsoft.Xna.Framework;
 using RetroEngine.Entities;
 using RetroEngine.Game.Entities.Player;
+using RetroEngine.PhysicsSystem;
 using RetroEngine.Skeletal;
 using System;
 using System.Collections.Generic;

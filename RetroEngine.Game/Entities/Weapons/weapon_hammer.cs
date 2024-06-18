@@ -3,6 +3,7 @@ using BulletSharp;
 using Microsoft.Xna.Framework;
 using RetroEngine.Entities;
 using RetroEngine.Game.Effects.Particles;
+using RetroEngine.PhysicsSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;

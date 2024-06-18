@@ -1,6 +1,7 @@
 ﻿using BulletSharp.SoftBody;
 using Microsoft.Xna.Framework;
 using RetroEngine.Entities.Navigaion;
+using RetroEngine.PhysicsSystem;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -156,7 +157,7 @@ namespace RetroEngine
 
             for (int i = points.Count - 1; i >= 0; i--)
             {
-                var hit = Physics.LineTrace(start.ToNumerics(), points[i].ToNumerics(), bodyType: Physics.BodyType.World);
+                var hit = Physics.LineTrace(start.ToNumerics(), points[i].ToNumerics(), bodyType: PhysicsSystem.BodyType.World);
 
                 if (hit.HasHit == false)
                 {
@@ -262,7 +263,7 @@ namespace RetroEngine
 
         void ProcessPoint(NavPoint point, Vector3 pos)
         {
-            var hit = Physics.SphereTrace(pos.ToNumerics(), point.Position.ToNumerics(), 0.3f, bodyType: Physics.BodyType.World);
+            var hit = Physics.SphereTrace(pos.ToNumerics(), point.Position.ToNumerics(), 0.3f, bodyType: PhysicsSystem.BodyType.World);
 
             if (hit.HasHit) return;
 
@@ -290,7 +291,7 @@ namespace RetroEngine
             start = Navigation.ProjectToGround(start);
             target = Navigation.ProjectToGround(target);
 
-            var hit = Physics.SphereTrace(start.ToPhysics(), target.ToPhysics(), 0.3f, bodyType: Physics.BodyType.World);
+            var hit = Physics.SphereTrace(start.ToPhysics(), target.ToPhysics(), 0.3f, bodyType: PhysicsSystem.BodyType.World);
 
             if (hit.HasHit == false)
             {

@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Diagnostics;
 using System.Collections.Generic;
+using RetroEngine.PhysicsSystem;
 
 namespace RetroEngine
 {
@@ -254,7 +255,7 @@ namespace RetroEngine
                 pendingDispose.Clear();
 
             }
-            var physicsTask = Task.Factory.StartNew(() => { Physics.Simulate(); });
+            var physicsTask = Task.Factory.StartNew((Action)(() => { Physics.Simulate(); }));
 
 
             PerformReservedTimeTasks();

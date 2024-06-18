@@ -12,6 +12,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Framework;
 using RetroEngine;
 using RetroEngine.Map;
+using RetroEngine.PhysicsSystem;
 using static Assimp.Metadata;
 
 namespace RetroEngine

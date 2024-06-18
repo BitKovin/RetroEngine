@@ -1,5 +1,6 @@
 ﻿using BulletSharp;
 using RetroEngine.Map;
+using RetroEngine.PhysicsSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +26,7 @@ namespace RetroEngine.Entities
             {
 
                 body.CollisionFlags = BulletSharp.CollisionFlags.NoContactResponse;
-                body.UserIndex2 = (int)(Physics.BodyType.NoRayTest | Physics.BodyType.World);
+                body.UserIndex2 = (int)(PhysicsSystem.BodyType.NoRayTest | PhysicsSystem.BodyType.World);
             }
             collisionCallback.CollisionEvent += TriggerEntered;
             collisionCallback.owner = this;

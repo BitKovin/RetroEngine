@@ -16,6 +16,7 @@ using RetroEngine.SaveSystem;
 using RetroEngine.Audio;
 using RetroEngine.Entities.Light;
 using RetroEngine.Game.Effects.Particles;
+using RetroEngine.PhysicsSystem;
 
 namespace RetroEngine.Game.Entities.Player
 {
@@ -175,6 +176,7 @@ namespace RetroEngine.Game.Entities.Player
             base.Start();
 
             body = Physics.CreateCharacterCapsule(this, 1, 0.5f, 2);
+            body.UserIndex = (int)BodyType.HitTest;
             body.Gravity = new Vector3(0, -30, 0).ToNumerics();
 
 
