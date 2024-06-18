@@ -25,7 +25,7 @@ namespace RetroEngine.Entities
             {
 
                 body.CollisionFlags = BulletSharp.CollisionFlags.NoContactResponse;
-                body.UserIndex = (int)RayFlags.NoRayTest;
+                body.UserIndex2 = (int)(Physics.BodyType.NoRayTest | Physics.BodyType.World);
             }
             collisionCallback.CollisionEvent += TriggerEntered;
             collisionCallback.owner = this;

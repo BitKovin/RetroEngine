@@ -196,12 +196,17 @@ namespace RetroEngine
 
         }
 
-        public enum BodyType 
+        [Flags]
+        public enum BodyType
         {
-            MainBody = 0,
-            HitBox = 1,
-            World = 2,
-            All
+            None = 0,
+            MainBody = 1 << 0,          // 1
+            HitBox = 1 << 1,            // 2
+            World = 1 << 2,             // 4
+            CharacterCapsule = 1 << 3,  // 8
+            NoRayTest = 1 << 4,         // 16
+            All = MainBody | HitBox | World | CharacterCapsule | NoRayTest,
+            HitTest = All & ~CharacterCapsule
         }
 
         public static void Update()
@@ -236,33 +241,28 @@ namespace RetroEngine
                             case BodyType.World:
                             case BodyType.MainBody:
 
-                                if (colObj.IsActive == false) continue;
-
-
-
-                                Entity ent = (Entity)colObj.UserObject;
-
-                                Vector3 pos = colObj.WorldTransform.Translation;
-
-                                ent.Position = new Microsoft.Xna.Framework.Vector3((float)pos.X, (float)pos.Y, (float)pos.Z);
-
-                                Matrix4x4 rotationMatrix = rigidBody.WorldTransform.GetBasis();
-                                Quaternion rotation = Quaternion.CreateFromRotationMatrix(rotationMatrix);
-
-                                Vector3 rotationEulerAngles = ToEulerAngles(rotation);
-
-                                ent.Rotation = new Microsoft.Xna.Framework.Vector3((float)rotationEulerAngles.X, (float)rotationEulerAngles.Y, (float)rotationEulerAngles.Z);
 
                                 break;
 
                             case BodyType.HitBox:
-
-
-
+                                continue;
                                 break;
 
 
                         }
+                        if (colObj.IsActive == false) continue;
+                        Entity ent = (Entity)colObj.UserObject;
+
+                        Vector3 pos = colObj.WorldTransform.Translation;
+
+                        ent.Position = new Microsoft.Xna.Framework.Vector3((float)pos.X, (float)pos.Y, (float)pos.Z);
+
+                        Matrix4x4 rotationMatrix = rigidBody.WorldTransform.GetBasis();
+                        Quaternion rotation = Quaternion.CreateFromRotationMatrix(rotationMatrix);
+
+                        Vector3 rotationEulerAngles = ToEulerAngles(rotation);
+
+                        ent.Rotation = new Microsoft.Xna.Framework.Vector3((float)rotationEulerAngles.X, (float)rotationEulerAngles.Y, (float)rotationEulerAngles.Z);
 
                     }
                 }
@@ -443,7 +443,7 @@ namespace RetroEngine
 
             RigidBody.UserObject = entity;
 
-            RigidBody.UserIndex = (int)RayFlags.NoRayTest;
+            RigidBody.UserIndex2 = (int)BodyType.CharacterCapsule;
 
             lock(dynamicsWorld)
             dynamicsWorld.AddRigidBody(RigidBody);

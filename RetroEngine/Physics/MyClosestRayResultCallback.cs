@@ -9,12 +9,6 @@ using System.Threading.Tasks;
 namespace RetroEngine
 {
 
-    public enum RayFlags
-    {
-        None = 0x0,
-        NoRayTest = 0x1
-    }
-
     public class MyClosestRayResultCallback : ClosestRayResultCallback
     {
         public MyClosestRayResultCallback(ref Vector3 rayFromWorld, ref Vector3 rayToWorld) : base(ref rayFromWorld, ref rayToWorld)
@@ -34,27 +28,22 @@ namespace RetroEngine
             {
                 if (ignoreList.Contains(proxy0.ClientObject)) return false;
 
-                RayFlags rayFlags = (RayFlags)collisionObject.UserIndex;
-
 
                 Physics.BodyType bodyType = (Physics.BodyType)collisionObject.UserIndex2;
 
                 if (collisionObject.UserIndex2 > -1)
                 {
-                    if(BodyTypeMask.HasFlag(Physics.BodyType.All) == false)
+
+                    if(bodyType.HasFlag(Physics.BodyType.NoRayTest))
+                        return false;
+
                     if (BodyTypeMask.HasFlag(bodyType) == false)
                     {
                         return false; // Exclude this object from the collision test
                     }
                 }
 
-                if (collisionObject.UserIndex > -1)
-                {
-                    if (rayFlags.HasFlag(RayFlags.NoRayTest))
-                    {
-                        return false; // Exclude this object from the collision test
-                    }
-                }
+                
 
                 if (FlagToRespond!= CollisionFlags.None)
                     if(collisionObject.CollisionFlags.HasFlag(FlagToRespond) == false)

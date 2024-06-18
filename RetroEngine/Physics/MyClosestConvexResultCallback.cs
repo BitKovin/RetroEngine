@@ -30,22 +30,16 @@ namespace RetroEngine
             {
                 if (ignoreList.Contains(proxy0.ClientObject)) return false;
 
-                RayFlags rayFlags = (RayFlags)collisionObject.UserIndex;
-
-                if (collisionObject.UserIndex > -1)
-                {
-                    if (rayFlags.HasFlag(RayFlags.NoRayTest))
-                    {
-                        return false; // Exclude this object from the collision test
-                    }
-                }
+                
 
                 if (collisionObject.UserIndex2 > -1)
                 {
 
                     Physics.BodyType bodyType = (Physics.BodyType)collisionObject.UserIndex2;
 
-                    if (BodyTypeMask.HasFlag(Physics.BodyType.All) == false)
+                    if (bodyType.HasFlag(Physics.BodyType.NoRayTest))
+                        return false;
+
                         if (BodyTypeMask.HasFlag(bodyType) == false)
                         {
                             return false; // Exclude this object from the collision test
