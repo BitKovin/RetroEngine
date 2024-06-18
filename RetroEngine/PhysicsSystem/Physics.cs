@@ -36,7 +36,7 @@ namespace RetroEngine.PhysicsSystem
         private static DiscreteDynamicsWorld staticWorld;
         private static List<StaticRigidBody> staticBodies = new List<StaticRigidBody>();
 
-        private static int steps = 3;
+        private static int steps = 1;
 
         static List<CollisionObject> removeList = new List<CollisionObject>();
 
@@ -84,8 +84,8 @@ namespace RetroEngine.PhysicsSystem
 
             // Create a collision configuration and dispatcher
             var collisionConfig = new DefaultCollisionConfiguration();
-            collisionConfig.SetConvexConvexMultipointIterations(1, 1);
-            collisionConfig.SetPlaneConvexMultipointIterations(1, 1);
+            collisionConfig.SetConvexConvexMultipointIterations();
+            collisionConfig.SetPlaneConvexMultipointIterations();
 
             dispatcher = new CollisionDispatcher(collisionConfig);
 
@@ -180,7 +180,7 @@ namespace RetroEngine.PhysicsSystem
                 if (GameMain.Instance.paused == false)
                 {
                     for(int i = 0; i<steps; i++)
-                    dynamicsWorld.StepSimulation(Time.DeltaTime * Time.TimeScale / steps, 5, Math.Max(1 / 30f, Time.DeltaTime)/steps);
+                    dynamicsWorld.StepSimulation(Time.DeltaTime * Time.TimeScale / steps, 5, 1f/50f);
                 }
             }
         }
@@ -270,7 +270,17 @@ namespace RetroEngine.PhysicsSystem
 
                         Vector3 pos = colObj.WorldTransform.Translation;
 
-                        ent.Position = new Microsoft.Xna.Framework.Vector3((float)pos.X, (float)pos.Y, (float)pos.Z);
+                        // Assume this value is set based on your fixed physics update rate
+                        float fixedDeltaTime = Math.Max(1 / 50f,Time.DeltaTime);
+
+                        // Store the previous and current positions of the entity
+                        Vector3 previousPosition = ent.Position.ToPhysics(); // This should be updated each physics tick
+                        Vector3 currentPosition = pos; // This is updated during the physics update
+
+                        // Interpolate the position based on the elapsed time in the current frame
+                        float interpolationFactor = Time.DeltaTime / fixedDeltaTime;
+                        ent.Position = Vector3.Lerp(previousPosition, currentPosition, interpolationFactor);
+
 
                         Matrix4x4 rotationMatrix = rigidBody.WorldTransform.GetBasis();
                         Quaternion rotation = Quaternion.CreateFromRotationMatrix(rotationMatrix);

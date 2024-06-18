@@ -354,7 +354,7 @@ namespace RetroEngine.Game.Entities.Player
 
             Vector3 newPos = Position;
 
-            interpolatedPosition = Vector3.Lerp(oldPos, newPos, Time.DeltaTime*25);
+            interpolatedPosition = newPos; //Vector3.Lerp(oldPos, newPos, Time.DeltaTime*30);
 
         }
 
