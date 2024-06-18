@@ -134,8 +134,8 @@ namespace RetroEngine.Entities
         {
             //UpdateNPCList();
 
-            
-
+            if(Input.GetAction("test2").Pressed())
+                mesh.ClearHitboxBodies();
             
 
         }

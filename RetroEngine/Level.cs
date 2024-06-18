@@ -107,9 +107,11 @@ namespace RetroEngine
                 AssetRegistry.UnloadBanks();
                 StaticMesh.ClearCache();
             }
-            Time.DeltaTime = 0;
+            Time.DeltaTime = 0.001f;
 
             Navigation.WaitForProcess();
+
+            GameMain.Instance.paused = false;
 
             string path = AssetRegistry.FindPathForFile(name);
 
@@ -128,10 +130,10 @@ namespace RetroEngine
                 entity.Destroy();
             }
 
-            Physics.Update();
+            Physics.Simulate();
 
             Physics.ResetWorld();
-            Physics.Update();
+            Physics.Simulate();
 
             UiElement.Viewport.childs.Clear();
 
@@ -155,7 +157,7 @@ namespace RetroEngine
             LoadingScreen.Update(0.7f);
 
 
-            Physics.Update();
+            Physics.Simulate();
 
             GameMain.Instance.curentLevel.LoadAssets();
 
@@ -177,8 +179,6 @@ namespace RetroEngine
             AssetRegistry.AllowGeneratingMipMaps = false;
 
             LoadingScreen.Update(0.9f);
-
-            StaticMesh.loadedScenes.Clear();
 
             GameMain.Instance.OnLevelChanged();
 

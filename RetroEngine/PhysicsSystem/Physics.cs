@@ -17,15 +17,15 @@ namespace RetroEngine.PhysicsSystem
     public enum BodyType
     {
         None = 0,
-        MainBody = 1 << 0,          // 1
-        HitBox = 1 << 1,            // 2
-        World = 1 << 2,             // 4
-        CharacterCapsule = 1 << 3,  // 8
-        NoRayTest = 1 << 4,         // 16
+        MainBody = 1,          // 1
+        HitBox = 2,            // 2
+        World = 4,             // 4
+        CharacterCapsule = 8,  // 8
+        NoRayTest = 16,         // 16
 
         All = MainBody | HitBox | World | CharacterCapsule | NoRayTest,
         HitTest = All & ~CharacterCapsule,
-        CollisionTest = All & ~HitBox
+        CollisionTest = All & ~HitBox,
     }
 
     public class Physics
@@ -144,6 +144,8 @@ namespace RetroEngine.PhysicsSystem
 
             dynamicsWorld.UpdateAabbs();
             broadphase.PairCache.Dispose();
+
+
 
             Start();
 
@@ -427,7 +429,7 @@ namespace RetroEngine.PhysicsSystem
                 }
             }
 
-
+            RigidBody.UserIndex = (int)BodyType.CollisionTest;
             RigidBody.UserIndex2 = (int) bodyType;
             RigidBody.Friction = 1f;
             RigidBody.SetDamping(0.1f, 0.1f);
@@ -457,8 +459,9 @@ namespace RetroEngine.PhysicsSystem
             RigidBody.UserObject = entity;
 
             RigidBody.UserIndex2 = (int)BodyType.CharacterCapsule;
+            RigidBody.UserIndex = (int)BodyType.CollisionTest;
 
-            lock(dynamicsWorld)
+            lock (dynamicsWorld)
             dynamicsWorld.AddRigidBody(RigidBody);
 
             RigidBody.Friction = 0f;

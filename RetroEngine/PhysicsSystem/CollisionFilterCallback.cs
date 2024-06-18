@@ -13,20 +13,19 @@ namespace RetroEngine.PhysicsSystem
         {
 
             if(proxy0==null || proxy1 == null)
-                return true;
+                return false;
 
             // Retrieve user indices from collision objects
             var colObj0 = (CollisionObject)proxy0.ClientObject;
             var colObj1 = (CollisionObject)proxy1.ClientObject;
 
             if (colObj0 == null || colObj1 == null)
-                return true;
+                return false;
 
-            if (colObj0.UserIndex == -1)
-                colObj0.UserIndex = (int)BodyType.CollisionTest;
+            if (colObj0 == colObj1)
+                return false;
 
-            if (colObj1.UserIndex == -1)
-                colObj1.UserIndex = (int)BodyType.CollisionTest;
+
 
             BodyType collidesWith1 = (BodyType)colObj0.UserIndex;
             BodyType bodyType1 = (BodyType)colObj0.UserIndex2;
@@ -34,14 +33,16 @@ namespace RetroEngine.PhysicsSystem
             BodyType collidesWith2 = (BodyType)colObj1.UserIndex;
             BodyType bodyType2 = (BodyType)colObj1.UserIndex2;
 
-            // Use the custom collision logic to determine if the objects should collide
-            return ShouldCollide(collidesWith1, bodyType2) && ShouldCollide(collidesWith2, bodyType1);
+            bool test1 = ShouldCollide(collidesWith1, bodyType2);
+            bool test2 = ShouldCollide(collidesWith2, bodyType1);
+
+            return test1 && test2;
         }
 
         private bool ShouldCollide(BodyType collidesWith, BodyType bodyType)
         {
             // Use bitwise AND to check if any flag is set in both collidesWith and bodyType
-            return (collidesWith & bodyType) != 0;
+            return collidesWith.HasFlag(bodyType);
         }
     }
 }

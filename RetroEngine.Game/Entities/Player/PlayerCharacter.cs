@@ -177,6 +177,7 @@ namespace RetroEngine.Game.Entities.Player
 
             body = Physics.CreateCharacterCapsule(this, 1, 0.5f, 2);
             body.UserIndex = (int)BodyType.HitTest;
+            body.UserIndex2 = (int)BodyType.CharacterCapsule;
             body.Gravity = new Vector3(0, -30, 0).ToNumerics();
 
 

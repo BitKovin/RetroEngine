@@ -271,8 +271,14 @@ namespace RetroEngine.Skeletal
         private void IterateUpdate(RiggedModelNode node)
         {
             // Cache frequently accessed values
-            Matrix additionalLocal = additionalLocalOffsets.TryGetValue(node.name, out var localOffset) ? localOffset : Matrix.Identity;
-            Matrix additionalMesh = additionalMeshOffsets.TryGetValue(node.name, out var meshOffset) ? meshOffset : Matrix.Identity;
+            Matrix additionalMesh;
+            Matrix additionalLocal;
+
+            lock (additionalLocalOffsets)
+                additionalLocal = additionalLocalOffsets.TryGetValue(node.name, out var localOffset) ? localOffset : Matrix.Identity;
+
+            lock (additionalMeshOffsets)
+                additionalMesh = additionalMeshOffsets.TryGetValue(node.name, out var meshOffset) ? meshOffset : Matrix.Identity;
 
             if (node.parent != null)
             {
