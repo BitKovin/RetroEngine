@@ -139,6 +139,12 @@ namespace RetroEngine
 
             render = new Render();
 
+            new DrawDebug(GraphicsDevice);
+
+#if DEBUG
+            DrawDebug.Enabled = true;
+#endif
+
             LevelObjectFactory.InitializeTypeCache();
             ParticleSystemFactory.InitializeTypeCache();
 

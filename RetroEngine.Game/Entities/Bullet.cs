@@ -129,6 +129,8 @@ namespace RetroEngine.Game.Entities
 
             var hit = Physics.LineTrace(OldPos.ToNumerics(), Position.ToNumerics(), ignoreObjects, PhysicsSystem.BodyType.HitTest);
 
+            DrawDebug.Sphere(0.5f,Position, Vector3.UnitX);
+
             if (hit.HasHit)
             {
 

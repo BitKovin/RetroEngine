@@ -380,6 +380,8 @@ namespace RetroEngine
             if (Graphics.DrawPhysics)
                 Physics.DebugDraw();
 
+            DrawDebug.Draw();
+
         }
 
         public void RenderLevelGeometryForward(List<StaticMesh> renderList, bool onlyTransperent = false, bool OnlyStatic = false)

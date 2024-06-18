@@ -78,6 +78,27 @@ namespace RetroEngine
             return newM;
         }
 
+
+        public static void SetBodyType(this CollisionObject body, BodyType bodyType)
+        {
+            body.UserIndex2 = (int) bodyType;
+        }
+
+        public static BodyType GetBodyType(this CollisionObject body)
+        {
+            return (BodyType)body.UserIndex2;
+        }
+
+        public static void SetCollisionMask(this CollisionObject body, BodyType bodyType)
+        {
+            body.UserIndex = (int)bodyType;
+        }
+
+        public static BodyType GetCollisionMask(this CollisionObject body)
+        {
+            return (BodyType)body.UserIndex;
+        }
+
         public static Microsoft.Xna.Framework.Vector3 FromPhysics(this Vector3 vector)
         {
             return new Microsoft.Xna.Framework.Vector3((float)vector.X, (float)vector.Y, (float)vector.Z);

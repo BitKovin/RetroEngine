@@ -176,9 +176,9 @@ namespace RetroEngine.Game.Entities.Player
             base.Start();
 
             body = Physics.CreateCharacterCapsule(this, 1, 0.5f, 2);
-            body.UserIndex = (int)BodyType.HitTest;
-            body.UserIndex2 = (int)BodyType.CharacterCapsule;
-            body.Gravity = new Vector3(0, -30, 0).ToNumerics();
+            //body.UserIndex = (int)BodyType.HitTest;
+            //body.UserIndex2 = (int)BodyType.CharacterCapsule;
+            body.Gravity = new Vector3(0, -25, 0).ToNumerics();
 
 
             body.SetPosition(Position.ToPhysics());
@@ -674,7 +674,7 @@ namespace RetroEngine.Game.Entities.Player
             
             if (onGround)
             {
-                body.LinearVelocity = new Vector3(body.LinearVelocity.X, 12, body.LinearVelocity.Z).ToNumerics();
+                body.LinearVelocity = new Vector3(body.LinearVelocity.X, 9, body.LinearVelocity.Z).ToNumerics();
                 jumpDelay.AddDelay(0.1f);
             }
         }

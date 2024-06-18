@@ -242,12 +242,13 @@ namespace RetroEngine.PhysicsSystem
                             continue;
                         }
                         if (colObj.UserIndex2 == -1)
-                            colObj.UserIndex2 = (int)BodyType.MainBody;
+                            colObj.SetBodyType(BodyType.MainBody);
 
                         if (colObj.UserIndex == -1)
-                            colObj.UserIndex = (int)BodyType.CollisionTest;
+                            colObj.SetCollisionMask(BodyType.CollisionTest);
 
-                        BodyType bodyType = (BodyType)colObj.UserIndex2;
+
+                        BodyType bodyType = colObj.GetBodyType();
 
 
 
@@ -439,8 +440,9 @@ namespace RetroEngine.PhysicsSystem
                 }
             }
 
-            RigidBody.UserIndex = (int)BodyType.CollisionTest;
-            RigidBody.UserIndex2 = (int) bodyType;
+            RigidBody.SetBodyType(bodyType);
+            RigidBody.SetCollisionMask(BodyType.CollisionTest);
+
             RigidBody.Friction = 1f;
             RigidBody.SetDamping(0.1f, 0.1f);
             RigidBody.Restitution = 0.1f;
@@ -468,8 +470,8 @@ namespace RetroEngine.PhysicsSystem
 
             RigidBody.UserObject = entity;
 
-            RigidBody.UserIndex2 = (int)BodyType.CharacterCapsule;
-            RigidBody.UserIndex = (int)BodyType.CollisionTest;
+            RigidBody.SetCollisionMask(BodyType.CollisionTest);
+            RigidBody.SetBodyType(BodyType.CharacterCapsule);
 
             lock (dynamicsWorld)
             dynamicsWorld.AddRigidBody(RigidBody);
