@@ -177,7 +177,7 @@ namespace RetroEngine
             var hit = Physics.LineTraceForStatic(point.ToNumerics(), (point - new Vector3(0, 100, 0)).ToNumerics());
 
             Position = hit.HitPointWorld;
-            Position += new Vector3(0, 1.25f, 0);
+            Position += new Vector3(0, 0.25f, 0);
 
             return Position;
         }
@@ -291,7 +291,7 @@ namespace RetroEngine
             start = Navigation.ProjectToGround(start);
             target = Navigation.ProjectToGround(target);
 
-            var hit = Physics.SphereTrace(start.ToPhysics(), target.ToPhysics(), 0.3f, bodyType: PhysicsSystem.BodyType.World);
+            var hit = Physics.SphereTrace(start.ToPhysics(), target.ToPhysics(), 0.4f, bodyType: PhysicsSystem.BodyType.World);
 
             if (hit.HasHit == false)
             {

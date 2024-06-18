@@ -74,7 +74,7 @@
 @PointClass base(light) size(-15 -15 -15, 15 15 15) color(255 255 255) model({ "path": "models/tools/radius.obj", "scale": radius * 32 * 2})  = cubeMap : "Cube Map" 
 [
 	radius(float) : "Radius" : "5"
-	resolution(int) : "Resolution" : "512"
+	resolution(int) : "Resolution" : "256"
 ]
 
 @PointClass base(Entity) size(-20 -20 -20, 20 20 20) color(255 0 0) = weaponPickup : "Weapon Pickup" 

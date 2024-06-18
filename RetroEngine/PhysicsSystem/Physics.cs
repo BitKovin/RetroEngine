@@ -486,7 +486,7 @@ namespace RetroEngine.PhysicsSystem
             return RigidBody;
         }
 
-        public static ClosestRayResultCallback LineTrace(Vector3 rayStart, Vector3 rayEnd, List<CollisionObject> ignoreList = null, BodyType bodyType = BodyType.All)
+        public static MyClosestRayResultCallback LineTrace(Vector3 rayStart, Vector3 rayEnd, List<CollisionObject> ignoreList = null, BodyType bodyType = BodyType.All)
         {
 
             if(Thread.CurrentThread != GameMain.RenderThread && Thread.CurrentThread != GameMain.GameThread)

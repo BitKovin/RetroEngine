@@ -16,7 +16,7 @@ namespace RetroEngine.Entities.Navigaion
         public List<NavPoint> staticConnected = new List<NavPoint>();
         public List<NavPoint> connected = new List<NavPoint>();
 
-        int MaxDepth = 40;
+        int MaxDepth = 30;
 
         int spawnedId = 0;
 
@@ -37,7 +37,7 @@ namespace RetroEngine.Entities.Navigaion
 
             if ((Time.FrameCount % total) != spawnedId) return;
 
-            UpdateInternalConnected();
+            //UpdateInternalConnected();
 
         }
 
@@ -129,12 +129,12 @@ namespace RetroEngine.Entities.Navigaion
 
             bool hited = false;
 
-            var staticHit = Physics.SphereTraceForStatic(Position.ToNumerics(), target.ToNumerics(), 0.3f);
+            var staticHit = Physics.LineTraceForStatic(Position.ToNumerics(), target.ToNumerics());
 
             var hit = staticHit;
 
             if (hit.HasHit == false)
-                hit = Physics.SphereTrace(Position.ToNumerics(), target.ToNumerics(), 0.3f, bodyType: PhysicsSystem.BodyType.World);
+                hit = Physics.LineTrace(Position.ToNumerics(), target.ToNumerics(), bodyType: PhysicsSystem.BodyType.World);
 
             hited = hit.HasHit;
 

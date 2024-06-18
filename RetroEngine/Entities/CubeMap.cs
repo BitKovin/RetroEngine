@@ -36,7 +36,7 @@ namespace RetroEngine.Entities
 
             graphicsDevice = GameMain.Instance.GraphicsDevice;
 
-            resolution = (int)data.GetPropertyFloat("resolution",512);
+            resolution = (int)data.GetPropertyFloat("resolution",256);
 
             map = new RenderTargetCube(graphicsDevice, resolution, false, SurfaceFormat.Color, DepthFormat.Depth24);
 
