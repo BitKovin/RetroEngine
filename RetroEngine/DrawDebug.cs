@@ -94,6 +94,105 @@ namespace RetroEngine
 
         }
 
+        #region sphere
+        private static VertexPositionColor[] sphereVertices;
+        private static int[] sphereIndices;
+        private static bool sphereInitialized = false;
+
+        private void InitializeSphere(float radius, ref System.Numerics.Vector3 color)
+        {
+            const int segments = 8;
+            const int rings = 8;
+            var vertices = new List<VertexPositionColor>();
+            var indices = new List<int>();
+
+            for (int i = 0; i <= rings; i++)
+            {
+                float theta = i * MathF.PI / rings;
+                float sinTheta = MathF.Sin(theta);
+                float cosTheta = MathF.Cos(theta);
+
+                for (int j = 0; j <= segments; j++)
+                {
+                    float phi = j * 2 * MathF.PI / segments;
+                    float sinPhi = MathF.Sin(phi);
+                    float cosPhi = MathF.Cos(phi);
+
+                    System.Numerics.Vector3 position = new System.Numerics.Vector3
+                    (
+                        radius * sinTheta * cosPhi,
+                        radius * cosTheta,
+                        radius * sinTheta * sinPhi
+                    );
+
+                    vertices.Add(new VertexPositionColor(
+                        new Microsoft.Xna.Framework.Vector3(position.X, position.Y, position.Z),
+                        new Microsoft.Xna.Framework.Color(color.X, color.Y, color.Z)
+                    ));
+                }
+            }
+
+            for (int i = 0; i < rings; i++)
+            {
+                for (int j = 0; j < segments; j++)
+                {
+                    int first = (i * (segments + 1)) + j;
+                    int second = first + segments + 1;
+
+                    indices.Add(first);
+                    indices.Add(first + 1);
+
+                    indices.Add(first);
+                    indices.Add(second);
+                }
+            }
+
+            sphereVertices = vertices.ToArray();
+            sphereIndices = indices.ToArray();
+            sphereInitialized = true;
+        }
+
+        public override void DrawSphere(float radius, ref System.Numerics.Matrix4x4 transform, ref System.Numerics.Vector3 color)
+        {
+            if (!sphereInitialized)
+            {
+                InitializeSphere(radius, ref color);
+            }
+
+            var transformedVertices = new VertexPositionColor[sphereVertices.Length];
+            for (int i = 0; i < sphereVertices.Length; i++)
+            {
+                var transformedPosition = System.Numerics.Vector3.Transform(
+                    new System.Numerics.Vector3(sphereVertices[i].Position.X, sphereVertices[i].Position.Y, sphereVertices[i].Position.Z),
+                    transform
+                );
+
+                transformedVertices[i] = new VertexPositionColor(
+                    new Microsoft.Xna.Framework.Vector3(transformedPosition.X, transformedPosition.Y, transformedPosition.Z),
+                    sphereVertices[i].Color
+                );
+            }
+
+            basicEffect.View = Camera.finalizedView;
+            basicEffect.Projection = Camera.finalizedProjection;
+
+            foreach (EffectPass pass in basicEffect.CurrentTechnique.Passes)
+            {
+                pass.Apply();
+                graphicsDevice.DrawUserIndexedPrimitives(
+                    PrimitiveType.LineList,
+                    transformedVertices,
+                    0,
+                    transformedVertices.Length,
+                    sphereIndices,
+                    0,
+                    sphereIndices.Length / 2
+                );
+            }
+        }
+
+        #endregion
+
         public override void DrawLine(ref System.Numerics.Vector3 from, ref System.Numerics.Vector3 to, ref System.Numerics.Vector3 color)
         {
             VertexPositionColor[] vertices = new VertexPositionColor[2];
