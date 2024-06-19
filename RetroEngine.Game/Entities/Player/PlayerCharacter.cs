@@ -695,7 +695,7 @@ namespace RetroEngine.Game.Entities.Player
             
             if (onGround)
             {
-                body.LinearVelocity = new Vector3(body.LinearVelocity.X, 9, body.LinearVelocity.Z).ToNumerics();
+                body.LinearVelocity = new Vector3(body.LinearVelocity.X, 9.5f, body.LinearVelocity.Z).ToNumerics();
                 jumpDelay.AddDelay(0.1f);
             }
         }

@@ -211,7 +211,7 @@ namespace RetroEngine
             Stats.StopRecord("frame total");
             Stats.StartRecord("frame total");
 
-            checkAppRegainedFocus();
+            //checkAppRegainedFocus();
 
             if (tick == 2)
                 GameInitialized();
@@ -519,20 +519,6 @@ namespace RetroEngine
             _graphics.PreferredBackBufferHeight = Window.ClientBounds.Height;
 
             pendingGraphicsUpdate = true;
-        }
-
-        void checkAppRegainedFocus()
-        {
-            if (!this.IsActive)
-            {
-                wasFocused = false;
-            }
-            else if (!wasFocused && _graphics.IsFullScreen)
-            {
-                wasFocused = true;
-                _graphics.ToggleFullScreen();
-                _graphics.ToggleFullScreen();
-            }
         }
 
         public void SetFullscreen(bool value)
