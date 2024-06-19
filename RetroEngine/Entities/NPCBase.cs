@@ -133,9 +133,6 @@ namespace RetroEngine.Entities
         public override void Update()
         {
             //UpdateNPCList();
-
-            if(Input.GetAction("test2").Pressed())
-                mesh.ClearHitboxBodies();
             
 
         }

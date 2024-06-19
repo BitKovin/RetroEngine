@@ -43,8 +43,6 @@ namespace RetroEngine.Entities
         {
             base.Update();
 
-            UpdateCollision();
-
             mesh.Position = Position;
             mesh.Rotation = Rotation;
 

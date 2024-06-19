@@ -56,8 +56,6 @@ namespace RetroEngine
 
         Task gameTask;
 
-        public bool Fullscreen = false;
-
         int tick = 0;
 
         bool pendingGraphicsUpdate = false;
@@ -433,11 +431,6 @@ namespace RetroEngine
             //SetupFullViewport();
 
 
-            if (_graphics.IsFullScreen != Fullscreen)
-            {
-                _graphics.IsFullScreen = Fullscreen;
-                pendingGraphicsUpdate = true;
-            }
 
             if (pendingGraphicsUpdate)
                 _graphics.ApplyChanges();
@@ -520,24 +513,76 @@ namespace RetroEngine
 
             pendingGraphicsUpdate = true;
         }
-
-        public void SetFullscreen(bool value)
+        bool _isFullscreen = false;
+        bool _isBorderless = false;
+        int _width = 0;
+        int _height = 0;
+        public void ToggleFullscreen()
         {
+            bool oldIsFullscreen = _isFullscreen;
+
+            if (_isBorderless)
+            {
+                _isBorderless = false;
+            }
+            else
+            {
+                _isFullscreen = !_isFullscreen;
+            }
+
+            ApplyFullscreenChange(oldIsFullscreen);
+        }
+        public void ToggleBorderless()
+        {
+            bool oldIsFullscreen = _isFullscreen;
+
+            _isBorderless = !_isBorderless;
+            _isFullscreen = _isBorderless;
+
+            ApplyFullscreenChange(oldIsFullscreen);
+        }
+
+        private void ApplyFullscreenChange(bool oldIsFullscreen)
+        {
+            if (_isFullscreen)
+            {
+                if (oldIsFullscreen)
+                {
+                    ApplyHardwareMode();
+                }
+                else
+                {
+                    SetFullscreen();
+                }
+            }
+            else
+            {
+                UnsetFullscreen();
+            }
+        }
+        private void ApplyHardwareMode()
+        {
+            _graphics.HardwareModeSwitch = !_isBorderless;
+            _graphics.ApplyChanges();
+        }
+        private void SetFullscreen()
+        {
+            _width = Window.ClientBounds.Width;
+            _height = Window.ClientBounds.Height;
+
             _graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
             _graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+            _graphics.HardwareModeSwitch = !_isBorderless;
 
-            if(value)
-                Window.Position = new Point(0, 0);
-
-            _graphics.IsFullScreen = value;
-            Fullscreen = value;
-
-            //_graphics.ApplyChanges();
-
-            //pendingGraphicsUpdate = true;
-
-
-
+            _graphics.IsFullScreen = true;
+            _graphics.ApplyChanges();
+        }
+        private void UnsetFullscreen()
+        {
+            _graphics.PreferredBackBufferWidth = _width;
+            _graphics.PreferredBackBufferHeight = _height;
+            _graphics.IsFullScreen = false;
+            _graphics.ApplyChanges();
         }
 
         public virtual void GameInitialized()

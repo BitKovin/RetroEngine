@@ -258,11 +258,11 @@ namespace RetroEngine
 
         public virtual void Update()
         {
+
             Entity[] list;
-            lock (entities)
-            {
-                list = entities.ToArray();
-            }
+
+            list = entities.ToArray();
+
             foreach (Entity entity in list)
                 if (entity.UpdateWhilePaused && GameMain.Instance.paused || GameMain.Instance.paused == false)
                     entity.Update();
@@ -427,6 +427,7 @@ namespace RetroEngine
 
         internal List<StaticMesh> GetAllOpaqueMeshes()
         {
+            return allMeshes.Where(m => m.Transperent == false).ToList();
 
             List<StaticMesh> result = new List<StaticMesh>();
 

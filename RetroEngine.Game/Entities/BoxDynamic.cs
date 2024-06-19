@@ -99,7 +99,6 @@ namespace RetroEngine.Game.Entities
         {
             base.Update();
 
-            UpdateCollision();
 
             //skeletalMesh.Update(Time.deltaTime);
 

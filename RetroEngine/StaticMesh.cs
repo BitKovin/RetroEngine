@@ -541,6 +541,15 @@ namespace RetroEngine
                 if (frameStaticMeshData.model is not null)
                 {
 
+                    effect.Parameters["World"].SetValue(frameStaticMeshData.World);
+                    effect.Parameters["Masked"]?.SetValue(Masked);
+
+                    if (Masked == false)
+                    {
+                        ApplyShaderParams(effect, null);
+                        effect.Techniques[0].Passes[0].Apply();
+                    }
+
                     if (frameStaticMeshData.model.Meshes is not null)
                         foreach (ModelMesh mesh in frameStaticMeshData.model.Meshes)
                         {
@@ -552,9 +561,9 @@ namespace RetroEngine
                                 graphicsDevice.SetVertexBuffer(meshPart.VertexBuffer);
                                 graphicsDevice.Indices = meshPart.IndexBuffer;
 
-                                effect.Parameters["World"].SetValue(frameStaticMeshData.World);
+                                
 
-                                effect.Parameters["Masked"]?.SetValue(Masked);
+                                
                                 if (Masked)
                                 {
                                     MeshPartData meshPartData = meshPart.Tag as MeshPartData;
@@ -563,8 +572,10 @@ namespace RetroEngine
 
                                     if (texture.GetType() == typeof(RenderTargetCube))
                                         effect.Parameters["Texture"].SetValue(AssetRegistry.LoadTextureFromFile("engine/textures/white.png"));
+
+                                    effect.Techniques[0].Passes[0].Apply();
                                 }
-                                effect.Techniques[0].Passes[0].Apply();
+                                
 
 
                                 graphicsDevice.DrawIndexedPrimitives(

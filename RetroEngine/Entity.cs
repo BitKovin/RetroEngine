@@ -210,11 +210,6 @@ namespace RetroEngine
             OnDamaged(damage, causer, weapon);
         }
 
-        protected void UpdateCollision()
-        {
-
-        }
-
         public virtual void Destroy()
         {
 

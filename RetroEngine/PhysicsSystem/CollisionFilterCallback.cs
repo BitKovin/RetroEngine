@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace RetroEngine.PhysicsSystem
 {
+
+    
+
     internal class CollisionFilterCallback : OverlapFilterCallback
     {
         public override bool NeedBroadphaseCollision(BroadphaseProxy proxy0, BroadphaseProxy proxy1)
@@ -20,9 +23,6 @@ namespace RetroEngine.PhysicsSystem
             var colObj1 = (CollisionObject)proxy1.ClientObject;
 
             if (colObj0 == null || colObj1 == null)
-                return false;
-
-            if (colObj0 == colObj1)
                 return false;
 
 

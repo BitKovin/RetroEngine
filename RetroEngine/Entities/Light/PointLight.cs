@@ -119,7 +119,7 @@ namespace RetroEngine.Entities.Light
 
         }
 
-        public override void Update()
+        public override void AsyncUpdate()
         {
             base.Update();
 

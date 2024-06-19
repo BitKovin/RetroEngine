@@ -105,6 +105,7 @@ namespace RetroEngine.PhysicsSystem
             dynamicsWorld.DispatchInfo.UseContinuous = true;
 
             broadphase.OverlappingPairCache.SetOverlapFilterCallback(collisionFilterCallback);
+            dynamicsWorld.ForceUpdateAllAabbs = false;
 
             staticWorld = new DiscreteDynamicsWorld(new CollisionDispatcher(new DefaultCollisionConfiguration()), new DbvtBroadphase(), new SequentialImpulseConstraintSolver(), new DefaultCollisionConfiguration());
             staticBodies.Clear();

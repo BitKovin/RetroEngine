@@ -220,23 +220,6 @@ namespace RetroEngine.Game.Entities.Player
             PlayerLight.Start();
         }
 
-
-        public override void Update()
-        {
-            base.Update();
-
-            CheckGround();
-
-            InterpolatePos();
-
-            FirstTick = false;
-
-            Camera.velocity = body.LinearVelocity;
-
-            //meleeTrail.SetTrailTransform(bodyMesh.GetBoneMatrix("upperarm_r").DecomposeMatrix().Position, bodyMesh.GetBoneMatrix("hand_r").DecomposeMatrix().Position);
-
-        }
-
         void UpdatePlayerInput()
         {
 
@@ -278,6 +261,14 @@ namespace RetroEngine.Game.Entities.Player
         public override void AsyncUpdate()
         {
             base.AsyncUpdate();
+
+            CheckGround();
+
+            InterpolatePos();
+
+            FirstTick = false;
+
+            Camera.velocity = body.LinearVelocity;
 
             PlayerBodyAnimator.Update();
 

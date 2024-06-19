@@ -56,7 +56,7 @@ namespace RetroEngine.Game
             base.Update(gameTime);
 
             if (Input.GetAction("fullscreen").Pressed())
-                SetFullscreen(!Fullscreen);
+                ToggleBorderless();
         }
 
         public override void OnLevelChanged()
