@@ -22,6 +22,8 @@ namespace RetroEngine
 
         public bool Static = false;
 
+        public bool DisablePhysicsInterpolation = false;
+
         [JsonInclude]
         public Vector3 Position;
 

@@ -139,7 +139,7 @@ namespace RetroEngine
                     // Negate the x-coordinate to correct mirroring
                     vertices.Add(new VertexData
                     {
-                        Position = new Vector3(-vertex.X / unitSize, vertex.Y / unitSize, vertex.Z / unitSize), // Negate x-coordinate
+                        Position = new Vector3(vertex.X / unitSize, vertex.Y / unitSize, vertex.Z / unitSize), // Negate x-coordinate
                         Normal = new Vector3(normal.X, normal.Y, normal.Z),
                         TextureCoordinate = new Vector2(textureCoord.X, 1-textureCoord.Y),
                         Tangent = new Vector3(tangent.X, tangent.Y, tangent.Z)

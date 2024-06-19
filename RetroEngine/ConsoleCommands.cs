@@ -35,35 +35,38 @@ namespace RetroEngine
             string command = parts[0];
             string[] arguments = parts.Skip(1).ToArray();
 
-            Assembly assembly = Assembly.GetExecutingAssembly();
-            Type[] types = assembly.GetTypes();
-
-            foreach (var type in types)
+            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
-                var methods = type.GetMethods();
+                if (assembly.FullName.Contains("RetroEngine") == false) continue;
+                Type[] types = assembly.GetTypes();
 
-                foreach (var method in methods)
+                foreach (var type in types)
                 {
-                    var attribute = (ConsoleCommandAttribute)Attribute.GetCustomAttribute(method, typeof(ConsoleCommandAttribute));
+                    var methods = type.GetMethods();
 
-                    if (attribute != null && attribute.Command.Equals(command, StringComparison.OrdinalIgnoreCase))
+                    foreach (var method in methods)
                     {
-                        // Ensure the number of arguments match the method's parameters
-                        var parameters = method.GetParameters();
-                        if (arguments.Length == parameters.Length)
-                        {
-                            // Convert arguments to the appropriate types
-                            object[] convertedArgs = arguments.Select((arg, index) => Convert.ChangeType(arg, parameters[index].ParameterType)).ToArray();
+                        var attribute = (ConsoleCommandAttribute)Attribute.GetCustomAttribute(method, typeof(ConsoleCommandAttribute));
 
-                            // Invoke the method
-                            var instance = Activator.CreateInstance(type);
-                            method.Invoke(instance, convertedArgs);
-                            return;
-                        }
-                        else
+                        if (attribute != null && attribute.Command.Equals(command, StringComparison.OrdinalIgnoreCase))
                         {
-                            Logger.Log("Invalid number of arguments");
-                            return;
+                            // Ensure the number of arguments match the method's parameters
+                            var parameters = method.GetParameters();
+                            if (arguments.Length == parameters.Length)
+                            {
+                                // Convert arguments to the appropriate types
+                                object[] convertedArgs = arguments.Select((arg, index) => Convert.ChangeType(arg, parameters[index].ParameterType)).ToArray();
+
+                                // Invoke the method
+                                var instance = Activator.CreateInstance(type);
+                                method.Invoke(instance, convertedArgs);
+                                return;
+                            }
+                            else
+                            {
+                                Logger.Log("Invalid number of arguments");
+                                return;
+                            }
                         }
                     }
                 }

@@ -299,10 +299,45 @@ namespace RetroEngine
                 return;
             }
 
-            List<Vector3> points;
-            points = Navigation.FindPath(start, target);
+            List<Vector3> points1;
+            List<Vector3> points2;
+            points1 = Navigation.FindPath(start, target);
+            points2 = Navigation.FindPath(target, start);
+            points2.Reverse();
+            if (points2.Count > 0)
+            {
+                points2.RemoveAt(0);
+                points2.Add(target);
+            }
+            
+
+            float dist1 = CalculatePathDistance(points1, start);
+            float dist2 = CalculatePathDistance(points1, target);
+
+
+            List<Vector3> points = dist2 > dist1 ? points1 : points2;
+
             OnPathFound?.Invoke(points);
 
+        }
+
+        float CalculatePathDistance(List<Vector3> points, Vector3 startPoint)
+        {
+
+            if(points.Count==0)
+                return 0;
+
+            float distance = 0;
+
+            Vector3 prevPoint = startPoint;
+
+            foreach (Vector3 point in points)
+            {
+                distance += Vector3.Distance(prevPoint, point);
+                prevPoint = point;
+            }
+
+            return distance;
         }
 
         internal bool IsVisibleFromPoint(NavPoint point, Vector3 location)

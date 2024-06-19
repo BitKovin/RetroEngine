@@ -274,14 +274,20 @@ namespace RetroEngine.PhysicsSystem
                         // Assume this value is set based on your fixed physics update rate
                         float fixedDeltaTime = Math.Max(1 / 50f,Time.DeltaTime);
 
-                        // Store the previous and current positions of the entity
-                        Vector3 previousPosition = ent.Position.ToPhysics(); // This should be updated each physics tick
-                        Vector3 currentPosition = pos; // This is updated during the physics update
+                        if (ent.DisablePhysicsInterpolation == false)
+                        {
 
-                        // Interpolate the position based on the elapsed time in the current frame
-                        float interpolationFactor = Time.DeltaTime / fixedDeltaTime;
-                        ent.Position = Vector3.Lerp(previousPosition, currentPosition, interpolationFactor);
+                            // Store the previous and current positions of the entity
+                            Vector3 previousPosition = ent.Position.ToPhysics(); // This should be updated each physics tick
+                            Vector3 currentPosition = pos; // This is updated during the physics update
 
+                            // Interpolate the position based on the elapsed time in the current frame
+                            float interpolationFactor = Time.DeltaTime / fixedDeltaTime;
+                            ent.Position = Vector3.Lerp(previousPosition, currentPosition, interpolationFactor);
+                        }else
+                        {
+                            ent.Position = pos;
+                        }
 
                         Matrix4x4 rotationMatrix = rigidBody.WorldTransform.GetBasis();
                         Quaternion rotation = Quaternion.CreateFromRotationMatrix(rotationMatrix);

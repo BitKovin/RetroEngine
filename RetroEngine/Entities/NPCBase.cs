@@ -155,7 +155,7 @@ namespace RetroEngine.Entities
         public override void AsyncUpdate()
         {
 
-            targetLocation = Camera.position;
+            targetLocation = Level.GetCurrent().FindEntityByName("player").Position;
 
             float angleDif = MathHelper.FindLookAtRotation(Position, targetLocation).Y - mesh.Rotation.Y;
 
@@ -199,7 +199,7 @@ namespace RetroEngine.Entities
 
             if (updateDelay.Wait()) return;
             RequestNewTargetLocation();
-            updateDelay.AddDelay(Math.Min(Vector3.Distance(Position, targetLocation)/60,1));
+            updateDelay.AddDelay(Math.Min(Vector3.Distance(Position, targetLocation)/60,0.2f));
 
         }
 
@@ -287,7 +287,6 @@ namespace RetroEngine.Entities
         {
             Vector3 moveLocation = new Vector3();
 
-            updateDelay.AddDelay(0.3f);
 
             if (points.Count > 0)
             {

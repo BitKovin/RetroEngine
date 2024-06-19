@@ -159,7 +159,12 @@ namespace RetroEngine
                 InitializeSphere(radius, ref color);
             }
 
-            
+            for (int i = 0; i < sphereVertices.Length; i++)
+            {
+                var vertex = sphereVertices[i];
+                vertex.Color = new Microsoft.Xna.Framework.Color(color.X, color.Y, color.Z);
+                sphereVertices[i] = vertex;
+            }
 
             basicEffect.View = Camera.finalizedView;
             basicEffect.Projection = Camera.finalizedProjection;
@@ -178,6 +183,7 @@ namespace RetroEngine
                     sphereIndices.Length / 2
                 );
             }
+            basicEffect.World = Matrix.Identity;
         }
 
         #endregion

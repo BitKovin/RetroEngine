@@ -17,6 +17,7 @@ using RetroEngine.Audio;
 using RetroEngine.Entities.Light;
 using RetroEngine.Game.Effects.Particles;
 using RetroEngine.PhysicsSystem;
+using BulletSharp.SoftBody;
 
 namespace RetroEngine.Game.Entities.Player
 {
@@ -116,6 +117,8 @@ namespace RetroEngine.Game.Entities.Player
 
             Tags.Add("player");
 
+            DisablePhysicsInterpolation = true;
+
             Input.CenterCursor();
 
             PlayerUI = new PlayerUI(this);
@@ -166,7 +169,7 @@ namespace RetroEngine.Game.Entities.Player
 
             Camera.position = Position = OldCameraPos = data.GetPropertyVectorPosition("origin");
 
-
+            name = "player";
             Camera.rotation = new Vector3(0, data.GetPropertyFloat("angle") + 90, 0);
 
         }
@@ -236,6 +239,9 @@ namespace RetroEngine.Game.Entities.Player
 
         void UpdatePlayerInput()
         {
+
+            
+
             UpdateMovement();
 
             UpdateCamera();
@@ -354,7 +360,15 @@ namespace RetroEngine.Game.Entities.Player
 
             Vector3 newPos = Position;
 
-            interpolatedPosition = newPos; //Vector3.Lerp(oldPos, newPos, Time.DeltaTime*30);
+            Vector3 previousPosition = interpolatedPosition; // This should be updated each physics tick
+            Vector3 currentPosition = Position; // This is updated during the physics update
+
+            float fixedDeltaTime = Math.Max(1 / 30f, Time.DeltaTime);
+
+            // Interpolate the position based on the elapsed time in the current frame
+            float interpolationFactor = Time.DeltaTime / fixedDeltaTime;
+            interpolatedPosition = Vector3.Lerp(previousPosition, currentPosition, interpolationFactor);
+
 
         }
 
@@ -425,8 +439,10 @@ namespace RetroEngine.Game.Entities.Player
 
                     body.LinearVelocity = new Vector3(velocity.X, body.LinearVelocity.Y, velocity.Z).ToPhysics();
 
-                    TryStep(motion.Normalized()/2);
-                    TryStep(motion.Normalized()/1.6f);
+                    TryStep(motion.Normalized()/2f);
+
+                    TryStep(MathHelper.RotateVector(motion.Normalized() * 1.1f / 2f, Vector3.UnitY, 45));
+                    TryStep(MathHelper.RotateVector(motion.Normalized() * 1.1f / 2f, Vector3.UnitY, -45));
 
                 }
                 else
@@ -534,19 +550,21 @@ namespace RetroEngine.Game.Entities.Player
 
             if (stepDelay.Wait()) return;
 
-            Vector3 pos = ProjectToGround(Position) + dir  + new Vector3(0,1f,0);
+            Vector3 pos = Position + dir;
 
             if (pos == Vector3.Zero)
                 return;
 
-            var hit = Physics.SphereTrace(pos.ToNumerics(), (pos - new Vector3(0, 0.85f, 0)).ToNumerics(),0.5f, new List<CollisionObject>() { body });
+            var hit = Physics.SphereTrace(pos.ToNumerics(), (pos - new Vector3(0, 0.5f, 0)).ToNumerics(),0.4f, new List<CollisionObject>() { body }, body.GetCollisionMask());
 
             if (hit.HasHit == false)
                 return;
 
-
+            DrawDebug.Line(hit.HitPointWorld, hit.HitPointWorld + hit.HitNormalWorld, Vector3.UnitX);
             if (hit.HitNormalWorld.Y < 0.95)
                 return;
+
+            
 
             Vector3 hitPoint = hit.HitPointWorld;
 
@@ -554,7 +572,6 @@ namespace RetroEngine.Game.Entities.Player
                 return;
 
 
-            testCube.Position = hitPoint;
 
             if (hitPoint.Y > Position.Y - 1 + 0.8)
                 return;
@@ -562,9 +579,11 @@ namespace RetroEngine.Game.Entities.Player
             if (Vector3.Distance(hitPoint, Position) > 1)
                 return;
 
-            hitPoint.Y += 1.2f;
+            hitPoint.Y += 1.1f;
 
-            Vector3 lerpPose = Vector3.Lerp(Position, hitPoint, 0.5f);
+            DrawDebug.Sphere(0.5f, hitPoint, Vector3.UnitY);
+
+            Vector3 lerpPose = Vector3.Lerp(Position, hitPoint, 0.65f);
 
             body.SetPosition(lerpPose);
 
@@ -574,7 +593,7 @@ namespace RetroEngine.Game.Entities.Player
 
         Vector3 ProjectToGround(Vector3 pos)
         {
-            var hit = Physics.LineTrace(pos.ToNumerics(), (pos - new Vector3(0, 100000000, 0)).ToNumerics(), new List<CollisionObject>() { body });
+            var hit = Physics.LineTrace(pos.ToNumerics(), (pos - new Vector3(0, 100000000, 0)).ToNumerics(), new List<CollisionObject>() { body }, BodyType.World);
 
             if(hit.HasHit == false)
                 return Vector3.Zero;
@@ -623,7 +642,9 @@ namespace RetroEngine.Game.Entities.Player
         public override void LateUpdate()
         {
 
-            
+            if (FreeCamera.active)
+                return;
+
             UpdatePlayerInput();
 
             bodyMesh.Position = interpolatedPosition - Camera.rotation.GetForwardVector().XZ().Normalized() * 0.25f - new Vector3(0, 1.05f, 0);
