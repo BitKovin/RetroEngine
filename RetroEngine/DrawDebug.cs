@@ -159,31 +159,20 @@ namespace RetroEngine
                 InitializeSphere(radius, ref color);
             }
 
-            var transformedVertices = new VertexPositionColor[sphereVertices.Length];
-            for (int i = 0; i < sphereVertices.Length; i++)
-            {
-                var transformedPosition = System.Numerics.Vector3.Transform(
-                    new System.Numerics.Vector3(sphereVertices[i].Position.X, sphereVertices[i].Position.Y, sphereVertices[i].Position.Z),
-                    transform
-                );
-
-                transformedVertices[i] = new VertexPositionColor(
-                    new Microsoft.Xna.Framework.Vector3(transformedPosition.X, transformedPosition.Y, transformedPosition.Z),
-                    sphereVertices[i].Color
-                );
-            }
+            
 
             basicEffect.View = Camera.finalizedView;
             basicEffect.Projection = Camera.finalizedProjection;
+            basicEffect.World = transform;
 
             foreach (EffectPass pass in basicEffect.CurrentTechnique.Passes)
             {
                 pass.Apply();
                 graphicsDevice.DrawUserIndexedPrimitives(
                     PrimitiveType.LineList,
-                    transformedVertices,
+                    sphereVertices,
                     0,
-                    transformedVertices.Length,
+                    sphereVertices.Length,
                     sphereIndices,
                     0,
                     sphereIndices.Length / 2

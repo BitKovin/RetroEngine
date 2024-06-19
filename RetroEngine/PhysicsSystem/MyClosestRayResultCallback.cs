@@ -17,7 +17,7 @@ namespace RetroEngine
 
         public CollisionFlags FlagToRespond = CollisionFlags.None;
 
-        public PhysicsSystem.BodyType BodyTypeMask = PhysicsSystem.BodyType.All;
+        public PhysicsSystem.BodyType BodyTypeMask = PhysicsSystem.BodyType.GroupAll;
 
         public List<CollisionObject> ignoreList = new List<CollisionObject>();
 

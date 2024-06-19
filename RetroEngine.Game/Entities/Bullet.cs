@@ -127,7 +127,7 @@ namespace RetroEngine.Game.Entities
                 return;
             }
 
-            var hit = Physics.LineTrace(OldPos.ToNumerics(), Position.ToNumerics(), ignoreObjects, PhysicsSystem.BodyType.HitTest);
+            var hit = Physics.LineTrace(OldPos.ToNumerics(), Position.ToNumerics(), ignoreObjects, PhysicsSystem.BodyType.GroupHitTest);
 
             DrawDebug.Sphere(0.5f,Position, Vector3.UnitX);
 

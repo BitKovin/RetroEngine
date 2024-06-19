@@ -41,8 +41,7 @@ namespace RetroEngine.Game
         protected override void Update(GameTime gameTime)
         {
 
-            if(Input.GetAction("fullscreen").Pressed())
-                SetFullscreen(!Fullscreen);
+
 
             if (Graphics.DefaultUnlit)
             {
@@ -55,6 +54,9 @@ namespace RetroEngine.Game
             //DefaultShader = AssetRegistry.GetShaderFromName("SimpleEffect");
 
             base.Update(gameTime);
+
+            if (Input.GetAction("fullscreen").Pressed())
+                SetFullscreen(!Fullscreen);
         }
 
         public override void OnLevelChanged()

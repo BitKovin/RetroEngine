@@ -280,7 +280,7 @@ namespace RetroEngine
 
         internal void Execute()
         {
-            deathDelay.AddDelay(3);
+            deathDelay.AddDelay(5);
             Process(startLocation, endLocation);
             //Thread.Sleep(1);
         }

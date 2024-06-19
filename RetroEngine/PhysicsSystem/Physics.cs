@@ -23,9 +23,9 @@ namespace RetroEngine.PhysicsSystem
         CharacterCapsule = 8,  // 8
         NoRayTest = 16,         // 16
 
-        All = MainBody | HitBox | World | CharacterCapsule | NoRayTest,
-        HitTest = All & ~CharacterCapsule,
-        CollisionTest = All & ~HitBox,
+        GroupAll = MainBody | HitBox | World | CharacterCapsule | NoRayTest,
+        GroupHitTest = GroupAll & ~CharacterCapsule,
+        GroupCollisionTest = GroupAll & ~HitBox,
     }
 
     public class Physics
@@ -109,7 +109,7 @@ namespace RetroEngine.PhysicsSystem
             staticWorld = new DiscreteDynamicsWorld(new CollisionDispatcher(new DefaultCollisionConfiguration()), new DbvtBroadphase(), new SequentialImpulseConstraintSolver(), new DefaultCollisionConfiguration());
             staticBodies.Clear();
 
-            dynamicsWorld.DebugDrawer = new DebugDrawer(GameMain.Instance.GraphicsDevice);
+            dynamicsWorld.DebugDrawer = DrawDebug.instance;
         }
 
         public static void ResetWorld()
@@ -245,7 +245,7 @@ namespace RetroEngine.PhysicsSystem
                             colObj.SetBodyType(BodyType.MainBody);
 
                         if (colObj.UserIndex == -1)
-                            colObj.SetCollisionMask(BodyType.CollisionTest);
+                            colObj.SetCollisionMask(BodyType.GroupCollisionTest);
 
 
                         BodyType bodyType = colObj.GetBodyType();
@@ -441,7 +441,7 @@ namespace RetroEngine.PhysicsSystem
             }
 
             RigidBody.SetBodyType(bodyType);
-            RigidBody.SetCollisionMask(BodyType.CollisionTest);
+            RigidBody.SetCollisionMask(BodyType.GroupCollisionTest);
 
             RigidBody.Friction = 1f;
             RigidBody.SetDamping(0.1f, 0.1f);
@@ -470,7 +470,7 @@ namespace RetroEngine.PhysicsSystem
 
             RigidBody.UserObject = entity;
 
-            RigidBody.SetCollisionMask(BodyType.CollisionTest);
+            RigidBody.SetCollisionMask(BodyType.GroupCollisionTest);
             RigidBody.SetBodyType(BodyType.CharacterCapsule);
 
             lock (dynamicsWorld)
@@ -486,7 +486,7 @@ namespace RetroEngine.PhysicsSystem
             return RigidBody;
         }
 
-        public static MyClosestRayResultCallback LineTrace(Vector3 rayStart, Vector3 rayEnd, List<CollisionObject> ignoreList = null, BodyType bodyType = BodyType.All)
+        public static MyClosestRayResultCallback LineTrace(Vector3 rayStart, Vector3 rayEnd, List<CollisionObject> ignoreList = null, BodyType bodyType = BodyType.GroupAll)
         {
 
             if(Thread.CurrentThread != GameMain.RenderThread && Thread.CurrentThread != GameMain.GameThread)
@@ -540,7 +540,7 @@ namespace RetroEngine.PhysicsSystem
             return convResultCallback;
         }
 
-        public static MyClosestConvexResultCallback SphereTrace(Vector3 rayStart, Vector3 rayEnd, float radius = 0.5f, List<CollisionObject> ignoreList = null, BodyType bodyType = BodyType.All)
+        public static MyClosestConvexResultCallback SphereTrace(Vector3 rayStart, Vector3 rayEnd, float radius = 0.5f, List<CollisionObject> ignoreList = null, BodyType bodyType = BodyType.GroupAll)
         {
 
             if (Thread.CurrentThread != GameMain.RenderThread && Thread.CurrentThread != GameMain.GameThread)
@@ -679,54 +679,6 @@ namespace RetroEngine.PhysicsSystem
             BvhTriangleMeshShape meshShape = new BvhTriangleMeshShape(triangleMesh, true); // Use quantization for better performance
 
             return meshShape;
-        }
-
-        public class DebugDrawer : DebugDraw
-        {
-            GraphicsDevice graphicsDevice;
-            BasicEffect basicEffect;
-
-            public DebugDrawer(GraphicsDevice graphicsDevice)
-            {
-                this.graphicsDevice = graphicsDevice;
-                basicEffect = new BasicEffect(graphicsDevice);
-                basicEffect.VertexColorEnabled = true;
-                basicEffect.LightingEnabled = false;
-                basicEffect.TextureEnabled = false;
-
-            }
-
-            public override DebugDrawModes DebugMode
-            {
-                get { return DebugDrawModes.DrawWireframe; }
-                set { }
-            }
-
-            public override void Draw3DText(ref Vector3 location, string textString)
-            {
-
-            }
-
-            public override void ReportErrorWarning(string warningString)
-            {
-
-            }
-
-            public override void DrawLine(ref Vector3 from, ref Vector3 to, ref Vector3 color)
-            {
-                VertexPositionColor[] vertices = new VertexPositionColor[2];
-                vertices[0] = new VertexPositionColor(from, new Microsoft.Xna.Framework.Color(color.X, color.Y, color.Z));
-                vertices[1] = new VertexPositionColor(to, new Microsoft.Xna.Framework.Color(color.X, color.Y, color.Z));
-
-                basicEffect.View = Camera.finalizedView;
-                basicEffect.Projection = Camera.finalizedProjection;
-
-                foreach (EffectPass pass in basicEffect.CurrentTechnique.Passes)
-                {
-                    pass.Apply();
-                    graphicsDevice.DrawUserPrimitives(PrimitiveType.LineList, vertices, 0, 1);
-                }
-            }
         }
 
     }

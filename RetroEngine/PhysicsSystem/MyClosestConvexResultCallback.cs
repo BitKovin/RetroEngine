@@ -20,7 +20,7 @@ namespace RetroEngine
         public List<CollisionObject> ignoreList = new List<CollisionObject>();
 
 
-        public PhysicsSystem.BodyType BodyTypeMask = PhysicsSystem.BodyType.All;
+        public PhysicsSystem.BodyType BodyTypeMask = PhysicsSystem.BodyType.GroupAll;
 
         public override bool NeedsCollision(BroadphaseProxy proxy0)
         {
