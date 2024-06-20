@@ -76,7 +76,7 @@ namespace RetroEngine.Game.Entities.Weapons
             if(Time.gameTime - SpawnTime > DrawTime)
                 Drawing = false;
 
-            UpdateSway();
+            
 
         }
 
@@ -102,6 +102,8 @@ namespace RetroEngine.Game.Entities.Weapons
         public override void LateUpdate()
         {
             base.LateUpdate();
+
+            UpdateSway();
 
             float progress = Math.Clamp((float)((Time.gameTime - SpawnTime)/DrawTime), 0, 1);
 
