@@ -19,7 +19,20 @@ namespace RetroEngine.Windows
             AllowAsyncAssetLoading = true;
         }
 
+        protected override void Update(GameTime gameTime)
+        {
+            if(Form.ActiveForm != null)
+            if (_graphics.IsFullScreen && Form.ActiveForm.FormBorderStyle != FormBorderStyle.None)
+            {
+                Form.ActiveForm.FormBorderStyle = FormBorderStyle.None;
+                Window.Position = new Point(0, 0);
+            }else if (_graphics.IsFullScreen == false && Form.ActiveForm.FormBorderStyle == FormBorderStyle.None)
+            {
+                Form.ActiveForm.FormBorderStyle = FormBorderStyle.Sizable;
+            }
 
+            base.Update(gameTime);
+        }
         public override void GameInitialized()
         {
             base.GameInitialized();
