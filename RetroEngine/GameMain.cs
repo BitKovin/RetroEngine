@@ -114,6 +114,8 @@ namespace RetroEngine
 
             Window.ClientSizeChanged += Window_ClientSizeChanged;
 
+            
+
             stopwatch.Start();
 
             this.Window.AllowUserResizing = true;
@@ -214,9 +216,20 @@ namespace RetroEngine
             if (tick == 2)
                 GameInitialized();
 
-            LimitFrameRate();
+            
 
             time = gameTime;
+
+            if(_isFullscreen && _graphics.IsFullScreen && IsActive == false)
+            { 
+                _graphics.IsFullScreen = false;
+                _graphics.ApplyChanges();
+
+            }else if(_isFullscreen && _graphics.IsFullScreen == false && IsActive)
+            {
+                _graphics.IsFullScreen = true;
+                _graphics.ApplyChanges();
+            }
 
 
             AssetRegistry.ClearTexturesIfNeeded();
@@ -244,9 +257,10 @@ namespace RetroEngine
             {
                 UpdateTime(gameTime);
             }
-            
 
-            lock(pendingDispose)
+            LimitFrameRate();
+
+            lock (pendingDispose)
             {
 
                 var list = pendingDispose.ToArray();
@@ -562,6 +576,7 @@ namespace RetroEngine
         }
         private void ApplyHardwareMode()
         {
+            _graphics.IsFullScreen = false;
             _graphics.HardwareModeSwitch = !_isBorderless;
             _graphics.ApplyChanges();
         }
@@ -572,7 +587,7 @@ namespace RetroEngine
 
             _graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
             _graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
-            _graphics.HardwareModeSwitch = !_isBorderless;
+            _graphics.ApplyChanges();
 
             _graphics.IsFullScreen = true;
             _graphics.ApplyChanges();
