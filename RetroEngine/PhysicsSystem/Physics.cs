@@ -106,6 +106,7 @@ namespace RetroEngine.PhysicsSystem
 
             broadphase.OverlappingPairCache.SetOverlapFilterCallback(collisionFilterCallback);
             dynamicsWorld.ForceUpdateAllAabbs = false;
+            
 
             staticWorld = new DiscreteDynamicsWorld(new CollisionDispatcher(new DefaultCollisionConfiguration()), new DbvtBroadphase(), new SequentialImpulseConstraintSolver(), new DefaultCollisionConfiguration());
             staticBodies.Clear();
@@ -126,17 +127,19 @@ namespace RetroEngine.PhysicsSystem
                 body.Dispose();
             }
 
-            foreach (CollisionObject collisionObject in collisionObjects)
+            lock (collisionObjects)
             {
+                foreach (CollisionObject collisionObject in collisionObjects)
+                {
 
-                RigidBody body = RigidBody.Upcast(collisionObject);
+                    RigidBody body = RigidBody.Upcast(collisionObject);
 
-                if (body == null)
-                    Remove(collisionObject);
-                else
-                    Remove(body);
+                    if (body == null)
+                        Remove(collisionObject);
+                    else
+                        Remove(body);
+                }
             }
-
             staticBodies.Clear();
             collisionObjects.Clear();
             solver.Reset();

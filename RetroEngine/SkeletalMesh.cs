@@ -601,7 +601,7 @@ namespace RetroEngine
         {
             foreach(HitboxInfo hitbox in hitboxes)
             {
-                Physics.Remove(hitbox.RigidBodyRef);
+                //Physics.Remove(hitbox.RigidBodyRef);
 
                 hitbox.RigidBodyRef = null;
 
@@ -636,7 +636,7 @@ namespace RetroEngine
                     Matrix.CreateTranslation(hitbox.Position) * GetBoneMatrix(hitbox.Bone);
 
                 var boneTrans = matrix.DecomposeMatrix();
-
+                hitbox.RigidBodyRef.Activate(true);
                 hitbox.RigidBodyRef.SetPosition(boneTrans.Position);
                 hitbox.RigidBodyRef.SetRotation(boneTrans.Rotation);
 

@@ -71,8 +71,6 @@ namespace RetroEngine.Game.Entities.Weapons
         {
             base.Update();
 
-            LateUpdateWhilePaused = true;
-
             if(Time.gameTime - SpawnTime > DrawTime)
                 Drawing = false;
 

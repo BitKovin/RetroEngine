@@ -48,7 +48,7 @@ namespace RetroEngine.Game.Entities
             base.LoadAssets();
 
             mesh.LoadFromFile("models/weapons/bullet/bullet.obj");
-            ParticleSystem.Preload("trail");
+            ParticleSystem.Preload("bulletTrail");
             mesh.texture = AssetRegistry.LoadTextureFromFile("models/weapons/bullet/bullet.png");
             mesh.emisssiveTexture = AssetRegistry.LoadTextureFromFile("models/weapons/bullet/bullet_em.png");
 
@@ -129,7 +129,6 @@ namespace RetroEngine.Game.Entities
 
             var hit = Physics.LineTrace(OldPos.ToNumerics(), Position.ToNumerics(), ignoreObjects, PhysicsSystem.BodyType.GroupHitTest);
 
-            DrawDebug.Sphere(0.5f,Position, Vector3.UnitX);
 
             if (hit.HasHit)
             {

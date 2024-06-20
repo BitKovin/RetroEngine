@@ -365,7 +365,7 @@ namespace RetroEngine
 
             List<Model> models = new List<Model>();
 
-            bool transperent = false;
+            bool transperent;
 
             foreach(Texture2D texture in keyValuePairs.Keys)
             {
@@ -387,7 +387,6 @@ namespace RetroEngine
 
                 if(transperent)
                 {
-
 
                     foreach(BrushFaceMesh mesh in keyValuePairs[texture])
                     {

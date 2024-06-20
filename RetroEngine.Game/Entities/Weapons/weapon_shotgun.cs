@@ -74,10 +74,10 @@ namespace RetroEngine.Game.Entities.Weapons
 
             attackDelay.AddDelay(0.6f);
 
-            fireSoundPlayer.Play(true);
+            //fireSoundPlayer.Play(true);
 
             mesh.Play();
-
+            return;
             for (float y = -2; y <= 2; y += 2f)
                 for (float x = -5; x <= 5; x += 2.5f)
                 {

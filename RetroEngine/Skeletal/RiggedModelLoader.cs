@@ -454,274 +454,174 @@ namespace RetroEngine.Skeletal
 
         /// <summary>Get Scene Model Mesh Vertices. Gets all the mesh data into a mesh array. 
         /// </summary>
-        public void CreateVerticeIndiceData(RiggedModel model, Scene scene, int meshIndex) // RiggedModel
+        public void CreateVerticeIndiceData(RiggedModel model, Scene scene, int meshIndex)
         {
-            // http://sir-kimmi.de/assimp/lib_html/structai_mesh.html#aa2807c7ba172115203ed16047ad65f9e
+            var meshes = scene.Meshes;
 
-            //
-            // Loop meshes for Vertice data.
-            //
-            for (int mloop = 0; mloop < scene.Meshes.Count; mloop++)
+            Parallel.ForEach(Enumerable.Range(0, meshes.Count), mloop =>
             {
-                Mesh mesh = scene.Meshes[mloop];
-                if (startupConsoleinfo)
-                {
-                    Console.WriteLine(
-                    "\n" + "__________________________" +
-                    "\n" + "scene.Meshes[" + mloop + "] " +
-                    "\n" + " FaceCount: " + mesh.FaceCount +
-                    "\n" + " VertexCount: " + mesh.VertexCount +
-                    "\n" + " Normals.Count: " + mesh.Normals.Count +
-                    "\n" + " BoneCount: " + mesh.BoneCount +
-                    "\n" + " MaterialIndex: " + mesh.MaterialIndex
-                    );
-                    Console.WriteLine("  mesh.UVComponentCount.Length: " + mesh.UVComponentCount.Length);
-                }
+                Mesh mesh = meshes[mloop];
+                int[] indices = new int[mesh.Faces.Count * 3];
+                VertexData[] vertices = new VertexData[mesh.Vertices.Count];
 
-                for (int i = 0; i < mesh.UVComponentCount.Length; i++)
-                {
-                    int val = mesh.UVComponentCount[i];
-                    if (startupConsoleinfo)
-                        Console.WriteLine("       mesh.UVComponentCount[" + i + "] : " + val);
-                }
-
-                // indices
-                int[] indexs = new int[mesh.Faces.Count * 3];
-                int loopindex = 0;
-                for (int k = 0; k < mesh.Faces.Count; k++)
+                // Process indices
+                Parallel.For(0, mesh.Faces.Count, k =>
                 {
                     var f = mesh.Faces[k];
+                    int baseIndex = k * 3;
                     for (int j = 0; j < f.IndexCount; j++)
                     {
-                        var ind = f.Indices[j];
-                        indexs[loopindex] = ind;
-                        loopindex++;
+                        indices[baseIndex + j] = f.Indices[j];
                     }
-                }
+                });
 
-                // vertices 
-                VertexData[] v = new VertexData[mesh.Vertices.Count];
-                for (int k = 0; k < mesh.Vertices.Count; k++)
+                // Initialize vertex data
+                Parallel.For(0, mesh.Vertices.Count, k =>
                 {
-                    var f = mesh.Vertices[k];
-                    v[k].Position = new Vector3(f.X, f.Y, f.Z);
-                    v[k].Color = Vector4.One;
-                }
-                // normals
-                for (int k = 0; k < mesh.Normals.Count; k++)
-                {
-                    var f = mesh.Normals[k];
-                    v[k].Normal = new Vector3(f.X, f.Y, f.Z);
-                }
-
-                // Check whether the mesh contains tangent and bitangent vectors It is not possible that it contains tangents and no bitangents (or the other way round). 
-                // http://sir-kimmi.de/assimp/lib_html/structai_mesh.html#aa2807c7ba172115203ed16047ad65f9e
-                //
-
-                //// TODO need to add this to the vertex declaration or calculate it on the shader.
-
-                // tangents
-                for (int k = 0; k < mesh.Tangents.Count; k++)
-                {
-                    var f = mesh.Tangents[k];
-                    v[k].Tangent = new Vector3(f.X, f.Y, f.Z);
-                }
-                // bi tangents  
-                for (int k = 0; k < mesh.BiTangents.Count; k++)
-                {
-                    var f = mesh.BiTangents[k];
-                    v[k].BiTangent = f.ToMg();
-                }
-
-                // A mesh may contain 0 to AI_MAX_NUMBER_OF_COLOR_SETS vertex colors per vertex. NULL if not present. Each array is mNumVertices in size if present. 
-                // http://sir-kimmi.de/assimp/lib_html/structai_mesh.html#aa2807c7ba172115203ed16047ad65f9e
-
-                // TODO colors dunno why there are lists of lists for colors 
-                // maybe its multi colored or something ill have to read up on this ...  not sure this is the right way to do it ?
-                //  This will have to be made from scratch need v4 to mg and other stuff
-                //
-                if (mesh.HasVertexColors(0) && false)
-                {
-                    var cchan0 = mesh.VertexColorChannels[0];
-                    for (int k = 0; k < cchan0.Count; k++)
+                    var v = mesh.Vertices[k];
+                    vertices[k] = new VertexData
                     {
-                        //var f = mesh.VertexColorChannels[k];
-                        Vector4 cf;
-                        for (int i = 0; i < cchan0.Count; i++)
+                        Position = new Vector3(v.X, v.Y, v.Z),
+                        Color = Vector4.One,
+                        BlendIndices = new Vector4(0f, 0f, 0f, 0f),
+                        BlendWeights = new Vector4(0f, 0f, 0f, 0f)
+                    };
+                });
+
+                // Process normals
+                if (mesh.Normals.Count == mesh.Vertices.Count)
+                {
+                    Parallel.For(0, mesh.Normals.Count, k =>
+                    {
+                        var n = mesh.Normals[k];
+                        vertices[k].Normal = new Vector3(n.X, n.Y, n.Z);
+                    });
+                }
+
+                // Process tangents
+                if (mesh.Tangents.Count == mesh.Vertices.Count)
+                {
+                    Parallel.For(0, mesh.Tangents.Count, k =>
+                    {
+                        var t = mesh.Tangents[k];
+                        vertices[k].Tangent = new Vector3(t.X, t.Y, t.Z);
+                    });
+                }
+
+                // Process bi tangents
+                if (mesh.BiTangents.Count == mesh.Vertices.Count)
+                {
+                    Parallel.For(0, mesh.BiTangents.Count, k =>
+                    {
+                        var bt = mesh.BiTangents[k];
+                        vertices[k].BiTangent = bt.ToMg();
+                    });
+                }
+
+                // Process UV channels
+                var uvChannels = mesh.TextureCoordinateChannels;
+                for (int k = 0; k < uvChannels.Length; k++)
+                {
+                    var f = uvChannels[k];
+                    Parallel.For(0, f.Count, j =>
+                    {
+                        var uv = f[j];
+                        vertices[j].TextureCoordinate = new Vector2(uv.X, uv.Y);
+                    });
+                }
+
+                // Calculate min, max, and centroid for bounding box
+                Vector3 min = new Vector3(float.MaxValue);
+                Vector3 max = new Vector3(float.MinValue);
+                Vector3 centroid = Vector3.Zero;
+
+                foreach (var vert in vertices)
+                {
+                    min = Vector3.Min(min, vert.Position);
+                    max = Vector3.Max(max, vert.Position);
+                    centroid += vert.Position;
+                }
+
+                model.meshes[mloop].Centroid = centroid / vertices.Length;
+                model.meshes[mloop].Min = min;
+                model.meshes[mloop].Max = max;
+
+                // Process bones and weights
+                TempWeightVert[] tempVerts = new TempWeightVert[mesh.Vertices.Count];
+                if (mesh.HasBones)
+                {
+                    var meshBones = mesh.Bones;
+                    foreach (var boneInMesh in meshBones)
+                    {
+                        int correspondingFlatBoneListIndex = GetFlatBoneIndexInModel(model, scene, boneInMesh.Name);
+
+                        foreach (var weight in boneInMesh.VertexWeights)
                         {
-                            var cc = cchan0[i];
-                            cf = new Vector4(cc.R, cc.G, cc.B, cc.A);
-                            //v[i].Color = cf;
+                            int verticeIndex = weight.VertexID;
+                            float boneWeight = weight.Weight;
+
+                            if (tempVerts[verticeIndex] == null)
+                                tempVerts[verticeIndex] = new TempWeightVert();
+
+                            tempVerts[verticeIndex].verticeIndexs.Add(verticeIndex);
+                            tempVerts[verticeIndex].verticesFlatBoneId.Add(correspondingFlatBoneListIndex);
+                            tempVerts[verticeIndex].verticeBoneWeights.Add(boneWeight);
+                            tempVerts[verticeIndex].countOfBoneEntrysForThisVertice++;
                         }
                     }
                 }
                 else
                 {
-                }
-
-
-                // Check whether the mesh contains a texture coordinate set. 
-                // mNumUVComponents
-                // unsigned int aiMesh::mNumUVComponents[AI_MAX_NUMBER_OF_TEXTURECOORDS]
-                // Specifies the number of components for a given UV channel.
-                // Up to three channels are supported(UVW, for accessing volume or cube maps).If the value is 2 for a given channel n, the component p.z of mTextureCoords[n][p] is set to 0.0f.If the value is 1 for a given channel, p.y is set to 0.0f, too.
-                // Note 4D coords are not supported
-
-                // Uv
-                var uvchannels = mesh.TextureCoordinateChannels;
-                for (int k = 0; k < uvchannels.Length; k++)
-                {
-                    var f = uvchannels[k];
-                    int loopIndex = 0;
-                    for (int j = 0; j < f.Count; j++)
+                    for (int i = 0; i < tempVerts.Length; i++)
                     {
-                        var uv = f[j];
-                        v[loopIndex].TextureCoordinate = new Vector2(uv.X, uv.Y);
-                        loopIndex++;
+                        tempVerts[i] = new TempWeightVert();
+                        tempVerts[i].verticeIndexs.Add(i);
+                        tempVerts[i].verticesFlatBoneId.Add(0);
+                        tempVerts[i].verticeBoneWeights.Add(1.0f);
                     }
                 }
 
-                // find the min max vertices for a bounding box.
-                // this is useful for other stuff which i need right now.
-
-                Vector3 min = Vector3.Zero;
-                Vector3 max = Vector3.Zero;
-                Vector3 centroid = Vector3.Zero;
-                foreach (var vert in v)
+                // Fill BlendIndices and BlendWeights
+                for (int i = 0; i < tempVerts.Length; i++)
                 {
-                    if (vert.Position.X < min.X) { min.X = vert.Position.X; }
-                    if (vert.Position.Y < min.Y) { min.Y = vert.Position.Y; }
-                    if (vert.Position.Z < min.Z) { min.Z = vert.Position.Z; }
-                    if (vert.Position.X > max.X) { max.X = vert.Position.X; }
-                    if (vert.Position.Y > max.Y) { max.Y = vert.Position.Y; }
-                    if (vert.Position.Z > max.Z) { max.Z = vert.Position.Z; }
-                    centroid += vert.Position;
-                }
-                model.meshes[mloop].Centroid = centroid / v.Length;
-                model.meshes[mloop].Min = min;
-                model.meshes[mloop].Max = max;
-
-                // Prep blend weight and indexs this one is just prep for later on.
-                for (int k = 0; k < mesh.Vertices.Count; k++)
-                {
-                    var f = mesh.Vertices[k];
-                    v[k].BlendIndices = new Vector4(0f, 0f, 0f, 0f);
-                    v[k].BlendWeights = new Vector4(0f, 0f, 0f, 0f);
-                }
-
-                // Restructure vertice data to conform to a shader.
-                // Iterate mesh bone offsets set the bone Id's and weights to the vertices.
-                // This also entails correlating the mesh local bone index names to the flat bone list.
-                TempWeightVert[] verts = new TempWeightVert[mesh.Vertices.Count];
-                if (mesh.HasBones)
-                {
-                    var meshBones = mesh.Bones;
-                    if (startupConsoleinfo)
-                        Console.WriteLine("meshBones.Count: " + meshBones.Count);
-                    for (int meshBoneIndex = 0; meshBoneIndex < meshBones.Count; meshBoneIndex++)
+                    var ve = tempVerts[i];
+                    if (ve != null)
                     {
-                        var boneInMesh = meshBones[meshBoneIndex]; // ahhhh
-                        var boneInMeshName = meshBones[meshBoneIndex].Name;
-                        var correspondingFlatBoneListIndex = GetFlatBoneIndexInModel(model, scene, boneInMeshName);
-
-                        if (startupConsoleinfo)
-                        {
-                            string str = "  mesh.Name: " + mesh.Name + "mesh[" + mloop + "] " + " bone.Name: " + boneInMeshName.PadRight(17) + "     meshLocalBoneListIndex: " + meshBoneIndex.ToString().PadRight(4) + " flatBoneListIndex: " + correspondingFlatBoneListIndex.ToString().PadRight(4) + " WeightCount: " + boneInMesh.VertexWeightCount;
-                            Console.WriteLine(str);
-                        }
-
-                        // loop thru this bones vertice listings with the weights for it.
-                        for (int weightIndex = 0; weightIndex < boneInMesh.VertexWeightCount; weightIndex++)
-                        {
-                            var verticeIndexTheBoneIsFor = boneInMesh.VertexWeights[weightIndex].VertexID;
-                            var boneWeightVal = boneInMesh.VertexWeights[weightIndex].Weight;
-                            if (verts[verticeIndexTheBoneIsFor] == null)
-                            {
-                                verts[verticeIndexTheBoneIsFor] = new TempWeightVert();
-                            }
-                            // add this vertice its weight and the bone id to the temp verts list.
-                            verts[verticeIndexTheBoneIsFor].verticeIndexs.Add(verticeIndexTheBoneIsFor);
-                            verts[verticeIndexTheBoneIsFor].verticesFlatBoneId.Add(correspondingFlatBoneListIndex);
-                            verts[verticeIndexTheBoneIsFor].verticeBoneWeights.Add(boneWeightVal);
-                            verts[verticeIndexTheBoneIsFor].countOfBoneEntrysForThisVertice++;
-                        }
-                    }
-                }
-                else // mesh has no bones
-                {
-                    // if there is no bone data we will make it set to bone zero.
-                    // this is basically a safety measure as if there is no bone data there is no bones.
-                    // however the vertices need to have a weight of 1.0 for bone zero which is really identity.
-                    for (int i = 0; i < verts.Length; i++)
-                    {
-                        verts[i] = new TempWeightVert();
-                        var ve = verts[i];
-                        if (ve.verticeIndexs.Count == 0)
-                        {
-                            // there is no bone data for this vertice at all then we should set it to bone zero.
-                            verts[i].verticeIndexs.Add(i);
-                            verts[i].verticesFlatBoneId.Add(0);
-                            verts[i].verticeBoneWeights.Add(1.0f);
-                        }
-                    }
-                }
-
-                // Ill need up to 4 values per bone list so if some of the values are empty ill copy zero to them with weight 0.
-                // This is to ensure the full key vector4 is populated.
-                // The bone weight data aligns to the bones not nodes so it aligns to the offset matrices bone names.
-
-                // loop each temp vertice add the temporary structure we have to the model vertices in sequence.
-                for (int i = 0; i < verts.Length; i++)
-                {
-                    if (verts[i] != null)
-                    {
-                        var ve = verts[i];
-                        //int maxbones = 4;
                         var arrayIndex = ve.verticeIndexs.ToArray();
                         var arrayBoneId = ve.verticesFlatBoneId.ToArray();
                         var arrayWeight = ve.verticeBoneWeights.ToArray();
-                        if (arrayBoneId.Count() > 3)
-                        {
-                            v[arrayIndex[3]].BlendIndices.W = arrayBoneId[3];
-                            v[arrayIndex[3]].BlendWeights.W = arrayWeight[3];
-                        }
-                        if (arrayBoneId.Count() > 2)
-                        {
-                            v[arrayIndex[2]].BlendIndices.Z = arrayBoneId[2];
-                            v[arrayIndex[2]].BlendWeights.Z = arrayWeight[2];
-                        }
-                        if (arrayBoneId.Count() > 1)
-                        {
-                            v[arrayIndex[1]].BlendIndices.Y = arrayBoneId[1];
-                            v[arrayIndex[1]].BlendWeights.Y = arrayWeight[1];
-                        }
-                        if (arrayBoneId.Count() > 0)
-                        {
-                            v[arrayIndex[0]].BlendIndices.X = arrayBoneId[0];
-                            v[arrayIndex[0]].BlendWeights.X = arrayWeight[0];
-                        }
+
+                        if (arrayBoneId.Length > 0) vertices[arrayIndex[0]].BlendIndices.X = arrayBoneId[0];
+                        if (arrayWeight.Length > 0) vertices[arrayIndex[0]].BlendWeights.X = arrayWeight[0];
+
+                        if (arrayBoneId.Length > 1) vertices[arrayIndex[1]].BlendIndices.Y = arrayBoneId[1];
+                        if (arrayWeight.Length > 1) vertices[arrayIndex[1]].BlendWeights.Y = arrayWeight[1];
+
+                        if (arrayBoneId.Length > 2) vertices[arrayIndex[2]].BlendIndices.Z = arrayBoneId[2];
+                        if (arrayWeight.Length > 2) vertices[arrayIndex[2]].BlendWeights.Z = arrayWeight[2];
+
+                        if (arrayBoneId.Length > 3) vertices[arrayIndex[3]].BlendIndices.W = arrayBoneId[3];
+                        if (arrayWeight.Length > 3) vertices[arrayIndex[3]].BlendWeights.W = arrayWeight[3];
                     }
                 }
 
-                model.meshes[mloop].vertices = v;
-                model.meshes[mloop].indices = indexs;
+                model.meshes[mloop].vertices = vertices;
+                model.meshes[mloop].indices = indices;
 
-                // last thing reverse the winding if specified.
+                // Reverse vertex winding if specified
                 if (ReverseVerticeWinding)
                 {
                     for (int k = 0; k < model.meshes[mloop].indices.Length; k += 3)
                     {
-                        var i0 = model.meshes[mloop].indices[k + 0];
+                        var i0 = model.meshes[mloop].indices[k];
                         var i1 = model.meshes[mloop].indices[k + 1];
                         var i2 = model.meshes[mloop].indices[k + 2];
-                        model.meshes[mloop].indices[k + 0] = i0;
+                        model.meshes[mloop].indices[k] = i0;
                         model.meshes[mloop].indices[k + 1] = i2;
                         model.meshes[mloop].indices[k + 2] = i1;
                     }
                 }
-
-            }
-            //return model;
+            });
         }
 
         /// <summary> Gets the assimp animations as the original does it into the model.

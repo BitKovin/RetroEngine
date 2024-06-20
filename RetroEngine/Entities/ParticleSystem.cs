@@ -40,7 +40,11 @@ namespace RetroEngine.Entities
 
             var sys = ParticleSystemFactory.CreateByTechnicalName(systemName);
 
-            if (sys == null) return;
+            if (sys == null)
+            {
+                Logger.Log($"ERRROR: failed to load system {sys}");
+                return;
+            }
 
             
             sys.Start();
