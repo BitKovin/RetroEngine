@@ -16,13 +16,12 @@ namespace RetroEngine
         {
             lock (body)
             {
-                lock (Physics.dynamicsWorld)
-                {
-                    // Directly set the position while keeping the existing rotation
-                    var worldTransform = body.WorldTransform;
-                    worldTransform.Translation = newPosition.ToPhysics();
-                    body.WorldTransform = worldTransform;
-                }
+
+                // Directly set the position while keeping the existing rotation
+                var worldTransform = body.WorldTransform;
+                worldTransform.Translation = newPosition.ToPhysics();
+                body.WorldTransform = worldTransform;
+
             }
         }
 
@@ -30,18 +29,17 @@ namespace RetroEngine
         {
             lock (body)
             {
-                lock (Physics.dynamicsWorld)
-                {
-                    // Create the new rotation matrix from the quaternion
-                    var newTransform = System.Numerics.Matrix4x4.CreateFromQuaternion(newRotation.ToPhysics());
 
-                    // Preserve the existing translation
-                    newTransform.Translation = body.WorldTransform.Translation;
+                // Create the new rotation matrix from the quaternion
+                var newTransform = System.Numerics.Matrix4x4.CreateFromQuaternion(newRotation.ToPhysics());
 
-                    // Update the body's world transform and motion state
-                    body.WorldTransform = newTransform;
-                    body.MotionState.WorldTransform = newTransform;
-                }
+                // Preserve the existing translation
+                newTransform.Translation = body.WorldTransform.Translation;
+
+                // Update the body's world transform and motion state
+                body.WorldTransform = newTransform;
+                body.MotionState.WorldTransform = newTransform;
+
             }
         }
 
