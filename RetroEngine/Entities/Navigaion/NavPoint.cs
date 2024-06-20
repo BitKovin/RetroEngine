@@ -38,7 +38,7 @@ namespace RetroEngine.Entities.Navigaion
             if ((Time.FrameCount % total) != spawnedId) return;
 
             UpdateInternalConnected();
-
+            return;
             foreach(NavPoint p in connected)
             {
                 DrawDebug.Line(Position, p.Position, Vector3.UnitZ, 0.1f);

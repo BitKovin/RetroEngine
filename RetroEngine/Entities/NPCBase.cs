@@ -55,6 +55,8 @@ namespace RetroEngine.Entities
         protected float ShadowDistance = 40;
         protected bool AnimationAlwaysUpdateTime = true;
 
+        Entity player;
+
         public NPCBase()
         {
             SaveGame = true;
@@ -70,8 +72,8 @@ namespace RetroEngine.Entities
 
             bodies.Add(body);
 
+            player = Level.GetCurrent().FindEntityByName("player");
 
-            
 
             //npcList.Add(this);
 
@@ -149,10 +151,12 @@ namespace RetroEngine.Entities
 
         }
 
+
+
         public override void AsyncUpdate()
         {
 
-            targetLocation = Level.GetCurrent().FindEntityByName("player").Position;
+            targetLocation = player.Position;
 
             float angleDif = MathHelper.FindLookAtRotation(Position, targetLocation).Y - mesh.Rotation.Y;
 
@@ -194,9 +198,12 @@ namespace RetroEngine.Entities
 
             mesh.Rotation = new Vector3(0, MathHelper.FindLookAtRotation(Vector3.Zero, MoveDirection).Y, 0);
 
+
             if (updateDelay.Wait()) return;
             RequestNewTargetLocation();
             updateDelay.AddDelay(Math.Min(Vector3.Distance(Position, targetLocation)/60,0.2f));
+
+
 
         }
 
