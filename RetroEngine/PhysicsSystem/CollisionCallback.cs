@@ -33,6 +33,8 @@ namespace RetroEngine
 
         public override bool NeedsCollision(BroadphaseProxy proxy0)
         {
+            if (proxy0.ClientObject == null)
+                return false;
 
             var colObj = (CollisionObject)proxy0.ClientObject;
 

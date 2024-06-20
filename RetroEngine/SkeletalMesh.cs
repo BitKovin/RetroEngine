@@ -638,7 +638,6 @@ namespace RetroEngine
                     Matrix.CreateTranslation(hitbox.Position) * GetBoneMatrix(hitbox.Bone);
 
                 var boneTrans = matrix.DecomposeMatrix();
-                hitbox.RigidBodyRef.Activate(true);
                 hitbox.RigidBodyRef.SetPosition(boneTrans.Position);
                 hitbox.RigidBodyRef.SetRotation(boneTrans.Rotation);
 
