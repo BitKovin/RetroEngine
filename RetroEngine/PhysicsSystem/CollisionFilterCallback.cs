@@ -42,7 +42,7 @@ namespace RetroEngine.PhysicsSystem
         private bool ShouldCollide(BodyType collidesWith, BodyType bodyType)
         {
             // Use bitwise AND to check if any flag is set in both collidesWith and bodyType
-            return collidesWith.HasFlag(bodyType);
+            return (collidesWith & bodyType) != 0;
         }
     }
 }

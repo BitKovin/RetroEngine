@@ -431,10 +431,12 @@ namespace RetroEngine
             if (Transperent)
                 Masked = true;
 
-            effect.Parameters["World"].SetValue(frameStaticMeshData.World);
 
             if (RiggedModel != null)
             {
+
+                effect.Parameters["World"].SetValue(frameStaticMeshData.World);
+                effect.Parameters["Masked"].SetValue(Masked);
 
                 graphicsDevice.RasterizerState = Graphics.DisableBackFaceCulling || TwoSided ? RasterizerState.CullNone : RasterizerState.CullClockwise;
 
@@ -451,7 +453,7 @@ namespace RetroEngine
                         //effect.Techniques[0].Passes[0].Apply();
 
 
-                        effect.Parameters["Masked"].SetValue(Masked);
+                        
                         if (Masked)
                         {
                             MeshPartData meshPartData = meshPart.Tag as MeshPartData;
@@ -460,9 +462,9 @@ namespace RetroEngine
                             if(texture!=null)
                             if (texture.GetType() == typeof(RenderTargetCube))
                                 effect.Parameters["Texture"].SetValue(AssetRegistry.LoadTextureFromFile("engine/textures/white.png"));
+                            effect.Techniques[0].Passes[0].Apply();
                         }
-
-                        effect.Techniques[0].Passes[0].Apply();
+                        
 
                         meshPart.Draw(graphicsDevice);
 
@@ -601,7 +603,7 @@ namespace RetroEngine
         {
             foreach(HitboxInfo hitbox in hitboxes)
             {
-                //Physics.Remove(hitbox.RigidBodyRef);
+                Physics.Remove(hitbox.RigidBodyRef);
 
                 hitbox.RigidBodyRef = null;
 
