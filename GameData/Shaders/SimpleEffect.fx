@@ -1,4 +1,5 @@
 ﻿#define NO_SPECULAR
+#define SIMPLE_SHADOWS
 #include "ShaderLib/BasicShader.fx"
 
 texture Texture;

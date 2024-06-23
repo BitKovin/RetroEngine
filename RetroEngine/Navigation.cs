@@ -291,7 +291,7 @@ namespace RetroEngine
             start = Navigation.ProjectToGround(start);
             target = Navigation.ProjectToGround(target);
 
-            var hit = Physics.SphereTrace(start.ToPhysics(), target.ToPhysics(), 0.4f, bodyType: PhysicsSystem.BodyType.World);
+            var hit = Physics.SphereTrace(start.ToPhysics() + Vector3.UnitY.ToPhysics() * 0.3f, target.ToPhysics() + Vector3.UnitY.ToPhysics() * 0.3f, 0.3f, bodyType: PhysicsSystem.BodyType.World);
 
             if (hit.HasHit == false)
             {
