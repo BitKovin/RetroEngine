@@ -1,20 +1,27 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net7.0-windows10.0.22621.0</TargetFramework>
+    <TargetFramework>net8.0-windows10.0.22621.0</TargetFramework>
     <RollForward>Major</RollForward>
     <PublishReadyToRun>false</PublishReadyToRun>
     <TieredCompilation>false</TieredCompilation>
     <Platforms>AnyCPU;x86;x64</Platforms>
     <ValidateExecutableReferencesMatchSelfContained>false</ValidateExecutableReferencesMatchSelfContained>
   </PropertyGroup>
+
+  <PropertyGroup>
+    <DotnetCommand Condition="'$(DotnetCommand)' == ''">dotnet</DotnetCommand>
+    <EnableMGCBItems Condition="'$(EnableMGCBItems)' == ''">true</EnableMGCBItems>
+    <MGCBPath Condition="'$(MGCBPath)' == ''">..\Libs\MonoGame\Artifacts\MonoGame.Content.Builder\Debug\mgcb.dll</MGCBPath>
+  </PropertyGroup>
+  
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Icon.ico</ApplicationIcon>
     <StartupObject>Program</StartupObject>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <SupportedOSPlatformVersion>8.0</SupportedOSPlatformVersion>
-    <PublishAot>True</PublishAot>
+    <PublishAot>False</PublishAot>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Icon.ico" />
@@ -30,8 +37,8 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.1.303" />
-    <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.1.303" />
+    <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.1.1-develop" />
+    <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.1.1-develop" />
     <PackageReference Include="SharpDX.DirectInput" Version="4.0.1" />
   </ItemGroup>
   <ItemGroup>

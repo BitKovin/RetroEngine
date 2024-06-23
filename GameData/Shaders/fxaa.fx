@@ -15,17 +15,48 @@
  */
 
 #if OPENGL
-    #define SV_POSITION POSITION
-    #define VS_SHADERMODEL vs_3_0
-    #define PS_SHADERMODEL ps_3_0
+    //#define SV_POSITION POSITION
+    #define VS_SHADERMODEL vs_5_0
+    #define PS_SHADERMODEL ps_5_0
 #else
     #define VS_SHADERMODEL vs_5_0
     #define PS_SHADERMODEL ps_5_0
 #endif
 
+struct VertexInput
+{
+    float4 PositionPS : POSITION;
+    float4 Diffuse    : COLOR0;
+    float2 TexCoord   : TEXCOORD0;
+};
+
+// Vertex Shader Output Structure
+struct VertexOutput
+{
+    float4 PositionPS : SV_Position0;
+    float4 Diffuse    : COLOR0;
+    float2 TexCoord   : TEXCOORD0;
+};
+
+// Vertex Shader
+VertexOutput SimpleVertexShader(VertexInput input)
+{
+    VertexOutput output;
+
+    // Pass the position directly to the pixel shader
+    output.PositionPS = input.PositionPS;
+
+    output.Diffuse = float4(1,1,1,1);
+
+    // Pass the texture coordinates directly to the pixel shader
+    output.TexCoord = input.TexCoord;
+
+    return output;
+}
+
 // helper
-    #define FxaaTexTop(t, p) tex2Dlod(t, float4(p, 0.0, 0.0))
-    #define FxaaTexOff(t, p, o, r) tex2Dlod(t, float4(p + (o * r), 0, 0))
+    #define FxaaTexTop(t, p) t.Sample(splScreen,p)
+    #define FxaaTexOff(t, p, o, r) t.Sample(splScreen,float2(p + (o * r)))
 #define FxaaSat(x) saturate(x)
 
 // flags
@@ -86,7 +117,7 @@ float FxaaLuma(float4 rgba)
 
 float4 FxaaPixelShader_PC(
     float2 pos,
-    sampler2D tex,
+    Texture2D tex,
     float2 fxaaQualityRcpFrame,
     float fxaaQualitySubpix,
     float fxaaQualityEdgeThreshold,
@@ -445,7 +476,7 @@ float4 FxaaPixelShader_PC(
 float4 FxaaPixelShader_Console(
     float2 pos, // texture coordinate
     float4 fxaaConsolePosPos, // console only, turn off perspective interpolation
-    sampler2D tex, // texture to sample
+    Texture2D tex, // texture to sample
     float4 fxaaConsoleRcpFrameOpt, // This effects sub-pixel AA quality and inversely sharpness.
     float4 fxaaConsoleRcpFrameOpt2, // only for PC
     float fxaaConsoleEdgeSharpness, // sharpness parameter
@@ -512,11 +543,14 @@ float4 FxaaPixelShader_Console(
 
 /*=======PIXELSHADER========================================================*/
 
-float4 PixelShaderFunction_PC(float4 position : SV_Position, float4 color : COLOR0, float2 texCoords : TEXCOORD0) : SV_Target0
+float4 PixelShaderFunction_PC(VertexOutput input) : SV_Target0
 {
+
+    //return float4(input.TexCoord,0,1);
+
     float4 value = FxaaPixelShader_PC(
-        texCoords,
-        splScreen,
+        input.TexCoord,
+        screenColor,
         float2(invViewportWidth, invViewportHeight),
         fxaaQualitySubpix,
         fxaaQualityEdgeThreshold,
@@ -534,7 +568,7 @@ float4 PixelShaderFunction_Console(float4 position : SV_Position, float4 color :
     float4 value = FxaaPixelShader_Console(
 		texCoords,
 		pixelBorder,
-		splScreen,
+		screenColor,
 		ConsoleOpt1,
 		ConsoleOpt2,
 		ConsoleEdgeSharpness,
@@ -547,10 +581,14 @@ float4 PixelShaderFunction_Console(float4 position : SV_Position, float4 color :
 
 /*=======TECHNIQUES=========================================================*/
 
+
+
+
 technique ppfxaa_PC
 {
     pass Pass1
     {
         PixelShader = compile PS_SHADERMODEL PixelShaderFunction_PC();
+        VertexShader = compile VS_SHADERMODEL SimpleVertexShader();
     }
 }

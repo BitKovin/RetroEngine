@@ -78,7 +78,7 @@ sampler ReflectionTextureSampler = sampler_state
     AddressV = Clamp;
 };
 
-texture ReflectionCubemap;
+TextureCube ReflectionCubemap;
 sampler ReflectionCubemapSampler = sampler_state
 {
     texture = <ReflectionCubemap>;
@@ -254,9 +254,11 @@ float ScreenWidth;
 float SSRHeight;
 float SSRWidth;
 
+bool DisableDepthDiscard;
+
 struct VertexInput
 {
-    float4 Position : SV_POSITION0;
+    float4 Position : SV_POSITION;
     float3 Normal : NORMAL0; // Add normal input
     float2 TexCoord : TEXCOORD0;
     float3 Tangent : TANGENT0;
@@ -419,7 +421,7 @@ PixelInput DefaultVertexShaderFunction(VertexInput input)
 
 void DepthDiscard(float depth, PixelInput input)
 {
-    if (depth < input.MyPixelPosition.z - 0.015)
+    if (depth < input.MyPixelPosition.z - 0.015 && DisableDepthDiscard == false)
         discard;
 }
 

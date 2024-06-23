@@ -121,6 +121,7 @@ namespace RetroEngine
         {
 
             ormTexture = AssetRegistry.LoadTextureFromFile("engine/textures/defaultORM.png");
+            
 
             if(GameMain.CompatibilityMode == false)
             OcclusionQuery = new OcclusionQuery(GameMain.Instance.GraphicsDevice);
@@ -129,6 +130,10 @@ namespace RetroEngine
 
             if (GameMain.Instance.DefaultShader == null)
                 Shader = AssetRegistry.GetShaderFromName("UnifiedOutput");
+
+            texture = AssetRegistry.LoadTextureFromFile("engine/textures/black.png");
+            emisssiveTexture = AssetRegistry.LoadTextureFromFile("engine/textures/black.png");
+            normalTexture = AssetRegistry.LoadTextureFromFile("engine/textures/black.png");
 
         }
 
@@ -388,6 +393,7 @@ namespace RetroEngine
 
         public virtual void DrawUnified()
         {
+            if(Render.IgnoreFrustrumCheck == false)
             if ((frameStaticMeshData.IsRendered == false) && frameStaticMeshData.Viewmodel == false || occluded) return;
 
             GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;

@@ -1,5 +1,4 @@
 ﻿#if OPENGL
-	#define SV_POSITION POSITION
 	#define VS_SHADERMODEL vs_3_0
 	#define PS_SHADERMODEL ps_3_0
 #else
@@ -72,12 +71,36 @@ sampler2D LutTextureSampler = sampler_state
 
 };
 
-struct VertexShaderOutput
+struct VertexInput
 {
-    float4 Position : SV_POSITION;
-    float4 Color : COLOR0;
-    float2 TextureCoordinates : TEXCOORD0;
+    float4 PositionPS : POSITION;
+    float4 Diffuse    : COLOR0;
+    float2 TexCoord   : TEXCOORD0;
 };
+
+// Vertex Shader Output Structure
+struct VertexOutput
+{
+    float4 PositionPS : SV_Position0;
+    float4 Diffuse    : COLOR0;
+    float2 TexCoord   : TEXCOORD0;
+};
+
+// Vertex Shader
+VertexOutput SimpleVertexShader(VertexInput input)
+{
+    VertexOutput output;
+
+    // Pass the position directly to the pixel shader
+    output.PositionPS = input.PositionPS;
+
+    output.Diffuse = float4(1,1,1,1);
+
+    // Pass the texture coordinates directly to the pixel shader
+    output.TexCoord = input.TexCoord;
+
+    return output;
+}
 
 int lutSize;
 
@@ -103,12 +126,12 @@ float3 GetFromLUT(float3 color)
 	return gradedCol;
 }
 
-float4 MainPS(VertexShaderOutput input) : COLOR
+float4 MainPS(VertexOutput input) : COLOR
 {
 	
-    float3 color = tex2D(ColorTextureSampler, input.TextureCoordinates).rgb;
+    float3 color = tex2D(ColorTextureSampler, input.TexCoord).rgb;
 	
-    float3 bloomColor = tex2D(BloomTextureSampler, input.TextureCoordinates).rgb / 3 + tex2D(Bloom2TextureSampler, input.TextureCoordinates).rgb / 1 + tex2D(Bloom3TextureSampler, input.TextureCoordinates).rgb / 2;
+    float3 bloomColor = tex2D(BloomTextureSampler, input.TexCoord).rgb / 3 + tex2D(Bloom2TextureSampler, input.TexCoord).rgb / 1 + tex2D(Bloom3TextureSampler, input.TexCoord).rgb / 2;
 	
     float bloomL = length(bloomColor);
 	
@@ -118,7 +141,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 	
     bloomColor *= lerp(bloomL + 1, 1, 0.1);
 	
-    float ssao = tex2D(SSAOTextureSampler, input.TextureCoordinates).r;
+    float ssao = tex2D(SSAOTextureSampler, input.TexCoord).r;
 	
     float3 result = (color + bloomColor)*ssao;
 
@@ -135,5 +158,7 @@ technique SpriteDrawing
 	pass P0
 	{
 		PixelShader = compile PS_SHADERMODEL MainPS();
+        
+		VertexShader = compile VS_SHADERMODEL SimpleVertexShader();
 	}
 };

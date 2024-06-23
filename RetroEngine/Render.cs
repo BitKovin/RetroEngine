@@ -106,6 +106,7 @@ namespace RetroEngine
         static internal List<StaticMesh> testedMeshes = new List<StaticMesh>();
 
         static internal bool IgnoreFrustrumCheck = false;
+        static internal bool DisableDepthDiscard = false;
 
         public static Texture2D LUT;
 
@@ -224,6 +225,8 @@ namespace RetroEngine
             effect.Parameters["ScreenHeight"]?.SetValue(DeferredOutput.Height);
             effect.Parameters["ScreenWidth"]?.SetValue(DeferredOutput.Width);
 
+            effect.Parameters["DisableDepthDiscard"]?.SetValue(DisableDepthDiscard);
+
             effect.Parameters["LightDistanceMultiplier"]?.SetValue(Graphics.LightDistanceMultiplier) ;
 
             if (reflection != null)
@@ -279,6 +282,7 @@ namespace RetroEngine
             List<StaticMesh> renderList = level.GetMeshesToRender();
 
             RenderPrepass(renderList);
+
             
 
             PointLight.DrawDirtyPointLights();
@@ -317,7 +321,7 @@ namespace RetroEngine
 
 
             if (Input.GetAction("test").Holding())
-                return ssaoOutput;
+                return DeferredOutput;
 
             return outputPath;
 
@@ -431,14 +435,9 @@ namespace RetroEngine
             graphics.GraphicsDevice.SetRenderTarget(DepthPrepathOutput);
             graphics.GraphicsDevice.Clear(ClearOptions.DepthBuffer, Color.Black, 1.0f, 0);
 
-            SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
-            spriteBatch.Begin(effect: maxDepth);
-
             // Draw a full-screen quad to apply the lighting
-            DrawFullScreenQuad(spriteBatch, black);
+            DrawFullScreenQuad(black);
 
-            // End the SpriteBatch
-            spriteBatch.End();
 
             graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 
@@ -486,14 +485,10 @@ namespace RetroEngine
             graphics.GraphicsDevice.SetRenderTarget(DepthPrepathOutput);
             graphics.GraphicsDevice.Clear(ClearOptions.DepthBuffer, Color.Black, 1.0f, 0);
 
-            SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
-            spriteBatch.Begin(effect: maxDepth);
 
             // Draw a full-screen quad to apply the lighting
-            DrawFullScreenQuad(spriteBatch, black);
+            DrawFullScreenQuad(black);
 
-            // End the SpriteBatch
-            spriteBatch.End();
             graphics.GraphicsDevice.SetRenderTarget(null);
         }
 
@@ -647,13 +642,8 @@ namespace RetroEngine
             PostProcessingEffect.Parameters["ColorTexture"].SetValue(colorPath);
             //PostProcessingEffect.Parameters["Enabled"].SetValue(Graphics.EnablePostPocessing);
 
-            SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
+            DrawFullScreenQuad(colorPath);
 
-            spriteBatch.Begin(effect: PostProcessingEffect);
-
-            DrawFullScreenQuad(spriteBatch, colorPath);
-
-            spriteBatch.End();
 
                 
 
@@ -721,12 +711,16 @@ namespace RetroEngine
             ReflectionEffect.Parameters["PositionTexture"]?.SetValue(positionPath);
             ReflectionEffect.Parameters["FactorTexture"]?.SetValue(ReflectivenessOutput);
             ReflectionEffect.Parameters["ScreenHeight"]?.SetValue(reflection.Height);
+            if (CubeMap.GetClosestToCamera() != null)
+            {
+                ReflectionEffect.Parameters["ReflectionCubemap"].SetValue(CubeMap.GetClosestToCamera().map);
+            }
+            else
+            {
+                Console.WriteLine("no cubemap");
+            }
+            DrawFullScreenQuad(normalPath, ReflectionEffect);
 
-            spriteBatch.Begin(effect: ReflectionEffect, blendState: BlendState.NonPremultiplied);
-
-            DrawFullScreenQuad(spriteBatch, normalPath);
-
-            spriteBatch.End();
 
         }
 
@@ -745,11 +739,8 @@ namespace RetroEngine
             ReflectionResultEffect.Parameters["ReflectionTexture"]?.SetValue(reflection);
             ReflectionResultEffect.Parameters["FactorTexture"]?.SetValue(ReflectivenessOutput);
 
-            spriteBatch.Begin(effect: ReflectionResultEffect, blendState: BlendState.NonPremultiplied);
+            DrawFullScreenQuad(DeferredOutput, ReflectionResultEffect);
 
-            DrawFullScreenQuad(spriteBatch, DeferredOutput);
-
-            spriteBatch.End();
 
         }
 
@@ -771,13 +762,8 @@ namespace RetroEngine
 
             graphics.GraphicsDevice.Clear(Color.Black);
 
-            SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
+            DrawFullScreenQuad(stepsResult, TonemapperEffect);
 
-            spriteBatch.Begin(effect: TonemapperEffect, blendState: BlendState.NonPremultiplied);
-
-            DrawFullScreenQuad(spriteBatch, stepsResult);
-
-            spriteBatch.End();
 
         }
 
@@ -805,13 +791,8 @@ namespace RetroEngine
 
             SSAOEffect.Parameters["Enabled"]?.SetValue(Graphics.EnableSSAO);
 
-            SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
+            DrawFullScreenQuad(DepthPrepathOutput, SSAOEffect);
 
-            spriteBatch.Begin(effect: SSAOEffect);
-
-            DrawFullScreenQuad(spriteBatch, DepthPrepathOutput);
-
-            spriteBatch.End();
             graphics.GraphicsDevice.SetRenderTarget(null);
         }
 
@@ -837,23 +818,19 @@ namespace RetroEngine
 
             fxaaEffect.CurrentTechnique = fxaaEffect.Techniques["ppfxaa_PC"];
 
-            fxaaEffect.Parameters["fxaaQualitySubpix"].SetValue(fxaaQualitySubpix);
-            fxaaEffect.Parameters["fxaaQualityEdgeThreshold"].SetValue(fxaaQualityEdgeThreshold);
-            fxaaEffect.Parameters["fxaaQualityEdgeThresholdMin"].SetValue(fxaaQualityEdgeThresholdMin);
+            fxaaEffect.Parameters["fxaaQualitySubpix"]?.SetValue(fxaaQualitySubpix);
+            fxaaEffect.Parameters["fxaaQualityEdgeThreshold"]?.SetValue(fxaaQualityEdgeThreshold);
+            fxaaEffect.Parameters["fxaaQualityEdgeThresholdMin"]?.SetValue(fxaaQualityEdgeThresholdMin);
 
-            fxaaEffect.Parameters["invViewportWidth"].SetValue(1f / stepsResult.Width);
-            fxaaEffect.Parameters["invViewportHeight"].SetValue(1f / stepsResult.Height);
-            fxaaEffect.Parameters["screenColor"].SetValue(stepsResult);
+            fxaaEffect.Parameters["invViewportWidth"]?.SetValue(1f / stepsResult.Width);
+            fxaaEffect.Parameters["invViewportHeight"]?.SetValue(1f / stepsResult.Height);
+            fxaaEffect.Parameters["screenColor"]?.SetValue(stepsResult);
 
             // Begin drawing with SpriteBatch
-            SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
-            spriteBatch.Begin(effect: fxaaEffect, blendState: BlendState.Opaque);
 
             // Draw a full-screen quad to apply the lighting
-            DrawFullScreenQuad(spriteBatch, stepsResult);
+            DrawFullScreenQuad(stepsResult,fxaaEffect);
 
-            // End the SpriteBatch
-            spriteBatch.End();
 
             outputPath = FxaaOutput;
 
@@ -880,13 +857,9 @@ namespace RetroEngine
             ComposeEffect.Parameters["LutTexture"]?.SetValue(LUT);
             ComposeEffect.Parameters["lutSize"]?.SetValue(lutSize);
 
-            SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
 
-            spriteBatch.Begin(effect: ComposeEffect);
+            DrawFullScreenQuad(TonemapResult, ComposeEffect);
 
-            DrawFullScreenQuad(spriteBatch, TonemapResult);
-
-            spriteBatch.End();
             graphics.GraphicsDevice.SetRenderTarget(null);
         }
 
@@ -903,13 +876,8 @@ namespace RetroEngine
             BloomEffect.Parameters["offset"].SetValue(0.85f);
 
 
-            SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
+            DrawFullScreenQuad(TonemapResult, BloomEffect);
 
-            spriteBatch.Begin(effect: BloomEffect, blendState: BlendState.Opaque, samplerState: SamplerState.AnisotropicClamp);
-
-            DrawFullScreenQuad(spriteBatch, TonemapResult);
-
-            spriteBatch.End();
 
             DownsampleToTexture(bloomSample, bloomSample2);
             DownsampleToTexture(bloomSample, bloomSample3);
@@ -963,23 +931,76 @@ namespace RetroEngine
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, target.Width, target.Height);
             graphics.GraphicsDevice.SetRenderTarget(target);
 
-            SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
 
-            spriteBatch.Begin(blendState: BlendState.Opaque);
+            DrawFullScreenQuad(source);
 
-            DrawFullScreenQuad(spriteBatch, source);
 
-            spriteBatch.End();
 
         }
 
-        internal static void DrawFullScreenQuad(SpriteBatch spriteBatch, Texture2D inputTexture)
-        {
-            // Create a rectangle covering the entire screen
-            Rectangle screenRectangle = new Rectangle(0, 0, GameMain.Instance.GraphicsDevice.Viewport.Width, GameMain.Instance.GraphicsDevice.Viewport.Height);
 
-            // Draw the full-screen quad using SpriteBatch
-            spriteBatch.Draw(inputTexture, screenRectangle, Color.White);
+
+        private static VertexBuffer vertexBuffer;
+        private static IndexBuffer indexBuffer;
+
+        private static void InitializeFullScreenQuad(GraphicsDevice graphicsDevice)
+        {
+            if (vertexBuffer == null)
+            {
+                VertexData[] vertices = 
+                {
+            new VertexData(new Vector3(-1, -1, 0), new Vector2(0, 1)),
+            new VertexData(new Vector3(-1,  1, 0), new Vector2(0, 0)),
+            new VertexData(new Vector3( 1, -1, 0), new Vector2(1, 1)),
+            new VertexData(new Vector3( 1,  1, 0), new Vector2(1, 0)),
+                };
+
+                vertexBuffer = new VertexBuffer(graphicsDevice, VertexData.VertexDeclaration, vertices.Length, BufferUsage.WriteOnly);
+                vertexBuffer.SetData(vertices);
+
+                int[] indices = { 0, 1, 2, 2, 1, 3 };
+
+                indexBuffer = new IndexBuffer(graphicsDevice, IndexElementSize.ThirtyTwoBits, indices.Length, BufferUsage.WriteOnly);
+                indexBuffer.SetData(indices);
+            }
+        }
+        internal static void DrawFullScreenQuad(Texture2D inputTexture, Effect effect = null)
+        {
+
+            var graphicsDevice = GameMain.Instance.GraphicsDevice;
+
+            InitializeFullScreenQuad(graphicsDevice);
+
+            graphicsDevice.SetVertexBuffer(vertexBuffer);
+            graphicsDevice.Indices = indexBuffer;
+
+
+
+            if (effect != null)
+            {
+                effect.Parameters["Texture"]?.SetValue(inputTexture);
+
+                foreach (EffectPass pass in effect.CurrentTechnique.Passes)
+                {
+                    pass.Apply();
+                    graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 2);
+                }
+            }
+            else
+            {
+                BasicEffect basicEffect = new BasicEffect(graphicsDevice)
+                {
+                    TextureEnabled = true,
+                    Texture = inputTexture,
+                    VertexColorEnabled = false,
+                };
+
+                foreach (EffectPass pass in basicEffect.CurrentTechnique.Passes)
+                {
+                    pass.Apply();
+                    graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 2);
+                }
+            }
         }
 
         void DrawShadowQuad(SpriteBatch spriteBatch, Texture2D inputTexture)

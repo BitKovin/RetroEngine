@@ -47,13 +47,12 @@ namespace RetroEngine.Graphic
 
             graphicsDevice.Clear(Color.Pink);
 
-            SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
 
             SetValues();
 
-            spriteBatch.Begin(blendState: BlendState.Opaque, effect: Shader);
-            Render.DrawFullScreenQuad(spriteBatch, BackBuffer);
-            spriteBatch.End();
+
+            Render.DrawFullScreenQuad(BackBuffer);
+
 
         }
 

@@ -108,7 +108,7 @@ namespace RetroEngine.Entities
 
         }
 
-        void Render()
+        public void Render()
         {
 
             if(Destroyed)
@@ -122,6 +122,8 @@ namespace RetroEngine.Entities
 
             PointLight.LateUpdateAll();
 
+            RetroEngine.Render.DisableDepthDiscard = true;
+
             RenderFace(CubeMapFace.PositiveX);
             RenderFace(CubeMapFace.PositiveX);
             RenderFace(CubeMapFace.NegativeX);
@@ -129,6 +131,8 @@ namespace RetroEngine.Entities
             RenderFace(CubeMapFace.NegativeY);
             RenderFace(CubeMapFace.PositiveZ);
             RenderFace(CubeMapFace.NegativeZ);
+
+            RetroEngine.Render.DisableDepthDiscard = false;
 
             Camera.position = startPos;
             Camera.view = view;
@@ -149,6 +153,8 @@ namespace RetroEngine.Entities
             Camera.projection = Camera.finalizedProjection;
 
             Camera.frustum.Matrix = Camera.finalizedView * Camera.finalizedProjection;
+
+            
 
             GameMain.Instance.render.FillPrepas();
 
@@ -173,7 +179,11 @@ namespace RetroEngine.Entities
 
             l = Level.GetCurrent().GetMeshesToRender();
 
+            RetroEngine.Render.IgnoreFrustrumCheck = true;
+
+
             GameMain.Instance.render.RenderLevelGeometryForward(l, OnlyStatic: true);
+
 
             graphicsDevice.SetRenderTarget(null);
         }

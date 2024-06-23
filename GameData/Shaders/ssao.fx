@@ -23,6 +23,13 @@ float ssaoIntensity = 1.0;
 
 bool Enabled;
 
+struct VertexShaderOutput
+{
+	float4 Position : SV_POSITION;
+	float4 Color : COLOR0;
+	float2 TextureCoordinates : TEXCOORD0;
+};
+
 // Function to convert normal from 0-1 to -1 to 1
 float3 DecodeNormal(float3 normal)
 {
@@ -133,12 +140,12 @@ float3 kernel[KERNEL_SIZE] = {
 }
 
 // Pixel shader
-float4 PixelShaderFunction(float4 position : SV_POSITION, float4 color : COLOR0, float2 texCoord : TEXCOORD0) : COLOR0
+float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 {
 // Sample depth, normal, and color
-float depth = tex2D(DepthTextureSampler, texCoord).r;
-float3 normal = DecodeNormal(tex2D(NormalTextureSampler, texCoord).xyz);
-float3 pos = tex2D(PosTextureSampler, texCoord).xyz + viewPos;
+float depth = tex2D(DepthTextureSampler, input.TextureCoordinates).r;
+float3 normal = DecodeNormal(tex2D(NormalTextureSampler, input.TextureCoordinates).xyz);
+float3 pos = tex2D(PosTextureSampler, input.TextureCoordinates).xyz + viewPos;
 
 float ao = 0;
 
@@ -146,7 +153,7 @@ float sampleRadius = 2;
 
 #if OPENGL == FALSE
 if(Enabled)
-    ao += CalculateSSAO(texCoord, depth, DecodeNormal(normal));
+    ao += CalculateSSAO(input.TextureCoordinates, depth, DecodeNormal(normal));
 #endif
 
 // Apply AO to the final color
@@ -155,11 +162,29 @@ float finalColor = 1 - ao;
 return float4(finalColor, finalColor, finalColor, 1.0);
 }
 
+// Vertex Shader
+VertexShaderOutput SimpleVertexShader(VertexInput input)
+{
+    VertexShaderOutput output = (VertexShaderOutput)0;
+
+    // Pass the position directly to the pixel shader
+    output.Position = input.Position;
+
+    output.Color = float4(1,1,1,1);
+
+    // Pass the texture coordinates directly to the pixel shader
+    output.TextureCoordinates = input.TexCoord;
+
+    return output;
+}
+
 // Technique
 technique Technique1
 {
     pass Pass1
     {
         PixelShader = compile PS_SHADERMODEL PixelShaderFunction();
+
+        VertexShader = compile VS_SHADERMODEL SimpleVertexShader();
     }
 }

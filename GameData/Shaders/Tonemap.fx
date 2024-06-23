@@ -1,17 +1,16 @@
 ﻿#if OPENGL
-	#define SV_POSITION POSITION
 	#define VS_SHADERMODEL vs_3_0
 	#define PS_SHADERMODEL ps_3_0
 #else
-	#define VS_SHADERMODEL vs_4_0_level_9_1
-	#define PS_SHADERMODEL ps_4_0_level_9_1
+	#define VS_SHADERMODEL vs_4_0
+	#define PS_SHADERMODEL ps_4_0
 #endif
 
-Texture2D SpriteTexture;
+Texture2D Texture;
 
 sampler2D SpriteTextureSampler = sampler_state
 {
-	Texture = <SpriteTexture>;
+	Texture = <Texture>;
 };
 
 float Brightness = 1;
@@ -19,12 +18,36 @@ float Exposure;
 float Gamma;
 float Saturation;
 
-struct VertexShaderOutput
+struct VertexInput
 {
-	float4 Position : SV_POSITION;
-    float4 color : COLOR0;
-	float2 TextureCoordinates : TEXCOORD0;
+    float4 PositionPS : POSITION;
+    float4 Diffuse    : COLOR0;
+    float2 TexCoord   : TEXCOORD0;
 };
+
+// Vertex Shader Output Structure
+struct VertexOutput
+{
+    float4 PositionPS : SV_Position0;
+    float4 Diffuse    : COLOR0;
+    float2 TexCoord   : TEXCOORD0;
+};
+
+// Vertex Shader
+VertexOutput SimpleVertexShader(VertexInput input)
+{
+    VertexOutput output;
+
+    // Pass the position directly to the pixel shader
+    output.PositionPS = input.PositionPS;
+
+    output.Diffuse = float4(1,1,1,1);
+
+    // Pass the texture coordinates directly to the pixel shader
+    output.TexCoord = input.TexCoord;
+
+    return output;
+}
 
 float ColToneB(float hdrMax, float contrast, float shoulder, float midIn, float midOut)
 {
@@ -165,10 +188,10 @@ float3 tonemap_filmic(float3 color)
 }
 
 
-float4 MainPS(VertexShaderOutput input) : COLOR0
+float4 MainPS(VertexOutput input) : COLOR0
 {
 	
-    float3 color = tex2D(SpriteTextureSampler, input.TextureCoordinates).rgb;
+    float3 color = tex2D(SpriteTextureSampler, input.TexCoord).rgb;
 	
     color = ToneMap(tonemap_filmic(color)* Brightness, 1, Exposure, Saturation);
 	
@@ -181,5 +204,7 @@ technique SpriteDrawing
 	pass P0
 	{
 		PixelShader = compile PS_SHADERMODEL MainPS();
+        
+		VertexShader = compile VS_SHADERMODEL SimpleVertexShader();
 	}
 };

@@ -1,20 +1,27 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net7.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows7.0</TargetFramework>
     <RollForward>Major</RollForward>
     <PublishReadyToRun>false</PublishReadyToRun>
     <TieredCompilation>false</TieredCompilation>
     <UseWindowsForms>True</UseWindowsForms>
   </PropertyGroup>
+
+  <PropertyGroup>
+    <DotnetCommand Condition="'$(DotnetCommand)' == ''">dotnet</DotnetCommand>
+    <EnableMGCBItems Condition="'$(EnableMGCBItems)' == ''">true</EnableMGCBItems>
+    <MGCBPath Condition="'$(MGCBPath)' == ''">..\Libs\MonoGame\Artifacts\MonoGame.Content.Builder\Debug\mgcb.dll</MGCBPath>
+  </PropertyGroup>
+  
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Icon.ico</ApplicationIcon>
     <StartupObject>Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.1.303" />
-    <PackageReference Include="MonoGame.Framework.WindowsDX" Version="3.8.1.303" />
+    <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.1.1-develop" />
+    <PackageReference Include="MonoGame.Framework.WindowsDX" Version="3.8.1.1-develop" />
     <PackageReference Include="SharpDX.DirectInput" Version="4.0.1" />
   </ItemGroup>
   <ItemGroup>

@@ -166,10 +166,29 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 
 }
 
+// Vertex Shader
+VertexShaderOutput SimpleVertexShader(VertexInput input)
+{
+    VertexShaderOutput output = (VertexShaderOutput)0;
+
+    // Pass the position directly to the pixel shader
+    output.Position = input.Position;
+
+    output.Color = float4(1,1,1,1);
+
+    // Pass the texture coordinates directly to the pixel shader
+    output.TextureCoordinates = input.TexCoord;
+
+    return output;
+}
+
 technique SpriteDrawing
 {
 	pass P0
 	{
 		PixelShader = compile PS_SHADERMODEL MainPS();
+
+		VertexShader = compile VS_SHADERMODEL SimpleVertexShader();
+
 	}
 };

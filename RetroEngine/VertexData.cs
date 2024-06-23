@@ -38,6 +38,11 @@ namespace RetroEngine
         public VertexData()
         {
         }
+        public VertexData(Vector3 pos, Vector2 coords)
+        {
+            Position = pos;
+            TextureCoordinate = coords;
+        }
 
         VertexDeclaration IVertexType.VertexDeclaration { get { return VertexDeclaration; } }
 

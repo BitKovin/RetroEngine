@@ -12,7 +12,7 @@ namespace RetroEngine
     public class DrawDebug : DebugDraw
     {
         GraphicsDevice graphicsDevice;
-        BasicEffect basicEffect;
+        internal static BasicEffect basicEffect;
 
         internal static DrawDebug instance;
 

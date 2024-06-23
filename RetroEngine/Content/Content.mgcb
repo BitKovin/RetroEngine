@@ -55,20 +55,6 @@
 /processorParam:Defines=
 /build:../../GameData/Shaders/DeferredShading.fx;Shaders/DeferredShading.fx
 
-#begin ../../GameData/Shaders/File.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/processorParam:Defines=
-/build:../../GameData/Shaders/File.fx;Shaders/File.fx
-
-#begin ../../GameData/Shaders/FinalColor.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/processorParam:Defines=
-/build:../../GameData/Shaders/FinalColor.fx;Shaders/FinalColor.fx
-
 #begin ../../GameData/Shaders/fxaa.fx
 /importer:EffectImporter
 /processor:EffectProcessor

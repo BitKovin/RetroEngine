@@ -14,8 +14,8 @@
     <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.1.303" />
-    <PackageReference Include="MonoGame.Framework.WindowsDX" Version="3.8.1.303" />
+    <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.1.1-develop" />
+    <PackageReference Include="MonoGame.Framework.WindowsDX" Version="3.8.1.1-develop" />
     <PackageReference Include="SharpDX.DirectInput" Version="4.0.1" />
   </ItemGroup>
   <ItemGroup>

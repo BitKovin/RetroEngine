@@ -659,7 +659,6 @@ namespace RetroEngine
             string text = reader.ReadToEnd();
 
             JsonSerializerOptions options = new JsonSerializerOptions();
-
             foreach (var conv in Helpers.JsonConverters.GetAll())
                 options.Converters.Add(conv);
 

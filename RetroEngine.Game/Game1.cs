@@ -51,12 +51,12 @@ namespace RetroEngine.Game
             {
                 DefaultShader = null;
             }
-            DefaultShader = AssetRegistry.GetShaderFromName("SimpleEffect");
+            //DefaultShader = AssetRegistry.GetShaderFromName("SimpleEffect");
 
             base.Update(gameTime);
 
-            if (Input.GetAction("fullscreen").Pressed())
-                ToggleFullscreen();
+            //if (Input.GetAction("fullscreen").Pressed())
+            //    ToggleFullscreen();
         }
 
 

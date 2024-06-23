@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFrameworks>net6.0</TargetFrameworks>
+		<TargetFrameworks>net8.0</TargetFrameworks>
 		<NoWarn>1591;1573</NoWarn>
 		<DefineConstants>UNITY_2017_4_OR_NEWER</DefineConstants>
 		<DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
@@ -26,9 +26,10 @@
 		</None>
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.1.*">
+		<PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.1.1-develop">
 			<PrivateAssets>All</PrivateAssets>
 		</PackageReference>
+		<PackageReference Include="MonoGame.Framework.WindowsDX" Version="3.8.1.1-develop" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\FmodForFoxes\FmodForFoxes.csproj" />
