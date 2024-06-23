@@ -89,6 +89,7 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
         
         if (inScreen == false || SampledDepth>10000)
         {
+            return float4(0,0,0,0);
             Step == 0.02;
             factor = lerp(factor, 1, 0.5);
         }
@@ -103,6 +104,8 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
             
             weight += 1;
             
+            if(factor < 1.01)
+            break;
             
             continue;
 
@@ -135,8 +138,16 @@ float4 MainPS(VertexShaderOutput input) : COLOR
     
     float3 reflection = reflect(normalize(vDir), normal);
     
-    float factor = tex2D(FactorTextureSampler, input.TextureCoordinates).r;
+
     
+    float2 texel = float2(1.5/SSRWidth, 1.5/SSRHeight);
+    float factor = tex2D(FactorTextureSampler, input.TextureCoordinates).r;
+    factor = max(tex2D(FactorTextureSampler, input.TextureCoordinates + float2(texel.x,0)).rgb, reflection);
+    factor = max(tex2D(FactorTextureSampler, input.TextureCoordinates + float2(-texel.x,0)).rgb, reflection);
+    factor = max(tex2D(FactorTextureSampler, input.TextureCoordinates + float2(0,texel.y)).rgb, reflection);
+    factor = max(tex2D(FactorTextureSampler, input.TextureCoordinates + float2(0,texel.y)).rgb, reflection);
+
+
     reflection = normalize(reflection);
     
     float3 cube = SampleCubemap(ReflectionCubemapSampler, reflection);

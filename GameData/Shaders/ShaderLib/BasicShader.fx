@@ -452,18 +452,30 @@ float4 SampleCubemap(samplerCUBE s, float3 coords)
 
 
 
-float GeometrySmith(float3 N, float3 V, float3 L, float roughness)
+float GeometrySchlickGGX(float NdotV, float roughness)
 {
-    float NdotV = saturate(dot(N, V));
-    float NdotL = saturate(dot(N, L));
-    float GGXV = 2.0 * NdotV / (NdotV + sqrt(roughness * roughness + (1.0 - roughness * roughness) * NdotV * NdotV));
-    float GGXL = 2.0 * NdotL / (NdotL + sqrt(roughness * roughness + (1.0 - roughness * roughness) * NdotL * NdotL));
-    return GGXV * GGXL;
+    float r = roughness + 1.0f;
+    float k = (r * r) / 8.0f;
+
+    float num = NdotV;
+    float denom = NdotV * (1.0f - k) + k;
+
+    return num / denom;
 }
 
-float FresnelSchlick(float cosTheta, float3 metallic)
+float GeometrySmith(float3 N, float3 V, float3 L, float roughness)
 {
-    return metallic + (1.0 - metallic) * pow(1.0 - cosTheta, 5.0);
+    float NdotV = max(dot(N, V), 0.0f);
+    float NdotL = max(dot(N, L), 0.0f);
+    float ggx2 = GeometrySchlickGGX(NdotV, roughness);
+    float ggx1 = GeometrySchlickGGX(NdotL, roughness);
+
+    return ggx1 * ggx2;
+}
+
+float3 FresnelSchlick(float cosTheta, float3 F0)
+{
+    return F0 + (1.0f - F0) * pow(1.0f - cosTheta, 5.0f);
 }
 
 float DistributionGGX(float3 N, float3 H, float a)
@@ -479,44 +491,37 @@ float DistributionGGX(float3 N, float3 H, float a)
     return nom / denom;
 }
 
-float CalculateSpecular(float3 worldPos, float3 normal, float3 lightDir, float roughness, float metallic, float3 albedo) {
-
+float CalculateSpecular(float3 worldPos, float3 normal, float3 lightDir, float roughness, float metallic, float3 albedo)
+{
 #ifdef NO_SPECULAR
     return 0;
 #endif
 
-// Common calculations
-float3 vDir = normalize(viewPos - worldPos);
-lightDir *= -1.0f;
-float3 halfwayDir = normalize(vDir + lightDir);
-float NdotH = saturate(dot(normal, halfwayDir));
-float NdotV = saturate(dot(normal, vDir));
-float NdotL = saturate(dot(normal, lightDir));
+    float3 vDir = normalize(viewPos - worldPos);
+    lightDir = normalize(lightDir);
+    float3 halfwayDir = normalize(vDir + lightDir);
+    
+    float NdotH = saturate(dot(normal, halfwayDir));
+    float NdotV = saturate(dot(normal, vDir));
+    float NdotL = saturate(dot(normal, lightDir));
 
-// GGX BRDF (distribution and visibility)
-float roughnessSq = roughness * roughness;
-float D = DistributionGGX(normal, halfwayDir, roughnessSq);
-float G = GeometrySmith(normal, vDir, lightDir, roughnessSq);
+    // GGX Normal Distribution Function (NDF)
+    float roughnessSq = roughness * roughness;
+    float D = DistributionGGX(normal, halfwayDir, roughnessSq);
 
-// Fresnel term (reflectivity based on metallic and viewing angle)
-// Here F0 should be defined based on the material's base reflectance
-float3 F0 = lerp(float3(0.04f, 0.04f, 0.04f), albedo, metallic);
-float3 F = FresnelSchlick(NdotH, F0);
+    // Geometry function using Smith's method
+    float G = GeometrySmith(normal, vDir, lightDir, roughnessSq);
 
-// Calculate specular based on BRDF components and energy conservation
-float3 kS = F; // Reflectance at normal incidence
-float3 kD = 1.0f - kS; // Diffuse reflection component
+    // Fresnel term using Schlick's approximation
+    float3 F0 = lerp(float3(0.04f, 0.04f, 0.04f), albedo, metallic);
+    float3 F = FresnelSchlick(NdotH, F0);
 
-// Energy conservation: diffuse is reduced by metallic term
-kD *= 1.0f - metallic;
+    // Specular BRDF
+    float3 specular = (D * G * F) / (4.0f * NdotV * NdotL + 0.001f);
 
-float3 specular = (D * G * F) / (4.0f * NdotV * NdotL + 0.001f);
-
-// Clamp specular to prevent negative values (shouldn't be necessary with the proper calculation)
-specular = max(specular, 0.0f);
-
-return specular;
+    return specular;
 }
+
 
 float3 offset_lookup(sampler2D map, float4 loc, float2 offset, float texelSize)
 {
@@ -909,6 +914,7 @@ float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal, float ro
 
 float3 CalculateSsrSpecular(PixelInput input, float3 normal, float roughness, float metalic, float3 albedo)
 {
+    return float3(0,0,0);
     
     float3 vDir = normalize(input.MyPosition - viewPos);
 
@@ -931,14 +937,10 @@ float3 CalculateSsrSpecular(PixelInput input, float3 normal, float roughness, fl
     return saturate(color * intens * dot(lightDir, -normal));
 }
 
-float3 CalculateLight(PixelInput input, float3 normal, float roughness, float metalic, float ao, float3 albedo)
+float3 CalculateLight(PixelInput input, float3 normal, float roughness, float metallic, float ao, float3 albedo)
 {
     float3 lightCoords = input.lightPos.xyz / input.lightPos.w;
-
-    float shadow = 0;
-
     lightCoords = (lightCoords + 1.0f) / 2.0f;
-
     lightCoords.y = 1.0f - lightCoords.y;
     
     float3 lightCoordsClose = input.lightPosClose.xyz / input.lightPosClose.w;
@@ -949,70 +951,54 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness, float me
     lightCoordsVeryClose = (lightCoordsVeryClose + 1.0f) / 2.0f;
     lightCoordsVeryClose.y = 1.0f - lightCoordsVeryClose.y;
 
+    float shadow = 0;
+
     if (isParticle)
         normal = -LightDirection;
     
-    if(dot(normal, -LightDirection)<0.01)
+    if (dot(normal, -LightDirection) < 0.01)
     {
-        shadow+=1;
-    }else
-    {
-    shadow += GetShadow(lightCoords,lightCoordsClose,lightCoordsVeryClose, input);
+        shadow += 1;
     }
-    
+    else
+    {
+        shadow += GetShadow(lightCoords, lightCoordsClose, lightCoordsVeryClose, input);
+    }
     
     shadow += 1 - max(0, dot(normal, normalize(-LightDirection) * 1));
-    
-
-    
     shadow = saturate(shadow);
-    
-    
-    float specular = 0;
-    
-    specular = CalculateSpecular(input.MyPosition, normal, normalize(LightDirection), roughness, metalic, albedo) * DirectBrightness;
-    
+
+    float3 vDir = normalize(viewPos - input.MyPosition);
+    float3 lightDir = normalize(-LightDirection);
+
+    // Calculate specular reflection
+    float3 specular = CalculateSpecular(input.MyPosition, normal, lightDir, roughness, metallic, albedo) * DirectBrightness;
     specular *= max(1 - shadow, 0);
-    
-    float3 globalSpecularDir = normalize(-normal + float3(0,-5,0) + LightDirection);
-    
 
-    specular += CalculateSpecular(input.MyPosition, normal, globalSpecularDir, roughness, metalic, albedo) * 0.02 ;
-    
+    float3 globalSpecularDir = normalize(-normal + float3(0, -5, 0) + LightDirection);
+    specular += CalculateSpecular(input.MyPosition, normal, globalSpecularDir, roughness, metallic, albedo) * 0.02;
 
-    
-    float3 light = DirectBrightness * GlobalLightColor; // Example light direction;
-    
-    light *= (1.0) - shadow;
-    
-    
-    
-    float3 globalLight = GlobalBrightness * GlobalLightColor * lerp(1, 0.4, max(dot(normal, float3(0, -1, 0)),0));
-    globalLight*=ao;
-    
-    light = max(light, 0);
-    
-    
-    
+    // Direct light contribution
+    float3 light = DirectBrightness * GlobalLightColor;
+    light *= (1.0f - shadow);
 
+    // Global ambient light
+    float3 globalLight = GlobalBrightness * GlobalLightColor * lerp(1.0f, 0.4f, max(dot(normal, float3(0, -1, 0)), 0.0f));
+    globalLight *= ao;
+
+    // Accumulate point light contributions
     for (int i = 0; i < MAX_POINT_LIGHTS; i++)
     {
-        light += CalculatePointLight(i, input, normal, roughness, metalic, albedo);
-
+        light += CalculatePointLight(i, input, normal, roughness, metallic, albedo);
     }
-    
-    //light -= (1 - ao);
-    
-    light += specular;
-    
-    light = max(light, 0);
-    
-    light += globalLight;
 
-    light += CalculateSsrSpecular(input, normal, roughness, metalic, albedo);
+    // Combine contributions
+    light += specular;
+    light = max(light, 0.0f);
+    light += globalLight;
+    light += CalculateSsrSpecular(input, normal, roughness, metallic, albedo);
 
     return light;
-    
 }
 
 float2 WorldToScreen(float3 pos)
@@ -1149,11 +1135,11 @@ float3 ApplyReflectionOnSurface(float3 color,float3 albedo,float2 screenCoords, 
 
     float2 texel = float2(1/SSRWidth, 1/SSRHeight);
 
-    reflection += tex2D(ReflectionTextureSampler, screenCoords + float2(texel.x,0)).rgb;
-    reflection += tex2D(ReflectionTextureSampler, screenCoords + float2(-texel.x,0)).rgb;
-    reflection += tex2D(ReflectionTextureSampler, screenCoords + float2(0,texel.y)).rgb;
-    reflection += tex2D(ReflectionTextureSampler, screenCoords + float2(0,texel.y)).rgb;
-    reflection/=5;
+    reflection += tex2D(ReflectionTextureSampler, screenCoords + float2(texel.x,0)).rgb/2;
+    reflection += tex2D(ReflectionTextureSampler, screenCoords + float2(-texel.x,0)).rgb/2;
+    reflection += tex2D(ReflectionTextureSampler, screenCoords + float2(0,texel.y)).rgb/2;
+    reflection += tex2D(ReflectionTextureSampler, screenCoords + float2(0,texel.y)).rgb/2;
+    reflection/=5.0/2.0;
 
     return lerp(color, reflection * albedo, saturate(reflectiveness/2 * 0 + reflectiveness));
 }

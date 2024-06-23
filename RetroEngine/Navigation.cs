@@ -315,7 +315,7 @@ namespace RetroEngine
             float dist2 = CalculatePathDistance(points1, target);
 
 
-            List<Vector3> points = dist2 > dist1 ? points1 : points2;
+            List<Vector3> points = (dist2 > dist1) || (points2.Count < 2) ? points1 : points2;
 
             OnPathFound?.Invoke(points);
 
