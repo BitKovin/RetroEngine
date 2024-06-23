@@ -243,7 +243,7 @@ namespace RetroEngine
 
         void LerpVertexBuffers(GraphicsDevice graphicsDevice, VertexBuffer resultBuffer, VertexBuffer buffer1, VertexBuffer buffer2, float amount)
         {
-            
+            return;
             if (buffer1.VertexDeclaration != buffer2.VertexDeclaration || resultBuffer.VertexDeclaration != buffer1.VertexDeclaration)
             {
                 throw new InvalidOperationException("Vertex buffers must have the same vertex declaration.");
@@ -253,6 +253,8 @@ namespace RetroEngine
 
             // Get the data from the vertex buffers
             VertexData[] data1 = frameVertexData[buffer1.GetHashCode()];
+            resultBuffer.SetData(data1);
+            return;
             VertexData[] data2 = frameVertexData[buffer2.GetHashCode()];
 
             if (data1 is null) return;

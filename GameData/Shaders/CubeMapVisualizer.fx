@@ -4,6 +4,12 @@ texture Texture;
 samplerCUBE TextureSampler = sampler_state
 {
     texture = <Texture>;
+
+    MinFilter = Linear;
+    MagFilter = Linear;
+    AddressU = Clamp;
+    AddressV = Clamp;
+
 };
 
 PixelInput VertexShaderFunction(VertexInput input)

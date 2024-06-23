@@ -243,7 +243,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             mesh.LoadFromFile("models/weapons/pistol2.fbx");
 
-            arms.LoadFromFile("models/weapons/arms.fbx");
+            arms.LoadFromFile("models/weapons/arms_n.fbx");
 
             mesh.textureSearchPaths.Add("textures/weapons/arms/");
             mesh.textureSearchPaths.Add("textures/weapons/pistol/");

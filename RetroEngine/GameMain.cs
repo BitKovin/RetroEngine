@@ -580,7 +580,7 @@ namespace RetroEngine
             _graphics.HardwareModeSwitch = !_isBorderless;
             _graphics.ApplyChanges();
         }
-        private void SetFullscreen()
+        protected virtual void SetFullscreen()
         {
             _width = Window.ClientBounds.Width;
             _height = Window.ClientBounds.Height;
@@ -592,7 +592,7 @@ namespace RetroEngine
             _graphics.IsFullScreen = true;
             _graphics.ApplyChanges();
         }
-        private void UnsetFullscreen()
+        protected virtual void UnsetFullscreen()
         {
             _graphics.PreferredBackBufferWidth = _width;
             _graphics.PreferredBackBufferHeight = _height;

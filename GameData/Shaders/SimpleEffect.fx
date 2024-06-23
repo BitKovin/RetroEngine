@@ -77,7 +77,7 @@ PixelOutput PixelShaderFunction(PixelInput input)
     if (textureAlpha < 0.01)
         discard;
 
-    float3 pixelNormal = ApplyNormalTexture(textureNormal, input.Normal, input.Tangent, input.BiTangent);
+    float3 pixelNormal = input.Normal;ApplyNormalTexture(textureNormal, input.Normal, input.Tangent, input.BiTangent);
     
     
     float3 albedo = textureColor;

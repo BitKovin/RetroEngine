@@ -44,5 +44,6 @@ namespace RetroEngine.PhysicsSystem
             // Use bitwise AND to check if any flag is set in both collidesWith and bodyType
             return (collidesWith & bodyType) != 0;
         }
+
     }
 }

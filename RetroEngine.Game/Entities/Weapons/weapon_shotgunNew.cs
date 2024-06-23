@@ -200,7 +200,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             mesh.LoadFromFile("models/weapons/shotgun.fbx");
 
-            arms.LoadFromFile("models/player_body.FBX");
+            arms.LoadFromFile("models/weapons/arms_n.FBX");
             arms.textureSearchPaths.Add("textures/weapons/arms/");
 
             mesh.textureSearchPaths.Add("textures/weapons/arms/");

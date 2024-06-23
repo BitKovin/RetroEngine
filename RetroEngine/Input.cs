@@ -108,6 +108,7 @@ namespace RetroEngine
             {
                 Mouse.SetPosition((int)windowCenter.X, (int)windowCenter.Y);
                 MousePos = windowCenter;
+                MouseDelta = new Vector2();
                 MouseDeltas.Clear();
                 PendingCenterCursor = false;
             }else

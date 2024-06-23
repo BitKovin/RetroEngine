@@ -71,6 +71,8 @@ namespace RetroEngine.Game.Entities.Weapons
         {
             base.Update();
 
+            LateUpdateWhilePaused = true;
+
             if(Time.gameTime - SpawnTime > DrawTime)
                 Drawing = false;
 
@@ -118,6 +120,9 @@ namespace RetroEngine.Game.Entities.Weapons
 
         void UpdateSway()
         {
+            return;
+            if (GameMain.Instance.paused) return;
+
             Sway -= new Vector3(Input.MouseDelta.X,-Input.MouseDelta.Y,0)/3000;
             Sway = Vector3.Lerp(Sway,Vector3.Zero, Time.DeltaTime*12);
 

@@ -194,7 +194,7 @@ namespace RetroEngine.Entities
             MoveDirection = Vector3.Lerp(MoveDirection, DesiredMoveDirection, Time.DeltaTime * 3);
 
 
-            mesh.Position = Position - new Vector3(0, 1f, 0);
+            mesh.Position = Position - new Vector3(0, 1.1f, 0);
 
             mesh.Rotation = new Vector3(0, MathHelper.FindLookAtRotation(Vector3.Zero, MoveDirection).Y, 0);
 
