@@ -1,16 +1,6 @@
 ﻿#include "ShaderLib/BasicShader.fx"
 
-texture Texture;
-samplerCUBE TextureSampler = sampler_state
-{
-    texture = <Texture>;
-
-    MinFilter = Linear;
-    MagFilter = Linear;
-    AddressU = Clamp;
-    AddressV = Clamp;
-
-};
+TextureCube Texture;
 
 PixelInput VertexShaderFunction(VertexInput input)
 {
@@ -42,7 +32,7 @@ PixelOutput output = (PixelOutput) 0;
     float3 reflection = normalize(input.MyPosition - viewPos);
 
     
-    float3 textureColor = SampleCubemap(TextureSampler, reflection).xyz;
+    float3 textureColor = SampleCubemap(Texture, reflection).xyz;
     
     
     

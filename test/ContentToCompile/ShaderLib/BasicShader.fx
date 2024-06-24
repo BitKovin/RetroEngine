@@ -1,0 +1,1035 @@
+#include "Macros.fxh"
+#if OPENGL
+#define VS_SHADERMODEL vs_5_0
+#define PS_SHADERMODEL ps_5_0
+#else
+#define VS_SHADERMODEL vs_5_0
+#define PS_SHADERMODEL ps_5_0
+#endif
+
+#define PI 3.1415f
+
+matrix World;
+matrix View;
+matrix Projection;
+matrix ProjectionViewmodel;
+
+Texture2D ShadowMap;
+
+sampler AnisotropicSampler = sampler_state
+{
+    texture = <ShadowMap>;
+    MinFilter = Anisotropic;
+    MagFilter = Anisotropic;
+    AddressU = Clamp;
+    AddressV = Clamp;
+};
+
+sampler LinearSampler = sampler_state
+{
+    texture = <ShadowMap>;
+    MinFilter = Linear;
+    MagFilter = Linear;
+    AddressU = Clamp;
+    AddressV = Clamp;
+};
+
+sampler PointSampler = sampler_state
+{
+    texture = <ShadowMap>;
+    MinFilter = Point;
+    MagFilter = Point;
+    AddressU = Clamp;
+    AddressV = Clamp;
+};
+
+
+sampler ShadowMapSampler = sampler_state
+{
+    texture = <ShadowMap>;
+    MinFilter = Point;
+    MagFilter = Point;
+    AddressU = Clamp;
+    AddressV = Clamp;
+};
+
+Texture2D ShadowMapClose;
+
+Texture2D ShadowMapVeryClose;
+
+Texture2D DepthTexture;
+
+Texture2D FrameTexture;
+
+Texture2D ReflectionTexture;
+
+
+float FarPlane;
+float3 viewDir;
+float3 viewPos;
+
+matrix InverseViewProjection;
+
+float LightDistanceMultiplier;
+float DirectBrightness;
+float GlobalBrightness;
+float3 LightDirection;
+float3 GlobalLightColor;
+
+float EmissionPower;
+float ShadowBias;
+float Transparency;
+matrix ShadowMapViewProjection;
+float ShadowMapResolution;
+
+bool Viewmodel = false;
+
+matrix ShadowMapViewProjectionClose;
+float ShadowMapResolutionClose;
+
+matrix ShadowMapViewProjectionVeryClose;
+float ShadowMapResolutionVeryClose;
+
+
+
+#ifndef MAX_POINT_LIGHTS
+
+#define MAX_POINT_LIGHTS 20
+
+#endif
+
+#ifndef MAX_POINT_LIGHTS_SHADOWS
+
+#define MAX_POINT_LIGHTS_SHADOWS 1
+
+#endif
+
+#ifdef OPENGL
+#define MAX_POINT_LIGHTS 1
+#endif
+
+float3 LightPositions[MAX_POINT_LIGHTS];
+float3 LightColors[MAX_POINT_LIGHTS];
+float LightRadiuses[MAX_POINT_LIGHTS];
+float LightResolutions[MAX_POINT_LIGHTS];
+float4 LightDirections[MAX_POINT_LIGHTS];
+
+sampler CubemapSampler = sampler_state
+{
+    MinFilter = Linear;
+    MagFilter = Linear;
+    AddressU = Clamp;
+    AddressV = Clamp;
+};
+
+TextureCube PointLightCubemap1;
+TextureCube PointLightCubemap2;
+TextureCube PointLightCubemap3;
+TextureCube PointLightCubemap4;
+TextureCube PointLightCubemap5;
+TextureCube PointLightCubemap6;
+
+#define BONE_NUM 128
+
+matrix Bones[BONE_NUM];
+
+bool isParticle = false;
+
+float depthScale = 1.0f;
+
+float ScreenHeight;
+float ScreenWidth;
+
+float SSRHeight;
+float SSRWidth;
+
+bool DisableDepthDiscard;
+
+struct VertexInput
+{
+    float4 Position : POSITION;
+    float3 Normal : NORMAL0; // Add normal input
+    float2 TexCoord : TEXCOORD0;
+    float3 Tangent : TANGENT0;
+    float3 BiTangent : BINORMAL0;
+    
+    float4 BlendIndices : BLENDINDICES0;
+    float4 BlendWeights : BLENDWEIGHT0;
+
+    float4 Color : COLOR0;
+
+};
+
+struct PixelInput //only color and texcoords or opengl might freak out
+{
+    float4 Position : SV_POSITION;
+    float2 TexCoord : TEXCOORD0;
+    float3 Normal : TEXCOORD8; 
+    float4 lightPos : TEXCOORD1;
+    float4 lightPosClose : TEXCOORD2;
+    float3 MyPosition : TEXCOORD3;
+    float4 MyPixelPosition : TEXCOORD4;
+    float3 Tangent : TEXCOORD5;
+    float4 lightPosVeryClose : TEXCOORD6;
+    float3 BiTangent : TEXCOORD7;
+    float4 Color : COLOR0;
+};
+
+struct PBRData
+{
+    float3 specular;
+    float3 lighting;
+    float reflectiveness;
+};
+
+struct PixelOutput
+{
+    float4 Color : SV_Target0;
+    float4 Normal : SV_Target1;
+    float4 Reflectiveness : SV_Target2;
+    float4 Position : SV_Target3;
+};
+
+float3 normalize(float3 v)
+{
+    return rsqrt(dot(v, v)) * v;
+}
+
+float4x4 GetBoneTransforms(VertexInput input)
+{
+    
+    float4x4 identity = float4x4(
+    1.0, 0.0, 0.0, 0.0,
+    0.0, 1.0, 0.0, 0.0,
+    0.0, 0.0, 1.0, 0.0,
+    0.0, 0.0, 0.0, 1.0);
+    
+    float sum = input.BlendWeights.x + input.BlendWeights.y + input.BlendWeights.z + input.BlendWeights.w;
+    
+    if (sum < 0.05f)
+        return identity;
+    
+    float4x4 mbones =
+    Bones[input.BlendIndices.x] * (float) input.BlendWeights.x / sum +
+    Bones[input.BlendIndices.y] * (float) input.BlendWeights.y / sum +
+    Bones[input.BlendIndices.z] * (float) input.BlendWeights.z / sum +
+    Bones[input.BlendIndices.w] * (float) input.BlendWeights.w / sum;
+    
+    return mbones;
+}
+
+float3 ApplyNormalTexture(float3 sampledNormalColor, float3 worldNormal, float3 worldTangent, float3 bitangent)
+{
+    
+    if (length(sampledNormalColor) < 0.1f)
+        sampledNormalColor = float3(0.5, 0.5, 1);
+    
+    
+    sampledNormalColor *= float3(1, 1, 1);
+    
+    worldNormal = normalize(worldNormal);
+    worldTangent = normalize(worldTangent);
+
+    float3 normalMapSample = sampledNormalColor * 2.0 - 1.0;
+    
+    normalMapSample *= float3(-1, -1, 1);
+    
+    normalMapSample *= 1;
+    
+    
+    float3x3 tangentToWorld = float3x3(worldTangent, bitangent, worldNormal);
+
+    // Transform the normal from tangent space to world space
+    float3 worldNormalFromTexture = mul(normalMapSample, tangentToWorld);
+    
+    worldNormalFromTexture = normalize(worldNormalFromTexture);
+
+    return worldNormalFromTexture;
+}
+
+float3 GetTangentNormal(float3 worldNormal, float3 worldTangent, float3 bitangent)
+{
+    return ApplyNormalTexture(float3(0.5,0.5,1),worldNormal, worldTangent, bitangent);
+}
+
+PixelInput DefaultVertexShaderFunction(VertexInput input)
+{
+    PixelInput output;
+
+    float4x4 boneTrans = GetBoneTransforms(input);
+    
+    float4x4 BonesWorld = mul(boneTrans, World);
+    
+    float4 worldPos = mul(input.Position, BonesWorld);
+
+    
+    output.Position = worldPos;
+    output.MyPosition = output.Position.xyz;
+    output.Position = mul(output.Position, View);
+    
+    
+    
+    if (Viewmodel)
+    {
+        output.Position = mul(output.Position, ProjectionViewmodel);
+        output.Position.z *= 0.02;
+    }
+    else
+    {
+        output.Position = mul(output.Position, Projection);
+    }
+    
+        
+    
+    output.MyPixelPosition = output.Position;
+    
+    
+    output.TexCoord = input.TexCoord;
+
+	// Pass the world space normal to the pixel shader
+    output.Normal = mul(input.Normal, (float3x3)BonesWorld);
+    output.Normal = normalize(output.Normal);
+    
+    
+    output.Tangent = mul(input.Tangent, (float3x3) BonesWorld);
+    output.Tangent = normalize(output.Tangent);
+
+    output.BiTangent = mul(input.BiTangent, (float3x3) BonesWorld);
+    output.BiTangent = normalize(output.BiTangent);
+    
+
+    output.lightPos = mul(worldPos, ShadowMapViewProjection);
+    output.lightPosClose = mul(worldPos, ShadowMapViewProjectionClose);
+    output.lightPosVeryClose = mul(worldPos, ShadowMapViewProjectionVeryClose);
+    
+    output.TexCoord = input.TexCoord;
+    output.Color = input.Color;
+
+    return output;
+}
+
+void DepthDiscard(float depth, PixelInput input)
+{
+    if (depth < input.MyPixelPosition.z - 0.015 && DisableDepthDiscard == false)
+        discard;
+}
+
+float SampleDepth(float2 coords)
+{
+    return SAMPLE_TEXTURE(DepthTexture, LinearSampler, coords);
+
+}
+
+float SampleMaxDepth(float2 screenCoords)
+{
+    
+    float2 texelSize = 0.4 / float2(ScreenWidth, ScreenHeight);
+    
+    float d = SampleDepth(screenCoords);
+    float d1 = SampleDepth(screenCoords + texelSize);
+    float d2 = SampleDepth(screenCoords - texelSize);
+
+    return max(d, max(d1, d2));
+
+}
+
+
+
+float4 SampleCubemap(TextureCube tex, float3 coords)
+{
+    return SAMPLE_TEXTURE(tex, CubemapSampler, coords * float3(-1,1,1));
+}
+
+
+
+
+float GeometrySchlickGGX(float NdotV, float roughness)
+{
+    float r = roughness + 1.0f;
+    float k = (r * r) / 8.0f;
+
+    float num = NdotV;
+    float denom = NdotV * (1.0f - k) + k;
+
+    return num / denom;
+}
+
+float GeometrySmith(float3 N, float3 V, float3 L, float roughness)
+{
+    float NdotV = max(dot(N, V), 0.0f);
+    float NdotL = max(dot(N, L), 0.0f);
+    float ggx2 = GeometrySchlickGGX(NdotV, roughness);
+    float ggx1 = GeometrySchlickGGX(NdotL, roughness);
+
+    return ggx1 * ggx2;
+}
+
+float3 FresnelSchlick(float cosTheta, float3 F0)
+{
+    return F0 + (1.0f - F0) * pow(1.0f - cosTheta, 5.0f);
+}
+
+float DistributionGGX(float3 N, float3 H, float a)
+{
+    float a2 = a * a;
+    float NdotH = max(dot(N, H), 0.0);
+    float NdotH2 = NdotH * NdotH;
+
+    float nom = a2;
+    float denom = (NdotH2 * (a2 - 1.0) + 1.0);
+    denom = PI * denom * denom;
+
+    return nom / denom;
+}
+
+float CalculateSpecular(float3 worldPos, float3 normal, float3 lightDir, float roughness, float metallic, float3 albedo)
+{
+#ifdef NO_SPECULAR
+    return 0;
+#endif
+
+    float3 vDir = normalize(viewPos - worldPos);
+    lightDir = normalize(lightDir);
+    float3 halfwayDir = normalize(vDir + lightDir);
+    
+    float NdotH = saturate(dot(normal, halfwayDir));
+    float NdotV = saturate(dot(normal, vDir));
+    float NdotL = saturate(dot(normal, lightDir));
+
+    // GGX Normal Distribution Function (NDF)
+    float roughnessSq = roughness * roughness;
+    float D = DistributionGGX(normal, halfwayDir, roughnessSq);
+
+    // Geometry function using Smith's method
+    float G = GeometrySmith(normal, vDir, lightDir, roughnessSq);
+
+    // Fresnel term using Schlick's approximation
+    float3 F0 = lerp(float3(0.04f, 0.04f, 0.04f), albedo, metallic);
+    float3 F = FresnelSchlick(NdotH, F0);
+
+    // Specular BRDF
+    float3 specular = (D * G * F) / (4.0f * NdotV * NdotL + 0.001f);
+
+    return specular;
+}
+
+float SampleShadowMap(Texture2D shadowMap, float2 coords, float compare)
+{
+    
+    float4 sample = SAMPLE_TEXTURE(shadowMap,ShadowMapSampler, coords);
+    
+    return step(compare, sample.r);
+}
+
+float SampleShadowDif(Texture2D shadowMap, float2 coords, float compare)
+{
+    
+    float sample = SAMPLE_TEXTURE(shadowMap,ShadowMapSampler, coords).r - compare;
+    
+    return sample;
+}
+
+float SampleShadowMapLinear(Texture2D shadowMap, float2 coords, float compare, float2 texelSize)
+{
+    float2 pixelPos = coords / texelSize + float2(0.5, 0.5);
+    float2 fracPart = frac(pixelPos);
+    float2 startTexel = (pixelPos - fracPart) * texelSize;
+
+    float blTexel = SampleShadowMap(shadowMap, startTexel, compare);
+    float brTexel = SampleShadowMap(shadowMap, startTexel + float2(texelSize.x, 0.0), compare);
+    float tlTexel = SampleShadowMap(shadowMap, startTexel + float2(0.0, texelSize.y), compare);
+    float trTexel = SampleShadowMap(shadowMap, startTexel + texelSize, compare);
+
+    float mixA = lerp(blTexel, tlTexel, fracPart.y);
+    float mixB = lerp(brTexel, trTexel, fracPart.y);
+
+    return lerp(mixA, mixB, fracPart.x);
+}
+
+float GetShadowClose(float3 lightCoords, PixelInput input)
+{
+    float shadow = 0;
+    
+    float dist = distance(viewPos, input.MyPosition);
+    
+    if (lightCoords.x >= 0 && lightCoords.x <= 1 && lightCoords.y >= 0 && lightCoords.y <= 1)
+    {
+        float currentDepth = lightCoords.z * 2 - 1;
+
+        float resolution = 1;
+        
+
+        int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)
+
+        float bias = ShadowBias * (1 - saturate(dot(input.Normal, -LightDirection))) + ShadowBias / 2.0f;
+        resolution = ShadowMapResolutionClose;
+        
+        
+        float size = 1;
+        
+        bias *=1.3;
+
+        bias *= (LightDistanceMultiplier+1)/2;
+        
+        if(abs(dot(input.Normal, -LightDirection)) <= 0.3)
+        return 1 - SampleShadowMap(ShadowMapClose, lightCoords.xy, currentDepth + bias);
+
+        float texelSize = size / resolution; // Assuming ShadowMapSize is the size of your shadow map texture
+
+    
+        return 1 - SampleShadowMapLinear(ShadowMapClose, lightCoords.xy, currentDepth + bias,float2(texelSize, texelSize));
+    
+        
+        
+        for (int i = -numSamples; i <= numSamples; ++i)
+        {
+            for (int j = -numSamples; j <= numSamples; ++j)
+            {
+                float2 offsetCoords = lightCoords.xy + float2(i, j) * texelSize;
+                float closestDepth;
+                closestDepth = SampleShadowMapLinear(ShadowMapClose, offsetCoords, currentDepth + bias, float2(texelSize, texelSize));
+
+                shadow += closestDepth;
+
+            }
+        }
+
+        // Normalize the accumulated shadow value
+        shadow /= ((2 * numSamples + 1) * (2 * numSamples + 1));
+        
+        return (1 - shadow) * (1 - shadow);
+    }
+    return 0;
+    
+}
+
+float GetShadowVeryClose(float3 lightCoords, PixelInput input)
+{
+    float shadow = 0;
+    
+    float dist = distance(viewPos, input.MyPosition);
+    
+    if (lightCoords.x >= 0 && lightCoords.x <= 1 && lightCoords.y >= 0 && lightCoords.y <= 1)
+    {
+        float currentDepth = lightCoords.z * 2 - 1;
+
+        float resolution = 1;
+        
+
+        int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)
+
+        float b = 0.0005;
+        
+        float bias = b * (1 - saturate(dot(input.Normal, -LightDirection))) + b / 2.0f;
+
+        bias *= (LightDistanceMultiplier+1)/2;
+
+        resolution = ShadowMapResolutionClose;
+        
+        //bias -= max(dot(input.Normal, float3(0,1,0)),0) * b/2;
+        
+        float size = (abs(dot(input.Normal, -LightDirection))-0.5)*2;
+        
+        size = 1; max(size, 0.001);
+        
+        float texelSize = size / resolution; // Assuming ShadowMapSize is the size of your shadow map texture
+        
+        #ifdef SIMPLE_SHADOWS
+        //return 1 - SampleShadowMapLinear(ShadowMapVeryCloseSampler, lightCoords.xy, currentDepth - bias, float2(texelSize, texelSize));
+        #endif
+
+        
+
+        for (int i = -numSamples; i <= numSamples; ++i)
+        {
+            for (int j = -numSamples; j <= numSamples; ++j)
+            {
+
+                if(length(float2(i, j)>1.1))
+                    continue;
+
+                float2 offsetCoords = lightCoords.xy + float2(i, j) * texelSize;
+                float closestDepth;
+                closestDepth = SampleShadowMapLinear(ShadowMapVeryClose, offsetCoords, currentDepth - bias, float2(texelSize, texelSize));
+
+                shadow += closestDepth;
+
+            }
+        }
+
+        // Normalize the accumulated shadow value
+        shadow /= ((2 * numSamples + 1) * (2 * numSamples + 1));
+        
+        return (1 - shadow) * (1 - shadow);
+    }
+    return 0;
+    
+}
+
+float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVeryClose, PixelInput input)
+{
+    float shadow = 0;
+    
+    if(DirectBrightness<0.00001)
+        return 0;
+
+    float dist = distance(viewPos, input.MyPosition) / LightDistanceMultiplier;
+    
+    if (dist > 140)
+        return 0;
+    
+
+
+    if (lightCoords.x >= 0 && lightCoords.x <= 1 && lightCoords.y >= 0 && lightCoords.y <= 1)
+    {
+        
+        
+        float currentDepth = lightCoords.z * 2 - 1;
+            
+        if (dist < 10 ) //&& abs(dot(input.TangentNormal, -LightDirection))>0.3
+        {
+            if (lightCoordsVeryClose.x >= 0 && lightCoordsVeryClose.x <= 1 && lightCoordsVeryClose.y >= 0 && lightCoordsVeryClose.y <= 1)
+            {
+                
+                float texelSize = 1/ShadowMapResolutionClose;
+
+
+                return GetShadowVeryClose(lightCoordsVeryClose, input);
+            }
+        }
+        
+        if (dist < 25)
+        {
+            if (lightCoordsClose.x >= 0 && lightCoordsClose.x <= 1 && lightCoordsClose.y >= 0 && lightCoordsClose.y <= 1)
+            {
+                return GetShadowClose(lightCoordsClose, input);
+            }
+        }
+        
+    if (SAMPLE_TEXTURE(ShadowMap,ShadowMapSampler, lightCoords.xy).r<0.01)
+        return 0;
+
+
+        float resolution = 1;
+        
+
+        int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)
+
+        float bias = ShadowBias * (1 - saturate(dot(input.Normal, -LightDirection))) + ShadowBias / 2.0f;
+        resolution = ShadowMapResolution;
+        
+        bias *= (LightDistanceMultiplier+1)/2;
+
+        return 1 - SampleShadowMap(ShadowMap, lightCoords.xy, currentDepth + bias);
+        
+        float size = 1;
+        
+        
+        float texelSize = size / resolution; // Assuming ShadowMapSize is the size of your shadow map texture
+        
+        for (int i = -numSamples; i <= numSamples; ++i)
+        {
+            for (int j = -numSamples; j <= numSamples; ++j)
+            {
+                float2 offsetCoords = lightCoords.xy + float2(i, j) * texelSize;
+                float closestDepth;
+                closestDepth = SampleShadowMapLinear(ShadowMap, offsetCoords, currentDepth + bias, float2(texelSize, texelSize));
+
+                shadow += closestDepth;
+
+            }
+        }
+
+        // Normalize the accumulated shadow value
+        shadow /= ((2 * numSamples + 1) * (2 * numSamples + 1));
+        
+        return (1 - shadow) * (1 - shadow);
+    }
+    return 0;
+    
+}
+
+
+float GetPointLightDepth(int i, float3 lightDir)
+{
+    if (i >= MAX_POINT_LIGHTS_SHADOWS)
+        return 10000;
+
+    float depth = 0.00;
+
+    lightDir *= float3(1, -1, -1);
+
+    ;
+
+    if (i == 0)
+        depth = SAMPLE_TEXTURE(PointLightCubemap1,CubemapSampler, lightDir).r;
+    else if (i == 1)
+        depth = SAMPLE_TEXTURE(PointLightCubemap2,CubemapSampler, lightDir).r;
+    else if (i == 2)
+        depth = SAMPLE_TEXTURE(PointLightCubemap3,CubemapSampler, lightDir).r;
+    else if (i == 3)
+        depth = SAMPLE_TEXTURE(PointLightCubemap4,CubemapSampler, lightDir).r;
+    else if (i == 4)
+        depth = SAMPLE_TEXTURE(PointLightCubemap5,CubemapSampler, lightDir).r;
+    else if (i == 5)
+        depth = SAMPLE_TEXTURE(PointLightCubemap6,CubemapSampler, lightDir).r;
+
+    if (depth == 0)
+        return 10000;
+
+    depth += depth / (LightResolutions[i] * 3) + 0.04;
+
+    return depth;
+}
+
+
+float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal, float roughness, float metalic, float3 albedo)
+{
+    float3 lightVector = LightPositions[i] - pixelInput.MyPosition;
+    float distanceToLight = length(lightVector);
+
+    if(distanceToLight> LightRadiuses[i])
+        return float3(0,0,0);
+    
+
+    if(isParticle)
+        normal = normalize(lightVector);
+
+    // Calculate the dot product between the normalized light vector and light direction
+    float lightDot = dot(normalize(-lightVector), normalize(LightDirections[i].xyz));
+
+    // Define the inner and outer angles of the spotlight in radians
+    float innerConeAngle = LightDirections[i].w;
+    float outerConeAngle = innerConeAngle - 0.1; // Adjust this value to control the smoothness
+
+    // Calculate the smooth transition factor using smoothstep
+    float dirFactor = smoothstep(outerConeAngle, innerConeAngle, lightDot);
+
+
+    if(dirFactor<=0.001)
+        return 0;
+
+    float offsetScale = 1 / (LightResolutions[i] / 40);// / lerp(distanceToLight,1, 0.7);
+    offsetScale *= lerp(abs(dot(normal, normalize(lightVector))), 0.7, 1);
+    float notShadow = 1;
+
+    if(dot(normal, normalize(lightVector))<0.01)
+    {
+        return float3(0,0,0);
+    }
+
+    float distFactor = 1; // 0.96
+
+    distFactor = lerp(distFactor, 1, abs(dot(normal, normalize(lightVector))));
+
+    if (LightResolutions[i] > 10 && notShadow>0)
+    {
+        float3 lightDir = normalize(lightVector);
+        float shadowBias = 0.05;  // Adjust this bias for your specific scene
+
+        // Calculate tangent and bitangent vectors
+        float3 up = abs(normal.y) < 0.999 ? float3(0, 1, 0) : float3(1, 0, 0);
+        float3 tangent = normalize(cross(up, normal));
+        float3 bitangent = cross(normal, tangent);
+
+        // PCF sampling
+        int samples = 0;
+        float shadowFactor = 0.0;
+
+        const int radius = 2;
+
+        float step = 0.66666666666665;
+
+#if OPENGL
+        step = radius;
+#endif
+
+            
+
+        bool simpleShadows = false;
+
+#ifdef SIMPLE_SHADOWS
+        simpleShadows = true;
+#endif
+
+        float bias = -1/LightResolutions[i] * distanceToLight;
+
+        if(simpleShadows)
+            step = radius;
+
+        if(simpleShadows&&false || isParticle)
+        {
+
+            float shadowDepth = GetPointLightDepth(i, lightDir);
+            notShadow = distanceToLight * distFactor + bias < shadowDepth ? 1.0 : 0.0;
+
+        }else
+        {
+
+        for (float x = -radius; x <= radius; x+=step)
+        {
+            for (float y = -radius; y <= radius; y+=step)
+            {
+
+                if(length(float2(x,y))>1.1*radius)
+                    continue;
+
+                float3 offset = (tangent * x + bitangent * y) * shadowBias * offsetScale;
+                float shadowDepth = GetPointLightDepth(i, lightDir + offset);
+                shadowFactor += distanceToLight * distFactor + bias < shadowDepth ? 1.0 : 0.0;
+                samples++;
+            }
+        }
+        
+        shadowFactor /= samples;
+        notShadow = shadowFactor;
+        }
+    }
+
+    float dist = (distanceToLight / LightRadiuses[i]);
+    float intense = saturate(1.0 - dist * dist);
+    float3 dirToSurface = normalize(lightVector);
+
+    intense *= saturate(dot(normal, dirToSurface));
+    float3 specular = CalculateSpecular(pixelInput.MyPosition, normal, -dirToSurface, roughness, metalic, albedo);
+
+    intense = max(intense, 0);
+    float3 l = LightColors[i] * intense;
+
+    return (l + intense * specular) * notShadow * dirFactor;
+}
+
+float3 CalculateSsrSpecular(PixelInput input, float3 normal, float roughness, float metalic, float3 albedo)
+{
+    return float3(0,0,0);
+    
+    float3 vDir = normalize(input.MyPosition - viewPos);
+
+    float lightDir = -reflect(vDir, normal);
+
+    float intens = CalculateSpecular(input.MyPosition, normal, lightDir, roughness+0.1, metalic, albedo);
+
+    
+
+    float2 screenCoords = input.MyPixelPosition.xyz / input.MyPixelPosition.w;
+    
+    screenCoords = (screenCoords + 1.0f) / 2.0f;
+
+    screenCoords.y = 1.0f - screenCoords.y;
+
+    float2 texel = 1 / float2(SSRWidth, SSRHeight);
+
+
+    float3 color = SAMPLE_TEXTURE(ReflectionTexture,AnisotropicSampler, screenCoords).rgb - 0.9;
+
+    return saturate(color * intens * dot(lightDir, -normal));
+}
+
+float3 CalculateLight(PixelInput input, float3 normal, float roughness, float metallic, float ao, float3 albedo)
+{
+    float3 lightCoords = input.lightPos.xyz / input.lightPos.w;
+    lightCoords = (lightCoords + 1.0f) / 2.0f;
+    lightCoords.y = 1.0f - lightCoords.y;
+    
+    float3 lightCoordsClose = input.lightPosClose.xyz / input.lightPosClose.w;
+    lightCoordsClose = (lightCoordsClose + 1.0f) / 2.0f;
+    lightCoordsClose.y = 1.0f - lightCoordsClose.y;
+    
+    float3 lightCoordsVeryClose = input.lightPosVeryClose.xyz / input.lightPosVeryClose.w;
+    lightCoordsVeryClose = (lightCoordsVeryClose + 1.0f) / 2.0f;
+    lightCoordsVeryClose.y = 1.0f - lightCoordsVeryClose.y;
+
+    float shadow = 0;
+
+    if (isParticle)
+        normal = -LightDirection;
+    
+    if (dot(normal, -LightDirection) < 0.01)
+    {
+        shadow += 1;
+    }
+    else
+    {
+        shadow += GetShadow(lightCoords, lightCoordsClose, lightCoordsVeryClose, input);
+    }
+    
+    shadow += 1 - max(0, dot(normal, normalize(-LightDirection) * 1));
+    shadow = saturate(shadow);
+
+    float3 vDir = normalize(viewPos - input.MyPosition);
+    float3 lightDir = normalize(-LightDirection);
+
+    // Calculate specular reflection
+    float3 specular = CalculateSpecular(input.MyPosition, normal, lightDir, roughness, metallic, albedo) * DirectBrightness;
+    specular *= max(1 - shadow, 0);
+
+    float3 globalSpecularDir = normalize(-normal + float3(0, -5, 0) + LightDirection);
+    specular += CalculateSpecular(input.MyPosition, normal, globalSpecularDir, roughness, metallic, albedo) * 0.02;
+
+    // Direct light contribution
+    float3 light = DirectBrightness * GlobalLightColor;
+    light *= (1.0f - shadow);
+
+    // Global ambient light
+    float3 globalLight = GlobalBrightness * GlobalLightColor * lerp(1.0f, 0.4f, max(dot(normal, float3(0, -1, 0)), 0.0f));
+    globalLight *= ao;
+
+    // Accumulate point light contributions
+    for (int i = 0; i < MAX_POINT_LIGHTS; i++)
+    {
+        light += CalculatePointLight(i, input, normal, roughness, metallic, albedo);
+    }
+
+    // Combine contributions
+    light += specular;
+    light = max(light, 0.0f);
+    light += globalLight;
+    light += CalculateSsrSpecular(input, normal, roughness, metallic, albedo);
+
+    return light;
+}
+
+float2 WorldToScreen(float3 pos)
+{
+    float4 position = float4(pos, 1);
+    
+    
+    float4 projection = mul(mul(position, View), Projection);
+    
+    float2 screenCoords = projection.xyz / projection.w;
+    
+    screenCoords = (screenCoords + 1.0f) / 2.0f;
+
+    screenCoords.y = 1.0f - screenCoords.y;
+    
+    
+    return screenCoords;
+}
+
+float4 WorldToClip(float3 pos)
+{
+    float4 position = float4(pos, 1);
+    
+    
+    float4 projection = mul(mul(position, View), Projection);
+    
+    return projection;
+}
+
+float SampleDepthWorldCoords(float3 pos)
+{
+    float2 screenCoords = WorldToScreen(pos);
+    
+    return SampleDepth(screenCoords);
+}
+
+
+float3 SampleColorWorldCoords(float3 pos)
+{
+    
+    float2 screenCoords = WorldToScreen(pos);
+    
+    return SAMPLE_TEXTURE(FrameTexture,LinearSampler, screenCoords).rgb;
+}
+
+float3 GetPosition(float2 UV, float depth)
+{
+    float4 position = 1.0f;
+ 
+    position.x = UV.x * 2.0f - 1.0f;
+    position.y = -(UV.y * 2.0f - 1.0f);
+
+    position.z = depth;
+ 
+    position = mul(position, InverseViewProjection);
+ 
+    position /= position.w;
+
+    return position.xyz;
+}
+
+
+float ReflectionMapping(float x)
+{
+    
+    const float n = -0.066;
+    
+    const float v = x / 3;
+    
+    return v / ((x * 10 + 1 / n)*n);
+
+}
+
+float CalculateReflectiveness(float roughness, float metallic, float3 vDir, float3 normal)
+{
+    // Calculate the base reflectiveness based on metallic
+    float baseReflectiveness = metallic * 0.5;
+
+    // Calculate the Fresnel factor using the Schlick approximation
+    float F0 = lerp(0.01, 0.5, metallic);
+    float F = 1; // F0 + (1.0 - F0) * pow(1.0 - abs(dot(vDir, normal)), 5.0);
+
+    // Adjust the base reflectiveness based on roughness
+    float reflectiveness = lerp(baseReflectiveness, 0.01, roughness);
+
+    // Modulate reflectiveness by the Fresnel factor
+    reflectiveness *= F;
+
+    reflectiveness = saturate(reflectiveness);
+    
+    reflectiveness -= 0.1;
+    
+    reflectiveness *= 2.6;
+    
+    return ReflectionMapping(saturate(reflectiveness));
+}
+
+float CalcLuminance(float3 color)
+{
+    return dot(color, float3(0.299f, 0.587f, 0.114f));
+}
+
+float3 ApplyReflection(float3 inColor, float3 albedo, PixelInput input,float3 normal, float roughness, float metallic)
+{
+    
+    return inColor;/*
+    float3 WorldPos = input.MyPosition;
+    
+    float3 vDir = normalize(input.MyPosition - viewPos);
+    
+    float3 reflection = reflect(normalize(input.MyPosition - viewPos), normalize(lerp(normal, input.TangentNormal, 0.4)));
+    
+    
+    float4 ssr = SampleSSR(reflection, input.MyPosition, input.MyPixelPosition.z, normal, vDir);
+    
+    float3 cube = SampleCubemap(ReflectionCubemapSampler, reflection);
+    
+    float3 reflectionColor = lerp(cube, ssr.rgb, ssr.w);
+    
+
+    float reflectiveness = CalculateReflectiveness(roughness, metallic, normal, normal);
+    
+    reflectiveness = saturate(reflectiveness);
+    
+    reflectionColor *= lerp(float3(1, 1, 1), albedo, metallic);
+    
+    return lerp(inColor, reflectionColor, reflectiveness);*/
+}
+
+float3 ApplyReflectionOnSurface(float3 color,float3 albedo,float2 screenCoords, float reflectiveness)
+{
+
+    float3 reflection = SAMPLE_TEXTURE(ReflectionTexture,LinearSampler, screenCoords).rgb;
+    
+
+
+    float2 texel = float2(1/SSRWidth, 1/SSRHeight);
+
+    reflection += SAMPLE_TEXTURE(ReflectionTexture,LinearSampler, screenCoords + float2(texel.x,0)).rgb/2;
+    reflection += SAMPLE_TEXTURE(ReflectionTexture,LinearSampler, screenCoords + float2(-texel.x,0)).rgb/2;
+    reflection += SAMPLE_TEXTURE(ReflectionTexture,LinearSampler, screenCoords + float2(0,texel.y)).rgb/2;
+    reflection += SAMPLE_TEXTURE(ReflectionTexture,LinearSampler, screenCoords + float2(0,texel.y)).rgb/2;
+    reflection/=5.0/2.0;
+
+    return lerp(color, reflection * albedo, saturate(reflectiveness/2 * 0 + reflectiveness));
+}

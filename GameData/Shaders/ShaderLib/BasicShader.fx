@@ -1,7 +1,7 @@
+#include "Macros.fxh"
 #if OPENGL
-#define SV_POSITION POSITION
-#define VS_SHADERMODEL vs_3_0
-#define PS_SHADERMODEL ps_3_0
+#define VS_SHADERMODEL vs_5_0
+#define PS_SHADERMODEL ps_5_0
 #else
 #define VS_SHADERMODEL vs_5_0
 #define PS_SHADERMODEL ps_5_0
@@ -14,7 +14,36 @@ matrix View;
 matrix Projection;
 matrix ProjectionViewmodel;
 
-texture ShadowMap;
+Texture2D ShadowMap;
+
+sampler AnisotropicSampler = sampler_state
+{
+    texture = <ShadowMap>;
+    MinFilter = Anisotropic;
+    MagFilter = Anisotropic;
+    AddressU = Clamp;
+    AddressV = Clamp;
+};
+
+sampler LinearSampler = sampler_state
+{
+    texture = <ShadowMap>;
+    MinFilter = Linear;
+    MagFilter = Linear;
+    AddressU = Clamp;
+    AddressV = Clamp;
+};
+
+sampler PointSampler = sampler_state
+{
+    texture = <ShadowMap>;
+    MinFilter = Point;
+    MagFilter = Point;
+    AddressU = Clamp;
+    AddressV = Clamp;
+};
+
+
 sampler ShadowMapSampler = sampler_state
 {
     texture = <ShadowMap>;
@@ -24,69 +53,15 @@ sampler ShadowMapSampler = sampler_state
     AddressV = Clamp;
 };
 
-texture ShadowMapClose;
-sampler ShadowMapCloseSampler = sampler_state
-{
-    texture = <ShadowMapClose>;
-    MinFilter = Point;
-    MagFilter = Point;
-    AddressU = Clamp;
-    AddressV = Clamp;
-};
+Texture2D ShadowMapClose;
 
-texture ShadowMapVeryClose;
-sampler ShadowMapVeryCloseSampler = sampler_state
-{
-    texture = <ShadowMapVeryClose>;
-    MinFilter = Point;
-    MagFilter = Point;
-    AddressU = Clamp;
-    AddressV = Clamp;
-};
+Texture2D ShadowMapVeryClose;
 
-texture DepthTexture;
-sampler DepthTextureSampler = sampler_state
-{
-    texture = <DepthTexture>;
+Texture2D DepthTexture;
 
-    MinFilter = Linear;
-    MagFilter = Linear;
-    AddressU = Clamp;
-    AddressV = Clamp;
+Texture2D FrameTexture;
 
-};
-
-texture FrameTexture;
-sampler FrameTextureSampler = sampler_state
-{
-    texture = <FrameTexture>;
-
-    MinFilter = Linear;
-    MagFilter = Linear;
-    AddressU = Clamp;
-    AddressV = Clamp;
-};
-
-texture ReflectionTexture;
-sampler ReflectionTextureSampler = sampler_state
-{
-    texture = <ReflectionTexture>;
-
-    MinFilter = Linear;
-    MagFilter = Linear;
-    AddressU = Clamp;
-    AddressV = Clamp;
-};
-
-TextureCube ReflectionCubemap;
-sampler ReflectionCubemapSampler = sampler_state
-{
-    texture = <ReflectionCubemap>;
-    MinFilter = Linear;
-    MagFilter = Linear;
-    AddressU = Clamp;
-    AddressV = Clamp;
-};
+Texture2D ReflectionTexture;
 
 
 float FarPlane;
@@ -130,7 +105,7 @@ float ShadowMapResolutionVeryClose;
 #endif
 
 #ifdef OPENGL
-#define MAX_POINT_LIGHTS 6
+#define MAX_POINT_LIGHTS 1
 #endif
 
 float3 LightPositions[MAX_POINT_LIGHTS];
@@ -139,106 +114,20 @@ float LightRadiuses[MAX_POINT_LIGHTS];
 float LightResolutions[MAX_POINT_LIGHTS];
 float4 LightDirections[MAX_POINT_LIGHTS];
 
-texture PointLightCubemap1;
-sampler PointLightCubemap1Sampler = sampler_state
+sampler CubemapSampler = sampler_state
 {
-    texture = <PointLightCubemap1>;
     MinFilter = Linear;
     MagFilter = Linear;
     AddressU = Clamp;
     AddressV = Clamp;
 };
 
-texture PointLightCubemap2;
-sampler PointLightCubemap2Sampler = sampler_state
-{
-    texture = <PointLightCubemap2>;
-    MinFilter = Linear;
-    MagFilter = Linear;
-    AddressU = Clamp;
-    AddressV = Clamp;
-
-};
-
-texture PointLightCubemap3;
-sampler PointLightCubemap3Sampler = sampler_state
-{
-    texture = <PointLightCubemap3>;
-    MinFilter = Linear;
-    MagFilter = Linear;
-    AddressU = Clamp;
-    AddressV = Clamp;
-};
-
-texture PointLightCubemap4;
-sampler PointLightCubemap4Sampler = sampler_state
-{
-    texture = <PointLightCubemap4>;
-    MinFilter = Linear;
-    MagFilter = Linear;
-    AddressU = Clamp;
-    AddressV = Clamp;
-};
-
-texture PointLightCubemap5;
-sampler PointLightCubemap5Sampler = sampler_state
-{
-    texture = <PointLightCubemap5>;
-    MinFilter = Linear;
-    MagFilter = Linear;
-    AddressU = Clamp;
-    AddressV = Clamp;
-};
-
-texture PointLightCubemap6;
-sampler PointLightCubemap6Sampler = sampler_state
-{
-    texture = <PointLightCubemap6>;
-    MinFilter = Linear;
-    MagFilter = Linear;
-    AddressU = Clamp;
-    AddressV = Clamp;
-};
-
-texture PointLightCubemap7;
-sampler PointLightCubemap7Sampler = sampler_state
-{
-    texture = <PointLightCubemap7>;
-    MinFilter = Linear;
-    MagFilter = Linear;
-    AddressU = Clamp;
-    AddressV = Clamp;
-};
-
-texture PointLightCubemap8;
-sampler PointLightCubemap8Sampler = sampler_state
-{
-    texture = <PointLightCubemap8>;
-    MinFilter = Linear;
-    MagFilter = Linear;
-    AddressU = Clamp;
-    AddressV = Clamp;
-};
-
-texture PointLightCubemap9;
-sampler PointLightCubemap9Sampler = sampler_state
-{
-    texture = <PointLightCubemap9>;
-    MinFilter = Linear;
-    MagFilter = Linear;
-    AddressU = Clamp;
-    AddressV = Clamp;
-};
-
-texture PointLightCubemap10;
-sampler PointLightCubemap10Sampler = sampler_state
-{
-    texture = <PointLightCubemap10>;
-    MinFilter = Linear;
-    MagFilter = Linear;
-    AddressU = Clamp;
-    AddressV = Clamp;
-};
+TextureCube PointLightCubemap1;
+TextureCube PointLightCubemap2;
+TextureCube PointLightCubemap3;
+TextureCube PointLightCubemap4;
+TextureCube PointLightCubemap5;
+TextureCube PointLightCubemap6;
 
 #define BONE_NUM 128
 
@@ -258,7 +147,7 @@ bool DisableDepthDiscard;
 
 struct VertexInput
 {
-    float4 Position : SV_POSITION;
+    float4 Position : POSITION;
     float3 Normal : NORMAL0; // Add normal input
     float2 TexCoord : TEXCOORD0;
     float3 Tangent : TANGENT0;
@@ -295,10 +184,10 @@ struct PBRData
 
 struct PixelOutput
 {
-    float4 Color : COLOR0;
-    float4 Normal : COLOR1;
-    float4 Reflectiveness : COLOR2;
-    float4 Position : COLOR3;
+    float4 Color : SV_Target0;
+    float4 Normal : SV_Target1;
+    float4 Reflectiveness : SV_Target2;
+    float4 Position : SV_Target3;
 };
 
 float3 normalize(float3 v)
@@ -427,7 +316,7 @@ void DepthDiscard(float depth, PixelInput input)
 
 float SampleDepth(float2 coords)
 {
-    return tex2D(DepthTextureSampler, coords);
+    return SAMPLE_TEXTURE(DepthTexture, LinearSampler, coords);
 
 }
 
@@ -446,9 +335,9 @@ float SampleMaxDepth(float2 screenCoords)
 
 
 
-float4 SampleCubemap(samplerCUBE s, float3 coords)
+float4 SampleCubemap(TextureCube tex, float3 coords)
 {
-    return texCUBE(s, coords * float3(-1,1,1));
+    return SAMPLE_TEXTURE(tex, CubemapSampler, coords * float3(-1,1,1));
 }
 
 
@@ -524,29 +413,23 @@ float CalculateSpecular(float3 worldPos, float3 normal, float3 lightDir, float r
     return specular;
 }
 
-
-float3 offset_lookup(sampler2D map, float4 loc, float2 offset, float texelSize)
-{
-    return tex2Dproj(map, float4(loc.xy+offset*texelSize * loc.w,loc.z, loc.w));
-}
-
-float SampleShadowMap(sampler2D shadowMap, float2 coords, float compare)
+float SampleShadowMap(Texture2D shadowMap, float2 coords, float compare)
 {
     
-    float4 sample = tex2D(shadowMap, coords);
+    float4 sample = SAMPLE_TEXTURE(shadowMap,ShadowMapSampler, coords);
     
     return step(compare, sample.r);
 }
 
-float SampleShadowDif(sampler2D shadowMap, float2 coords, float compare)
+float SampleShadowDif(Texture2D shadowMap, float2 coords, float compare)
 {
     
-    float sample = tex2D(shadowMap, coords).r - compare;
+    float sample = SAMPLE_TEXTURE(shadowMap,ShadowMapSampler, coords).r - compare;
     
     return sample;
 }
 
-float SampleShadowMapLinear(sampler2D shadowMap, float2 coords, float compare, float2 texelSize)
+float SampleShadowMapLinear(Texture2D shadowMap, float2 coords, float compare, float2 texelSize)
 {
     float2 pixelPos = coords / texelSize + float2(0.5, 0.5);
     float2 fracPart = frac(pixelPos);
@@ -589,12 +472,12 @@ float GetShadowClose(float3 lightCoords, PixelInput input)
         bias *= (LightDistanceMultiplier+1)/2;
         
         if(abs(dot(input.Normal, -LightDirection)) <= 0.3)
-        return 1 - SampleShadowMap(ShadowMapCloseSampler, lightCoords.xy, currentDepth + bias);
+        return 1 - SampleShadowMap(ShadowMapClose, lightCoords.xy, currentDepth + bias);
 
         float texelSize = size / resolution; // Assuming ShadowMapSize is the size of your shadow map texture
 
     
-        return 1 - SampleShadowMapLinear(ShadowMapCloseSampler, lightCoords.xy, currentDepth + bias,float2(texelSize, texelSize));
+        return 1 - SampleShadowMapLinear(ShadowMapClose, lightCoords.xy, currentDepth + bias,float2(texelSize, texelSize));
     
         
         
@@ -604,7 +487,7 @@ float GetShadowClose(float3 lightCoords, PixelInput input)
             {
                 float2 offsetCoords = lightCoords.xy + float2(i, j) * texelSize;
                 float closestDepth;
-                closestDepth = SampleShadowMapLinear(ShadowMapCloseSampler, offsetCoords, currentDepth + bias, float2(texelSize, texelSize));
+                closestDepth = SampleShadowMapLinear(ShadowMapClose, offsetCoords, currentDepth + bias, float2(texelSize, texelSize));
 
                 shadow += closestDepth;
 
@@ -667,7 +550,7 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input)
 
                 float2 offsetCoords = lightCoords.xy + float2(i, j) * texelSize;
                 float closestDepth;
-                closestDepth = SampleShadowMapLinear(ShadowMapVeryCloseSampler, offsetCoords, currentDepth - bias, float2(texelSize, texelSize));
+                closestDepth = SampleShadowMapLinear(ShadowMapVeryClose, offsetCoords, currentDepth - bias, float2(texelSize, texelSize));
 
                 shadow += closestDepth;
 
@@ -723,7 +606,7 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
             }
         }
         
-    if (tex2D(ShadowMapSampler,lightCoords.xy).r<0.01)
+    if (SAMPLE_TEXTURE(ShadowMap,ShadowMapSampler, lightCoords.xy).r<0.01)
         return 0;
 
 
@@ -737,7 +620,7 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
         
         bias *= (LightDistanceMultiplier+1)/2;
 
-        return 1 - SampleShadowMap(ShadowMapSampler, lightCoords.xy, currentDepth + bias);
+        return 1 - SampleShadowMap(ShadowMap, lightCoords.xy, currentDepth + bias);
         
         float size = 1;
         
@@ -750,7 +633,7 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
             {
                 float2 offsetCoords = lightCoords.xy + float2(i, j) * texelSize;
                 float closestDepth;
-                closestDepth = SampleShadowMapLinear(ShadowMapSampler, offsetCoords, currentDepth + bias, float2(texelSize, texelSize));
+                closestDepth = SampleShadowMapLinear(ShadowMap, offsetCoords, currentDepth + bias, float2(texelSize, texelSize));
 
                 shadow += closestDepth;
 
@@ -776,18 +659,20 @@ float GetPointLightDepth(int i, float3 lightDir)
 
     lightDir *= float3(1, -1, -1);
 
+    
+
     if (i == 0)
-        depth = texCUBE(PointLightCubemap1Sampler, lightDir).r;
+        depth = SAMPLE_TEXTURE(PointLightCubemap1,CubemapSampler, lightDir).r;
     else if (i == 1)
-        depth = texCUBE(PointLightCubemap2Sampler, lightDir).r;
+        depth = SAMPLE_TEXTURE(PointLightCubemap2,CubemapSampler, lightDir).r;
     else if (i == 2)
-        depth = texCUBE(PointLightCubemap3Sampler, lightDir).r;
+        depth = SAMPLE_TEXTURE(PointLightCubemap3,CubemapSampler, lightDir).r;
     else if (i == 3)
-        depth = texCUBE(PointLightCubemap4Sampler, lightDir).r;
+        depth = SAMPLE_TEXTURE(PointLightCubemap4,CubemapSampler, lightDir).r;
     else if (i == 4)
-        depth = texCUBE(PointLightCubemap5Sampler, lightDir).r;
+        depth = SAMPLE_TEXTURE(PointLightCubemap5,CubemapSampler, lightDir).r;
     else if (i == 5)
-        depth = texCUBE(PointLightCubemap6Sampler, lightDir).r;
+        depth = SAMPLE_TEXTURE(PointLightCubemap6,CubemapSampler, lightDir).r;
 
     if (depth == 0)
         return 10000;
@@ -934,7 +819,8 @@ float3 CalculateSsrSpecular(PixelInput input, float3 normal, float roughness, fl
 
     float2 texel = 1 / float2(SSRWidth, SSRHeight);
 
-    float3 color = tex2D(ReflectionTextureSampler, screenCoords).rgb - 0.9;
+
+    float3 color = SAMPLE_TEXTURE(ReflectionTexture,AnisotropicSampler, screenCoords).rgb - 0.9;
 
     return saturate(color * intens * dot(lightDir, -normal));
 }
@@ -1043,7 +929,7 @@ float3 SampleColorWorldCoords(float3 pos)
     
     float2 screenCoords = WorldToScreen(pos);
     
-    return tex2D(FrameTextureSampler, screenCoords).rgb;
+    return SAMPLE_TEXTURE(FrameTexture,LinearSampler, screenCoords).rgb;
 }
 
 float3 GetPosition(float2 UV, float depth)
@@ -1133,14 +1019,16 @@ float3 ApplyReflection(float3 inColor, float3 albedo, PixelInput input,float3 no
 float3 ApplyReflectionOnSurface(float3 color,float3 albedo,float2 screenCoords, float reflectiveness)
 {
 
-    float3 reflection = tex2D(ReflectionTextureSampler, screenCoords).rgb;
+    float3 reflection = SAMPLE_TEXTURE(ReflectionTexture,LinearSampler, screenCoords).rgb;
+    
+
 
     float2 texel = float2(1/SSRWidth, 1/SSRHeight);
 
-    reflection += tex2D(ReflectionTextureSampler, screenCoords + float2(texel.x,0)).rgb/2;
-    reflection += tex2D(ReflectionTextureSampler, screenCoords + float2(-texel.x,0)).rgb/2;
-    reflection += tex2D(ReflectionTextureSampler, screenCoords + float2(0,texel.y)).rgb/2;
-    reflection += tex2D(ReflectionTextureSampler, screenCoords + float2(0,texel.y)).rgb/2;
+    reflection += SAMPLE_TEXTURE(ReflectionTexture,LinearSampler, screenCoords + float2(texel.x,0)).rgb/2;
+    reflection += SAMPLE_TEXTURE(ReflectionTexture,LinearSampler, screenCoords + float2(-texel.x,0)).rgb/2;
+    reflection += SAMPLE_TEXTURE(ReflectionTexture,LinearSampler, screenCoords + float2(0,texel.y)).rgb/2;
+    reflection += SAMPLE_TEXTURE(ReflectionTexture,LinearSampler, screenCoords + float2(0,texel.y)).rgb/2;
     reflection/=5.0/2.0;
 
     return lerp(color, reflection * albedo, saturate(reflectiveness/2 * 0 + reflectiveness));

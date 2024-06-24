@@ -2,14 +2,14 @@
 
 #include "ShaderLib/BasicShader.fx"
 
-texture Texture;
+Texture2D Texture;
 sampler TextureSampler = sampler_state
 {
     texture = <Texture>;
     AddressU = Wrap;
     AddressV = Wrap;
 };
-texture EmissiveTexture;
+Texture2D EmissiveTexture;
 sampler EmissiveTextureSampler = sampler_state
 {
     texture = <EmissiveTexture>;
@@ -17,7 +17,7 @@ sampler EmissiveTextureSampler = sampler_state
     AddressV = Wrap;
 };
 
-texture NormalTexture;
+Texture2D NormalTexture;
 sampler NormalTextureSampler = sampler_state
 {
     texture = <NormalTexture>;
@@ -25,7 +25,7 @@ sampler NormalTextureSampler = sampler_state
     AddressV = Wrap;
 };
 
-texture ORMTexture;
+Texture2D ORMTexture;
 sampler ORMTextureSampler = sampler_state
 {
     texture = <ORMTexture>;
@@ -60,14 +60,14 @@ PixelOutput PixelShaderFunction(PixelInput input)
     
     float Depth = input.MyPixelPosition.z;
     
-    float4 ColorRGBTA = tex2D(TextureSampler, input.TexCoord) * input.Color;
+    float4 ColorRGBTA = SAMPLE_TEXTURE(Texture, TextureSampler, input.TexCoord) * input.Color;
     
     if (ColorRGBTA.a < 0.001)
         discard;
 
-    float3 textureNormal = tex2D(NormalTextureSampler, input.TexCoord).rgb;
+    float3 textureNormal = SAMPLE_TEXTURE(NormalTexture,NormalTextureSampler, input.TexCoord).rgb;
     
-    float3 orm = tex2D(ORMTextureSampler, input.TexCoord).rgb;
+    float3 orm = SAMPLE_TEXTURE(ORMTexture,ORMTextureSampler, input.TexCoord).rgb;
     
     float roughness =orm.g;
     float metalic = orm.b;
@@ -75,7 +75,7 @@ PixelOutput PixelShaderFunction(PixelInput input)
     
     
     float3 textureColor = ColorRGBTA.xyz;
-	float textureAlpha = tex2D(TextureSampler, input.TexCoord).w;
+	float textureAlpha = ColorRGBTA.w;
     
     if (textureAlpha < 0.01)
         discard;
@@ -97,7 +97,9 @@ PixelOutput PixelShaderFunction(PixelInput input)
     light = saturate(light/30);
     textureColor += light;
     
-    textureColor += tex2D(EmissiveTextureSampler, input.TexCoord).rgb * EmissionPower * 2 * tex2D(EmissiveTextureSampler, input.TexCoord).a;
+    float4 emissive = SAMPLE_TEXTURE(EmissiveTexture, EmissiveTextureSampler, input.TexCoord);
+
+    textureColor += emissive.rgb * EmissionPower * 2 * emissive.a;
     
     textureAlpha *= Transparency;
     

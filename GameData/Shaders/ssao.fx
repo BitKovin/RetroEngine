@@ -1,12 +1,12 @@
 ﻿#include "ShaderLib/BasicShader.fx"
 
-texture NormalTexture;
+Texture2D NormalTexture;
 sampler NormalTextureSampler = sampler_state
 {
     texture = <NormalTexture>;
 };
 
-texture PosTexture;
+Texture2D PosTexture;
 sampler PosTextureSampler = sampler_state
 {
     texture = <PosTexture>;
@@ -66,7 +66,7 @@ float CalculateSSAO(float2 texCoord, float depth, float3 normal)
             if (sampleCoord.x > 1 || sampleCoord.y > 1 || sampleCoord.x < 0 || sampleCoord.y < 0)
                 continue;
 
-            float sampleDepth = tex2D(DepthTextureSampler, sampleCoord).r;
+            float sampleDepth = SAMPLE_TEXTURE(DepthTexture, LinearSampler, sampleCoord).r;
 
             float depthDifference = -0.76;// sampleDepth - sampleDepth + bias;
 
@@ -140,12 +140,12 @@ float3 kernel[KERNEL_SIZE] = {
 }
 
 // Pixel shader
-float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
+float4 PixelShaderFunction(VertexShaderOutput input) : SV_Target0
 {
 // Sample depth, normal, and color
-float depth = tex2D(DepthTextureSampler, input.TextureCoordinates).r;
-float3 normal = DecodeNormal(tex2D(NormalTextureSampler, input.TextureCoordinates).xyz);
-float3 pos = tex2D(PosTextureSampler, input.TextureCoordinates).xyz + viewPos;
+float depth = SAMPLE_TEXTURE(DepthTexture,LinearSampler, input.TextureCoordinates).r;
+float3 normal = DecodeNormal(SAMPLE_TEXTURE(NormalTexture, NormalTextureSampler, input.TextureCoordinates).xyz);
+float3 pos = SAMPLE_TEXTURE(PosTexture, PosTextureSampler, input.TextureCoordinates).xyz + viewPos;
 
 float ao = 0;
 

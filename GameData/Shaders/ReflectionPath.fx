@@ -1,25 +1,18 @@
 ﻿#include "ShaderLib/BasicShader.fx"
 
+
+TextureCube ReflectionCubemap;
+sampler ReflectionCubemapSampler = sampler_state
+{
+    MinFilter = Linear;
+    MagFilter = Linear;
+    AddressU = Clamp;
+    AddressV = Clamp;
+};
+
 Texture2D NormalTexture;
-
-sampler2D NormalTextureSampler = sampler_state
-{
-    Texture = <NormalTexture>;
-};
-
 Texture2D PositionTexture;
-
-sampler2D PositionTextureSampler = sampler_state
-{
-    Texture = <PositionTexture>;
-};
-
 Texture2D FactorTexture;
-
-sampler2D FactorTextureSampler = sampler_state
-{
-    Texture = <FactorTexture>;
-};
 
 struct VertexShaderOutput
 {
@@ -32,7 +25,6 @@ bool enableSSR;
 
 float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 normal, float3 vDir)
 {
-    
     float Step = 0.015;
     
     const int steps = 40;
@@ -119,38 +111,38 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
 
     //weight = saturate(weight);
 
-    outColor = float4(tex2D(FrameTextureSampler, coords).rgb,  weight);
+    outColor = float4(SAMPLE_TEXTURE(FrameTexture,LinearSampler, coords).rgb,  weight);
     
     return outColor;
     
 }
 
-float4 MainPS(VertexShaderOutput input) : COLOR
+float4 MainPS(VertexShaderOutput input) : SV_Target0
 {
 	
-    float3 normal = tex2D(NormalTextureSampler, input.TextureCoordinates).rgb * 2 - 1;
+    float3 normal = SAMPLE_TEXTURE(NormalTexture,LinearSampler, input.TextureCoordinates).rgb * 2 - 1;
     float depth = SampleDepth(input.TextureCoordinates).r;
 	
     
-    float3 worldPos = tex2D(PositionTextureSampler, input.TextureCoordinates).xyz + viewPos;
+    float3 worldPos = SAMPLE_TEXTURE(PositionTexture, LinearSampler, input.TextureCoordinates).xyz + viewPos;
     
     float3 vDir = normalize(worldPos - viewPos);
     
     float3 reflection = reflect(normalize(vDir), normal);
     
-
+    
     
     float2 texel = float2(1.5/SSRWidth, 1.5/SSRHeight);
-    float factor = tex2D(FactorTextureSampler, input.TextureCoordinates).r;
-    factor = max(tex2D(FactorTextureSampler, input.TextureCoordinates + float2(texel.x,0)).rgb, reflection);
-    factor = max(tex2D(FactorTextureSampler, input.TextureCoordinates + float2(-texel.x,0)).rgb, reflection);
-    factor = max(tex2D(FactorTextureSampler, input.TextureCoordinates + float2(0,texel.y)).rgb, reflection);
-    factor = max(tex2D(FactorTextureSampler, input.TextureCoordinates + float2(0,texel.y)).rgb, reflection);
+    float factor = SAMPLE_TEXTURE(FactorTexture,LinearSampler, input.TextureCoordinates).r;
+    factor = max(SAMPLE_TEXTURE(FactorTexture,LinearSampler, input.TextureCoordinates + float2(texel.x,0)).rgb, reflection);
+    factor = max(SAMPLE_TEXTURE(FactorTexture,LinearSampler, input.TextureCoordinates + float2(-texel.x,0)).rgb, reflection);
+    factor = max(SAMPLE_TEXTURE(FactorTexture,LinearSampler, input.TextureCoordinates + float2(0,texel.y)).rgb, reflection);
+    factor = max(SAMPLE_TEXTURE(FactorTexture,LinearSampler, input.TextureCoordinates + float2(0,texel.y)).rgb, reflection);
 
 
     reflection = normalize(reflection);
     
-    float3 cube = SampleCubemap(ReflectionCubemapSampler, reflection);
+    float3 cube = SampleCubemap(ReflectionCubemap, reflection);
     
     if (enableSSR == false)
         return float4(cube, 1);

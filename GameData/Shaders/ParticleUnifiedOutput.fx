@@ -3,14 +3,14 @@
 
 #include "ShaderLib/BasicShader.fx"
 
-texture Texture;
+Texture2D Texture;
 sampler TextureSampler = sampler_state
 {
     texture = <Texture>;
     AddressU = Wrap;
     AddressV = Wrap;
 };
-texture EmissiveTexture;
+Texture2D EmissiveTexture;
 sampler EmissiveTextureSampler = sampler_state
 {
     texture = <EmissiveTexture>;
@@ -18,7 +18,7 @@ sampler EmissiveTextureSampler = sampler_state
     AddressV = Wrap;
 };
 
-texture NormalTexture;
+Texture2D NormalTexture;
 sampler NormalTextureSampler = sampler_state
 {
     texture = <NormalTexture>;
@@ -26,7 +26,7 @@ sampler NormalTextureSampler = sampler_state
     AddressV = Wrap;
 };
 
-texture ORMTexture;
+Texture2D ORMTexture;
 sampler ORMTextureSampler = sampler_state
 {
     texture = <ORMTexture>;
@@ -34,16 +34,10 @@ sampler ORMTextureSampler = sampler_state
     AddressV = Wrap;
 };
 
-texture OldFrameTexture;
-sampler OldFrameTextureSampler = sampler_state
-{
-    texture = <OldFrameTexture>;
-};
 
 
 
-
-PixelInput VertexShaderFunction(VertexInput input, float4 row1: BLENDINDICES1, float4 row2 : BLENDINDICES2, float4 row3 : BLENDINDICES3, float4 row4 : BLENDINDICES4, float4 InstanceColor : Color2)
+PixelInput VertexShaderFunction(VertexInput input, float4 row1: BLENDINDICES1, float4 row2 : BLENDINDICES2, float4 row3 : BLENDINDICES3, float4 row4 : BLENDINDICES4, float4 InstanceColor : COLOR2)
 {
 
     float4x4 world = float4x4(row1,row2,row3,row4);
@@ -116,10 +110,15 @@ PixelOutput PixelShaderFunction(PixelInput input)
     float Depth = input.MyPixelPosition.z;
     
     
+    float4 ColorRGBTA = SAMPLE_TEXTURE(Texture, TextureSampler, input.TexCoord) * input.Color;
     
+    if (ColorRGBTA.a < 0.001)
+        discard;
 
-    float3 textureNormal = tex2D(NormalTextureSampler, input.TexCoord).rgb;
-    
+    float3 textureNormal = SAMPLE_TEXTURE(NormalTexture,NormalTextureSampler, input.TexCoord).rgb;
+        
+
+
     float3 orm;// = tex2D(ORMTextureSampler, input.TexCoord).rgb;
     
     orm = float3(1, 1, 0);
@@ -128,7 +127,7 @@ PixelOutput PixelShaderFunction(PixelInput input)
     float metalic = orm.b;
     float ao = orm.r;
     
-    float4 tex = tex2D(TextureSampler, input.TexCoord);
+    float4 tex = ColorRGBTA;
     
     float3 textureColor = tex.xyz * input.Color.rgb;
 	float textureAlpha = tex.w * input.Color.a;
@@ -149,7 +148,9 @@ PixelOutput PixelShaderFunction(PixelInput input)
     light = saturate(light/8);
     textureColor += light;
     
-    textureColor += tex2D(EmissiveTextureSampler, input.TexCoord).rgb * EmissionPower * tex2D(EmissiveTextureSampler, input.TexCoord).a;
+    float4 emissive = SAMPLE_TEXTURE(EmissiveTexture, EmissiveTextureSampler, input.TexCoord);
+
+    textureColor += emissive.rgb * EmissionPower * 2 * emissive.a;
     
     textureAlpha *= Transparency;
     

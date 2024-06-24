@@ -1,6 +1,6 @@
 ﻿#include "ShaderLib/BasicShader.fx"
 
-texture Texture;
+Texture2D Texture;
 sampler TextureSampler = sampler_state
 {
     texture = <Texture>;
@@ -24,9 +24,10 @@ PixelOutput PixelShaderFunction(PixelInput input)
     
     output.Position = float4(input.MyPosition - viewPos, 1);
     
+    float4 ColorRGBTA = SAMPLE_TEXTURE(Texture, TextureSampler, input.TexCoord) * input.Color;
     
-    float3 textureColor = tex2D(TextureSampler, input.TexCoord).xyz;
-    float textureAlpha = tex2D(TextureSampler, input.TexCoord).w;
+    float3 textureColor = ColorRGBTA.xyz;
+    float textureAlpha = ColorRGBTA.w;
     
     
     textureAlpha *= Transparency;

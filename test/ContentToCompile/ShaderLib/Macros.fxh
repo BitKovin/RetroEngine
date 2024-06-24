@@ -1,0 +1,1 @@
+#define SAMPLE_TEXTURE(Name,Sampler, texCoords)  Name.Sample(Sampler, texCoords)

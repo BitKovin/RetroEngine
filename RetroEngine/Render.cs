@@ -330,7 +330,7 @@ namespace RetroEngine
         public void InitSampler(int max = 10)
         {
 
-
+            return;
             samplerState = new SamplerState();
 
             samplerState.Filter = Graphics.TextureFiltration ? (Graphics.AnisotropicFiltration ? TextureFilter.Anisotropic : TextureFilter.Linear) : TextureFilter.PointMipLinear;

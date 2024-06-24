@@ -1,23 +1,23 @@
 ﻿#include "ShaderLib/BasicShader.fx"
 
-texture Texture;
+Texture2D Texture;
 sampler TextureSampler = sampler_state
 {
     texture = <Texture>;
 };
-texture EmissiveTexture;
+Texture2D EmissiveTexture;
 sampler EmissiveTextureSampler = sampler_state
 {
     texture = <EmissiveTexture>;
 };
 
-texture NormalTexture;
+Texture2D NormalTexture;
 sampler NormalTextureSampler = sampler_state
 {
     texture = <NormalTexture>;
 };
 
-texture ORMTexture;
+Texture2D ORMTexture;
 sampler ORMTextureSampler = sampler_state
 {
     texture = <ORMTexture>;
@@ -35,12 +35,12 @@ PixelOutput PixelShaderFunction(PixelInput input)
     
     float Depth = input.MyPixelPosition.z;
     
-    float3 textureNormal = tex2D(NormalTextureSampler, input.TexCoord).xyz;
+    float3 textureNormal = SAMPLE_TEXTURE(NormalTexture,NormalTextureSampler, input.TexCoord).rgb;
     
     
-    
-    float3 textureColor = tex2D(TextureSampler, input.TexCoord).xyz;
-	float textureAlpha = tex2D(TextureSampler, input.TexCoord).w;
+    float4 ColorRGBTA = SAMPLE_TEXTURE(Texture, TextureSampler, input.TexCoord) * input.Color;
+    float3 textureColor = ColorRGBTA.xyz;
+	float textureAlpha = ColorRGBTA.w;
 
     
     float3 pixelNormal = ApplyNormalTexture(textureNormal, input.Normal, input.Tangent, input.BiTangent);
