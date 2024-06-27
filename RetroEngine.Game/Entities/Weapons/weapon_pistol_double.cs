@@ -65,8 +65,8 @@ namespace RetroEngine.Game.Entities.Weapons
         {
             base.Update();
 
-            mesh.Update(Time.DeltaTime * 1.2f);
-            mesh2.Update(Time.DeltaTime * 1.2f);
+            mesh.Update(Time.DeltaTime * 1.1f);
+            mesh2.Update(Time.DeltaTime * 1.1f);
 
             if (((ICharacter)player).isFirstPerson())
             {
@@ -173,13 +173,13 @@ namespace RetroEngine.Game.Entities.Weapons
             Vector3 right = Camera.rotation.GetRightVector();
 
             mesh.Position = Position + GetWorldSway() * (1f - aim) + GetWorldOffset() + forward * depthDif + forward*depthOffset;
-            mesh.Rotation = Rotation + DrawRotation;
+            mesh.Rotation = Rotation;
 
             arms.Position = mesh.Position;
             arms.Rotation = mesh.Rotation;
 
             mesh2.Position = Position + GetWorldSway() * (1f - aim) + GetWorldOffset() - forward * depthDif + forward * depthOffset - up*0.02f + right*0.02f;
-            mesh2.Rotation = Rotation + DrawRotation;
+            mesh2.Rotation = Rotation;
             arms2.Position = mesh2.Position;
             arms2.Rotation = mesh2.Rotation;
 
@@ -211,12 +211,12 @@ namespace RetroEngine.Game.Entities.Weapons
 
             if (r)
             {
-                mesh.PlayAnimation(0, false);
+                mesh.PlayAnimation("fire", false);
                 fireSoundPlayer.Play(true);
             }
             else
             {
-                mesh2.PlayAnimation(0, false);
+                mesh2.PlayAnimation("fire", false);
                 fireSoundPlayer2.Play(true);
             }
 
@@ -350,6 +350,9 @@ namespace RetroEngine.Game.Entities.Weapons
             pistolAnimationIdle.SetAnimation("pistol_idle");
 
             mesh.SetInterpolationEnabled(true);
+
+            mesh.PlayAnimation("draw", false);
+            mesh2.PlayAnimation("draw",false);
 
 
             Console.WriteLine("loaded pistol double");

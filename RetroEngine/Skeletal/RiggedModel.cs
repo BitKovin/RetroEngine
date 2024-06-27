@@ -225,11 +225,13 @@ namespace RetroEngine.Skeletal
                     }
                     else // animation completed
                     {
-                        currentFrame = 0;
-                        timeStart = 0;
-                        AnimationTime = 0;
+                        currentAnimationFrameTime = animationTotalDuration;
                         animationRunning = false;
-                        currentAnimationFrameTime = 0.0001f;
+                        //currentFrame = 0;
+                        //timeStart = 0;
+                        //AnimationTime = 0;
+                        //animationRunning = false;
+                        //currentAnimationFrameTime = 0.0001f;
                     }
                 }
                 if (UpdateVisual == false) return;
@@ -440,15 +442,15 @@ namespace RetroEngine.Skeletal
             for (int i = 0; i < originalAnimations.Count; i++)
             {
                 var anim = originalAnimations[i];
-                if (anim.animationName.ToLower() == name.ToLower())
+                if (anim.animationName.ToLower().EndsWith(name))
                 {
                     index = i;
                     break;
                 }
-
-                currentAnimation = index;
-                animationRunning = false;
             }
+            currentAnimation = index;
+            CurrentPlayingAnimationIndex = index;
+            animationRunning = false;
         }
 
         public void StopAnimation()

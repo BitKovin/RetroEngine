@@ -262,6 +262,17 @@ namespace RetroEngine
             RiggedModel.loopAnimation = looped;
         }
 
+        public void PlayAnimation(string name, bool looped = true)
+        {
+
+            if (RiggedModel is null) return;
+
+            RiggedModel.SetAnimation(name);
+            RiggedModel.BeginAnimation(RiggedModel.CurrentPlayingAnimationIndex);
+            RiggedModel.loopAnimation = looped;
+            RiggedModel.Update(0);
+        }
+
         public void SetAnimation(int id = 0)
         {
             if (RiggedModel is null) return;

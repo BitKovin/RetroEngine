@@ -50,7 +50,7 @@ namespace RetroEngine.Game.Entities
                 input -= new Vector2(1, 0);
 
 
-            Camera.position += (Camera.rotation.GetForwardVector() * input.Y + Camera.rotation.GetRightVector() * input.X)*Time.DeltaTime * 10;
+            Camera.position += (Camera.rotation.GetForwardVector() * input.Y + Camera.rotation.GetRightVector() * input.X)*Time.DeltaTime * 1;
 
 
         }

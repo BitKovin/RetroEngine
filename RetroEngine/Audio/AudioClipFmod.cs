@@ -58,11 +58,10 @@ namespace RetroEngine.Audio
         }
         void ApplyStartSoundData()
         {
-            sound.Is3D = true;
+            sound.Volume = 0;
             sound.Pitch = Pitch;
             sound.Loops = Loop ? -1 : 0;
             sound.Volume = 0;
-            Apply3DData(sound);
         }
 
         void ApplyDistance()

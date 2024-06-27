@@ -386,6 +386,7 @@ namespace RetroEngine
 
 
             List<StaticMesh> transperentMeshes = new List<StaticMesh>();
+            List<StaticMesh> maskedMeshes = new List<StaticMesh>();
 
             allMeshes.Clear();
 
@@ -402,7 +403,11 @@ namespace RetroEngine
 
                         if (mesh.inFrustrum == false && mesh.CastShadows == false) continue;
 
-                        if (mesh.Transperent)
+                        if(mesh.Masked)
+                        {
+                            maskedMeshes.Add(mesh);
+                        }
+                        else if (mesh.Transperent)
                             transperentMeshes.Add(mesh);
                         else
                             renderList.Add(mesh);
@@ -417,8 +422,13 @@ namespace RetroEngine
             renderList = renderList.OrderBy(m => Vector3.Distance(m.GetClosestToCameraPosition(), Camera.position) + (m.Static ? 0 : 1000)).ToList();
 
             transperentMeshes = transperentMeshes.OrderByDescending(m => Vector3.Distance(m.GetClosestToCameraPosition(), Camera.position)).ToList();
+            maskedMeshes = maskedMeshes.OrderByDescending(m => Vector3.Distance(m.GetClosestToCameraPosition(), Camera.position)).ToList();
 
             renderList.AddRange(transperentMeshes);
+
+            maskedMeshes.AddRange(renderList);
+
+            renderList = maskedMeshes;
 
             LightManager.PrepareLightSources();
             LightManager.ClearPointLights();
