@@ -32,7 +32,6 @@ namespace RetroEngine.Audio
             base.Update();
 
             channel.Pitch = Pitch;
-            sound.Pitch = Pitch;
 
             channel.Paused = isPaused();
 
@@ -129,6 +128,7 @@ namespace RetroEngine.Audio
 
             ApplyStartSoundData();
             channel = sound.Play();
+            channel.Volume = 0;
             Update();
         }
 

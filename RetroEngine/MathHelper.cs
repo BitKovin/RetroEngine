@@ -67,6 +67,16 @@ namespace RetroEngine
             return vector;
         }
 
+        public static Vector3 Clamp(this Vector3 vector, float min, float max)
+        {
+            return new Vector3(Math.Clamp(vector.X, min, max), Math.Clamp(vector.Y, min, max), Math.Clamp(vector.Z, min, max));
+        }
+
+        public static Vector4 Clamp(this Vector4 vector, float min, float max)
+        {
+            return new Vector4(Math.Clamp(vector.X, min, max), Math.Clamp(vector.Y, min, max), Math.Clamp(vector.Z, min, max), Math.Clamp(vector.W, min, max));
+        }
+
         public static float Lerp(float a, float b, float progress)
         {
             return Vector2.Lerp(new Vector2(a), new Vector2(b), progress).X;

@@ -326,6 +326,7 @@ namespace RetroEngine
                 sound = CoreSystem.LoadSoundFromStream(AssetRegistry.GetFileStreamFromPath(filePath));
                 soundsFmod.TryAdd(path, sound);
             }
+            sound.Volume = 0;
 
             return sound;
         }

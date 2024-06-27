@@ -46,13 +46,18 @@ namespace RetroEngine.Entities
                 return;
             }
 
-            
-            sys.Start();
-
-            sys.VisualUpdate();
-
             sys.LoadAssetsIfNeeded();
 
+            sys.Start();
+            sys.Update();
+            sys.VisualUpdate();
+            sys.AsyncUpdate();
+            foreach(var mesh in sys.meshes)
+            {
+                mesh.RenderPreparation();
+            }
+            sys.LoadAssetsIfNeeded();
+            sys.AsyncUpdate();
             sys.Destroy();
         }
 

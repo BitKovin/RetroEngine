@@ -295,7 +295,7 @@ namespace RetroEngine
                 RenderShadowMapVeryClose(renderList);
             }
             graphics.GraphicsDevice.RasterizerState = Graphics.DisableBackFaceCulling? RasterizerState.CullCounterClockwise : RasterizerState.CullNone;
-
+                
             InitSampler(25);
 
             //EndOcclusionTest(renderList);
@@ -317,7 +317,7 @@ namespace RetroEngine
 
 
             if (Input.GetAction("test").Holding())
-                return ssaoOutput;
+                return ReflectivenessOutput;
 
             return outputPath;
 

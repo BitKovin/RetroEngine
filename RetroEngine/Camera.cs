@@ -33,9 +33,13 @@ namespace RetroEngine
 
         public static float roll = 0;
         public static float FOV = 80;
-        public static float ViewmodelFOV = 50;
+        public static float ViewmodelFOV = 60;
 
         public static float FarPlane = 3000;
+
+        public static Vector3 Up => rotation.GetUpVector();
+        public static Vector3 Right => rotation.GetRightVector();
+        public static Vector3 Forward => rotation.GetForwardVector();
 
         static Vector3 lastWorkingRotation = new Vector3();
 

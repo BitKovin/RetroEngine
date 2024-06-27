@@ -497,6 +497,9 @@ float CalculateSpecular(float3 worldPos, float3 normal, float3 lightDir, float r
     return 0;
 #endif
 
+    if(dot(normal, lightDir)<0)
+        return 0;
+
     float3 vDir = normalize(viewPos - worldPos);
     lightDir = normalize(lightDir);
     float3 halfwayDir = normalize(vDir + lightDir);
@@ -517,9 +520,9 @@ float CalculateSpecular(float3 worldPos, float3 normal, float3 lightDir, float r
     float3 F = FresnelSchlick(NdotH, F0);
 
     // Specular BRDF
-    float3 specular = (D * G * F) / (4.0f * NdotV * NdotL + 0.001f);
+    float3 specular = (D * G) / (4.0f * NdotV * NdotL + 0.001f);
 
-    return specular;
+    return specular * 0.5;
 }
 
 
@@ -826,7 +829,7 @@ float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal, float ro
     offsetScale *= lerp(abs(dot(normal, normalize(lightVector))), 0.7, 1);
     float notShadow = 1;
 
-    if(dot(normal, normalize(lightVector))<0.01)
+    if(dot(normal, normalize(lightVector))<-0.01)
     {
         return float3(0,0,0);
     }
@@ -901,10 +904,13 @@ float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal, float ro
 
     float dist = (distanceToLight / LightRadiuses[i]);
     float intense = saturate(1.0 - dist * dist);
+    float distIntence = intense;
     float3 dirToSurface = normalize(lightVector);
 
     intense *= saturate(dot(normal, dirToSurface));
-    float3 specular = CalculateSpecular(pixelInput.MyPosition, normal, -dirToSurface, roughness, metalic, albedo);
+    float3 specular = CalculateSpecular(pixelInput.MyPosition, normal, dirToSurface, roughness, metalic, albedo);
+
+
 
     intense = max(intense, 0);
     float3 l = LightColors[i] * intense;
@@ -1074,12 +1080,13 @@ float ReflectionMapping(float x)
 
 float CalculateReflectiveness(float roughness, float metallic, float3 vDir, float3 normal)
 {
+
     // Calculate the base reflectiveness based on metallic
-    float baseReflectiveness = metallic * 0.5;
+    float baseReflectiveness = metallic;
 
     // Calculate the Fresnel factor using the Schlick approximation
     float F0 = lerp(0.01, 0.5, metallic);
-    float F = 1; // F0 + (1.0 - F0) * pow(1.0 - abs(dot(vDir, normal)), 5.0);
+    float F = F0 + (1.0 - F0);// * pow(1.0 - abs(dot(vDir, normal)), 5.0);
 
     // Adjust the base reflectiveness based on roughness
     float reflectiveness = lerp(baseReflectiveness, 0.01, roughness);
@@ -1089,9 +1096,6 @@ float CalculateReflectiveness(float roughness, float metallic, float3 vDir, floa
 
     reflectiveness = saturate(reflectiveness);
     
-    reflectiveness -= 0.1;
-    
-    reflectiveness *= 2.6;
     
     return ReflectionMapping(saturate(reflectiveness));
 }
@@ -1128,7 +1132,7 @@ float3 ApplyReflection(float3 inColor, float3 albedo, PixelInput input,float3 no
     return lerp(inColor, reflectionColor, reflectiveness);*/
 }
 
-float3 ApplyReflectionOnSurface(float3 color,float3 albedo,float2 screenCoords, float reflectiveness)
+float3 ApplyReflectionOnSurface(float3 color,float3 albedo,float2 screenCoords, float reflectiveness, float metalic)
 {
 
     float3 reflection = tex2D(ReflectionTextureSampler, screenCoords).rgb;
@@ -1141,5 +1145,9 @@ float3 ApplyReflectionOnSurface(float3 color,float3 albedo,float2 screenCoords, 
     reflection += tex2D(ReflectionTextureSampler, screenCoords + float2(0,texel.y)).rgb/2;
     reflection/=5.0/2.0;
 
-    return lerp(color, reflection * albedo, saturate(reflectiveness/2 * 0 + reflectiveness));
+    float lum = saturate(CalcLuminance(reflection));
+
+    float3 reflectionIntens = lerp(lum*reflectiveness, reflectiveness, metalic);
+
+    return lerp(color, reflection * albedo, reflectionIntens);
 }

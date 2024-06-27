@@ -16,13 +16,16 @@ namespace RetroEngine.Game.Entities.Weapons
     internal class weapon_pistol_double : Weapon
     {
         SkeletalMesh mesh = new SkeletalMesh();
+        SkeletalMesh mesh2 = new SkeletalMesh();
         SkeletalMesh meshTp = new SkeletalMesh();
 
         SkeletalMesh arms = new SkeletalMesh();
+        SkeletalMesh arms2 = new SkeletalMesh();
 
         Delay attackDelay = new Delay();
 
         SoundPlayer fireSoundPlayer;
+        SoundPlayer fireSoundPlayer2;
 
 
         float aim = 0;
@@ -40,6 +43,12 @@ namespace RetroEngine.Game.Entities.Weapons
             fireSoundPlayer.AudioClip.Is3D = false;
             fireSoundPlayer.Volume = 0.15f;
 
+            fireSoundPlayer2 = Level.GetCurrent().AddEntity(new SoundPlayer()) as SoundPlayer;
+            fireSoundPlayer2.SetSound(AssetRegistry.LoadSoundFromFile("sounds/pistol_fire.wav"));
+            fireSoundPlayer2.AudioClip.Is3D = false;
+            fireSoundPlayer2.Volume = 0.15f;
+
+            ShowHandL = false;
 
         }
 
@@ -48,7 +57,7 @@ namespace RetroEngine.Game.Entities.Weapons
             base.LoadAssets();
 
             LoadVisual();
-
+            AssetRegistry.LoadSoundFromFile("sounds/pistol_fire.wav");
 
         }
 
@@ -56,9 +65,12 @@ namespace RetroEngine.Game.Entities.Weapons
         {
             base.Update();
 
+            mesh.Update(Time.DeltaTime * 1.2f);
+            mesh2.Update(Time.DeltaTime * 1.2f);
+
             if (((ICharacter)player).isFirstPerson())
             {
-                mesh.Update(Time.DeltaTime * 1.2f);
+
             }
             else
             {
@@ -90,8 +102,7 @@ namespace RetroEngine.Game.Entities.Weapons
                 Shoot();
 
 
-            arms.Visible = ((ICharacter)player).isFirstPerson();
-            mesh.Visible = ((ICharacter)player).isFirstPerson();
+            arms2.Visible = mesh2.Visible = arms.Visible = mesh.Visible = ((ICharacter)player).isFirstPerson();
 
             meshTp.Visible = ((ICharacter)player).isFirstPerson() == false;
 
@@ -141,6 +152,7 @@ namespace RetroEngine.Game.Entities.Weapons
             base.Destroy();
 
             fireSoundPlayer.Destroy(2);
+            fireSoundPlayer2.Destroy(2);
         }
 
         public override void FinalizeFrame()
@@ -153,13 +165,26 @@ namespace RetroEngine.Game.Entities.Weapons
         {
             base.LateUpdate();
 
-            mesh.Position = Position + GetWorldSway() * (1f - aim) + GetWorldOffset();
+            float depthDif = 0.03f;
+            float depthOffset = -0.05f;
+
+            Vector3 forward = Camera.rotation.GetForwardVector();
+            Vector3 up = Camera.rotation.GetUpVector();
+            Vector3 right = Camera.rotation.GetRightVector();
+
+            mesh.Position = Position + GetWorldSway() * (1f - aim) + GetWorldOffset() + forward * depthDif + forward*depthOffset;
             mesh.Rotation = Rotation + DrawRotation;
 
             arms.Position = mesh.Position;
             arms.Rotation = mesh.Rotation;
 
+            mesh2.Position = Position + GetWorldSway() * (1f - aim) + GetWorldOffset() - forward * depthDif + forward * depthOffset - up*0.02f + right*0.02f;
+            mesh2.Rotation = Rotation + DrawRotation;
+            arms2.Position = mesh2.Position;
+            arms2.Rotation = mesh2.Rotation;
+
             arms.PastePose(mesh.GetPose());
+            arms2.PastePose(mesh2.GetPose());
 
             ICharacter character = ((ICharacter)player);
 
@@ -171,6 +196,7 @@ namespace RetroEngine.Game.Entities.Weapons
             }
 
             fireSoundPlayer.Position = Camera.position + Camera.rotation.GetForwardVector()*0.2f;
+            fireSoundPlayer2.Position = Camera.position + Camera.rotation.GetForwardVector() * 0.2f;
         }
         bool r;
         void Shoot()
@@ -179,11 +205,20 @@ namespace RetroEngine.Game.Entities.Weapons
 
             if (attackDelay.Wait()) return;
 
-            attackDelay.AddDelay(0.2f);
+            attackDelay.AddDelay(0.15f);
 
-            fireSoundPlayer.Play(true);
+            
 
-            mesh.PlayAnimation(0, false);
+            if (r)
+            {
+                mesh.PlayAnimation(0, false);
+                fireSoundPlayer.Play(true);
+            }
+            else
+            {
+                mesh2.PlayAnimation(0, false);
+                fireSoundPlayer2.Play(true);
+            }
 
             pistolAnimationAim.PlayAnimation(0, false);
 
@@ -195,7 +230,7 @@ namespace RetroEngine.Game.Entities.Weapons
             float x = 0;
             float y = 0;
 
-            Vector3 startPos = Camera.position + Camera.rotation.GetForwardVector() * 0.5f + Camera.rotation.GetRightVector() / 8f - Camera.rotation.GetUpVector() / 5f;
+            Vector3 startPos = Camera.position + Camera.rotation.GetForwardVector() * 0.5f + Camera.rotation.GetRightVector() / 5f * (r ? 1 :-0.8f) - Camera.rotation.GetUpVector() / 5 - (r? Vector3.Zero : Camera.Up*0.01f);
 
             ICharacter character = ((ICharacter)player);
             if (character.isFirstPerson() == false)
@@ -205,16 +240,16 @@ namespace RetroEngine.Game.Entities.Weapons
                 else
                     startPos = meshTp.GetBoneMatrix("muzzle_l").DecomposeMatrix().Position;
 
-                r = !r;
+                
             }
 
-            Vector3 endPos = Camera.position + Camera.rotation.GetForwardVector() * 50 + Camera.rotation.GetRightVector() * x + Camera.rotation.GetUpVector() * y;
+            Vector3 endPos = Camera.position + Camera.rotation.GetForwardVector() * 50;
 
             bulletRotation = MathHelper.FindLookAtRotation(startPos, endPos);
 
             bullet.Rotation = bulletRotation;
 
-            bullet.LifeTime = 2f;
+            bullet.LifeTime = 1f;
 
             Level.GetCurrent().AddEntity(bullet);
 
@@ -222,14 +257,14 @@ namespace RetroEngine.Game.Entities.Weapons
             bullet.Position = startPos;
 
             bullet.Start();
-            bullet.Speed = 100;
+            bullet.Speed = 200;
             bullet.Damage = 50;
 
             bullet.ignore.Add(player);
 
             aimAnimation = 3;
 
-
+            r = !r;
             return;
 
             var hit = Physics.LineTrace(Camera.position.ToPhysics(), Camera.rotation.GetForwardVector().ToPhysics() * 100 + Camera.position.ToPhysics());
@@ -261,22 +296,27 @@ namespace RetroEngine.Game.Entities.Weapons
         void LoadVisual()
         {
             mesh.Scale = new Vector3(1f);
-
             mesh.LoadFromFile("models/weapons/pistol2.fbx");
 
-            arms.LoadFromFile("models/weapons/arms_n.fbx");
-
-            mesh.textureSearchPaths.Add("textures/weapons/arms/");
             mesh.textureSearchPaths.Add("textures/weapons/pistol/");
             mesh.textureSearchPaths.Add("textures/weapons/general/");
-            arms.textureSearchPaths.Add("textures/weapons/arms/");
 
             mesh.CastShadows = false;
             mesh.PreloadTextures();
-            arms.PreloadTextures();
             mesh.Viewmodel = true;
             mesh.UseAlternativeRotationCalculation = true;
 
+            mesh2.LoadFromFile("models/weapons/pistol2.fbx");
+
+            mesh2.textureSearchPaths.Add("textures/weapons/pistol/");
+            mesh2.textureSearchPaths.Add("textures/weapons/general/");
+
+            mesh2.CastShadows = false;
+            mesh2.PreloadTextures();
+            mesh2.Viewmodel = true;
+            mesh2.UseAlternativeRotationCalculation = true;
+
+            mesh2.Scale = arms2.Scale = new Vector3(-1, 1, 1);
 
             meshTp.LoadFromFile("models/weapons/pistol_tp.fbx");
 
@@ -287,10 +327,19 @@ namespace RetroEngine.Game.Entities.Weapons
 
             meshTp.DisableOcclusionCulling = true;
 
+            arms.LoadFromFile("models/weapons/arms_n.fbx");
+            arms.textureSearchPaths.Add("textures/weapons/arms/");
             arms.CastShadows = false;
             arms.PreloadTextures();
             arms.Viewmodel = true;
             arms.UseAlternativeRotationCalculation = true;
+
+            arms2.LoadFromFile("models/weapons/arms_n.fbx");
+            arms2.textureSearchPaths.Add("textures/weapons/arms/");
+            arms2.CastShadows = false;
+            arms2.PreloadTextures();
+            arms2.Viewmodel = true;
+            arms2.UseAlternativeRotationCalculation = true;
 
             pistolAnimationAim.LoadFromFile("models/weapons/animations/pistolTP/pistols.fbx");
             pistolAnimationAim.SetAnimation(0);
@@ -305,6 +354,8 @@ namespace RetroEngine.Game.Entities.Weapons
 
             meshes.Add(mesh);
             meshes.Add(arms);
+            meshes.Add(mesh2);
+            meshes.Add(arms2);
             meshes.Add(meshTp);
 
             new Bullet().LoadAssetsIfNeeded();

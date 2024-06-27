@@ -29,7 +29,8 @@ namespace RetroEngine
             {
                 return Activator.CreateInstance(objectType) as ParticleSystem;
             }
-
+            if(Level.ChangingLevel == false)
+            Logger.Log($"System '{technicalName}' not found. Searching...");
             objectType = GetObjectTypeByTechnicalName(technicalName);
 
             if (objectType != null)

@@ -22,40 +22,75 @@ namespace RetroEngine.Windows
         protected override void Update(GameTime gameTime)
         {
 
-            if (Form.ActiveForm != null) //some times ActiveForm sets to null on alt tab and I have 0 idea why. It continues code(even with this check)
+            try
             {
-
-                if (Form.ActiveForm != null && _graphics.IsFullScreen && Form.ActiveForm.FormBorderStyle != FormBorderStyle.None)
+                if (Form.ActiveForm != null) //some times ActiveForm sets to null on alt tab and I have 0 idea why. It continues code(even with this check)
                 {
-                    Form.ActiveForm.FormBorderStyle = FormBorderStyle.None;
-                    Window.Position = new Point(0, 0);
-                }
-                else if (Form.ActiveForm != null && _graphics.IsFullScreen == false && Form.ActiveForm.FormBorderStyle == FormBorderStyle.None)
-                {
-                    Form.ActiveForm.FormBorderStyle = FormBorderStyle.Sizable;
-                }
-            }
 
+                    if (Form.ActiveForm != null && _graphics.IsFullScreen && Form.ActiveForm.FormBorderStyle != FormBorderStyle.None)
+                    {
+                        Form.ActiveForm.FormBorderStyle = FormBorderStyle.None;
+                        Window.Position = new Point(0, 0);
+                    }
+                    else if (Form.ActiveForm != null && _graphics.IsFullScreen == false && Form.ActiveForm.FormBorderStyle == FormBorderStyle.None)
+                    {
+                        Form.ActiveForm.FormBorderStyle = FormBorderStyle.Sizable;
+                    }
+                }
+            }catch (Exception ex) { }
             base.Update(gameTime);
         }
 
         protected override void SetFullscreen()
         {
-            base.SetFullscreen();
+           
+            
 
-            if (Form.ActiveForm != null)//some times ActiveForm sets to null on alt tab and I have 0 idea why. It continues code(even with this check)
+            try
             {
 
-                if (Form.ActiveForm != null && _graphics.IsFullScreen && Form.ActiveForm.FormBorderStyle != FormBorderStyle.None)
+                if (Form.ActiveForm != null) //some times ActiveForm sets to null on alt tab and I have 0 idea why. It continues code(even with this check)
                 {
-                    Form.ActiveForm.FormBorderStyle = FormBorderStyle.None;
-                    Window.Position = new Point(0, 0);
-                }
-                else if (Form.ActiveForm != null && _graphics.IsFullScreen == false && Form.ActiveForm.FormBorderStyle == FormBorderStyle.None)
-                {
-                    Form.ActiveForm.FormBorderStyle = FormBorderStyle.Sizable;
+                    Form.ActiveForm.Focus();
+                    base.SetFullscreen();
+                    Form.ActiveForm.Focus();
+
+                    if (Form.ActiveForm != null && _graphics.IsFullScreen && Form.ActiveForm.FormBorderStyle != FormBorderStyle.None)
+                    {
+                        Form.ActiveForm.FormBorderStyle = FormBorderStyle.None;
+                        Window.Position = new Point(0, 0);
+                    }
+                    else if (Form.ActiveForm != null && _graphics.IsFullScreen == false && Form.ActiveForm.FormBorderStyle == FormBorderStyle.None)
+                    {
+                        Form.ActiveForm.FormBorderStyle = FormBorderStyle.Sizable;
+                    }
                 }
             }
+            catch (Exception ex) { }
+        }
+
+        protected override void UnsetFullscreen()
+        {
+            base.UnsetFullscreen();
+
+            try
+            {
+
+                if (Form.ActiveForm != null) //some times ActiveForm sets to null on alt tab and I have 0 idea why. It continues code(even with this check)
+                {
+
+                    if (Form.ActiveForm != null && _graphics.IsFullScreen && Form.ActiveForm.FormBorderStyle != FormBorderStyle.None)
+                    {
+                        Form.ActiveForm.FormBorderStyle = FormBorderStyle.None;
+                        Window.Position = new Point(0, 0);
+                    }
+                    else if (Form.ActiveForm != null && _graphics.IsFullScreen == false && Form.ActiveForm.FormBorderStyle == FormBorderStyle.None)
+                    {
+                        Form.ActiveForm.FormBorderStyle = FormBorderStyle.Sizable;
+                    }
+                }
+            }
+            catch (Exception ex) { }
         }
 
         public override void GameInitialized()

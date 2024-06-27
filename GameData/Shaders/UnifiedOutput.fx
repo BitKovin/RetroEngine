@@ -69,7 +69,7 @@ PixelOutput PixelShaderFunction(PixelInput input)
     
     float3 orm = tex2D(ORMTextureSampler, input.TexCoord).rgb;
     
-    float roughness =orm.g;
+    float roughness = orm.g;
     float metalic = orm.b;
     float ao = orm.r;
     
@@ -124,9 +124,9 @@ PixelOutput PixelShaderFunction(PixelInput input)
     
     reflectiveness = saturate(reflectiveness);
     
-    output.Reflectiveness = float4(reflectiveness, reflectiveness, reflectiveness, pbs);
+    output.Reflectiveness = float4(reflectiveness, roughness, 0, pbs);
     
-    textureColor = ApplyReflectionOnSurface(textureColor,albedo, screenCoords, reflectiveness);
+    textureColor = ApplyReflectionOnSurface(textureColor,albedo, screenCoords, reflectiveness, metalic);
     output.Color = float4(textureColor, textureAlpha);
 
     return output;

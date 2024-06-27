@@ -594,6 +594,7 @@ namespace RetroEngine
         }
         protected virtual void UnsetFullscreen()
         {
+
             _graphics.PreferredBackBufferWidth = _width;
             _graphics.PreferredBackBufferHeight = _height;
             _graphics.IsFullScreen = false;

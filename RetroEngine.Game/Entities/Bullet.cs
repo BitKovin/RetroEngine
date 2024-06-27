@@ -44,7 +44,7 @@ namespace RetroEngine.Game.Entities
 
         protected override void LoadAssets()
         {
-
+            //return;
             base.LoadAssets();
 
             mesh.LoadFromFile("models/weapons/bullet/bullet.obj");
@@ -56,7 +56,7 @@ namespace RetroEngine.Game.Entities
 
         public override void Start()
         {
-
+            
             base.Start();
 
             startRotation = Rotation;
