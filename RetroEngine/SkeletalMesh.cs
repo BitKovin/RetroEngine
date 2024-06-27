@@ -37,7 +37,9 @@ namespace RetroEngine
         public bool UpdatePose = true;
 
         public List<HitboxInfo> hitboxes = new List<HitboxInfo>();
-        
+
+        public bool AlwaysUpdateVisual = false;
+
         public SkeletalMesh()
         {
             CastShadows = true;
@@ -240,7 +242,7 @@ namespace RetroEngine
             RiggedModel.additionalMeshOffsets = additionalMeshOffsets;
             RiggedModel.additionalLocalOffsets = additionalLocalOffsets;
 
-            RiggedModel.UpdateVisual = isRendered && UpdatePose;
+            RiggedModel.UpdateVisual = (isRendered && UpdatePose) || AlwaysUpdateVisual;
             RiggedModel.Update(deltaTime);
         }
 

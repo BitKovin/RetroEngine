@@ -318,6 +318,8 @@ namespace RetroEngine.Game.Entities.Weapons
 
             mesh2.Scale = arms2.Scale = new Vector3(-1, 1, 1);
 
+            mesh.AlwaysUpdateVisual = mesh2.AlwaysUpdateVisual = true;
+
             meshTp.LoadFromFile("models/weapons/pistol_tp.fbx");
 
             meshTp.textureSearchPaths.Add("textures/weapons/pistol/");
