@@ -49,8 +49,8 @@ sampler DepthTextureSampler = sampler_state
 {
     texture = <DepthTexture>;
 
-    MinFilter = Linear;
-    MagFilter = Linear;
+    MinFilter = Point;
+    MagFilter = Point;
     AddressU = Clamp;
     AddressV = Clamp;
 
@@ -61,8 +61,8 @@ sampler FrameTextureSampler = sampler_state
 {
     texture = <FrameTexture>;
 
-    MinFilter = Linear;
-    MagFilter = Linear;
+    MinFilter = Point;
+    MagFilter = Point;
     AddressU = Clamp;
     AddressV = Clamp;
 };
@@ -1002,7 +1002,7 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness, float me
     light += specular;
     light = max(light, 0.0f);
     light += globalLight;
-    light += CalculateSsrSpecular(input, normal, roughness, metallic, albedo);
+    //light += CalculateSsrSpecular(input, normal, roughness, metallic, albedo);
 
     return light;
 }
@@ -1081,15 +1081,17 @@ float ReflectionMapping(float x)
 float CalculateReflectiveness(float roughness, float metallic, float3 vDir, float3 normal)
 {
 
+    return lerp(0.04, 1, metallic*metallic);
+
     // Calculate the base reflectiveness based on metallic
     float baseReflectiveness = metallic;
 
     // Calculate the Fresnel factor using the Schlick approximation
-    float F0 = lerp(0.01, 0.5, metallic);
+    float F0 = lerp(0.01, 1, metallic);
     float F = F0 + (1.0 - F0);// * pow(1.0 - abs(dot(vDir, normal)), 5.0);
 
     // Adjust the base reflectiveness based on roughness
-    float reflectiveness = lerp(baseReflectiveness, 0.01, roughness);
+    float reflectiveness = lerp(baseReflectiveness, 0.04, roughness);
 
     // Modulate reflectiveness by the Fresnel factor
     reflectiveness *= F;
@@ -1139,13 +1141,17 @@ float3 ApplyReflectionOnSurface(float3 color,float3 albedo,float2 screenCoords, 
 
     float2 texel = float2(1/SSRWidth, 1/SSRHeight);
 
+
     reflection += tex2D(ReflectionTextureSampler, screenCoords + float2(texel.x,0)).rgb/2;
     reflection += tex2D(ReflectionTextureSampler, screenCoords + float2(-texel.x,0)).rgb/2;
     reflection += tex2D(ReflectionTextureSampler, screenCoords + float2(0,texel.y)).rgb/2;
     reflection += tex2D(ReflectionTextureSampler, screenCoords + float2(0,texel.y)).rgb/2;
-    reflection/=5.0/2.0;
+    reflection/=4.0/2.0 + 1;
 
-    float lum = saturate(CalcLuminance(reflection));
+    reflection = saturate(reflection);
+
+    float lum =0;// saturate(CalcLuminance(reflection))/30;
+    
 
     float3 reflectionIntens = lerp(lum*reflectiveness, reflectiveness, metalic);
 

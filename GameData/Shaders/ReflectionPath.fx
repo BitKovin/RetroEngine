@@ -75,17 +75,20 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
     
     float2 coords;
     
-    float2 outCoords;
+    float2 outCoords = 0;
     
     float weight = -0.3;
    
-    float factor = 1.3;
+    float factor = 1.4;
     
     bool facingCamera = false; dot(vDir, direction) < 0;
     
     
     float disToCamera = length(viewPos - position);
     
+    float2 oldCoords = 0;
+    float oldDepth = 0;
+
     for (int i = 0; i < steps; i++)
     {
         
@@ -97,13 +100,19 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
         
         selectedCoords = pos + offset;
         
+        
+
         coords = WorldToScreen(selectedCoords);
 
         float SampledDepth = SampleDepth(coords);
 
         bool inScreen = coords.x > 0.001 && coords.x < 0.999 && coords.y > 0.001 && coords.y < 0.999;
         
-        
+        if(i<2)
+        {
+            oldCoords = coords;
+            oldDepth = SampledDepth;
+        }
 
         if (SampledDepth < currentDepth - 0.05 && facingCamera == false)
         {
@@ -122,19 +131,25 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
             Step == 0.1;
         }
         
-        if (SampledDepth + 0.025 < dist)
+        if (SampledDepth + 0.015 < dist)
         {
 
-            outCoords = coords;
+            if(distance(oldDepth, SampledDepth)<disToCamera/15)
+                outCoords = lerp(coords, oldCoords,1);
+
             Step /= factor;
             factor = lerp(factor, 1, 0.5);
 
             weight += 1;
             
+            //oldCoords = coords;
+            //oldPos = pos + offset;
+
             continue;
 
         }
-
+        oldCoords = coords;
+        oldDepth = SampledDepth;
         Step *= factor;
     }
     
@@ -153,7 +168,7 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
 // Function to generate a random float based on the surface coordinates
 float Random (float2 uv)
 {
-    return frac(sin(dot(uv,float2(12.9898,78.233)))*43758.5453123);
+    return frac(sin(dot(uv,float2(12.9898,78.233)))*758.5453123);
 }
 
 // Function to generate a random vector based on the surface coordinates and roughness
@@ -178,7 +193,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR
     float3 vDir = normalize(worldPos - viewPos);
     
     float3 reflection = reflect(normalize(vDir), normal);
-    
+    float3 reflectionBase = reflection;
 
     
     float2 texel = float2(1.5/SSRWidth, 1.5/SSRHeight);
@@ -193,7 +208,13 @@ float4 MainPS(VertexShaderOutput input) : COLOR
     reflection = normalize(reflection + noise * roughness);
     
     float3 cube = SampleCubemap(ReflectionCubemapSampler, reflection);
-    
+    cube += SampleCubemap(ReflectionCubemapSampler, normalize(reflectionBase + RandomVector(input.TextureCoordinates, 3) * roughness));
+    cube += SampleCubemap(ReflectionCubemapSampler, normalize(reflectionBase + RandomVector(input.TextureCoordinates, 4) * roughness));
+    cube += SampleCubemap(ReflectionCubemapSampler, normalize(reflectionBase + RandomVector(input.TextureCoordinates, 7) * roughness));
+    cube += SampleCubemap(ReflectionCubemapSampler, normalize(reflectionBase + RandomVector(input.TextureCoordinates, 5) * roughness));
+    cube += SampleCubemap(ReflectionCubemapSampler, normalize(reflectionBase + RandomVector(input.TextureCoordinates, 2) * roughness));
+    cube/=6;
+
     if (enableSSR == false)
         return float4(cube, 1);
     

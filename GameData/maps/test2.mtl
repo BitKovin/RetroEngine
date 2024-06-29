@@ -13,9 +13,6 @@ map_Kd textures/brushes/bricks.png
 newmtl brushes/foil
 map_Kd textures/brushes/foil.png
 
-newmtl brushes/grass
-map_Kd textures/brushes/grass.png
-
 newmtl brushes/light
 map_Kd textures/brushes/light.png
 
