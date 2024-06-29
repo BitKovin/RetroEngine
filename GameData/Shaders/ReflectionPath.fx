@@ -108,7 +108,7 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
 
         bool inScreen = coords.x > 0.001 && coords.x < 0.999 && coords.y > 0.001 && coords.y < 0.999;
         
-        if(i<2)
+        if(i<3)
         {
             oldCoords = coords;
             oldDepth = SampledDepth;
@@ -131,7 +131,7 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
             Step == 0.1;
         }
         
-        if (SampledDepth + 0.015 < dist)
+        if (SampledDepth + 0.015 < dist&& SampledDepth>0.3f)
         {
 
             if(distance(oldDepth, SampledDepth)<disToCamera/15)

@@ -40,12 +40,12 @@ namespace RetroEngine.Game.Entities.Weapons
 
             fireSoundPlayer = Level.GetCurrent().AddEntity(new SoundPlayer()) as SoundPlayer;
             fireSoundPlayer.SetSound(AssetRegistry.LoadSoundFromFile("sounds/pistol_fire.wav"));
-            fireSoundPlayer.AudioClip.Is3D = false;
+            fireSoundPlayer.Is3DSound = false;
             fireSoundPlayer.Volume = 0.15f;
 
             fireSoundPlayer2 = Level.GetCurrent().AddEntity(new SoundPlayer()) as SoundPlayer;
             fireSoundPlayer2.SetSound(AssetRegistry.LoadSoundFromFile("sounds/pistol_fire.wav"));
-            fireSoundPlayer2.AudioClip.Is3D = false;
+            fireSoundPlayer2.Is3DSound = false;
             fireSoundPlayer2.Volume = 0.15f;
 
             ShowHandL = false;

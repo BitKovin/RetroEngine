@@ -16,6 +16,7 @@ namespace RetroEngine.Audio
 
         static ChannelGroup group = new ChannelGroup("general");
 
+        int ticks = 0;
 
         Channel channel = new Channel();
 
@@ -23,7 +24,6 @@ namespace RetroEngine.Audio
         {
             sound = _sound;
             sound.LowPass = 1;
-            sound.ChannelGroup = group;
             sound.Volume = 0;
         }
 
@@ -36,6 +36,7 @@ namespace RetroEngine.Audio
             channel.Paused = isPaused();
 
             Apply3D();
+            ticks++;
         }
 
         public override void Apply3D()
@@ -53,7 +54,7 @@ namespace RetroEngine.Audio
 
             Apply3DData(channel);
             
-
+            if(ticks>2)
             ApplyDistance();
         }
         void ApplyStartSoundData()
@@ -92,6 +93,9 @@ namespace RetroEngine.Audio
             float minVolume = 0.0f; // Adjust this value for minimum volume
             float volume = minVolume + (maxVolume - minVolume) * attenuation * Volume;
 
+            if (float.IsNaN(volume) || float.IsInfinity(volume))
+                volume = 0;
+
             channel.Volume = volume;
 
 
@@ -108,7 +112,7 @@ namespace RetroEngine.Audio
             control.Position3D = Position;
         }
 
-        public override void Play(bool fromStart = false)
+        public override void Play(bool fromStart = true)
         {
             base.Play(fromStart);
 
@@ -123,10 +127,11 @@ namespace RetroEngine.Audio
                 }
             }
 
-            channel.Stop();
+            Stop();
 
             ApplyStartSoundData();
             channel = sound.Play();
+            channel.VolumeRamp = false;
             channel.Volume = 0;
             Update();
         }
@@ -138,6 +143,12 @@ namespace RetroEngine.Audio
             base.Stop();
 
             channel.Stop();
+            channel.Native.getNumDSPs(out int num);
+            for (int i = 0; i < num; i++)
+            {
+                channel.Native.getDSP(i, out var dsp);
+                dsp.reset();
+            }
 
         }
 
