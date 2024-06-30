@@ -89,6 +89,8 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
     float2 oldCoords = 0;
     float oldDepth = 0;
 
+    float lastHitStep = 0.015;
+
     for (int i = 0; i < steps; i++)
     {
         
@@ -116,21 +118,19 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
 
         if (SampledDepth < currentDepth - 0.05 && facingCamera == false)
         {
-            return float4(0, 0, 0, 0);
-
-            Step -= 0.01;
-            Step /= factor;
-            weight-=1;
+            Step = lastHitStep;
+            factor = lerp(factor, 1, 0.5);
+            continue;
 
         }
         
-        if (inScreen == false || SampledDepth>10000)
+        if (inScreen == false || SampledDepth>1000)
         {
-            return float4(0,0,0,0);
-            outCoords = 0;
-            Step == 0.1;
+            Step /= 2;
+            factor = lerp(factor, 1, 0.5);
+            continue;
         }
-        
+
         if (SampledDepth + 0.015 < dist&& SampledDepth>0.3f)
         {
 
@@ -138,6 +138,7 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
                 outCoords = lerp(coords, oldCoords,1);
 
             Step /= factor;
+            lastHitStep = Step;
             factor = lerp(factor, 1, 0.5);
 
             weight += 1;

@@ -143,6 +143,8 @@ namespace RetroEngine.Audio
             base.Stop();
 
             channel.Stop();
+            channel.Volume = 0;
+            channel.Mute = true;
             channel.Native.getNumDSPs(out int num);
             for (int i = 0; i < num; i++)
             {
