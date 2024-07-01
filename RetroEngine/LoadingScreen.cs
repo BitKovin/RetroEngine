@@ -31,13 +31,21 @@ namespace RetroEngine
             // Draw the render target to the screen
             SpriteBatch.Draw(background, screenRectangle, Color.White);
 
+            SpriteBatch.End();
+
+            GameMain.Instance.DrawSplashIfNeed();
+
+            SpriteBatch.Begin();
+
             Texture2D white = AssetRegistry.LoadTextureFromFile("engine/textures/white.png", false, false);
 
-            Rectangle loadingBar = new Rectangle(0, GameMain.Instance.GraphicsDevice.Viewport.Height - 20, (int)((float)GameMain.Instance.GraphicsDevice.Viewport.Width * Progress), 20);
+            Rectangle loadingBar = new Rectangle(0, GameMain.Instance.GraphicsDevice.Viewport.Height - 10, (int)((float)GameMain.Instance.GraphicsDevice.Viewport.Width * Progress), 10);
 
             SpriteBatch.Draw(white, loadingBar, Color.Red);
 
             SpriteBatch.End();
+
+
 
             GameMain.Instance.GraphicsDevice.Present();
 

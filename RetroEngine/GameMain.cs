@@ -57,6 +57,7 @@ namespace RetroEngine
         Task gameTask;
 
         int tick = 0;
+        
 
         bool pendingGraphicsUpdate = false;
         bool wasFocused = true;
@@ -150,6 +151,9 @@ namespace RetroEngine
 
             if (AllowAsyncAssetLoading)
                 AssetRegistry.StartAsyncAssetLoader();
+
+            GameTotalTime.Start();
+
         }
 
         public static bool CanLoadAssetsOnThisThread()
@@ -444,10 +448,10 @@ namespace RetroEngine
 
             //SetupFullViewport();
 
-
-
             if (pendingGraphicsUpdate)
                 _graphics.ApplyChanges();
+
+            DrawSplashIfNeed();
 
             if (SkipFrames > 0)
             {
@@ -508,6 +512,39 @@ namespace RetroEngine
         protected override void EndDraw()
         {
 
+        }
+
+
+        Stopwatch GameTotalTime = new Stopwatch();
+
+        internal virtual void DrawSplashIfNeed()
+        {
+            if (GameTotalTime.Elapsed.TotalSeconds < 4)
+                DrawSplash();
+        }
+
+        
+
+        protected virtual void DrawSplash()
+        {
+            if (GameMain.CanLoadAssetsOnThisThread() == false) return;
+
+            GameMain.Instance.GraphicsDevice.Clear(Color.Black);
+
+            SpriteBatch SpriteBatch = GameMain.Instance.SpriteBatch;
+
+            SpriteBatch.Begin();
+
+            int offsetX = GraphicsDevice.Viewport.Width - GraphicsDevice.Viewport.Height;
+
+            Rectangle screenRectangle = new Rectangle(offsetX/2, 0, GameMain.Instance.GraphicsDevice.Viewport.Height, GameMain.Instance.GraphicsDevice.Viewport.Height);
+
+            Texture2D background = AssetRegistry.LoadTextureFromFile("engine/textures/splash.png", false, false);
+
+            // Draw the render target to the screen
+            SpriteBatch.Draw(background, screenRectangle, Color.White);
+
+            SpriteBatch.End();
         }
 
         public object GetView(System.Type type)
