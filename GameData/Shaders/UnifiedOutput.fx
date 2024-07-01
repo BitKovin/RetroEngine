@@ -62,6 +62,11 @@ PixelOutput PixelShaderFunction(PixelInput input)
     
     float4 ColorRGBTA = tex2D(TextureSampler, input.TexCoord) * input.Color;
     
+    if(Masked && DitherDisolve>0)
+    ColorRGBTA.a *= Dither(screenCoords, 1.0 - DitherDisolve, float2(ScreenWidth, ScreenHeight));
+
+    MaskedDiscard(ColorRGBTA.a);
+
     if (ColorRGBTA.a < 0.001)
         discard;
 

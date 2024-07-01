@@ -40,6 +40,8 @@ namespace RetroEngine
 
         public bool AlwaysUpdateVisual = false;
 
+
+
         public SkeletalMesh()
         {
             CastShadows = true;
@@ -429,7 +431,7 @@ namespace RetroEngine
         public override void DrawDepth()
         {
 
-
+            if (DitherDisolve > 0) return;
 
             if (Render.IgnoreFrustrumCheck == false)
                 if (frameStaticMeshData.InFrustrum == false) return;

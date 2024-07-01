@@ -117,6 +117,8 @@ namespace RetroEngine
 
         public bool DisableOcclusionCulling = false;
 
+        public float DitherDisolve = 0;
+
         public StaticMesh()
         {
 
@@ -218,6 +220,8 @@ namespace RetroEngine
             effect.Parameters["Viewmodel"]?.SetValue(frameStaticMeshData.Viewmodel);
 
             effect.Parameters["Masked"]?.SetValue(Masked);
+
+            effect.Parameters["DitherDisolve"]?.SetValue(DitherDisolve);
 
             if (meshPartData is not null && textureSearchPaths.Count > 0)
             {
@@ -523,7 +527,9 @@ namespace RetroEngine
 
             if (Viewmodel) return;
 
-            if(Render.IgnoreFrustrumCheck == false)
+            if (DitherDisolve > 0) return;
+
+            if (Render.IgnoreFrustrumCheck == false)
             if (frameStaticMeshData.InFrustrum == false) return;
 
             GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
@@ -1121,6 +1127,10 @@ namespace RetroEngine
             frameStaticMeshData.IsRendered = isRendered;
             frameStaticMeshData.IsRenderedShadow = isRenderedShadow;
             frameStaticMeshData.InFrustrum = inFrustrum;
+
+            if (DitherDisolve > 0)
+                Masked = true;
+
         }
 
         public virtual void UpdateCulling()

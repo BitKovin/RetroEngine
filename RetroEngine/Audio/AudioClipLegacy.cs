@@ -150,7 +150,7 @@ namespace RetroEngine.Audio
             // Set the volume and pitch based on attenuation
             float maxVolume = 1.0f; // Adjust this value for maximum volume
             float minVolume = 0.0f; // Adjust this value for minimum volume
-            float volume = minVolume + (maxVolume - minVolume) * attenuation * Volume;
+            float volume = Math.Clamp(minVolume + (maxVolume - minVolume) * attenuation,0,1) * Volume;
 
 
             Vector3 toEmitter = SoundManager.listener.Position - Position;
