@@ -16,6 +16,9 @@ internal class Program
     public static extern int MessageBox(IntPtr h, string m, string c, int type);
     private static void Main(string[] args)
     {
+
+        AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+
         SoundManager.nativeFmodLibrary = new FmodForFoxes.DesktopNativeFmodLibrary();
         Game game = new GameWindows();
 #if RELEASE
@@ -25,18 +28,28 @@ internal class Program
         }
         catch (Exception ex)
         {
-            var stream = File.CreateText("_crash_" + DateTime.Now.ToString().Replace("/", ".").Replace(":", "-") + ".txt");
-            stream.Write(ex.ToString());
-            stream.Close();
-
-            MessageBox((IntPtr)0, ex.Message + "\nAn error occurred during work of the engine. If problem appears on unmodified version of the game on supported hardware, please contact developer. \nFile with error callstack was created. \n\ncallstack: \n" + ex.ToString(), ex.Message, 0);
-
+            
+            ShowExeption(ex);
 
         }
 #else
         game.Run();
 #endif
 
+    }
+
+    private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+    {
+        ShowExeption((Exception)e.ExceptionObject);
+    }
+
+    static void ShowExeption(Exception ex)
+    {
+        var stream = File.CreateText("_crash_" + DateTime.Now.ToString().Replace("/", ".").Replace(":", "-") + ".txt");
+        stream.Write(ex.ToString());
+        stream.Close();
+
+        MessageBox((IntPtr)0, ex.Message + "\nAn error occurred during work of the engine. If problem appears in unmodified version of the game on supported hardware, please contact developer. \nFile with error callstack was created. \n\ncallstack: \n" + ex.ToString(), ex.Message, 0);
     }
 
 }
