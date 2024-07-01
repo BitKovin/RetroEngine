@@ -17,6 +17,8 @@ namespace RetroEngine.Entities
         string eventName = "";
         string soundFileName = "";
 
+        float fadeTime;
+
         public override void FromData(EntityData data)
         {
             base.FromData(data);
@@ -26,6 +28,8 @@ namespace RetroEngine.Entities
             soundFileName = data.GetPropertyString("soundFileName", soundFileName);
 
             Volume = data.GetPropertyFloat("volume", 1f);
+
+            fadeTime = data.GetPropertyFloat("fadeTime", 1);
 
             LoadAssetsIfNeeded();
 
@@ -74,12 +78,12 @@ namespace RetroEngine.Entities
 
             if(action == "play")
             {
-                PlayWithFade();
+                PlayWithFade(false,fadeTime);
             }
 
             if(action == "stop")
             {
-                StopWithFade();
+                StopWithFade(fadeTime);
             }
 
             if (action.ToLower().StartsWith("SetEventProperty".ToLower()))

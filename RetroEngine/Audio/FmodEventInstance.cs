@@ -41,6 +41,12 @@ namespace RetroEngine.Audio
             base.Play(fromStart);
 
             Update();
+            if (EventInstance.PlaybackState == FMOD.Studio.PLAYBACK_STATE.PLAYING && fromStart == false)
+            {
+                EventInstance.Paused = false;
+                return;
+            }
+
             EventInstance.Start();
 
             

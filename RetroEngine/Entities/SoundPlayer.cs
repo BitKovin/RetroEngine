@@ -29,7 +29,7 @@ namespace RetroEngine.Entities
         public bool IsUiSound = false;
         public bool Is3DSound = true;
 
-        protected float fade = 1;
+        protected float fade = 0;
         protected float fadeSpeed = 1;
 
         public SoundPlayer()
@@ -77,12 +77,14 @@ namespace RetroEngine.Entities
             if (AudioClip == null) return;
             LateUpdate();
             AudioClip.Play(fromStart);
+            fade = 1;
         }
 
         public virtual void PlayWithFade(bool fromStart = false, float fadeTime = 1)
         {
             fadeSpeed = 1/fadeTime;
-            Play(fromStart);
+            LateUpdate();
+            AudioClip.Play(fromStart);
         }
 
         public virtual void StopWithFade(float fadeTime = 1)
@@ -94,6 +96,7 @@ namespace RetroEngine.Entities
         {
             if (AudioClip == null) return;
             AudioClip.Stop();
+            fade = 0;
         }
 
         public override void Destroy()
