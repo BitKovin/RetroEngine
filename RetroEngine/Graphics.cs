@@ -90,19 +90,19 @@ namespace RetroEngine
         public static Matrix GetLightProjection()
         {
 
-            return Matrix.CreateOrthographic(LightDistance* LightDistanceMultiplier, LightDistance* LightDistanceMultiplier, -LightDistance * LightDistanceMultiplier, LightDistance * LightDistanceMultiplier);
+            return Matrix.CreateOrthographic(LightDistance* LightDistanceMultiplier, LightDistance* LightDistanceMultiplier, -LightDistance, LightDistance);
         }
 
         public static Matrix GetCloseLightProjection()
         {
 
-            return Matrix.CreateOrthographic(CloseLightDistance * LightDistanceMultiplier, CloseLightDistance * LightDistanceMultiplier, -100 * LightDistanceMultiplier, 100 * LightDistanceMultiplier);
+            return Matrix.CreateOrthographic(CloseLightDistance * LightDistanceMultiplier, CloseLightDistance * LightDistanceMultiplier, -100, 100);
         }
 
         public static Matrix GetVeryCloseLightProjection()
         {
 
-            return Matrix.CreateOrthographic(VeryCloseLightDistance * LightDistanceMultiplier, VeryCloseLightDistance * LightDistanceMultiplier, -100 * LightDistanceMultiplier, 100 * LightDistanceMultiplier);
+            return Matrix.CreateOrthographic(VeryCloseLightDistance * LightDistanceMultiplier, VeryCloseLightDistance * LightDistanceMultiplier, -100, 100);
         }
 
         public static Matrix GetLightView()

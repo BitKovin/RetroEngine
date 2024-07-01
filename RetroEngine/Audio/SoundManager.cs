@@ -30,7 +30,11 @@ namespace RetroEngine.Audio
 
             if (UseFmod == false) return;
 
-            FmodManager.Init(nativeFmodLibrary, FmodInitMode.CoreAndStudio, AssetRegistry.ROOT_PATH);
+#if DEBUG
+            FmodManager.Init(nativeFmodLibrary, FmodInitMode.CoreAndStudio, AssetRegistry.ROOT_PATH, studioInitFlags: FMOD.Studio.INITFLAGS.NORMAL | FMOD.Studio.INITFLAGS.LIVEUPDATE);
+#else
+            FmodManager.Init(nativeFmodLibrary, FmodInitMode.CoreAndStudio, AssetRegistry.ROOT_PATH, studioInitFlags: FMOD.Studio.INITFLAGS.NORMAL);
+#endif
             listener3D = new Listener3D();
         }
 

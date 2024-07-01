@@ -86,7 +86,7 @@ namespace RetroEngine
         public static void LoadFromFile(string name, bool force = false)
         {
             LoadingScreen.Progress = 0;
-            //LoadingScreen.Draw();
+            LoadingScreen.Draw();
 
             //StaticMesh.textures.Clear();
 

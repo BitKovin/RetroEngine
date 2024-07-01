@@ -196,7 +196,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
         void LoadVisual()
         {
-            mesh.Scale = new Vector3(1f);
+            mesh.Scale = new Vector3(5f);
 
             mesh.LoadFromFile("models/weapons/shotgun.fbx");
 
@@ -217,14 +217,15 @@ namespace RetroEngine.Game.Entities.Weapons
 
             meshTp.PreloadTextures();
 
-            mesh.CastShadows = false;
+            //mesh.CastShadows = false;
             mesh.PreloadTextures();
             mesh.Viewmodel = true;
             mesh.UseAlternativeRotationCalculation = true;
             mesh.Transperent = true;
 
-            arms.CastShadows = false;
+            //arms.CastShadows = false;
             arms.PreloadTextures();
+            arms.Scale = mesh.Scale;
             arms.Viewmodel = true;
             arms.UseAlternativeRotationCalculation = true;
 

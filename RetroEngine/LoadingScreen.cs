@@ -16,6 +16,8 @@ namespace RetroEngine
         public static void Draw()
         {
 
+            if(GameMain.CanLoadAssetsOnThisThread() == false) return;
+
             GameMain.Instance.GraphicsDevice.Clear(Color.Blue);
 
             SpriteBatch SpriteBatch = GameMain.Instance.SpriteBatch;

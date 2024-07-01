@@ -29,6 +29,9 @@ namespace RetroEngine.Entities
         public bool IsUiSound = false;
         public bool Is3DSound = true;
 
+        protected float fade = 1;
+        protected float fadeSpeed = 1;
+
         public SoundPlayer()
         {
             LateUpdateWhilePaused = true;
@@ -40,7 +43,10 @@ namespace RetroEngine.Entities
 
             if (AudioClip == null) return;
 
-            AudioClip.Volume = Volume;
+            fade += fadeSpeed*Time.DeltaTime;
+            fade = Math.Clamp(fade, 0, 1);
+
+            AudioClip.Volume = GetVolume();
             AudioClip.Pitch = Pitch;
             AudioClip.Position = Position;
 
@@ -66,14 +72,25 @@ namespace RetroEngine.Entities
             AudioClip = clip;
         }
 
-        public void Play(bool fromStart = false)
+        public virtual void Play(bool fromStart = false)
         {
             if (AudioClip == null) return;
             LateUpdate();
             AudioClip.Play(fromStart);
         }
 
-        public void Stop()
+        public virtual void PlayWithFade(bool fromStart = false, float fadeTime = 1)
+        {
+            fadeSpeed = 1/fadeTime;
+            Play(fromStart);
+        }
+
+        public virtual void StopWithFade(float fadeTime = 1)
+        {
+            fadeSpeed = -1 / fadeTime;
+        }
+
+        public virtual void Stop()
         {
             if (AudioClip == null) return;
             AudioClip.Stop();
@@ -85,6 +102,21 @@ namespace RetroEngine.Entities
 
             AudioClip?.Stop();
             AudioClip?.Dispose();   
+
+        }
+
+        protected virtual float GetVolume()
+        {
+            return Volume * fade;
+        }
+
+        public virtual void SetEventProperty(string name, float value)
+        {
+            FmodEventInstance fmodEventInstance = AudioClip as FmodEventInstance;
+
+            if(fmodEventInstance == null) return;
+
+            fmodEventInstance.SetParameter(name, value);
 
         }
 

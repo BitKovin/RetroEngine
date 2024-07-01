@@ -217,6 +217,7 @@ namespace RetroEngine
             effect.Parameters["isParticle"]?.SetValue(isParticle);
             effect.Parameters["Viewmodel"]?.SetValue(frameStaticMeshData.Viewmodel);
 
+            effect.Parameters["Masked"]?.SetValue(Masked);
 
             if (meshPartData is not null && textureSearchPaths.Count > 0)
             {
@@ -1114,9 +1115,9 @@ namespace RetroEngine
             frameStaticMeshData.LightViewClose = Graphics.LightCloseView;
             frameStaticMeshData.LightViewVeryClose = Graphics.LightVeryCloseView;
             frameStaticMeshData.LightProjection = Graphics.LightProjection;
+            frameStaticMeshData.LightProjectionClose = Graphics.LightCloseProjection;
             frameStaticMeshData.LightProjectionVeryClose = Graphics.LightVeryCloseProjection;
             frameStaticMeshData.Transparency = Transparency;
-            frameStaticMeshData.LightProjectionClose = Graphics.LightCloseProjection;
             frameStaticMeshData.IsRendered = isRendered;
             frameStaticMeshData.IsRenderedShadow = isRenderedShadow;
             frameStaticMeshData.InFrustrum = inFrustrum;
@@ -1132,7 +1133,7 @@ namespace RetroEngine
 
             if (model is null) return;
 
-            //WorldMatrix = GetWorldMatrix();
+            WorldMatrix = GetWorldMatrix();
 
             foreach (ModelMesh mesh in model.Meshes)
             {
@@ -1233,7 +1234,7 @@ namespace RetroEngine
 
             destroyed = true;
             //GameMain.pendingDispose.Add(this);
-            Dispose();
+            //Dispose();
             
         }
 

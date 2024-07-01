@@ -60,27 +60,38 @@
 [
 ]
 
-@PointClass base(Entity) size(-15 -15 -15, 15 15 15) color(255 200 0) model({ "path": "models/tools/radius.obj", "scale": radius * 32 * 2}) = light_point : "Light" 
+@PointClass base(Entity) size(-15 -15 -15, 15 15 15) color(255 200 0) model({ "path": "models/tools/radius.obj", "scale": radius * 32 * 2}) = light_point : "Graphics" 
 [
 	light_color(Vector3) : "Color" : "1 1 1"
 	radius(float) : "Radius" : "5"
 	intensity(float) : "Intensity" : "1"
 	resolution(int) : "Resolution" : "256"
 	dynamic(bool) : "Dynamic" : "false"
-
-
 ]
 
-@PointClass base(light) size(-15 -15 -15, 15 15 15) color(255 255 255) model({ "path": "models/tools/radius.obj", "scale": radius * 32 * 2})  = cubeMap : "Cube Map" 
+@PointClass base(light) size(-15 -15 -15, 15 15 15) color(255 255 255) model({ "path": "models/tools/radius.obj", "scale": radius * 32 * 2})  = cubeMap : "Graphics" 
 [
 	radius(float) : "Radius" : "5"
 	resolution(int) : "Resolution" : "256"
 ]
 
-@PointClass base(Entity) size(-20 -20 -20, 20 20 20) color(255 0 0) = weaponPickup : "Weapon Pickup" 
+@PointClass base(Entity) size(-20 -20 -20, 20 20 20) color(255 0 0) = weaponPickup : "Weapon" 
 [
-
 	type(string) : "Type" : "weapon_pistol_double"
+]
+
+@PointClass base(Entity) size(-15 -15 -15, 15 15 15) color(150 30 150) = music_player : "Audio" 
+[
+	bankName(string) : "bankName" : "Music.bank"
+	eventName(string) : "eventName" : ""
+	soundFileName(string) : "soundFileName" : ""
+	volume(float) : "volume" : "0.5"
+]
+
+@PointClass base(Entity) size(-10 -10 -10, 10 10 10) color(255 255 0) = event_start : "Event" 
+[
+	target(string) : "Target" : ""
+	actionName(string) : "Action Name" : ""
 ]
 
 @PointClass base(Entity) size(-5 -5 -5, 5 5 5) color(255 0 0) model({ "path": path, "scale": scale * 32}) = static_mesh: "Mesh" 
@@ -89,5 +100,4 @@
 	texture(string): "Texture" : ""
 	scale(float): "Scale" : "1"
 	angles(Vector3): "Angles" : "0 0 0"
-	
 ]

@@ -254,6 +254,8 @@ float ScreenWidth;
 float SSRHeight;
 float SSRWidth;
 
+bool Masked;
+
 struct VertexInput
 {
     float4 Position : SV_POSITION0;
@@ -427,6 +429,12 @@ float SampleDepth(float2 coords)
 {
     return tex2D(DepthTextureSampler, coords);
 
+}
+
+void MaskedDiscard(float alpha)
+{
+    if(alpha<0.95)
+        discard;
 }
 
 float SampleMaxDepth(float2 screenCoords)
@@ -641,7 +649,7 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input)
         float bias = b * (1 - saturate(dot(input.Normal, -LightDirection))) + b / 2.0f;
 
         bias *= (LightDistanceMultiplier+1)/2;
-
+        bias=0;
         resolution = ShadowMapResolutionClose;
         
         //bias -= max(dot(input.Normal, float3(0,1,0)),0) * b/2;
@@ -691,7 +699,7 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
     if(DirectBrightness<0.00001)
         return 0;
 
-    float dist = distance(viewPos, input.MyPosition) / LightDistanceMultiplier;
+    float dist = distance(viewPos, input.MyPosition);
     
     if (dist > 140)
         return 0;
@@ -704,7 +712,7 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
         
         float currentDepth = lightCoords.z * 2 - 1;
             
-        if (dist < 10 ) //&& abs(dot(input.TangentNormal, -LightDirection))>0.3
+        if (dist < 10.0) //&& abs(dot(input.TangentNormal, -LightDirection))>0.3
         {
             if (lightCoordsVeryClose.x >= 0 && lightCoordsVeryClose.x <= 1 && lightCoordsVeryClose.y >= 0 && lightCoordsVeryClose.y <= 1)
             {
@@ -981,8 +989,8 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness, float me
     float3 specular = CalculateSpecular(input.MyPosition, normal, lightDir, roughness, metallic, albedo) * DirectBrightness;
     specular *= max(1 - shadow, 0);
 
-    float3 globalSpecularDir = normalize(-normal + float3(0, -5, 0) + LightDirection);
-    specular += CalculateSpecular(input.MyPosition, normal, globalSpecularDir, roughness, metallic, albedo) * 0.02;
+    //float3 globalSpecularDir = normalize(-normal + float3(0, -5, 0) + LightDirection);
+    //specular += CalculateSpecular(input.MyPosition, normal, globalSpecularDir, roughness, metallic, albedo) * 0.02;
 
     // Direct light contribution
     float3 light = DirectBrightness * GlobalLightColor;
@@ -1081,7 +1089,7 @@ float ReflectionMapping(float x)
 float CalculateReflectiveness(float roughness, float metallic, float3 vDir, float3 normal)
 {
 
-    return lerp(0.04, 1, metallic*metallic);
+    return lerp(0.04, 1, metallic*metallic*metallic) * (lerp(1, 0.5, roughness));
 
     // Calculate the base reflectiveness based on metallic
     float baseReflectiveness = metallic;
@@ -1153,7 +1161,7 @@ float3 ApplyReflectionOnSurface(float3 color,float3 albedo,float2 screenCoords, 
     float lum =0;// saturate(CalcLuminance(reflection))/30;
     
 
-    float3 reflectionIntens = lerp(lum*reflectiveness, reflectiveness, metalic);
+    float3 reflectionIntens = lerp(0, reflectiveness, metalic);
 
-    return lerp(color, reflection * albedo, reflectionIntens);
+    return lerp(color, reflection * albedo, reflectiveness);
 }

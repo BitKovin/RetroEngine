@@ -40,7 +40,7 @@ namespace RetroEngine.Game.Entities
 
             AssetRegistry.LoadFmodBankIntoMemory("Sounds/banks/Master.bank");
             AssetRegistry.LoadFmodBankIntoMemory("Sounds/banks/Master.strings.bank");
-            AssetRegistry.LoadFmodBankIntoMemory("Sounds/banks/Dialogue_EN.bank");
+            AssetRegistry.LoadFmodBankIntoMemory("Sounds/banks/Dialogue_CN.bank");
             AssetRegistry.LoadFmodBankIntoMemory("Sounds/banks/SFX.bank");
 
 

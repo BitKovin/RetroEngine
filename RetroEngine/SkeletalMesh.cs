@@ -369,13 +369,14 @@ namespace RetroEngine
 
             if (RiggedModel != null)
             {
+                if (Graphics.LightDistanceMultiplier > 0.9)
+                {
+                    if (closeShadow)
+                        if (Graphics.DirectionalLightFrustrumClose.Contains(boundingSphere.Transform(GetWorldMatrix())) == ContainmentType.Disjoint) return;
 
-                if (closeShadow)
-                    if (Graphics.DirectionalLightFrustrumClose.Contains(boundingSphere.Transform(GetWorldMatrix())) == ContainmentType.Disjoint) return;
-
-                if (veryClose)
-                    if (Graphics.DirectionalLightFrustrumVeryClose.Contains(boundingSphere.Transform(GetWorldMatrix())) == ContainmentType.Disjoint) return;
-
+                    if (veryClose)
+                        if (Graphics.DirectionalLightFrustrumVeryClose.Contains(boundingSphere.Transform(GetWorldMatrix())) == ContainmentType.Disjoint) return;
+                }
                 foreach (RiggedModel.RiggedModelMesh meshPart in RiggedModel.meshes)
                 {
                     // Set the vertex buffer and index buffer for this mesh part

@@ -109,6 +109,7 @@ namespace RetroEngine
 
         public static Texture2D LUT;
 
+        public static bool StableDirectShadows = true;
         public Render()
         {
             graphics = GameMain.Instance._graphics;
@@ -291,7 +292,7 @@ namespace RetroEngine
                 ShadowMapEffect.Parameters["close"].SetValue(false);
                 RenderShadowMapClose(renderList);
                 RenderShadowMap(renderList);
-                ShadowMapEffect.Parameters["close"].SetValue(true);
+                ShadowMapEffect.Parameters["close"].SetValue(false);
                 RenderShadowMapVeryClose(renderList);
             }
             graphics.GraphicsDevice.RasterizerState = Graphics.DisableBackFaceCulling? RasterizerState.CullCounterClockwise : RasterizerState.CullNone;
@@ -317,7 +318,7 @@ namespace RetroEngine
 
 
             if (Input.GetAction("test").Holding())
-                return ReflectivenessOutput;
+                return reflection;
 
             return outputPath;
 
@@ -506,7 +507,7 @@ namespace RetroEngine
         {
             InitShadowMap(ref shadowMap);
 
-            if (renderShadow() == false) return;
+            if (renderShadow() == false && StableDirectShadows == false) return;
 
             shadowPassRenderDelay.AddDelay(0.05f);
 
@@ -545,7 +546,7 @@ namespace RetroEngine
         {
             InitShadowMapClose(ref shadowMapClose);
 
-            if(renderShadow()) return;
+            if(renderShadow() && StableDirectShadows == false) return;
 
             // Set up the shadow map render target with the desired resolution
             graphics.GraphicsDevice.SetRenderTarget(shadowMapClose);
@@ -600,7 +601,7 @@ namespace RetroEngine
 
             graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 
-            graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
+            graphics.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
 
             graphics.GraphicsDevice.BlendState = BlendState.Opaque;
 
@@ -705,7 +706,7 @@ namespace RetroEngine
         RenderTarget2D reflection;
         void PerformReflection()
         {
-            InitSizedRenderTargetIfNeed(ref reflection, (int)(GetScreenResolution().Y*Graphics.SSRResolutionScale), surfaceFormat: SurfaceFormat.HalfVector4);
+            InitSizedRenderTargetIfNeed(ref reflection, (int)(GetScreenResolution().Y*Graphics.SSRResolutionScale), surfaceFormat: SurfaceFormat.Color);
 
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, reflection.Width, reflection.Height);
 
