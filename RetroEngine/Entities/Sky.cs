@@ -51,7 +51,7 @@ namespace RetroEngine.Entities
             frameStaticMeshData.IsRenderedShadow = false;
         }
 
-        public override void DrawDepth()
+        public override void DrawDepth(bool pointLight)
         {
 
             Position = Camera.finalizedPosition;

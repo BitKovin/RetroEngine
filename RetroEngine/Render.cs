@@ -37,6 +37,7 @@ namespace RetroEngine
         RenderTarget2D postProcessingOutput;
         public RenderTarget2D DepthOutput;
 
+        public RenderTarget2D shadowMapViewmodel;
         public RenderTarget2D shadowMap;
         public RenderTarget2D shadowMapClose;
         public RenderTarget2D shadowMapVeryClose;
@@ -109,7 +110,7 @@ namespace RetroEngine
 
         public static Texture2D LUT;
 
-        public static bool StableDirectShadows = true;
+        public static bool StableDirectShadows = false;
         public Render()
         {
             graphics = GameMain.Instance._graphics;
@@ -294,6 +295,7 @@ namespace RetroEngine
                 RenderShadowMap(renderList);
                 ShadowMapEffect.Parameters["close"].SetValue(false);
                 RenderShadowMapVeryClose(renderList);
+                RenderShadowMapViewmodel(renderList);
             }
             graphics.GraphicsDevice.RasterizerState = Graphics.DisableBackFaceCulling? RasterizerState.CullCounterClockwise : RasterizerState.CullNone;
                 
@@ -400,7 +402,7 @@ namespace RetroEngine
             }
         }
 
-        public void RenderLevelGeometryDepth(List<StaticMesh> renderList, bool OnlyStatic = false, bool onlyShadowCasters = false, RasterizerState rasterizerState = null)
+        public void RenderLevelGeometryDepth(List<StaticMesh> renderList, bool OnlyStatic = false, bool onlyShadowCasters = false, RasterizerState rasterizerState = null, bool pointLight = false)
         {
             graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 
@@ -417,7 +419,7 @@ namespace RetroEngine
                 if (mesh.Transperent == false)
                 {
                     if (mesh.Static || OnlyStatic == false && mesh.CastShadows == true || onlyShadowCasters == false)
-                        mesh.DrawDepth();
+                        mesh.DrawDepth(pointLight);
 
                 }
             }
@@ -609,6 +611,52 @@ namespace RetroEngine
             foreach (StaticMesh mesh in renderList)
             {
                 mesh.DrawShadow(veryClose: true);
+            }
+
+        }
+
+        internal void RenderShadowMapViewmodel(List<StaticMesh> renderList)
+        {
+
+
+            if (Graphics.ViemodelShadows == false) return;
+
+            InitShadowMapViemodel(ref shadowMapViewmodel);
+
+
+            // Set up the shadow map render target with the desired resolution
+            graphics.GraphicsDevice.SetRenderTarget(shadowMapViewmodel);
+            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, Graphics.ViewmodelShadowMapResolution, Graphics.ViewmodelShadowMapResolution);
+
+            // Clear the shadow map with the desired clear color (e.g., Color.White)
+            graphics.GraphicsDevice.Clear(Color.Black);
+
+            SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
+            spriteBatch.Begin(effect: maxDepth, sortMode: SpriteSortMode.FrontToBack);
+
+            // Draw a full-screen quad to apply the lighting
+            DrawShadowQuad(spriteBatch, black);
+
+            // End the SpriteBatch
+            spriteBatch.End();
+
+
+            graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+
+
+            graphics.GraphicsDevice.BlendState = BlendState.Opaque;
+
+            // Iterate through meshes and draw shadows
+            foreach (StaticMesh mesh in renderList)
+            {
+                if (mesh.Viewmodel)
+                {
+
+
+                    graphics.GraphicsDevice.RasterizerState = mesh.isNegativeScale()? RasterizerState.CullClockwise : RasterizerState.CullCounterClockwise;
+
+                    mesh.DrawShadow(viewmodel: true);
+                }
             }
 
         }
@@ -1048,6 +1096,26 @@ namespace RetroEngine
                 SurfaceFormat.Single, // Color format
                 depthFormat); // Depth format
         }
+
+        void InitShadowMapViemodel(ref RenderTarget2D target)
+        {
+            if (target is not null && target.Height == Graphics.ViewmodelShadowMapResolution) return;
+
+            DestroyRenderTarget(target);
+
+            // Set the depth format based on your requirements
+            DepthFormat depthFormat = DepthFormat.Depth24;
+
+            // Create the new render target with the specified depth format
+            target = new RenderTarget2D(
+                graphics.GraphicsDevice,
+                Graphics.ViewmodelShadowMapResolution,
+                Graphics.ViewmodelShadowMapResolution,
+                false, // No mipmaps
+                SurfaceFormat.HalfSingle, // Color format
+                depthFormat); // Depth format
+        }
+
 
         void InitOcclusionMap(ref RenderTarget2D target)
         {

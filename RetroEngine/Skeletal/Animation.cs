@@ -113,7 +113,7 @@ namespace RetroEngine.Skeletal
         {
         }
 
-        public override void DrawDepth()
+        public override void DrawDepth(bool pointLight = false)
         {
         }
 

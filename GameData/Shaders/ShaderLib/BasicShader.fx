@@ -734,7 +734,7 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
     
 
 
-    if (lightCoords.x >= 0 && lightCoords.x <= 1 && lightCoords.y >= 0 && lightCoords.y <= 1)
+    if (lightCoords.x >= 0 && lightCoords.x <= 1 && lightCoords.y >= 0 && lightCoords.y <= 1 || Viewmodel)
     {
         
         
@@ -801,6 +801,48 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
     }
     return 0;
     
+}
+
+float GetShadowViewmodel(float3 lightCoords, PixelInput input)
+{
+    float resolution = 1;
+    float shadow = 0;
+
+    float currentDepth = lightCoords.z * 2 - 1;
+
+    int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)
+
+    float b = -0.0005;
+
+    float bias = b * (1 - saturate(dot(input.Normal, -LightDirection))) + b / 2.0f;
+
+    resolution = ShadowMapResolution;
+        
+    bias *= (LightDistanceMultiplier+1)/2;
+
+    float texelSize = 1 / resolution; // Assuming ShadowMapSize is the size of your shadow map texture
+
+    return 1 - SampleShadowMapLinear(ShadowMapSampler, lightCoords.xy, currentDepth + bias, float2(texelSize, texelSize));
+        
+    float size = 1;
+        
+        
+    for (int i = -numSamples; i <= numSamples; ++i)
+    {
+        for (int j = -numSamples; j <= numSamples; ++j)
+        {
+            float2 offsetCoords = lightCoords.xy + float2(i, j) * texelSize;
+            float closestDepth;
+            closestDepth = SampleShadowMapLinear(ShadowMapSampler, offsetCoords, currentDepth + bias, float2(texelSize, texelSize));
+
+            shadow += closestDepth;
+        }
+    }
+
+    // Normalize the accumulated shadow value
+    shadow /= ((2 * numSamples + 1) * (2 * numSamples + 1));
+        
+    return (1 - shadow) * (1 - shadow);
 }
 
 
@@ -1004,7 +1046,18 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness, float me
     }
     else
     {
-        shadow += GetShadow(lightCoords, lightCoordsClose, lightCoordsVeryClose, input);
+        
+
+        if(Viewmodel)
+        {
+            shadow += GetShadowVeryClose(lightCoordsVeryClose, input);
+            shadow += GetShadowViewmodel(lightCoords, input);
+        }else
+        {
+            shadow += GetShadow(lightCoords, lightCoordsClose, lightCoordsVeryClose, input);
+        }
+
+        shadow = saturate(shadow);
     }
     
     shadow += 1 - max(0, dot(normal, normalize(-LightDirection) * 1));

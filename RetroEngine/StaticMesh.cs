@@ -39,8 +39,11 @@ namespace RetroEngine
         public Matrix ProjectionViewmodel;
 
         public Matrix LightView;
+        public Matrix LightViewmodelView;
         public Matrix LightViewClose;
         public Matrix LightViewVeryClose;
+
+        public Matrix LightViewmodelProjection;
         public Matrix LightProjection;
         public Matrix LightProjectionClose;
         public Matrix LightProjectionVeryClose;
@@ -210,6 +213,11 @@ namespace RetroEngine
             }
         }
 
+        public bool isNegativeScale()
+        {
+            return (Scale.X * Scale.Y * Scale.Z) < 0;
+        }
+
         protected void ApplyShaderParams(Effect effect, MeshPartData meshPartData)
         {
             effect.Parameters["World"]?.SetValue(frameStaticMeshData.World);
@@ -222,6 +230,24 @@ namespace RetroEngine
             effect.Parameters["Masked"]?.SetValue(Masked);
 
             effect.Parameters["DitherDisolve"]?.SetValue(DitherDisolve);
+
+
+            if(Viewmodel&&Graphics.ViemodelShadows)
+            {
+
+                effect.Parameters["ShadowMap"]?.SetValue(GameMain.Instance.render.shadowMapViewmodel);
+                effect.Parameters["ShadowMapViewProjection"]?.SetValue(Graphics.LightViewProjectionViewmodel);
+                effect.Parameters["ShadowMapResolution"]?.SetValue(Graphics.ViewmodelShadowMapResolution);
+
+            }
+            else
+            {
+
+                effect.Parameters["ShadowMap"]?.SetValue(GameMain.Instance.render.shadowMap);
+                effect.Parameters["ShadowMapViewProjection"]?.SetValue(Graphics.LightViewProjection);
+                effect.Parameters["ShadowMapResolution"]?.SetValue(Graphics.shadowMapResolution);
+
+            }
 
             if (meshPartData is not null && textureSearchPaths.Count > 0)
             {
@@ -442,7 +468,7 @@ namespace RetroEngine
 
         }
 
-        public virtual void DrawShadow(bool closeShadow = false, bool veryClose = false)
+        public virtual void DrawShadow(bool closeShadow = false, bool veryClose = false, bool viewmodel = false)
         {
             if (!CastShadows || !isRenderedShadow) return;
 
@@ -522,7 +548,7 @@ namespace RetroEngine
             }
         }
 
-        public virtual void DrawDepth()
+        public virtual void DrawDepth(bool pointLightDraw = false)
         {
 
             if (Viewmodel) return;
@@ -1117,12 +1143,17 @@ namespace RetroEngine
             frameStaticMeshData.View = Camera.finalizedView;
             frameStaticMeshData.World = WorldMatrix;
             frameStaticMeshData.Viewmodel = Viewmodel;
+
             frameStaticMeshData.LightView = Graphics.LightView;
             frameStaticMeshData.LightViewClose = Graphics.LightCloseView;
             frameStaticMeshData.LightViewVeryClose = Graphics.LightVeryCloseView;
+            frameStaticMeshData.LightViewmodelView = Graphics.LightViewmodelView;
+
+            frameStaticMeshData.LightViewmodelProjection = Graphics.LightViewmodelProjection;
             frameStaticMeshData.LightProjection = Graphics.LightProjection;
             frameStaticMeshData.LightProjectionClose = Graphics.LightCloseProjection;
             frameStaticMeshData.LightProjectionVeryClose = Graphics.LightVeryCloseProjection;
+
             frameStaticMeshData.Transparency = Transparency;
             frameStaticMeshData.IsRendered = isRendered;
             frameStaticMeshData.IsRenderedShadow = isRenderedShadow;

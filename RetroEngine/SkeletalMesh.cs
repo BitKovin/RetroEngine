@@ -359,9 +359,11 @@ namespace RetroEngine
 
         }
 
-        public override void DrawShadow(bool closeShadow = false, bool veryClose = false)
+        public override void DrawShadow(bool closeShadow = false, bool veryClose = false, bool viewmodel = false)
         {
             if (!CastShadows) return;
+
+            if(Viewmodel && viewmodel == false) return;
 
             GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
 
@@ -390,6 +392,8 @@ namespace RetroEngine
                         Graphics.LightViewProjectionClose = frameStaticMeshData.LightViewClose * frameStaticMeshData.LightProjectionClose;
                     else if (veryClose)
                         Graphics.LightViewProjectionVeryClose = frameStaticMeshData.LightViewVeryClose * frameStaticMeshData.LightProjectionVeryClose;
+                    else if(viewmodel)
+                        Graphics.LightViewProjectionViewmodel = frameStaticMeshData.LightViewmodelView * frameStaticMeshData.LightViewmodelProjection;
                     else
                         Graphics.LightViewProjection = frameStaticMeshData.LightView * frameStaticMeshData.LightProjection;
 
@@ -405,7 +409,12 @@ namespace RetroEngine
                     {
                         effect.Parameters["Projection"].SetValue(frameStaticMeshData.LightProjectionVeryClose);
                         effect.Parameters["View"].SetValue(frameStaticMeshData.LightViewVeryClose);
-                    }else
+                    }else if(viewmodel)
+                    {
+                        effect.Parameters["Projection"].SetValue(frameStaticMeshData.LightViewmodelProjection);
+                        effect.Parameters["View"].SetValue(frameStaticMeshData.LightViewmodelView);
+                    }
+                    else
                     {
                         effect.Parameters["View"].SetValue(frameStaticMeshData.LightView);
                         effect.Parameters["Projection"].SetValue(frameStaticMeshData.LightProjection);
@@ -428,10 +437,12 @@ namespace RetroEngine
 
         }
 
-        public override void DrawDepth()
+        public override void DrawDepth(bool pointLightDraw = false)
         {
 
             if (DitherDisolve > 0) return;
+
+            if (pointLightDraw && Viewmodel) return;
 
             if (Render.IgnoreFrustrumCheck == false)
                 if (frameStaticMeshData.InFrustrum == false) return;
@@ -467,7 +478,6 @@ namespace RetroEngine
                         graphicsDevice.Indices = meshPart.IndexBuffer;
 
                         //effect.Techniques[0].Passes[0].Apply();
-
 
                         
                         if (Masked)

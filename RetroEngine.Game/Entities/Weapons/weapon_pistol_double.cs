@@ -301,7 +301,7 @@ namespace RetroEngine.Game.Entities.Weapons
             mesh.textureSearchPaths.Add("textures/weapons/pistol/");
             mesh.textureSearchPaths.Add("textures/weapons/general/");
 
-            mesh.CastShadows = false;
+            //mesh.CastShadows = false;
             mesh.PreloadTextures();
             mesh.Viewmodel = true;
             mesh.UseAlternativeRotationCalculation = true;
@@ -311,7 +311,7 @@ namespace RetroEngine.Game.Entities.Weapons
             mesh2.textureSearchPaths.Add("textures/weapons/pistol/");
             mesh2.textureSearchPaths.Add("textures/weapons/general/");
 
-            mesh2.CastShadows = false;
+            //mesh2.CastShadows = false;
             mesh2.PreloadTextures();
             mesh2.Viewmodel = true;
             mesh2.UseAlternativeRotationCalculation = true;
@@ -331,14 +331,14 @@ namespace RetroEngine.Game.Entities.Weapons
 
             arms.LoadFromFile("models/weapons/arms_n.fbx");
             arms.textureSearchPaths.Add("textures/weapons/arms/");
-            arms.CastShadows = false;
+            //arms.CastShadows = false;
             arms.PreloadTextures();
             arms.Viewmodel = true;
             arms.UseAlternativeRotationCalculation = true;
 
             arms2.LoadFromFile("models/weapons/arms_n.fbx");
             arms2.textureSearchPaths.Add("textures/weapons/arms/");
-            arms2.CastShadows = false;
+            //arms2.CastShadows = false;
             arms2.PreloadTextures();
             arms2.Viewmodel = true;
             arms2.UseAlternativeRotationCalculation = true;

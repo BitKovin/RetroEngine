@@ -221,15 +221,15 @@ namespace RetroEngine.Game.Entities.Weapons
             mesh.PreloadTextures();
             mesh.Viewmodel = true;
             mesh.UseAlternativeRotationCalculation = true;
-            mesh.CastShadows = false;
+            mesh.CastShadows = true;
 
-            mesh.DitherDisolve = 0.5f;
+            //mesh.DitherDisolve = 0.5f;
 
             //arms.CastShadows = false;
             arms.PreloadTextures();
             arms.Scale = mesh.Scale;
             arms.Viewmodel = true;
-            arms.CastShadows = false;
+            arms.CastShadows = true;
             arms.UseAlternativeRotationCalculation = true;
 
 

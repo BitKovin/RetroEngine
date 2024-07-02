@@ -21,7 +21,7 @@ namespace RetroEngine.Entities.Light
             return occluded == false && inFrustrum;
         }
 
-        public override void DrawShadow(bool closeShadow = false, bool veryClose = false)
+        public override void DrawShadow(bool closeShadow = false, bool veryClose = false, bool viewmodel = false)
         {
 
         }
@@ -31,7 +31,7 @@ namespace RetroEngine.Entities.Light
             return Camera.rotation.GetForwardVector()*10000000 + Camera.position;
         }
 
-        public override void DrawDepth()
+        public override void DrawDepth(bool pointLight)
         {
             var def = GameMain.Instance.GraphicsDevice.DepthStencilState;
             var defBlend = GameMain.Instance.GraphicsDevice.BlendState;

@@ -177,7 +177,7 @@ namespace RetroEngine
             var hit = Physics.LineTraceForStatic(point.ToNumerics(), (point - new Vector3(0, 100, 0)).ToNumerics());
 
             Position = hit.HitPointWorld;
-            Position += new Vector3(0, 0.25f, 0);
+            Position += new Vector3(0, 0.35f, 0);
 
             return Position;
         }

@@ -366,7 +366,7 @@ namespace RetroEngine.Entities.Light
             GameMain.Instance.render.OcclusionStaticEffect.Parameters["CameraPos"].SetValue(Position);
             GameMain.Instance.render.OcclusionStaticEffect.Parameters["pointDistance"].SetValue(true);
 
-            GameMain.Instance.render.RenderLevelGeometryDepth(l, OnlyStatic: !isDynamic(), onlyShadowCasters: true);
+            GameMain.Instance.render.RenderLevelGeometryDepth(l, OnlyStatic: !isDynamic(), onlyShadowCasters: true, pointLight: true);
 
             GameMain.Instance.render.BoundingSphere.Radius = 0;
             graphicsDevice.SetRenderTarget(null);

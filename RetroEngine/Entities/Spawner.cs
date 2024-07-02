@@ -26,6 +26,18 @@ namespace RetroEngine.Entities
 
         }
 
+        protected override void LoadAssets()
+        {
+            base.LoadAssets();
+
+            var ent = LevelObjectFactory.CreateByTechnicalName(className);
+
+            ent.LoadAssetsIfNeeded();
+
+            ent.Destroy();
+
+        }
+
         public override void OnAction(string action)
         {
             base.OnAction(action);

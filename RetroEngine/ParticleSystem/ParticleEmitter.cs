@@ -228,7 +228,7 @@ namespace RetroEngine.Particles
             //GameMain.Instance.render.particlesToDraw.AddRange(finalizedParticles);
         }
 
-        public override void DrawDepth()
+        public override void DrawDepth(bool pointLight = false)
         {
             
         }
@@ -425,7 +425,7 @@ namespace RetroEngine.Particles
             }
         }
 
-        public override void DrawShadow(bool close = false, bool veryClose = false)
+        public override void DrawShadow(bool close = false, bool veryClose = false, bool viewmodel = false)
         {
             return; // no shadows for particles
         }

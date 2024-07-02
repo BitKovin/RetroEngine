@@ -19,6 +19,9 @@ namespace RetroEngine
         public static int shadowMapResolution = 2048*2;
         public static int closeShadowMapResolution = 2048;
         public static int veryCloseShadowMapResolution = 2048;
+        public static int ViewmodelShadowMapResolution = 2048;
+
+        public static bool ViemodelShadows = true;
 
         public static float SSRResolutionScale = 0.8f;
         public static bool EnableSSR = true;
@@ -32,6 +35,7 @@ namespace RetroEngine
 
         public static float LightDistanceMultiplier = 1;
         public static Matrix LightViewProjection;
+        public static Matrix LightViewProjectionViewmodel;
         public static Matrix LightViewProjectionClose;
         public static Matrix LightViewProjectionVeryClose;
         public static float LightDistance = 300;
@@ -66,10 +70,12 @@ namespace RetroEngine
         internal static Matrix LightVeryCloseView;
         internal static Matrix LightCloseView;
         internal static Matrix LightView;
+        internal static Matrix LightViewmodelView;
 
         internal static Matrix LightVeryCloseProjection;
         internal static Matrix LightCloseProjection;
         internal static Matrix LightProjection;
+        internal static Matrix LightViewmodelProjection;
 
         public static void UpdateDirectionalLight()
         {
@@ -80,10 +86,12 @@ namespace RetroEngine
             LightVeryCloseView = GetLightViewVeryClose();
             LightCloseView = GetLightViewClose();
             LightView = GetLightView();
+            LightViewmodelView = GetLightViewViewmodel();
 
             LightVeryCloseProjection = GetVeryCloseLightProjection();
             LightCloseProjection = GetCloseLightProjection();
             LightProjection = GetLightProjection();
+            LightViewmodelProjection = GetLightProjectionViewmodel();
 
         }
 
@@ -108,6 +116,19 @@ namespace RetroEngine
         public static Matrix GetLightView()
         {
             return Matrix.CreateLookAt(GetCameraPositionByPixelGrid(LightDistance * LightDistanceMultiplier), GetCameraPositionByPixelGrid(LightDistance * LightDistanceMultiplier) + LightDirection, new Vector3(0,0,1));
+        }
+
+        public static Matrix GetLightViewViewmodel()
+        {
+            return Matrix.CreateLookAt(Camera.position + Camera.Forward*0.5f, Camera.position + Camera.Forward * 0.5f + LightDirection, new Vector3(0, 0, 1));
+        }
+
+        public static Matrix GetLightProjectionViewmodel()
+        {
+
+            if (Graphics.ViemodelShadows == false) return Matrix.Identity;
+
+            return Matrix.CreateOrthographic(1.5f, 1.5f, -4, 4);
         }
 
         public static Matrix GetLightViewClose()
