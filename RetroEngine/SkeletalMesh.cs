@@ -369,7 +369,19 @@ namespace RetroEngine
 
             Effect effect = GameMain.Instance.render.ShadowMapEffect;
 
+
+            graphicsDevice.RasterizerState = isNegativeScale() ? RasterizerState.CullClockwise : RasterizerState.CullCounterClockwise;
+
             effect.Parameters["Bones"].SetValue(finalizedBones);
+
+            if (closeShadow)
+                Graphics.LightViewProjectionClose = frameStaticMeshData.LightViewClose * frameStaticMeshData.LightProjectionClose;
+            else if (veryClose)
+                Graphics.LightViewProjectionVeryClose = frameStaticMeshData.LightViewVeryClose * frameStaticMeshData.LightProjectionVeryClose;
+            else if (viewmodel)
+                Graphics.LightViewProjectionViewmodel = frameStaticMeshData.LightViewmodelView * frameStaticMeshData.LightViewmodelProjection;
+            else
+                Graphics.LightViewProjection = frameStaticMeshData.LightView * frameStaticMeshData.LightProjection;
 
             if (RiggedModel != null)
             {
@@ -387,15 +399,6 @@ namespace RetroEngine
                     graphicsDevice.SetVertexBuffer(meshPart.VertexBuffer);
                     graphicsDevice.Indices = meshPart.IndexBuffer;
 
-
-                    if (closeShadow)
-                        Graphics.LightViewProjectionClose = frameStaticMeshData.LightViewClose * frameStaticMeshData.LightProjectionClose;
-                    else if (veryClose)
-                        Graphics.LightViewProjectionVeryClose = frameStaticMeshData.LightViewVeryClose * frameStaticMeshData.LightProjectionVeryClose;
-                    else if(viewmodel)
-                        Graphics.LightViewProjectionViewmodel = frameStaticMeshData.LightViewmodelView * frameStaticMeshData.LightViewmodelProjection;
-                    else
-                        Graphics.LightViewProjection = frameStaticMeshData.LightView * frameStaticMeshData.LightProjection;
 
                     // Set effect parameters
                     effect.Parameters["World"].SetValue(frameStaticMeshData.World);
@@ -455,19 +458,21 @@ namespace RetroEngine
 
             effect.Parameters["Viewmodel"].SetValue(Viewmodel);
 
+            bool mask = Masked;
+
             if (Transperent)
-                Masked = true;
+                mask = true;
 
 
             if (RiggedModel != null)
             {
 
                 effect.Parameters["World"].SetValue(frameStaticMeshData.World);
-                effect.Parameters["Masked"].SetValue(Masked);
+                effect.Parameters["Masked"].SetValue(mask);
 
                 graphicsDevice.RasterizerState = Graphics.DisableBackFaceCulling || TwoSided ? RasterizerState.CullNone : RasterizerState.CullClockwise;
 
-                if (!Masked)
+                if (!mask)
                     effect.Techniques[0].Passes[0].Apply();
 
                 if (GameMain.Instance.render.BoundingSphere.Radius == 0 || IntersectsBoundingSphere(GameMain.Instance.render.BoundingSphere))
@@ -480,7 +485,7 @@ namespace RetroEngine
                         //effect.Techniques[0].Passes[0].Apply();
 
                         
-                        if (Masked)
+                        if (mask)
                         {
                             MeshPartData meshPartData = meshPart.Tag as MeshPartData;
                             ApplyShaderParams(effect, meshPartData);

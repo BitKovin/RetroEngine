@@ -615,13 +615,18 @@ float GetShadowClose(float3 lightCoords, PixelInput input)
 
         int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)
 
-        float bias = ShadowBias * (1 - saturate(dot(input.Normal, -LightDirection))) + ShadowBias / 2.0f;
+        float b = -0.00001;
+        
+        float bias = b * (1 - saturate(dot(input.Normal, -LightDirection))) + b / 2.0f;
+
+        bias*= lerp(4,1, abs(dot(input.Normal, -LightDirection)));
+
         resolution = ShadowMapResolutionClose;
         
         
         float size = 1;
+   
         
-        bias *=1.3;
 
         bias *= (LightDistanceMultiplier+1)/2;
         
@@ -672,12 +677,14 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input)
 
         int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)
 
-        float b = 0.0005;
+        float b = 0.000013;
         
         float bias = b * (1 - saturate(dot(input.Normal, -LightDirection))) + b / 2.0f;
 
+        bias*= lerp(6,1, abs(dot(input.Normal, -LightDirection)));
+
         bias *= (LightDistanceMultiplier+1)/2;
-        bias=0;
+        //bias=0;
         resolution = ShadowMapResolutionClose;
         
         //bias -= max(dot(input.Normal, float3(0,1,0)),0) * b/2;

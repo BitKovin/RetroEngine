@@ -286,13 +286,6 @@ namespace RetroEngine
                     var tangent = mesh.Tangents[i];
                     var biTangent = mesh.BiTangents[i];
 
-                    if(Vector3D.Dot(normal, new Vector3D(-1,1,1))>0)
-                    {
-                        tangent *= 1;
-                    }else
-                    {
-                        tangent *= 1;
-                    }
 
                     var textureCoord = mesh.HasTextureCoords(0) ? mesh.TextureCoordinateChannels[0][i] : new Assimp.Vector3D(0, 0, 0);
 

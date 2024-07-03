@@ -56,7 +56,7 @@ namespace RetroEngine
 
         public int Layer = 0;
 
-        public bool mergeBrushes = false;
+        public bool mergeBrushes = true;
 
         public bool SaveGame = false;
         public bool SaveAsUnique = false;

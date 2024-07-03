@@ -26,8 +26,8 @@
 "origin" "139 -309 16"
 "path" "models/enviroment/door/door.obj"
 "scale" "2"
-"angle" "180"
 "texture" "models/enviroment/door/door.png"
+"angles" "0 180 0"
 }
 // entity 3
 {

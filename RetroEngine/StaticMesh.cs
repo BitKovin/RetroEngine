@@ -484,6 +484,16 @@ namespace RetroEngine
 
             }
 
+            graphicsDevice.RasterizerState = isNegativeScale() ? RasterizerState.CullClockwise : RasterizerState.CullCounterClockwise;
+
+            if (closeShadow)
+                Graphics.LightViewProjectionClose = frameStaticMeshData.LightViewClose * frameStaticMeshData.LightProjectionClose;
+            else if (veryClose)
+                Graphics.LightViewProjectionVeryClose = frameStaticMeshData.LightViewVeryClose * frameStaticMeshData.LightProjectionVeryClose;
+            else
+                Graphics.LightViewProjection = frameStaticMeshData.LightView * frameStaticMeshData.LightProjection;
+
+
             if (frameStaticMeshData.model is not null)
             {
                 foreach (ModelMesh mesh in frameStaticMeshData.model.Meshes)
@@ -501,14 +511,6 @@ namespace RetroEngine
                         // Set the vertex buffer and index buffer for this mesh part
                         graphicsDevice.SetVertexBuffer(meshPart.VertexBuffer);
                         graphicsDevice.Indices = meshPart.IndexBuffer;
-
-
-                        if (closeShadow)
-                            Graphics.LightViewProjectionClose = frameStaticMeshData.LightViewClose * frameStaticMeshData.LightProjectionClose;
-                        else if (veryClose)
-                            Graphics.LightViewProjectionVeryClose = frameStaticMeshData.LightViewVeryClose * frameStaticMeshData.LightProjectionVeryClose;
-                        else
-                            Graphics.LightViewProjection = frameStaticMeshData.LightView * frameStaticMeshData.LightProjection;
 
                         MeshPartData meshPartData = meshPart.Tag as MeshPartData;
 
@@ -563,8 +565,10 @@ namespace RetroEngine
             Effect effect = GameMain.Instance.render.OcclusionStaticEffect;
 
 
+            bool mask = Masked;
+
             if (Transperent)
-                Masked = true;
+                mask = true;
 
             graphicsDevice.RasterizerState = Graphics.DisableBackFaceCulling || TwoSided ? RasterizerState.CullNone : RasterizerState.CullClockwise;
 
@@ -575,9 +579,9 @@ namespace RetroEngine
                 {
 
                     effect.Parameters["World"].SetValue(frameStaticMeshData.World);
-                    effect.Parameters["Masked"]?.SetValue(Masked);
+                    effect.Parameters["Masked"]?.SetValue(mask);
 
-                    if (Masked == false)
+                    if (mask == false)
                     {
                         ApplyShaderParams(effect, null);
                         effect.Techniques[0].Passes[0].Apply();
@@ -597,7 +601,7 @@ namespace RetroEngine
                                 
 
                                 
-                                if (Masked)
+                                if (mask)
                                 {
                                     MeshPartData meshPartData = meshPart.Tag as MeshPartData;
                                     ApplyShaderParams(effect, meshPartData);

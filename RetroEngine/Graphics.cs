@@ -15,13 +15,13 @@ namespace RetroEngine
         public static Color BackgroundColor = new Color(0.15f, 0.15f, 0.2f);
         public static Vector3 LightColor = new Vector3(1,1,1);
 
-        public static float ShadowBias = -0.001f;//0025f
+        public static float ShadowBias = -0.000f;//0025f
         public static int shadowMapResolution = 2048*2;
         public static int closeShadowMapResolution = 2048;
         public static int veryCloseShadowMapResolution = 2048;
         public static int ViewmodelShadowMapResolution = 2048;
 
-        public static bool ViemodelShadows = true;
+        public static bool ViemodelShadows = false;
 
         public static float SSRResolutionScale = 0.8f;
         public static bool EnableSSR = true;

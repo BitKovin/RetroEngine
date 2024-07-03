@@ -290,10 +290,8 @@ namespace RetroEngine
 
             if (Graphics.DirectLighting > 0.0001)
             {
-                ShadowMapEffect.Parameters["close"].SetValue(false);
                 RenderShadowMapClose(renderList);
                 RenderShadowMap(renderList);
-                ShadowMapEffect.Parameters["close"].SetValue(false);
                 RenderShadowMapVeryClose(renderList);
                 RenderShadowMapViewmodel(renderList);
             }

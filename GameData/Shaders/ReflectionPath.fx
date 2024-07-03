@@ -61,7 +61,7 @@ float FadeDistance(float distance, float minDistance, float maxDistance)
 float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 normal, float3 vDir)
 {
     
-    float Step = 0.015;
+    float Step = 0.011;
     
     const int steps = 50;
     
@@ -94,7 +94,7 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
     for (int i = 0; i < steps; i++)
     {
         
-        float3 offset = dir * (Step) * disToCamera / 30 + dir * 0.02 * disToCamera;
+        float3 offset = dir * (Step) * disToCamera / 30 + dir * 0.03 * disToCamera;
         
         
         float dist = WorldToClip(pos + offset).z;
