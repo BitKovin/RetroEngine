@@ -558,7 +558,7 @@ float CalculateSpecular(float3 worldPos, float3 normal, float3 lightDir, float r
     // Specular BRDF
     float3 specular = (D * G) / (4.0f * NdotV * NdotL + 0.001f);
 
-    return specular * 0.5;
+    return specular * 0.75;
 }
 
 
@@ -615,7 +615,7 @@ float GetShadowClose(float3 lightCoords, PixelInput input)
 
         int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)
 
-        float b = -0.00001;
+        float b = -0.0003;
         
         float bias = b * (1 - saturate(dot(input.Normal, -LightDirection))) + b / 2.0f;
 
@@ -677,7 +677,7 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input)
 
         int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)
 
-        float b = 0.000013;
+        float b = 0.000007;
         
         float bias = b * (1 - saturate(dot(input.Normal, -LightDirection))) + b / 2.0f;
 
@@ -776,12 +776,14 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
 
         int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)
 
-        float bias = ShadowBias * (1 - saturate(dot(input.Normal, -LightDirection))) + ShadowBias / 2.0f;
+        float b = 0.0003;
+
+        float bias = b * (1 - saturate(dot(input.Normal, -LightDirection))) + b / 2.0f;
         resolution = ShadowMapResolution;
         
         bias *= (LightDistanceMultiplier+1)/2;
 
-        return 1 - SampleShadowMap(ShadowMapSampler, lightCoords.xy, currentDepth + bias);
+        return 1 - SampleShadowMap(ShadowMapSampler, lightCoords.xy, currentDepth - bias);
         
         float size = 1;
         
@@ -1054,6 +1056,9 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness, float me
     else
     {
         
+        #if OPENGL
+            shadow += GetShadow(lightCoords, lightCoordsClose, lightCoordsVeryClose, input);
+        #else
 
         if(Viewmodel)
         {
@@ -1065,6 +1070,8 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness, float me
         }
 
         shadow = saturate(shadow);
+        
+        #endif
     }
     
     shadow += 1 - max(0, dot(normal, normalize(-LightDirection) * 1));
@@ -1177,7 +1184,7 @@ float ReflectionMapping(float x)
 float CalculateReflectiveness(float roughness, float metallic, float3 vDir, float3 normal)
 {
 
-    return lerp(0.04, 1, metallic*metallic*metallic) * (lerp(1, 0.5, roughness));
+    return lerp(0.04, 1, metallic*(lerp(metallic, 1, 0.5)) * (lerp(1, 0.3, roughness)));
 
     // Calculate the base reflectiveness based on metallic
     float baseReflectiveness = metallic;

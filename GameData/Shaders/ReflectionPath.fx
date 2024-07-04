@@ -58,12 +58,11 @@ float FadeDistance(float distance, float minDistance, float maxDistance)
     return fadeValue;
 }
 
-float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 normal, float3 vDir)
+float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 normal, float3 vDir, int steps, float factor)
 {
     
     float Step = 0.011;
     
-    const int steps = 50;
     
     float4 outColor = float4(0, 0, 0, 0);
     
@@ -79,7 +78,6 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
     
     float weight = -0.3;
    
-    float factor = 1.4;
     
     bool facingCamera = false; dot(vDir, direction) < 0;
     
@@ -169,7 +167,7 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
 // Function to generate a random float based on the surface coordinates
 float Random (float2 uv)
 {
-    return frac(sin(dot(uv,float2(12.9898,78.233)))*758.5453123);
+    return frac(sin(dot(uv,float2(12.9898,78.233)*21))*758.5453123);
 }
 
 // Function to generate a random vector based on the surface coordinates and roughness
@@ -209,12 +207,19 @@ float4 MainPS(VertexShaderOutput input) : COLOR
     reflection = normalize(reflection + noise * roughness);
     
     float3 cube = SampleCubemap(ReflectionCubemapSampler, reflection);
-    cube += SampleCubemap(ReflectionCubemapSampler, normalize(reflectionBase + RandomVector(input.TextureCoordinates, 3) * roughness));
-    cube += SampleCubemap(ReflectionCubemapSampler, normalize(reflectionBase + RandomVector(input.TextureCoordinates, 4) * roughness));
-    cube += SampleCubemap(ReflectionCubemapSampler, normalize(reflectionBase + RandomVector(input.TextureCoordinates, 7) * roughness));
-    cube += SampleCubemap(ReflectionCubemapSampler, normalize(reflectionBase + RandomVector(input.TextureCoordinates, 5) * roughness));
-    cube += SampleCubemap(ReflectionCubemapSampler, normalize(reflectionBase + RandomVector(input.TextureCoordinates, 2) * roughness));
-    cube/=6;
+
+    const int numSamples = 8;
+
+
+    float n = 1;
+
+    for(int i = 0; i < numSamples; i++)
+    {
+        cube += SampleCubemap(ReflectionCubemapSampler, normalize(reflectionBase + RandomVector(input.TextureCoordinates, (i*3)%3.12352 + 0.1) * roughness));
+
+        n++;
+    }
+    cube/=n;
 
     if (enableSSR == false)
         return float4(cube, 1);
@@ -222,7 +227,9 @@ float4 MainPS(VertexShaderOutput input) : COLOR
     float4 ssr = float4(cube, 1);
     
     if (factor.x > 0.1)
-        ssr = SampleSSR(reflection, worldPos, depth, normal, vDir);
+    {
+        ssr = SampleSSR(reflection, worldPos, depth, normal, vDir, 40, 1.5);
+    }
     
     float3 reflectionColor = lerp(cube, ssr.rgb, ssr.w);
     

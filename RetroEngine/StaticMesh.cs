@@ -484,7 +484,14 @@ namespace RetroEngine
 
             }
 
-            graphicsDevice.RasterizerState = isNegativeScale() ? RasterizerState.CullClockwise : RasterizerState.CullCounterClockwise;
+            if (veryClose || viewmodel)
+            {
+                graphicsDevice.RasterizerState = isNegativeScale() ? RasterizerState.CullClockwise : RasterizerState.CullCounterClockwise;
+            }
+            else
+            {
+                graphicsDevice.RasterizerState = isNegativeScale() ? RasterizerState.CullCounterClockwise : RasterizerState.CullClockwise;
+            }
 
             if (closeShadow)
                 Graphics.LightViewProjectionClose = frameStaticMeshData.LightViewClose * frameStaticMeshData.LightProjectionClose;

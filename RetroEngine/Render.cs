@@ -65,6 +65,8 @@ namespace RetroEngine
         public Effect BuffersEffect;
         public Effect DeferredEffect;
 
+        Effect DenoiseEffect;
+
         public Effect ReflectionEffect;
         public Effect ReflectionResultEffect;
 
@@ -139,6 +141,7 @@ namespace RetroEngine
             OcclusionEffect = GameMain.content.Load<Effect>("Shaders/OcclusionPath");
             OcclusionStaticEffect = GameMain.content.Load<Effect>("Shaders/OcclusionPathStatic");
 
+            DenoiseEffect = GameMain.content.Load<Effect>("Shaders/Denoise");
 
             TonemapperEffect = GameMain.content.Load<Effect>("Shaders/Tonemap");
 
@@ -216,7 +219,7 @@ namespace RetroEngine
 
 
             effect.Parameters["DepthTexture"]?.SetValue(DepthPrepathOutput);
-            effect.Parameters["ReflectionTexture"]?.SetValue(reflection);
+            effect.Parameters["ReflectionTexture"]?.SetValue(ReflectionOutput);
             effect.Parameters["FrameTexture"]?.SetValue(oldFrame);
 
             var cubeMap = CubeMap.GetClosestToCamera();
@@ -318,7 +321,7 @@ namespace RetroEngine
 
 
             if (Input.GetAction("test").Holding())
-                return reflection;
+                return ReflectionOutput;
 
             return outputPath;
 
@@ -669,7 +672,7 @@ namespace RetroEngine
             PerformReflection();
             ApplyReflection();
             
-            PerformPostProcessingShaders(ReflectionOutput);
+            PerformPostProcessingShaders(DeferredOutput);
             
             PerformSSAO();
 
@@ -777,7 +780,7 @@ namespace RetroEngine
 
         }
 
-        void ApplyReflection()
+        void DenoiseReflection()
         {
             InitRenderTargetVectorIfNeed(ref ReflectionOutput);
 
@@ -792,9 +795,32 @@ namespace RetroEngine
             ReflectionResultEffect.Parameters["ReflectionTexture"]?.SetValue(reflection);
             ReflectionResultEffect.Parameters["FactorTexture"]?.SetValue(ReflectivenessOutput);
 
-            spriteBatch.Begin(effect: ReflectionResultEffect, blendState: BlendState.NonPremultiplied);
+            spriteBatch.Begin(effect: ReflectionResultEffect, blendState: BlendState.Opaque);
 
-            DrawFullScreenQuad(spriteBatch, DeferredOutput);
+            DrawFullScreenQuad(spriteBatch, reflection);
+
+            spriteBatch.End();
+
+        }
+
+        void ApplyReflection()
+        {
+            InitRenderTargetVectorIfNeed(ref ReflectionOutput);
+
+            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, ReflectionOutput.Width, ReflectionOutput.Height);
+
+            graphics.GraphicsDevice.SetRenderTarget(ReflectionOutput);
+
+            graphics.GraphicsDevice.Clear(Color.Black);
+
+            SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
+
+            DenoiseEffect.Parameters["screenWidth"]?.SetValue(ReflectionOutput.Width);
+            DenoiseEffect.Parameters["screenHeight"]?.SetValue(ReflectionOutput.Height);
+
+            spriteBatch.Begin(effect: DenoiseEffect, blendState: BlendState.NonPremultiplied);
+
+            DrawFullScreenQuad(spriteBatch, reflection);
 
             spriteBatch.End();
 
