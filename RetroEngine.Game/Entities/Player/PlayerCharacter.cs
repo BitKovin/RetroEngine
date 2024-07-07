@@ -142,6 +142,8 @@ namespace RetroEngine.Game.Entities.Player
 
             bodyMesh.LoadFromFile("models/player_model_full.FBX");
 
+            bodyMesh.CastGeometricShadow = true;
+
             bodyMesh.textureSearchPaths.Add("textures/weapons/arms/");
 
             //bodyMesh.Scale = new Vector3(1.15f);
@@ -638,7 +640,7 @@ namespace RetroEngine.Game.Entities.Player
 
             UpdatePlayerInput();
 
-            bodyMesh.Position = interpolatedPosition - Camera.rotation.GetForwardVector().XZ().Normalized() * 0.25f - new Vector3(0, 1.05f, 0);
+            bodyMesh.Position = interpolatedPosition - Camera.rotation.GetForwardVector().XZ().Normalized() * 0.25f - new Vector3(0, 1.01f, 0);
             bodyMesh.Rotation = new Vector3(0, Camera.rotation.Y, 0);
 
             

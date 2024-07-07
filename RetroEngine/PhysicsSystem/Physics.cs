@@ -599,8 +599,8 @@ namespace RetroEngine.PhysicsSystem
                 // Perform the ray cast
                 world.RayTest(rayStart, rayEnd, rayCallback);
             }
-            return rayCallback;
 
+            return rayCallback;
 
         }
 

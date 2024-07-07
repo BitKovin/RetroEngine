@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using RetroEngine.PhysicsSystem;
 
 namespace RetroEngine
 {
@@ -121,6 +122,8 @@ namespace RetroEngine
         public bool DisableOcclusionCulling = false;
 
         public float DitherDisolve = 0;
+
+        public bool CastGeometricShadow = false;
 
         public StaticMesh()
         {
@@ -631,6 +634,59 @@ namespace RetroEngine
                             }
                         }
                 }
+        }
+
+        public virtual void DrawGeometryShadow()
+        {
+
+            if (CastGeometricShadow == false) return;
+
+            GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
+            // Load the custom effect
+            Effect effect = GameMain.Instance.render.GeometryShadowEffect;
+
+
+
+
+
+            if (frameStaticMeshData.model is not null)
+            {
+
+                var hit = Physics.LineTraceForStatic(Position.ToPhysics(), (Position + Graphics.LightDirection * 100).ToPhysics());
+
+                if (hit.HasHit == false) return;
+
+
+                Plane plane = new Plane(hit.HitPointWorld, hit.HitNormalWorld);
+
+                Matrix shadow = Matrix.CreateShadow(Graphics.LightDirection, plane);
+
+
+                effect.Parameters["World"].SetValue(frameStaticMeshData.World * -shadow);
+
+                effect.Techniques[0].Passes[0].Apply();
+
+                if (frameStaticMeshData.model.Meshes is not null)
+                    foreach (ModelMesh mesh in frameStaticMeshData.model.Meshes)
+                    {
+
+                        foreach (ModelMeshPart meshPart in mesh.MeshParts)
+                        {
+
+                            // Set the vertex buffer and index buffer for this mesh part
+                            graphicsDevice.SetVertexBuffer(meshPart.VertexBuffer);
+                            graphicsDevice.Indices = meshPart.IndexBuffer;
+
+
+                            graphicsDevice.DrawIndexedPrimitives(
+                                PrimitiveType.TriangleList,
+                                meshPart.VertexOffset,
+                                meshPart.StartIndex,
+                                meshPart.PrimitiveCount);
+
+                        }
+                    }
+            }
         }
 
         public virtual void DrawPathes()

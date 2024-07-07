@@ -13,6 +13,9 @@ map_Kd textures/brushes/bricks.png
 newmtl brushes/foil
 map_Kd textures/brushes/foil.png
 
+newmtl brushes/ground_pbr
+map_Kd textures/brushes/ground_pbr.png
+
 newmtl brushes/light
 map_Kd textures/brushes/light.png
 
@@ -21,9 +24,6 @@ map_Kd textures/brushes/mask_test_m.png
 
 newmtl brushes/mirror
 map_Kd textures/brushes/mirror.png
-
-newmtl brushes/tiling
-map_Kd textures/brushes/tiling.png
 
 newmtl brushes/trigger_t
 map_Kd textures/brushes/trigger_t.png

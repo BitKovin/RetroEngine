@@ -73,6 +73,8 @@ namespace RetroEngine
         public Effect OcclusionEffect;
         public Effect OcclusionStaticEffect;
 
+        public Effect GeometryShadowEffect;
+
         public Effect ColorEffect;
         public Effect ParticleColorEffect;
         public Effect NormalEffect;
@@ -140,6 +142,9 @@ namespace RetroEngine
 
             OcclusionEffect = GameMain.content.Load<Effect>("Shaders/OcclusionPath");
             OcclusionStaticEffect = GameMain.content.Load<Effect>("Shaders/OcclusionPathStatic");
+
+            GeometryShadowEffect = GameMain.content.Load<Effect>("Shaders/GeometryShadow");
+            GeometryShadowEffect.Name = "GeometryShadow";
 
             DenoiseEffect = GameMain.content.Load<Effect>("Shaders/Denoise");
 
@@ -376,6 +381,17 @@ namespace RetroEngine
 
             RenderLevelGeometryForward(renderList);
 
+            GeometryShadowEffect.Parameters["ViewProjection"].SetValue(Camera.finalizedView * Camera.finalizedProjection);
+            GeometryShadowEffect.Parameters["ScreenHeight"].SetValue(DeferredOutput.Height);
+            GeometryShadowEffect.Parameters["ScreenWidth"].SetValue(DeferredOutput.Width);
+
+
+            graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
+
+            foreach (var mesh in renderList)
+            {
+                mesh?.DrawGeometryShadow();
+            }
             
 
             graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;

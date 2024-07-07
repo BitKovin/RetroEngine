@@ -20,12 +20,18 @@ namespace RetroEngine
 
         public static bool Enabled = false;
 
-        public static void Line(Vector3 pointA, Vector3 pointB, Vector3 color, float duration = 1)
+        public static void Line(Vector3 pointA, Vector3 pointB, Vector3? color =  null, float duration = 1)
         {
             if (!Enabled) return;
+
+            Vector3 col = Vector3.UnitX;
+
+            if(color != null)
+                col = color.Value;
+
             lock (commands)
             {
-                commands.Add(new DrawShapeLine(pointA, pointB, color, duration));
+                commands.Add(new DrawShapeLine(pointA, pointB, col, duration));
             }
         }
 

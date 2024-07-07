@@ -109,7 +109,7 @@ namespace RetroEngine.Game
             Input.AddAction("qSave").AddKeyboardKey(Keys.F5);
             Input.AddAction("qLoad").AddKeyboardKey(Keys.F8);
 
-            Input.AddAction("fullscreen").AddKeyboardKey(Keys.F11);
+            Input.AddAction("fullscreen").AddKeyboardKey(Keys.F10);
         }
 
     }

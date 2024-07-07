@@ -12,6 +12,7 @@ using System.IO;
 using System.Text.Json;
 using System.Linq;
 using RetroEngine.PhysicsSystem;
+using System.Threading.Tasks;
 
 
 namespace RetroEngine
@@ -503,6 +504,53 @@ namespace RetroEngine
             }
         }
 
+        public override void DrawGeometryShadow()
+        {
+            if (CastGeometricShadow == false) return;
+
+            GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
+            // Load the custom effect
+            Effect effect = GameMain.Instance.render.GeometryShadowEffect;
+
+
+            if (RiggedModel!=null)
+            {
+
+                effect.Parameters["Bones"].SetValue(finalizedBones);
+
+                var hit = Physics.LineTraceForStatic((Position - Graphics.LightDirection/4).ToPhysics() , (Position + Graphics.LightDirection.Normalized() * 100).ToPhysics());
+
+                if (hit.HasHit == false) return;
+
+                Vector3 hitPoint = hit.HitPointWorld;
+
+                if(hitPoint.Y>Position.Y)
+                {
+                    hitPoint = Position;
+                    hitPoint.Y = hit.HitPointWorld.Y;
+                }
+
+                Plane plane = new Plane(hitPoint, hit.HitNormalWorld);
+
+                Matrix shadow = Matrix.CreateShadow(Graphics.LightDirection, plane);
+
+
+                effect.Parameters["World"].SetValue(frameStaticMeshData.World * -shadow);
+
+                effect.Techniques[0].Passes[0].Apply();
+
+                foreach (RiggedModel.RiggedModelMesh meshPart in RiggedModel.meshes)
+                {
+                    // Set the vertex buffer and index buffer for this mesh part
+                    graphicsDevice.SetVertexBuffer(meshPart.VertexBuffer);
+                    graphicsDevice.Indices = meshPart.IndexBuffer;
+
+
+                    meshPart.Draw(graphicsDevice);
+
+                }
+            }
+        }
         public override void DrawUnified()
         {
             if(frameStaticMeshData.IsRendered == false) { return; }
