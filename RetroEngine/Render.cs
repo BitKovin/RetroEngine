@@ -374,27 +374,28 @@ namespace RetroEngine
             
             graphics.GraphicsDevice.SetRenderTargets(DeferredOutput, normalPath, ReflectivenessOutput, positionPath);
             graphics.GraphicsDevice.Clear(ClearOptions.DepthBuffer, Color.Black, 1.0f, 0);
-            
 
-            
+            if (Graphics.GeometricalShadowsEnabled)
+            {
+                graphics.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
+                GeometryShadowEffect.Parameters["ViewProjection"].SetValue(Camera.finalizedView * Camera.finalizedProjection);
+                GeometryShadowEffect.Parameters["ScreenHeight"].SetValue(DeferredOutput.Height);
+                GeometryShadowEffect.Parameters["ScreenWidth"].SetValue(DeferredOutput.Width);
+
+
+                foreach (var mesh in renderList)
+                {
+                    mesh?.DrawGeometryShadow();
+                }
+            }
+
             //particlesToDraw.Clear();
 
             RenderLevelGeometryForward(renderList);
 
-            GeometryShadowEffect.Parameters["ViewProjection"].SetValue(Camera.finalizedView * Camera.finalizedProjection);
-            GeometryShadowEffect.Parameters["ScreenHeight"].SetValue(DeferredOutput.Height);
-            GeometryShadowEffect.Parameters["ScreenWidth"].SetValue(DeferredOutput.Width);
 
 
-            graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 
-            foreach (var mesh in renderList)
-            {
-                mesh?.DrawGeometryShadow();
-            }
-            
-
-            graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
             //ParticleEmitter.RenderEmitter.DrawParticles(particlesToDraw);
 
             if (Graphics.DrawPhysics)
@@ -555,7 +556,7 @@ namespace RetroEngine
             // Iterate through meshes and draw shadows
             foreach (StaticMesh mesh in renderList)
             {
-                //if(mesh.Static == true)
+                if(mesh.Static == true && Graphics.DynamicSunShadowsEnabled == false || Graphics.DynamicSunShadowsEnabled == true)
                     mesh.DrawShadow();
             }
 
@@ -592,7 +593,8 @@ namespace RetroEngine
             // Iterate through meshes and draw shadows
             foreach (StaticMesh mesh in renderList)
             {
-                mesh.DrawShadow(true);
+                if (mesh.Static == true && Graphics.DynamicSunShadowsEnabled == false || Graphics.DynamicSunShadowsEnabled == true)
+                    mesh.DrawShadow(true);
             }
 
         }
@@ -627,7 +629,8 @@ namespace RetroEngine
             // Iterate through meshes and draw shadows
             foreach (StaticMesh mesh in renderList)
             {
-                mesh.DrawShadow(veryClose: true);
+                if (mesh.Static == true && Graphics.DynamicSunShadowsEnabled == false || Graphics.DynamicSunShadowsEnabled == true)
+                    mesh.DrawShadow(veryClose: true);
             }
 
         }

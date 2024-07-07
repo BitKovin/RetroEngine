@@ -116,7 +116,12 @@ float4 MainPS(VertexShaderOutput input) : SV_TARGET
 
     screenCoords.y = 1.0f - screenCoords.y;
 
-    return float4(0, 0, 0, Dither(screenCoords, 0.5, float2(ScreenWidth,ScreenHeight)));
+    if(Dither(screenCoords, 0.5, float2(ScreenWidth,ScreenHeight)))
+        discard;
+
+    const float b = 0.01f;
+
+    return float4(b, b, b, 1);
 }
 
 technique NormalColorDrawing

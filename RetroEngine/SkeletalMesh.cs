@@ -46,6 +46,9 @@ namespace RetroEngine
         public SkeletalMesh()
         {
             CastShadows = true;
+
+            CastGeometricShadow = true;
+
         }
 
         public override void LoadFromFile(string filePath)
@@ -508,6 +511,8 @@ namespace RetroEngine
         {
             if (CastGeometricShadow == false) return;
 
+            if (Viewmodel) return;
+
             GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
             // Load the custom effect
             Effect effect = GameMain.Instance.render.GeometryShadowEffect;
@@ -518,7 +523,7 @@ namespace RetroEngine
 
                 effect.Parameters["Bones"].SetValue(finalizedBones);
 
-                var hit = Physics.LineTraceForStatic((Position - Graphics.LightDirection/4).ToPhysics() , (Position + Graphics.LightDirection.Normalized() * 100).ToPhysics());
+                var hit = Physics.LineTraceForStatic((Position - Graphics.LightDirection/8).ToPhysics() , (Position + Graphics.LightDirection.Normalized() * 100).ToPhysics());
 
                 if (hit.HasHit == false) return;
 

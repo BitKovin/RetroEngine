@@ -1,4 +1,6 @@
-﻿#include "ShaderLib/BasicShader.fx"
+﻿//#define SIMPLE_SHADOWS
+
+#include "ShaderLib/BasicShader.fx"
 
 texture Texture;
 sampler TextureSampler = sampler_state
@@ -36,6 +38,7 @@ sampler ORMTextureSampler = sampler_state
 
 PixelInput VertexShaderFunction(VertexInput input)
 {
+    //return (PixelInput)0;
     return DefaultVertexShaderFunction(input);
 }
 
@@ -54,10 +57,16 @@ PixelOutput PixelShaderFunction(PixelInput input)
     
     PixelOutput output = (PixelOutput)0;
     
+    
     float Depth = input.MyPixelPosition.z;
     
     float4 ColorRGBTA = tex2D(TextureSampler, input.TexCoord) * input.Color;
     
+    if(Masked && DitherDisolve>0)
+        ColorRGBTA.a *= Dither(screenCoords, 1.0 - DitherDisolve, float2(ScreenWidth, ScreenHeight));
+    
+    MaskedDiscard(ColorRGBTA.a);
+
     if (ColorRGBTA.a < 0.001)
         discard;
 
@@ -65,7 +74,7 @@ PixelOutput PixelShaderFunction(PixelInput input)
     
     float3 orm = tex2D(ORMTextureSampler, input.TexCoord).rgb;
     
-    float roughness =orm.g;
+    float roughness = orm.g;
     float metalic = orm.b;
     float ao = orm.r;
     
@@ -76,15 +85,16 @@ PixelOutput PixelShaderFunction(PixelInput input)
     if (textureAlpha < 0.01)
         discard;
 
-    float3 pixelNormal = ApplyNormalTexture(textureNormal, input.Normal, input.Tangent);
+    float3 pixelNormal = ApplyNormalTexture(textureNormal, input.Normal, input.Tangent, input.BiTangent);
     
     
     float3 albedo = textureColor;
     
-    float3 light = CalculateLight(input, pixelNormal, roughness, metalic, ao);
+    float3 light = CalculateLight(input, pixelNormal, roughness, metalic, ao, albedo);
     
     
 	textureColor *= light;
+    
     
     //textureColor = ApplyReflection(textureColor, albedo, input, pixelNormal, roughness, metalic);
     
@@ -92,7 +102,7 @@ PixelOutput PixelShaderFunction(PixelInput input)
     light = saturate(light/30);
     textureColor += light;
     
-    textureColor += tex2D(EmissiveTextureSampler, input.TexCoord).rgb * EmissionPower * tex2D(EmissiveTextureSampler, input.TexCoord).a;
+    textureColor += tex2D(EmissiveTextureSampler, input.TexCoord).rgb * EmissionPower * 2 * tex2D(EmissiveTextureSampler, input.TexCoord).a;
     
     textureAlpha *= Transparency;
     
@@ -110,18 +120,19 @@ PixelOutput PixelShaderFunction(PixelInput input)
     
     
     
-    output.Normal = float4((normalize(lerp(pixelNormal, input.TangentNormal, 0.0)) + 1) / 2, pbs);
-    output.Position = float4(input.MyPosition - viewPos, pbs);
-    
-    
+    output.Normal = float4((pixelNormal + 1) / 2, pbs);
+
+
+    output.Position = float4((input.MyPosition - viewPos), pbs);
+
     
     float reflectiveness = CalculateReflectiveness(roughness, metalic, vDir / 3, pixelNormal);
     
     reflectiveness = saturate(reflectiveness);
     
-    output.Reflectiveness = float4(reflectiveness, reflectiveness, reflectiveness, pbs);
+    output.Reflectiveness = float4(reflectiveness, roughness, 0, pbs);
     
-    textureColor = ApplyReflectionOnSurface(textureColor,albedo, screenCoords, reflectiveness);
+    textureColor = ApplyReflectionOnSurface(textureColor,albedo, screenCoords, reflectiveness, metalic);
     output.Color = float4(textureColor, textureAlpha);
 
     return output;

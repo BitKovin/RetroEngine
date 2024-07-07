@@ -31,6 +31,10 @@ namespace RetroEngine.Entities
 
             Graphics.LightDirection = data.GetPropertyVector("globalLightDirection", new Vector3(-1f, -1, -0.2f));
 
+            Graphics.DynamicSunShadowsEnabled = data.GetPropertyBool("dynamicSunShadowsEnabled", true);
+
+            Graphics.GeometricalShadowsEnabled = data.GetPropertyBool("geometricalShadowsEnabled", true);
+
             Vector3 skyColor = data.GetPropertyVector("skyColor", new Vector3(0.15f, 0.15f, 0.2f));
 
             Graphics.BackgroundColor = new Color(skyColor.X, skyColor.Y, skyColor.Z);

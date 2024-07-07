@@ -73,9 +73,18 @@ float4 MainPS(VertexShaderOutput input) : SV_TARGET
 
     if (pointDistance)
         depth = distance(input.WorldPos, CameraPos);
-
+    
+#if OPENGL
     if (Masked && tex2D(TextureSampler, input.TexCoords).a < 0.99)
         discard;
+#else 
+
+    if(Masked)
+        {
+            if(tex2D(TextureSampler, input.TexCoords).a < 0.99)
+                discard;
+        }
+#endif
 
     return float4(depth, 0, 0, black? 0:1);
 }

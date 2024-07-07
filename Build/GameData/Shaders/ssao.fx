@@ -21,6 +21,8 @@ float ssaoRadius = 0.1;
 float ssaoBias = 0.01;
 float ssaoIntensity = 1.0;
 
+bool Enabled;
+
 // Function to convert normal from 0-1 to -1 to 1
 float3 DecodeNormal(float3 normal)
 {
@@ -37,7 +39,7 @@ float CalculateSSAO(float2 texCoord, float depth, float3 normal)
     const float radius = 0.06;
     const float bias = ssaoBias;
 
-    const float steps = 13;
+    const float steps = 10;
 
     float rotation = 1;
 
@@ -45,10 +47,10 @@ float CalculateSSAO(float2 texCoord, float depth, float3 normal)
         return 0;
 
     for (float l = 0; l <= radius; l += radius / steps)
-        for (float angle = 0.0; angle < 6.283; angle += 0.5)
+        for (float angle = 0.0; angle < 6.283; angle += 0.7853)
         {
 
-            float sampleL = l * lerp(1, 0.2, depth/50);
+            float sampleL = l * lerp(1, 0.1, depth/50);
 
             float2 offset = sampleL * float2(cos(angle), sin(angle));
             offset*= float2(1,1.5);
@@ -59,7 +61,7 @@ float CalculateSSAO(float2 texCoord, float depth, float3 normal)
 
             float sampleDepth = tex2D(DepthTextureSampler, sampleCoord).r;
 
-            float depthDifference = -0.6;// sampleDepth - sampleDepth + bias;
+            float depthDifference = -0.76;// sampleDepth - sampleDepth + bias;
 
             if (depth > sampleDepth + bias && (depth - sampleDepth) < 1)
                 depthDifference = 1;
@@ -142,8 +144,10 @@ float ao = 0;
 
 float sampleRadius = 2;
 
-ao += CalculateSSAO(texCoord, depth, DecodeNormal(normal));
-
+#if OPENGL == FALSE
+if(Enabled)
+    ao += CalculateSSAO(texCoord, depth, DecodeNormal(normal));
+#endif
 
 // Apply AO to the final color
 float finalColor = 1 - ao;

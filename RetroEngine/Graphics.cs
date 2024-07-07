@@ -21,7 +21,11 @@ namespace RetroEngine
         public static int veryCloseShadowMapResolution = 2048;
         public static int ViewmodelShadowMapResolution = 2048;
 
-        public static bool ViemodelShadows = false;
+        public static bool GeometricalShadowsEnabled = true;
+
+        public static bool DynamicSunShadowsEnabled = true;
+
+        public static bool ViemodelShadows = true;
 
         public static float SSRResolutionScale = 0.8f;
         public static bool EnableSSR = true;
@@ -81,7 +85,14 @@ namespace RetroEngine
         {
             DirectionalLightFrustrum.Matrix = GetLightView() * GetLightProjection();
             DirectionalLightFrustrumClose.Matrix = GetLightViewClose() * GetCloseLightProjection();
-            DirectionalLightFrustrumVeryClose.Matrix = GetLightViewVeryClose() * GetVeryCloseLightProjection();
+
+            if (DynamicSunShadowsEnabled)
+            {
+                DirectionalLightFrustrumVeryClose.Matrix = GetLightViewVeryClose() * GetVeryCloseLightProjection();
+            }else
+            {
+                DirectionalLightFrustrumVeryClose.Matrix = Matrix.Identity;
+            }
 
             LightVeryCloseView = GetLightViewVeryClose();
             LightCloseView = GetLightViewClose();
@@ -137,7 +148,16 @@ namespace RetroEngine
         }
         public static Matrix GetLightViewVeryClose()
         {
-            return Matrix.CreateLookAt(GetCameraPositionByPixelGrid(VeryCloseLightDistance * LightDistanceMultiplier / 1.5f), GetCameraPositionByPixelGrid(VeryCloseLightDistance * LightDistanceMultiplier / 1.5f) + LightDirection, new Vector3(0, 0, 1));
+
+            if(DynamicSunShadowsEnabled)
+            {
+                return Matrix.CreateLookAt(GetCameraPositionByPixelGrid(VeryCloseLightDistance * LightDistanceMultiplier / 1.5f), GetCameraPositionByPixelGrid(VeryCloseLightDistance * LightDistanceMultiplier / 1.5f) + LightDirection, new Vector3(0, 0, 1));
+            }else
+            {
+                return new Matrix(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+            }
+
+            
         }
 
         static Vector3 GetCameraPositionByPixelGrid(float lightDistance)
@@ -145,14 +165,14 @@ namespace RetroEngine
 
             float hFactor = 1f - Math.Abs(Camera.rotation.GetForwardVector().Y);
 
-            Vector3 pos = Camera.position + Camera.rotation.GetForwardVector().XZ().Normalized() * lightDistance / 2f * hFactor;
+            Vector3 pos = Camera.position;// + Camera.rotation.GetForwardVector().XZ().Normalized() * lightDistance / 2f * hFactor;
 
-            return Camera.position;
+            //return pos;
 
             //ector3 pos = Camera.position - new Vector3(0, 1, 0);
 
             // Calculate step based on shadow map resolution and light distance
-            float step = 1f/(shadowMapResolution/LightDistance);
+            float step = 0.1f;
 
             // Adjust the position using the calculated step
             pos *= step;

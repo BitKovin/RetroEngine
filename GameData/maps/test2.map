@@ -8,6 +8,7 @@
 "skyColor" "0.8 0.8 1"
 "globalLightBrightness" "0.35"
 "directLightBrightness" "0.75"
+"dynamicSunShadowsEnabled" "false"
 // brush 0
 {
 ( -896 288 272 ) ( -896 768 208 ) ( -896 768 272 ) brushes/bricks 0 0 0 0.75 0.75

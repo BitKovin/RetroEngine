@@ -13,6 +13,12 @@ map_Kd textures/brushes/bricks.png
 newmtl brushes/foil
 map_Kd textures/brushes/foil.png
 
+newmtl brushes/ground_pbr
+map_Kd textures/brushes/ground_pbr.png
+
+newmtl brushes/light
+map_Kd textures/brushes/light.png
+
 newmtl brushes/mask_test_m
 map_Kd textures/brushes/mask_test_m.png
 

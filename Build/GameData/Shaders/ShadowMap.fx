@@ -11,8 +11,6 @@ matrix World;
 matrix View;
 matrix Projection;
 
-bool close;
-
 #define BONE_NUM 128
 
 matrix Bones[BONE_NUM];
@@ -86,8 +84,6 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
     
     float3 normal = GetTangentNormal(input.Normal, input.Tangent);
     
-    if(close)
-    input.Position -= float4(normal * 0.02f, 0);
     
     // Transform the vertex position to world space
     output.Position = mul(mul(input.Position, boneTrans), World);

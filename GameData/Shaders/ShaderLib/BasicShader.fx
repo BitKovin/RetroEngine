@@ -1184,7 +1184,7 @@ float ReflectionMapping(float x)
 float CalculateReflectiveness(float roughness, float metallic, float3 vDir, float3 normal)
 {
 
-    return lerp(0.04, 1, metallic*(lerp(metallic, 1, 0.5)) * (lerp(1, 0.3, roughness)));
+    return lerp(0.04, 1, metallic * metallic) * (lerp(1, 0.3, roughness));
 
     // Calculate the base reflectiveness based on metallic
     float baseReflectiveness = metallic;

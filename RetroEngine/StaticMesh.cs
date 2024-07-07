@@ -652,12 +652,19 @@ namespace RetroEngine
             if (frameStaticMeshData.model is not null)
             {
 
-                var hit = Physics.LineTraceForStatic(Position.ToPhysics(), (Position + Graphics.LightDirection * 100).ToPhysics());
+                var hit = Physics.LineTraceForStatic((Position - Graphics.LightDirection / 8).ToPhysics(), (Position + Graphics.LightDirection.Normalized() * 100).ToPhysics());
 
                 if (hit.HasHit == false) return;
 
+                Vector3 hitPoint = hit.HitPointWorld;
 
-                Plane plane = new Plane(hit.HitPointWorld, hit.HitNormalWorld);
+                if (hitPoint.Y > Position.Y)
+                {
+                    hitPoint = Position;
+                    hitPoint.Y = hit.HitPointWorld.Y;
+                }
+
+                Plane plane = new Plane(hitPoint, hit.HitNormalWorld);
 
                 Matrix shadow = Matrix.CreateShadow(Graphics.LightDirection, plane);
 

@@ -43,7 +43,7 @@ PixelOutput PixelShaderFunction(PixelInput input)
 	float textureAlpha = tex2D(TextureSampler, input.TexCoord).w;
 
     
-    float3 pixelNormal = ApplyNormalTexture(textureNormal, input.Normal, input.Tangent);
+    float3 pixelNormal = ApplyNormalTexture(textureNormal, input.Normal, input.Tangent, input.BiTangent);
     
     
     textureAlpha *= Transparency;
