@@ -204,6 +204,7 @@ namespace RetroEngine.Skeletal
             if (OnlyAnimation == false)
                 CreateVerticeIndiceData(model, scene, 0);
 
+            ResetPose(model);
 
             // this calls the models function to create the interpolated animtion frames.
             // for a full set of callable time stamped orientations per frame so indexing and dirty flags can be used when running.
@@ -237,6 +238,11 @@ namespace RetroEngine.Skeletal
             return model;
         }
 
+        void ResetPose(RiggedModel model)
+        {
+
+            model.ResetBoneTransformsToRestPose(model.rootNodeOfTree);
+        }
         public void CreateRootNode(RiggedModel model, Scene scene)
         {
             model.rootNodeOfTree = new RiggedModel.RiggedModelNode();

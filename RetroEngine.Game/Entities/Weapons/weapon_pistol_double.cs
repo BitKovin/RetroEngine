@@ -1,6 +1,7 @@
 ﻿using BulletSharp;
 using FmodForFoxes.Studio;
 using Microsoft.Xna.Framework;
+using RetroEngine.Audio;
 using RetroEngine.Entities;
 using RetroEngine.Game.Entities.Player;
 using RetroEngine.PhysicsSystem;
@@ -39,14 +40,12 @@ namespace RetroEngine.Game.Entities.Weapons
             base.Start();
 
             fireSoundPlayer = Level.GetCurrent().AddEntity(new SoundPlayer()) as SoundPlayer;
-            fireSoundPlayer.SetSound(AssetRegistry.LoadSoundFromFile("sounds/pistol_fire.wav"));
-            fireSoundPlayer.Is3DSound = false;
-            fireSoundPlayer.Volume = 0.15f;
+            fireSoundPlayer.SetSound(FmodEventInstance.Create("event:/Weapons/pistol/pistol_fire"));
+            fireSoundPlayer.SetEventProperty("pistol_right_hand", 1);
 
             fireSoundPlayer2 = Level.GetCurrent().AddEntity(new SoundPlayer()) as SoundPlayer;
-            fireSoundPlayer2.SetSound(AssetRegistry.LoadSoundFromFile("sounds/pistol_fire.wav"));
-            fireSoundPlayer2.Is3DSound = false;
-            fireSoundPlayer2.Volume = 0.15f;
+            fireSoundPlayer2.SetSound(FmodEventInstance.Create("event:/Weapons/pistol/pistol_fire"));
+            fireSoundPlayer2.SetEventProperty("pistol_right_hand", -1);
 
             ShowHandL = false;
 
@@ -57,7 +56,7 @@ namespace RetroEngine.Game.Entities.Weapons
             base.LoadAssets();
 
             LoadVisual();
-            AssetRegistry.LoadSoundFromFile("sounds/pistol_fire.wav");
+            AssetRegistry.LoadFmodBankIntoMemory("sounds/banks/weapons.bank");
 
         }
 
@@ -194,9 +193,6 @@ namespace RetroEngine.Game.Entities.Weapons
                 meshTp.Rotation = character.GetSkeletalMesh().Rotation;
                 //mesh.PastePose(character.GetSkeletalMesh().GetPose());
             }
-
-            fireSoundPlayer.Position = Camera.position + Camera.rotation.GetForwardVector()*0.2f;
-            fireSoundPlayer2.Position = Camera.position + Camera.rotation.GetForwardVector() * 0.2f;
         }
         bool r;
         void Shoot()

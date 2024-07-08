@@ -338,6 +338,38 @@ namespace RetroEngine.Skeletal
             }
         }
 
+        public void ResetBoneTransformsToRestPose(RiggedModelNode node)
+        {
+
+            return;
+            // Compute the combined transform for the node
+            if (node.parent != null)
+            {
+
+                node.LocalTransformMg = Matrix.Identity * -node.OffsetMatrixMg * Matrix.Invert(node.parent.CombinedTransformMg);
+
+                node.CombinedTransformMg = node.LocalTransformMg * node.parent.CombinedTransformMg;
+                node.LocalFinalTransformMg = node.LocalTransformMg * Matrix.Invert(node.parent.CombinedTransformMg);
+            }
+            else
+            {
+                node.CombinedTransformMg = node.LocalTransformMg;
+                node.LocalFinalTransformMg = node.CombinedTransformMg;
+            }
+
+            // Update the global shader matrix if needed
+            if (node.isThisARealBone)
+            {
+                globalShaderMatrixs[node.boneShaderFinalTransformIndex] = node.OffsetMatrixMg * node.CombinedTransformMg;
+            }
+
+            // Call recursively for children
+            for (int i = 0; i < node.children.Count; i++)
+            {
+                ResetBoneTransformsToRestPose(node.children[i]);
+            }
+        }
+
         // ok ... in draw we should now be able to call on this in relation to the world transform.
         private void UpdateMeshTransforms()
         {

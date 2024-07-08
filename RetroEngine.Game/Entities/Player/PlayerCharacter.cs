@@ -157,7 +157,7 @@ namespace RetroEngine.Game.Entities.Player
             testCube.Scale = new Vector3(1);
             //meshes.Add(testCube);
 
-            AssetRegistry.LoadFmodBankIntoMemory("sounds/banks/sfx.bank");
+            AssetRegistry.LoadFmodBankIntoMemory("Sounds/banks/SFX.bank");
 
             Weapon.PreloadAllWeapons();
             PlayerUI.Load();

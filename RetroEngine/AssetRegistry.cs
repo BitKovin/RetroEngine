@@ -371,7 +371,7 @@ namespace RetroEngine
 
                 foreach(string name in fmodBanks.Keys)
                 {
-                    if (name.ToLower().StartsWith("master")) continue;
+                    if (name.ToLower().Contains("master")) continue;
 
                     fmodBanks[name].Unload();
                     unloaded.Add(name); 

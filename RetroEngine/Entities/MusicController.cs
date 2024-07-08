@@ -19,6 +19,10 @@ namespace RetroEngine.Entities
 
         float fadeTime;
 
+        float group;
+
+        static List<MusicPlayer> players = new List<MusicPlayer>();
+
         public override void FromData(EntityData data)
         {
             base.FromData(data);
@@ -29,7 +33,14 @@ namespace RetroEngine.Entities
 
             Volume = data.GetPropertyFloat("volume", 1f);
 
+            group = data.GetPropertyFloat("group", 1f);
+
             fadeTime = data.GetPropertyFloat("fadeTime", 1);
+
+            lock(players)
+            {
+                players.Add(this);
+            }
 
             LoadAssetsIfNeeded();
 
@@ -55,6 +66,29 @@ namespace RetroEngine.Entities
 
         }
 
+        public override void Destroy()
+        {
+            base.Destroy();
+
+            lock(players)
+            {
+                players.Remove(this);
+            }
+
+        }
+
+        void StopGroup(float g)
+        {
+            lock(players)
+            {
+                foreach(var player in players)
+                {
+                    if (player.group == g)
+                        player.OnAction("stop");
+                }
+            }
+        }
+
         public MusicPlayer() 
         {
             Is3DSound = false;
@@ -78,6 +112,7 @@ namespace RetroEngine.Entities
 
             if(action == "play")
             {
+                StopGroup(group);
                 PlayWithFade(false,fadeTime);
             }
 

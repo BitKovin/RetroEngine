@@ -103,14 +103,17 @@ namespace RetroEngine.Entities
         {
             base.Destroy();
 
+            Stop();
+
             AudioClip?.Stop();
             AudioClip?.Dispose();   
+
 
         }
 
         protected virtual float GetVolume()
         {
-            return Volume * fade;
+            return Volume * fade * SoundManager.Volume;
         }
 
         public virtual void SetEventProperty(string name, float value)

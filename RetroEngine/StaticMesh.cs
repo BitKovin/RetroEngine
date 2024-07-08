@@ -235,7 +235,7 @@ namespace RetroEngine
             effect.Parameters["DitherDisolve"]?.SetValue(DitherDisolve);
 
 
-            if(Viewmodel&&Graphics.ViemodelShadows)
+            if(Viewmodel&&Graphics.ViewmodelShadows)
             {
 
                 effect.Parameters["ShadowMap"]?.SetValue(GameMain.Instance.render.shadowMapViewmodel);
@@ -487,7 +487,7 @@ namespace RetroEngine
 
             }
 
-            if (veryClose || viewmodel)
+            if (viewmodel)
             {
                 graphicsDevice.RasterizerState = isNegativeScale() ? RasterizerState.CullClockwise : RasterizerState.CullCounterClockwise;
             }

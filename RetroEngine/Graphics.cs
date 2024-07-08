@@ -25,7 +25,7 @@ namespace RetroEngine
 
         public static bool DynamicSunShadowsEnabled = true;
 
-        public static bool ViemodelShadows = true;
+        public static bool ViewmodelShadows = false;
 
         public static float SSRResolutionScale = 0.8f;
         public static bool EnableSSR = true;
@@ -137,7 +137,7 @@ namespace RetroEngine
         public static Matrix GetLightProjectionViewmodel()
         {
 
-            if (Graphics.ViemodelShadows == false) return Matrix.Identity;
+            if (Graphics.ViewmodelShadows == false) return Matrix.Identity;
 
             return Matrix.CreateOrthographic(1.5f, 1.5f, -4, 4);
         }

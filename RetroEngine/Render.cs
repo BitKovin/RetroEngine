@@ -639,7 +639,7 @@ namespace RetroEngine
         {
 
 
-            if (Graphics.ViemodelShadows == false) return;
+            if (Graphics.ViewmodelShadows == false) return;
 
             InitShadowMapViemodel(ref shadowMapViewmodel);
 

@@ -615,11 +615,11 @@ float GetShadowClose(float3 lightCoords, PixelInput input)
 
         int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)
 
-        float b = -0.0003;
+        float b = -0.0007;
         
         float bias = b * (1 - saturate(dot(input.Normal, -LightDirection))) + b / 2.0f;
 
-        bias*= lerp(4,1, abs(dot(input.Normal, -LightDirection)));
+        bias*= lerp(3,1, abs(dot(input.Normal, -LightDirection)));
 
         resolution = ShadowMapResolutionClose;
         
@@ -630,6 +630,8 @@ float GetShadowClose(float3 lightCoords, PixelInput input)
 
         bias *= (LightDistanceMultiplier+1)/2;
         
+
+
         if(abs(dot(input.Normal, -LightDirection)) <= 0.3)
         return 1 - SampleShadowMap(ShadowMapCloseSampler, lightCoords.xy, currentDepth + bias);
 
@@ -677,11 +679,11 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input)
 
         int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)
 
-        float b = 0.000007;
+        float b = 0.00005;
         
         float bias = b * (1 - saturate(dot(input.Normal, -LightDirection))) + b / 2.0f;
 
-        bias*= lerp(6,1, abs(dot(input.Normal, -LightDirection)));
+        bias*= lerp(30,1, abs(dot(input.Normal, -LightDirection)));
 
         bias *= (LightDistanceMultiplier+1)/2;
         //bias=0;
@@ -821,13 +823,13 @@ float GetShadowViewmodel(float3 lightCoords, PixelInput input)
 
     int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)
 
-    float b = -0.0005;
+    float b = -0.00035;
 
     float bias = b * (1 - saturate(dot(input.Normal, -LightDirection))) + b / 2.0f;
 
+    bias*= lerp(2,1, abs(dot(input.Normal, -LightDirection)));
+
     resolution = ShadowMapResolution;
-        
-    bias *= (LightDistanceMultiplier+1)/2;
 
     float texelSize = 1 / resolution; // Assuming ShadowMapSize is the size of your shadow map texture
 

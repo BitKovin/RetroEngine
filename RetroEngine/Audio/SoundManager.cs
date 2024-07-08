@@ -24,6 +24,8 @@ namespace RetroEngine.Audio
 
         public static bool UseFmod = true;
 
+        public static float Volume = 1.0f;
+
         public static void Init()
         {
             listener = new AudioListener();

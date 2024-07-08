@@ -21,6 +21,7 @@ namespace RetroEngine.Audio
 
         private FMOD.Studio.EVENT_CALLBACK ProgrammerSoundCallbackDelegate;
 
+        public Sound DefaultProgrammerSound;
 
         public string SoundTableKey = string.Empty;
 
@@ -131,10 +132,16 @@ namespace RetroEngine.Audio
                     Marshal.StructureToPtr(soundInfo, parameters, false);
                 }
 
-                if(sound == null)
+                if (sound == null)
+                {
+                    sound = DefaultProgrammerSound; 
+                }
+
+                if (sound == null)
                 {
 
-                    var dialogueSound = GetSoundByName(soundName, out var dialogueSoundInfo);
+                    var dialogueSound = GetSoundByName(SoundTableKey, out var dialogueSoundInfo);
+
 
                     if (dialogueSound.hasHandle())
                     {
@@ -143,6 +150,8 @@ namespace RetroEngine.Audio
                         Marshal.StructureToPtr(soundInfo, parameters, false);
                     }
                 }
+
+                
 
                 if (sound == null)
                 {
@@ -172,7 +181,7 @@ namespace RetroEngine.Audio
         FMOD.Sound GetSoundByName(string name, out FMOD.Studio.SOUND_INFO soundInfo)
         {
             FMOD.Studio.SOUND_INFO dialogueSoundInfo;
-            var keyResult = StudioSystem.Native.getSoundInfo(SoundTableKey, out dialogueSoundInfo);
+            var keyResult = StudioSystem.Native.getSoundInfo(name, out dialogueSoundInfo);
             soundInfo = dialogueSoundInfo;
 
             if (keyResult != FMOD.RESULT.OK)
@@ -201,6 +210,13 @@ namespace RetroEngine.Audio
 
         }
 
+        public override void Stop()
+        {
+            base.Stop();
+
+            EventInstance.Stop();
+
+        }
         public static FmodEventInstance CreateFromId(string guid)
         {
 
