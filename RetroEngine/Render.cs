@@ -606,7 +606,7 @@ namespace RetroEngine
 
             // Set up the shadow map render target with the desired resolution
             graphics.GraphicsDevice.SetRenderTarget(shadowMapVeryClose);
-            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, Graphics.veryCloseShadowMapResolution, Graphics.veryCloseShadowMapResolution);
+            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, shadowMapVeryClose.Width, shadowMapVeryClose.Height);
 
             // Clear the shadow map with the desired clear color (e.g., Color.White)
             graphics.GraphicsDevice.Clear(Color.Black);
@@ -1133,8 +1133,8 @@ namespace RetroEngine
             // Create the new render target with the specified depth format
             target = new RenderTarget2D(
                 graphics.GraphicsDevice,
-                Graphics.closeShadowMapResolution,
-                Graphics.closeShadowMapResolution,
+                Graphics.veryCloseShadowMapResolution,
+                Graphics.veryCloseShadowMapResolution,
                 false, // No mipmaps
                 SurfaceFormat.Single, // Color format
                 depthFormat); // Depth format

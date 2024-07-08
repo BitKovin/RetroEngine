@@ -374,7 +374,14 @@ namespace RetroEngine
             Effect effect = GameMain.Instance.render.ShadowMapEffect;
 
 
-            graphicsDevice.RasterizerState = isNegativeScale() ? RasterizerState.CullClockwise : RasterizerState.CullCounterClockwise;
+            if (viewmodel)
+            {
+                graphicsDevice.RasterizerState = isNegativeScale() ? RasterizerState.CullClockwise : RasterizerState.CullCounterClockwise;
+            }
+            else
+            {
+                graphicsDevice.RasterizerState = RasterizerState.CullNone;
+            }
 
             effect.Parameters["Bones"].SetValue(finalizedBones);
 

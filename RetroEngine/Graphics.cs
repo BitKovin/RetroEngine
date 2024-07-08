@@ -18,7 +18,7 @@ namespace RetroEngine
         public static float ShadowBias = -0.000f;//0025f
         public static int shadowMapResolution = 2048*2;
         public static int closeShadowMapResolution = 2048;
-        public static int veryCloseShadowMapResolution = 2048;
+        public static int veryCloseShadowMapResolution = 2048*2;
         public static int ViewmodelShadowMapResolution = 2048;
 
         public static bool GeometricalShadowsEnabled = true;
@@ -44,7 +44,7 @@ namespace RetroEngine
         public static Matrix LightViewProjectionVeryClose;
         public static float LightDistance = 300;
         public static float CloseLightDistance = 51;
-        public static float VeryCloseLightDistance = 21;
+        public static float VeryCloseLightDistance = 16;
 
         public static bool EnablePostPocessing = true;
         public static bool TextureFiltration = true;
@@ -109,19 +109,19 @@ namespace RetroEngine
         public static Matrix GetLightProjection()
         {
 
-            return Matrix.CreateOrthographic(LightDistance* LightDistanceMultiplier, LightDistance* LightDistanceMultiplier, -LightDistance, LightDistance);
+            return Matrix.CreateOrthographic(LightDistance* LightDistanceMultiplier, LightDistance* LightDistanceMultiplier, -100, 100);
         }
 
         public static Matrix GetCloseLightProjection()
         {
 
-            return Matrix.CreateOrthographic(CloseLightDistance * LightDistanceMultiplier, CloseLightDistance * LightDistanceMultiplier, -100, 100);
+            return Matrix.CreateOrthographic(CloseLightDistance * LightDistanceMultiplier, CloseLightDistance * LightDistanceMultiplier, -50, 50);
         }
 
         public static Matrix GetVeryCloseLightProjection()
         {
 
-            return Matrix.CreateOrthographic(VeryCloseLightDistance * LightDistanceMultiplier, VeryCloseLightDistance * LightDistanceMultiplier, -100, 100);
+            return Matrix.CreateOrthographic(VeryCloseLightDistance * LightDistanceMultiplier, VeryCloseLightDistance * LightDistanceMultiplier, -50, 50);
         }
 
         public static Matrix GetLightView()
@@ -175,9 +175,9 @@ namespace RetroEngine
             float step = 0.1f;
 
             // Adjust the position using the calculated step
-            pos *= step;
-            pos.Floor();
             pos /= step;
+            pos.Floor();
+            pos *= step;
 
             lightlocation = pos;
 

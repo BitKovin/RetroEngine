@@ -619,7 +619,7 @@ float GetShadowClose(float3 lightCoords, PixelInput input)
         
         float bias = b * (1 - saturate(dot(input.Normal, -LightDirection))) + b / 2.0f;
 
-        bias*= lerp(3,1, abs(dot(input.Normal, -LightDirection)));
+        bias*= lerp(10,1, abs(dot(input.Normal, -LightDirection)));
 
         resolution = ShadowMapResolutionClose;
         
@@ -679,11 +679,12 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input)
 
         int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)
 
-        float b = 0.00005;
+        float b = 0.00004;
         
         float bias = b * (1 - saturate(dot(input.Normal, -LightDirection))) + b / 2.0f;
 
-        bias*= lerp(30,1, abs(dot(input.Normal, -LightDirection)));
+        bias*= lerp(70,1, abs(dot(input.Normal, -LightDirection)));
+
 
         bias *= (LightDistanceMultiplier+1)/2;
         //bias=0;
@@ -741,7 +742,7 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
     if (dist > 140)
         return 0;
     
-
+        float b = 0.0012;
 
     if (lightCoords.x >= 0 && lightCoords.x <= 1 && lightCoords.y >= 0 && lightCoords.y <= 1 || Viewmodel)
     {
@@ -749,14 +750,37 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
         
         float currentDepth = lightCoords.z * 2 - 1;
             
-        if (dist < 10.0) //&& abs(dot(input.TangentNormal, -LightDirection))>0.3
+        #if OPENGL
+        #else
+
+if (lightCoordsClose.x >= 0 && lightCoordsClose.x <= 1 && lightCoordsClose.y >= 0 && lightCoordsClose.y <= 1)
+{
+if (lightCoordsVeryClose.x >= 0 && lightCoordsVeryClose.x <= 1 && lightCoordsVeryClose.y >= 0 && lightCoordsVeryClose.y <= 1)
+
+        if(dist>6 && dist<8)
+        {
+            return lerp(GetShadowVeryClose(lightCoordsVeryClose, input), GetShadowClose(lightCoordsClose, input), (dist - 6)/2);
+        }
+
+
+    if(dist>22 && dist<25)
+    {
+        float close = GetShadowClose(lightCoordsClose, input);
+
+        float bias = b * (1 - saturate(dot(input.Normal, -LightDirection))) + b / 2.0f;
+        bias *= (LightDistanceMultiplier+1)/2;
+        float far = 1 - SampleShadowMap(ShadowMapSampler, lightCoords.xy, currentDepth - bias);
+
+        return lerp(close, far, (dist - 22)/3);
+        
+    }
+}
+        #endif
+
+        if (dist < 7.0) //&& abs(dot(input.TangentNormal, -LightDirection))>0.3
         {
             if (lightCoordsVeryClose.x >= 0 && lightCoordsVeryClose.x <= 1 && lightCoordsVeryClose.y >= 0 && lightCoordsVeryClose.y <= 1)
             {
-                
-                float texelSize = 1/ShadowMapResolutionClose;
-
-
                 return GetShadowVeryClose(lightCoordsVeryClose, input);
             }
         }
@@ -778,7 +802,7 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
 
         int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)
 
-        float b = 0.0003;
+
 
         float bias = b * (1 - saturate(dot(input.Normal, -LightDirection))) + b / 2.0f;
         resolution = ShadowMapResolution;
