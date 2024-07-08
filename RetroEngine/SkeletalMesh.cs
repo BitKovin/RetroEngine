@@ -469,6 +469,8 @@ namespace RetroEngine
 
             effect.Parameters["Viewmodel"].SetValue(Viewmodel);
 
+            effect.Parameters["Masked"].SetValue(false);
+
             bool mask = Masked;
 
             if (Transperent)

@@ -291,6 +291,7 @@ namespace RetroEngine.Game.Entities.Weapons
         }
         void LoadVisual()
         {
+
             mesh.Scale = new Vector3(1f);
             mesh.LoadFromFile("models/weapons/pistol2.fbx");
 

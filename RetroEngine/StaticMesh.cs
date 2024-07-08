@@ -573,6 +573,7 @@ namespace RetroEngine
             // Load the custom effect
             Effect effect = GameMain.Instance.render.OcclusionStaticEffect;
 
+            effect.Parameters["Masked"]?.SetValue(false);
 
             bool mask = Masked;
 

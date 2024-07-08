@@ -142,6 +142,8 @@ namespace RetroEngine.Game.Entities.Player
 
             bodyMesh.LoadFromFile("models/player_model_full.FBX");
 
+            //bodyMesh.DisableOcclusionCulling = true;
+
             bodyMesh.CastGeometricShadow = true;
 
             bodyMesh.textureSearchPaths.Add("textures/weapons/arms/");

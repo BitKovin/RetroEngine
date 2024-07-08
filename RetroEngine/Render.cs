@@ -326,7 +326,7 @@ namespace RetroEngine
 
 
             if (Input.GetAction("test").Holding())
-                return ReflectionOutput;
+                return DepthPrepathOutput;
 
             return outputPath;
 
@@ -474,7 +474,6 @@ namespace RetroEngine
 
             OcclusionEffect.Parameters["pointDistance"].SetValue(false);
             OcclusionStaticEffect.Parameters["pointDistance"].SetValue(false);
-
 
 
             foreach (StaticMesh mesh in renderList)
