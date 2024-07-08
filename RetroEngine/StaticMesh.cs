@@ -664,7 +664,14 @@ namespace RetroEngine
                     hitPoint.Y = hit.HitPointWorld.Y;
                 }
 
-                Plane plane = new Plane(hitPoint, hit.HitNormalWorld);
+                Vector3 normal = hit.HitNormalWorld;
+
+                if (Vector3.Dot(hit.HitNormalWorld, Graphics.LightDirection.Normalized()) > -0.5)
+                {
+                    normal = Vector3.UnitY;
+                }
+
+                Plane plane = new Plane(hitPoint, normal);
 
                 Matrix shadow = Matrix.CreateShadow(Graphics.LightDirection, plane);
 
