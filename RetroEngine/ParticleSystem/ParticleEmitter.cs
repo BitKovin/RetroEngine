@@ -13,7 +13,7 @@ namespace RetroEngine.Particles
 
     public class ParticleEmitter : StaticMesh
     {
-        List<Particle> particles = new List<Particle>();
+        protected List<Particle> particles = new List<Particle>();
 
         static Model particleModel = null;
 
@@ -462,8 +462,8 @@ namespace RetroEngine.Particles
 
         public override Vector3 GetClosestToCameraPosition()
         {
-            if (finalizedParticles == null) return Vector3.Zero;
-            if (finalizedParticles.Count == 0) return Vector3.Zero;
+            if (finalizedParticles == null) return Position;
+            if (finalizedParticles.Count == 0) return Position;
 
             List<Particle> particles = finalizedParticles.OrderBy(p => Vector3.Distance(p.position, Camera.position)).ToList();
 

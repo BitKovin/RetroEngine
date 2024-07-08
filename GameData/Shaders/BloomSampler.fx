@@ -7,56 +7,59 @@
 	#define PS_SHADERMODEL ps_5_0
 #endif
 
-Texture2D SpriteTexture;
+Texture2D SpriteTexture; // screen texture
 
 sampler2D SpriteTextureSampler = sampler_state
 {
-	Texture = <SpriteTexture>;
+    Texture = <SpriteTexture>;
 };
 
-float offset = 0.8f;
-
+float offset = 0.95f; // brightness bloom offset
 float screenWidth = 1280; // Change to your actual screen width
 float screenHeight = 720; // Change to your actual screen height
+float bloomRadius = 5.0f; // bloom radius
+float bloomIntensity = 0.5; // bloom intensity
 
 struct VertexShaderOutput
 {
-	float4 Position : SV_POSITION;
-	float4 Color : COLOR0;
-	float2 TextureCoordinates : TEXCOORD0;
+    float4 Position : SV_POSITION;
+    float4 Color : COLOR0;
+    float2 TextureCoordinates : TEXCOORD0;
 };
+
+float CalcLuminance(float3 color)
+{
+    return dot(color, float3(0.299f, 0.587f, 0.114f));
+}
+
 
 float4 MainPS(VertexShaderOutput input) : COLOR
 {
-	
-    float3 color = 0;
-	
+    float2 texCoord = input.TextureCoordinates;
+    float4 color = tex2D(SpriteTextureSampler, texCoord);
 
-    color += saturate(tex2D(SpriteTextureSampler, input.TextureCoordinates).rgb - offset);
-	
-	
-    float sampleRadius = 6;
-	
-	
-    for (int x = -1 * sampleRadius; x <= sampleRadius; x ++)
-        for (int y = -1 * sampleRadius; y <= sampleRadius; y ++)
+    float3 bloomColor = float4(0, 0, 0, 0);
+    float totalWeight = 0.0f;
+
+    // Sample the surrounding pixels
+    for (int x = -int(bloomRadius); x <= int(bloomRadius); ++x)
+    {
+        for (int y = -int(bloomRadius); y <= int(bloomRadius); ++y)
         {
-            
-            float2 TextureOffset = float2(x, y);
-            
-            if (length(TextureOffset) > sampleRadius)
-                continue;
-			
-            float2 offsetCoords = TextureOffset / float2(screenWidth * 3, screenHeight * 3);
-			
-            color += saturate(tex2D(SpriteTextureSampler, input.TextureCoordinates + offsetCoords).rgb - offset) / (length(TextureOffset) + 1);
+            float2 sampleCoord = texCoord + float2(x / screenWidth, y / screenHeight);
+            float weight = exp(-(x * x + y * y) / (2 * bloomRadius * bloomRadius));
+            bloomColor += max(tex2D(SpriteTextureSampler, sampleCoord).rgb - offset,0) * weight;
+            totalWeight += weight;
         }
-	
-    color = color / 30.0f;
-	
-    color = length(color)*lerp(normalize(color), length(color), length(color)*2);
-	
-    return float4(color,1);
+    }
+
+    bloomColor /= totalWeight;
+
+    bloomColor = pow(bloomColor, 0.7);
+
+    bloomColor *= bloomIntensity;
+
+    return float4(bloomColor,1);
 }
 
 technique SpriteDrawing

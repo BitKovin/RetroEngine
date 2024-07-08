@@ -307,6 +307,11 @@ namespace RetroEngine.Game.Entities.Weapons
             mesh2.textureSearchPaths.Add("textures/weapons/pistol/");
             mesh2.textureSearchPaths.Add("textures/weapons/general/");
 
+            mesh.Transperent = true;
+            mesh2.Transperent = true;
+
+            mesh.EmissionPower = mesh2.EmissionPower = 2;
+
             //mesh2.CastShadows = false;
             mesh2.PreloadTextures();
             mesh2.Viewmodel = true;

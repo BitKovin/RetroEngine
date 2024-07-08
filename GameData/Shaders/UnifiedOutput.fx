@@ -80,10 +80,7 @@ PixelOutput PixelShaderFunction(PixelInput input)
     
     
     float3 textureColor = ColorRGBTA.xyz;
-	float textureAlpha = tex2D(TextureSampler, input.TexCoord).w;
-    
-    if (textureAlpha < 0.01)
-        discard;
+	float textureAlpha = ColorRGBTA.a;
 
     float3 pixelNormal = ApplyNormalTexture(textureNormal, input.Normal, input.Tangent, input.BiTangent);
     
@@ -102,7 +99,7 @@ PixelOutput PixelShaderFunction(PixelInput input)
     light = saturate(light/30);
     textureColor += light;
     
-    textureColor += tex2D(EmissiveTextureSampler, input.TexCoord).rgb * EmissionPower * 2 * tex2D(EmissiveTextureSampler, input.TexCoord).a;
+    textureColor += tex2D(EmissiveTextureSampler, input.TexCoord).rgb * EmissionPower * 2 / textureAlpha;
     
     textureAlpha *= Transparency;
     

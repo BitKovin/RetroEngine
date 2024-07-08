@@ -68,7 +68,6 @@ namespace RetroEngine
         public List<string> textureSearchPaths = new List<string>();
         public float EmissionPower = 1;
 
-        public float CalculatedCameraDistance = 0;
 
         public bool isRendered = true;
 

@@ -479,7 +479,7 @@ namespace RetroEngine
             {
 
                 effect.Parameters["World"].SetValue(frameStaticMeshData.World);
-                effect.Parameters["Masked"].SetValue(mask);
+                
 
                 graphicsDevice.RasterizerState = Graphics.DisableBackFaceCulling || TwoSided ? RasterizerState.CullNone : RasterizerState.CullClockwise;
 
@@ -498,13 +498,14 @@ namespace RetroEngine
                         
                         if (mask)
                         {
+
                             MeshPartData meshPartData = meshPart.Tag as MeshPartData;
                             ApplyShaderParams(effect, meshPartData);
 
-                            if(texture!=null)
-                            if (texture.GetType() == typeof(RenderTargetCube))
-                                effect.Parameters["Texture"].SetValue(AssetRegistry.LoadTextureFromFile("engine/textures/white.png"));
+                            effect.Parameters["Masked"].SetValue(mask);
+
                             effect.Techniques[0].Passes[0].Apply();
+
                         }
                         
 
