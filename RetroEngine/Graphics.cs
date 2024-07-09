@@ -115,13 +115,13 @@ namespace RetroEngine
         public static Matrix GetCloseLightProjection()
         {
 
-            return Matrix.CreateOrthographic(CloseLightDistance * LightDistanceMultiplier, CloseLightDistance * LightDistanceMultiplier, -100, 50);
+            return Matrix.CreateOrthographic(CloseLightDistance * LightDistanceMultiplier, CloseLightDistance * LightDistanceMultiplier, -100, CloseLightDistance);
         }
 
         public static Matrix GetVeryCloseLightProjection()
         {
 
-            return Matrix.CreateOrthographic(VeryCloseLightDistance * LightDistanceMultiplier, VeryCloseLightDistance * LightDistanceMultiplier, -100, 50);
+            return Matrix.CreateOrthographic(VeryCloseLightDistance * LightDistanceMultiplier, VeryCloseLightDistance * LightDistanceMultiplier, -100, VeryCloseLightDistance);
         }
 
         public static Matrix GetLightView()
