@@ -64,8 +64,8 @@ namespace RetroEngine.Game.Entities.Weapons
         {
             base.Update();
 
-            mesh.Update(Time.DeltaTime * 1.1f);
-            mesh2.Update(Time.DeltaTime * 1.1f);
+            mesh.Update(Time.DeltaTime * 1.2f);
+            mesh2.Update(Time.DeltaTime * 1.2f);
 
             if (((ICharacter)player).isFirstPerson())
             {
@@ -164,7 +164,7 @@ namespace RetroEngine.Game.Entities.Weapons
         {
             base.LateUpdate();
 
-            float depthDif = 0.03f;
+            float depthDif = 0.04f;
             float depthOffset = -0.05f;
 
             Vector3 forward = Camera.rotation.GetForwardVector();
@@ -292,8 +292,10 @@ namespace RetroEngine.Game.Entities.Weapons
         void LoadVisual()
         {
 
+            const string pistolPath = "models/weapons/pistol_revolver.fbx";
+
             mesh.Scale = new Vector3(1f);
-            mesh.LoadFromFile("models/weapons/pistol2.fbx");
+            mesh.LoadFromFile(pistolPath);
 
             mesh.textureSearchPaths.Add("textures/weapons/pistol/");
             mesh.textureSearchPaths.Add("textures/weapons/general/");
@@ -303,7 +305,7 @@ namespace RetroEngine.Game.Entities.Weapons
             mesh.Viewmodel = true;
             mesh.UseAlternativeRotationCalculation = true;
 
-            mesh2.LoadFromFile("models/weapons/pistol2.fbx");
+            mesh2.LoadFromFile(pistolPath);
 
             mesh2.textureSearchPaths.Add("textures/weapons/pistol/");
             mesh2.textureSearchPaths.Add("textures/weapons/general/");

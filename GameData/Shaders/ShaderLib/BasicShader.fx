@@ -670,6 +670,7 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input)
     
     float dist = distance(viewPos, input.MyPosition);
     
+
     if (lightCoords.x >= 0 && lightCoords.x <= 1 && lightCoords.y >= 0 && lightCoords.y <= 1)
     {
         float currentDepth = lightCoords.z * 2 - 1;
@@ -679,12 +680,13 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input)
 
         int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)
 
-        float b = 0.00004;
+        float b = 0.00003;
         
         float bias = b * (1 - saturate(dot(input.Normal, -LightDirection))) + b / 2.0f;
 
-        bias*= lerp(70,1, abs(dot(input.Normal, -LightDirection)));
+        bias*= lerp(50,1, abs(dot(input.Normal, -LightDirection)));
 
+        bias += 0.00014;
 
         bias *= (LightDistanceMultiplier+1)/2;
         //bias=0;
@@ -736,6 +738,11 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
     
     if(DirectBrightness<0.00001)
         return 0;
+
+    if(abs(dot(input.Normal, LightDirection))<0.06)
+    {
+        return 1;
+    }
 
     float dist = distance(viewPos, input.MyPosition);
     
@@ -1210,7 +1217,7 @@ float ReflectionMapping(float x)
 float CalculateReflectiveness(float roughness, float metallic, float3 vDir, float3 normal)
 {
 
-    return lerp(0.04, 1, metallic * metallic) * (lerp(1, 0.3, roughness));
+    return lerp(0.04, 1, metallic * metallic) * (lerp(1, 0.1, roughness));
 
     // Calculate the base reflectiveness based on metallic
     float baseReflectiveness = metallic;

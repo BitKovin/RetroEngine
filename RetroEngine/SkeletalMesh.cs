@@ -380,7 +380,7 @@ namespace RetroEngine
             }
             else
             {
-                graphicsDevice.RasterizerState = RasterizerState.CullNone;
+                graphicsDevice.RasterizerState = isNegativeScale() ? RasterizerState.CullCounterClockwise : RasterizerState.CullClockwise;
             }
 
             effect.Parameters["Bones"].SetValue(finalizedBones);
