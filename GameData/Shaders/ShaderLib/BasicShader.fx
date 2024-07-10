@@ -49,8 +49,8 @@ sampler DepthTextureSampler = sampler_state
 {
     texture = <DepthTexture>;
 
-    MinFilter = Point;
-    MagFilter = Point;
+    MinFilter = Linear;
+    MagFilter = Linear;
     AddressU = Clamp;
     AddressV = Clamp;
 
@@ -423,7 +423,7 @@ PixelInput DefaultVertexShaderFunction(VertexInput input)
 
 void DepthDiscard(float depth, PixelInput input)
 {
-    if (depth < input.MyPixelPosition.z - 0.015)
+    if (depth < input.MyPixelPosition.z - 0.01)
         discard;
 }
 

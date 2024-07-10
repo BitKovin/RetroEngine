@@ -51,6 +51,7 @@ namespace RetroEngine.Game
             {
                 DefaultShader = null;
             }
+
             //DefaultShader = AssetRegistry.GetShaderFromName("SimpleEffect");
 
             base.Update(gameTime);
