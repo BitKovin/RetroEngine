@@ -65,6 +65,8 @@ namespace RetroEngine
 
         public int StartOrder = 0;
 
+        public bool ConvexBrush = true;
+
         public bool Destroyed = false;
 
         public Entity()

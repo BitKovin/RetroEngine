@@ -632,7 +632,7 @@ float GetShadowClose(float3 lightCoords, PixelInput input)
         
 
 
-        if(abs(dot(input.Normal, -LightDirection)) <= 0.3)
+        if(abs(dot(input.Normal, -LightDirection)) <= 0.3 && false)
         return 1 - SampleShadowMap(ShadowMapCloseSampler, lightCoords.xy, currentDepth + bias);
 
         float texelSize = size / resolution; // Assuming ShadowMapSize is the size of your shadow map texture
@@ -1217,7 +1217,7 @@ float ReflectionMapping(float x)
 float CalculateReflectiveness(float roughness, float metallic, float3 vDir, float3 normal)
 {
 
-    return lerp(0.04, 1, metallic * metallic) * (lerp(0.04, 1, (1-roughness)*(1-roughness)));
+    return lerp(0.04, 1, metallic) * (lerp(0.04, 1, (1-roughness)*(1-roughness)));
 
     // Calculate the base reflectiveness based on metallic
     float baseReflectiveness = metallic;

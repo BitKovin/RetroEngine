@@ -574,11 +574,11 @@ namespace RetroEngine.Game.Entities.Player
             if (Vector3.Distance(hitPoint, Position) > 1)
                 return;
 
-            hitPoint.Y += 1.1f;
+            hitPoint.Y += 1.4f;
 
             DrawDebug.Sphere(0.5f, hitPoint, Vector3.UnitY);
 
-            Vector3 lerpPose = Vector3.Lerp(Position, hitPoint, 0.65f);
+            Vector3 lerpPose = Vector3.Lerp(Position, hitPoint, 0.5f);
 
             body.SetPosition(lerpPose);
 

@@ -64,8 +64,8 @@ namespace RetroEngine.Game.Entities.Weapons
         {
             base.Update();
 
-            mesh.Update(Time.DeltaTime * 1.2f);
-            mesh2.Update(Time.DeltaTime * 1.2f);
+            mesh.Update(Time.DeltaTime * 1.1f);
+            mesh2.Update(Time.DeltaTime * 1.1f);
 
             if (((ICharacter)player).isFirstPerson())
             {

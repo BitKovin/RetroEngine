@@ -57,9 +57,10 @@ namespace RetroEngine
                                 // Convert arguments to the appropriate types
                                 object[] convertedArgs = arguments.Select((arg, index) => Convert.ChangeType(arg, parameters[index].ParameterType)).ToArray();
 
+
                                 // Invoke the method
-                                var instance = Activator.CreateInstance(type);
-                                method.Invoke(instance, convertedArgs);
+                                //var instance = Activator.CreateInstance(type);
+                                method.Invoke(null, convertedArgs);
                                 return;
                             }
                             else

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 
 namespace RetroEngine
@@ -36,9 +37,25 @@ namespace RetroEngine
 
             deltaTimeDifference = Math.Abs(avg - DeltaTime);
 
-            DeltaTime = avg;
+            DeltaTime = avg*TimeScale;
             FrameCount++;
         }
+
+        [ConsoleCommand("time.scale")]
+        public static void SetTimeScale(string value)
+        {
+
+            if (float.TryParse(value.Replace(" ",""), CultureInfo.InvariantCulture, out float val) == false)
+            {
+                Logger.Log("wrong formating: " + value);
+                return;
+            }
+
+
+            TimeScale = val;
+        }
+
+
 
     }
 }

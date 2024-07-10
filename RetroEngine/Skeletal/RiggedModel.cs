@@ -225,8 +225,9 @@ namespace RetroEngine.Skeletal
                     }
                     else // animation completed
                     {
-                        currentAnimationFrameTime = animationTotalDuration;
+                        currentAnimationFrameTime = animationTotalDuration- 0.0001f;
                         animationRunning = false;
+                        //currentFrame = originalAnimations[currentAnimation].TotalFrames - 1;
                         //currentFrame = 0;
                         //timeStart = 0;
                         //AnimationTime = 0;

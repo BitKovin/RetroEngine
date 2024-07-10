@@ -2,6 +2,7 @@
 using RetroEngine;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,8 @@ namespace RetroEngine.Game.Entities
     {
 
         public static bool active = false;
+
+        static float speed = 5;
 
         static FreeCamera instance;
 
@@ -50,12 +53,12 @@ namespace RetroEngine.Game.Entities
                 input -= new Vector2(1, 0);
 
 
-            Camera.position += (Camera.rotation.GetForwardVector() * input.Y + Camera.rotation.GetRightVector() * input.X)*Time.DeltaTime * 10;
+            Camera.position += (Camera.rotation.GetForwardVector() * input.Y + Camera.rotation.GetRightVector() * input.X)*Time.DeltaTime * speed;
 
 
         }
 
-        [ConsoleCommand("tfc")]
+        [ConsoleCommand("freecam")]
         public static void StartFreecam()
         {
             if(active)
@@ -69,6 +72,20 @@ namespace RetroEngine.Game.Entities
                 instance = Level.GetCurrent().AddEntity(new FreeCamera()) as FreeCamera;
                 Logger.Log("free camera created");
             }
+        }
+
+        [ConsoleCommand("freecam.speed")]
+        public static void SetCameraSpeed(string value)
+        {
+
+            if (float.TryParse(value.Replace(" ", ""), CultureInfo.InvariantCulture, out float val) == false)
+            {
+                Logger.Log("wrong formating: " + value);
+                return;
+            }
+
+
+            speed = val;
         }
 
     }

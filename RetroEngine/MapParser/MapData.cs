@@ -12,6 +12,7 @@ using SharpFont.PostScript;
 using RetroEngine.Entities.Light;
 using MonoGame.Framework.Content.Pipeline.Builder;
 using RetroEngine.PhysicsSystem;
+using System.Globalization;
 
 namespace RetroEngine.Map
 {
@@ -94,7 +95,7 @@ namespace RetroEngine.Map
 
                         foreach (var face in loadedFaces)
                         {
-                            var shape = Physics.CreateCollisionShapeFromModel(face.model, shapeData: new Physics.CollisionShapeData { surfaceType = face.textureName }, complex: true);
+                            var shape = Physics.CreateCollisionShapeFromModel(face.model, shapeData: new Physics.CollisionShapeData { surfaceType = face.textureName }, complex: entity.ConvexBrush == false);
                             RigidBody rigidBody = Physics.CreateFromShape(entity, Vector3.One.ToPhysics(), shape, collisionFlags: BulletSharp.CollisionFlags.StaticObject, bodyType: PhysicsSystem.BodyType.World);
                             rigidBody.SetCollisionMask(BodyType.GroupAll);
                             entity.bodies.Add(rigidBody);
@@ -209,9 +210,9 @@ namespace RetroEngine.Map
         {
             try
             {
-                string[] parts = Properties[name].Replace(".",",").Split(" ");
+                string[] parts = Properties[name].Split(" ");
 
-                return new Vector3(float.Parse(parts[0]), float.Parse(parts[2]), float.Parse(parts[1])*-1) / MapData.UnitSize;
+                return new Vector3(float.Parse(parts[0], CultureInfo.InvariantCulture), float.Parse(parts[2], CultureInfo.InvariantCulture), float.Parse(parts[1], CultureInfo.InvariantCulture)*-1) / MapData.UnitSize;
             }catch(Exception)
             {
                 return Vector3.Zero;
@@ -222,9 +223,9 @@ namespace RetroEngine.Map
         {
             try
             {
-                string[] parts = Properties[name].Replace(".", ",").Split(" ");
+                string[] parts = Properties[name].Split(" ");
 
-                return new Vector3(float.Parse(parts[0]) , float.Parse(parts[1]), float.Parse(parts[2]));
+                return new Vector3(float.Parse(parts[0], CultureInfo.InvariantCulture) , float.Parse(parts[1], CultureInfo.InvariantCulture), float.Parse(parts[2], CultureInfo.InvariantCulture));
             }
             catch (Exception)
             {
@@ -236,9 +237,9 @@ namespace RetroEngine.Map
         {
             try
             {
-                string[] parts = Properties[name].Replace(".", ",").Split(" ");
+                string[] parts = Properties[name].Split(" ");
 
-                return new Vector3(float.Parse(parts[0]), float.Parse(parts[1]), float.Parse(parts[2]));
+                return new Vector3(float.Parse(parts[0], CultureInfo.InvariantCulture), float.Parse(parts[1], CultureInfo.InvariantCulture), float.Parse(parts[2], CultureInfo.InvariantCulture));
             }catch(Exception)
             {
                 return def;
@@ -252,7 +253,7 @@ namespace RetroEngine.Map
 
                 string[] parts = Properties[name].Split(" ");
 
-                return float.Parse(parts[0].Replace(".",","));
+                return float.Parse(parts[0], CultureInfo.InvariantCulture);
             }catch (Exception)
             {
                 return defaultValue;

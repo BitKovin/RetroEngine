@@ -2,6 +2,7 @@
 using RetroEngine.Map;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -127,7 +128,7 @@ namespace RetroEngine.Entities
 
                 try
                 {
-                    float value = float.Parse(parts[2]);
+                    float value = float.Parse(parts[2], CultureInfo.InvariantCulture);
 
                     SetEventProperty(parts[1], value);
 

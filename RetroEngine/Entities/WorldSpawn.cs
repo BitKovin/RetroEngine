@@ -14,6 +14,9 @@ namespace RetroEngine.Entities
         public WorldSpawn() 
         {
             Static = true;
+
+            ConvexBrush = false;
+
         }
 
         List<string> visibleLayers = new List<string>();

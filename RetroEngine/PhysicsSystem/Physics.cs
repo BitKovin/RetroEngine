@@ -184,7 +184,7 @@ namespace RetroEngine.PhysicsSystem
                 if (GameMain.Instance.paused == false)
                 {
                     for(int i = 0; i<steps; i++)
-                    dynamicsWorld.StepSimulation(Time.DeltaTime * Time.TimeScale / steps, 5, 1f/50f);
+                    dynamicsWorld.StepSimulation(Time.DeltaTime / steps, 5, 1f/50f);
                 }
             }
         }
