@@ -31,7 +31,7 @@ namespace RetroEngine.Entities.Light
             return Camera.rotation.GetForwardVector()*10000000 + Camera.position;
         }
 
-        public override void DrawDepth(bool pointLight)
+        public override void DrawDepth(bool pointLight, bool DrawTrans)
         {
             var def = GameMain.Instance.GraphicsDevice.DepthStencilState;
             var defBlend = GameMain.Instance.GraphicsDevice.BlendState;

@@ -228,7 +228,7 @@ namespace RetroEngine.Particles
             //GameMain.Instance.render.particlesToDraw.AddRange(finalizedParticles);
         }
 
-        public override void DrawDepth(bool pointLight = false)
+        public override void DrawDepth(bool pointLight = false, bool renderTransperent = false)
         {
             
         }

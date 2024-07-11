@@ -11,7 +11,7 @@ namespace RetroEngine.Entities
 
         StaticMesh mesh = new SkyMesh();
 
-        public string texturePath = "textures/sky/sky.jpg";
+        public string texturePath = "textures/sky/sky2.png";
 
         protected override void LoadAssets()
         {
@@ -51,7 +51,7 @@ namespace RetroEngine.Entities
             frameStaticMeshData.IsRenderedShadow = false;
         }
 
-        public override void DrawDepth(bool pointLight)
+        public override void DrawDepth(bool pointLight = false, bool drawTrans = false)
         {
 
             Position = Camera.finalizedPosition;

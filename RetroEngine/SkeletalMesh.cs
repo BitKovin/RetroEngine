@@ -451,8 +451,10 @@ namespace RetroEngine
 
         }
 
-        public override void DrawDepth(bool pointLightDraw = false)
+        public override void DrawDepth(bool pointLightDraw = false, bool renderTransperent = false)
         {
+
+            if (Transparency < 1 && renderTransperent == false) return;
 
             if (DitherDisolve > 0) return;
 
@@ -470,17 +472,14 @@ namespace RetroEngine
             effect.Parameters["Viewmodel"].SetValue(Viewmodel);
 
             effect.Parameters["Masked"].SetValue(false);
+            effect.Parameters["World"].SetValue(frameStaticMeshData.World);
 
             bool mask = Masked;
 
-            if (Transperent)
-                mask = true;
 
 
             if (RiggedModel != null)
             {
-
-                effect.Parameters["World"].SetValue(frameStaticMeshData.World);
                 
 
                 graphicsDevice.RasterizerState = Graphics.DisableBackFaceCulling || TwoSided ? RasterizerState.CullNone : RasterizerState.CullClockwise;
@@ -582,11 +581,72 @@ namespace RetroEngine
             // Load the custom effect
             Effect effect = Shader;
 
-            SetupBlending();
 
             effect.Parameters["Bones"].SetValue(finalizedBones);
             if (RiggedModel != null)
             {
+
+                if (DepthTestEqual)
+                {
+                    if (Viewmodel == false)
+                    {
+                        GameMain.Instance.render.OcclusionEffect.Parameters["ViewProjection"].SetValue(Camera.finalizedView * Camera.finalizedProjection);
+                        GameMain.Instance.render.OcclusionStaticEffect.Parameters["ViewProjection"].SetValue(Camera.finalizedView * Camera.finalizedProjection);
+                    }
+                    else
+                    {
+
+                        GameMain.Instance.render.OcclusionEffect.Parameters["ViewProjection"].SetValue(Camera.finalizedView * Camera.finalizedProjectionViewmodel);
+                        GameMain.Instance.render.OcclusionStaticEffect.Parameters["ViewProjection"].SetValue(Camera.finalizedView * Camera.finalizedProjectionViewmodel);
+                    }
+
+                    graphicsDevice.DepthStencilState = DepthStencilState.Default;
+
+                    
+
+                    BlendState blend = new BlendState { ColorWriteChannels = ColorWriteChannels.None };
+
+                    graphicsDevice.BlendState = blend;
+
+                    DrawDepth(renderTransperent: true);
+                }
+                else
+                {
+                    graphicsDevice.DepthStencilState = DepthStencilState.Default;
+                }
+
+                SetupBlending();
+
+                if(DepthTestEqual)
+                {
+                    DepthStencilState customDepthStencilState = new DepthStencilState
+                    {
+                        DepthBufferEnable = true,
+                        DepthBufferWriteEnable = false,
+                        DepthBufferFunction = CompareFunction.LessEqual,
+                        StencilEnable = false,
+                        
+                    };
+
+                    graphicsDevice.DepthStencilState = customDepthStencilState;
+
+
+                    RasterizerState rasterizerState = new RasterizerState()
+                    {
+                        CullMode = graphicsDevice.RasterizerState.CullMode,
+                        FillMode = graphicsDevice.RasterizerState.FillMode,
+                        DepthBias = Viewmodel ? -0.000004f : -0.0001f,
+                        MultiSampleAntiAlias = false,
+                        ScissorTestEnable = graphicsDevice.RasterizerState.ScissorTestEnable,
+                        SlopeScaleDepthBias = graphicsDevice.RasterizerState.SlopeScaleDepthBias,
+                        DepthClipEnable = graphicsDevice.RasterizerState.DepthClipEnable
+
+                    };
+
+                    graphicsDevice.RasterizerState = rasterizerState;
+
+                }
+
                 foreach (RiggedModel.RiggedModelMesh meshPart in RiggedModel.meshes)
                 {
 

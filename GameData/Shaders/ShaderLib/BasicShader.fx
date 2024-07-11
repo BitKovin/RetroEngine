@@ -117,7 +117,7 @@ float ShadowMapResolutionClose;
 matrix ShadowMapViewProjectionVeryClose;
 float ShadowMapResolutionVeryClose;
 
-
+bool depthTestEqual;
 
 #ifndef MAX_POINT_LIGHTS
 
@@ -423,7 +423,12 @@ PixelInput DefaultVertexShaderFunction(VertexInput input)
 
 void DepthDiscard(float depth, PixelInput input)
 {
-    if (depth < input.MyPixelPosition.z - 0.01)
+
+    float b = 0.01;
+    if(Viewmodel)
+    b = 0.000004f;
+
+    if (depth < input.MyPixelPosition.z - 0.01 && depthTestEqual == false)
         discard;
 }
 
@@ -1217,7 +1222,7 @@ float ReflectionMapping(float x)
 float CalculateReflectiveness(float roughness, float metallic, float3 vDir, float3 normal)
 {
 
-    return lerp(0.04, 1, metallic) * (lerp(0.04, 1, (1-roughness)*(1-roughness)));
+    return lerp(0.04, 1, metallic) * (lerp(0.1, 1, (1-roughness)*(1-roughness)));
 
     // Calculate the base reflectiveness based on metallic
     float baseReflectiveness = metallic;

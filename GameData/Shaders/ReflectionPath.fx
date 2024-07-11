@@ -198,7 +198,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR
     float2 texel = float2(1.5/SSRWidth, 1.5/SSRHeight);
     float3 factor = tex2D(FactorTextureSampler, input.TextureCoordinates).rgb;
 
-    float roughness = saturate(factor.g/1.2 - 0.1);
+    float roughness = saturate(factor.g/1.3 - 0.1);
 
     // Add noise to the reflection vector based on surface roughness
     float3 noise = RandomVector(input.TextureCoordinates, 1);
@@ -226,7 +226,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR
     
     float4 ssr = float4(cube, 1);
     
-    if (factor.x > 0.1)
+    if (factor.x > 0.03)
     {
         ssr = SampleSSR(reflection, worldPos, depth, normal, vDir, 40, 1.5);
     }

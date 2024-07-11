@@ -203,6 +203,10 @@ namespace RetroEngine.Game.Entities.Weapons
             arms.LoadFromFile("models/weapons/arms_n.FBX");
             arms.textureSearchPaths.Add("textures/weapons/arms/");
 
+            mesh.DepthTestEqual = true;
+            mesh.Transparency = 0.5f;
+            mesh.Transperent = true;
+
             mesh.textureSearchPaths.Add("textures/weapons/arms/");
             mesh.textureSearchPaths.Add("textures/weapons/shotgun_new/");
             mesh.textureSearchPaths.Add("textures/weapons/general/");

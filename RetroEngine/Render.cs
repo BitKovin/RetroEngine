@@ -475,8 +475,9 @@ namespace RetroEngine
             OcclusionEffect.Parameters["pointDistance"].SetValue(false);
             OcclusionStaticEffect.Parameters["pointDistance"].SetValue(false);
 
+            var list = renderList.OrderBy(m => Vector3.Distance(Camera.finalizedPosition, m.GetClosestToCameraPosition()) * (m.Viewmodel? 0.1 : 1)).ToArray();
 
-            foreach (StaticMesh mesh in renderList)
+            foreach (StaticMesh mesh in list)
             {
                 
                     OcclusionEffect.Parameters["Viewmodel"].SetValue(false);

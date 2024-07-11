@@ -7,7 +7,7 @@
 "globalLightColor" "1 1 0.8"
 "skyColor" "1 0.9 0.8"
 "globalLightBrightness" "0.14"
-"directLightBrightness" "0.02"
+"directLightBrightness" "0.1"
 "dynamicSunShadowsEnabled" "true"
 "geometricalShadowsEnabled" "false"
 // brush 0

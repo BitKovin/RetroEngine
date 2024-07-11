@@ -124,6 +124,8 @@ namespace RetroEngine
 
         public bool CastGeometricShadow = false;
 
+        public bool DepthTestEqual = false; //pixel gets discarded if depths does not equal to prepath(not closer or farther. Only equal)
+
         public StaticMesh()
         {
 
@@ -230,6 +232,7 @@ namespace RetroEngine
             effect.Parameters["Viewmodel"]?.SetValue(frameStaticMeshData.Viewmodel);
 
             effect.Parameters["Masked"]?.SetValue(Masked);
+            effect.Parameters["depthTestEqual"]?.SetValue(DepthTestEqual);
 
             effect.Parameters["DitherDisolve"]?.SetValue(DitherDisolve);
 
@@ -427,10 +430,80 @@ namespace RetroEngine
             // Load the custom effect
             Effect effect = Shader;
 
-            SetupBlending();
 
             if (frameStaticMeshData.model is not null)
             {
+
+                if (DepthTestEqual)
+                {
+                    if (Viewmodel == false)
+                    {
+                        GameMain.Instance.render.OcclusionEffect.Parameters["ViewProjection"].SetValue(Camera.finalizedView * Camera.finalizedProjection);
+                        GameMain.Instance.render.OcclusionStaticEffect.Parameters["ViewProjection"].SetValue(Camera.finalizedView * Camera.finalizedProjection);
+                    }
+                    else
+                    {
+
+                        GameMain.Instance.render.OcclusionEffect.Parameters["ViewProjection"].SetValue(Camera.finalizedView * Camera.finalizedProjectionViewmodel);
+                        GameMain.Instance.render.OcclusionStaticEffect.Parameters["ViewProjection"].SetValue(Camera.finalizedView * Camera.finalizedProjectionViewmodel);
+                    }
+
+                    DrawDepth(renderTransperent: true);
+
+
+
+                    DepthStencilState customDepthStencilState = new DepthStencilState
+                    {
+                        DepthBufferEnable = true,
+                        DepthBufferWriteEnable = true,
+                        DepthBufferFunction = CompareFunction.Equal,
+                        StencilEnable = true
+                    };
+
+                    graphicsDevice.DepthStencilState = customDepthStencilState;
+
+                    BlendState blend = new BlendState { ColorWriteChannels = ColorWriteChannels.None };
+
+                    graphicsDevice.BlendState = blend;
+                }
+                else
+                {
+                    graphicsDevice.DepthStencilState = DepthStencilState.Default;
+
+                }
+
+                SetupBlending();
+
+                if (DepthTestEqual)
+                {
+                    DepthStencilState customDepthStencilState = new DepthStencilState
+                    {
+                        DepthBufferEnable = true,
+                        DepthBufferWriteEnable = false,
+                        DepthBufferFunction = CompareFunction.LessEqual,
+                        StencilEnable = false,
+
+                    };
+
+                    graphicsDevice.DepthStencilState = customDepthStencilState;
+
+
+                    RasterizerState rasterizerState = new RasterizerState()
+                    {
+                        CullMode = graphicsDevice.RasterizerState.CullMode,
+                        FillMode = graphicsDevice.RasterizerState.FillMode,
+                        DepthBias = Viewmodel ? -0.000005f : -0.0001f,
+                        MultiSampleAntiAlias = false,
+                        ScissorTestEnable = graphicsDevice.RasterizerState.ScissorTestEnable,
+                        SlopeScaleDepthBias = graphicsDevice.RasterizerState.SlopeScaleDepthBias,
+                        DepthClipEnable = graphicsDevice.RasterizerState.DepthClipEnable
+
+                    };
+
+                    graphicsDevice.RasterizerState = rasterizerState;
+
+                }
+
                 foreach (ModelMesh mesh in frameStaticMeshData.model.Meshes)
                 {
                     foreach (ModelMeshPart meshPart in mesh.MeshParts)
@@ -559,11 +632,13 @@ namespace RetroEngine
             }
         }
 
-        public virtual void DrawDepth(bool pointLightDraw = false)
+        public virtual void DrawDepth(bool pointLightDraw = false, bool renderTransperent = false)
         {
 
             if (Viewmodel) return;
 
+
+            if (Transparency < 1 && renderTransperent == false) return;
             if (DitherDisolve > 0) return;
 
             if (Render.IgnoreFrustrumCheck == false)
