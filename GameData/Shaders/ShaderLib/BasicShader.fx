@@ -1131,6 +1131,13 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness, float me
 
     // Global ambient light
     float3 globalLight = GlobalBrightness * GlobalLightColor * lerp(1.0f, 0.4f, max(dot(normal, float3(0, -1, 0)), 0.0f));
+    
+
+    if(Viewmodel)
+    {
+        globalLight += GlobalBrightness * GlobalLightColor * lerp(1.0f, 0.6f, max(dot(normal, float3(0, -1, 0)), 0.0f)) * 1;
+    }
+
     globalLight *= ao;
 
     // Accumulate point light contributions

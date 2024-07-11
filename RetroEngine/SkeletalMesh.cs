@@ -359,6 +359,12 @@ namespace RetroEngine
 
             if (RiggedModel is null) return;
 
+            if (Viewmodel && Position == Vector3.Zero && Camera.position != Vector3.Zero)
+            {
+                frameStaticMeshData.IsRendered = false;
+                return;
+            }
+
             RiggedModel.globalShaderMatrixs.CopyTo(finalizedBones, 0);
 
         }
@@ -476,7 +482,7 @@ namespace RetroEngine
 
             bool mask = Masked;
 
-            if (Transperent)
+            if(Transperent)
                 mask = true;
 
             if (RiggedModel != null)
@@ -574,6 +580,7 @@ namespace RetroEngine
                 }
             }
         }
+
         public override void DrawUnified()
         {
             if(frameStaticMeshData.IsRendered == false) { return; }

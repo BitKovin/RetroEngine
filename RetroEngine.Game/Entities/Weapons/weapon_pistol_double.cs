@@ -49,6 +49,9 @@ namespace RetroEngine.Game.Entities.Weapons
 
             ShowHandL = false;
 
+
+            LateUpdate();
+
         }
 
         protected override void LoadAssets()
@@ -358,6 +361,8 @@ namespace RetroEngine.Game.Entities.Weapons
             mesh.PlayAnimation("draw", false);
             mesh2.PlayAnimation("draw",false);
 
+            mesh.Position = Camera.position;
+            
 
             Console.WriteLine("loaded pistol double");
 

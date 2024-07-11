@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using static Assimp.Metadata;
 
 namespace RetroEngine.Game.Entities.Weapons
 {
@@ -63,6 +64,7 @@ namespace RetroEngine.Game.Entities.Weapons
             weapon.data = data;
             weapon.player = owner;
             weapon.Start();
+            weapon.LateUpdate();
 
             return weapon;
         }
@@ -144,6 +146,32 @@ namespace RetroEngine.Game.Entities.Weapons
         {
             return Camera.rotation.GetRightVector() * Offset.X + Camera.rotation.GetUpVector() * Offset.Y + Camera.rotation.GetForwardVector() * Offset.Z;
         }
+        protected override void LoadAssets()
+        {
+            base.LoadAssets();
+
+        }
+
+        [ConsoleCommand("weapon.give")]
+        public static void GiveToPlayer(string typeName)
+        {
+            try
+            {
+                PlayerCharacter character = Level.GetCurrent().FindEntityByName("player") as PlayerCharacter;
+
+                Assembly asm = typeof(Weapon).Assembly;
+                Type type = asm.GetType(typeof(Weapon).Namespace + "." + typeName);
+                if (type == null)
+                {
+                    Logger.Log($"weapon with type name of {typeName} not found");
+                    return;
+                }
+                WeaponData weaponData = WeaponData.FromType(type);
+
+                character.AddWeapon(weaponData);
+            }catch (Exception ex) { Logger.Log(ex.Message); }
+        }
+
 
     }
 }

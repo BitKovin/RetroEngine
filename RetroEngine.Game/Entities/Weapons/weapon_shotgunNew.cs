@@ -41,6 +41,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             meshTp.ParrentBounds = ((PlayerCharacter)player).GetSkeletalMesh();
 
+            LateUpdate();
         }
 
         protected override void LoadAssets()

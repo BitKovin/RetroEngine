@@ -88,7 +88,8 @@ namespace RetroEngine.Game.Entities.Player
         [JsonInclude]
         public bool thirdPerson = false;
 
-        PointLight PlayerLight;
+        PointLight PlayerFlashLight;
+        PointLight PlayerAmbientLight;
 
         //particle_system_meleeTrail meleeTrail;
         public PlayerCharacter() : base()
@@ -211,17 +212,17 @@ namespace RetroEngine.Game.Entities.Player
 
             interpolatedPosition = Position;
 
-            PlayerLight = Level.GetCurrent().AddEntity(new PointLight()) as PointLight;
-            PlayerLight.CastShadows = true;
+            PlayerFlashLight = Level.GetCurrent().AddEntity(new PointLight()) as PointLight;
+            PlayerFlashLight.CastShadows = true;
 
 
-            PlayerLight.enabled = true;
+            PlayerFlashLight.enabled = true;
 
-            PlayerLight.MinDot = 0.85f;
-            PlayerLight.radius = 20;
-            PlayerLight.Intensity = 1;
+            PlayerFlashLight.MinDot = 0.85f;
+            PlayerFlashLight.radius = 20;
+            PlayerFlashLight.Intensity = 1;
 
-            PlayerLight.Start();
+            PlayerFlashLight.Start();
         }
 
         void UpdatePlayerInput()
@@ -283,7 +284,7 @@ namespace RetroEngine.Game.Entities.Player
 
             Vector2 dir = new Vector2(Dx, Dy);
 
-            PlayerLight.enabled = flashlightEnabled;
+            PlayerFlashLight.enabled = flashlightEnabled;
 
             PlayerBodyAnimator.MovementDirection = dir;
             
@@ -678,11 +679,11 @@ namespace RetroEngine.Game.Entities.Player
 
             MathHelper.Transform t = bodyMesh.GetBoneMatrix("spine_03").DecomposeMatrix();
 
-            PlayerLight.Position = t.Position
+            PlayerFlashLight.Position = t.Position
                 + Camera.rotation.GetForwardVector().XZ().Normalized() * 0.2f
                 + Camera.rotation.GetRightVector() * -0.1f
                 + Vector3.Up * 0.1f;
-            PlayerLight.Rotation = Camera.rotation;
+            PlayerFlashLight.Rotation = Camera.rotation;
         }
 
         void Jump()
