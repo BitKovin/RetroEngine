@@ -476,7 +476,8 @@ namespace RetroEngine
 
             bool mask = Masked;
 
-
+            if (Transperent)
+                mask = true;
 
             if (RiggedModel != null)
             {

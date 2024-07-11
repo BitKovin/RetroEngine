@@ -57,8 +57,8 @@ namespace RetroEngine
             ImGui.SliderFloat("light direction Y", ref Graphics.LightDirection.Y, -1, 1);
             ImGui.SliderFloat("light direction Z", ref Graphics.LightDirection.Z, -1, 1);
 
-            ImGui.SliderFloat("global brightness", ref Graphics.GlobalLighting, 0, 5);
-            ImGui.SliderFloat("directional brightness", ref Graphics.DirectLighting, 0, 5);
+            ImGui.DragFloat("global brightness", ref Graphics.GlobalLighting, 0.01f, 0,5);
+            ImGui.DragFloat("directional brightness", ref Graphics.DirectLighting, 0.01f, 0,5);
 
             ImGui.End();
 
