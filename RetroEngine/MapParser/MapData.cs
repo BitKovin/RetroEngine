@@ -28,7 +28,7 @@ namespace RetroEngine.Map
         public static float UnitSize = 32;
 
 
-
+        static List<BrushFaceMesh> loadedFaces = new List<BrushFaceMesh>();
 
         public Level GetLevel()
         {
@@ -143,7 +143,12 @@ namespace RetroEngine.Map
 
                             var faceList = pointLightFaces[key];
 
-                            entity.meshes.AddRange(BrushFaceMesh.MergeFaceMeshes(faceList));
+                            var mergedResult = BrushFaceMesh.MergeFaceMeshes(faceList);
+
+                            entity.meshes.AddRange(mergedResult);
+
+                            loadedFaces.AddRange(mergedResult);
+
                         }
 
 
@@ -183,6 +188,18 @@ namespace RetroEngine.Map
             //level.Start();
 
             return level;
+        }
+
+        public static void ClearMeshData()
+        {
+            foreach(var face in loadedFaces)
+            {
+                if (face == null) continue;
+                if(face.model ==  null) continue;
+
+                StaticMesh.UnloadModel(face.model);
+
+            }
         }
 
         public EntityData GetEntityDataFromClass(string className)

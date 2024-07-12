@@ -569,7 +569,7 @@ namespace RetroEngine.Game.Entities.Player
 
 
 
-            if (hitPoint.Y > Position.Y - 1 + 0.8)
+            if (hitPoint.Y > Position.Y - 1 + 0.5)
                 return;
 
             if (Vector3.Distance(hitPoint, Position) > 1)

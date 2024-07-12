@@ -33,7 +33,7 @@ namespace RetroEngine.Game
         {
             AssetRegistry.LoadFmodBankIntoMemory("Sounds/banks/Master.bank");
             AssetRegistry.LoadFmodBankIntoMemory("Sounds/banks/Master.strings.bank");
-            Level.LoadFromFile("test2");
+            Level.LoadFromFile("test");
 
 
         }
@@ -52,7 +52,7 @@ namespace RetroEngine.Game
                 DefaultShader = null;
             }
 
-            //DefaultShader = AssetRegistry.GetShaderFromName("SimpleEffect");
+            DefaultShader = AssetRegistry.GetShaderFromName("SimpleEffect");
 
             base.Update(gameTime);
 

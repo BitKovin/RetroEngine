@@ -23,6 +23,7 @@ namespace RetroEngine.Entities
         {
             base.Start();
 
+            if (meshes.Count == 0) return;
             meshes[0].CastShadows = false;
             meshes[0].Visible = false;
         }

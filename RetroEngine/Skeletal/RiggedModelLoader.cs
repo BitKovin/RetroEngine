@@ -694,7 +694,7 @@ namespace RetroEngine.Skeletal
                     {
                         var oas = keyList.Value.ToMg();
 
-                        oas = new Vector3(oas.X, oas.Z, oas.Y);
+                        oas = new Vector3(oas.X, oas.Y, oas.Z);
 
                         nodeAnim.scaleTime.Add(keyList.Time / assimpAnim.TicksPerSecond);
                         nodeAnim.scale.Add(oas);

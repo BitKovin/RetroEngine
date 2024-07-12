@@ -100,6 +100,8 @@ namespace RetroEngine
                 return;
             }
 
+            MapData.ClearMeshData();
+
             if (name != GetCurrent().Name) 
             {
                 AssetRegistry.ConstantCache.Clear();

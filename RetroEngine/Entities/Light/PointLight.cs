@@ -83,6 +83,7 @@ namespace RetroEngine.Entities.Light
 
             resolution = (int)data.GetPropertyFloat("resolution", 256);
 
+
             CastShadows = data.GetPropertyBool("shadows",true);
 
             if (CastShadows == false)

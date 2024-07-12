@@ -187,13 +187,18 @@ namespace RetroEngine
             return models;
         }
 
-
+        internal static Dictionary<string, List<BrushFaceMesh>> loadedFaces = new Dictionary<string, List<BrushFaceMesh>>();
         public static List<BrushFaceMesh> GetMergedFacesFromPath(string filePath, string objectName, float unitSize = 32)
         {
             if (GameMain.CanLoadAssetsOnThisThread() == false)
             {
                 Logger.Log($"THREAD ERROR:  attempted to load merged model from not render thread. Model path: {filePath}  object name: {objectName}");
                 return null;
+            }
+
+            if(loadedFaces.ContainsKey(filePath+"_"+objectName) && false)
+            {
+                return loadedFaces[filePath+"_"+objectName];
             }
 
             GraphicsDevice graphicsDevice = GameMain.Instance.GraphicsDevice;
@@ -334,6 +339,8 @@ namespace RetroEngine
 
                 models.Add(brushFaceMesh);
             }
+
+            //loadedFaces.Add(filePath+"_"+objectName, models);
 
             return models;
         }

@@ -24,7 +24,7 @@ namespace RetroEngine.Entities
 
         GraphicsDevice graphicsDevice;
 
-        int resolution = 512;
+        int resolution = 256;
 
         StaticMesh mesh = new StaticMesh();
 
@@ -203,7 +203,7 @@ namespace RetroEngine.Entities
         {
             base.Destroy();
 
-            map.Dispose();
+            map?.Dispose();
 
         }
 

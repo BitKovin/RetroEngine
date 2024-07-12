@@ -18332,11 +18332,6 @@
 }
 // entity 1
 {
-"classname" "info_player_start"
-"origin" "-16 64 40"
-}
-// entity 2
-{
 "classname" "trigger"
 // brush 0
 {
@@ -18348,26 +18343,18 @@
 ( 160 16 112 ) ( 160 -64 32 ) ( 160 -64 112 ) trigger 0 0 0 1 1
 }
 }
-// entity 3
-{
-"classname" "light_point"
-"origin" "-5 261 101"
-"radius" "5"
-"light_color" "2 2 2"
-}
-// entity 4
+// entity 2
 {
 "classname" "ent_cat_point"
 "origin" "160 160 80"
 }
-// entity 5
+// entity 3
 {
 "classname" "info.navpoint"
 "origin" "104 232 24"
 }
-// entity 6
+// entity 4
 {
-"classname" "cubeMap"
-"origin" "123 171 37"
-"radius" "20"
+"classname" "info_player_start"
+"origin" "-16 64 40"
 }
