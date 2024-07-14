@@ -18365,4 +18365,5 @@
 "classname" "light_point"
 "origin" "-17 255 129"
 "radius" "5"
+"intensity" "10"
 }

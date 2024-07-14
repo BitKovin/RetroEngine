@@ -689,9 +689,9 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input)
         
         float bias = b * (1 - saturate(dot(input.Normal, -LightDirection))) + b / 2.0f;
 
-        bias*= lerp(50,1, abs(dot(input.Normal, -LightDirection)));
+        bias*= lerp(40,1, abs(dot(input.Normal, -LightDirection)));
 
-        bias += 0.00014;
+        bias += 0.0001;
 
         bias *= (LightDistanceMultiplier+1)/2;
         //bias=0;
@@ -744,7 +744,7 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
     if(DirectBrightness<0.00001)
         return 0;
 
-    if(abs(dot(input.Normal, LightDirection))<0.06)
+    if(abs(dot(input.Normal, LightDirection))<0.1)
     {
         return 1;
     }

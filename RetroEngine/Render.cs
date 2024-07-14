@@ -389,6 +389,7 @@ namespace RetroEngine
                 StencilEnable = false,
             };
 
+            
 
             DrawFullScreenQuad(DepthPrepathBufferOutput, DepthApplyEffect);
 
@@ -401,10 +402,7 @@ namespace RetroEngine
                 GeometryShadowEffect.Parameters["ScreenWidth"].SetValue(ForwardOutput.Width);
 
 
-                foreach (var mesh in renderList)
-                {
-                    mesh?.DrawGeometryShadow();
-                }
+                
             }
 
             //particlesToDraw.Clear();
@@ -412,7 +410,10 @@ namespace RetroEngine
             RenderLevelGeometryForward(renderList);
 
 
-
+            foreach (var mesh in renderList)
+            {
+                mesh?.DrawGeometryShadow();
+            }
 
             //ParticleEmitter.RenderEmitter.DrawParticles(particlesToDraw);
 

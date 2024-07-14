@@ -18,7 +18,7 @@ namespace RetroEngine
         public static float ShadowBias = -0.000f;//0025f
         public static int shadowMapResolution = 2048*2;
         public static int closeShadowMapResolution = 2048;
-        public static int veryCloseShadowMapResolution = 2048;
+        public static int veryCloseShadowMapResolution = 2048*2;
         public static int ViewmodelShadowMapResolution = 2048;
 
         public static bool GeometricalShadowsEnabled = true;

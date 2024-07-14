@@ -323,7 +323,7 @@ namespace RetroEngine.Entities.Light
 
 
 
-                if (lightVisibilityCheckMesh.IsVisible() == false && cameraDist > lightData.Radius * 1.2) 
+                if (lightVisibilityCheckMesh.IsVisible() == false && cameraDist > lightData.Radius * 1.5) 
                     return;
 
 

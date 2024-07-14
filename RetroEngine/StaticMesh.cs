@@ -684,9 +684,9 @@ namespace RetroEngine
                                 graphicsDevice.SetVertexBuffer(meshPart.VertexBuffer);
                                 graphicsDevice.Indices = meshPart.IndexBuffer;
 
-                                
 
-                                
+
+
                                 if (mask)
                                 {
                                     MeshPartData meshPartData = meshPart.Tag as MeshPartData;
@@ -698,7 +698,7 @@ namespace RetroEngine
 
                                     effect.Techniques[0].Passes[0].Apply();
                                 }
-                                
+
 
 
                                 graphicsDevice.DrawIndexedPrimitives(
