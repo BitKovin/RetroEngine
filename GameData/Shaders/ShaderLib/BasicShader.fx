@@ -620,7 +620,7 @@ float GetShadowClose(float3 lightCoords, PixelInput input)
 
         int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)
 
-        float b = -0.0004;
+        float b = -0.0003;
         
         float bias = b * (1 - saturate(dot(input.Normal, -LightDirection))) + b / 2.0f;
 
@@ -640,7 +640,7 @@ float GetShadowClose(float3 lightCoords, PixelInput input)
         if(abs(dot(input.Normal, -LightDirection)) <= 0.3 && false)
         return 1 - SampleShadowMap(ShadowMapCloseSampler, lightCoords.xy, currentDepth + bias);
 
-        float texelSize = size / resolution; // Assuming ShadowMapSize is the size of your shadow map texture
+        float texelSize = size / resolution / 2; // Assuming ShadowMapSize is the size of your shadow map texture
 
     
         return 1 - SampleShadowMapLinear(ShadowMapCloseSampler, lightCoords.xy, currentDepth + bias,float2(texelSize, texelSize));
@@ -685,11 +685,11 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input)
 
         int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)
 
-        float b = 0.00003;
+        float b = 0.000025;
         
         float bias = b * (1 - saturate(dot(input.Normal, -LightDirection))) + b / 2.0f;
 
-        bias*= lerp(40,1, abs(dot(input.Normal, -LightDirection)));
+        bias*= lerp(30,1, abs(dot(input.Normal, -LightDirection)));
 
         bias += 0.0001;
 
@@ -703,8 +703,10 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input)
         
         size = 1; max(size, 0.001);
         
-        float texelSize = size / resolution; // Assuming ShadowMapSize is the size of your shadow map texture
+        float texelSize = size / resolution / 2; // Assuming ShadowMapSize is the size of your shadow map texture
         
+    
+
         #ifdef SIMPLE_SHADOWS
         //return 1 - SampleShadowMapLinear(ShadowMapVeryCloseSampler, lightCoords.xy, currentDepth - bias, float2(texelSize, texelSize));
         #endif
