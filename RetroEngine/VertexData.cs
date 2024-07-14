@@ -39,6 +39,12 @@ namespace RetroEngine
         {
         }
 
+        public VertexData(Vector3 pos, Vector2 tex)
+        {
+            Position = pos;
+            TextureCoordinate = tex;
+        }
+
         VertexDeclaration IVertexType.VertexDeclaration { get { return VertexDeclaration; } }
 
     }

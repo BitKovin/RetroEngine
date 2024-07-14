@@ -53491,17 +53491,17 @@ f  16465/7754/5  16459/7753/5  16462/7752/5  16466/7751/5
 usemtl brushes/grass
 f  16466/7750/6  16463/6192/6  16464/7749/6  16465/7748/6
 
-o entity2_brush0
-usemtl trigger
+o entity0_brush1856
+usemtl brushes/trigger_t
 f  16467/7759/1  16468/6286/1  16469/2941/1  16470/7760/1
-usemtl trigger
+usemtl brushes/trigger_t
 f  16471/7761/2  16469/7760/2  16468/7759/2  16472/7762/2
-usemtl trigger
+usemtl brushes/trigger_t
 f  16472/7763/3  16468/7764/3  16467/7765/3  16473/7766/3
-usemtl trigger
+usemtl brushes/trigger_t
 f  16474/7766/4  16470/7765/4  16469/7764/4  16471/7763/4
-usemtl trigger
+usemtl brushes/trigger_t
 f  16473/7762/5  16467/7759/5  16470/7760/5  16474/7761/5
-usemtl trigger
+usemtl brushes/trigger_t
 f  16474/7760/6  16471/2941/6  16472/6286/6  16473/7759/6
 

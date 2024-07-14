@@ -206,6 +206,8 @@ namespace RetroEngine.Game.Entities.Weapons
             bullet.ignore.Add(player);
 
 
+            WeaponFireFlash.CreateAt(startPos + Camera.Forward * 0.2f);
+
 
             return;
 

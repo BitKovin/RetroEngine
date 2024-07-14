@@ -417,7 +417,8 @@ namespace RetroEngine
             else
             {
                 graphicsDevice.DepthStencilState = DepthStencilState.Default;
-                graphicsDevice.RasterizerState = Graphics.DisableBackFaceCulling || TwoSided? RasterizerState.CullNone : RasterizerState.CullClockwise;
+                graphicsDevice.RasterizerState = Graphics.DisableBackFaceCulling || TwoSided ? RasterizerState.CullNone : (isNegativeScale() ? RasterizerState.CullCounterClockwise : RasterizerState.CullClockwise);
+
             }
 
         }
@@ -690,7 +691,7 @@ namespace RetroEngine
                                 {
                                     MeshPartData meshPartData = meshPart.Tag as MeshPartData;
                                     ApplyShaderParams(effect, meshPartData);
-
+                                    effect.Parameters["Masked"]?.SetValue(mask);
 
                                     if (texture.GetType() == typeof(RenderTargetCube))
                                         effect.Parameters["Texture"].SetValue(AssetRegistry.LoadTextureFromFile("engine/textures/white.png"));

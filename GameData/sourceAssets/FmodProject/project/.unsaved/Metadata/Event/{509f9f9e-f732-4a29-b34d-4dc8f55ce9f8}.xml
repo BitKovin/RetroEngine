@@ -84,7 +84,7 @@
 	</object>
 	<object class="EventMixerMaster" id="{f1603d45-38f8-486c-99fb-b58d4eabb9e9}">
 		<property name="volume">
-			<value>-11.5</value>
+			<value>-16</value>
 		</property>
 		<relationship name="effectChain">
 			<destination>{df43fe5d-4daa-41bd-a4ee-a714a0d12954}</destination>
@@ -138,7 +138,7 @@
 	</object>
 	<object class="EventMixerGroup" id="{2492eac2-9582-413d-b9a7-7b392e53ed22}">
 		<property name="volume">
-			<value>-28.5</value>
+			<value>-80</value>
 		</property>
 		<property name="name">
 			<value>Audio 1</value>
@@ -206,16 +206,13 @@
 	<object class="MixerBusFader" id="{dcbad663-a025-4b9d-84ff-5f45947ff7c0}" />
 	<object class="PannerEffect" id="{ef408562-fbb9-4e73-8731-339e7d783b15}">
 		<property name="surroundPanExtent">
-			<value>52</value>
+			<value>86</value>
 		</property>
 		<property name="stereoToSurroundPanMode">
 			<value>0</value>
 		</property>
 		<property name="surroundStereoSeparation">
 			<value>-34.909317</value>
-		</property>
-		<property name="surroundHeightBlend">
-			<value>-0.099999994</value>
 		</property>
 		<property name="overridingOutputFormat">
 			<value>7</value>
@@ -256,7 +253,7 @@
 			<value>-1</value>
 		</property>
 		<property name="value">
-			<value>-2</value>
+			<value>-5</value>
 		</property>
 	</object>
 	<object class="AutomationPoint" id="{896edffc-b800-4235-94c1-7702b87f9f93}">
@@ -264,7 +261,7 @@
 			<value>1</value>
 		</property>
 		<property name="value">
-			<value>2</value>
+			<value>5</value>
 		</property>
 	</object>
 </objects>

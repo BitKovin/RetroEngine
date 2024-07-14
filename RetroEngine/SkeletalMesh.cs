@@ -359,7 +359,7 @@ namespace RetroEngine
 
             if (RiggedModel is null) return;
 
-            if (Viewmodel && Position == Vector3.Zero && Camera.position != Vector3.Zero)
+            if (Viewmodel && Position.Length()<0.1f && Camera.position != Vector3.Zero)
             {
                 frameStaticMeshData.IsRendered = false;
                 return;
@@ -489,7 +489,7 @@ namespace RetroEngine
             {
                 
 
-                graphicsDevice.RasterizerState = Graphics.DisableBackFaceCulling || TwoSided ? RasterizerState.CullNone : RasterizerState.CullClockwise;
+                graphicsDevice.RasterizerState = Graphics.DisableBackFaceCulling || TwoSided ? RasterizerState.CullNone : (isNegativeScale() ? RasterizerState.CullCounterClockwise : RasterizerState.CullClockwise);
 
                 if (!mask)
                     effect.Techniques[0].Passes[0].Apply();

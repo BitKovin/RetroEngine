@@ -18329,32 +18329,40 @@
 ( -560 64 176 ) ( -559 64 176 ) ( -560 64 177 ) brushes/grass 0 0 0 1 1
 ( -560 64 176 ) ( -560 64 177 ) ( -560 65 176 ) brushes/grass 0 0 0 1 1
 }
+// brush 1856
+{
+( 16 -64 112 ) ( 16 16 32 ) ( 16 16 112 ) brushes/trigger_t 0 0 0 1 1
+( 160 -64 112 ) ( 16 -64 32 ) ( 16 -64 112 ) brushes/trigger_t 0 0 0 1 1
+( 160 16 32 ) ( 16 -64 32 ) ( 160 -64 32 ) brushes/trigger_t 0 0 0 1 1
+( 160 16 112 ) ( 16 -64 112 ) ( 16 16 112 ) brushes/trigger_t 0 0 0 1 1
+( 160 16 112 ) ( 16 16 32 ) ( 160 16 32 ) brushes/trigger_t 0 0 0 1 1
+( 160 16 112 ) ( 160 -64 32 ) ( 160 -64 112 ) brushes/trigger_t 0 0 0 1 1
+}
 }
 // entity 1
-{
-"classname" "trigger"
-// brush 0
-{
-( 16 -64 112 ) ( 16 16 32 ) ( 16 16 112 ) trigger 0 0 0 1 1
-( 160 -64 112 ) ( 16 -64 32 ) ( 16 -64 112 ) trigger 0 0 0 1 1
-( 160 16 32 ) ( 16 -64 32 ) ( 160 -64 32 ) trigger 0 0 0 1 1
-( 160 16 112 ) ( 16 -64 112 ) ( 16 16 112 ) trigger 0 0 0 1 1
-( 160 16 112 ) ( 16 16 32 ) ( 160 16 32 ) trigger 0 0 0 1 1
-( 160 16 112 ) ( 160 -64 32 ) ( 160 -64 112 ) trigger 0 0 0 1 1
-}
-}
-// entity 2
 {
 "classname" "ent_cat_point"
 "origin" "160 160 80"
 }
-// entity 3
+// entity 2
 {
 "classname" "info.navpoint"
 "origin" "104 232 24"
 }
-// entity 4
+// entity 3
 {
 "classname" "info_player_start"
 "origin" "-16 64 40"
+}
+// entity 4
+{
+"classname" "cubeMap"
+"origin" "-335 -287 303"
+"radius" "100"
+}
+// entity 5
+{
+"classname" "light_point"
+"origin" "-17 255 129"
+"radius" "5"
 }

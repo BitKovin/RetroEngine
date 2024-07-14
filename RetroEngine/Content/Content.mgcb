@@ -222,3 +222,10 @@
 /processorParam:DebugMode=Auto
 /processorParam:Defines=
 /build:../../GameData/Shaders/GeometryShadow.fx;Shaders/GeometryShadow.fx
+
+#begin ../../GameData/Shaders/DepthFromTex.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/processorParam:Defines=
+/build:../../GameData/Shaders/DepthFromTex.fx;Shaders/DepthFromTex.fx

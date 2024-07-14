@@ -620,7 +620,7 @@ float GetShadowClose(float3 lightCoords, PixelInput input)
 
         int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)
 
-        float b = -0.0007;
+        float b = -0.0004;
         
         float bias = b * (1 - saturate(dot(input.Normal, -LightDirection))) + b / 2.0f;
 
@@ -1036,8 +1036,9 @@ float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal, float ro
     float3 specular = CalculateSpecular(pixelInput.MyPosition, normal, dirToSurface, roughness, metalic, albedo);
 
 
+    float colorInstens = max(LightColors[i].x,(max(LightColors[i].y,LightColors[i].z)));
 
-    intense = max(intense, 0);
+    intense = max(intense, 0) * colorInstens;
     float3 l = LightColors[i] * intense;
 
     return (l + intense * specular) * notShadow * dirFactor;

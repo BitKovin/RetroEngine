@@ -105,8 +105,11 @@ namespace RetroEngine
         private static int[] sphereIndices;
         private static bool sphereInitialized = false;
 
-        private void InitializeSphere(float radius, ref System.Numerics.Vector3 color)
+        private void InitializeSphere(ref System.Numerics.Vector3 color)
         {
+
+            float radius = 1;
+
             const int segments = 8;
             const int rings = 8;
             var vertices = new List<VertexPositionColor>();
@@ -162,7 +165,7 @@ namespace RetroEngine
         {
             if (!sphereInitialized)
             {
-                InitializeSphere(radius, ref color);
+                InitializeSphere(ref color);
             }
 
             for (int i = 0; i < sphereVertices.Length; i++)
@@ -174,7 +177,7 @@ namespace RetroEngine
 
             basicEffect.View = Camera.finalizedView;
             basicEffect.Projection = Camera.finalizedProjection;
-            basicEffect.World = transform;
+            basicEffect.World = Matrix.CreateScale(radius) * transform;
 
             foreach (EffectPass pass in basicEffect.CurrentTechnique.Passes)
             {

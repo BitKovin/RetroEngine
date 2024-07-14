@@ -59,7 +59,7 @@ namespace RetroEngine
 
         public static bool DefaultUnlit = false;
 
-        public static bool DisableBackFaceCulling = true;
+        public static bool DisableBackFaceCulling = false;
 
         public static bool GlobalPointLights = false;
 

@@ -34,7 +34,7 @@ namespace RetroEngine.Entities.Light
 
         }
 
-        LightManager.PointLightData lightData = new LightManager.PointLightData();
+        protected LightManager.PointLightData lightData = new LightManager.PointLightData();
 
         GraphicsDevice graphicsDevice;
 
@@ -173,7 +173,11 @@ namespace RetroEngine.Entities.Light
 
             lights.Remove(this);
 
-            renderTargetCube?.Dispose();
+            lock(GameMain.pendingDispose)
+            {
+                GameMain.pendingDispose.Add(renderTargetCube);
+            }
+            //renderTargetCube?.Dispose();
 
 
         }
@@ -257,6 +261,8 @@ namespace RetroEngine.Entities.Light
         void InitRenderTargetIfNeeded()
         {
 
+            if (Destroyed) return;
+
             if (renderTargetCube == null)
                 InitRenderTarget();
 
@@ -268,7 +274,10 @@ namespace RetroEngine.Entities.Light
 
         void InitRenderTarget()
         {
-            renderTargetCube?.Dispose();
+            lock (GameMain.pendingDispose)
+            {
+                GameMain.pendingDispose.Add(renderTargetCube);
+            }
 
             renderTargetCube = new RenderTargetCube(graphicsDevice, lightData.Resolution, false, SurfaceFormat.Single, DepthFormat.Depth24);
 

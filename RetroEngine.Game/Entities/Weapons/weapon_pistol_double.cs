@@ -67,8 +67,8 @@ namespace RetroEngine.Game.Entities.Weapons
         {
             base.Update();
 
-            mesh.Update(Time.DeltaTime * 1.1f);
-            mesh2.Update(Time.DeltaTime * 1.1f);
+            mesh.Update(Time.DeltaTime * 1.2f);
+            mesh2.Update(Time.DeltaTime * 1.2f);
 
             if (((ICharacter)player).isFirstPerson())
             {
@@ -204,7 +204,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             if (attackDelay.Wait()) return;
 
-            attackDelay.AddDelay(0.15f);
+            attackDelay.AddDelay(0.17f);
 
             
 
@@ -249,6 +249,8 @@ namespace RetroEngine.Game.Entities.Weapons
             bullet.Rotation = bulletRotation;
 
             bullet.LifeTime = 1f;
+
+            WeaponFireFlash.CreateAt(startPos + Camera.Forward*0.3f);
 
             Level.GetCurrent().AddEntity(bullet);
 

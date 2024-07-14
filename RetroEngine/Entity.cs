@@ -38,8 +38,10 @@ namespace RetroEngine
         public bool UpdateWhilePaused = false;
         public bool LateUpdateWhilePaused = false;
 
+        [JsonInclude]
         public string name = "";
 
+        [JsonInclude]
         public List<string> Tags = new List<string>();
 
         public double SpawnTime = 0;

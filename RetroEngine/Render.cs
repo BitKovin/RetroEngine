@@ -13,6 +13,7 @@ using RetroEngine.Entities;
 using RetroEngine.Entities.Light;
 using RetroEngine.Graphic;
 using RetroEngine.PhysicsSystem;
+using CppNet;
 
 namespace RetroEngine
 {
@@ -25,15 +26,12 @@ namespace RetroEngine
         public RenderTarget2D positionPath;
         RenderTarget2D depthPath;
 
-        RenderTarget2D DeferredOutput;
+        RenderTarget2D ForwardOutput;
         RenderTarget2D ReflectionOutput;
         RenderTarget2D ReflectivenessOutput;
         internal RenderTarget2D DepthPrepathOutput;
+        internal RenderTarget2D DepthPrepathBufferOutput;
 
-        RenderTarget2D ForwardOutput;
-        RenderTarget2D ForwardDepth;
-
-        RenderTarget2D miscPath;
         RenderTarget2D postProcessingOutput;
         public RenderTarget2D DepthOutput;
 
@@ -66,6 +64,8 @@ namespace RetroEngine
         public Effect DeferredEffect;
 
         Effect DenoiseEffect;
+
+        Effect DepthApplyEffect;
 
         public Effect ReflectionEffect;
         public Effect ReflectionResultEffect;
@@ -135,6 +135,8 @@ namespace RetroEngine
             BuffersEffect = GameMain.content.Load<Effect>("Shaders/GPathesOutput");
 
             DeferredEffect = GameMain.content.Load<Effect>("Shaders/DeferredShading");
+
+            DepthApplyEffect = GameMain.content.Load<Effect>("Shaders/DepthFromTex");
 
             ComposeEffect = GameMain.content.Load<Effect>("Shaders/ComposedColor");
 
@@ -231,8 +233,8 @@ namespace RetroEngine
             if(cubeMap!=null)
                 effect.Parameters["ReflectionCubemap"]?.SetValue(cubeMap.map);
 
-            effect.Parameters["ScreenHeight"]?.SetValue(DeferredOutput.Height);
-            effect.Parameters["ScreenWidth"]?.SetValue(DeferredOutput.Width);
+            effect.Parameters["ScreenHeight"]?.SetValue(ForwardOutput.Height);
+            effect.Parameters["ScreenWidth"]?.SetValue(ForwardOutput.Width);
 
             effect.Parameters["LightDistanceMultiplier"]?.SetValue(Graphics.LightDistanceMultiplier) ;
 
@@ -257,8 +259,9 @@ namespace RetroEngine
             InitRenderTargetDepth(ref DepthOutput);
 
             InitRenderTargetDepth(ref DepthPrepathOutput);
+            InitRenderTargetDepth(ref DepthPrepathBufferOutput);
 
-            InitRenderTargetVectorIfNeed(ref DeferredOutput);
+            InitRenderTargetVectorIfNeed(ref ForwardOutput);
 
             InitRenderTargetIfNeed(ref ReflectivenessOutput);
 
@@ -326,7 +329,7 @@ namespace RetroEngine
 
 
             if (Input.GetAction("test").Holding())
-                return DepthPrepathOutput;
+                return DepthPrepathBufferOutput;
 
             return outputPath;
 
@@ -371,16 +374,31 @@ namespace RetroEngine
             UpdateShaderFrameData();
             
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, (int)GetScreenResolution().X, (int)GetScreenResolution().Y);
-            
-            graphics.GraphicsDevice.SetRenderTargets(DeferredOutput, normalPath, ReflectivenessOutput, positionPath);
+
+
+            graphics.GraphicsDevice.SetRenderTargets(ForwardOutput, normalPath, ReflectivenessOutput, positionPath);
             graphics.GraphicsDevice.Clear(ClearOptions.DepthBuffer, Color.Black, 1.0f, 0);
+
+            //graphics.GraphicsDevice.Clear(Color.Red);
+
+            graphics.GraphicsDevice.DepthStencilState = new DepthStencilState()
+            {
+                DepthBufferWriteEnable = true,
+                DepthBufferEnable = true,
+                DepthBufferFunction = CompareFunction.LessEqual,
+                StencilEnable = false,
+            };
+
+
+            DrawFullScreenQuad(DepthPrepathBufferOutput, DepthApplyEffect);
+
 
             if (Graphics.GeometricalShadowsEnabled)
             {
                 graphics.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
                 GeometryShadowEffect.Parameters["ViewProjection"].SetValue(Camera.finalizedView * Camera.finalizedProjection);
-                GeometryShadowEffect.Parameters["ScreenHeight"].SetValue(DeferredOutput.Height);
-                GeometryShadowEffect.Parameters["ScreenWidth"].SetValue(DeferredOutput.Width);
+                GeometryShadowEffect.Parameters["ScreenHeight"].SetValue(ForwardOutput.Height);
+                GeometryShadowEffect.Parameters["ScreenWidth"].SetValue(ForwardOutput.Width);
 
 
                 foreach (var mesh in renderList)
@@ -449,17 +467,8 @@ namespace RetroEngine
 
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, (int)GetScreenResolution().X, (int)GetScreenResolution().Y);
 
-            graphics.GraphicsDevice.SetRenderTarget(DepthPrepathOutput);
+            graphics.GraphicsDevice.SetRenderTargets(DepthPrepathOutput,DepthPrepathBufferOutput);
             graphics.GraphicsDevice.Clear(ClearOptions.DepthBuffer, Color.Black, 1.0f, 0);
-
-            SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
-            spriteBatch.Begin(effect: maxDepth);
-
-            // Draw a full-screen quad to apply the lighting
-            DrawFullScreenQuad(spriteBatch, black);
-
-            // End the SpriteBatch
-            spriteBatch.End();
 
             graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 
@@ -691,7 +700,7 @@ namespace RetroEngine
             PerformReflection();
             ApplyReflection();
             
-            PerformPostProcessingShaders(DeferredOutput);
+            PerformPostProcessingShaders(ForwardOutput);
             
             PerformSSAO();
 
@@ -786,7 +795,7 @@ namespace RetroEngine
 
             ReflectionEffect.Parameters["enableSSR"]?.SetValue(Graphics.EnableSSR);
             ReflectionEffect.Parameters["NormalTexture"]?.SetValue(normalPath);
-            ReflectionEffect.Parameters["FrameTexture"]?.SetValue(DeferredOutput);
+            ReflectionEffect.Parameters["FrameTexture"]?.SetValue(ForwardOutput);
             ReflectionEffect.Parameters["PositionTexture"]?.SetValue(positionPath);
             ReflectionEffect.Parameters["FactorTexture"]?.SetValue(ReflectivenessOutput);
             ReflectionEffect.Parameters["ScreenHeight"]?.SetValue(reflection.Height);
@@ -1072,6 +1081,69 @@ namespace RetroEngine
 
             // Draw the full-screen quad using SpriteBatch
             spriteBatch.Draw(inputTexture, screenRectangle, Color.White);
+        }
+
+        private static VertexBuffer vertexBuffer;
+        private static IndexBuffer indexBuffer;
+
+        private static void InitializeFullScreenQuad(GraphicsDevice graphicsDevice)
+        {
+            if (vertexBuffer == null)
+            {
+                VertexData[] vertices =
+                {
+            new VertexData(new Vector3(-1, -1, 0), new Vector2(0, 1)),
+            new VertexData(new Vector3(-1,  1, 0), new Vector2(0, 0)),
+            new VertexData(new Vector3( 1, -1, 0), new Vector2(1, 1)),
+            new VertexData(new Vector3( 1,  1, 0), new Vector2(1, 0)),
+                };
+
+                vertexBuffer = new VertexBuffer(graphicsDevice, VertexData.VertexDeclaration, vertices.Length, BufferUsage.WriteOnly);
+                vertexBuffer.SetData(vertices);
+
+                int[] indices = { 0, 1, 2, 2, 1, 3 };
+
+                indexBuffer = new IndexBuffer(graphicsDevice, IndexElementSize.ThirtyTwoBits, indices.Length, BufferUsage.WriteOnly);
+                indexBuffer.SetData(indices);
+            }
+        }
+        internal static void DrawFullScreenQuad(Texture2D inputTexture, Effect effect = null)
+        {
+
+            var graphicsDevice = GameMain.Instance.GraphicsDevice;
+
+            InitializeFullScreenQuad(graphicsDevice);
+
+            graphicsDevice.SetVertexBuffer(vertexBuffer);
+            graphicsDevice.Indices = indexBuffer;
+
+
+
+            if (effect != null)
+            {
+                effect.Parameters["Texture"]?.SetValue(inputTexture);
+
+                foreach (EffectPass pass in effect.CurrentTechnique.Passes)
+                {
+                    pass.Apply();
+                    graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 2);
+                }
+            }
+            else
+            {
+                BasicEffect basicEffect = new BasicEffect(graphicsDevice)
+                {
+                    TextureEnabled = true,
+                    Texture = inputTexture,
+                    VertexColorEnabled = false,
+                };
+
+                foreach (EffectPass pass in basicEffect.CurrentTechnique.Passes)
+                {
+                    pass.Apply();
+                    graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 2);
+                }
+            }
         }
 
         void DrawShadowQuad(SpriteBatch spriteBatch, Texture2D inputTexture)

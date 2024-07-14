@@ -48,6 +48,9 @@ namespace RetroEngine.Audio
                 return;
             }
 
+            EventInstance.Volume = 0;
+            FmodManager.Update();
+
             EventInstance.Start();
 
             
