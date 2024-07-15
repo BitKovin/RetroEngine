@@ -87,7 +87,7 @@ PS_Out MainPS(VertexShaderOutput input)
 
     PS_Out output;
     output.depth = float4(depth, 0, 0, a);
-    output.depthHomo = float4((input.MyPosition.z+0.001)/input.MyPosition.w, 0, 0, a);
+    output.depthHomo = float4((input.MyPosition.z+0.01)/input.MyPosition.w, 0, 0, a);
 
     return output;
 }

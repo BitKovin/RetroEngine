@@ -123,6 +123,8 @@ bool depthTestEqual;
 
 #define MAX_POINT_LIGHTS 20
 
+bool skeletalMesh;
+
 #endif
 
 #ifndef MAX_POINT_LIGHTS_SHADOWS
@@ -628,6 +630,11 @@ float GetShadowClose(float3 lightCoords, PixelInput input)
 
         resolution = ShadowMapResolutionClose;
         
+        float adot = abs(dot(input.Normal, LightDirection));
+        if(adot<0.1)
+        {
+            bias *= lerp(1, 30, (adot*10)*(adot*10));
+        }
         
         float size = 1;
    
@@ -695,6 +702,13 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input)
         bias += 0.0001;
 
         bias *= (LightDistanceMultiplier+1)/2;
+
+        float adot = abs(dot(input.Normal, LightDirection));
+        if(adot<0.1)
+        {
+            bias *= lerp(1, 40, (adot*10)*(adot*10)*(adot*10));
+        }
+
         //bias=0;
         resolution = ShadowMapResolutionClose;
         
@@ -747,9 +761,9 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
     if(DirectBrightness<0.00001)
         return 0;
 
-    if(abs(dot(input.Normal, LightDirection))<0.1)
+    if(abs(dot(input.Normal, LightDirection))<0.01)
     {
-        return 1;
+        //return 1;
     }
 
     float dist = distance(viewPos, input.MyPosition);
@@ -1300,9 +1314,9 @@ float3 ApplyReflectionOnSurface(float3 color,float3 albedo,float2 screenCoords, 
     reflection += tex2D(ReflectionTextureSampler, screenCoords + float2(0,texel.y)).rgb/2;
     reflection/=4.0/2.0 + 1;
 
-    reflection = saturate(reflection);
+    //reflection = saturate(reflection);
 
-    float lum =0;// saturate(CalcLuminance(reflection))/30;
+    float lum = 0;// saturate(CalcLuminance(reflection))/30;
     
 
     float3 reflectionIntens = lerp(0, reflectiveness, metalic);

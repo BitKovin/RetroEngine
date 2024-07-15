@@ -30,7 +30,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             radius = Radius * MathHelper.Lerp(1,0.5f, progress);
 
-            Intensity = MathHelper.Lerp(Intensity, 0, progress);
+            Intensity = MathHelper.Lerp(FlashIntensity, 0, progress);
 
             //DrawDebug.Sphere(0.01f, Position, lightData.Color, 0.1f);
 
@@ -39,7 +39,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
         }
 
-        public static void CreateAt(Vector3 location, float duraion = 0.2f, float radius = 4, float FlashIntensity = 0.4f)
+        public static void CreateAt(Vector3 location, float duraion = 0.1f, float radius = 4, float FlashIntensity = 1f)
         {
             WeaponFireFlash flash = Level.GetCurrent().AddEntity(new WeaponFireFlash {Position = location, Duration = duraion, Radius = radius, FlashIntensity = FlashIntensity}) as WeaponFireFlash;
 

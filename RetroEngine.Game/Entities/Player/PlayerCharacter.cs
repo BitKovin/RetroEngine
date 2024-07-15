@@ -435,10 +435,10 @@ namespace RetroEngine.Game.Entities.Player
 
                     body.LinearVelocity = new Vector3(velocity.X, body.LinearVelocity.Y, velocity.Z).ToPhysics();
 
-                    TryStep(motion.Normalized()/2f);
+                    TryStep(motion.Normalized()/1.5f);
 
-                    TryStep(MathHelper.RotateVector(motion.Normalized() * 1.1f / 2f, Vector3.UnitY, 45));
-                    TryStep(MathHelper.RotateVector(motion.Normalized() * 1.1f / 2f, Vector3.UnitY, -45));
+                    TryStep(MathHelper.RotateVector(motion.Normalized() * 1f / 1.6f, Vector3.UnitY, 35));
+                    TryStep(MathHelper.RotateVector(motion.Normalized() * 1f / 1.6f, Vector3.UnitY, -35));
 
                 }
                 else
@@ -551,7 +551,7 @@ namespace RetroEngine.Game.Entities.Player
             if (pos == Vector3.Zero)
                 return;
 
-            var hit = Physics.SphereTrace(pos.ToNumerics(), (pos - new Vector3(0, 0.5f, 0)).ToNumerics(),0.4f, new List<CollisionObject>() { body }, body.GetCollisionMask());
+            var hit = Physics.LineTrace(pos.ToPhysics(), (pos - new Vector3(0, 0.9f, 0)).ToPhysics(), new List<CollisionObject>() { body }, body.GetCollisionMask());
 
             if (hit.HasHit == false)
                 return;
@@ -569,11 +569,20 @@ namespace RetroEngine.Game.Entities.Player
 
 
 
-            if (hitPoint.Y > Position.Y - 1 + 0.5)
+            if (hitPoint.Y > Position.Y - 1 + 1)
                 return;
 
-            if (Vector3.Distance(hitPoint, Position) > 1)
+            if (Vector3.Distance(hitPoint, Position) > 1.4)
                 return;
+
+            hit = Physics.LineTrace(Position.ToPhysics(), Vector3.Lerp(Position, hitPoint, 1.1f).ToPhysics() + Vector3.UnitY.ToPhysics() * 0.2f, new List<CollisionObject>() { body }, body.GetCollisionMask());
+
+            if (hit.HasHit)
+            {
+                //DrawDebug.Sphere(0.1f, hit.HitPointWorld, Vector3.Zero, 3);
+                return;
+            }
+
 
             hitPoint.Y += 1.4f;
 
