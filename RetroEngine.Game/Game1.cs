@@ -72,7 +72,9 @@ namespace RetroEngine.Game
 
         public override void OnLevelChanged()
         {
-            
+
+            AssetRegistry.LoadFmodBankIntoMemory("Sounds/banks/Master.bank");
+            AssetRegistry.LoadFmodBankIntoMemory("Sounds/banks/Master.strings.bank");
 
             Level.GetCurrent().AddEntity(new Entities.Player.PlayerGlobal());
 

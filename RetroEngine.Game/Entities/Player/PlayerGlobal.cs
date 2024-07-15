@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Input;
+using RetroEngine.Audio;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,10 +11,15 @@ namespace RetroEngine.Game.Entities.Player
     public class PlayerGlobal : Entity
     {
 
+        FmodEventInstance pauseEvent;
+
         public PlayerGlobal()
         {
             UpdateWhilePaused = true;
             LateUpdateWhilePaused = true;
+
+            pauseEvent = FmodEventInstance.Create("snapshot:/Pause");
+
         }
 
         public override void Update()
@@ -24,6 +30,14 @@ namespace RetroEngine.Game.Entities.Player
 
         }
 
+        public override void Destroy()
+        {
+            base.Destroy();
+
+            pauseEvent?.Stop();
+            pauseEvent?.Dispose();
+        }
+
         public override void LateUpdate()
         {
             base.LateUpdate();
@@ -32,6 +46,14 @@ namespace RetroEngine.Game.Entities.Player
             if (Input.GetAction("pause").Pressed())
             {
                 GameMain.Instance.paused = !GameMain.Instance.paused;
+
+                if(GameMain.Instance.paused)
+                {
+                    pauseEvent.StartEvent();
+                }else
+                {
+                    pauseEvent.Stop();
+                }
 
             }
             if (GameMain.Instance.paused == false)
