@@ -111,9 +111,6 @@ https://commons.wikimedia.org/wiki/File:Heartbeat.ogg</value>
 		</relationship>
 	</object>
 	<object class="GroupTrack" id="{997c903d-73f4-48cc-869a-ab9e6be66a96}">
-		<relationship name="modules">
-			<destination>{f83484c3-887e-43cc-9798-c5e710b71880}</destination>
-		</relationship>
 		<relationship name="mixerGroup">
 			<destination>{ba8fce40-6b52-495d-aafb-a6c8e0bcc252}</destination>
 		</relationship>
@@ -125,7 +122,6 @@ https://commons.wikimedia.org/wiki/File:Heartbeat.ogg</value>
 	</object>
 	<object class="ParameterProxy" id="{27df63c2-d999-428a-adc9-60b610c58825}">
 		<relationship name="modules">
-			<destination>{f83484c3-887e-43cc-9798-c5e710b71880}</destination>
 			<destination>{5f333ad5-7ed8-433e-9499-bf039935ca03}</destination>
 		</relationship>
 		<relationship name="preset">
@@ -183,14 +179,6 @@ https://commons.wikimedia.org/wiki/File:Heartbeat.ogg</value>
 		</relationship>
 		<relationship name="output">
 			<destination>{29ab778a-4c29-464c-b04e-a0ecf0d005bb}</destination>
-		</relationship>
-	</object>
-	<object class="SnapshotModule" id="{f83484c3-887e-43cc-9798-c5e710b71880}">
-		<property name="length">
-			<value>35</value>
-		</property>
-		<relationship name="event">
-			<destination>{87ea4134-fff1-4e9d-8f8b-294a2b518223}</destination>
 		</relationship>
 	</object>
 	<object class="EventMixerGroup" id="{ba8fce40-6b52-495d-aafb-a6c8e0bcc252}">

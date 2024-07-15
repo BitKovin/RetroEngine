@@ -18367,3 +18367,8 @@
 "radius" "5"
 "intensity" "10"
 }
+// entity 6
+{
+"classname" "weaponPickup"
+"origin" "44 68 36"
+}

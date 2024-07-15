@@ -147,10 +147,6 @@ Weapon sounds courtesy of Frank Bry at The Recordist.</value>
 		<relationship name="fadeInCurve">
 			<destination>{320aab26-3bfb-4150-ac83-a646c546e1a4}</destination>
 		</relationship>
-		<relationship name="sounds">
-			<destination>{751115c9-f751-4be2-b65f-1a5ae49de601}</destination>
-			<destination>{dd53a240-e88c-4d18-954b-df21a33a2ee8}</destination>
-		</relationship>
 	</object>
 	<object class="MultiSound" id="{68afee84-8b56-44a8-9a77-567f1e367348}">
 		<property name="isAsync">
@@ -168,10 +164,6 @@ Weapon sounds courtesy of Frank Bry at The Recordist.</value>
 		</relationship>
 		<relationship name="fadeOutCurve">
 			<destination>{94e2fc05-7c82-4386-a2c6-5c9c84d4153d}</destination>
-		</relationship>
-		<relationship name="sounds">
-			<destination>{33c10426-9ffb-4eaf-ac81-bda2a5539247}</destination>
-			<destination>{90243a05-d821-45db-8513-67f60eab602b}</destination>
 		</relationship>
 	</object>
 	<object class="EventMixerGroup" id="{bf761092-4a74-4897-9c3b-f0db578e6a4f}">
@@ -259,28 +251,6 @@ Weapon sounds courtesy of Frank Bry at The Recordist.</value>
 			<destination>{68afee84-8b56-44a8-9a77-567f1e367348}</destination>
 		</relationship>
 	</object>
-	<object class="SingleSound" id="{751115c9-f751-4be2-b65f-1a5ae49de601}">
-		<property name="length">
-			<value>0</value>
-		</property>
-		<property name="voiceStealing">
-			<value>3</value>
-		</property>
-		<relationship name="audioFile">
-			<destination>{ea1034e0-b73f-4b13-87e6-4bbf335a201f}</destination>
-		</relationship>
-	</object>
-	<object class="SingleSound" id="{dd53a240-e88c-4d18-954b-df21a33a2ee8}">
-		<property name="length">
-			<value>0</value>
-		</property>
-		<property name="voiceStealing">
-			<value>3</value>
-		</property>
-		<relationship name="audioFile">
-			<destination>{0c8d7083-5af3-421a-a806-7ec67e53cab6}</destination>
-		</relationship>
-	</object>
 	<object class="RandomizerModulator" id="{a16ae297-9acd-4ef1-bb3c-9c3c59f95a52}">
 		<property name="nameOfPropertyBeingModulated">
 			<value>volume</value>
@@ -306,28 +276,6 @@ Weapon sounds courtesy of Frank Bry at The Recordist.</value>
 		</relationship>
 		<relationship name="relatedModule">
 			<destination>{9ff99ef7-b94a-45b4-8092-1f4ebbd55450}</destination>
-		</relationship>
-	</object>
-	<object class="SingleSound" id="{33c10426-9ffb-4eaf-ac81-bda2a5539247}">
-		<property name="length">
-			<value>0</value>
-		</property>
-		<property name="voiceStealing">
-			<value>3</value>
-		</property>
-		<relationship name="audioFile">
-			<destination>{79919899-b24c-4d40-86c6-1fb584a3e947}</destination>
-		</relationship>
-	</object>
-	<object class="SingleSound" id="{90243a05-d821-45db-8513-67f60eab602b}">
-		<property name="length">
-			<value>0</value>
-		</property>
-		<property name="voiceStealing">
-			<value>3</value>
-		</property>
-		<relationship name="audioFile">
-			<destination>{edc2b884-0605-41d1-b191-b5c703689865}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusEffectChain" id="{c2fed2c8-9710-42f6-b757-3fd9ce37b8e5}">

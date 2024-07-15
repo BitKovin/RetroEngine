@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FmodForFoxes;
 using System.Runtime.InteropServices;
+using FmodForFoxes.Studio;
 
 namespace RetroEngine.Audio
 {
@@ -26,17 +27,21 @@ namespace RetroEngine.Audio
 
         public static float Volume = 1.0f;
 
+
         public static void Init()
         {
             listener = new AudioListener();
 
             if (UseFmod == false) return;
 
+            
+
 #if DEBUG
             FmodManager.Init(nativeFmodLibrary, FmodInitMode.CoreAndStudio, AssetRegistry.ROOT_PATH, studioInitFlags: FMOD.Studio.INITFLAGS.NORMAL | FMOD.Studio.INITFLAGS.LIVEUPDATE);
 #else
             FmodManager.Init(nativeFmodLibrary, FmodInitMode.CoreAndStudio, AssetRegistry.ROOT_PATH, studioInitFlags: FMOD.Studio.INITFLAGS.NORMAL);
 #endif
+
             listener3D = new Listener3D();
         }
 
@@ -54,7 +59,10 @@ namespace RetroEngine.Audio
 
 
             if (UseFmod == false) return;
-            
+
+
+            StudioSystem.SetParameterValue("parameter:/GameSpeed", Time.TimeScale);
+
             FmodManager.Update();
             listener3D.SetAttributes(SoundManager.listener.Position, Camera.velocity, SoundManager.listener.Forward, -SoundManager.listener.Up);
 

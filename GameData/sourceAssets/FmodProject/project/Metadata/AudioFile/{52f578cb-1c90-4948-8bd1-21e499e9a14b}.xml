@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.02.00">
 	<object class="AudioFile" id="{52f578cb-1c90-4948-8bd1-21e499e9a14b}">
 		<property name="assetPath">
-			<value>DBM_TC2_60_Choir_Layer_Loop_For_Honor_Fmin.wav</value>
+			<value>Music/choirTest/DBM_TC2_60_Choir_Layer_Loop_For_Honor_Fmin.wav</value>
 		</property>
 		<property name="isStreaming">
 			<value>true</value>

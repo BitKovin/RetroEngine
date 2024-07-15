@@ -10,11 +10,15 @@ using RetroEngine;
 using RetroEngine.Entities.Navigaion;
 using RetroEngine.Graphic;
 using RetroEngine.Game.Effects;
+using RetroEngine.Audio;
 
 namespace RetroEngine.Game
 {
     public class Game : RetroEngine.GameMain
     {
+
+        static FmodEventInstance GameSpeedEvent;
+
         protected override void LoadContent()
         {
             base.LoadContent();
@@ -33,6 +37,11 @@ namespace RetroEngine.Game
         {
             AssetRegistry.LoadFmodBankIntoMemory("Sounds/banks/Master.bank");
             AssetRegistry.LoadFmodBankIntoMemory("Sounds/banks/Master.strings.bank");
+
+
+            GameSpeedEvent = FmodEventInstance.Create("snapshot:/GameSpeed");
+            GameSpeedEvent.Play();
+
             Level.LoadFromFile("test");
 
 

@@ -8,7 +8,7 @@
 
 	dynamicSunShadowsEnabled(bool) : "Dynamic Sun Shadows Enabled" : "true"
 
-	geometricalShadowsEnabled(bool) : "Geometrical Shadows Enabled" : "true"
+	geometricalShadowsEnabled(bool) : "Geometrical Shadows Enabled" : "false"
 
 
 	globalLightDirection(Vector3) : "Direct Light Direction": "-1 -1 -0.2"
@@ -72,6 +72,7 @@
 	intensity(float) : "Intensity" : "1"
 	resolution(int) : "Resolution" : "256"
 	dynamic(bool) : "Dynamic" : "false"
+	shadows(bool) : "Shadows" : "true"
 ]
 
 @PointClass base(light) size(-15 -15 -15, 15 15 15) color(255 255 255) model({ "path": "models/tools/radius.obj", "scale": radius * 32 * 2})  = cubeMap : "Graphics" 

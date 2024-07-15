@@ -147,11 +147,6 @@ Weapon sounds courtesy of Frank Bry at The Recordist.</value>
 			<destination>{85f8e27f-ca44-42c1-a994-ad4d5b8a3a4b}</destination>
 			<destination>{edec6b2e-1ccb-485b-b631-a9874588b917}</destination>
 		</relationship>
-		<relationship name="sounds">
-			<destination>{e2923c9d-4533-4f5a-b16b-446f285078b3}</destination>
-			<destination>{ce965250-f3ff-4161-8fd9-21fd1986f118}</destination>
-			<destination>{9973714c-f314-4aaf-82d9-93de7ac3a365}</destination>
-		</relationship>
 	</object>
 	<object class="EventMixerGroup" id="{ea9c197f-e18e-4658-b971-3fbfc0b272f9}">
 		<property name="name">
@@ -243,39 +238,6 @@ Weapon sounds courtesy of Frank Bry at The Recordist.</value>
 		<property name="amount">
 			<value>2</value>
 		</property>
-	</object>
-	<object class="SingleSound" id="{e2923c9d-4533-4f5a-b16b-446f285078b3}">
-		<property name="length">
-			<value>0</value>
-		</property>
-		<property name="voiceStealing">
-			<value>3</value>
-		</property>
-		<relationship name="audioFile">
-			<destination>{4516d375-e205-43b3-94bd-2a3ea63a5bb4}</destination>
-		</relationship>
-	</object>
-	<object class="SingleSound" id="{ce965250-f3ff-4161-8fd9-21fd1986f118}">
-		<property name="length">
-			<value>0</value>
-		</property>
-		<property name="voiceStealing">
-			<value>3</value>
-		</property>
-		<relationship name="audioFile">
-			<destination>{eb9a6ecf-85d8-431c-8c07-fcc337bfdc66}</destination>
-		</relationship>
-	</object>
-	<object class="SingleSound" id="{9973714c-f314-4aaf-82d9-93de7ac3a365}">
-		<property name="length">
-			<value>0</value>
-		</property>
-		<property name="voiceStealing">
-			<value>3</value>
-		</property>
-		<relationship name="audioFile">
-			<destination>{801e8274-ecbb-489f-8ca2-b31b9f2c27ff}</destination>
-		</relationship>
 	</object>
 	<object class="MixerBusEffectChain" id="{39db7427-a2f3-4014-bfa4-4250245b3654}">
 		<relationship name="effects">

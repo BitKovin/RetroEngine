@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.02.00">
 	<object class="AudioFile" id="{ba404303-97a7-48b0-96cc-c3019a51bb0f}">
 		<property name="assetPath">
-			<value>FF_CA_foley_church_bell_attack_medium_C.wav</value>
+			<value>Music/choirTest/FF_CA_foley_church_bell_attack_medium_C.wav</value>
 		</property>
 		<property name="frequencyInKHz">
 			<value>44.0999985</value>

@@ -32,7 +32,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             Intensity = MathHelper.Lerp(Intensity, 0, progress);
 
-            DrawDebug.Sphere(0.01f, Position, lightData.Color, 0.1f);
+            //DrawDebug.Sphere(0.01f, Position, lightData.Color, 0.1f);
 
             //DrawDebug.Line(Position, Camera.position,null, 0.01f);
 

@@ -26,7 +26,6 @@ namespace RetroEngine.Audio
         public string SoundTableKey = string.Empty;
 
 
-        [RequiresDynamicCode("")]
         public FmodEventInstance(EventInstance eventInstance) 
         {
             EventInstance = eventInstance;
@@ -49,12 +48,16 @@ namespace RetroEngine.Audio
             }
 
             EventInstance.Volume = 0;
-            FmodManager.Update();
 
             EventInstance.Start();
 
             
 
+        }
+
+        public void StartEvent()
+        {
+            EventInstance.Start();
         }
 
         public void SetParameter(string name,float value)
