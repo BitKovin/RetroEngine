@@ -18366,6 +18366,7 @@
 "origin" "-17 255 129"
 "radius" "5"
 "intensity" "10"
+"light_color" "1 0 0"
 }
 // entity 6
 {
