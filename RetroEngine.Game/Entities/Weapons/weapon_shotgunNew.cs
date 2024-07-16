@@ -1,5 +1,6 @@
 ﻿using BulletSharp;
 using Microsoft.Xna.Framework;
+using RetroEngine.Audio;
 using RetroEngine.Entities;
 using RetroEngine.Game.Entities.Player;
 using RetroEngine.PhysicsSystem;
@@ -35,8 +36,8 @@ namespace RetroEngine.Game.Entities.Weapons
             base.Start();
 
             fireSoundPlayer = Level.GetCurrent().AddEntity(new SoundPlayer()) as SoundPlayer;
-            fireSoundPlayer.SetSound(AssetRegistry.LoadSoundFromFile("sounds/pistol_fire.wav"));
-            fireSoundPlayer.Volume = 0.1f;
+            fireSoundPlayer.SetSound(FmodEventInstance.Create("event:/Weapons/shotgun/shotgun_fire"));
+            fireSoundPlayer.Volume = 1f;
 
 
             meshTp.ParrentBounds = ((PlayerCharacter)player).GetSkeletalMesh();
@@ -121,7 +122,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             if (attackDelay.Wait()) return;
 
-            attackDelay.AddDelay(0.85f);
+            attackDelay.AddDelay(1f);
 
             fireSoundPlayer.Play(true);
 

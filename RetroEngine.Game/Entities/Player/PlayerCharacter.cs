@@ -206,9 +206,10 @@ namespace RetroEngine.Game.Entities.Player
 
             stepSound.SetParameter("Surface", 1);
 
-            weapons.Add(new WeaponData { weaponType = typeof(weapon_hammer), ammo = 1 });
+            //weapons.Add(new WeaponData { weaponType = typeof(weapon_hammer), ammo = 1 });
             //weapons.Add(new WeaponData { weaponType = typeof(weapon_shotgunNew), ammo = 50 });
-            //weapons.Add(new WeaponData { weaponType = typeof(weapon_pistol_double), ammo = 50 });
+            weapons.Add(new WeaponData { weaponType = typeof(weapon_pistol_double), ammo = 50 });
+            SwitchToSlot(0, true);
 
             interpolatedPosition = Position;
 

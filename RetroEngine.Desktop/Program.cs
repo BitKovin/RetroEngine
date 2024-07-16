@@ -21,6 +21,8 @@ internal class Program
 
         SoundManager.nativeFmodLibrary = new FmodForFoxes.DesktopNativeFmodLibrary();
 
+        RetroEngine.Render.UsesOpenGL = true;
+
         using var game = new RetroEngine.Game.Game();
         RetroEngine.GameMain.platform = RetroEngine.Platform.Desktop;
         Input.MouseMoveCalculatorObject = new WindowsInputCalculator();

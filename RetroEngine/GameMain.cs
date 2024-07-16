@@ -87,6 +87,7 @@ namespace RetroEngine
 
         public static bool CompatibilityMode = false;
 
+
         public GameMain()
         {
             _graphics = new GraphicsDeviceManager(this);

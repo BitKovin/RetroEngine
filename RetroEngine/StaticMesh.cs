@@ -129,6 +129,14 @@ namespace RetroEngine
         public StaticMesh()
         {
 
+            if(Render.UsesOpenGL)
+            {
+                if(Level.ChangingLevel == false)
+                {
+                    DisableOcclusionCulling = true;
+                }
+            }
+
             ormTexture = AssetRegistry.LoadTextureFromFile("engine/textures/defaultORM.png");
 
             if(GameMain.CompatibilityMode == false)

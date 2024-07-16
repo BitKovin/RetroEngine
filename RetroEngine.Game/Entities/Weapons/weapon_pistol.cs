@@ -183,6 +183,9 @@ namespace RetroEngine.Game.Entities.Weapons
                 //mesh.PastePose(character.GetSkeletalMesh().GetPose());
             }
         }
+
+        bool a = false;
+
         void Shoot()
         {
             if (Drawing) return;
@@ -194,8 +197,12 @@ namespace RetroEngine.Game.Entities.Weapons
             
 
 
-                mesh.PlayAnimation("fire", false);
+            mesh.PlayAnimation("fire", false);
+
+            if (a)
                 fireSoundPlayer.Play(true);
+            else
+                fireSoundPlayer2.Play(true);
 
 
             pistolAnimationAim.PlayAnimation(0, false);
@@ -238,6 +245,8 @@ namespace RetroEngine.Game.Entities.Weapons
             bullet.ignore.Add(player);
 
             aimAnimation = 3;
+
+            a = !a;
 
             return;
 

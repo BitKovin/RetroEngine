@@ -43,8 +43,9 @@ namespace RetroEngine
 
 
 
-        public SkeletalMesh()
+        public SkeletalMesh() : base()
         {
+
             CastShadows = true;
 
             CastGeometricShadow = true;

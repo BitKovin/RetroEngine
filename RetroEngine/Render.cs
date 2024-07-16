@@ -115,6 +115,9 @@ namespace RetroEngine
         public static Texture2D LUT;
 
         public static bool StableDirectShadows = false;
+
+        public static bool UsesOpenGL = false;
+
         public Render()
         {
             graphics = GameMain.Instance._graphics;

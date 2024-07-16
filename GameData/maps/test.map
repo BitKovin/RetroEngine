@@ -18373,3 +18373,128 @@
 "classname" "weaponPickup"
 "origin" "44 68 36"
 }
+// entity 7
+{
+"classname" "ent_cat_point"
+"origin" "-288 -576 48"
+}
+// entity 8
+{
+"classname" "ent_cat_point"
+"origin" "-320 -336 16"
+}
+// entity 9
+{
+"classname" "ent_cat_point"
+"origin" "-320 -320 16"
+}
+// entity 10
+{
+"classname" "ent_cat_point"
+"origin" "-320 -320 16"
+}
+// entity 11
+{
+"classname" "ent_cat_point"
+"origin" "-320 -304 16"
+}
+// entity 12
+{
+"classname" "ent_cat_point"
+"origin" "-336 -224 16"
+}
+// entity 13
+{
+"classname" "ent_cat_point"
+"origin" "-512 -432 32"
+}
+// entity 14
+{
+"classname" "ent_cat_point"
+"origin" "-368 -560 48"
+}
+// entity 15
+{
+"classname" "ent_cat_point"
+"origin" "-240 -528 32"
+}
+// entity 16
+{
+"classname" "ent_cat_point"
+"origin" "-208 -448 32"
+}
+// entity 17
+{
+"classname" "ent_cat_point"
+"origin" "-208 -288 16"
+}
+// entity 18
+{
+"classname" "ent_cat_point"
+"origin" "-224 -208 16"
+}
+// entity 19
+{
+"classname" "ent_cat_point"
+"origin" "-368 -432 32"
+}
+// entity 20
+{
+"classname" "ent_cat_point"
+"origin" "-432 -352 16"
+}
+// entity 21
+{
+"classname" "ent_cat_point"
+"origin" "-480 -208 16"
+}
+// entity 22
+{
+"classname" "ent_cat_point"
+"origin" "-464 -80 16"
+}
+// entity 23
+{
+"classname" "ent_cat_point"
+"origin" "-304 16 16"
+}
+// entity 24
+{
+"classname" "ent_cat_point"
+"origin" "-320 -160 16"
+}
+// entity 25
+{
+"classname" "ent_cat_point"
+"origin" "-432 -208 16"
+}
+// entity 26
+{
+"classname" "ent_cat_point"
+"origin" "-448 -320 16"
+}
+// entity 27
+{
+"classname" "ent_cat_point"
+"origin" "-352 -496 32"
+}
+// entity 28
+{
+"classname" "ent_cat_point"
+"origin" "-208 -544 48"
+}
+// entity 29
+{
+"classname" "ent_cat_point"
+"origin" "-176 -560 48"
+}
+// entity 30
+{
+"classname" "ent_cat_point"
+"origin" "-256 -640 48"
+}
+// entity 31
+{
+"classname" "ent_cat_point"
+"origin" "-336 -672 48"
+}

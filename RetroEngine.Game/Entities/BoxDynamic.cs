@@ -65,7 +65,8 @@ namespace RetroEngine.Game.Entities
 
             mesh.CastShadows = true;
 
-            mesh.CastGeometricShadow = true;
+
+            //mesh.CastGeometricShadow = true;
 
             meshes.Add(mesh);
 

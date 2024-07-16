@@ -51,10 +51,22 @@ VertexOutput SimpleVertexShader(VertexInput input)
     return output;
 }
 
-// Pixel shader
-float PixelShaderFunction(float4 position : SV_POSITION, float4 color : COLOR0, float2 texCoord : TEXCOORD0) : SV_Depth
+struct PixelOut
 {
-    return tex2D(DepthTextureSampler, texCoord).x;
+    float4 color : COLOR0;
+    float depth : SV_Depth;
+};
+
+// Pixel shader
+PixelOut PixelShaderFunction(float4 position : SV_POSITION, float4 color : COLOR0, float2 texCoord : TEXCOORD0)
+{
+
+    PixelOut output = (PixelOut)0;
+
+    output.color = float4(0,0,0,0);
+    output.depth = tex2D(DepthTextureSampler, texCoord).x;
+
+    return output;
 }
 
 // Technique
