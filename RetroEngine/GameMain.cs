@@ -285,7 +285,7 @@ namespace RetroEngine
 
             
 
-            UiElement.Viewport.Update();
+            
             
             Camera.ViewportUpdate();
 
@@ -296,6 +296,9 @@ namespace RetroEngine
             Stats.StopRecord("waiting for physics");
 
             bool changedLevel = Level.LoadPendingLevel();
+
+            UiElement.Viewport.Update();
+
             if (AsyncGameThread && changedLevel == false)
             {
                 Stats.StartRecord("starting game task");

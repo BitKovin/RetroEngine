@@ -68,7 +68,7 @@ namespace RetroEngine.UI
         public static UiElement Viewport;
 
         public bool hovering;
-        public Collision2D col = new Collision2D();
+        protected Collision2D col = new Collision2D();
 
         public Vector2 size = new Vector2(1,1);
 
@@ -81,7 +81,7 @@ namespace RetroEngine.UI
 
         public Vector2 relativeOrigin = new Vector2();
 
-        protected Vector2 offset;
+        public Vector2 offset;
 
         protected Vector2 ParrentTopLeft;
         protected Vector2 ParrentBottomRight;
@@ -89,6 +89,11 @@ namespace RetroEngine.UI
         public UiElement parrent { get; private set; }
 
         public bool Visible = true;
+
+        public bool DrawBorder = false;
+
+        Vector2 TopLeft;
+        Vector2 BottomRight;
 
         public UiElement()
         {
@@ -99,14 +104,15 @@ namespace RetroEngine.UI
             float ScaleY = GameMain.Instance.Window.ClientBounds.Height / UiViewport.GetViewportHeight();
             //float HtV = ((float)GameMain.Instance.Window.ClientBounds.Width) / ((float)GameMain.Instance.Window.ClientBounds.Height);
 
-            Console.WriteLine(ScaleY);
 
-            Vector2 TopLeft = position - size * Origin;
-            Vector2 BottomRight = position + size * (Vector2.One - Origin);
 
-            offset = GetOrigin() + GetSize()*Pivot;
 
-            
+
+
+            offset = GetOrigin() - GetSize() * Pivot;
+
+            TopLeft = position + offset;
+            BottomRight = position + offset + GetSize();
 
             if (GameMain.platform == Platform.Desktop)
             {
@@ -217,6 +223,15 @@ namespace RetroEngine.UI
 
         public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
+
+            if (DrawBorder)
+            {
+                Rectangle mainRectangle = new Rectangle();
+                mainRectangle.Location = new Point((int)position.X + (int)offset.X, (int)position.Y + (int)offset.Y);
+                mainRectangle.Size = new Point((int)GetSize().X, (int)GetSize().Y);
+
+                spriteBatch.Draw(AssetRegistry.LoadTextureFromFile("engine/textures/border.png"), mainRectangle, new Color(1, 0, 0, 0.3f));
+            }
             foreach (UiElement element in childs)
                 if(element.Visible)
                     element.Draw(gameTime, spriteBatch);

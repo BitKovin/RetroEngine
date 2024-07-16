@@ -18,12 +18,12 @@ namespace RetroEngine.UI
 
         public override void Update()
         {
-            base.Update();
 
-            position = parrent.position;
+            //position = parrent.position + parrent.offset;
 
             size = GetSize();
 
+            base.Update();
         }
 
     }

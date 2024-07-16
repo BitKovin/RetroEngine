@@ -38,7 +38,7 @@ namespace RetroEngine.Game.Entities.Player
 
             crosshair.Origin = new Vector2(0.5f, 0.5f);
             crosshair.size = new Vector2(10, 10);
-            crosshair.position = -crosshair.size/2;
+            crosshair.Pivot = new Vector2(0.5f, 0.5f);
 
             AddChild(crosshair);
 

@@ -31,17 +31,12 @@ namespace RetroEngine.Game.Entities.MainMenu
 
                 MenuButtons menuButtons = new MenuButtons();
 
-                menuButtons.Origin = new Vector2(0,-0.5f);
+                menuButtons.Origin = new Vector2(0.0f,0.5f);
+                menuButtons.position = new Vector2(10,0);
+
+                //position = new Vector2(300,300);
 
                 AddChild(menuButtons);
-
-            }
-
-            public override void Update()
-            {
-                base.Update();
-
-                Console.WriteLine(Input.MousePos);
 
             }
 
@@ -51,14 +46,25 @@ namespace RetroEngine.Game.Entities.MainMenu
         {
             public MenuButtons()
             {
+
+                //DrawBorder = true;
+
                 Button button = new Button();
-                button.size = new Vector2(100, 20);
+                button.size = new Vector2(200, 50);
                 button.position = new Vector2(0, 0);
+                
+                Text text = new Text();
+                text.text = "Play";
+                text.Pivot = new Vector2(0.5f);
+                text.Origin = new Vector2(0.5f);
+                text.baseColor = Color.Black;
+                button.AddChild(text);
+
                 AddChild(button);
 
                 Button button2 = new Button();
                 button2.size = new Vector2(100, 20);
-                button2.position = new Vector2(0, 30);
+                button2.position = new Vector2(0, 100);
                 AddChild(button2);
             }
 
