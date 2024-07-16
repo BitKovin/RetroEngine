@@ -116,7 +116,7 @@ namespace RetroEngine
 
             Window.ClientSizeChanged += Window_ClientSizeChanged;
 
-            
+            Input.AddAction("click").LMB = true;
 
             stopwatch.Start();
 

@@ -67,7 +67,7 @@ namespace RetroEngine
             return GameMain.Instance.curentLevel;
         }
 
-        public static bool LoadPendingLevel()
+        internal static bool LoadPendingLevel()
         {
             if (pendingLevelChange != null)
             {

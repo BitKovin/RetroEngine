@@ -49,28 +49,46 @@ namespace RetroEngine.Game.Entities.MainMenu
 
                 //DrawBorder = true;
 
-                Button button = new Button();
+                MenuButton button = new MenuButton();
                 button.size = new Vector2(200, 50);
                 button.position = new Vector2(0, 0);
-                
-                Text text = new Text();
-                text.text = "Play";
-                text.Pivot = new Vector2(0.5f);
-                text.Origin = new Vector2(0.5f);
-                text.baseColor = Color.Black;
-                button.AddChild(text);
-
+                button.Text = "Play";
+                button.onReleased += () => { Level.LoadLevelFromFile("test"); };
                 AddChild(button);
 
-                Button button2 = new Button();
+                MenuButton button2 = new MenuButton();
                 button2.size = new Vector2(100, 20);
                 button2.position = new Vector2(0, 100);
+                button2.Text = "Quit";
+                button2.onReleased += () => { System.Environment.Exit(0); };
                 AddChild(button2);
             }
 
             public override void Update()
             {
                 base.Update();
+            }
+
+            class MenuButton : Button
+            {
+
+                public Text uiText;
+
+                public string Text { get { return uiText.text; } set { uiText.text = value; } }
+
+                public MenuButton() : base()
+                {
+                    uiText = new Text();
+                    uiText.text = "hello world";
+
+                    uiText.Origin = new Vector2(0.5f);
+                    uiText.Pivot = new Vector2(0.5f);
+                    uiText.baseColor = Color.Black;
+
+                    AddChild(uiText);
+
+                }
+
             }
 
         }

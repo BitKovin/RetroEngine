@@ -26,6 +26,8 @@ namespace RetroEngine.UI
 
         float delay;
 
+        bool clicked = false;
+
         public Button() : base()
         {
             tex = new Texture2D(GameMain.Instance.GraphicsDevice, 1, 1);
@@ -40,25 +42,45 @@ namespace RetroEngine.UI
 
             if (GameMain.platform == Platform.Desktop)
             {
-                pressing = Mouse.GetState().LeftButton == ButtonState.Pressed && hovering;
+                if (pressing == false)
+                {
+                    pressing = Input.GetAction("click").Pressed() && hovering;
+                }else
+                {
+                    pressing = Mouse.GetState().LeftButton == ButtonState.Pressed && hovering;
+                }
             }
             else if (GameMain.platform == Platform.Mobile)
             {
                 pressing = hovering;
             }
 
+            if (hovering == false)
+                clicked = false;
+
             if (pressing != oldPressing)
             {
                 if (pressing)
                 {
-                    if (onClicked != null&&delay<=0)
+                    clicked = true;
+
+                    Console.WriteLine(clicked);
+
+                    if (onClicked != null && delay <= 0)
+                    {
                         onClicked.Invoke();
+                    }
                     delay = 0;
                 }
+
                 if (!pressing)
-                    if (onReleased != null)
+                    if (onReleased != null && clicked)
+                    {
                         onReleased.Invoke();
+                    }
+
             }
+
 
             oldPressing = pressing;
 
