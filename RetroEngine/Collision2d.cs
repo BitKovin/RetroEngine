@@ -12,7 +12,7 @@ namespace RetroEngine
         public Point size;
         public Entity owner;
 
-        const int Accuracy = 500;
+        const int Accuracy = 1;
 
         public static bool MakeCollionTest(Collision2D col1, Collision2D col2)
         {

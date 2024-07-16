@@ -42,7 +42,7 @@ namespace RetroEngine.Game
             GameSpeedEvent = FmodEventInstance.Create("snapshot:/GameSpeed");
             GameSpeedEvent.Play();
 
-            Level.LoadFromFile("test");
+            Level.LoadFromFile("menu");
 
 
         }
@@ -76,7 +76,8 @@ namespace RetroEngine.Game
             AssetRegistry.LoadFmodBankIntoMemory("Sounds/banks/Master.bank");
             AssetRegistry.LoadFmodBankIntoMemory("Sounds/banks/Master.strings.bank");
 
-            Level.GetCurrent().AddEntity(new Entities.Player.PlayerGlobal());
+            
+            
 
 
             //PostProcessStep.StepsAfter.Add(new TestPP());

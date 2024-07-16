@@ -1,0 +1,32 @@
+// Game: GenericEngine
+// Format: Standard
+// entity 0
+{
+"classname" "worldspawn"
+"_tb_textures" "textures;textures\brushes"
+// brush 0
+{
+( -560 992 16 ) ( -560 -64 16 ) ( -560 -64 -16 ) brushes/ground_pbr 0 0 0 0.17 0.17
+( -560 -64 16 ) ( 624 -64 16 ) ( 624 -64 -16 ) brushes/ground_pbr 0 0 0 0.17 0.17
+( 624 -64 -16 ) ( 624 992 -16 ) ( -560 992 -16 ) brushes/ground_pbr 0 0 0 0.17 0.17
+( -560 992 16 ) ( 624 992 16 ) ( 624 -64 16 ) brushes/ground_pbr 0 0 0 0.17 0.17
+( 624 992 -16 ) ( 624 992 16 ) ( -560 992 16 ) brushes/ground_pbr 0 0 0 0.17 0.17
+( 624 -64 16 ) ( 624 992 16 ) ( 624 992 -16 ) brushes/ground_pbr 0 0 0 0.17 0.17
+}
+}
+// entity 1
+{
+"classname" "main_menu"
+"origin" "-58 522 26"
+}
+// entity 2
+{
+"classname" "camera_target"
+"origin" "200 488 24"
+"targetname" "camera_target"
+}
+// entity 3
+{
+"classname" "camera_point"
+"origin" "-472 488 216"
+}

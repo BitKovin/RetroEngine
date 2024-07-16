@@ -137,7 +137,7 @@ namespace RetroEngine
             Physics.ResetWorld();
             Physics.Simulate();
 
-            UiElement.Viewport.childs.Clear();
+            UiElement.Viewport.ClearChild();
 
 
             Navigation.ClearNavData();

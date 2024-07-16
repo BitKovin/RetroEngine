@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace RetroEngine.Game.Entities.Player
 {
-    internal class PlayerUI
+    internal class PlayerUI : UiCanvas
     {
 
         Entity player;
@@ -29,6 +29,8 @@ namespace RetroEngine.Game.Entities.Player
 
         public static bool ShowCrosshair = true;
 
+        static PlayerUI instance;
+
         public void Load()
         {
             crosshair.baseColor = new Color(1f, 1f, 1f) * 2f;
@@ -37,27 +39,35 @@ namespace RetroEngine.Game.Entities.Player
             crosshair.Origin = new Vector2(0.5f, 0.5f);
             crosshair.size = new Vector2(10, 10);
             crosshair.position = -crosshair.size/2;
-            UiElement.Viewport.childs.Add(crosshair);
+
+            AddChild(crosshair);
 
             health.Origin = new Vector2(0, 1);
             health.position = new Vector2(10,-50);
             health.FontSize = 24;
             health.AlignProgress = new Vector2(0.0f, 0.5f);
-            UiElement.Viewport.childs.Add(health);
+            AddChild(health);
 
             fps.Origin = new Vector2(0, 0);
             fps.position = new Vector2(10, 50);
             fps.FontSize = 24;
             fps.AlignProgress = new Vector2(0.0f, 0.5f);
-            UiElement.Viewport.childs.Add(fps);
+            AddChild(fps);
+
+            Viewport.AddChild(this);
 
             //LoadWorldCrosshair();
+
+            instance = this;
 
             loaded = true;
         }
 
-        public void Update()
+        public override void Update()
         {
+
+            base.Update();
+
             if (loaded == false) return;
 
             health.text = ((Vector3)((ICharacter)player).GetPhysicsBody().LinearVelocity).XZ().Length().ToString();
@@ -73,8 +83,11 @@ namespace RetroEngine.Game.Entities.Player
 
         public void Destroy()
         {
-
+            ClearChild();
+            Viewport.RemoveChild(this);
         }
+
+
 
         void LoadWorldCrosshair()
         {
@@ -110,6 +123,16 @@ namespace RetroEngine.Game.Entities.Player
             crosshair.position = UiElement.WorldToScreenSpace(crosshairPos) - crosshair.size/2;
 
         }
+
+        [ConsoleCommand("hud.show")]
+        public static void SetVisibility(bool value)
+        {
+
+            if (instance == null) return;
+
+            instance.Visible = value;
+        }
+
 
     }
 }

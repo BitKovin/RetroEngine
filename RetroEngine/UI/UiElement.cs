@@ -63,7 +63,7 @@ namespace RetroEngine.UI
 
     public class UiElement
     {
-        public List<UiElement> childs = new List<UiElement>();
+        private List<UiElement> childs = new List<UiElement>();
 
         public static UiElement Viewport;
 
@@ -86,6 +86,10 @@ namespace RetroEngine.UI
         protected Vector2 ParrentTopLeft;
         protected Vector2 ParrentBottomRight;
 
+        public UiElement parrent { get; private set; }
+
+        public bool Visible = true;
+
         public UiElement()
         {
         }
@@ -93,10 +97,11 @@ namespace RetroEngine.UI
         public virtual void Update()
         {
             float ScaleY = GameMain.Instance.Window.ClientBounds.Height / UiViewport.GetViewportHeight();
-            float HtV = ((float)GameMain.Instance.Window.ClientBounds.Width) / ((float)GameMain.Instance.Window.ClientBounds.Height);
+            //float HtV = ((float)GameMain.Instance.Window.ClientBounds.Width) / ((float)GameMain.Instance.Window.ClientBounds.Height);
 
+            Console.WriteLine(ScaleY);
 
-            Vector2 TopLeft = position - size*Origin;
+            Vector2 TopLeft = position - size * Origin;
             Vector2 BottomRight = position + size * (Vector2.One - Origin);
 
             offset = GetOrigin() + GetSize()*Pivot;
@@ -106,11 +111,12 @@ namespace RetroEngine.UI
             if (GameMain.platform == Platform.Desktop)
             {
 
-                col.size = new Point((int)size.X, (int)size.Y);
+                col.size = new Point((int)GetSize().X, (int)GetSize().Y);
                 col.position = new Vector2((int)position.X + (int)offset.X, (int)position.Y + (int)offset.Y);
                 Collision2D mouseCol = new Collision2D();
                 mouseCol.size = new Point(2, 2);
-                mouseCol.position = new Vector2((int)Input.MousePos.X, (int)Input.MousePos.Y);
+                mouseCol.position = new Vector2(Input.MousePos.X, Input.MousePos.Y) / ScaleY;
+                mouseCol.position -= new Vector2(1,1);
                 hovering = Collision2D.MakeCollionTest(col, mouseCol);
             }
             else if (GameMain.platform == Platform.Mobile)
@@ -143,6 +149,7 @@ namespace RetroEngine.UI
                     {
                         element.ParrentTopLeft = TopLeft;
                         element.ParrentBottomRight = BottomRight;
+                        element.parrent = this;
                         element.Update();
                     }
                 }
@@ -160,6 +167,30 @@ namespace RetroEngine.UI
         public virtual Vector2 GetSize()
         {
             return size;
+        }
+
+        public virtual void AddChild(UiElement child)
+        {
+            lock(childs)
+            {
+                childs.Add(child);
+            }
+        }
+
+        public virtual void RemoveChild(UiElement child)
+        {
+            lock(childs)
+            {
+                childs.Remove(child);
+            }
+        }
+
+        public virtual void ClearChild()
+        {
+            lock(childs)
+            {
+                childs.Clear();
+            }
         }
 
         public static Vector2 WorldToScreenSpace(Vector3 pos)
@@ -187,7 +218,8 @@ namespace RetroEngine.UI
         public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             foreach (UiElement element in childs)
-                element.Draw(gameTime, spriteBatch);
+                if(element.Visible)
+                    element.Draw(gameTime, spriteBatch);
         }
     }
 

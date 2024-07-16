@@ -165,7 +165,10 @@ namespace RetroEngine.Map
                 }
                 else
                 {
-                    if (entity is null) continue;
+                    if (entity is null)
+                    {
+                        entity = new Entity();
+                    }
 
                     if (ent.Properties.ContainsKey("origin"))
                     {

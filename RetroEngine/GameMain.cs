@@ -77,13 +77,13 @@ namespace RetroEngine
 
         ImFontPtr font;
 
-        internal static int SkipFrames = 0;
+        public static int SkipFrames = 0;
 
         public static float ReservedTaskMinTime = 0.000f;
 
         public static float ReservedTaskPresentMinTime = 0.000f;
 
-        internal static List<IDisposable> pendingDispose = new List<IDisposable>();
+        public static List<IDisposable> pendingDispose = new List<IDisposable>();
 
         public static bool CompatibilityMode = false;
 
@@ -520,8 +520,10 @@ namespace RetroEngine
 
         internal virtual void DrawSplashIfNeed()
         {
-            if (GameTotalTime.Elapsed.TotalSeconds < 4)
+#if RELEASE
+            if (GameTotalTime.Elapsed.TotalSeconds < 2)
                 DrawSplash();
+#endif
         }
 
         

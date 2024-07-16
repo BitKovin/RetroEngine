@@ -59,6 +59,8 @@ namespace RetroEngine
                 AddMouseInput(MouseDelta);
                 MouseDelta *= sensitivity;
 
+                MousePos = mousePos;
+
                 return;
             }
 

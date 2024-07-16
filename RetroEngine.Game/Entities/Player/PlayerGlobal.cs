@@ -20,6 +20,8 @@ namespace RetroEngine.Game.Entities.Player
 
             pauseEvent = FmodEventInstance.Create("snapshot:/Pause");
 
+            name = "PlayerGlobal";
+
         }
 
         public override void Update()

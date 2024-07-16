@@ -26,14 +26,6 @@ namespace RetroEngine.Game.Entities.Player
     public class PlayerCharacter : Entity, ICharacter
     {
 
-        Button buttonUp = new Button();
-        Button buttonUpRight = new Button();
-        Button buttonUpLeft = new Button();
-        Button buttonDown = new Button();
-        Button buttonLeft = new Button();
-        Button buttonRight = new Button();
-        Button buttonRotate = new Button();
-
 
         StaticMesh cylinder = new StaticMesh();
 
@@ -55,8 +47,6 @@ namespace RetroEngine.Game.Entities.Player
         Vector3 bob;
 
         float cameraRoll;
-
-        bool FirstTick = true;
 
         SoundPlayer stepSoundPlayer;
         FmodEventInstance stepSound;
@@ -97,24 +87,7 @@ namespace RetroEngine.Game.Entities.Player
             if (GameMain.platform == Platform.Mobile)
             {
 
-                buttonLeft = new Button();
-                buttonLeft.position = new Vector2(59, 601);
-                buttonLeft.size = new Vector2(100, 100);
-                UiElement.Viewport.childs.Add(buttonLeft);
-
-                buttonRight = new Button();
-                buttonRight.position = new Vector2(112 + 50, 601);
-                buttonRight.size = new Vector2(100, 100);
-                UiElement.Viewport.childs.Add(buttonRight);
-
-                buttonRotate = new Button();
-                buttonRotate.position = new Vector2(-200, 601);
-                buttonRotate.size = new Vector2(100, 100);
-                buttonRotate.Origin = new Vector2(1,0);
-                UiElement.Viewport.childs.Add(buttonRotate);
             }
-
-            buttonRotate.onClicked += ButtonRotate_onClicked;
 
             Tags.Add("player");
 
@@ -224,6 +197,11 @@ namespace RetroEngine.Game.Entities.Player
             PlayerFlashLight.Intensity = 1;
 
             PlayerFlashLight.Start();
+
+
+            if(Level.GetCurrent().FindEntityByName("PlayerGlobal") == null)
+                Level.GetCurrent().AddEntity(new Entities.Player.PlayerGlobal());
+
         }
 
         void UpdatePlayerInput()
@@ -272,7 +250,6 @@ namespace RetroEngine.Game.Entities.Player
 
             InterpolatePos();
 
-            FirstTick = false;
 
             Camera.velocity = body.LinearVelocity;
 
@@ -371,7 +348,7 @@ namespace RetroEngine.Game.Entities.Player
 
         void UpdateCamera()
         {
-            if (!FirstTick)
+            if (GameMain.SkipFrames == 0)
                 Camera.rotation += new Vector3(Input.MouseDelta.Y, -Input.MouseDelta.X, 10) / 2f;
 
             Camera.rotation = new Vector3(Math.Clamp(Camera.rotation.X, -89, 89), Camera.rotation.Y, 0);
@@ -390,16 +367,16 @@ namespace RetroEngine.Game.Entities.Player
 
             Vector2 input = new Vector2();
 
-            if (buttonUp.pressing || Input.GetAction("moveForward").Holding() || buttonUpRight.pressing || buttonUpLeft.pressing)
+            if (Input.GetAction("moveForward").Holding())
                 input += new Vector2(0, 1);
 
-            if (buttonDown.pressing || Input.GetAction("moveBackward").Holding())
+            if (Input.GetAction("moveBackward").Holding())
                 input -= new Vector2(0, 1);
 
-            if (buttonRight.pressing || Input.GetAction("moveRight").Holding() || buttonUpRight.pressing)
+            if (Input.GetAction("moveRight").Holding())
                 input += new Vector2(1, 0);
 
-            if (buttonLeft.pressing || Input.GetAction("moveLeft").Holding() || buttonUpLeft.pressing)
+            if (Input.GetAction("moveLeft").Holding())
                 input -= new Vector2(1, 0);
 
 
@@ -653,7 +630,7 @@ namespace RetroEngine.Game.Entities.Player
 
             UpdatePlayerInput();
 
-            bodyMesh.Position = interpolatedPosition - Camera.rotation.GetForwardVector().XZ().Normalized() * 0.25f - new Vector3(0, 1.0f, 0);
+            bodyMesh.Position = interpolatedPosition - Camera.rotation.GetForwardVector().XZ().Normalized() * 0.25f - new Vector3(0, 1.01f, 0);
             bodyMesh.Rotation = new Vector3(0, Camera.rotation.Y, 0);
 
             
@@ -677,7 +654,8 @@ namespace RetroEngine.Game.Entities.Player
             }
 
             UpdatePlayerLight();
-            PlayerUI.Update();
+
+            
 
             cylinder.Position = Position + Camera.rotation.GetForwardVector().XZ() * 3;
         }
@@ -749,8 +727,6 @@ namespace RetroEngine.Game.Entities.Player
         Vector3 Friction(Vector3 vel, float factor = 50f)
         {
 
-            if (FirstTick)
-                return new Vector3();
 
             vel = vel.XZ();
 

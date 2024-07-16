@@ -15,13 +15,18 @@ namespace RetroEngine.UI
         public override void Update()
         {
 
-            size = new Vector2 (GetViewportHeight() * Camera.HtW, GetViewportHeight());
+            size = GetSize();
 
             ParrentTopLeft = new Vector2();
 
             ParrentBottomRight = size;
 
             base.Update();
+        }
+
+        public override Vector2 GetSize()
+        {
+            return new Vector2(GetViewportHeight() * Camera.HtW, GetViewportHeight());
         }
 
         public static float GetViewportHeight()
