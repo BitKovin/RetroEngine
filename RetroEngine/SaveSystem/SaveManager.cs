@@ -13,6 +13,8 @@ namespace RetroEngine.SaveSystem
 
         internal static LevelSaveData pendingLoadData;
 
+        public static string ProfileName = "player";
+
         public static bool HasPendingLoad()
         {
             return pendingLoadData.levelName != null;
@@ -51,11 +53,16 @@ namespace RetroEngine.SaveSystem
 
             string save = JsonSerializer.Serialize(data, options);
 
-            var stream = File.CreateText(AssetRegistry.ROOT_PATH + fileName);
+            var stream = File.CreateText(GetProfilePath() + fileName);
             stream.Write(save);
             stream.Close();
             Logger.Log("saved game");
 
+        }
+
+        public static string GetProfilePath()
+        {
+            return AssetRegistry.ROOT_PATH + ProfileName;
         }
 
         static List<EntitySaveData> GetEntitySaveDatas()
@@ -158,6 +165,11 @@ namespace RetroEngine.SaveSystem
                 targetEntity.LoadData(entity);
 
             }
+        }
+
+        public static void LoadGameFromFile(string name)
+        {
+            LoadGameFromPath(GetProfilePath() + name);
         }
 
         public static void LoadGameFromPath(string path)

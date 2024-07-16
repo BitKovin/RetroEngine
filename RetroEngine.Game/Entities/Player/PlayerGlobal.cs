@@ -66,7 +66,7 @@ namespace RetroEngine.Game.Entities.Player
 
                 if (Input.GetAction("qLoad").Pressed())
                 {
-                    SaveSystem.SaveManager.LoadGameFromPath(AssetRegistry.ROOT_PATH + "save.sav");
+                    SaveSystem.SaveManager.LoadGameFromFile("save.sav");
 
                 }
             }

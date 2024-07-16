@@ -1,7 +1,7 @@
-﻿using Assimp;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RetroEngine.Map;
+using RetroEngine.PhysicsSystem;
 using SharpFont;
 using System;
 using System.Collections.Generic;
@@ -21,6 +21,13 @@ namespace RetroEngine.Entities.Light
         static List<PointLight> finalLights = new List<PointLight>();
 
         internal BoundingSphere lightSphere = new BoundingSphere();
+
+        List<CubeMapFace> facesToUpdate = new List<CubeMapFace>();
+
+        public float CollisionTestRadius = 0;
+
+        public bool SkipUp = false;
+        public bool SkipDown = false;
 
         public PointLight() 
         {
@@ -86,6 +93,11 @@ namespace RetroEngine.Entities.Light
 
             CastShadows = data.GetPropertyBool("shadows",true);
 
+            CollisionTestRadius = data.GetPropertyFloat("collisionTestRadius", 0);
+
+            SkipUp = data.GetPropertyBool("dynamicSkipUp", false);
+            SkipDown = data.GetPropertyBool("dynamicSkipDown", false);
+
             if (CastShadows == false)
                 resolution = 5;
 
@@ -109,7 +121,10 @@ namespace RetroEngine.Entities.Light
 
             if (Level.ChangingLevel == false) return;
 
-            Render();
+            if(Level.ChangingLevel== true)
+                Render();
+
+            TestFaceSide();
 
             mesh.Visible = true;
             mesh.Position = Position;
@@ -117,6 +132,75 @@ namespace RetroEngine.Entities.Light
             
 
             mesh.Shader = AssetRegistry.GetShaderFromName("CubeMapVisualizer");
+
+        }
+
+        void TestFaceSide()
+        {
+
+            facesToUpdate = new List<CubeMapFace>();
+
+            TestSide(CubeMapFace.PositiveX);
+            TestSide(CubeMapFace.NegativeX);
+            TestSide(CubeMapFace.PositiveY);
+            TestSide(CubeMapFace.NegativeY);
+            TestSide(CubeMapFace.PositiveZ);
+            TestSide(CubeMapFace.NegativeZ);
+
+        }
+
+        Vector3 GetCubemapDirection(CubeMapFace face)
+        {
+            Vector3 dir = Vector3.Zero;
+
+            switch (face)
+            {
+                case CubeMapFace.PositiveX:
+                    dir = Vector3.UnitX; break;
+
+                case CubeMapFace.NegativeX:
+                    dir = -Vector3.UnitX; break;
+
+                case CubeMapFace.PositiveY:
+                    dir = Vector3.UnitY; break;
+
+                case CubeMapFace.NegativeY:
+                    dir = -Vector3.UnitY; break;
+
+                case CubeMapFace.PositiveZ:
+                    dir = Vector3.UnitZ; break;
+
+                case CubeMapFace.NegativeZ:
+                    dir = -Vector3.UnitZ; break;
+
+            }
+
+            return dir;
+        }
+
+        void TestSide(CubeMapFace face)
+        {
+
+
+            Vector3 dir = GetCubemapDirection(face);
+
+            Vector3 testPos = Position + dir * CollisionTestRadius;
+
+            if (face == CubeMapFace.PositiveY && SkipUp)
+                return;
+
+            if (face == CubeMapFace.NegativeY && SkipDown)
+                return;
+
+            if (Physics.LineTraceForStatic(Position.ToPhysics(), testPos.ToPhysics()).HasHit)
+            {
+                //DrawDebug.Sphere(CollisionTestRadius, testPos, Vector3.Zero, 10);
+                return;
+            }
+
+            
+
+            facesToUpdate.Add(face);
 
         }
 
@@ -354,7 +438,10 @@ namespace RetroEngine.Entities.Light
         void RenderFace(CubeMapFace face)
         {
 
+            if (GameMain.SkipFrames < 1 && facesToUpdate.Contains(face) == false)
+                return;
 
+            //DrawDebug.Line(Position, Position + GetCubemapDirection(face));
 
             var view = GetViewForFace(face);
             var projection = Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.ToRadians(90f), 1, 0.005f, lightData.Radius*1.5f);
