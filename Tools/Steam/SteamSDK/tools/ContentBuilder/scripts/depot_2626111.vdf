@@ -1,0 +1,12 @@
+"DepotBuildConfig"
+{
+	"DepotID" "2626111"
+	"contentroot" "F:\Git\RetroEngine\Build"
+	"FileMapping"
+	{
+		"LocalPath" "*"
+		"DepotPath" "."
+		"recursive" "1"
+	}
+	"FileExclusion" "*.pdb"
+}

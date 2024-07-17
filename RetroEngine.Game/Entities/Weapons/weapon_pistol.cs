@@ -192,7 +192,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             if (attackDelay.Wait()) return;
 
-            attackDelay.AddDelay(0.3f);
+            attackDelay.AddDelay(0.4f);
 
             
 

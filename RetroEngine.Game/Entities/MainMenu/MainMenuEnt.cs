@@ -42,22 +42,25 @@ namespace RetroEngine.Game.Entities.MainMenu
 
         }
 
-        class MenuButtons : UiCanvas
+        class MenuButtons : ContentBox
         {
             public MenuButtons()
             {
 
-                //DrawBorder = true;
+                Pivot = new Vector2(0, 0.5f);
+                
+
+                DrawBorder = true;
 
                 MenuButton button = new MenuButton();
-                button.size = new Vector2(200, 50);
+                button.size = new Vector2(300, 50);
                 button.position = new Vector2(0, 0);
                 button.Text = "Play";
                 button.onReleased += () => { Level.LoadLevelFromFile("test"); };
                 AddChild(button);
 
                 MenuButton button2 = new MenuButton();
-                button2.size = new Vector2(100, 20);
+                button2.size = new Vector2(300, 50);
                 button2.position = new Vector2(0, 100);
                 button2.Text = "Quit";
                 button2.onReleased += () => { System.Environment.Exit(0); };

@@ -1,0 +1,14 @@
+"appbuild"
+{
+	"appid" "941907"
+	"desc" "Shooter Game Preservation"
+	"buildoutput" "F:\Git\Robot\Tools\Steam\SteamSDK\tools\ContentBuilder\output"
+	"contentroot" ""
+	"setlive" "shooter_game_preservation"
+	"preview" "0"
+	"local"	""
+	"depots"
+	{
+		"2626111"	"F:\Git\RetroEngine\Tools\Steam\SteamSDK\tools\ContentBuilder\scripts\depot_2626111.vdf"
+	}
+}

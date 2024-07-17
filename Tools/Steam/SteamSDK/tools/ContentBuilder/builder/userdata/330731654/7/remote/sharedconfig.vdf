@@ -1,0 +1,73 @@
+"UserRoamingConfigStore"
+{
+	"Software"
+	{
+		"valve"
+		{
+			"steam"
+			{
+				"SurveyDate"		"2017-08-21"
+				"SurveyDateVersion"		"-3290761849578970196"
+				"StartMenuShortcutCheck"		"1"
+				"DesktopShortcutCheck"		"1"
+				"apps"
+				{
+					"1861970"
+					{
+						"hidden"		"1"
+					}
+					"1235140"
+					{
+						"tags"
+						{
+							"0"		"Yakuza"
+						}
+					}
+					"379430"
+					{
+						"tags"
+						{
+							"0"		"favorite"
+						}
+					}
+					"1388590"
+					{
+						"tags"
+						{
+							"0"		"Yakuza"
+						}
+					}
+					"1150690"
+					{
+						"tags"
+						{
+							"0"		"favorite"
+						}
+					}
+					"1349040"
+					{
+						"hidden"		"1"
+					}
+					"1566060"
+					{
+						"hidden"		"1"
+					}
+				}
+			}
+		}
+	}
+	"ScreenshotViewItemsPerRow"		"3"
+	"JSClientStorage"
+	{
+		"spotlight.review.1150690"
+		{
+			"rgPromptDismissals"		"2"
+			"bWasAskedToRevise"		"0"
+		}
+		"timeline_intro"
+		{
+			"rtSeen"		"0"
+			"rtLinkDismissed"		"1721216128"
+		}
+	}
+}

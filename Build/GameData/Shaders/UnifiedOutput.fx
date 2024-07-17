@@ -51,9 +51,9 @@ PixelOutput PixelShaderFunction(PixelInput input)
 
     screenCoords.y = 1.0f - screenCoords.y;
     
-    float depthIn = SampleMaxDepth(screenCoords);
+    //float depthIn = SampleDepth(screenCoords);
     
-    DepthDiscard(depthIn,input);
+    //DepthDiscard(depthIn,input);
     
     PixelOutput output = (PixelOutput)0;
     
@@ -80,10 +80,7 @@ PixelOutput PixelShaderFunction(PixelInput input)
     
     
     float3 textureColor = ColorRGBTA.xyz;
-	float textureAlpha = tex2D(TextureSampler, input.TexCoord).w;
-    
-    if (textureAlpha < 0.01)
-        discard;
+	float textureAlpha = ColorRGBTA.a;
 
     float3 pixelNormal = ApplyNormalTexture(textureNormal, input.Normal, input.Tangent, input.BiTangent);
     
@@ -102,7 +99,7 @@ PixelOutput PixelShaderFunction(PixelInput input)
     light = saturate(light/30);
     textureColor += light;
     
-    textureColor += tex2D(EmissiveTextureSampler, input.TexCoord).rgb * EmissionPower * 2 * tex2D(EmissiveTextureSampler, input.TexCoord).a;
+    textureColor += tex2D(EmissiveTextureSampler, input.TexCoord).rgb * EmissionPower * 2;
     
     textureAlpha *= Transparency;
     
@@ -132,6 +129,7 @@ PixelOutput PixelShaderFunction(PixelInput input)
     
     output.Reflectiveness = float4(reflectiveness, roughness, 0, pbs);
     
+    if(pbs>0.5)
     textureColor = ApplyReflectionOnSurface(textureColor,albedo, screenCoords, reflectiveness, metalic);
     output.Color = float4(textureColor, textureAlpha);
 

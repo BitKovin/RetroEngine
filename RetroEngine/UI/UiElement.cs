@@ -63,7 +63,7 @@ namespace RetroEngine.UI
 
     public class UiElement
     {
-        private List<UiElement> childs = new List<UiElement>();
+        protected List<UiElement> childs = new List<UiElement>();
 
         public static UiElement Viewport;
 
@@ -92,8 +92,8 @@ namespace RetroEngine.UI
 
         public bool DrawBorder = false;
 
-        Vector2 TopLeft;
-        Vector2 BottomRight;
+        public Vector2 TopLeft {  get; private set; }   
+        public Vector2 BottomRight { get; private set; }
 
         public UiElement()
         {
@@ -224,6 +224,11 @@ namespace RetroEngine.UI
         public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
 
+            
+            foreach (UiElement element in childs)
+                if(element.Visible)
+                    element.Draw(gameTime, spriteBatch);
+
             if (DrawBorder)
             {
                 Rectangle mainRectangle = new Rectangle();
@@ -232,9 +237,7 @@ namespace RetroEngine.UI
 
                 spriteBatch.Draw(AssetRegistry.LoadTextureFromFile("engine/textures/border.png"), mainRectangle, new Color(1, 0, 0, 0.3f));
             }
-            foreach (UiElement element in childs)
-                if(element.Visible)
-                    element.Draw(gameTime, spriteBatch);
+
         }
     }
 

@@ -397,22 +397,19 @@ namespace RetroEngine
             DrawFullScreenQuad(DepthPrepathBufferOutput, DepthApplyEffect);
 
 
-            if (Graphics.GeometricalShadowsEnabled)
-            {
-                graphics.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
-                GeometryShadowEffect.Parameters["ViewProjection"].SetValue(Camera.finalizedView * Camera.finalizedProjection);
-                GeometryShadowEffect.Parameters["ScreenHeight"].SetValue(ForwardOutput.Height);
-                GeometryShadowEffect.Parameters["ScreenWidth"].SetValue(ForwardOutput.Width);
-
-
-                
-            }
+            
 
             //particlesToDraw.Clear();
 
             RenderLevelGeometryForward(renderList);
 
-
+            if (Graphics.GeometricalShadowsEnabled)
+            {
+                graphics.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
+                GeometryShadowEffect.Parameters["ViewProjection"].SetValue(Camera.view * Camera.projection);
+                GeometryShadowEffect.Parameters["ScreenHeight"].SetValue(ForwardOutput.Height);
+                GeometryShadowEffect.Parameters["ScreenWidth"].SetValue(ForwardOutput.Width);
+            }
             foreach (var mesh in renderList)
             {
                 mesh?.DrawGeometryShadow();

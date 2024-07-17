@@ -49,8 +49,8 @@ sampler DepthTextureSampler = sampler_state
 {
     texture = <DepthTexture>;
 
-    MinFilter = Point;
-    MagFilter = Point;
+    MinFilter = Linear;
+    MagFilter = Linear;
     AddressU = Clamp;
     AddressV = Clamp;
 
@@ -117,11 +117,13 @@ float ShadowMapResolutionClose;
 matrix ShadowMapViewProjectionVeryClose;
 float ShadowMapResolutionVeryClose;
 
-
+bool depthTestEqual;
 
 #ifndef MAX_POINT_LIGHTS
 
 #define MAX_POINT_LIGHTS 20
+
+bool skeletalMesh;
 
 #endif
 
@@ -423,7 +425,12 @@ PixelInput DefaultVertexShaderFunction(VertexInput input)
 
 void DepthDiscard(float depth, PixelInput input)
 {
-    if (depth < input.MyPixelPosition.z - 0.015)
+
+    float b = 0.01;
+    if(Viewmodel)
+    b = 0.000004f;
+
+    if (depth < input.MyPixelPosition.z - 0.01 && depthTestEqual == false)
         discard;
 }
 
@@ -615,14 +622,19 @@ float GetShadowClose(float3 lightCoords, PixelInput input)
 
         int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)
 
-        float b = -0.0003;
+        float b = -0.0004;
         
         float bias = b * (1 - saturate(dot(input.Normal, -LightDirection))) + b / 2.0f;
 
-        bias*= lerp(4,1, abs(dot(input.Normal, -LightDirection)));
+        bias*= lerp(10,1, abs(dot(input.Normal, -LightDirection)));
 
         resolution = ShadowMapResolutionClose;
         
+        float adot = abs(dot(input.Normal, LightDirection));
+        if(adot<0.1)
+        {
+            bias *= lerp(1, 30, (adot*10)*(adot*10));
+        }
         
         float size = 1;
    
@@ -630,13 +642,16 @@ float GetShadowClose(float3 lightCoords, PixelInput input)
 
         bias *= (LightDistanceMultiplier+1)/2;
         
-        if(abs(dot(input.Normal, -LightDirection)) <= 0.3)
-        return 1 - SampleShadowMap(ShadowMapCloseSampler, lightCoords.xy, currentDepth + bias);
+
+
+        //if(abs(dot(input.Normal, -LightDirection)) <= 0.3 && false)
+        //return 1 - SampleShadowMap(ShadowMapCloseSampler, lightCoords.xy, currentDepth + bias);
 
         float texelSize = size / resolution; // Assuming ShadowMapSize is the size of your shadow map texture
 
+        
     
-        return 1 - SampleShadowMapLinear(ShadowMapCloseSampler, lightCoords.xy, currentDepth + bias,float2(texelSize, texelSize));
+        //return 1 - SampleShadowMapLinear(ShadowMapCloseSampler, lightCoords.xy, currentDepth + bias,float2(texelSize, texelSize));
     
         
         
@@ -668,6 +683,7 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input)
     
     float dist = distance(viewPos, input.MyPosition);
     
+
     if (lightCoords.x >= 0 && lightCoords.x <= 1 && lightCoords.y >= 0 && lightCoords.y <= 1)
     {
         float currentDepth = lightCoords.z * 2 - 1;
@@ -677,13 +693,22 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input)
 
         int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)
 
-        float b = 0.000007;
+        float b = 0.000025;
         
         float bias = b * (1 - saturate(dot(input.Normal, -LightDirection))) + b / 2.0f;
 
-        bias*= lerp(6,1, abs(dot(input.Normal, -LightDirection)));
+        bias*= lerp(30,1, abs(dot(input.Normal, -LightDirection)));
+
+        bias += 0.0001;
 
         bias *= (LightDistanceMultiplier+1)/2;
+
+        float adot = abs(dot(input.Normal, LightDirection));
+        if(adot<0.1)
+        {
+            bias *= lerp(1, 40, (adot*10)*(adot*10)*(adot*10));
+        }
+
         //bias=0;
         resolution = ShadowMapResolutionClose;
         
@@ -693,8 +718,10 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input)
         
         size = 1; max(size, 0.001);
         
-        float texelSize = size / resolution; // Assuming ShadowMapSize is the size of your shadow map texture
+        float texelSize = size / resolution / 2; // Assuming ShadowMapSize is the size of your shadow map texture
         
+    
+
         #ifdef SIMPLE_SHADOWS
         //return 1 - SampleShadowMapLinear(ShadowMapVeryCloseSampler, lightCoords.xy, currentDepth - bias, float2(texelSize, texelSize));
         #endif
@@ -734,12 +761,17 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
     if(DirectBrightness<0.00001)
         return 0;
 
+    if(abs(dot(input.Normal, LightDirection))<0.01)
+    {
+        //return 1;
+    }
+
     float dist = distance(viewPos, input.MyPosition);
     
     if (dist > 140)
         return 0;
     
-
+        float b = 0.0015;
 
     if (lightCoords.x >= 0 && lightCoords.x <= 1 && lightCoords.y >= 0 && lightCoords.y <= 1 || Viewmodel)
     {
@@ -747,14 +779,37 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
         
         float currentDepth = lightCoords.z * 2 - 1;
             
-        if (dist < 10.0) //&& abs(dot(input.TangentNormal, -LightDirection))>0.3
+        #if OPENGL
+        #else
+
+if (lightCoordsClose.x >= 0 && lightCoordsClose.x <= 1 && lightCoordsClose.y >= 0 && lightCoordsClose.y <= 1)
+{
+if (lightCoordsVeryClose.x >= 0 && lightCoordsVeryClose.x <= 1 && lightCoordsVeryClose.y >= 0 && lightCoordsVeryClose.y <= 1)
+
+        if(dist>6 && dist<8)
+        {
+            return lerp(GetShadowVeryClose(lightCoordsVeryClose, input), GetShadowClose(lightCoordsClose, input), (dist - 6)/2);
+        }
+
+
+    if(dist>22 && dist<25)
+    {
+        float close = GetShadowClose(lightCoordsClose, input);
+
+        float bias = b * (1 - saturate(dot(input.Normal, -LightDirection))) + b / 2.0f;
+        bias *= (LightDistanceMultiplier+1)/2;
+        float far = 1 - SampleShadowMap(ShadowMapSampler, lightCoords.xy, currentDepth - bias);
+
+        return lerp(close, far, (dist - 22)/3);
+        
+    }
+}
+        #endif
+
+        if (dist < 7.0) //&& abs(dot(input.TangentNormal, -LightDirection))>0.3
         {
             if (lightCoordsVeryClose.x >= 0 && lightCoordsVeryClose.x <= 1 && lightCoordsVeryClose.y >= 0 && lightCoordsVeryClose.y <= 1)
             {
-                
-                float texelSize = 1/ShadowMapResolutionClose;
-
-
                 return GetShadowVeryClose(lightCoordsVeryClose, input);
             }
         }
@@ -776,7 +831,7 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
 
         int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)
 
-        float b = 0.0003;
+
 
         float bias = b * (1 - saturate(dot(input.Normal, -LightDirection))) + b / 2.0f;
         resolution = ShadowMapResolution;
@@ -821,13 +876,13 @@ float GetShadowViewmodel(float3 lightCoords, PixelInput input)
 
     int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)
 
-    float b = -0.0005;
+    float b = -0.00035;
 
     float bias = b * (1 - saturate(dot(input.Normal, -LightDirection))) + b / 2.0f;
 
+    bias*= lerp(2,1, abs(dot(input.Normal, -LightDirection)));
+
     resolution = ShadowMapResolution;
-        
-    bias *= (LightDistanceMultiplier+1)/2;
 
     float texelSize = 1 / resolution; // Assuming ShadowMapSize is the size of your shadow map texture
 
@@ -998,8 +1053,9 @@ float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal, float ro
     float3 specular = CalculateSpecular(pixelInput.MyPosition, normal, dirToSurface, roughness, metalic, albedo);
 
 
+    float colorInstens = max(LightColors[i].x,(max(LightColors[i].y,LightColors[i].z)));
 
-    intense = max(intense, 0);
+    intense = max(intense, 0) * colorInstens;
     float3 l = LightColors[i] * intense;
 
     return (l + intense * specular) * notShadow * dirFactor;
@@ -1093,6 +1149,13 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness, float me
 
     // Global ambient light
     float3 globalLight = GlobalBrightness * GlobalLightColor * lerp(1.0f, 0.4f, max(dot(normal, float3(0, -1, 0)), 0.0f));
+    
+
+    if(Viewmodel)
+    {
+        globalLight += GlobalBrightness * GlobalLightColor * lerp(1.0f, 0.6f, max(dot(normal, float3(0, -1, 0)), 0.0f)) * 1;
+    }
+
     globalLight *= ao;
 
     // Accumulate point light contributions
@@ -1184,7 +1247,7 @@ float ReflectionMapping(float x)
 float CalculateReflectiveness(float roughness, float metallic, float3 vDir, float3 normal)
 {
 
-    return lerp(0.04, 1, metallic*(lerp(metallic, 1, 0.5)) * (lerp(1, 0.3, roughness)));
+    return lerp(0.04, 1, metallic) * (lerp(0.1, 1, (1-roughness)*(1-roughness)));
 
     // Calculate the base reflectiveness based on metallic
     float baseReflectiveness = metallic;
@@ -1251,9 +1314,9 @@ float3 ApplyReflectionOnSurface(float3 color,float3 albedo,float2 screenCoords, 
     reflection += tex2D(ReflectionTextureSampler, screenCoords + float2(0,texel.y)).rgb/2;
     reflection/=4.0/2.0 + 1;
 
-    reflection = saturate(reflection);
+    //reflection = saturate(reflection);
 
-    float lum =0;// saturate(CalcLuminance(reflection))/30;
+    float lum = 0;// saturate(CalcLuminance(reflection))/30;
     
 
     float3 reflectionIntens = lerp(0, reflectiveness, metalic);

@@ -62,7 +62,7 @@ namespace RetroEngine.SaveSystem
 
         public static string GetProfilePath()
         {
-            return AssetRegistry.ROOT_PATH + ProfileName;
+            return AssetRegistry.ROOT_PATH + "/Profiles/" + ProfileName + "/";
         }
 
         static List<EntitySaveData> GetEntitySaveDatas()

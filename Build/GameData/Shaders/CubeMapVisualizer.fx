@@ -30,9 +30,9 @@ PixelOutput output = (PixelOutput) 0;
 
     screenCoords.y = 1.0f - screenCoords.y;
     
-    float depthIn = SampleMaxDepth(screenCoords);
+    //float depthIn = SampleMaxDepth(screenCoords);
     
-    DepthDiscard(depthIn, input);
+    //DepthDiscard(depthIn, input);
     
     
     
@@ -49,7 +49,7 @@ PixelOutput output = (PixelOutput) 0;
     output.Color = float4(textureColor, 1);
     
     output.Position = float4(input.MyPosition - viewPos, 1);
-    output.Reflectiveness = float4(0,0,0,1);
+    output.Reflectiveness = float4(0.00001,1,0,1);
     
     float3 TangentNormal = GetTangentNormal(input.Normal, input.Tangent, input.BiTangent);
     return output;

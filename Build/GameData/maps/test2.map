@@ -5,9 +5,11 @@
 "classname" "worldspawn"
 "_tb_textures" "textures/brushes"
 "globalLightColor" "1 1 0.8"
-"skyColor" "0.8 0.8 1"
-"globalLightBrightness" "0.35"
-"directLightBrightness" "0.75"
+"skyColor" "1 0.9 0.8"
+"globalLightBrightness" "0.13"
+"directLightBrightness" "0.04"
+"dynamicSunShadowsEnabled" "true"
+"geometricalShadowsEnabled" "false"
 // brush 0
 {
 ( -896 288 272 ) ( -896 768 208 ) ( -896 768 272 ) brushes/bricks 0 0 0 0.75 0.75

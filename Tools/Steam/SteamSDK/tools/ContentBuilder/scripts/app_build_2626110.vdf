@@ -1,0 +1,16 @@
+"AppBuild"
+{
+	"AppID" "2626110" // Your AppID
+	"Desc" "ShooterGame" // internal description for this build
+	"Preview" "1" // make this a preview build only, nothing is uploaded
+	"Local" "..\..\ContentServer\htdocs" // put content on local content server instead of uploading to Steam
+	"SetLive" "shooter_game_preservation" // set this build live on beta branch AlphaTest
+	"ContentRoot" "..\content\" // content root folder relative to this script file
+	"BuildOutput" "F:\GitHub\Robot\Tools\Steam\SteamSDK\tools\ContentBuilder\output\" // put build cache and log files on different drive for better performance
+	"Depots"
+	{
+		// file mapping instructions for each depot are in separate script files
+		"1001" "depot_build_1001.vdf"
+		"1002" "depot_build_1002.vdf"
+	}
+}

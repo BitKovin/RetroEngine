@@ -45,7 +45,7 @@ namespace RetroEngine.UI
 
             Vector2 textSize = Font.MeasureString(text) * AlignProgress;
 
-            spriteBatch.DrawString(Font, text, pos - textSize / 72 * FontSize, baseColor, rotation,relativeOrigin,Vector2.One/72*FontSize,SpriteEffects.None,0);
+            spriteBatch.DrawString(Font, text, pos, baseColor, rotation,relativeOrigin,Vector2.One/72*FontSize,SpriteEffects.None,0);
 
             base.Draw(gameTime, spriteBatch);
 

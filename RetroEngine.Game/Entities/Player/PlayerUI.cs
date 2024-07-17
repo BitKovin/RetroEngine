@@ -43,13 +43,13 @@ namespace RetroEngine.Game.Entities.Player
             AddChild(crosshair);
 
             health.Origin = new Vector2(0, 1);
-            health.position = new Vector2(10,-50);
+            health.position = new Vector2(30,-50);
             health.FontSize = 24;
             health.AlignProgress = new Vector2(0.0f, 0.5f);
             AddChild(health);
 
             fps.Origin = new Vector2(0, 0);
-            fps.position = new Vector2(10, 50);
+            fps.position = new Vector2(30, 50);
             fps.FontSize = 24;
             fps.AlignProgress = new Vector2(0.0f, 0.5f);
             AddChild(fps);

@@ -1,0 +1,21 @@
+// Game: GenericEngine
+// Format: Standard
+// entity 0
+{
+"classname" "worldspawn"
+"_tb_textures" "textures;textures\brushes"
+// brush 0
+{
+( -560 992 16 ) ( -560 -64 16 ) ( -560 -64 -16 ) brushes/ground_pbr 0 0 0 0.17 0.17
+( -560 -64 16 ) ( 624 -64 16 ) ( 624 -64 -16 ) brushes/ground_pbr 0 0 0 0.17 0.17
+( 624 -64 -16 ) ( 624 992 -16 ) ( -560 992 -16 ) brushes/ground_pbr 0 0 0 0.17 0.17
+( -560 992 16 ) ( 624 992 16 ) ( 624 -64 16 ) brushes/ground_pbr 0 0 0 0.17 0.17
+( 624 992 -16 ) ( 624 992 16 ) ( -560 992 16 ) brushes/ground_pbr 0 0 0 0.17 0.17
+( 624 -64 16 ) ( 624 992 16 ) ( 624 992 -16 ) brushes/ground_pbr 0 0 0 0.17 0.17
+}
+}
+// entity 1
+{
+"classname" "event_start"
+"origin" "6 474 26"
+}

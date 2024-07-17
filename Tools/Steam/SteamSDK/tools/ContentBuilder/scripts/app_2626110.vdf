@@ -1,0 +1,14 @@
+"appbuild"
+{
+	"appid" "2626110"
+	"desc" "engine game"
+	"buildoutput" "F:\Git\RetroEngine\Tools\Steam\SteamSDK\tools\ContentBuilder\output"
+	"contentroot" ""
+	"setlive" "engine_game"
+	"preview" "0"
+	"local"	""
+	"depots"
+	{
+		"2626111"	"F:\Git\RetroEngine\Tools\Steam\SteamSDK\tools\ContentBuilder\scripts\depot_2626111.vdf"
+	}
+}

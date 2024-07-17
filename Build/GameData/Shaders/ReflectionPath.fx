@@ -92,6 +92,9 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
     for (int i = 0; i < steps; i++)
     {
         
+        if(weight>6)
+            break;
+
         float3 offset = dir * (Step) * disToCamera / 30 + dir * 0.03 * disToCamera;
         
         
@@ -198,7 +201,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR
     float2 texel = float2(1.5/SSRWidth, 1.5/SSRHeight);
     float3 factor = tex2D(FactorTextureSampler, input.TextureCoordinates).rgb;
 
-    float roughness = saturate(factor.g/2 - 0.1);
+    float roughness = saturate(factor.g/1.3 - 0.1);
 
     // Add noise to the reflection vector based on surface roughness
     float3 noise = RandomVector(input.TextureCoordinates, 1);
@@ -208,7 +211,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR
     
     float3 cube = SampleCubemap(ReflectionCubemapSampler, reflection);
 
-    const int numSamples = 8;
+    const int numSamples = 4;
 
 
     float n = 1;
@@ -226,7 +229,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR
     
     float4 ssr = float4(cube, 1);
     
-    if (factor.x > 0.1)
+    if (factor.x > 0.2)
     {
         ssr = SampleSSR(reflection, worldPos, depth, normal, vDir, 40, 1.5);
     }

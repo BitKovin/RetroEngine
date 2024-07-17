@@ -97,11 +97,11 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 
 struct PS_Out
 {
-    float4 occlusion;
-    float4 depth;
+    float4 depth : COLOR0;
+    float4 depthHomo: COLOR1; //this value is gay for gpu (stores depth in same homogeneous way)
 };
 
-float4 MainPS(VertexShaderOutput input) : SV_TARGET
+PS_Out MainPS(VertexShaderOutput input)
 {
     
     PS_Out output = (PS_Out)0;
@@ -115,7 +115,12 @@ float4 MainPS(VertexShaderOutput input) : SV_TARGET
     if (Masked && tex2D(TextureSampler, input.TexCoords).a < 0.99)
         discard;
 
-    return float4(depth, 0, 0, 1);
+    const float a = 1;
+
+    output.depth = float4(depth, 0, 0, a);
+    output.depthHomo = float4(((input.MyPosition.z+(Viewmodel? +0.000013 : 0.001))/input.MyPosition.w), 0, 0, a);
+
+    return output;
 }
 
 technique NormalColorDrawing
