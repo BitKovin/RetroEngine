@@ -113,6 +113,8 @@ namespace RetroEngine
 
             Navigation.WaitForProcess();
 
+            LoadingScreen.Update(0.02f);
+
             GameMain.Instance.paused = false;
 
             string path = AssetRegistry.FindPathForFile(name);
