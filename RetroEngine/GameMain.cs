@@ -157,6 +157,11 @@ namespace RetroEngine
 
         }
 
+        protected virtual void CheckWindowFullscreenStatus()
+        {
+
+        }
+
         public static bool CanLoadAssetsOnThisThread()
         {
             if (AllowAsyncAssetLoading)
@@ -465,7 +470,7 @@ namespace RetroEngine
             }
 
 
-
+            CheckWindowFullscreenStatus();
             if (AllowAsyncAssetLoading)
             {
                 presentingFrame = true;

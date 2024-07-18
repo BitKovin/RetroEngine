@@ -410,12 +410,12 @@ namespace RetroEngine
                 GeometryShadowEffect.Parameters["ViewProjection"].SetValue(Camera.finalizedView * Camera.finalizedProjection);
                 GeometryShadowEffect.Parameters["ScreenHeight"].SetValue(ForwardOutput.Height);
                 GeometryShadowEffect.Parameters["ScreenWidth"].SetValue(ForwardOutput.Width);
-            }
-            foreach (var mesh in renderList)
-            {
-                mesh?.DrawGeometryShadow();
-            }
 
+                foreach (var mesh in renderList)
+                {
+                    mesh?.DrawGeometryShadow();
+                }
+            }
             //ParticleEmitter.RenderEmitter.DrawParticles(particlesToDraw);
 
             if (Graphics.DrawPhysics)

@@ -22,6 +22,14 @@ namespace RetroEngine.Windows
         protected override void Update(GameTime gameTime)
         {
 
+            CheckWindowFullscreenStatus();
+            base.Update(gameTime);
+        }
+
+        protected override void CheckWindowFullscreenStatus()
+        {
+            base.CheckWindowFullscreenStatus();
+
             try
             {
                 if (Form.ActiveForm != null) //some times ActiveForm sets to null on alt tab and I have 0 idea why. It continues code(even with this check)
@@ -37,8 +45,9 @@ namespace RetroEngine.Windows
                         Form.ActiveForm.FormBorderStyle = FormBorderStyle.Sizable;
                     }
                 }
-            }catch (Exception ex) { }
-            base.Update(gameTime);
+            }
+            catch (Exception ex) { }
+
         }
 
         protected override void SetFullscreen()

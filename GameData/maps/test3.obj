@@ -65,7 +65,7 @@ f  7/8/5  1/7/5  4/6/5  8/5/5
 usemtl brushes/ground_pbr
 f  8/4/6  5/3/6  6/2/6  7/1/6
 
-o entity4_brush0
+o entity5_brush0
 usemtl brushes/ground_pbr
 f  9/13/1  10/14/1  11/15/1  12/16/1
 usemtl brushes/ground_pbr

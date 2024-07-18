@@ -666,13 +666,13 @@ namespace RetroEngine.PhysicsSystem
         {
             // 1. Gather vertices in a contiguous array
             VertexData[] vertices = new VertexData[mesh.MeshParts[part].VertexBuffer.VertexCount];
-            mesh.MeshParts[0].VertexBuffer.GetData(vertices);
+            mesh.MeshParts[part].VertexBuffer.GetData(vertices);
 
 
             // 3. Access indices for correct triangle construction
             // Assuming indices are 32-bit integers
             int[] indices = new int[mesh.MeshParts[part].IndexBuffer.IndexCount];
-            mesh.MeshParts[0].IndexBuffer.GetData(indices);
+            mesh.MeshParts[part].IndexBuffer.GetData(indices);
 
             // 4. Create the triangle mesh
             TriangleMesh triangleMesh = new TriangleMesh();

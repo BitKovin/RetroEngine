@@ -58,17 +58,33 @@ namespace RetroEngine.Entities
             base.LoadAssets();
 
             mesh.LoadFromFile(modelPath);
-            mesh.texture = AssetRegistry.LoadTextureFromFile(texturePath);
+            var tex = AssetRegistry.LoadTextureFromFile(texturePath);
 
-            var normal = AssetRegistry.LoadTextureFromFile(texturePath.Replace(".png", "_n.png"));
+            if (tex != null)
+            {
+                mesh.texture = tex;
 
-            if(normal !=null)
-            mesh.normalTexture = normal;
+                var normal = AssetRegistry.LoadTextureFromFile(texturePath.Replace(".png", "_n.png"));
 
-            var orm = AssetRegistry.LoadTextureFromFile(texturePath.Replace(".png", "_orm.png"));
+                if (normal != null)
+                    mesh.normalTexture = normal;
 
-            if (orm != null)
-            mesh.ormTexture = orm;
+                var orm = AssetRegistry.LoadTextureFromFile(texturePath.Replace(".png", "_orm.png"));
+
+                if (orm != null)
+                    mesh.ormTexture = orm;
+
+            }
+            else
+            {
+                mesh.textureSearchPaths.Add(texturePath);
+                
+                mesh.PreloadTextures();
+            }
+
+            
+
+            
 
             body = Physics.CreateFromShape(this, mesh.Scale.ToPhysics(), Physics.CreateCollisionShapeFromModel(mesh.model, complex: true), 0);
 

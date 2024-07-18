@@ -380,6 +380,18 @@ namespace RetroEngine
 
             Effect effect = GameMain.Instance.render.ShadowMapEffect;
 
+            float bias = 0.2f;
+
+            if (closeShadow)
+                bias = 0.05f;
+
+            if (veryClose)
+                bias = 0.02f;
+
+            if (viewmodel)
+                bias = 0.002f;
+
+            effect.Parameters["bias"].SetValue(bias);
 
             if (viewmodel)
             {

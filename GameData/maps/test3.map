@@ -41,6 +41,14 @@
 }
 // entity 4
 {
+"classname" "static_mesh"
+"origin" "-112 1760 -576"
+"path" "models\enviroment\testDawg\testDawg.fbx"
+"scale" "0.2"
+"texture" "models/enviroment/testDawg/"
+}
+// entity 5
+{
 "classname" "func_group"
 "_tb_type" "_tb_layer"
 "_tb_name" "layer2"
@@ -56,25 +64,25 @@
 ( 176 192 128 ) ( 176 64 16 ) ( 176 64 128 ) brushes/ground_pbr 0 0 0 1 1
 }
 }
-// entity 5
+// entity 6
 {
 "classname" "info.navpoint"
 "origin" "104 -184 24"
 "_tb_layer" "1"
 }
-// entity 6
+// entity 7
 {
 "classname" "info.navpoint"
 "origin" "152 8 24"
 "_tb_layer" "1"
 }
-// entity 7
+// entity 8
 {
 "classname" "info.navpoint"
 "origin" "168 -104 24"
 "_tb_layer" "1"
 }
-// entity 8
+// entity 9
 {
 "classname" "func_group"
 "_tb_type" "_tb_layer"
@@ -82,25 +90,25 @@
 "_tb_id" "2"
 "_tb_layer_sort_index" "1"
 }
-// entity 9
+// entity 10
 {
 "classname" "ent_cat_point"
 "origin" "176 -224 32"
 "_tb_layer" "2"
 }
-// entity 10
+// entity 11
 {
 "classname" "ent_cat_point"
 "origin" "0 -128 32"
 "_tb_layer" "2"
 }
-// entity 11
+// entity 12
 {
 "classname" "ent_cat_point"
 "origin" "64 -160 32"
 "_tb_layer" "2"
 }
-// entity 12
+// entity 13
 {
 "classname" "ent_cat_point"
 "origin" "-48 -224 32"
