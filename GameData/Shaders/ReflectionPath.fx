@@ -132,10 +132,10 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
             continue;
         }
 
-        if (SampledDepth + 0.015 < dist&& SampledDepth>0.3f)
+        if (SampledDepth + 0.02 < dist&& SampledDepth>0.3f)
         {
 
-            if(distance(oldDepth, SampledDepth)<disToCamera/15)
+            if(distance(oldDepth, SampledDepth)<disToCamera/5)
                 outCoords = lerp(coords, oldCoords,1);
 
             Step /= factor;

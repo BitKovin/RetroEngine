@@ -191,6 +191,7 @@ namespace RetroEngine
             effect.Parameters["ShadowBias"]?.SetValue(Graphics.ShadowBias);
             effect.Parameters["ShadowMapResolution"]?.SetValue((float)Graphics.shadowMapResolution);
             effect.Parameters["ShadowMapResolutionClose"]?.SetValue((float)Graphics.closeShadowMapResolution);
+            effect.Parameters["ShadowMapResolutionVeryClose"]?.SetValue((float)Graphics.veryCloseShadowMapResolution);
 
             effect.Parameters["ShadowMap"]?.SetValue(GameMain.Instance.render.shadowMap);
             effect.Parameters["ShadowMapClose"]?.SetValue(GameMain.Instance.render.shadowMapClose);
@@ -406,7 +407,7 @@ namespace RetroEngine
             if (Graphics.GeometricalShadowsEnabled)
             {
                 graphics.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
-                GeometryShadowEffect.Parameters["ViewProjection"].SetValue(Camera.view * Camera.projection);
+                GeometryShadowEffect.Parameters["ViewProjection"].SetValue(Camera.finalizedView * Camera.finalizedProjection);
                 GeometryShadowEffect.Parameters["ScreenHeight"].SetValue(ForwardOutput.Height);
                 GeometryShadowEffect.Parameters["ScreenWidth"].SetValue(ForwardOutput.Width);
             }

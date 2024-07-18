@@ -18,7 +18,7 @@ namespace Launcher
         static void Main(string[] args)
         {
 
-            InitGames();
+
 
             for (int i = 0; i < args.Length; i++)
             {
@@ -62,6 +62,9 @@ namespace Launcher
             startInfo.WorkingDirectory = Path.GetDirectoryName(executablePath); // Set working directory to the game's directory
             Process.Start(startInfo);
         }
+
+
+        const string ROOT_PATH = "../../../../";
 
         static void InitGames()
         {

@@ -589,12 +589,13 @@ namespace RetroEngine
             {
                 foreach (ModelMesh mesh in frameStaticMeshData.model.Meshes)
                 {
-
+                    
                     if(closeShadow)
                         if (Graphics.DirectionalLightFrustrumClose.Contains(mesh.BoundingSphere.Transform(WorldMatrix)) == ContainmentType.Disjoint) continue;
 
                     if (veryClose)
                         if (Graphics.DirectionalLightFrustrumVeryClose.Contains(mesh.BoundingSphere.Transform(WorldMatrix)) == ContainmentType.Disjoint) continue;
+                    
 
                     foreach (ModelMeshPart meshPart in mesh.MeshParts)
                     {

@@ -3,9 +3,10 @@
 // entity 0
 {
 "classname" "worldspawn"
-"geometricalShadowsEnabled" "false"
+"geometricalShadowsEnabled" "true"
 "_tb_textures" "textures;textures\brushes"
 "dynamicSunShadowsEnabled" "true"
+"globalLightDirection" "-0.1 -1 -0.3"
 // brush 0
 {
 ( -1408 1520 16 ) ( -1408 -64 16 ) ( -1408 -64 -16 ) brushes/brickPBR 0 0 0 0.17 0.17

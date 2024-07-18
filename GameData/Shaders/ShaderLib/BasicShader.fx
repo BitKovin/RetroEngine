@@ -627,12 +627,12 @@ float GetShadowClose(float3 lightCoords, PixelInput input)
 
         bias*= lerp(10,1, abs(dot(input.Normal, LightDirection)));
 
-        resolution = ShadowMapResolutionClose;
+        resolution = 2048;
         
         float adot = abs(dot(input.Normal, LightDirection));
         if(adot<0.1)
         {
-            bias *= lerp(1, 30, (adot*10)*(adot*10));
+            //bias *= lerp(1, 30, (adot*10)*(adot*10));
         }
         
         float size = 1;
@@ -665,8 +665,6 @@ float GetShadowClose(float3 lightCoords, PixelInput input)
                 closestDepth = saturate(closestDepth);
 
                 shadow += closestDepth;
-
-                
 
             }
         }
@@ -701,7 +699,7 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input)
         
         float bias = b * (1 - saturate(dot(input.Normal, -LightDirection))) + b / 2.0f;
 
-        bias*= lerp(30,1, abs(dot(input.Normal, -LightDirection)));
+        bias*= lerp(20,1, abs(dot(input.Normal, -LightDirection)));
 
         bias += 0.0001;
 
@@ -710,10 +708,10 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input)
         float adot = abs(dot(input.Normal, LightDirection));
         if(adot<0.1)
         {
-            bias *= lerp(1, 70, (adot*10)*(adot*10)*(adot*10));
+            bias *= lerp(1, 2, (adot*10)*(adot*10)*(adot*10));
         }
 
-        resolution = ShadowMapResolutionClose;
+        resolution = ShadowMapResolutionVeryClose;
         
         //bias -= max(dot(input.Normal, float3(0,1,0)),0) * b/2;
         
@@ -735,6 +733,10 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input)
         {
             for (int j = -numSamples; j <= numSamples; ++j)
             {
+
+                if(length(float2(i,j))> 1.1)
+                    continue;
+
                 float2 offsetCoords = lightCoords.xy + float2(i, j) * texelSize;
                 float closestDepth;
                 closestDepth = SampleShadowMapLinear(ShadowMapVeryCloseSampler, offsetCoords, currentDepth - bias, float2(texelSize, texelSize));
@@ -818,7 +820,7 @@ if (lightCoordsVeryClose.x >= 0 && lightCoordsVeryClose.x <= 1 && lightCoordsVer
             if (lightCoordsClose.x >= 0 && lightCoordsClose.x <= 1 && lightCoordsClose.y >= 0 && lightCoordsClose.y <= 1)
             {
 
-                
+                //return 1;
                 return GetShadowClose(lightCoordsClose, input);
             }
         }

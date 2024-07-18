@@ -7,7 +7,6 @@ namespace Launcher
     public partial class Form1 : Form
     {
 
-        const string ROOT_PATH = "../../../../";
 
         public Form1()
         {

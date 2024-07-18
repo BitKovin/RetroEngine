@@ -134,7 +134,7 @@ namespace RetroEngine.UI
                 {
                     pos = touch.Position / ScaleY;
 
-                    col.size = new Point((int)size.X, (int)size.Y);
+                    col.size = new Point((int)GetSize().X, (int)GetSize().Y);
                     col.position = new Vector2((int)position.X+ (int)offset.X, (int)position.Y+(int)offset.Y);
                     Collision2D mouseCol = new Collision2D();
                     mouseCol.size = new Point(2, 2);

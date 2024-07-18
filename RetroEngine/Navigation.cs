@@ -5,6 +5,7 @@ using RetroEngine.PhysicsSystem;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -112,9 +113,18 @@ namespace RetroEngine
 
             waitingToFinish = true;
 
+            Stopwatch stopwatch = Stopwatch.StartNew();
+
             while (ProcessingPathfinding)
             {
-
+                if (stopwatch.Elapsed.TotalSeconds > 5)
+                {
+                    ProcessingPathfinding = false;
+                    Logger.Log("Force Skipping Navigation");
+                    UpdateTask = null;
+                    return;
+                }
+                    
             }
         }
 

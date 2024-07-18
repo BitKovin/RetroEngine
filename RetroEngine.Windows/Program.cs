@@ -12,12 +12,16 @@ using RetroEngine.Audio;
 internal class Program
 {
 
+
+
     [DllImport("User32.dll", CharSet = CharSet.Unicode)]
     public static extern int MessageBox(IntPtr h, string m, string c, int type);
     private static void Main(string[] args)
     {
 
         AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+
+
 
         SoundManager.nativeFmodLibrary = new FmodForFoxes.DesktopNativeFmodLibrary();
         Game game = new GameWindows();

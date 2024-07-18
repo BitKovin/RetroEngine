@@ -29,6 +29,8 @@ namespace RetroEngine.Game.Entities.MainMenu
             public MainMenuUi()
             {
 
+                AssetRegistry.LoadFmodBankIntoMemory("sounds/banks/Music.bank");
+
                 MenuButtons menuButtons = new MenuButtons();
 
                 menuButtons.Origin = new Vector2(0.0f,0.5f);
