@@ -71,6 +71,9 @@ namespace RetroEngine
         public static BoundingFrustum DirectionalLightFrustrumClose = new BoundingFrustum(Matrix.Identity);
         public static BoundingFrustum DirectionalLightFrustrumVeryClose = new BoundingFrustum(Matrix.Identity);
 
+        public static bool EarlyDepthDiscard = true;
+        public static bool EarlyDepthDiscardShader = true;
+
         internal static Matrix LightVeryCloseView;
         internal static Matrix LightCloseView;
         internal static Matrix LightView;

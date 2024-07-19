@@ -248,6 +248,8 @@ namespace RetroEngine
                 effect.Parameters["SSRWidth"]?.SetValue(reflection.Height);
             }
 
+            effect.Parameters["earlyZ"]?.SetValue(Graphics.EarlyDepthDiscardShader);
+
             effect.ApplyValues();
 
         }
@@ -394,7 +396,7 @@ namespace RetroEngine
             };
 
             
-
+            if(Graphics.EarlyDepthDiscard)
             DrawFullScreenQuad(DepthPrepathBufferOutput, DepthApplyEffect);
 
 
