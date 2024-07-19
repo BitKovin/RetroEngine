@@ -380,10 +380,10 @@ namespace RetroEngine
 
             Effect effect = GameMain.Instance.render.ShadowMapEffect;
 
-            float bias = 0.2f;
+            float bias = 0.05f;
 
             if (closeShadow)
-                bias = 0.05f;
+                bias = 0.03f;
 
             if (veryClose)
                 bias = 0.02f;
@@ -391,7 +391,12 @@ namespace RetroEngine
             if (viewmodel)
                 bias = 0.002f;
 
+            if (BackFaceShadows)
+                bias *= -2;
+
             effect.Parameters["bias"].SetValue(bias);
+
+            effect.Parameters["depthBias"].SetValue(BackFaceShadows ? 0.0001f : 0);
 
             if (viewmodel)
             {
@@ -399,7 +404,14 @@ namespace RetroEngine
             }
             else
             {
-                graphicsDevice.RasterizerState = isNegativeScale() ? RasterizerState.CullCounterClockwise : RasterizerState.CullClockwise;
+                if (BackFaceShadows)
+                {
+                    graphicsDevice.RasterizerState = isNegativeScale() == false ? RasterizerState.CullCounterClockwise : RasterizerState.CullClockwise;
+                }
+                else
+                {
+                    graphicsDevice.RasterizerState = isNegativeScale() ? RasterizerState.CullCounterClockwise : RasterizerState.CullClockwise;
+                }
             }
 
             effect.Parameters["Bones"].SetValue(finalizedBones);

@@ -126,6 +126,7 @@ namespace RetroEngine
 
         public bool DepthTestEqual = false; //pixel gets discarded if depths does not equal to prepath(not closer or farther. Only equal)
 
+        public bool BackFaceShadows = false;
         public StaticMesh()
         {
 
@@ -568,15 +569,17 @@ namespace RetroEngine
 
             }
 
-            float bias = 0.2f;
+            float bias = 0.025f;
 
             if (closeShadow)
-                bias = 0.05f;
-
-            if (veryClose)
                 bias = 0.02f;
 
+            if (veryClose)
+                bias = 0.015f;
+
+
             effect.Parameters["bias"].SetValue(bias);
+            effect.Parameters["depthBias"].SetValue(BackFaceShadows ? 0.0001f : 0);
 
             if (viewmodel)
             {
@@ -584,7 +587,15 @@ namespace RetroEngine
             }
             else
             {
-                graphicsDevice.RasterizerState = isNegativeScale() ? RasterizerState.CullCounterClockwise : RasterizerState.CullClockwise;
+                if (BackFaceShadows)
+                {
+                    graphicsDevice.RasterizerState = isNegativeScale() == false ? RasterizerState.CullCounterClockwise : RasterizerState.CullClockwise;
+                }
+                else
+                {
+                    graphicsDevice.RasterizerState = isNegativeScale() ? RasterizerState.CullCounterClockwise : RasterizerState.CullClockwise;
+                }
+                
             }
 
             if (closeShadow)

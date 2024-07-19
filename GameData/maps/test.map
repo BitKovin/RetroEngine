@@ -18400,3 +18400,11 @@
 "classname" "ent_cat_point"
 "origin" "-304 16 16"
 }
+// entity 10
+{
+"classname" "static_mesh"
+"origin" "149 197 53"
+"scale" "1"
+"path" "models/sphere.obj"
+"texture" "engine/textures/white.png"
+}

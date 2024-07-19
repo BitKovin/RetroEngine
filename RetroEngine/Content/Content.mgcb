@@ -13,6 +13,13 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin ../../GameData/Fonts/Font.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:../../GameData/Fonts/Font.spritefont;Fonts/Font.spritefont
+
 #begin ../../GameData/Shaders/BloomSampler.fx
 /importer:EffectImporter
 /processor:EffectProcessor
@@ -55,6 +62,13 @@
 /processorParam:Defines=
 /build:../../GameData/Shaders/DeferredShading.fx;Shaders/DeferredShading.fx
 
+#begin ../../GameData/Shaders/Denoise.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/processorParam:Defines=
+/build:../../GameData/Shaders/Denoise.fx;Shaders/Denoise.fx
+
 #begin ../../GameData/Shaders/File.fx
 /importer:EffectImporter
 /processor:EffectProcessor
@@ -75,6 +89,13 @@
 /processorParam:DebugMode=Auto
 /processorParam:Defines=
 /build:../../GameData/Shaders/fxaa.fx;Shaders/fxaa.fx
+
+#begin ../../GameData/Shaders/GeometryShadow.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/processorParam:Defines=
+/build:../../GameData/Shaders/GeometryShadow.fx;Shaders/GeometryShadow.fx
 
 #begin ../../GameData/Shaders/GPathesOutput.fx
 /importer:EffectImporter
@@ -188,13 +209,6 @@
 /processorParam:Defines=
 /build:../../GameData/Shaders/Tonemap.fx;Shaders/Tonemap.fx
 
-#begin ../../GameData/Shaders/UnifiedOutput.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/processorParam:Defines=
-/build:../../GameData/Shaders/UnifiedOutput.fx;Shaders/UnifiedOutput.fx
-
 #begin ../../GameData/Shaders/Unlit.fx
 /importer:EffectImporter
 /processor:EffectProcessor
@@ -202,30 +216,16 @@
 /processorParam:Defines=
 /build:../../GameData/Shaders/Unlit.fx;Shaders/Unlit.fx
 
-#begin ../../GameData/Fonts/Font.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:../../GameData/Fonts/Font.spritefont;Fonts/Font.spritefont
-
-#begin ../../GameData/Shaders/Denoise.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/processorParam:Defines=
-/build:../../GameData/Shaders/Denoise.fx;Shaders/Denoise.fx
-
-#begin ../../GameData/Shaders/GeometryShadow.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/processorParam:Defines=
-/build:../../GameData/Shaders/GeometryShadow.fx;Shaders/GeometryShadow.fx
-
 #begin ../../GameData/Shaders/DepthFromTex.fx
 /importer:EffectImporter
 /processor:EffectProcessor
 /processorParam:DebugMode=Auto
 /processorParam:Defines=
 /build:../../GameData/Shaders/DepthFromTex.fx;Shaders/DepthFromTex.fx
+
+#begin ../../GameData/Shaders/UnifiedOutput.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/processorParam:Defines=
+/build:../../GameData/Shaders/UnifiedOutput.fx;Shaders/UnifiedOutput.fx

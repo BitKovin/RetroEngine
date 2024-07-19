@@ -607,7 +607,7 @@ float SampleShadowMapLinear(sampler2D shadowMap, float2 coords, float compare, f
     return lerp(mixA, mixB, fracPart.x);
 }
 
-float GetShadowClose(float3 lightCoords, PixelInput input)
+float GetShadowClose(float3 lightCoords, PixelInput input, float3 TangentNormal)
 {
     float shadow = 0;
     
@@ -629,11 +629,7 @@ float GetShadowClose(float3 lightCoords, PixelInput input)
 
         resolution = 2048;
         
-        float adot = abs(dot(input.Normal, LightDirection));
-        if(adot<0.1)
-        {
-            //bias *= lerp(1, 30, (adot*10)*(adot*10));
-        }
+        
         
         float size = 1;
    
@@ -648,9 +644,14 @@ float GetShadowClose(float3 lightCoords, PixelInput input)
 
         float texelSize = size / resolution; // Assuming ShadowMapSize is the size of your shadow map texture
 
+        float forceShadow = 0;
+
+        forceShadow = lerp(0, 1, saturate((dot(TangentNormal, LightDirection)+0.2)*5));
         
-    
-        return 1 - SampleShadowMapLinear(ShadowMapCloseSampler, lightCoords.xy, currentDepth + bias,float2(texelSize, texelSize));
+        forceShadow*=forceShadow;
+        
+
+        return 1 - SampleShadowMapLinear(ShadowMapCloseSampler, lightCoords.xy, currentDepth + bias,float2(texelSize, texelSize))* (1 - forceShadow);
     
         int n = 0;
         
@@ -679,7 +680,7 @@ float GetShadowClose(float3 lightCoords, PixelInput input)
     
 }
 
-float GetShadowVeryClose(float3 lightCoords, PixelInput input)
+float GetShadowVeryClose(float3 lightCoords, PixelInput input, float3 TangentNormal)
 {
     float shadow = 0;
     
@@ -708,8 +709,15 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input)
         float adot = abs(dot(input.Normal, LightDirection));
         if(adot<0.1)
         {
-            bias *= lerp(1, 2, (adot*10)*(adot*10)*(adot*10));
+            bias *= lerp(1, 3, (adot*10)*(adot*10)*(adot*10));
         }
+
+        float forceShadow = 0;
+        
+        //if(Viewmodel == false)
+        forceShadow = lerp(0, 1, saturate((dot(TangentNormal, LightDirection)+0.2)*5));
+        
+        forceShadow*=forceShadow;
 
         resolution = ShadowMapResolutionVeryClose;
         
@@ -749,13 +757,13 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input)
         // Normalize the accumulated shadow value
         shadow /= n;
         
-        return (1 - shadow) * (1 - shadow);
+        return lerp((1 - shadow) * (1 - shadow), 1, forceShadow);
     }
     return 0;
     
 }
 
-float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVeryClose, PixelInput input)
+float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVeryClose, PixelInput input, float3 TangentNormal)
 {
     float shadow = 0;
     
@@ -786,13 +794,13 @@ if (lightCoordsVeryClose.x >= 0 && lightCoordsVeryClose.x <= 1 && lightCoordsVer
 
         if(dist>6 && dist<8)
         {
-            return lerp(GetShadowVeryClose(lightCoordsVeryClose, input), GetShadowClose(lightCoordsClose, input), (dist - 6)/2);
+            return lerp(GetShadowVeryClose(lightCoordsVeryClose, input, TangentNormal), GetShadowClose(lightCoordsClose, input, TangentNormal), (dist - 6)/2);
         }
 
 
     if(dist>22 && dist<25)
     {
-        float close = GetShadowClose(lightCoordsClose, input);
+        float close = GetShadowClose(lightCoordsClose, input, TangentNormal);
 
         float bias = b * (1 - saturate(dot(input.Normal, -LightDirection))) + b / 2.0f;
         bias *= (LightDistanceMultiplier+1)/2;
@@ -811,7 +819,7 @@ if (lightCoordsVeryClose.x >= 0 && lightCoordsVeryClose.x <= 1 && lightCoordsVer
 
             if (lightCoordsVeryClose.x >= 0 && lightCoordsVeryClose.x <= 1 && lightCoordsVeryClose.y >= 0 && lightCoordsVeryClose.y <= 1)
             {
-                return GetShadowVeryClose(lightCoordsVeryClose, input);
+                return GetShadowVeryClose(lightCoordsVeryClose, input, TangentNormal);
             }
         }
         
@@ -821,7 +829,7 @@ if (lightCoordsVeryClose.x >= 0 && lightCoordsVeryClose.x <= 1 && lightCoordsVer
             {
 
                 //return 1;
-                return GetShadowClose(lightCoordsClose, input);
+                return GetShadowClose(lightCoordsClose, input, TangentNormal);
             }
         }
         
@@ -841,7 +849,11 @@ if (lightCoordsVeryClose.x >= 0 && lightCoordsVeryClose.x <= 1 && lightCoordsVer
         
         bias *= (LightDistanceMultiplier+1)/2;
 
-        return 1 - SampleShadowMap(ShadowMapSampler, lightCoords.xy, currentDepth - bias);
+        float forceShadow = lerp(0, 1, saturate((dot(TangentNormal, LightDirection)+0.2)*5));
+        
+        forceShadow*=forceShadow;
+
+        return 1 - SampleShadowMap(ShadowMapSampler, lightCoords.xy, currentDepth - bias)*(1 - forceShadow);
         
         float size = 1;
         
@@ -1089,7 +1101,7 @@ float3 CalculateSsrSpecular(PixelInput input, float3 normal, float roughness, fl
     return saturate(color * intens * dot(lightDir, -normal));
 }
 
-float3 CalculateLight(PixelInput input, float3 normal, float roughness, float metallic, float ao, float3 albedo)
+float3 CalculateLight(PixelInput input, float3 normal, float roughness, float metallic, float ao, float3 albedo, float3 TangentNormal)
 {
     float3 lightCoords = input.lightPos.xyz / input.lightPos.w;
     lightCoords = (lightCoords + 1.0f) / 2.0f;
@@ -1105,6 +1117,8 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness, float me
 
     float shadow = 0;
 
+    shadow = 1 - max(0, dot(normal, normalize(-LightDirection) * 1));
+
     if (isParticle)
         normal = -LightDirection;
     
@@ -1116,16 +1130,16 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness, float me
     {
         
         #if OPENGL
-            shadow += GetShadow(lightCoords, lightCoordsClose, lightCoordsVeryClose, input);
+            shadow += GetShadow(lightCoords, lightCoordsClose, lightCoordsVeryClose, input, TangentNormal);
         #else
 
         if(Viewmodel)
         {
-            shadow += GetShadowVeryClose(lightCoordsVeryClose, input);
+            shadow += GetShadowVeryClose(lightCoordsVeryClose, input, TangentNormal);
             shadow += GetShadowViewmodel(lightCoords, input);
         }else
         {
-            shadow += GetShadow(lightCoords, lightCoordsClose, lightCoordsVeryClose, input);
+            shadow += GetShadow(lightCoords, lightCoordsClose, lightCoordsVeryClose, input, TangentNormal);
         }
 
         shadow = saturate(shadow);
@@ -1133,7 +1147,7 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness, float me
         #endif
     }
     
-    shadow += 1 - max(0, dot(normal, normalize(-LightDirection) * 1));
+    
     shadow = saturate(shadow);
 
     float3 vDir = normalize(viewPos - input.MyPosition);
@@ -1151,12 +1165,12 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness, float me
     light *= (1.0f - shadow);
 
     // Global ambient light
-    float3 globalLight = GlobalBrightness * GlobalLightColor * lerp(1.0f, 0.4f, max(dot(normal, float3(0, -1, 0)), 0.0f));
+    float3 globalLight = GlobalBrightness * GlobalLightColor * lerp(1.0f, 0.2f, max(dot(normal, LightDirection), 0.0f));
     
 
     if(Viewmodel)
     {
-        globalLight += GlobalBrightness * GlobalLightColor * lerp(1.0f, 0.6f, max(dot(normal, float3(0, -1, 0)), 0.0f)) * 1;
+        globalLight += GlobalBrightness * GlobalLightColor * lerp(1.0f, 0.3f, max(dot(normal, LightDirection), 0.0f)) * 1;
     }
 
     globalLight *= ao;

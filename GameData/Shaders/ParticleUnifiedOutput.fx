@@ -138,7 +138,7 @@ PixelOutput PixelShaderFunction(PixelInput input)
     
     float3 albedo = textureColor;
     
-    float3 light = CalculateLight(input, pixelNormal, roughness, metalic, ao, albedo);
+    float3 light = CalculateLight(input, pixelNormal, roughness, metalic, ao, albedo, GetTangentNormal(input.Normal, input.Tangent, input.BiTangent));
     
     
 	textureColor *= light;

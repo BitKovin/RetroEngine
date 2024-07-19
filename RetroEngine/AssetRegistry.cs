@@ -37,7 +37,7 @@ namespace RetroEngine
 
         static List<string> nullTextures= new List<string>();
 
-        public const string ROOT_PATH = "../../../../";
+        public const string ROOT_PATH = "../../../../../";
 
         const int MaxTexturesInMemory = 5000;
 

@@ -15,6 +15,9 @@ matrix Projection;
 
 matrix Bones[BONE_NUM];
 
+float bias = 0.02;
+float depthBias = 0;
+
 texture Texture;
 sampler textureSampler = sampler_state
 {
@@ -93,14 +96,15 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 
     float4x4 boneTrans = GetBoneTransforms(input);
 
-    float3 normal = GetTangentNormal(input.Normal, input.Tangent);
+    //float3 normal = GetTangentNormal(input.Normal, input.Tangent);
 
-    input.Position-= float4(normal*0.02,0);
+    input.Position-= float4(input.Normal*bias,0);
 
     // Transform the vertex position to world space
     output.Position = mul(mul(input.Position, boneTrans), World);
     output.Position = mul(output.Position, View);
     output.Position = mul(output.Position, Projection);
+    output.Position.z -= depthBias;
     output.myPosition = output.Position;
 
     output.TexCoords = input.TexCoords;

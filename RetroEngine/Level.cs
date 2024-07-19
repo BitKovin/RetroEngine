@@ -188,7 +188,7 @@ namespace RetroEngine
 
             GameMain.Instance.curentLevel.LoadAssets();
             AssetRegistry.WaitForAssetsToLoad();
-            GameMain.SkipFrames = 2;
+            GameMain.SkipFrames = 5;
 
             GC.Collect();
 

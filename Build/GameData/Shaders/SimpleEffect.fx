@@ -83,7 +83,10 @@ PixelOutput PixelShaderFunction(PixelInput input)
     
     float3 albedo = textureColor;
     
-    float3 light = CalculateLight(input, pixelNormal, roughness, metalic, ao, albedo);
+    
+    float3 TangentNormal = GetTangentNormal(input.Normal, input.Tangent, input.Tangent);
+
+    float3 light = CalculateLight(input, pixelNormal, roughness, metalic, ao, albedo, TangentNormal);
     
     
 	textureColor *= light;
@@ -94,6 +97,8 @@ PixelOutput PixelShaderFunction(PixelInput input)
     light = saturate(light/30);
     textureColor += light;
     
+    
+
     textureColor += tex2D(EmissiveTextureSampler, input.TexCoord).rgb * EmissionPower * tex2D(EmissiveTextureSampler, input.TexCoord).a;
     
     textureAlpha *= Transparency;
@@ -110,7 +115,6 @@ PixelOutput PixelShaderFunction(PixelInput input)
     
     float3 reflection = reflect(vDir, pixelNormal);
     
-    float3 TangentNormal = GetTangentNormal(input.Normal, input.Tangent, input.Tangent);
     
     output.Normal = float4((normalize(lerp(pixelNormal, TangentNormal, 0.0)) + 1) / 2, pbs);
     output.Position = float4(input.MyPosition - viewPos, pbs);

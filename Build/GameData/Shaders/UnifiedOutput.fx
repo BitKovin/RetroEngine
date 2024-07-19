@@ -34,7 +34,7 @@ sampler ORMTextureSampler = sampler_state
 };
 
 
-
+bool earlyZ;
 
 PixelInput VertexShaderFunction(VertexInput input)
 {
@@ -51,10 +51,13 @@ PixelOutput PixelShaderFunction(PixelInput input)
 
     screenCoords.y = 1.0f - screenCoords.y;
     
-    //float depthIn = SampleDepth(screenCoords);
+    if(earlyZ)
+    {
+        float depthIn = SampleDepth(screenCoords);
     
-    //DepthDiscard(depthIn,input);
     
+        DepthDiscard(depthIn,input);
+    }
     PixelOutput output = (PixelOutput)0;
     
     
@@ -87,7 +90,10 @@ PixelOutput PixelShaderFunction(PixelInput input)
     
     float3 albedo = textureColor;
     
-    float3 light = CalculateLight(input, pixelNormal, roughness, metalic, ao, albedo);
+    
+    float3 TangentNormal = GetTangentNormal(input.Normal, input.Tangent, input.Tangent);
+
+    float3 light = CalculateLight(input, pixelNormal, roughness, metalic, ao, albedo, TangentNormal);
     
     
 	textureColor *= light;
