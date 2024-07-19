@@ -67,26 +67,32 @@ namespace RetroEngine
 
             try
             {
-                using (Stream stream = GetFileStreamFromPath(filePath))
+
+                lock (textures)
                 {
-                    if (generateMipMaps && AllowGeneratingMipMaps)
-                    {
-                        Texture2D tex = Texture2D.FromStream(GameMain.Instance.GraphicsDevice, stream);
 
-                        textures.Add(path, GenerateMipMaps(tex));
-                        
-                    }else
+                    using (Stream stream = GetFileStreamFromPath(filePath))
                     {
-                        textures.Add(path, Texture2D.FromStream(GameMain.Instance.GraphicsDevice, stream));
+                        if (generateMipMaps && AllowGeneratingMipMaps)
+                        {
+                            Texture2D tex = Texture2D.FromStream(GameMain.Instance.GraphicsDevice, stream);
+
+                            textures.Add(path, GenerateMipMaps(tex));
+
+                        }
+                        else
+                        {
+                            textures.Add(path, Texture2D.FromStream(GameMain.Instance.GraphicsDevice, stream));
+                        }
+
+                        textures[path].Name = path;
+
+                        texturesHistory.Add(path);
+
+                        Logger.Log($"loaded texture {path}. Current texture cache: {textures.Count}");
+
+                        return (Texture2D)textures[path];
                     }
-
-                    textures[path].Name = path;
-
-                    texturesHistory.Add(path);
-
-                    Logger.Log($"loaded texture {path}. Current texture cache: {textures.Count}");
-
-                    return (Texture2D)textures[path];
                 }
             }
             catch (Exception ex)
