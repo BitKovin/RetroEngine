@@ -632,7 +632,7 @@ float GetShadowClose(float3 lightCoords, PixelInput input)
         float adot = abs(dot(input.Normal, LightDirection));
         if(adot<0.1)
         {
-            //bias *= lerp(1, 30, (adot*10)*(adot*10));
+            bias *= lerp(1, 3, (adot*10)*(adot*10));
         }
         
         float size = 1;
@@ -708,7 +708,7 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input)
         float adot = abs(dot(input.Normal, LightDirection));
         if(adot<0.1)
         {
-            bias *= lerp(1, 2, (adot*10)*(adot*10)*(adot*10));
+            bias *= lerp(1, 3, (adot*10)*(adot*10)*(adot*10));
         }
 
         resolution = ShadowMapResolutionVeryClose;
