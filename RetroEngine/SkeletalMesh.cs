@@ -411,6 +411,7 @@ namespace RetroEngine
                 else
                 {
                     graphicsDevice.RasterizerState = isNegativeScale() ? RasterizerState.CullCounterClockwise : RasterizerState.CullClockwise;
+                    //graphicsDevice.RasterizerState = RasterizerState.CullNone;
                 }
             }
 

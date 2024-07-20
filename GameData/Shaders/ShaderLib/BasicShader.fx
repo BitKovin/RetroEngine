@@ -428,9 +428,9 @@ void DepthDiscard(float depth, PixelInput input)
 
     float b = 0.01;
     if(Viewmodel)
-    b = 0.000004f;
+    b = 0.000005f;
 
-    if (depth < input.MyPixelPosition.z - 0.01 && depthTestEqual == false)
+    if (depth < input.MyPixelPosition.z - b && depthTestEqual == false)
         discard;
 }
 
@@ -449,13 +449,15 @@ void MaskedDiscard(float alpha)
 float SampleMaxDepth(float2 screenCoords)
 {
     
-    float2 texelSize = 0.4 / float2(ScreenWidth, ScreenHeight);
+    float2 texelSize = 1.1 / float2(ScreenWidth, ScreenHeight);
     
     float d = SampleDepth(screenCoords);
     float d1 = SampleDepth(screenCoords + texelSize);
     float d2 = SampleDepth(screenCoords - texelSize);
+    float d3 = SampleDepth(screenCoords + texelSize*float2(1,-1));
+    float d4 = SampleDepth(screenCoords - texelSize*float2(-1,1));
 
-    return max(d, max(d1, d2));
+    return max(d, max(d1, max(d2,max(d3,d4))));
 
 }
 
@@ -621,11 +623,11 @@ float GetShadowClose(float3 lightCoords, PixelInput input, float3 TangentNormal)
 
         int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)
 
-        float b = -0.0004;
+        float b = -0.00012;
         
         float bias = b * (1 - saturate(dot(input.Normal, -LightDirection))) + b / 2.0f;
 
-        bias*= lerp(10,1, abs(dot(input.Normal, LightDirection)));
+        bias*= lerp(15,1, abs(dot(input.Normal, LightDirection)));
 
         resolution = 2048;
         
@@ -646,8 +648,13 @@ float GetShadowClose(float3 lightCoords, PixelInput input, float3 TangentNormal)
 
         float forceShadow = 0;
 
-        forceShadow = lerp(0, 1, saturate((dot(TangentNormal, LightDirection)+0.15)*(10/1.5)));
+        forceShadow = lerp(0, 1, saturate((dot(TangentNormal, LightDirection)+0.3)*(10/3)));
         
+        bias *= lerp(1,4,saturate(forceShadow*1.75));
+
+        forceShadow = 0;
+
+
         forceShadow*=forceShadow;
         forceShadow*=forceShadow;
         
@@ -695,7 +702,7 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input, float3 TangentNor
         float resolution = 1;
         
 
-        int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)
+        int numSamples = 2; // Number of samples in each direction (total samples = numSamples^2)
 
         float b = 0.000025;
         
@@ -711,10 +718,9 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input, float3 TangentNor
         float forceShadow = 0;
         
         //if(Viewmodel == false)
-        forceShadow = lerp(0, 1, saturate((dot(TangentNormal, LightDirection)+0.15)*(10/1.5)));
+        forceShadow = lerp(0, 1, saturate((dot(TangentNormal, LightDirection)+0.3)*(10/3)));
         
-        forceShadow*=forceShadow;
-        forceShadow*=forceShadow;
+        bias *= lerp(1,2,saturate(forceShadow*1.5));
 
         resolution = ShadowMapResolutionVeryClose;
         
@@ -739,7 +745,7 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input, float3 TangentNor
             for (int j = -numSamples; j <= numSamples; ++j)
             {
 
-                if(length(float2(i,j))> 1.1)
+                if(length(float2(i,j))> numSamples*1.1)
                     continue;
 
                 float2 offsetCoords = lightCoords.xy + float2(i, j) * texelSize;
@@ -754,7 +760,7 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input, float3 TangentNor
         // Normalize the accumulated shadow value
         shadow /= n;
         
-        return lerp((1 - shadow) * (1 - shadow), 1, forceShadow);
+        return lerp((1 - shadow) * (1 - shadow), 1, 0);
     }
     return 0;
     
@@ -769,10 +775,10 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
 
     float dist = distance(viewPos, input.MyPosition);
     
-    if (dist > 140)
+    if (dist > 100)
         return 0;
     
-        float b = 0.0015;
+        float b = 0.0010;
 
     
 
@@ -846,10 +852,11 @@ if (lightCoordsVeryClose.x >= 0 && lightCoordsVeryClose.x <= 1 && lightCoordsVer
         
         bias *= (LightDistanceMultiplier+1)/2;
 
-        float forceShadow = lerp(0, 1, saturate((dot(TangentNormal, LightDirection)+0.15)*(10/1.5)));
+        float forceShadow = lerp(0, 1, saturate((dot(TangentNormal, LightDirection)+0.2)*(10/2)));
         
-        forceShadow*=forceShadow;
-        forceShadow*=forceShadow;
+        bias *= lerp(1,6,saturate(forceShadow*2));
+
+        forceShadow = 0;
 
         return 1 - SampleShadowMap(ShadowMapSampler, lightCoords.xy, currentDepth - bias)*(1 - forceShadow);
         

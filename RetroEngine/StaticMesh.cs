@@ -569,10 +569,10 @@ namespace RetroEngine
 
             }
 
-            float bias = 0.025f;
+            float bias = 0.035f;
 
             if (closeShadow)
-                bias = 0.02f;
+                bias = 0.025f;
 
             if (veryClose)
                 bias = 0.015f;
@@ -594,8 +594,12 @@ namespace RetroEngine
                 else
                 {
                     graphicsDevice.RasterizerState = isNegativeScale() ? RasterizerState.CullCounterClockwise : RasterizerState.CullClockwise;
+                    //graphicsDevice.RasterizerState = RasterizerState.CullNone;
                 }
+
                 
+
+
             }
 
             if (closeShadow)

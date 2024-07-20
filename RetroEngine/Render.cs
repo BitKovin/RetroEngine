@@ -293,7 +293,7 @@ namespace RetroEngine
             GameMain.Instance.WaitForFramePresent();
 
             if (outputPath!=null)
-            DownsampleToTexture(outputPath, oldFrame);
+            DownsampleToTexture(ForwardOutput, oldFrame);
 
             List<StaticMesh> renderList = level.GetMeshesToRender();
 
@@ -307,6 +307,8 @@ namespace RetroEngine
 
             if (Graphics.DirectLighting > 0.0001)
             {
+                ShadowMapEffect.Parameters["LightDirection"]?.SetValue(Graphics.LightDirection);
+                ShadowMapMaskedEffect.Parameters["LightDirection"]?.SetValue(Graphics.LightDirection);
                 RenderShadowMapClose(renderList);
                 RenderShadowMap(renderList);
                 RenderShadowMapVeryClose(renderList);
@@ -395,9 +397,12 @@ namespace RetroEngine
                 StencilEnable = false,
             };
 
-            
-            if(Graphics.EarlyDepthDiscard)
-            DrawFullScreenQuad(DepthPrepathBufferOutput, DepthApplyEffect);
+
+            if (Graphics.EarlyDepthDiscard)
+            {
+                DepthApplyEffect.Parameters["OldFrame"].SetValue(oldFrame);
+                DrawFullScreenQuad(DepthPrepathBufferOutput, DepthApplyEffect);
+            }
 
 
             
@@ -1068,9 +1073,11 @@ namespace RetroEngine
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, target.Width, target.Height);
             graphics.GraphicsDevice.SetRenderTarget(target);
 
+            graphics.GraphicsDevice.Clear(Color.Black);
+
             SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
 
-            spriteBatch.Begin(blendState: BlendState.Opaque);
+            spriteBatch.Begin(blendState: BlendState.AlphaBlend);
 
             DrawFullScreenQuad(spriteBatch, source);
 

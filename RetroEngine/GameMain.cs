@@ -678,5 +678,11 @@ namespace RetroEngine
 
         }
 
+        [ConsoleCommand("g.maxfps")]
+        public static void SetMaxFPS(int value)
+        {
+            MaxFPS = value;
+        }
+
     }
 }

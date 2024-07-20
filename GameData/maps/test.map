@@ -4,7 +4,7 @@
 {
 "classname" "worldspawn"
 "_tb_textures" "textures;textures/brushes"
-"geometricalShadowsEnabled" "true"
+"geometricalShadowsEnabled" "false"
 // brush 0
 {
 ( -64 -160 192 ) ( -64 -64 -16 ) ( -64 -64 192 ) cat 0 0 0 1 1
@@ -18378,7 +18378,7 @@
 "intensity" "2"
 "light_color" "1 0 0"
 "dynamic" "true"
-"dynamicSkipDown" "true"
+"dynamicSkipDown" "false"
 }
 // entity 6
 {
