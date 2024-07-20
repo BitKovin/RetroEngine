@@ -389,7 +389,7 @@ namespace RetroEngine
                 bias = 0.02f;
 
             if (viewmodel)
-                bias = 0.002f;
+                bias = 0.001f;
 
             if (BackFaceShadows)
                 bias *= -2;
@@ -400,7 +400,7 @@ namespace RetroEngine
 
             if (viewmodel)
             {
-                graphicsDevice.RasterizerState = isNegativeScale() ? RasterizerState.CullClockwise : RasterizerState.CullCounterClockwise;
+                graphicsDevice.RasterizerState = isNegativeScale() ? RasterizerState.CullCounterClockwise : RasterizerState.CullClockwise;
             }
             else
             {
@@ -413,6 +413,8 @@ namespace RetroEngine
                     graphicsDevice.RasterizerState = isNegativeScale() ? RasterizerState.CullCounterClockwise : RasterizerState.CullClockwise;
                     //graphicsDevice.RasterizerState = RasterizerState.CullNone;
                 }
+
+                //graphicsDevice.RasterizerState = isNegativeScale() ? RasterizerState.CullCounterClockwise : RasterizerState.CullClockwise;
             }
 
             effect.Parameters["Bones"].SetValue(finalizedBones);

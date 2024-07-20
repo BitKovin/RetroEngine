@@ -120,6 +120,8 @@ namespace RetroEngine.Game.Entities.Player
 
             bodyMesh.CastGeometricShadow = true;
 
+            bodyMesh.CastViewModelShadows = false;
+
             bodyMesh.textureSearchPaths.Add("textures/weapons/arms/");
 
             //bodyMesh.Scale = new Vector3(1.15f);

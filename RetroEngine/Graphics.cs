@@ -71,6 +71,8 @@ namespace RetroEngine
         public static BoundingFrustum DirectionalLightFrustrumClose = new BoundingFrustum(Matrix.Identity);
         public static BoundingFrustum DirectionalLightFrustrumVeryClose = new BoundingFrustum(Matrix.Identity);
 
+        public static BoundingFrustum DirectionalLightFrustrumViewmodel = new BoundingFrustum(Matrix.Identity);
+
         public static bool EarlyDepthDiscard = true;
         public static bool EarlyDepthDiscardShader = true;
 
@@ -96,6 +98,8 @@ namespace RetroEngine
             {
                 DirectionalLightFrustrumVeryClose.Matrix = Matrix.Identity;
             }
+
+            DirectionalLightFrustrumViewmodel.Matrix = GetLightViewViewmodel() * GetLightProjectionViewmodel();
 
             LightVeryCloseView = GetLightViewVeryClose();
             LightCloseView = GetLightViewClose();
@@ -144,7 +148,7 @@ namespace RetroEngine
 
             if (Graphics.ViewmodelShadows == false) return Matrix.Identity;
 
-            return Matrix.CreateOrthographic(1.5f, 1.5f, -4, 4);
+            return Matrix.CreateOrthographic(1.5f, 1.5f, -100, 4);
         }
 
         static Vector3 GetLightUpVector()

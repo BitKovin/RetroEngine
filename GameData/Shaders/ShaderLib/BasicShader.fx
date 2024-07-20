@@ -258,6 +258,8 @@ float ScreenWidth;
 float SSRHeight;
 float SSRWidth;
 
+bool ViewmodelShadowsEnabled;
+
 bool Masked;
 
 struct VertexInput
@@ -887,7 +889,7 @@ if (lightCoordsVeryClose.x >= 0 && lightCoordsVeryClose.x <= 1 && lightCoordsVer
     
 }
 
-float GetShadowViewmodel(float3 lightCoords, PixelInput input)
+float GetShadowViewmodel(float3 lightCoords, PixelInput input, float3 TangentNormal)
 {
     float resolution = 1;
     float shadow = 0;
@@ -896,11 +898,17 @@ float GetShadowViewmodel(float3 lightCoords, PixelInput input)
 
     int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)
 
-    float b = -0.00035;
-
+    float b = -0.0003;
+        
     float bias = b * (1 - saturate(dot(input.Normal, -LightDirection))) + b / 2.0f;
 
-    bias*= lerp(2,1, abs(dot(input.Normal, -LightDirection)));
+    bias*= lerp(3,1, abs(dot(input.Normal, -LightDirection)));
+
+    bias += -0.0005;
+
+    float forceShadow = lerp(0, 1, saturate((dot(TangentNormal, LightDirection)+0.3)*(10/3)));
+        
+    bias *= lerp(1,1,saturate(forceShadow*1.5));
 
     resolution = ShadowMapResolution;
 
@@ -1138,10 +1146,10 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness, float me
             shadow += GetShadow(lightCoords, lightCoordsClose, lightCoordsVeryClose, input, TangentNormal);
         #else
 
-        if(Viewmodel)
+        if(Viewmodel && ViewmodelShadowsEnabled)
         {
-            shadow += GetShadowVeryClose(lightCoordsVeryClose, input, TangentNormal);
-            shadow += GetShadowViewmodel(lightCoords, input);
+            //shadow += GetShadowVeryClose(lightCoordsVeryClose, input, TangentNormal);
+            shadow += GetShadowViewmodel(lightCoords, input, TangentNormal);
         }else
         {
             shadow += GetShadow(lightCoords, lightCoordsClose, lightCoordsVeryClose, input, TangentNormal);

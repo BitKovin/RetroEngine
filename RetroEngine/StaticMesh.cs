@@ -82,6 +82,8 @@ namespace RetroEngine
 
         public bool Viewmodel = false;
 
+        public bool CastViewModelShadows = true;
+
         internal Dictionary<string, Texture2D> textures = new Dictionary<string, Texture2D>();
 
         public bool CastShadows = false;
@@ -583,7 +585,8 @@ namespace RetroEngine
 
             if (viewmodel)
             {
-                graphicsDevice.RasterizerState = isNegativeScale() ? RasterizerState.CullClockwise : RasterizerState.CullCounterClockwise;
+                
+                graphicsDevice.RasterizerState = RasterizerState.CullNone;
             }
             else
             {
@@ -606,6 +609,8 @@ namespace RetroEngine
                 Graphics.LightViewProjectionClose = frameStaticMeshData.LightViewClose * frameStaticMeshData.LightProjectionClose;
             else if (veryClose)
                 Graphics.LightViewProjectionVeryClose = frameStaticMeshData.LightViewVeryClose * frameStaticMeshData.LightProjectionVeryClose;
+            else if (viewmodel)
+                Graphics.LightViewProjectionViewmodel = frameStaticMeshData.LightViewmodelView * frameStaticMeshData.LightViewmodelProjection;
             else
                 Graphics.LightViewProjection = frameStaticMeshData.LightView * frameStaticMeshData.LightProjection;
 
@@ -614,13 +619,14 @@ namespace RetroEngine
             {
                 foreach (ModelMesh mesh in frameStaticMeshData.model.Meshes)
                 {
-                    
-                    if(closeShadow)
+
+                    if (closeShadow)
                         if (Graphics.DirectionalLightFrustrumClose.Contains(mesh.BoundingSphere.Transform(WorldMatrix)) == ContainmentType.Disjoint) continue;
+
 
                     if (veryClose)
                         if (Graphics.DirectionalLightFrustrumVeryClose.Contains(mesh.BoundingSphere.Transform(WorldMatrix)) == ContainmentType.Disjoint) continue;
-                    
+
 
                     foreach (ModelMeshPart meshPart in mesh.MeshParts)
                     {
@@ -645,6 +651,11 @@ namespace RetroEngine
                         {
                             effect.Parameters["Projection"].SetValue(frameStaticMeshData.LightProjectionVeryClose);
                             effect.Parameters["View"].SetValue(frameStaticMeshData.LightViewVeryClose);
+                        }
+                        else if (viewmodel)
+                        {
+                            effect.Parameters["Projection"].SetValue(frameStaticMeshData.LightViewmodelProjection);
+                            effect.Parameters["View"].SetValue(frameStaticMeshData.LightViewmodelView);
                         }
                         else
                         {

@@ -249,6 +249,8 @@ namespace RetroEngine
             }
 
             effect.Parameters["earlyZ"]?.SetValue(Graphics.EarlyDepthDiscardShader);
+            effect.Parameters["ViewmodelShadowsEnabled"]?.SetValue(Graphics.ViewmodelShadows);
+
 
             effect.ApplyValues();
 
@@ -687,12 +689,8 @@ namespace RetroEngine
             // Iterate through meshes and draw shadows
             foreach (StaticMesh mesh in renderList)
             {
-                if (mesh.Viewmodel)
+                if (mesh.Viewmodel || mesh.CastViewModelShadows)
                 {
-
-
-                    graphics.GraphicsDevice.RasterizerState = mesh.isNegativeScale()? RasterizerState.CullClockwise : RasterizerState.CullCounterClockwise;
-
                     mesh.DrawShadow(viewmodel: true);
                 }
             }
