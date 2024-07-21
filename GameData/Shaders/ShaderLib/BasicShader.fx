@@ -629,7 +629,11 @@ float GetShadowClose(float3 lightCoords, PixelInput input, float3 TangentNormal)
         
         float bias = b * (1 - saturate(dot(input.Normal, -LightDirection))) + b / 2.0f;
 
-        bias*= lerp(15,1, abs(dot(input.Normal, LightDirection)));
+        float f = abs(dot(input.Normal, LightDirection));
+
+        f*=lerp(f,1,0.5); 
+
+        bias*= lerp(15,1, f);
 
         resolution = 2048;
         
@@ -715,7 +719,11 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input, float3 TangentNor
         
         float bias = b * (1 - saturate(dot(input.Normal, -LightDirection))) + b / 2.0f;
 
-        bias*= lerp(20,1, abs(dot(input.Normal, -LightDirection)));
+        float f = abs(dot(input.Normal, LightDirection));
+
+        f*=lerp(f,1,0.5); 
+
+        bias*= lerp(20,1, f);
 
         bias += 0.00013;
 

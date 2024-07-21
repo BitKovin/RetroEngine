@@ -582,7 +582,13 @@ namespace RetroEngine
             //bias = 0.015f;
 
             effect.Parameters["bias"].SetValue(bias);
-            effect.Parameters["depthBias"].SetValue(BackFaceShadows ? 0.0001f : 0);
+            effect.Parameters["depthBias"].SetValue(BackFaceShadows ? 0.004f : 0);
+
+            if(veryClose)
+                effect.Parameters["depthBias"].SetValue(BackFaceShadows ? 0.004f : 0);
+
+            if (closeShadow)
+                effect.Parameters["depthBias"].SetValue(BackFaceShadows ? 0.001f : 0);
 
             if (viewmodel)
             {

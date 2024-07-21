@@ -91,13 +91,13 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 
     float4x4 boneTrans = GetBoneTransforms(input);
     
-    //float3 normal = GetTangentNormal(input.Normal, input.Tangent);
+    float3 normal = GetTangentNormal(input.Normal, input.Tangent);
     
     float4x4 BonesWorld = mul(boneTrans, World);
 
     //output.normal = mul(input.Normal, (float3x3)BonesWorld);
 
-    input.Position-= float4(input.Normal*bias,0);
+    input.Position-= float4(normal*bias,0);
     
     // Transform the vertex position to world space
     output.Position = mul(input.Position, BonesWorld);

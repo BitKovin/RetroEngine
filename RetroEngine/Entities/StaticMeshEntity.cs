@@ -82,9 +82,9 @@ namespace RetroEngine.Entities
                 mesh.PreloadTextures();
             }
 
-            
+            mesh.BackFaceShadows = true;
 
-            
+
 
             body = Physics.CreateFromShape(this, mesh.Scale.ToPhysics(), Physics.CreateCollisionShapeFromModel(mesh.model, complex: true), 0);
 
