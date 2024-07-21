@@ -42,9 +42,10 @@ namespace RetroEngine
         public static Matrix LightViewProjectionViewmodel;
         public static Matrix LightViewProjectionClose;
         public static Matrix LightViewProjectionVeryClose;
-        public static float LightDistance = 150;
+        public static float LightDistance = 200;
         public static float CloseLightDistance = 51;
         public static float VeryCloseLightDistance = 16;
+
 
         public static bool EnablePostPocessing = true;
         public static bool TextureFiltration = true;
@@ -158,14 +159,14 @@ namespace RetroEngine
 
         public static Matrix GetLightViewClose()
         {
-            return Matrix.CreateLookAt(GetCameraPositionByPixelGrid(CloseLightDistance * LightDistanceMultiplier / 1.5f), GetCameraPositionByPixelGrid(CloseLightDistance * LightDistanceMultiplier / 1.5f) + LightDirection, GetLightUpVector());
+            return Matrix.CreateLookAt(GetCameraPositionByPixelGrid(CloseLightDistance * LightDistanceMultiplier / 1.5f), GetCameraPositionByPixelGrid(CloseLightDistance * LightDistanceMultiplier / 1.5f) + LightDirection, Vector3.UnitZ);
         }
         public static Matrix GetLightViewVeryClose()
         {
 
             if(DynamicSunShadowsEnabled)
             {
-                return Matrix.CreateLookAt(GetCameraPositionByPixelGrid(VeryCloseLightDistance * LightDistanceMultiplier / 1.5f), GetCameraPositionByPixelGrid(VeryCloseLightDistance * LightDistanceMultiplier / 1.5f) + LightDirection, GetLightUpVector());
+                return Matrix.CreateLookAt(GetCameraPositionByPixelGrid(VeryCloseLightDistance * LightDistanceMultiplier / 1.5f), GetCameraPositionByPixelGrid(VeryCloseLightDistance * LightDistanceMultiplier / 1.5f) + LightDirection, Vector3.UnitZ);
             }else
             {
                 return new Matrix(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
@@ -173,6 +174,8 @@ namespace RetroEngine
 
             
         }
+
+
 
         static Vector3 GetCameraPositionByPixelGrid(float lightDistance)
         {

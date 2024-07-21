@@ -262,6 +262,8 @@ bool ViewmodelShadowsEnabled;
 
 bool Masked;
 
+
+
 struct VertexInput
 {
     float4 Position : SV_POSITION0;
@@ -654,15 +656,22 @@ float GetShadowClose(float3 lightCoords, PixelInput input, float3 TangentNormal)
         
         bias *= lerp(1,4,saturate(forceShadow*1.75));
 
-        forceShadow = 0;
 
+        numSamples = 3;
+        if(forceShadow>0)
+            numSamples = 2;
 
-        //forceShadow*=forceShadow;
-        //forceShadow*=forceShadow;
+        if(forceShadow>0.8)
+            numSamples = 1;
         
+        #if OPENGL
+        return 1 - SampleShadowMapLinear(ShadowMapCloseSampler, lightCoords.xy, currentDepth + bias,float2(texelSize, texelSize));
+        #endif
 
-        return 1 - SampleShadowMapLinear(ShadowMapCloseSampler, lightCoords.xy, currentDepth + bias,float2(texelSize, texelSize))* (1 - forceShadow);
+        //return 1 - SampleShadowMapLinear(ShadowMapCloseSampler, lightCoords.xy, currentDepth + bias,float2(texelSize, texelSize));
     
+        numSamples = max(numSamples,0);
+
         int n = 0;
         
         for (int i = -numSamples; i <= numSamples; ++i)
@@ -674,7 +683,7 @@ float GetShadowClose(float3 lightCoords, PixelInput input, float3 TangentNormal)
 
                 float2 offsetCoords = lightCoords.xy + float2(i, j) * texelSize;
                 float closestDepth;
-                closestDepth = SampleShadowMap(ShadowMapCloseSampler, offsetCoords, currentDepth + bias);
+                closestDepth = SampleShadowMapLinear(ShadowMapCloseSampler, offsetCoords, currentDepth + (bias* lerp(length(float2(i,j)),1,0.5)),float2(texelSize, texelSize));
 
                 closestDepth = saturate(closestDepth);
 
@@ -746,29 +755,44 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input, float3 TangentNor
         #endif
 
 
-        numSamples = 2;
+        numSamples = 3;
         if(forceShadow>0)
-            numSamples = 1;
+            numSamples = 2;
 
         if(forceShadow>0.8)
-            numSamples = 0;
+            numSamples = 1;
+        
+        if(Viewmodel)
+            numSamples = 1;
 
+        #if OPENGL
+        numSamples = 1;
+        #endif
+
+
+        numSamples = max(numSamples,0);
+
+        //return 1 - SampleShadowMapLinear(ShadowMapCloseSampler, lightCoords.xy, currentDepth + bias,float2(texelSize, texelSize));
+    
         int n = 0;
-
+        
         for (int i = -numSamples; i <= numSamples; ++i)
         {
             for (int j = -numSamples; j <= numSamples; ++j)
             {
 
-                if(length(float2(i,j))> numSamples*1.1)
-                    continue;
+                if(length(float2(i,j)) > numSamples*1.1) continue;
 
                 float2 offsetCoords = lightCoords.xy + float2(i, j) * texelSize;
                 float closestDepth;
-                closestDepth = SampleShadowMapLinear(ShadowMapVeryCloseSampler, offsetCoords, currentDepth - bias, float2(texelSize, texelSize));
+                closestDepth = SampleShadowMapLinear(ShadowMapVeryCloseSampler, offsetCoords, currentDepth - (bias* lerp(length(float2(i,j)),1,0.3)),float2(texelSize, texelSize));
+
+                closestDepth = saturate(closestDepth);
 
                 shadow += closestDepth;
+
                 n++;
+
             }
         }
 
@@ -792,7 +816,7 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
 
     float dist = distance(viewPos, input.MyPosition);
     
-    if (dist > 100)
+    if (dist > 150)
         return 0;
     
         float b = 0.0003;

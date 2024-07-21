@@ -393,6 +393,9 @@ namespace RetroEngine.Entities.Light
             if (isDynamic() && Level.ChangingLevel == false)
             {
 
+                if (enabled == false)
+                    return;
+
                 DynamicUpdateDystance = (lightData.Radius + 10) * 6;
 
                 float cameraDist = Vector3.Distance(Camera.finalizedPosition, Position);

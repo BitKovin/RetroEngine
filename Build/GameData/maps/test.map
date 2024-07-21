@@ -5,6 +5,7 @@
 "classname" "worldspawn"
 "_tb_textures" "textures;textures/brushes"
 "geometricalShadowsEnabled" "false"
+"dynamicSunShadowsEnabled" "true"
 // brush 0
 {
 ( -64 -160 192 ) ( -64 -64 -16 ) ( -64 -64 192 ) cat 0 0 0 1 1

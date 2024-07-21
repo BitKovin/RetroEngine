@@ -70,6 +70,7 @@ namespace RetroEngine
 
             ImGui.SliderFloat("reflection resolution scale", ref Graphics.SSRResolutionScale, 0.2f, 1);
 
+
             ImGui.Checkbox("early depth discard", ref Graphics.EarlyDepthDiscard);
 
             ImGui.Checkbox("early depth discard shader", ref Graphics.EarlyDepthDiscardShader);

@@ -625,7 +625,7 @@ float GetShadowClose(float3 lightCoords, PixelInput input, float3 TangentNormal)
 
         int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)
 
-        float b = -0.00005;
+        float b = -0.00007;
         
         float bias = b * (1 - saturate(dot(input.Normal, -LightDirection))) + b / 2.0f;
 
@@ -650,9 +650,9 @@ float GetShadowClose(float3 lightCoords, PixelInput input, float3 TangentNormal)
 
         float forceShadow = 0;
 
-        forceShadow = lerp(0, 1, saturate((dot(TangentNormal, LightDirection)+0.3)*(10/3)));
+        forceShadow = lerp(0, 1, saturate((dot(TangentNormal, LightDirection)+0.4)*(10/4)));
         
-        bias *= lerp(1,4,saturate(forceShadow*1.75));
+        bias *= lerp(1,5,saturate(forceShadow*1.75));
 
         forceShadow = 0;
 
@@ -661,7 +661,7 @@ float GetShadowClose(float3 lightCoords, PixelInput input, float3 TangentNormal)
         //forceShadow*=forceShadow;
         
 
-        return 1 - SampleShadowMapLinear(ShadowMapCloseSampler, lightCoords.xy, currentDepth + bias,float2(texelSize, texelSize))* (1 - forceShadow);
+        return 1 - SampleShadowMap(ShadowMapCloseSampler, lightCoords.xy, currentDepth + bias)* (1 - forceShadow);
     
         int n = 0;
         
@@ -711,13 +711,13 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input, float3 TangentNor
 
         int numSamples = 2; // Number of samples in each direction (total samples = numSamples^2)
 
-        float b = 0.000025;
+        float b = 0.00003;
         
         float bias = b * (1 - saturate(dot(input.Normal, -LightDirection))) + b / 2.0f;
 
         bias*= lerp(20,1, abs(dot(input.Normal, -LightDirection)));
 
-        bias += 0.0001;
+        bias += 0.00013;
 
         bias *= (LightDistanceMultiplier+1)/2;
 
@@ -746,7 +746,7 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input, float3 TangentNor
         #endif
 
 
-        numSamples = 2;
+        numSamples = 1;
         if(forceShadow>0)
             numSamples = 1;
 
@@ -792,7 +792,7 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
 
     float dist = distance(viewPos, input.MyPosition);
     
-    if (dist > 100)
+    if (dist > 150)
         return 0;
     
         float b = 0.0003;
