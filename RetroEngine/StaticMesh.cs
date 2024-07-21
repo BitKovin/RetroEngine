@@ -579,6 +579,7 @@ namespace RetroEngine
             if (veryClose)
                 bias = 0.015f;
 
+            //bias = 0.015f;
 
             effect.Parameters["bias"].SetValue(bias);
             effect.Parameters["depthBias"].SetValue(BackFaceShadows ? 0.0001f : 0);

@@ -625,7 +625,7 @@ float GetShadowClose(float3 lightCoords, PixelInput input, float3 TangentNormal)
 
         int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)
 
-        float b = -0.00012;
+        float b = -0.00005;
         
         float bias = b * (1 - saturate(dot(input.Normal, -LightDirection))) + b / 2.0f;
 
@@ -633,7 +633,7 @@ float GetShadowClose(float3 lightCoords, PixelInput input, float3 TangentNormal)
 
         resolution = 2048;
         
-        
+        bias -= 0.00002;
         
         float size = 1;
    
@@ -669,13 +669,18 @@ float GetShadowClose(float3 lightCoords, PixelInput input, float3 TangentNormal)
         {
             for (int j = -numSamples; j <= numSamples; ++j)
             {
+
+                if(length(float2(i,j)) > numSamples*1.1) continue;
+
                 float2 offsetCoords = lightCoords.xy + float2(i, j) * texelSize;
                 float closestDepth;
-                closestDepth = SampleShadowMapLinear(ShadowMapCloseSampler, offsetCoords, currentDepth + bias, float2(texelSize, texelSize));
+                closestDepth = SampleShadowMap(ShadowMapCloseSampler, offsetCoords, currentDepth + bias);
 
                 closestDepth = saturate(closestDepth);
 
                 shadow += closestDepth;
+
+                n++;
 
             }
         }
@@ -683,7 +688,7 @@ float GetShadowClose(float3 lightCoords, PixelInput input, float3 TangentNormal)
         //return saturate(shadow);
 
         // Normalize the accumulated shadow value
-        shadow /= ((2 * numSamples + 1) * (2 * numSamples + 1));
+        shadow /= n;
         
         return (1 - shadow) * (1 - shadow);
     
@@ -740,6 +745,12 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input, float3 TangentNor
         return 1 - SampleShadowMapLinear(ShadowMapVeryCloseSampler, lightCoords.xy, currentDepth - bias, float2(texelSize, texelSize));
         #endif
 
+        if(forceShadow>0)
+            numSamples = 1;
+
+        if(forceShadow>0.8)
+            numSamples = 0;
+
         int n = 0;
 
         for (int i = -numSamples; i <= numSamples; ++i)
@@ -780,7 +791,7 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
     if (dist > 100)
         return 0;
     
-        float b = 0.0010;
+        float b = 0.0003;
 
     
 
@@ -1148,7 +1159,7 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness, float me
 
         if(Viewmodel && ViewmodelShadowsEnabled)
         {
-            //shadow += GetShadowVeryClose(lightCoordsVeryClose, input, TangentNormal);
+            shadow += GetShadowVeryClose(lightCoordsVeryClose, input, TangentNormal);
             shadow += GetShadowViewmodel(lightCoords, input, TangentNormal);
         }else
         {

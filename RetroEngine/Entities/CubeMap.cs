@@ -152,6 +152,8 @@ namespace RetroEngine.Entities
 
             GameMain.Instance.render.FillPrepas();
 
+            graphicsDevice.SetRenderTarget(GameMain.Instance.render.ReflectionOutput);
+            graphicsDevice.Clear(new Color(0.1f,0.1f,0.2f));
             
             PointLight.LateUpdateAll();
             Level.GetCurrent().RenderPreparation();

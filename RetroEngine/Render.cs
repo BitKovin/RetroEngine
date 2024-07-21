@@ -27,7 +27,7 @@ namespace RetroEngine
         RenderTarget2D depthPath;
 
         RenderTarget2D ForwardOutput;
-        RenderTarget2D ReflectionOutput;
+        internal RenderTarget2D ReflectionOutput;
         RenderTarget2D ReflectivenessOutput;
         internal RenderTarget2D DepthPrepathOutput;
         internal RenderTarget2D DepthPrepathBufferOutput;
@@ -689,7 +689,7 @@ namespace RetroEngine
             // Iterate through meshes and draw shadows
             foreach (StaticMesh mesh in renderList)
             {
-                if (mesh.Viewmodel || mesh.CastViewModelShadows)
+                if (mesh.Viewmodel) // ||mesh.CastViewModelShadows
                 {
                     mesh.DrawShadow(viewmodel: true);
                 }

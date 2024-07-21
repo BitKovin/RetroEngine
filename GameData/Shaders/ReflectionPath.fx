@@ -95,7 +95,7 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
         if(weight>6)
             break;
 
-        float3 offset = dir * (Step) * disToCamera / 30 + dir * 0.03 * disToCamera;
+        float3 offset = dir * (Step) * disToCamera / 30 + dir * 0.01 * disToCamera;
         
         
         float dist = WorldToClip(pos + offset).z;
@@ -201,7 +201,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR
     float2 texel = float2(1.5/SSRWidth, 1.5/SSRHeight);
     float3 factor = tex2D(FactorTextureSampler, input.TextureCoordinates).rgb;
 
-    float roughness = saturate(factor.g/1.35 - 0.1);
+    float roughness = saturate(factor.g/1.25 - 0.1);
 
     // Add noise to the reflection vector based on surface roughness
     float3 noise = RandomVector(input.TextureCoordinates, 1);

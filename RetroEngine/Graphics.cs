@@ -25,7 +25,7 @@ namespace RetroEngine
 
         public static bool DynamicSunShadowsEnabled = true;
 
-        public static bool ViewmodelShadows = false;
+        public static bool ViewmodelShadows = true;
 
         public static float SSRResolutionScale = 0.8f;
         public static bool EnableSSR = true;
@@ -118,19 +118,19 @@ namespace RetroEngine
         public static Matrix GetLightProjection()
         {
 
-            return Matrix.CreateOrthographic(LightDistance* LightDistanceMultiplier, LightDistance* LightDistanceMultiplier, -100, 100);
+            return Matrix.CreateOrthographic(LightDistance* LightDistanceMultiplier, LightDistance* LightDistanceMultiplier, -50, 100);
         }
 
         public static Matrix GetCloseLightProjection()
         {
 
-            return Matrix.CreateOrthographic(CloseLightDistance * LightDistanceMultiplier, CloseLightDistance * LightDistanceMultiplier, -100, CloseLightDistance);
+            return Matrix.CreateOrthographic(CloseLightDistance * LightDistanceMultiplier, CloseLightDistance * LightDistanceMultiplier, -50, CloseLightDistance);
         }
 
         public static Matrix GetVeryCloseLightProjection()
         {
 
-            return Matrix.CreateOrthographic(VeryCloseLightDistance * LightDistanceMultiplier, VeryCloseLightDistance * LightDistanceMultiplier, -100, VeryCloseLightDistance);
+            return Matrix.CreateOrthographic(VeryCloseLightDistance * LightDistanceMultiplier, VeryCloseLightDistance * LightDistanceMultiplier, -50, VeryCloseLightDistance);
         }
 
         public static Matrix GetLightView()
@@ -148,7 +148,7 @@ namespace RetroEngine
 
             if (Graphics.ViewmodelShadows == false) return Matrix.Identity;
 
-            return Matrix.CreateOrthographic(1.5f, 1.5f, -100, 4);
+            return Matrix.CreateOrthographic(1.5f, 1.5f, -4, 4);
         }
 
         static Vector3 GetLightUpVector()
