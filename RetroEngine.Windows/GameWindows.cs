@@ -32,17 +32,19 @@ namespace RetroEngine.Windows
 
             try
             {
-                if (Form.ActiveForm != null) //some times ActiveForm sets to null on alt tab and I have 0 idea why. It continues code(even with this check)
+                var form = Form.ActiveForm;
+
+                if (form != null) //some times ActiveForm sets to null on alt tab and I have 0 idea why. It continues code(even with this check)
                 {
 
-                    if (Form.ActiveForm != null && _graphics.IsFullScreen && Form.ActiveForm.FormBorderStyle != FormBorderStyle.None)
+                    if (form != null && _graphics.IsFullScreen && form.FormBorderStyle != FormBorderStyle.None)
                     {
-                        Form.ActiveForm.FormBorderStyle = FormBorderStyle.None;
+                        form.FormBorderStyle = FormBorderStyle.None;
                         Window.Position = new Point(0, 0);
                     }
-                    else if (Form.ActiveForm != null && _graphics.IsFullScreen == false && Form.ActiveForm.FormBorderStyle == FormBorderStyle.None)
+                    else if (form != null && _graphics.IsFullScreen == false && form.FormBorderStyle == FormBorderStyle.None)
                     {
-                        Form.ActiveForm.FormBorderStyle = FormBorderStyle.Sizable;
+                        form.FormBorderStyle = FormBorderStyle.Sizable;
                     }
                 }
             }
@@ -52,54 +54,17 @@ namespace RetroEngine.Windows
 
         protected override void SetFullscreen()
         {
-           
-            
 
-            try
-            {
 
-                if (Form.ActiveForm != null) //some times ActiveForm sets to null on alt tab and I have 0 idea why. It continues code(even with this check)
-                {
-                    Form.ActiveForm.Focus();
-                    base.SetFullscreen();
-                    Form.ActiveForm.Focus();
 
-                    if (Form.ActiveForm != null && _graphics.IsFullScreen && Form.ActiveForm.FormBorderStyle != FormBorderStyle.None)
-                    {
-                        Form.ActiveForm.FormBorderStyle = FormBorderStyle.None;
-                        Window.Position = new Point(0, 0);
-                    }
-                    else if (Form.ActiveForm != null && _graphics.IsFullScreen == false && Form.ActiveForm.FormBorderStyle == FormBorderStyle.None)
-                    {
-                        Form.ActiveForm.FormBorderStyle = FormBorderStyle.Sizable;
-                    }
-                }
-            }
-            catch (Exception ex) { }
+            CheckWindowFullscreenStatus();
         }
 
         protected override void UnsetFullscreen()
         {
             base.UnsetFullscreen();
 
-            try
-            {
-
-                if (Form.ActiveForm != null) //some times ActiveForm sets to null on alt tab and I have 0 idea why. It continues code(even with this check)
-                {
-
-                    if (Form.ActiveForm != null && _graphics.IsFullScreen && Form.ActiveForm.FormBorderStyle != FormBorderStyle.None)
-                    {
-                        Form.ActiveForm.FormBorderStyle = FormBorderStyle.None;
-                        Window.Position = new Point(0, 0);
-                    }
-                    else if (Form.ActiveForm != null && _graphics.IsFullScreen == false && Form.ActiveForm.FormBorderStyle == FormBorderStyle.None)
-                    {
-                        Form.ActiveForm.FormBorderStyle = FormBorderStyle.Sizable;
-                    }
-                }
-            }
-            catch (Exception ex) { }
+            CheckWindowFullscreenStatus();
         }
 
         public override void GameInitialized()
