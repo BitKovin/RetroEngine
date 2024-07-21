@@ -55,7 +55,7 @@ namespace RetroEngine.Windows
         protected override void SetFullscreen()
         {
 
-
+            base.SetFullscreen();
 
             CheckWindowFullscreenStatus();
         }

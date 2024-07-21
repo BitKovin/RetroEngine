@@ -34,6 +34,7 @@ namespace RetroEngine.Windows
             {
                 var form = Form.ActiveForm;
 
+
                 if (form != null) //some times ActiveForm sets to null on alt tab and I have 0 idea why. It continues code(even with this check)
                 {
 
@@ -55,7 +56,7 @@ namespace RetroEngine.Windows
         protected override void SetFullscreen()
         {
 
-
+            base.SetFullscreen();
 
             CheckWindowFullscreenStatus();
         }
