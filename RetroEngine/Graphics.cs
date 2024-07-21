@@ -136,7 +136,7 @@ namespace RetroEngine
 
         public static Matrix GetLightView()
         {
-            return Matrix.CreateLookAt(GetCameraPositionByPixelGrid(LightDistance * LightDistanceMultiplier), GetCameraPositionByPixelGrid(LightDistance * LightDistanceMultiplier) + LightDirection, GetLightUpVector());
+            return Matrix.CreateLookAt(GetCameraPositionByPixelGrid(LightDistance), GetCameraPositionByPixelGrid(LightDistance) + LightDirection, GetLightUpVector());
         }
 
         public static Matrix GetLightViewViewmodel()
@@ -159,14 +159,14 @@ namespace RetroEngine
 
         public static Matrix GetLightViewClose()
         {
-            return Matrix.CreateLookAt(GetCameraPositionByPixelGrid(CloseLightDistance * LightDistanceMultiplier / 1.5f), GetCameraPositionByPixelGrid(CloseLightDistance * LightDistanceMultiplier / 1.5f) + LightDirection, Vector3.UnitZ);
+            return Matrix.CreateLookAt(GetCameraPositionByPixelGrid(CloseLightDistance), GetCameraPositionByPixelGrid(CloseLightDistance) + LightDirection, Vector3.UnitZ);
         }
         public static Matrix GetLightViewVeryClose()
         {
 
             if(DynamicSunShadowsEnabled)
             {
-                return Matrix.CreateLookAt(GetCameraPositionByPixelGrid(VeryCloseLightDistance * LightDistanceMultiplier / 1.5f), GetCameraPositionByPixelGrid(VeryCloseLightDistance * LightDistanceMultiplier / 1.5f) + LightDirection, Vector3.UnitZ);
+                return Matrix.CreateLookAt(GetCameraPositionByPixelGrid(VeryCloseLightDistance), GetCameraPositionByPixelGrid(VeryCloseLightDistance) + LightDirection, Vector3.UnitZ);
             }else
             {
                 return new Matrix(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
@@ -182,7 +182,7 @@ namespace RetroEngine
 
             float hFactor = 1f - Math.Abs(Camera.rotation.GetForwardVector().Y);
 
-            Vector3 pos = Camera.position+ Camera.rotation.GetForwardVector().XZ().Normalized() * lightDistance / 2f * hFactor;
+            Vector3 pos = Camera.position + Camera.rotation.GetForwardVector().XZ().Normalized() * lightDistance / 3f * hFactor;
 
             //return pos;
 
