@@ -279,7 +279,7 @@
 "classname" "light_point"
 "origin" "703 4513 3071"
 "radius" "15"
-"intensity" "0.5"
+"intensity" "0.75"
 }
 // entity 13
 {

@@ -37,9 +37,9 @@ internal class Program
             return;
         }
 
-        string winEXE = buildPath + "/Engine/bin/Release/DirectX/RetroEngine.Windows.exe";
-        string glEXE = buildPath + "/Engine/bin/Release/OpenGL/RetroEngine.Desktop.exe";
-        string vulkanEXE = buildPath + "/Engine/bin/Release/Vulkan/RetroEngine.WindowsVK.exe";
+        string winEXE = buildPath + "/Engine/bin/Release/x64/DirectX//RetroEngine.Windows.exe";
+        string glEXE = buildPath + "/Engine/bin/Release/x64/OpenGL/RetroEngine.Desktop.exe";
+        string vulkanEXE = buildPath + "/Engine/bin/Release/x64/Vulkan/RetroEngine.WindowsVK.exe";
 
         PublishPlatforms(solutionPath, buildPath);
 
@@ -79,21 +79,28 @@ internal class Program
 
     static void PublishPlatforms(string solutionPath, string buildPath)
     {
-        PublishProject(solutionPath + "RetroEngine.Windows/RetroEngine.Windows.csproj", buildPath + "Engine/bin/Release/DirectX");
-        PublishProject(solutionPath + "RetroEngine.Desktop/RetroEngine.Desktop.csproj", buildPath + "Engine/bin/Release/OpenGL");
-        PublishProject(solutionPath + "RetroEngine.WindowsVK/RetroEngine.WindowsVK.csproj", buildPath + "Engine/bin/Release/Vulkan");
+
+        PublishProject(solutionPath + "RetroEngine.Windows/RetroEngine.Windows.csproj", buildPath + "Engine/bin/Release/x64/DirectX");
+        PublishProject(solutionPath + "RetroEngine.Desktop/RetroEngine.Desktop.csproj", buildPath + "Engine/bin/Release/x64/OpenGL");
+        PublishProject(solutionPath + "RetroEngine.WindowsVK/RetroEngine.WindowsVK.csproj", buildPath + "Engine/bin/Release/x64/Vulkan");
     }
 
     static void CopyGameData(string solutionPath, string buildPath)
     {
 
-        Directory.Delete(buildPath + "GameData",true);
+        if (Directory.Exists(buildPath + "GameData"))
+            Directory.Delete(buildPath + "GameData",true);
+
+        Directory.CreateDirectory(buildPath + "GameData");
 
         CopyFilesRecursively(solutionPath + "GameData", buildPath + "GameData");
     }
 
     static void PublishProject(string projectPath, string outPath)
     {
+
+        if(Directory.Exists(outPath))
+            Directory.Delete(outPath,true);
 
         projectPath = Path.GetFullPath(projectPath);
         outPath = Path.GetFullPath(outPath);
@@ -112,15 +119,70 @@ internal class Program
 
     private static void CopyFilesRecursively(string sourcePath, string targetPath)
     {
+
+        List<string> ignoreDirs = new List<string>();
+
+        foreach (string newPath in Directory.GetFiles(sourcePath, "*.*", SearchOption.AllDirectories))
+        {
+
+            string dir = Path.GetFullPath(Path.GetDirectoryName(newPath));
+
+
+
+            if (File.Exists(dir + "\\.dev"))
+            {
+                ignoreDirs.Add(dir);
+            }
+        }
+
+
         //Now Create all of the directories
         foreach (string dirPath in Directory.GetDirectories(sourcePath, "*", SearchOption.AllDirectories))
         {
-            Directory.CreateDirectory(dirPath.Replace(sourcePath, targetPath));
+
+            bool copy = true;
+
+            foreach (var dir in ignoreDirs)
+            {
+
+                string path = Path.GetFullPath(dirPath);
+
+                if (path.Contains(dir))
+                {
+
+                    copy = false;
+
+                    continue;
+                }
+            }
+
+            if (copy)
+                Directory.CreateDirectory(dirPath.Replace(sourcePath, targetPath));
         }
+
+        
 
         //Copy all the files & Replaces any files with the same name
         foreach (string newPath in Directory.GetFiles(sourcePath, "*.*", SearchOption.AllDirectories))
         {
+
+            bool copy = true;
+
+            foreach(var dir in ignoreDirs)
+            {
+
+                string path = Path.GetFullPath(newPath);
+
+                if (path.Contains(dir))
+                {
+
+                    copy = false;
+
+                    continue;
+                }
+            }
+
+            if(copy)
             File.Copy(newPath, newPath.Replace(sourcePath, targetPath), true);
         }
     }

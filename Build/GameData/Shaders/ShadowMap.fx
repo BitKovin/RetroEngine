@@ -11,6 +11,8 @@ matrix World;
 matrix View;
 matrix Projection;
 
+float3 LightDirection;
+
 #define BONE_NUM 128
 
 matrix Bones[BONE_NUM];
@@ -34,6 +36,7 @@ struct VertexShaderOutput
 {
     float4 Position : SV_POSITION;
     float4 myPosition : TEXCOORD1;
+    //float3 normal : TEXCOORD2;
 };
 
 float DepthScale = 1;
@@ -84,14 +87,20 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 {
     VertexShaderOutput output;
 
+    
+
     float4x4 boneTrans = GetBoneTransforms(input);
     
-    float3 normal = GetTangentNormal(input.Normal, input.Tangent);
+    //float3 normal = GetTangentNormal(input.Normal, input.Tangent);
     
-    input.Position-= float4(normal*bias,0);
+    float4x4 BonesWorld = mul(boneTrans, World);
+
+    //output.normal = mul(input.Normal, (float3x3)BonesWorld);
+
+    input.Position-= float4(input.Normal*bias,0);
     
     // Transform the vertex position to world space
-    output.Position = mul(mul(input.Position, boneTrans), World);
+    output.Position = mul(input.Position, BonesWorld);
     output.Position = mul(output.Position, View);
     output.Position = mul(output.Position, Projection);
     output.Position.z -= depthBias;
@@ -102,7 +111,12 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 
 float4 MainPS(VertexShaderOutput input) : SV_TARGET
 {
-
+/*
+    if(dot(normalize(input.normal), -normalize(LightDirection))>0.7)
+    {
+        discard;
+    }
+*/
     // Retrieve the depth value from the depth buffer
     float depthValue = input.myPosition.z;
     

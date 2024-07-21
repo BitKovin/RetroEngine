@@ -19,6 +19,18 @@ sampler DepthTextureSampler = sampler_state
 
 };
 
+texture OldFrame;
+sampler OldFrameSampler = sampler_state
+{
+    texture = <OldFrame>;
+
+    MinFilter = Linear;
+    MagFilter = Linear;
+    AddressU = Clamp;
+    AddressV = Clamp;
+
+};
+
 
 struct VertexInput
 {
@@ -63,7 +75,7 @@ PixelOut PixelShaderFunction(float4 position : SV_POSITION, float4 color : COLOR
 
     PixelOut output = (PixelOut)0;
 
-    output.color = float4(0,0,0,0);
+    output.color = float4(tex2D(OldFrameSampler,texCoord).xyz,1);
     output.depth = tex2D(DepthTextureSampler, texCoord).x;
 
     return output;

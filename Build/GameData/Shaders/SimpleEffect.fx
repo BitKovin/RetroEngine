@@ -33,7 +33,7 @@ sampler ORMTextureSampler = sampler_state
     AddressV = Wrap;
 };
 
-
+bool earlyZ;
 
 
 PixelInput VertexShaderFunction(VertexInput input)
@@ -50,9 +50,13 @@ PixelOutput PixelShaderFunction(PixelInput input)
 
     screenCoords.y = 1.0f - screenCoords.y;
     
-    //float depthIn = SampleMaxDepth(screenCoords);
     
-    //DepthDiscard(depthIn,input);
+        float depthIn = SampleDepth(screenCoords);
+
+    if(earlyZ)
+    {
+        DepthDiscard(depthIn,input);
+    }
     
     PixelOutput output = (PixelOutput)0;
     

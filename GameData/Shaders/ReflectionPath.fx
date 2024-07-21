@@ -170,12 +170,13 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
 // Function to generate a random float based on the surface coordinates
 float Random (float2 uv)
 {
-    return frac(sin(dot(uv,float2(12.9898,78.233)*21))*758.5453123);
+    return frac(sin(dot(uv,float2(12.9898,78.233)*21))*78.5453123);
 }
 
 // Function to generate a random vector based on the surface coordinates and roughness
 float3 RandomVector(float2 uv, float roughness)
 {
+    
     float3 randomVec;
     randomVec.x = Random(uv + roughness);
     randomVec.y = Random(uv + roughness * 2.0);
@@ -223,6 +224,10 @@ float4 MainPS(VertexShaderOutput input) : COLOR
         n++;
     }
     cube/=n;
+
+    #if OPENGL
+    return float4(cube, 1);
+    #endif
 
     if (enableSSR == false)
         return float4(cube, 1);

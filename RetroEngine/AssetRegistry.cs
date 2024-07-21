@@ -37,7 +37,7 @@ namespace RetroEngine
 
         static List<string> nullTextures= new List<string>();
 
-        public const string ROOT_PATH = "../../../../../";
+        public static string ROOT_PATH = "../../../../../";
 
         const int MaxTexturesInMemory = 5000;
 
@@ -46,7 +46,6 @@ namespace RetroEngine
         public static bool AllowGeneratingMipMaps = false;
 
         static bool loadingAssets = false;
-
 
         public static Texture2D LoadTextureFromFile(string path, bool ignoreErrors = false, bool generateMipMaps = true)
         {

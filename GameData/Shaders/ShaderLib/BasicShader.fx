@@ -657,8 +657,8 @@ float GetShadowClose(float3 lightCoords, PixelInput input, float3 TangentNormal)
         forceShadow = 0;
 
 
-        forceShadow*=forceShadow;
-        forceShadow*=forceShadow;
+        //forceShadow*=forceShadow;
+        //forceShadow*=forceShadow;
         
 
         return 1 - SampleShadowMapLinear(ShadowMapCloseSampler, lightCoords.xy, currentDepth + bias,float2(texelSize, texelSize))* (1 - forceShadow);
@@ -700,7 +700,7 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input, float3 TangentNor
     float shadow = 0;
     
     float dist = distance(viewPos, input.MyPosition);
-    
+
 
     if (lightCoords.x >= 0 && lightCoords.x <= 1 && lightCoords.y >= 0 && lightCoords.y <= 1)
     {
@@ -745,6 +745,8 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input, float3 TangentNor
         return 1 - SampleShadowMapLinear(ShadowMapVeryCloseSampler, lightCoords.xy, currentDepth - bias, float2(texelSize, texelSize));
         #endif
 
+
+        numSamples = 2;
         if(forceShadow>0)
             numSamples = 1;
 
@@ -781,6 +783,8 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input, float3 TangentNor
 
 float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVeryClose, PixelInput input, float3 TangentNormal)
 {
+
+
     float shadow = 0;
     
     if(DirectBrightness<0.00001)
@@ -1146,6 +1150,7 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness, float me
     if (isParticle)
         normal = -LightDirection;
     
+
     if (dot(normal, LightDirection) > 0.01)
     {
         shadow += 1;
