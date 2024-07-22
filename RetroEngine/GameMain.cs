@@ -268,7 +268,7 @@ namespace RetroEngine
                 UpdateTime(gameTime);
             }
 
-            LimitFrameRate();
+            
 
             lock (pendingDispose)
             {
@@ -284,14 +284,14 @@ namespace RetroEngine
 
             }
             var physicsTask = Task.Factory.StartNew((Action)(() => { Physics.Simulate(); }));
-
+            
 
             PerformReservedTimeTasks();
 
-            
+            LimitFrameRate();
 
-            
-            
+
+
             Camera.ViewportUpdate();
 
             Input.Update();

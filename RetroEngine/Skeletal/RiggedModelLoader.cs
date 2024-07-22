@@ -611,6 +611,7 @@ namespace RetroEngine.Skeletal
                     }
                 }
 
+
                 model.meshes[mloop].vertices = vertices;
                 model.meshes[mloop].indices = indices;
 

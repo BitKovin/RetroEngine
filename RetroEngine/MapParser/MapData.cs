@@ -158,7 +158,17 @@ namespace RetroEngine.Map
 
                     }
                     else
+                    {
                         entity.meshes.AddRange(faces);
+                    }
+
+                    Dictionary<Vector3, (Vector3 accumulatedNormal, int count, List<Vector3> existingNormals)> positionToNormals = new Dictionary<Vector3, (Vector3 accumulatedNormal, int count, List<Vector3> existingNormals)>();
+
+                    foreach (var face in entity.meshes)
+                        face.AddNormalsToPositionNormalDictionary(ref positionToNormals);
+
+                    foreach (var face in entity.meshes)
+                        face.GenerateSmoothNormalsFromDictionary(positionToNormals);
 
                     level.AddEntity(entity);
                     entity.FromData(ent);

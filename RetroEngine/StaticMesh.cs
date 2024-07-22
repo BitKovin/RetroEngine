@@ -129,6 +129,9 @@ namespace RetroEngine
         public bool DepthTestEqual = false; //pixel gets discarded if depths does not equal to prepath(not closer or farther. Only equal)
 
         public bool BackFaceShadows = false;
+
+        public float NormalBiasScale = 1;
+
         public StaticMesh()
         {
 
@@ -571,13 +574,15 @@ namespace RetroEngine
 
             }
 
-            float bias = 0.05f;
+            float bias = 0.1f;
 
             if (closeShadow)
-                bias = 0.025f;
+                bias = 0.05f;
 
             if (veryClose)
                 bias = 0.015f;
+
+            bias *= NormalBiasScale;
 
             //bias = 0.015f;
 
@@ -604,7 +609,7 @@ namespace RetroEngine
                 else
                 {
                     graphicsDevice.RasterizerState = isNegativeScale() ? RasterizerState.CullCounterClockwise : RasterizerState.CullClockwise;
-                    //graphicsDevice.RasterizerState = RasterizerState.CullNone;
+                    graphicsDevice.RasterizerState = RasterizerState.CullNone;
                 }
 
                 
@@ -763,6 +768,169 @@ namespace RetroEngine
                         }
                 }
         }
+
+        public virtual void AddNormalsToPositionNormalDictionary(ref Dictionary<Vector3, (Vector3 accumulatedNormal, int count, List<Vector3> existingNormals)> positionToNormals)
+        {
+            if (model == null) return;
+
+            foreach (var mesh in model.Meshes)
+            {
+                foreach (var meshPart in mesh.MeshParts)
+                {
+
+                    VertexData[] vertices = new VertexData[meshPart.VertexBuffer.VertexCount];
+
+                    meshPart.VertexBuffer.GetData(vertices);
+
+                    AddNormalsToPositionNormalDictionary(vertices, ref positionToNormals);
+
+                }
+            }
+        }
+
+        public virtual void GenerateSmoothNormalsFromDictionary(Dictionary<Vector3, (Vector3 accumulatedNormal, int count, List<Vector3> existingNormals)> positionToNormals)
+        {
+            if (model == null) return;
+
+            foreach (var mesh in model.Meshes)
+            {
+                foreach (var meshPart in mesh.MeshParts)
+                {
+
+                    VertexData[] vertices = new VertexData[meshPart.NumVertices];
+
+                    meshPart.VertexBuffer.GetData(vertices);
+
+                    var data = GenerateSmoothNormalsForBuffer(vertices, positionToNormals);
+
+                    meshPart.VertexBuffer.SetData(data, 0, data.Length);
+
+                }
+            }
+        }
+
+        public virtual void GenerateSmoothNormals()
+        {
+
+            Dictionary<Vector3, (Vector3 accumulatedNormal, int count, List<Vector3> existingNormals)> positionToNormals = new Dictionary<Vector3, (Vector3 accumulatedNormal, int count, List<Vector3> existingNormals)>();
+
+            AddNormalsToPositionNormalDictionary(ref positionToNormals);
+
+            GenerateSmoothNormalsFromDictionary(positionToNormals);
+        }
+
+        public static void AddNormalsToPositionNormalDictionary(VertexData[] vertices, ref Dictionary<Vector3, (Vector3 accumulatedNormal, int count, List<Vector3> existingNormals)> positionToNormals)
+        {
+            // Iterate through each vertex in the index buffer
+            for (int i = 0; i < vertices.Length; i++)
+            {
+                int index = i;
+                Vector3 position = vertices[index].Position;
+                Vector3 normal = vertices[index].Normal;
+
+                if (positionToNormals.ContainsKey(position))
+                {
+
+                    var list = positionToNormals[position].existingNormals;
+
+                    if (list.Contains(normal))
+                        continue;
+
+                    list.Add(normal);
+
+                    positionToNormals[position] = (
+                        positionToNormals[position].accumulatedNormal + normal,
+                        positionToNormals[position].count + 1,
+                        list
+
+                    );
+                }
+                else
+                {
+                    positionToNormals[position] = (normal, 1, new List<Vector3> { normal });
+                }
+            }
+        }
+
+        public static VertexData[] GenerateSmoothNormalsForBuffer(VertexData[] vertices, Dictionary<Vector3, (Vector3 accumulatedNormal, int count, List<Vector3> existingNormals)> positionToNormals)
+        {
+            // Calculate the average normal for each vertex position
+            foreach (var kvp in positionToNormals)
+            {
+
+                //Console.WriteLine(kvp.Value.count);
+
+                Vector3 averageNormal = kvp.Value.accumulatedNormal / kvp.Value.count;
+                averageNormal.Normalize(); // Normalize the average normal
+                positionToNormals[kvp.Key] = (averageNormal, kvp.Value.count, kvp.Value.existingNormals);
+            }
+
+            // Assign the smooth normals to each vertex
+            for (int i = 0; i < vertices.Length; i++)
+            {
+                Vector3 position = vertices[i].Position;
+                vertices[i].SmoothNormal = positionToNormals[position].accumulatedNormal.Normalized();
+            }
+
+            return vertices;
+        }
+
+        public static VertexData[] GenerateSmoothNormalsForBuffer(VertexData[] vertices)
+        {
+            // Create a dictionary to accumulate normals and count occurrences for each unique vertex position
+            Dictionary<Vector3, (Vector3 accumulatedNormal, int count, List<Vector3> existingNormals)> positionToNormals = new Dictionary<Vector3, (Vector3, int, List<Vector3>)>();
+
+            // Iterate through each vertex in the index buffer
+            for (int i = 0; i < vertices.Length; i++)
+            {
+                int index = i;
+                Vector3 position = vertices[index].Position;
+                Vector3 normal = vertices[index].Normal;
+
+                if (positionToNormals.ContainsKey(position))
+                {
+
+                    var list = positionToNormals[position].existingNormals;
+
+                    if (list.Contains(normal))
+                        continue;
+
+                    list.Add(normal);
+
+                    positionToNormals[position] = (
+                        positionToNormals[position].accumulatedNormal + normal,
+                        positionToNormals[position].count + 1,
+                        list
+
+                    );
+                }
+                else
+                {
+                    positionToNormals[position] = (normal, 1, new List<Vector3> { normal});
+                }
+            }
+
+            // Calculate the average normal for each vertex position
+            foreach (var kvp in positionToNormals)
+            {
+
+                //Console.WriteLine(kvp.Value.count);
+
+                Vector3 averageNormal = kvp.Value.accumulatedNormal / kvp.Value.count;
+                averageNormal.Normalize(); // Normalize the average normal
+                positionToNormals[kvp.Key] = (averageNormal, kvp.Value.count, kvp.Value.existingNormals);
+            }
+
+            // Assign the smooth normals to each vertex
+            for (int i = 0; i < vertices.Length; i++)
+            {
+                Vector3 position = vertices[i].Position;
+                vertices[i].SmoothNormal = positionToNormals[position].accumulatedNormal.Normalized();
+            }
+
+            return vertices;
+        }
+
 
         public virtual void DrawGeometryShadow()
         {
@@ -1207,9 +1375,9 @@ namespace RetroEngine
                     for (int i = 1; i < face.IndexCount - 1; i++)
                     {
                         
-                        indices.Add(face.Indices[i + 1]);
-                        indices.Add(face.Indices[i]);
                         indices.Add(face.Indices[0]);
+                        indices.Add(face.Indices[i]);
+                        indices.Add(face.Indices[i + 1]);
                     }
                 }
 
@@ -1226,11 +1394,11 @@ namespace RetroEngine
                     // Negate the x-coordinate to correct mirroring
                     vertices.Add(new VertexData
                     {
-                        Position = new Vector3(vertex.X, vertex.Y, vertex.Z), // Negate x-coordinate
-                        Normal = new Vector3(normal.X, normal.Y, normal.Z),
+                        Position = new Vector3(-vertex.X, vertex.Y, vertex.Z), // Negate x-coordinate
+                        Normal = new Vector3(-normal.X, normal.Y, normal.Z),
                         TextureCoordinate = new Vector2(textureCoord.X, textureCoord.Y),
-                        Tangent = new Vector3(tangent.X, tangent.Y, tangent.Z),
-                        BiTangent = new Vector3(BiTangent.X, BiTangent.Y, BiTangent.Z)
+                        Tangent = new Vector3(-tangent.X, tangent.Y, tangent.Z),
+                        BiTangent = new Vector3(-BiTangent.X, BiTangent.Y, BiTangent.Z)
                     });
                 }
 
@@ -1238,6 +1406,8 @@ namespace RetroEngine
                 VertexBuffer vertexBuffer;
 
                 vertexBuffer = new VertexBuffer(graphicsDevice, typeof(VertexData), vertices.Count, BufferUsage.None);
+
+                vertices = GenerateSmoothNormalsForBuffer(vertices.ToArray()).ToList();
 
                 vertexBuffer.SetData(vertices.ToArray());
                 var indexBuffer = new IndexBuffer(graphicsDevice, IndexElementSize.ThirtyTwoBits, indices.Count, BufferUsage.None);

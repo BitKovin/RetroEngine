@@ -33,7 +33,7 @@ namespace RetroEngine
 
         protected AnimationPose animationPose = new AnimationPose();
 
-        public SkeletalMesh ParrentBounds; 
+        public SkeletalMesh ParrentBounds;
 
         public bool UpdatePose = true;
 
@@ -60,12 +60,15 @@ namespace RetroEngine
             if (LoadedRigModels.ContainsKey(path))
             {
                 RiggedModel = LoadedRigModels[path].MakeCopy();
+
             }
             else
             {
                 RiggedModel = modelReader.LoadAsset(path, 30);
 
                 RiggedModel.CreateBuffers();
+
+                GenerateSmoothNormals();
 
                 LoadedRigModels.Add(path, RiggedModel);
             }
@@ -85,6 +88,8 @@ namespace RetroEngine
 
             LoadMeshMetaFromFile(path);
 
+
+
             RiggedModel.overrideAnimationFrameTime = -1;
         }
 
@@ -96,7 +101,7 @@ namespace RetroEngine
             {
                 foreach (var b in RiggedModel.flatListToBoneNodes)
                 {
-                    points.Add(b.CombinedTransformMg.Translation/100);
+                    points.Add(b.CombinedTransformMg.Translation / 100);
                 }
             }
 
@@ -106,7 +111,7 @@ namespace RetroEngine
 
         }
 
-        public void SetBoneLocalTransformModification(string name,Matrix tranform)
+        public void SetBoneLocalTransformModification(string name, Matrix tranform)
         {
             if (additionalLocalOffsets.ContainsKey(name))
             {
@@ -136,13 +141,13 @@ namespace RetroEngine
         public AnimationPose GetPose()
         {
 
-            if(RiggedModel ==null) return new AnimationPose();
+            if (RiggedModel == null) return new AnimationPose();
 
             Dictionary<string, Matrix> boneNamesToTransforms = new Dictionary<string, Matrix>();
 
             RiggedModel.UpdatePose();
 
-            foreach(var bone in RiggedModel.flatListToAllNodes)
+            foreach (var bone in RiggedModel.flatListToAllNodes)
             {
                 boneNamesToTransforms.TryAdd(bone.name, bone.CombinedTransformMg);
             }
@@ -186,7 +191,7 @@ namespace RetroEngine
 
                 var node = namesToBones[key];
 
-                if(node.isThisARealBone)
+                if (node.isThisARealBone)
                 {
                     if (p.ContainsKey(key) == false) continue;
                     node.LocalTransformMg = p[key];
@@ -225,17 +230,17 @@ namespace RetroEngine
             RiggedModel.animationPose = animPose;
 
             RiggedModel.UpdatePose();
-            
+
         }
 
         public RiggedModelNode GetBoneByName(string name)
         {
-            if(RiggedModel!=null)
-            foreach(var bone in RiggedModel.flatListToBoneNodes)
-            {
-                if(bone.name == name)
-                    return bone;
-            }
+            if (RiggedModel != null)
+                foreach (var bone in RiggedModel.flatListToBoneNodes)
+                {
+                    if (bone.name == name)
+                        return bone;
+                }
 
             return null;
         }
@@ -306,16 +311,16 @@ namespace RetroEngine
 
         }
 
-        Dictionary<string, RiggedModel.RiggedModelNode> namesToBones = new Dictionary<string, RiggedModel.RiggedModelNode> ();
+        Dictionary<string, RiggedModel.RiggedModelNode> namesToBones = new Dictionary<string, RiggedModel.RiggedModelNode>();
 
         public Matrix GetBoneMatrix(string name)
         {
 
-            
+
 
             if (RiggedModel == null) return Matrix.Identity;
 
-            if(namesToBones.ContainsKey(name))
+            if (namesToBones.ContainsKey(name))
                 return namesToBones[name].CombinedTransformMg * GetWorldMatrix();
 
             foreach (var bone in RiggedModel.flatListToAllNodes)
@@ -337,7 +342,7 @@ namespace RetroEngine
         {
             if (RiggedModel == null) return -1;
 
-            foreach(var bone in RiggedModel.flatListToBoneNodes)
+            foreach (var bone in RiggedModel.flatListToBoneNodes)
             {
                 if (bone.name.ToLower() == name.ToLower())
                     return bone.boneShaderFinalTransformIndex;
@@ -360,7 +365,7 @@ namespace RetroEngine
 
             if (RiggedModel is null) return;
 
-            if (Viewmodel && Position.Length()<0.1f && Camera.position != Vector3.Zero)
+            if (Viewmodel && Position.Length() < 0.1f && Camera.position != Vector3.Zero)
             {
                 frameStaticMeshData.IsRendered = false;
                 return;
@@ -374,25 +379,24 @@ namespace RetroEngine
         {
             if (!CastShadows) return;
 
-            if(Viewmodel && viewmodel == false) return;
+            if (Viewmodel && viewmodel == false) return;
 
             GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
 
             Effect effect = GameMain.Instance.render.ShadowMapEffect;
 
-            float bias = 0.05f;
+            float bias = 0.03f;
 
             if (closeShadow)
-                bias = 0.03f;
+                bias = 0.01f;
 
             if (veryClose)
-                bias = 0.01f;
+                bias = 0.005f;
 
             if (viewmodel)
                 bias = 0.001f;
 
-            if (BackFaceShadows)
-                bias *= -2;
+            bias *= NormalBiasScale;
 
             effect.Parameters["bias"].SetValue(bias);
 
@@ -447,7 +451,7 @@ namespace RetroEngine
 
                     // Set effect parameters
                     effect.Parameters["World"].SetValue(frameStaticMeshData.World);
-                    
+
                     if (closeShadow)
                     {
                         effect.Parameters["Projection"].SetValue(frameStaticMeshData.LightProjectionClose);
@@ -457,7 +461,8 @@ namespace RetroEngine
                     {
                         effect.Parameters["Projection"].SetValue(frameStaticMeshData.LightProjectionVeryClose);
                         effect.Parameters["View"].SetValue(frameStaticMeshData.LightViewVeryClose);
-                    }else if(viewmodel)
+                    }
+                    else if (viewmodel)
                     {
                         effect.Parameters["Projection"].SetValue(frameStaticMeshData.LightViewmodelProjection);
                         effect.Parameters["View"].SetValue(frameStaticMeshData.LightViewmodelView);
@@ -468,7 +473,7 @@ namespace RetroEngine
                         effect.Parameters["Projection"].SetValue(frameStaticMeshData.LightProjection);
                     }
 
-                    
+
 
                     // Draw the primitives using the custom effect
                     foreach (EffectPass pass in effect.CurrentTechnique.Passes)
@@ -510,12 +515,12 @@ namespace RetroEngine
 
             bool mask = Masked;
 
-            if(Transperent)
+            if (Transperent)
                 mask = true;
 
             if (RiggedModel != null)
             {
-                
+
 
                 graphicsDevice.RasterizerState = Graphics.DisableBackFaceCulling || TwoSided ? RasterizerState.CullNone : (isNegativeScale() ? RasterizerState.CullCounterClockwise : RasterizerState.CullClockwise);
 
@@ -531,7 +536,7 @@ namespace RetroEngine
 
                         //effect.Techniques[0].Passes[0].Apply();
 
-                        
+
                         if (mask)
                         {
 
@@ -543,7 +548,7 @@ namespace RetroEngine
                             effect.Techniques[0].Passes[0].Apply();
 
                         }
-                        
+
 
                         meshPart.Draw(graphicsDevice);
 
@@ -562,18 +567,18 @@ namespace RetroEngine
             Effect effect = GameMain.Instance.render.GeometryShadowEffect;
 
 
-            if (RiggedModel!=null)
+            if (RiggedModel != null)
             {
 
                 effect.Parameters["Bones"].SetValue(finalizedBones);
 
-                var hit = Physics.LineTraceForStatic((Position - Graphics.LightDirection/8).ToPhysics() , (Position + Graphics.LightDirection.Normalized() * 100).ToPhysics());
+                var hit = Physics.LineTraceForStatic((Position - Graphics.LightDirection / 8).ToPhysics(), (Position + Graphics.LightDirection.Normalized() * 100).ToPhysics());
 
                 if (hit.HasHit == false) return;
 
                 Vector3 hitPoint = hit.HitPointWorld;
 
-                if(hitPoint.Y>Position.Y)
+                if (hitPoint.Y > Position.Y)
                 {
                     hitPoint = Position;
                     hitPoint.Y = hit.HitPointWorld.Y;
@@ -611,7 +616,7 @@ namespace RetroEngine
 
         public override void DrawUnified()
         {
-            if(frameStaticMeshData.IsRendered == false) { return; }
+            if (frameStaticMeshData.IsRendered == false) { return; }
 
             GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
             // Load the custom effect
@@ -638,7 +643,7 @@ namespace RetroEngine
 
                     graphicsDevice.DepthStencilState = DepthStencilState.Default;
 
-                    
+
 
                     BlendState blend = new BlendState { ColorWriteChannels = ColorWriteChannels.None };
 
@@ -653,7 +658,7 @@ namespace RetroEngine
 
                 SetupBlending();
 
-                if(DepthTestEqual)
+                if (DepthTestEqual)
                 {
                     DepthStencilState customDepthStencilState = new DepthStencilState
                     {
@@ -661,7 +666,7 @@ namespace RetroEngine
                         DepthBufferWriteEnable = false,
                         DepthBufferFunction = CompareFunction.LessEqual,
                         StencilEnable = false,
-                        
+
                     };
 
                     graphicsDevice.DepthStencilState = customDepthStencilState;
@@ -739,7 +744,7 @@ namespace RetroEngine
             {
                 intersects = boundingSphere.Transform(base.GetWorldMatrix()).Intersects(sphere);
 
-                if(ParrentBounds!=null)   
+                if (ParrentBounds != null)
                     intersects = intersects || ParrentBounds.IntersectsBoundingSphere(sphere);
             }
 
@@ -763,8 +768,8 @@ namespace RetroEngine
                 inFrustrum = true;
             }
 
-            if(ParrentBounds!=null)
-            if(Camera.frustum.Contains(ParrentBounds.boundingSphere.Transform(base.GetWorldMatrix())) != ContainmentType.Disjoint)
+            if (ParrentBounds != null)
+                if (Camera.frustum.Contains(ParrentBounds.boundingSphere.Transform(base.GetWorldMatrix())) != ContainmentType.Disjoint)
                     inFrustrum = true;
 
             if (Graphics.DirectionalLightFrustrum.Contains(boundingSphere.Transform(base.GetWorldMatrix())) != ContainmentType.Disjoint)
@@ -799,7 +804,7 @@ namespace RetroEngine
 
         public void ClearHitboxBodies()
         {
-            foreach(HitboxInfo hitbox in hitboxes)
+            foreach (HitboxInfo hitbox in hitboxes)
             {
                 Physics.Remove(hitbox.RigidBodyRef);
 
@@ -848,7 +853,7 @@ namespace RetroEngine
         {
             path = AssetRegistry.FindPathForFile(path);
 
-            if (File.Exists(path + ".skeletaldata") == false) return; 
+            if (File.Exists(path + ".skeletaldata") == false) return;
 
             var stream = AssetRegistry.GetFileStreamFromPath(path + ".skeletaldata");
 
@@ -896,6 +901,41 @@ namespace RetroEngine
         }
 
 
+        public override void AddNormalsToPositionNormalDictionary(ref Dictionary<Vector3, (Vector3 accumulatedNormal, int count, List<Vector3> existingNormals)> positionToNormals)
+        {
+
+            if (RiggedModel == null) return;
+
+            foreach (var meshPart in RiggedModel.meshes)
+            {
+
+                VertexData[] vertices = new VertexData[meshPart.NumberOfVertices];
+
+                meshPart.VertexBuffer.GetData(vertices);
+
+                AddNormalsToPositionNormalDictionary(vertices, ref positionToNormals);
+
+            }
+        }
+
+        public override void GenerateSmoothNormalsFromDictionary(Dictionary<Vector3, (Vector3 accumulatedNormal, int count, List<Vector3> existingNormals)> positionToNormals)
+        {
+            if (RiggedModel == null) return;
+
+            foreach (var meshPart in RiggedModel.meshes)
+            {
+
+                VertexData[] vertices = new VertexData[meshPart.NumberOfVertices];
+
+                meshPart.VertexBuffer.GetData(vertices);
+
+                var data = GenerateSmoothNormalsForBuffer(vertices, positionToNormals);
+
+                meshPart.VertexBuffer.SetData(data, 0, data.Length);
+            }
+        }
+
+
     }
 
 
@@ -907,14 +947,14 @@ namespace RetroEngine
 
         public AnimationPose() { }
 
-        public AnimationPose(AnimationPose original) 
+        public AnimationPose(AnimationPose original)
         {
-            foreach(var key in original.Pose.Keys)
+            foreach (var key in original.Pose.Keys)
             {
                 Pose.Add(key, original.Pose[key]);
             }
 
-            foreach(var key in original.BoneOverrides.Keys)
+            foreach (var key in original.BoneOverrides.Keys)
             {
                 BoneOverrides.Add(key, original.BoneOverrides[key]);
             }
@@ -925,15 +965,16 @@ namespace RetroEngine
             if (node == null) return;
             ApplyNodeChildrenOnPose(node, pose, progress);
 
-            if(meshSpaceRotation>0.01)
+            if (meshSpaceRotation > 0.01)
             {
 
                 var newTransform = node.LocalTransformMg * node.parent.CombinedTransformMg;
 
                 if (BoneOverrides.ContainsKey(node.name) == false)
                 {
-                    BoneOverrides.TryAdd(node.name, new BonePoseBlend { progress = progress* meshSpaceRotation, transform = newTransform });
-                }else
+                    BoneOverrides.TryAdd(node.name, new BonePoseBlend { progress = progress * meshSpaceRotation, transform = newTransform });
+                }
+                else
                 {
                     var oldTransform = BoneOverrides[node.name].transform.DecomposeMatrix();
 
@@ -944,7 +985,7 @@ namespace RetroEngine
 
                     overr.transform = MathHelper.Transform.Lerp(oldTransform, newTransform.DecomposeMatrix(), progress).ToMatrix();
 
-                    overr.progress = progress* meshSpaceRotation;
+                    overr.progress = progress * meshSpaceRotation;
 
                     BoneOverrides[node.name] = overr;
 
@@ -955,20 +996,21 @@ namespace RetroEngine
 
         void ApplyNodeChildrenOnPose(RiggedModelNode node, AnimationPose pose, float progress)
         {
-            foreach(RiggedModelNode n in node.children)
+            foreach (RiggedModelNode n in node.children)
             {
 
                 ApplyNodeChildrenOnPose(n, pose, progress);
 
                 if (pose.Pose.ContainsKey(n.name) == false) continue;
 
-                if(Pose.ContainsKey(n.name) == false)
+                if (Pose.ContainsKey(n.name) == false)
                     Pose.Add(n.name, Matrix.Identity);
 
-                if(progress<=0.001)
+                if (progress <= 0.001)
                 {
                     continue;
-                }else if(progress>0.999)
+                }
+                else if (progress > 0.999)
                 {
                     Pose[n.name] = pose.Pose[n.name];
                     continue;
@@ -977,7 +1019,7 @@ namespace RetroEngine
                 MathHelper.Transform a = Pose[n.name].DecomposeMatrix();
                 MathHelper.Transform b = pose.Pose[n.name].DecomposeMatrix();
 
-                Pose[n.name] = MathHelper.Transform.Lerp(a,b,progress).ToMatrix();
+                Pose[n.name] = MathHelper.Transform.Lerp(a, b, progress).ToMatrix();
 
             }
         }

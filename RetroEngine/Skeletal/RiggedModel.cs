@@ -616,7 +616,7 @@ namespace RetroEngine.Skeletal
                 IndexBuffer = new IndexBuffer(GameMain.Instance.GraphicsDevice, IndexElementSize.ThirtyTwoBits, indices.Count(), BufferUsage.None);
                 IndexBuffer.SetData(indices.ToArray());
                 PrimitiveCount = indices.Length/3;
-                vertices = null;
+                //vertices = null;
             }
 
             public void Draw(GraphicsDevice gd)

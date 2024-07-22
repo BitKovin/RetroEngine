@@ -206,8 +206,8 @@ namespace RetroEngine.Game.Entities.Weapons
             arms.textureSearchPaths.Add("textures/weapons/arms/");
 
             mesh.DepthTestEqual = false;
-            mesh.Transparency = 1;
-            mesh.Transperent = false;
+            mesh.Transparency = 0.5f;
+            mesh.Transperent = true;
 
             mesh.textureSearchPaths.Add("textures/weapons/arms/");
             mesh.textureSearchPaths.Add("textures/weapons/shotgun_new/");

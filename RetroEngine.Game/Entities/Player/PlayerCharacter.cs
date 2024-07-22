@@ -632,7 +632,7 @@ namespace RetroEngine.Game.Entities.Player
 
             UpdatePlayerInput();
 
-            bodyMesh.Position = interpolatedPosition - Camera.rotation.GetForwardVector().XZ().Normalized() * 0.25f - new Vector3(0, 1.01f, 0);
+            bodyMesh.Position = interpolatedPosition - Camera.rotation.GetForwardVector().XZ().Normalized() * 0.25f - new Vector3(0, 1.0f, 0);
             bodyMesh.Rotation = new Vector3(0, Camera.rotation.Y, 0);
 
             

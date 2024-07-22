@@ -29,7 +29,7 @@ namespace RetroEngine.Entities
             meshes.Add(mesh);
             texturePath = data.GetPropertyString("texture");
             mesh.Position = Position;
-            mesh.Scale = new Vector3(data.GetPropertyFloat("scale", 1)) * new Vector3(-1,1,1);
+            mesh.Scale = new Vector3(data.GetPropertyFloat("scale", 1)) * new Vector3(1,1,1);
 
 
             Vector3 importRot = (data.GetPropertyVector("angles", Vector3.Zero) + new Vector3(0, 180, 0)).NormalizeAngles().NonZeroAngles() / 180 * (float)Math.PI;
@@ -82,7 +82,7 @@ namespace RetroEngine.Entities
                 mesh.PreloadTextures();
             }
 
-            mesh.BackFaceShadows = true;
+            //mesh.BackFaceShadows = true;
 
 
 

@@ -65,6 +65,7 @@ namespace RetroEngine.Game.Entities
 
             mesh.CastShadows = true;
 
+            //mesh.GenerateSmoothNormals();
 
             //mesh.CastGeometricShadow = true;
 
@@ -91,6 +92,7 @@ namespace RetroEngine.Game.Entities
             body.SetMassProps(scale.Length(), body.CollisionShape.CalculateLocalInertia(scale.Length()));
             //body.UserIndex = (int)BodyType.HitTest;
             mesh.Scale = scale;
+
 
             bodies.Add(body);
 

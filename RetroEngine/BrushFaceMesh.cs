@@ -35,6 +35,9 @@ namespace RetroEngine
 
             SimpleTransperent = true;
 
+            NormalBiasScale = 1;
+
+
         }
 
         public static List<BrushFaceMesh> GetFacesFromPath(string filePath, string objectName, float unitSize = 32)

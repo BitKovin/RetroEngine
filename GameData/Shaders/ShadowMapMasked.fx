@@ -30,7 +30,7 @@ sampler textureSampler = sampler_state
 struct VertexShaderInput
 {
     float4 Position : POSITION0;
-    float3 Normal : NORMAL0;
+    float3 Normal : NORMAL1;
     float2 TexCoords: TEXCOORD0;
 
     float3 Tangent : TANGENT0;
@@ -94,21 +94,32 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 {
     VertexShaderOutput output;
 
+    
+
     float4x4 boneTrans = GetBoneTransforms(input);
+    
 
-    //float3 normal = GetTangentNormal(input.Normal, input.Tangent);
+    
+    float4x4 BonesWorld = mul(boneTrans, World);
 
-    input.Position-= float4(input.Normal*bias,0);
+    float3 normal = mul(input.Normal, (float3x3)BonesWorld);
 
+    normal = normalize(normal);
+
+    //output.normal = mul(input.Normal, (float3x3)BonesWorld);
+
+    input.Position-= float4(input.Normal * bias,0);
+    
     // Transform the vertex position to world space
-    output.Position = mul(mul(input.Position, boneTrans), World);
+    output.Position = mul(input.Position, BonesWorld);
+
+    output.Position -= float4(normal,0) * bias;
+
     output.Position = mul(output.Position, View);
     output.Position = mul(output.Position, Projection);
     output.Position.z -= depthBias;
     output.myPosition = output.Position;
-
-    output.TexCoords = input.TexCoords;
-
+    
     return output;
 }
 

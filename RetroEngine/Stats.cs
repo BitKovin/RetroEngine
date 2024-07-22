@@ -22,33 +22,41 @@ namespace RetroEngine
         public static void StartRecord(string name)
         {
             if (!Enabled) return;
-
-            if (stopwatches.ContainsKey(name))
-            {
-                stopwatches[name] = Stopwatch.StartNew();
-            }
-            else
-            {
-                stopwatches.Add(name, Stopwatch.StartNew());
-            }
+            lock (stopwatches) lock (results)
+                {
+                    if (stopwatches.ContainsKey(name))
+                    {
+                        stopwatches[name] = Stopwatch.StartNew();
+                    }
+                    else
+                    {
+                        stopwatches.Add(name, Stopwatch.StartNew());
+                    }
+                }
         }
 
         public static void StopRecord(string name)
         {
             if (!Enabled) return;
-            if (stopwatches.ContainsKey(name) == false) return;
+            lock (stopwatches) lock (results) 
+            {
+                if (stopwatches.ContainsKey(name) == false) return;
 
-            if (results.ContainsKey(name) == false)
-                results.Add(name, (float)stopwatches[name].Elapsed.TotalMilliseconds * 1000);
-            else
-                results[name] = (float)stopwatches[name].Elapsed.TotalMilliseconds * 1000;
-
+                if (results.ContainsKey(name) == false)
+                    results.Add(name, (float)stopwatches[name].Elapsed.TotalMilliseconds * 1000);
+                else
+                    results[name] = (float)stopwatches[name].Elapsed.TotalMilliseconds * 1000;
+            }
         }
 
         public static Dictionary<string, float> GetResults()
         {
             if (!Enabled) return new Dictionary<string, float>();
-            return new Dictionary<string, float>(results);
+            lock (results)
+            {
+                return new Dictionary<string, float>(results);
+            }
+            
         }
 
     }

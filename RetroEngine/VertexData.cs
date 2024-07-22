@@ -21,6 +21,8 @@ namespace RetroEngine
         public Vector4 BlendIndices = new Vector4();
         public Vector4 BlendWeights = new Vector4();
 
+        public Vector3 SmoothNormal = new Vector3();
+
         public Vector4 Color = Vector4.One;
 
         public static VertexDeclaration VertexDeclaration = new VertexDeclaration
@@ -32,6 +34,7 @@ namespace RetroEngine
               new VertexElement(VertexElementByteOffset.OffsetVector3(), VertexElementFormat.Vector3, VertexElementUsage.Binormal, 0),
               new VertexElement(VertexElementByteOffset.OffsetVector4(), VertexElementFormat.Vector4, VertexElementUsage.BlendIndices, 0),
               new VertexElement(VertexElementByteOffset.OffsetVector4(), VertexElementFormat.Vector4, VertexElementUsage.BlendWeight, 0),
+              new VertexElement(VertexElementByteOffset.OffsetVector3(), VertexElementFormat.Vector3, VertexElementUsage.Normal, 1),
               new VertexElement(VertexElementByteOffset.OffsetVector4(), VertexElementFormat.Vector4, VertexElementUsage.Color, 0)
         );
 
