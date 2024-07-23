@@ -638,7 +638,7 @@ float GetShadowClose(float3 lightCoords, PixelInput input, float3 TangentNormal)
 
         f*=lerp(f,1,0.5); 
 
-        bias*= lerp(10,1, f);
+        bias*= lerp(15,1, f);
 
         resolution = 2048;
         

@@ -120,6 +120,8 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
     output.Position.z -= depthBias;
     output.myPosition = output.Position;
     
+    output.TexCoords = input.TexCoords;
+
     return output;
 }
 

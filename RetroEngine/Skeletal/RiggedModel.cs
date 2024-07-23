@@ -73,7 +73,7 @@ namespace RetroEngine.Skeletal
 
         // initial assimp animations
         public List<RiggedAnimation> originalAnimations = new List<RiggedAnimation>();
-        int currentAnimation = 0;
+        public int currentAnimation = -1;
         public int currentFrame = 0;
         public bool animationRunning = false;
         public bool loopAnimation = false;
@@ -374,6 +374,9 @@ namespace RetroEngine.Skeletal
         // ok ... in draw we should now be able to call on this in relation to the world transform.
         private void UpdateMeshTransforms()
         {
+
+            if (CurrentPlayingAnimationIndex <= 0) return;
+
             // try to handle when we just have mesh transforms
             for (int i = 0; i < meshes.Length; i++)
             {

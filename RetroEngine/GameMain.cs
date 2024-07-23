@@ -284,7 +284,12 @@ namespace RetroEngine
 
             }
             var physicsTask = Task.Factory.StartNew((Action)(() => { Physics.Simulate(); }));
-            
+
+            Camera.ViewportUpdate();
+
+            Input.Update();
+
+            UiElement.Viewport.Update();
 
             PerformReservedTimeTasks();
 
@@ -292,17 +297,13 @@ namespace RetroEngine
 
 
 
-            Camera.ViewportUpdate();
 
-            Input.Update();
 
             Stats.StartRecord("waiting for physics");
             physicsTask.Wait();
             Stats.StopRecord("waiting for physics");
 
             bool changedLevel = Level.LoadPendingLevel();
-
-            UiElement.Viewport.Update();
 
             if (AsyncGameThread && changedLevel == false)
             {
@@ -471,7 +472,7 @@ namespace RetroEngine
 
 
             CheckWindowFullscreenStatus();
-            if (AllowAsyncAssetLoading)
+            if (AllowAsyncAssetLoading && Render.AsyncPresent)
             {
                 presentingFrame = true;
                 presentFrameTask = Task.Factory.StartNew(() => { PresentFrame(); });
@@ -497,8 +498,11 @@ namespace RetroEngine
 
         void PresentFrame()
         {
+            presentingFrame = true;
             GraphicsDevice.SetRenderTarget(null);
+            Stats.StartRecord("Frame Present");
             GraphicsDevice.Present();
+            Stats.StopRecord("Frame Present");
             presentingFrame = false;
             Stats.StopRecord("Render");
             Level.LoadedAssetsThisFrame = 0;
@@ -508,6 +512,7 @@ namespace RetroEngine
         {
             if (presentingFrame == false) return;
 
+            Stats.StartRecord("WaitForFramePresent");
             while (presentingFrame)
             {
                 if (presentFrameTask == null) return;
@@ -515,6 +520,7 @@ namespace RetroEngine
                 if (presentFrameTask.IsCanceled) return;
                 if (presentFrameTask.IsFaulted) return;
             }
+            Stats.StopRecord("WaitForFramePresent");
 
         }
 

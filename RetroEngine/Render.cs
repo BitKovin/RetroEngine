@@ -118,6 +118,7 @@ namespace RetroEngine
 
         public static bool UsesOpenGL = false;
 
+        public static bool AsyncPresent = true;
         public Render()
         {
             graphics = GameMain.Instance._graphics;
@@ -1466,6 +1467,12 @@ namespace RetroEngine
             black = new Texture2D(graphics.GraphicsDevice, 1, 1);
             Color[] data = new Color[1] { Color.Black };
             black.SetData(data);
+        }
+
+        [ConsoleCommand("r.asyncPresent")]
+        public static void SetAsyncPresent(bool value)
+        {
+            AsyncPresent = value;
         }
 
     }

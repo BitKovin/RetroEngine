@@ -66,8 +66,6 @@ namespace RetroEngine
 
         public static bool LowLatency = false;
 
-        public static Vector3 lightlocation = new Vector3();
-
         public static BoundingFrustum DirectionalLightFrustrum = new BoundingFrustum(Matrix.Identity);
         public static BoundingFrustum DirectionalLightFrustrumClose = new BoundingFrustum(Matrix.Identity);
         public static BoundingFrustum DirectionalLightFrustrumVeryClose = new BoundingFrustum(Matrix.Identity);
@@ -182,7 +180,7 @@ namespace RetroEngine
 
             float hFactor = 1f - Math.Abs(Camera.rotation.GetForwardVector().Y);
 
-            Vector3 pos = Camera.position;// + Camera.rotation.GetForwardVector().XZ().Normalized() * lightDistance / 3f * hFactor * Graphics.LightDistanceMultiplier;
+            Vector3 pos = Camera.position + Camera.rotation.GetForwardVector().XZ().Normalized() * lightDistance / 3f * hFactor * Graphics.LightDistanceMultiplier;
 
             //return pos;
 
@@ -195,8 +193,6 @@ namespace RetroEngine
             pos /= step;
             pos.Floor();
             pos *= step;
-
-            lightlocation = pos;
 
             return pos;
         }

@@ -577,7 +577,7 @@ namespace RetroEngine
             float bias = 0.06f;
 
             if (closeShadow)
-                bias = 0.035f;
+                bias = 0.027f;
 
             if (veryClose)
                 bias = 0.015f;
@@ -611,7 +611,7 @@ namespace RetroEngine
                 else
                 {
                     graphicsDevice.RasterizerState = isNegativeScale() ? RasterizerState.CullCounterClockwise : RasterizerState.CullClockwise;
-                    graphicsDevice.RasterizerState = RasterizerState.CullNone;
+                    //graphicsDevice.RasterizerState = RasterizerState.CullNone;
                 }
 
                 
@@ -1537,7 +1537,7 @@ namespace RetroEngine
         public virtual void UpdateCulling()
         {
             isRendered = false;
-            isRenderedShadow = false;
+            isRenderedShadow = true;
             inFrustrum = false;
 
             if (Visible == false) return;

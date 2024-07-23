@@ -397,7 +397,7 @@ namespace RetroEngine
             foreach (Entity ent in entities)
             {
                 if (renderLayers.Contains(ent.Layer) == false) continue;
-                if (ent.loadedAssets == false) continue;
+                if (ent.loadedAssets == false || ent.Visible == false) continue;
                 if (ent.meshes != null)
                 {
                     foreach (StaticMesh mesh in ent.meshes)

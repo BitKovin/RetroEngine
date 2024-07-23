@@ -39,6 +39,8 @@ namespace RetroEngine
             ImGui.DockSpaceOverViewport();
             ImGui.PopStyleColor(2);
 
+            
+
             DrawStats();
 
             ImGui.BeginMainMenuBar();
@@ -46,6 +48,8 @@ namespace RetroEngine
             ImGui.EndMainMenuBar();
 
             if (!GameMain.Instance.paused) return;
+
+            DrawEntityList();
 
             ImGui.Begin("lighting");
 
@@ -70,6 +74,8 @@ namespace RetroEngine
 
             ImGui.SliderFloat("reflection resolution scale", ref Graphics.SSRResolutionScale, 0.2f, 1);
 
+
+            ImGui.Checkbox("async present", ref Render.AsyncPresent);
 
             ImGui.Checkbox("early depth discard", ref Graphics.EarlyDepthDiscard);
 
@@ -155,6 +161,29 @@ namespace RetroEngine
             ImGui.SameLine();
             if (ImGui.Button("SUBMIT")) submitInput();
             
+            ImGui.End();
+
+        }
+
+        protected virtual void DrawEntityList()
+        {
+            ImGui.Begin("EntityList");
+
+            ImGui.BeginChild("ScrollingRegion", new Vector2(ImGui.GetWindowWidth(), ImGui.GetWindowHeight() - 70));
+
+            lock (Level.GetCurrent().entities)
+            {
+                foreach (var item in Level.GetCurrent().entities)
+                {
+                    if (item is not null)
+                        if (ImGui.Selectable(item.ToString()))
+                        {
+                            //ImGui.SetClipboardText(item);
+                        }
+                }
+            }
+            ImGui.EndChild();
+
             ImGui.End();
         }
 

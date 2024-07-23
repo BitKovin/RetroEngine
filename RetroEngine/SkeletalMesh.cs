@@ -41,7 +41,10 @@ namespace RetroEngine
 
         public bool AlwaysUpdateVisual = false;
 
+        float newAnimInterpolationProgress = 0;
+        float newAnimInterpolationSpeed = 0;
 
+        AnimationPose oldAnimPose;
 
         public SkeletalMesh() : base()
         {
@@ -172,6 +175,11 @@ namespace RetroEngine
 
             animationPose.Pose = boneNamesToTransforms;
 
+            if(newAnimInterpolationProgress>0&& newAnimInterpolationProgress<1)
+            {
+                animationPose = Animation.LerpPose(oldAnimPose, animationPose, newAnimInterpolationProgress);   
+            }
+
             return animationPose;
         }
 
@@ -256,6 +264,14 @@ namespace RetroEngine
 
             RiggedModel.UpdateVisual = (isRendered && UpdatePose) || AlwaysUpdateVisual;
             RiggedModel.Update(deltaTime);
+
+            newAnimInterpolationProgress += deltaTime * newAnimInterpolationSpeed;
+
+            if(RiggedModel.UpdateVisual && newAnimInterpolationProgress>0 && newAnimInterpolationProgress<1)
+            {
+                PastePoseLocal(GetPoseLocal());
+            }
+
         }
 
         public void SetInterpolationEnabled(bool enabled)
@@ -265,24 +281,49 @@ namespace RetroEngine
             RiggedModel.UseStaticGeneratedFrames = !enabled;
         }
 
-        public void PlayAnimation(int id = 0, bool looped = true)
+        public void PlayAnimation(int id, bool looped = true, float interpolationTime = 0.2f)
         {
 
             if (RiggedModel is null) return;
 
-            RiggedModel.BeginAnimation(id);
+            if (interpolationTime > 0.001)
+                oldAnimPose = GetPoseLocal();
+
+            newAnimInterpolationSpeed = 1 / interpolationTime;
+            newAnimInterpolationProgress = 0;
+
+            bool firstAnim = RiggedModel.currentAnimation == -1;
+
+            RiggedModel.SetAnimation(id);
+            RiggedModel.BeginAnimation(RiggedModel.CurrentPlayingAnimationIndex);
             RiggedModel.loopAnimation = looped;
+
+            if (firstAnim)
+            {
+                RiggedModel.Update(0);
+                newAnimInterpolationProgress = 1;
+            }
         }
 
-        public void PlayAnimation(string name, bool looped = true)
+        public void PlayAnimation(string name, bool looped = true, float interpolationTime = 0.2f)
         {
 
             if (RiggedModel is null) return;
+
+            if (interpolationTime > 0.001)
+                oldAnimPose = GetPoseLocal();
+
+            newAnimInterpolationSpeed = 1/interpolationTime;
+            newAnimInterpolationProgress = 0;
+
+            bool firstAnim = RiggedModel.currentAnimation == -1;
 
             RiggedModel.SetAnimation(name);
             RiggedModel.BeginAnimation(RiggedModel.CurrentPlayingAnimationIndex);
             RiggedModel.loopAnimation = looped;
-            RiggedModel.Update(0);
+
+            if(firstAnim)
+                RiggedModel.Update(0);
         }
 
         public void SetAnimation(int id = 0)

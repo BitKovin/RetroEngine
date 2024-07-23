@@ -71,6 +71,7 @@ namespace RetroEngine
 
         public bool Destroyed = false;
 
+        public bool Visible = true;
         public Entity()
         {
             System.Reflection.MemberInfo info = this.GetType();
@@ -286,6 +287,11 @@ namespace RetroEngine
         protected virtual void LoadAssets()
         {
 
+        }
+
+        public override string ToString()
+        {
+            return $"[{GetType().Name}] {name} {Id}";
         }
 
     }
