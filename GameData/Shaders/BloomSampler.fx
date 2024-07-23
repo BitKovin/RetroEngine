@@ -52,9 +52,9 @@ float4 MainPS(VertexShaderOutput input) : COLOR
             color += saturate(tex2D(SpriteTextureSampler, input.TextureCoordinates + offsetCoords).rgb - offset) / (length(TextureOffset) + 1);
         }
 	
-    color = color / 20.0f;
+    color = color / 35.0f;
 	
-    color = length(color)*lerp(normalize(color), length(color), length(color)*2);
+    color = length(color)*lerp(normalize(color), length(color), lerp(length(color),1,0.5));
 	
     return float4(color,1);
 }

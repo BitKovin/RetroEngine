@@ -574,15 +574,17 @@ namespace RetroEngine
 
             }
 
-            float bias = 0.1f;
+            float bias = 0.06f;
 
             if (closeShadow)
-                bias = 0.05f;
+                bias = 0.035f;
 
             if (veryClose)
                 bias = 0.015f;
 
             bias *= NormalBiasScale;
+
+            bias *= Graphics.LightDistanceMultiplier;
 
             //bias = 0.015f;
 
@@ -769,7 +771,7 @@ namespace RetroEngine
                 }
         }
 
-        public virtual void AddNormalsToPositionNormalDictionary(ref Dictionary<Vector3, (Vector3 accumulatedNormal, int count, List<Vector3> existingNormals)> positionToNormals)
+        public virtual void AddNormalsToPositionNormalDictionary(ref Dictionary<Vector3, (Vector3 accumulatedNormal, List<Vector3> existingNormals)> positionToNormals)
         {
             if (model == null) return;
 
@@ -788,7 +790,7 @@ namespace RetroEngine
             }
         }
 
-        public virtual void GenerateSmoothNormalsFromDictionary(Dictionary<Vector3, (Vector3 accumulatedNormal, int count, List<Vector3> existingNormals)> positionToNormals)
+        public virtual void GenerateSmoothNormalsFromDictionary(Dictionary<Vector3, (Vector3 accumulatedNormal, List<Vector3> existingNormals)> positionToNormals)
         {
             if (model == null) return;
 
@@ -812,14 +814,14 @@ namespace RetroEngine
         public virtual void GenerateSmoothNormals()
         {
 
-            Dictionary<Vector3, (Vector3 accumulatedNormal, int count, List<Vector3> existingNormals)> positionToNormals = new Dictionary<Vector3, (Vector3 accumulatedNormal, int count, List<Vector3> existingNormals)>();
+            Dictionary<Vector3, (Vector3 accumulatedNormal, List<Vector3> existingNormals)> positionToNormals = new Dictionary<Vector3, (Vector3 accumulatedNormal, List<Vector3> existingNormals)>();
 
             AddNormalsToPositionNormalDictionary(ref positionToNormals);
 
             GenerateSmoothNormalsFromDictionary(positionToNormals);
         }
 
-        public static void AddNormalsToPositionNormalDictionary(VertexData[] vertices, ref Dictionary<Vector3, (Vector3 accumulatedNormal, int count, List<Vector3> existingNormals)> positionToNormals)
+        public static void AddNormalsToPositionNormalDictionary(VertexData[] vertices, ref Dictionary<Vector3, (Vector3 accumulatedNormal, List<Vector3> existingNormals)> positionToNormals)
         {
             // Iterate through each vertex in the index buffer
             for (int i = 0; i < vertices.Length; i++)
@@ -840,30 +842,19 @@ namespace RetroEngine
 
                     positionToNormals[position] = (
                         positionToNormals[position].accumulatedNormal + normal,
-                        positionToNormals[position].count + 1,
                         list
 
                     );
                 }
                 else
                 {
-                    positionToNormals[position] = (normal, 1, new List<Vector3> { normal });
+                    positionToNormals[position] = (normal, new List<Vector3> { normal });
                 }
             }
         }
 
-        public static VertexData[] GenerateSmoothNormalsForBuffer(VertexData[] vertices, Dictionary<Vector3, (Vector3 accumulatedNormal, int count, List<Vector3> existingNormals)> positionToNormals)
+        public static VertexData[] GenerateSmoothNormalsForBuffer(VertexData[] vertices, Dictionary<Vector3, (Vector3 accumulatedNormal, List<Vector3> existingNormals)> positionToNormals)
         {
-            // Calculate the average normal for each vertex position
-            foreach (var kvp in positionToNormals)
-            {
-
-                //Console.WriteLine(kvp.Value.count);
-
-                Vector3 averageNormal = kvp.Value.accumulatedNormal / kvp.Value.count;
-                averageNormal.Normalize(); // Normalize the average normal
-                positionToNormals[kvp.Key] = (averageNormal, kvp.Value.count, kvp.Value.existingNormals);
-            }
 
             // Assign the smooth normals to each vertex
             for (int i = 0; i < vertices.Length; i++)

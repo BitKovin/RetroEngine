@@ -385,18 +385,20 @@ namespace RetroEngine
 
             Effect effect = GameMain.Instance.render.ShadowMapEffect;
 
-            float bias = 0.03f;
+            float bias = 0.05f;
 
             if (closeShadow)
-                bias = 0.01f;
+                bias = 0.03f;
 
             if (veryClose)
-                bias = 0.005f;
+                bias = 0.01f;
 
             if (viewmodel)
                 bias = 0.001f;
 
             bias *= NormalBiasScale;
+
+            bias *= Graphics.LightDistanceMultiplier;
 
             effect.Parameters["bias"].SetValue(bias);
 
@@ -414,8 +416,8 @@ namespace RetroEngine
                 }
                 else
                 {
-                    graphicsDevice.RasterizerState = isNegativeScale() ? RasterizerState.CullCounterClockwise : RasterizerState.CullClockwise;
-                    //graphicsDevice.RasterizerState = RasterizerState.CullNone;
+                    //graphicsDevice.RasterizerState = isNegativeScale() ? RasterizerState.CullCounterClockwise : RasterizerState.CullClockwise;
+                    graphicsDevice.RasterizerState = RasterizerState.CullNone;
                 }
 
                 //graphicsDevice.RasterizerState = isNegativeScale() ? RasterizerState.CullCounterClockwise : RasterizerState.CullClockwise;
@@ -901,7 +903,7 @@ namespace RetroEngine
         }
 
 
-        public override void AddNormalsToPositionNormalDictionary(ref Dictionary<Vector3, (Vector3 accumulatedNormal, int count, List<Vector3> existingNormals)> positionToNormals)
+        public override void AddNormalsToPositionNormalDictionary(ref Dictionary<Vector3, (Vector3 accumulatedNormal, List<Vector3> existingNormals)> positionToNormals)
         {
 
             if (RiggedModel == null) return;
@@ -918,7 +920,7 @@ namespace RetroEngine
             }
         }
 
-        public override void GenerateSmoothNormalsFromDictionary(Dictionary<Vector3, (Vector3 accumulatedNormal, int count, List<Vector3> existingNormals)> positionToNormals)
+        public override void GenerateSmoothNormalsFromDictionary(Dictionary<Vector3, (Vector3 accumulatedNormal, List<Vector3> existingNormals)> positionToNormals)
         {
             if (RiggedModel == null) return;
 

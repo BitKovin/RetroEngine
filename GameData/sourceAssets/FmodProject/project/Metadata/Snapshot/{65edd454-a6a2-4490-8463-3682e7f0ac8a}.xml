@@ -49,7 +49,7 @@
 	</object>
 	<object class="SnapshotTrack" id="{535b706d-fa52-4d64-a80a-807b94a4c350}">
 		<relationship name="automationTracks">
-			<destination>{3e5ed6a9-b3dd-41b7-aef2-9dc6240be094}</destination>
+			<destination>{b061be85-409c-4253-989e-8b07beec97e1}</destination>
 		</relationship>
 		<relationship name="mixerStrip">
 			<destination>{d320eb98-3d4a-4cd9-a001-fdb4e071c58e}</destination>
@@ -63,7 +63,7 @@
 			<destination>{a9e4039e-8b98-4203-a7cb-82a988db3964}</destination>
 		</relationship>
 	</object>
-	<object class="AutomationTrack" id="{3e5ed6a9-b3dd-41b7-aef2-9dc6240be094}">
+	<object class="AutomationTrack" id="{b061be85-409c-4253-989e-8b07beec97e1}">
 		<relationship name="automator">
 			<destination>{238eac51-711b-4926-bb7b-35e6025acd85}</destination>
 		</relationship>
@@ -88,7 +88,7 @@
 	</object>
 	<object class="AutomationPoint" id="{7720e79c-b81c-47b5-b50f-2980e1f54e4f}">
 		<property name="position">
-			<value>0</value>
+			<value>0.20000000000000001</value>
 		</property>
 		<property name="value">
 			<value>-24</value>
