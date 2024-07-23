@@ -26,6 +26,9 @@
 		<property name="filterTypeA">
 			<value>4</value>
 		</property>
+		<property name="filterTypeB">
+			<value>5</value>
+		</property>
 	</object>
 	<object class="MixerBusFader" id="{7fd423d2-f491-4d97-9ada-841c9377334e}" />
 	<object class="ThreeEQEffect" id="{26e99567-f608-4807-875f-c273cfd17225}" />
