@@ -26,7 +26,7 @@ namespace RetroEngine.Windows
             base.Update(gameTime);
         }
 
-        protected override void CheckWindowFullscreenStatus()
+        public override void CheckWindowFullscreenStatus()
         {
             base.CheckWindowFullscreenStatus();
 

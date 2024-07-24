@@ -210,12 +210,12 @@ namespace RetroEngine.Game.Entities.Weapons
 
             if (r)
             {
-                mesh.PlayAnimation("fire", false, 0.1f);
+                mesh.PlayAnimation("fire", false, 0.05f);
                 fireSoundPlayer.Play(true);
             }
             else
             {
-                mesh2.PlayAnimation("fire", false, 0.1f);
+                mesh2.PlayAnimation("fire", false, 0.05f);
                 fireSoundPlayer2.Play(true);
             }
 

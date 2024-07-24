@@ -157,7 +157,7 @@ namespace RetroEngine
 
         }
 
-        protected virtual void CheckWindowFullscreenStatus()
+        public virtual void CheckWindowFullscreenStatus()
         {
 
         }

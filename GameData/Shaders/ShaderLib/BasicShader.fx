@@ -730,7 +730,7 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input, float3 TangentNor
 
         bias*= lerp(12,1, f);
 
-        bias += 0.00013;
+        bias += 0.00016;
 
         bias *= (LightDistanceMultiplier+1)/2;
 
@@ -803,7 +803,7 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
 
 
     float dist = distance(viewPos, input.MyPosition);
-    
+
     if (dist > 150)
         return 0;
     
@@ -1211,7 +1211,7 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness, float me
 
     if(Viewmodel)
     {
-        globalLight += GlobalBrightness * GlobalLightColor * lerp(1.0f, 0.3f, max(dot(normal, LightDirection), 0.0f)) * 1;
+        globalLight += GlobalBrightness * GlobalLightColor * lerp(1.0f, 0.5f, max(dot(normal, LightDirection), 0.0f)) * 0.5;
     }
 
     globalLight *= ao;

@@ -25,7 +25,7 @@ namespace RetroEngine.Audio
 
         public static bool UseFmod = true;
 
-        public static float Volume = 1.0f;
+        public static float Volume = 0.3f;
 
 
         public static void Init()
@@ -66,6 +66,12 @@ namespace RetroEngine.Audio
             FmodManager.Update();
             listener3D.SetAttributes(SoundManager.listener.Position, Camera.velocity, SoundManager.listener.Forward, -SoundManager.listener.Up);
 
+        }
+
+        [ConsoleCommand("volume")]
+        public static void SetVolume(float value)
+        {
+            Volume = value;
         }
 
     }

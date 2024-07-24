@@ -50,8 +50,9 @@ namespace RetroEngine
             SpriteBatch.End();
 
 
-
+            GameMain.Instance.CheckWindowFullscreenStatus();
             GameMain.Instance.GraphicsDevice.Present();
+            GameMain.Instance.CheckWindowFullscreenStatus();
 
         }
 
