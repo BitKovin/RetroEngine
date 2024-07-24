@@ -42,8 +42,9 @@ namespace RetroEngine.Game
             GameSpeedEvent = FmodEventInstance.Create("snapshot:/GameSpeed");
             GameSpeedEvent.Play();
 
-            Level.LoadFromFile("test");
+            Level.LoadFromFile("test3");
 
+            base.GameInitialized();
 
         }
 

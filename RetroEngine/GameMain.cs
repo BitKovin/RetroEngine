@@ -87,6 +87,7 @@ namespace RetroEngine
 
         public static bool CompatibilityMode = false;
 
+        public static string LaunchArguments = "";
 
         public GameMain()
         {
@@ -655,8 +656,31 @@ namespace RetroEngine
             _graphics.ApplyChanges();
         }
 
+
+        public static void AddLaunchArguments(string[] args)
+        {
+            foreach (string arg in args)
+            {
+                LaunchArguments += arg;
+            }
+        }
+
         public virtual void GameInitialized()
         {
+
+            Logger.Log("Launch Arguments: " + LaunchArguments);
+
+            if (LaunchArguments.StartsWith("-"))
+                LaunchArguments = LaunchArguments.Replace("-", " -");
+
+            var commands = LaunchArguments.Split(" -");
+
+            foreach (string command in commands)
+            {
+                ConsoleCommands.ProcessCommand(command);
+            }
+
+            
 
         }
 

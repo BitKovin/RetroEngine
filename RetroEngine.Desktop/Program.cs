@@ -23,6 +23,8 @@ internal class Program
 
         RetroEngine.Render.UsesOpenGL = true;
 
+        GameMain.AddLaunchArguments(args);
+        
         using var game = new RetroEngine.Game.Game();
         RetroEngine.GameMain.platform = RetroEngine.Platform.Desktop;
         Input.MouseMoveCalculatorObject = new WindowsInputCalculator();

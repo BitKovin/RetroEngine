@@ -88,6 +88,7 @@ namespace RetroEngine
             LoadingScreen.Progress = 0;
             LoadingScreen.Draw();
 
+
             //StaticMesh.textures.Clear();
 
             if (name.EndsWith(".map") == false)

@@ -21,7 +21,7 @@ internal class Program
 
         AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
-
+        GameMain.AddLaunchArguments(args);
 
         SoundManager.nativeFmodLibrary = new FmodForFoxes.DesktopNativeFmodLibrary();
         Game game = new GameWindows();
