@@ -206,6 +206,7 @@ namespace RetroEngine
             effect.Parameters["ProjectionViewmodel"]?.SetValue(Camera.finalizedProjectionViewmodel);
 
             effect.Parameters["GlobalLightColor"]?.SetValue(Graphics.LightColor);
+            effect.Parameters["SkyColor"]?.SetValue(Graphics.SkyLightColor);
 
             if (Graphics.GlobalPointLights)
             {

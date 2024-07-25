@@ -38,9 +38,9 @@ namespace RetroEngine.Entities
 
             Graphics.GeometricalShadowsEnabled = data.GetPropertyBool("geometricalShadowsEnabled", false);
 
-            Vector3 skyColor = data.GetPropertyVector("skyColor", new Vector3(0.15f, 0.15f, 0.2f));
+            Vector3 skyColor = data.GetPropertyVector("skyColor", new Vector3(0.72f, 0.72f, 1));
 
-            Graphics.BackgroundColor = new Color(skyColor.X, skyColor.Y, skyColor.Z);
+            Graphics.SkyLightColor = skyColor;
 
 
             Level.GetCurrent().TryAddLayerName("Default Layer", 0);

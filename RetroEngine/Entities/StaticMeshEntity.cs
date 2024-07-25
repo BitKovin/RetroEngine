@@ -37,7 +37,9 @@ namespace RetroEngine.Entities
 
             Vector3 rotation = EntityData.ConvertRotation(importRot);
 
+            Rotation = rotation;
 
+            DrawDebug.Line(Position, Position + Rotation.GetForwardVector() * 4, Vector3.One, 40);
 
 
             mesh.Rotation = rotation;

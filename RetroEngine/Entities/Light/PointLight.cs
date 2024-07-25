@@ -90,6 +90,14 @@ namespace RetroEngine.Entities.Light
 
             resolution = (int)data.GetPropertyFloat("resolution", 256);
 
+            Vector3 importRot = data.GetPropertyVector("angles", Vector3.Zero);
+
+
+            Rotation = EntityData.ConvertRotation(importRot);
+
+            SetAngle(data.GetPropertyFloat("light_angle", 180));
+
+            //DrawDebug.Line(Position, Position + Rotation.GetForwardVector() * 4, Vector3.One, 40);
 
             CastShadows = data.GetPropertyBool("shadows",true);
 
@@ -111,6 +119,17 @@ namespace RetroEngine.Entities.Light
             graphicsDevice = GameMain.Instance.GraphicsDevice;
 
 
+        }
+
+        public void SetAngle(float angleInDegrees)
+        {
+            // Convert the angle from degrees to radians
+            float angleInRadians = MathHelper.ToRadians(angleInDegrees);
+
+            // Compute the cosine of the angle
+            float minDot = (float)Math.Cos(angleInRadians);
+
+            MinDot = minDot;
         }
 
         public override void Start()
@@ -208,7 +227,7 @@ namespace RetroEngine.Entities.Light
         {
             base.Update();
 
-            Rotation += new Vector3(0, Time.DeltaTime * 300, 0);
+            //Rotation += new Vector3(0, Time.DeltaTime * 300, 0);
 
             float dist = Vector3.Distance(Camera.position, Position);
 

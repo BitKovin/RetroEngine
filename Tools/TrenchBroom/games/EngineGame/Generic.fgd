@@ -1,7 +1,7 @@
 @SolidClass = worldspawn : "World entity" 
 [
 	visibleLayers(string) : "Visible Layers": "Default Layer, "
-	skyColor(Vector3) : "Color": "0.15 0.15 0.2"
+	skyColor(Vector3) : "Color": "0.72 0.72 1"
 
 	globalLightColor(Vector3) : "Color": "1 1 1"
 	globalLightBrightness(float) : "Global Light Brightness": "0.15"
@@ -66,11 +66,13 @@
 [
 ]
 
-@PointClass base(Entity) size(-15 -15 -15, 15 15 15) color(255 200 0) model({ "path": "models/tools/radius.obj", "scale": radius * 32 * 2}) = light_point : "Graphics" 
+@PointClass base(Entity) size(-15 -15 -15, 15 15 15) color(255 200 0) model({ "path": "models/tools/spotlight.obj", "scale": radius * 32 * 2}) = light_point : "Graphics" 
 [
-	light_color(Vector3) : "Color" : "1 1 1"
 	radius(float) : "Radius" : "5"
+	angles(Vector3): "Angles" : "0 0 0"
+	light_color(Vector3) : "Color" : "1 1 1"
 	intensity(float) : "Intensity" : "1"
+	light_angle(float) : "Light Angle" : "180"
 	resolution(int) : "Resolution" : "256"
 	dynamic(bool) : "Dynamic" : "false"
 	shadows(bool) : "Shadows" : "true"

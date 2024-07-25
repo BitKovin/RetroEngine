@@ -195,7 +195,7 @@ namespace RetroEngine.Game.Entities.Player
             PlayerFlashLight.enabled = true;
 
             PlayerFlashLight.MinDot = 0.85f;
-            PlayerFlashLight.radius = 21;
+            PlayerFlashLight.radius = 20;
             PlayerFlashLight.Intensity = 1;
 
             PlayerFlashLight.Start();

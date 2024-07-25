@@ -102,6 +102,7 @@ float DirectBrightness;
 float GlobalBrightness;
 float3 LightDirection;
 float3 GlobalLightColor;
+float3 SkyColor;
 
 float EmissionPower;
 float ShadowBias;
@@ -1210,9 +1211,8 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness, float me
     float3 light = DirectBrightness * GlobalLightColor;
     light *= (1.0f - shadow);
 
-    float3 skyColor = float3(0.72,0.72,1);
 
-    float3 globalLightColor = lerp(GlobalLightColor, skyColor, shadow);
+    float3 globalLightColor = lerp(GlobalLightColor, SkyColor, shadow);
 
     // Global ambient light
     float3 globalLight = GlobalBrightness * globalLightColor * lerp(1.0f, 0.1f, (dot(normal, float3(0,-1,0))+1)/2);

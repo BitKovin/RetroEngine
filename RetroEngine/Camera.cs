@@ -66,7 +66,7 @@ namespace RetroEngine
             else
             {
                 rotation += new Vector3(0.0001f, 0.0001f, 0);
-                Logger.Log("Wrong camera up vector detected! Trying to fix");
+                //Logger.Log("Wrong camera up vector detected! Trying to fix");
             }
 
             view = CalculateView();

@@ -10,50 +10,24 @@ namespace RetroEngine
 
         public static Vector3 GetForwardVector(this Vector3 rot)
         {
-            double X = Math.Sin(rot.Y / 180d * Math.PI);
-            double Y = -Math.Tan(rot.X / 180d * Math.PI);
-            double Z = Math.Cos(rot.Y / 180d * Math.PI);
-
-            Vector3 vector = new Vector3((float)X, (float)Y, (float)Z);
-
-            vector = Vector3.Normalize(vector);
-
-            return vector;
+            return Vector3.Transform(Vector3.UnitZ, Quaternion.CreateFromRotationMatrix(Matrix.CreateRotationX(rot.X / 180 * (float)Math.PI) *
+                                Matrix.CreateRotationY(rot.Y / 180 * (float)Math.PI) *
+                                Matrix.CreateRotationZ(rot.Z / 180 * (float)Math.PI)));
         }
 
         public static Vector3 GetRightVector(this Vector3 rot)
         {
 
-            rot = NonZeroAngles(rot);
-
-            double X = Math.Sin((rot.Y + 90) / 180d * Math.PI);
-            double Y = 0;//-Math.Tan(rot.X / 180d * Math.PI);
-            double Z = Math.Cos((rot.Y + 90) / 180d * Math.PI);
-            
-            Vector3 rotation = new Vector3((float)X, (float)Y, (float)Z);
-            
-            rotation = Vector3.Normalize(rotation);
-
-            return rotation * -1f;
+            return Vector3.Transform(-Vector3.UnitX, Quaternion.CreateFromRotationMatrix(Matrix.CreateRotationX(rot.X / 180 * (float)Math.PI) *
+                               Matrix.CreateRotationY(rot.Y / 180 * (float)Math.PI) *
+                               Matrix.CreateRotationZ(rot.Z / 180 * (float)Math.PI)));
         }
 
         public static Vector3 GetUpVector(this Vector3 rot)
         {
-            float epsilon = 0.00001f;
-            rot.X = Math.Abs(rot.X) < epsilon ? epsilon : rot.X;
-
-            double X = Math.Sin(rot.Y * Math.PI / 180.0);
-            double Y = -Math.Tan((rot.X + 90.0) * Math.PI / 180.0);
-            double Z = Math.Cos(rot.Y * Math.PI / 180.0);
-
-            Vector3 rotation = new Vector3((float)X, (float)Y, (float)Z);
-            rotation = Vector3.Normalize(rotation);
-
-            // Ensure correct direction of the up vector
-            if (rot.X >= 0)
-                rotation = -rotation;
-
-            return -rotation;
+            return Vector3.Transform(Vector3.UnitY, Quaternion.CreateFromRotationMatrix(Matrix.CreateRotationX(rot.X / 180 * (float)Math.PI) *
+                               Matrix.CreateRotationY(rot.Y / 180 * (float)Math.PI) *
+                               Matrix.CreateRotationZ(rot.Z / 180 * (float)Math.PI)));
         }
 
         public static Vector3 XZ(this Vector3 vector)

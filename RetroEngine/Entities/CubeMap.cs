@@ -171,7 +171,7 @@ namespace RetroEngine.Entities
             GameMain.Instance.render.UpdateShaderFrameData();
 
             graphicsDevice.SetRenderTarget(map, face);
-            graphicsDevice.Clear(Graphics.BackgroundColor);
+            graphicsDevice.Clear(Color.Black);
 
             l = Level.GetCurrent().GetMeshesToRender();
 
