@@ -15,6 +15,8 @@ namespace RetroEngine
         public static Vector3 SkyLightColor = new Vector3(0.72f, 0.72f, 1);
         public static Vector3 LightColor = new Vector3(1,1,1);
 
+        public static Point Resolution = new Point(1280, 720);
+
         public static float ShadowBias = -0.000f;//0025f
         public static int shadowMapResolution = 2048*2;
         public static int closeShadowMapResolution = 2048;

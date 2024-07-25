@@ -112,7 +112,7 @@ internal class Program
         ExecutePowerShellCommand($"dotnet publish {projectPath}" +
             " -c Release" +
             $" -o {outPath} " +
-            "-f net7.0-windows -r win-x64 " +
+            "-f net8.0-windows -r win-x64 " +
             "--no-self-contained " +
             "--no-restore");
     }

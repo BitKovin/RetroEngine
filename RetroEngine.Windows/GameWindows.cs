@@ -4,6 +4,7 @@ using SharpDX.DirectInput;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,13 +27,69 @@ namespace RetroEngine.Windows
             base.Update(gameTime);
         }
 
+        [DllImport("user32.dll")]
+        private static extern IntPtr GetForegroundWindow();
+        private static bool IsWindowFocused(IntPtr handle)
+        {
+            IntPtr focusedWindow = GetForegroundWindow();
+            return handle == focusedWindow;
+        }
+
+        static Form form1;
         public override void CheckWindowFullscreenStatus()
         {
             base.CheckWindowFullscreenStatus();
 
+
+            if(_graphics.HardwareModeSwitch)
             try
             {
                 var form = Form.ActiveForm;
+
+                if (form != null)
+                {
+                    form1 = form;
+                }
+                else
+                {
+                    form = form1;
+                }
+
+                bool focused = IsWindowFocused(Window.Handle);
+
+                if (_isFullscreen && _graphics.IsFullScreen && focused == false)
+                {
+                    //form.TopMost = false;
+                    _graphics.IsFullScreen = false;
+                    _graphics.ApplyChanges();
+
+                }
+                else if (_isFullscreen && _graphics.IsFullScreen == false && focused)
+                {
+
+                    int _width = Graphics.Resolution.X;
+                    int _height = Graphics.Resolution.Y;
+
+                    _graphics.PreferredBackBufferWidth = _width;
+                    _graphics.PreferredBackBufferHeight = _height;
+                    _graphics.HardwareModeSwitch = true;
+                    _graphics.IsFullScreen = false;
+                    _graphics.ApplyChanges();
+                    form.Focus();
+                    Thread.Sleep(100);
+                    form.Focus();
+                    _graphics.PreferredBackBufferWidth = _width;
+                    _graphics.PreferredBackBufferHeight = _height;
+                    _graphics.ApplyChanges();
+                    Thread.Sleep(100);
+                    form.Focus();
+                    Thread.Sleep(100);
+                    _graphics.PreferredBackBufferWidth = _width;
+                    _graphics.PreferredBackBufferHeight = _height;
+                    form.Focus();
+                    _graphics.IsFullScreen = true;
+                    _graphics.ApplyChanges();
+                }
 
                 if (form != null) //some times ActiveForm sets to null on alt tab and I have 0 idea why. It continues code(even with this check)
                 {
@@ -56,6 +113,8 @@ namespace RetroEngine.Windows
         {
 
             base.SetFullscreen();
+
+            GraphicsDevice.Present();
 
             CheckWindowFullscreenStatus();
         }

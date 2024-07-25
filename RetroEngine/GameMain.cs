@@ -231,16 +231,7 @@ namespace RetroEngine
 
             time = gameTime;
 
-            if(_isFullscreen && _graphics.IsFullScreen && IsActive == false)
-            { 
-                _graphics.IsFullScreen = false;
-                _graphics.ApplyChanges();
-
-            }else if(_isFullscreen && _graphics.IsFullScreen == false && IsActive)
-            {
-                _graphics.IsFullScreen = true;
-                _graphics.ApplyChanges();
-            }
+            //CheckWindowFullscreenStatus();
 
 
             AssetRegistry.ClearTexturesIfNeeded();
@@ -472,7 +463,7 @@ namespace RetroEngine
             }
 
 
-            CheckWindowFullscreenStatus();
+            //CheckWindowFullscreenStatus();
             if (AllowAsyncAssetLoading && Render.AsyncPresent)
             {
                 presentingFrame = true;
@@ -587,7 +578,7 @@ namespace RetroEngine
 
             pendingGraphicsUpdate = true;
         }
-        bool _isFullscreen = false;
+        protected bool _isFullscreen = false;
         bool _isBorderless = false;
         int _width = 0;
         int _height = 0;
@@ -642,11 +633,11 @@ namespace RetroEngine
         }
         protected virtual void SetFullscreen()
         {
-            _width = Window.ClientBounds.Width;
-            _height = Window.ClientBounds.Height;
+            _width = Graphics.Resolution.X;
+           _height = Graphics.Resolution.Y;
 
-            _graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-            _graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+            _graphics.PreferredBackBufferWidth = _width;
+            _graphics.PreferredBackBufferHeight = _height;
             _graphics.ApplyChanges();
 
             _graphics.IsFullScreen = true;
@@ -654,6 +645,9 @@ namespace RetroEngine
         }
         protected virtual void UnsetFullscreen()
         {
+
+            _width = Graphics.Resolution.X;
+            _height = Graphics.Resolution.Y;
 
             _graphics.PreferredBackBufferWidth = _width;
             _graphics.PreferredBackBufferHeight = _height;
@@ -672,6 +666,8 @@ namespace RetroEngine
 
         public virtual void GameInitialized()
         {
+
+            Graphics.Resolution = new Point(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height);
 
             Logger.Log("Launch Arguments: " + LaunchArguments);
 

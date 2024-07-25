@@ -16,7 +16,7 @@ namespace RetroEngine.Entities.Brushes
 
         Vector3 targetLocation;
 
-        float time = 2;
+        float time = 1;
 
         [JsonInclude]
         public float progress = 0;
@@ -40,7 +40,7 @@ namespace RetroEngine.Entities.Brushes
         {
             base.FromData(data);
 
-            targetLocation = data.GetPropertyVector("targetLocation",new Vector3(0,3,0));
+            targetLocation = data.GetPropertyVector("targetLocation",new Vector3(0,0,0));
 
             time = data.GetPropertyFloat("time", time);
 
@@ -108,10 +108,20 @@ namespace RetroEngine.Entities.Brushes
 
             Position -= offsetPosition;
 
-            Position = Vector3.Transform(Position, Matrix.CreateRotationX(offsetRotation.X / 180 * (float)Math.PI) *
-                                Matrix.CreateRotationY(offsetRotation.Y / 180 * (float)Math.PI) *
-                                Matrix.CreateRotationZ(offsetRotation.Z / 180 * (float)Math.PI));
+            // Apply rotation transformation
+            Matrix rotationMatrix = Matrix.CreateRotationX(offsetRotation.X / 180 * (float)Math.PI) *
+                                    Matrix.CreateRotationY(offsetRotation.Y / 180 * (float)Math.PI) *
+                                    Matrix.CreateRotationZ(offsetRotation.Z / 180 * (float)Math.PI);
 
+            Rotation = Quaternion.Lerp(Quaternion.Identity, Quaternion.CreateFromRotationMatrix(rotationMatrix), progress).ToEulerAnglesDegrees();
+
+            rotationMatrix = Matrix.CreateRotationX(Rotation.X / 180 * (float)Math.PI) *
+                                    Matrix.CreateRotationY(Rotation.Y / 180 * (float)Math.PI) *
+                                    Matrix.CreateRotationZ(Rotation.Z / 180 * (float)Math.PI);
+
+            Position = Vector3.Transform(Position, Quaternion.CreateFromRotationMatrix(rotationMatrix));
+
+            // Move position back to world space
             Position += offsetPosition;
 
             foreach (var body in bodies)

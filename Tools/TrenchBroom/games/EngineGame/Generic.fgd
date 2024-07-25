@@ -57,9 +57,9 @@
 
 @SolidClass base(Entity) = movebleBrush : "Moveable Brush"
 [
-	targetLocation(Vector3) : "Target Location" : "0 3 0"
+	targetLocation(Vector3) : "Target Location" : "0 0 0"
 	rotationPointName(string) : "rotationPointName" : ""
-	time(float) : "Time" : "2"
+	time(float) : "Time" : "1"
 ]
 
 @SolidClass base(Entity) = groupBrush : "Group Brush"

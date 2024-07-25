@@ -427,7 +427,7 @@
 		{
 			"name"		"Ukraine"
 			"tag"		"UA"
-			"avatar"		"be92f151392df1fa907b2af9ae1e5629298f50ec"
+			"avatar"		"fc07f357f7ea4fbf4aff18342b6a3411a9971a53"
 		}
 		"1277784071"
 		{
@@ -528,10 +528,10 @@
 	}
 	"Offline"
 	{
-		"Ticket"		"0886a1da9d0115be4d9d66"
-		"Signature"		"3bfa32834792aef7068e1f096ea0a433ae5654b2da4a81daab79c6c8b7adbf43dadd400d7a1931abf650cdcd7e36578c22fd949955b2a6a3855f03ba739c31325a4286ad8011938d73a6446558a941b0edc3d1997139afaa410b051d720b3527a1f9a31456b8be6826c65385dfe2a03cde5aa1b985f0081f2f972d318944bafede65c30c61ff0a60ff5b6ecf086401e96a3aafb6eb49841e660e6d50c06eb0e960d246648d7b705bbe53dfe61100f94c01fe62da5bb88c3bcb77dd4a3b21f15db95d291ede30fb6ad3fba8b67db81cee863993b721a80236eee39da93ccbcb7400a6449f22f8c2fb362cc396204c2ef5837c4f7fef11d2a4671527bbef249724"
-		"EncryptedTicket"		"0a205a79f0338ff3b1f8dd8d83394596165477ac57cf460db0d495c09b0eed3121271280023bfa32834792aef7068e1f096ea0a433ae5654b2da4a81daab79c6c8b7adbf43dadd400d7a1931abf650cdcd7e36578c22fd949955b2a6a3855f03ba739c31325a4286ad8011938d73a6446558a941b0edc3d1997139afaa410b051d720b3527a1f9a31456b8be6826c65385dfe2a03cde5aa1b985f0081f2f972d318944bafede65c30c61ff0a60ff5b6ecf086401e96a3aafb6eb49841e660e6d50c06eb0e960d246648d7b705bbe53dfe61100f94c01fe62da5bb88c3bcb77dd4a3b21f15db95d291ede30fb6ad3fba8b67db81cee863993b721a80236eee39da93ccbcb7400a6449f22f8c2fb362cc396204c2ef5837c4f7fef11d2a4671527bbef24972418062208f54a956cdf9e761228043208d8bd17992f6c695c"
-		"EncryptedSignature"		"3bfa32834792aef7068e1f096ea0a433ae5654b2da4a81daab79c6c8b7adbf43dadd400d7a1931abf650cdcd7e36578c22fd949955b2a6a3855f03ba739c31325a4286ad8011938d73a6446558a941b0edc3d1997139afaa410b051d720b3527a1f9a31456b8be6826c65385dfe2a03cde5aa1b985f0081f2f972d318944bafede65c30c61ff0a60ff5b6ecf086401e96a3aafb6eb49841e660e6d50c06eb0e960d246648d7b705bbe53dfe61100f94c01fe62da5bb88c3bcb77dd4a3b21f15db95d291ede30fb6ad3fba8b67db81cee863993b721a80236eee39da93ccbcb7400a6449f22f8c2fb362cc396204c2ef5837c4f7fef11d2a4671527bbef249724"
+		"Ticket"		"0886a1da9d0115ed87a266"
+		"Signature"		"9849a1f22ec2f96d7de65b7bdba5b2c5d120b9c41c0f31e0f523b26cb6294504c586cc20f257ae1483b63436edb0f52f014fbaaea861fe6648d90466e924287826f4e0a564e1ba6abd4d2ec739757b40e943af715fc9ff60a8c51905f98d283e3ed93563168611df7982a0ed5b84f1ed960eb393fe684d2f241bc0c1e959cd2e1674dc231d69d22b7da8a0bb248e24b6ad68f14193ade94356824a3f4ff9edda2c42e045f69a3d0990e60faddf5fbc6e41110266ae5202e608c52865a81ebf82a866443933b7dfb6f737d02abf8cf34ece74fc245ae1366e473c0b40f568299fdd6bb16fde226aeeb554e3bd004a2bbdc300423edc290ad8ac6f6fefa71a6276"
+		"EncryptedTicket"		"0a20ceb6fbafb2642ade80ccf92cf1580fd636c38665b5bf7688868b830011c1a1b71280029849a1f22ec2f96d7de65b7bdba5b2c5d120b9c41c0f31e0f523b26cb6294504c586cc20f257ae1483b63436edb0f52f014fbaaea861fe6648d90466e924287826f4e0a564e1ba6abd4d2ec739757b40e943af715fc9ff60a8c51905f98d283e3ed93563168611df7982a0ed5b84f1ed960eb393fe684d2f241bc0c1e959cd2e1674dc231d69d22b7da8a0bb248e24b6ad68f14193ade94356824a3f4ff9edda2c42e045f69a3d0990e60faddf5fbc6e41110266ae5202e608c52865a81ebf82a866443933b7dfb6f737d02abf8cf34ece74fc245ae1366e473c0b40f568299fdd6bb16fde226aeeb554e3bd004a2bbdc300423edc290ad8ac6f6fefa71a627618062208f54a956cdf9e761228043208a4dbb3bf724a052b"
+		"EncryptedSignature"		"9849a1f22ec2f96d7de65b7bdba5b2c5d120b9c41c0f31e0f523b26cb6294504c586cc20f257ae1483b63436edb0f52f014fbaaea861fe6648d90466e924287826f4e0a564e1ba6abd4d2ec739757b40e943af715fc9ff60a8c51905f98d283e3ed93563168611df7982a0ed5b84f1ed960eb393fe684d2f241bc0c1e959cd2e1674dc231d69d22b7da8a0bb248e24b6ad68f14193ade94356824a3f4ff9edda2c42e045f69a3d0990e60faddf5fbc6e41110266ae5202e608c52865a81ebf82a866443933b7dfb6f737d02abf8cf34ece74fc245ae1366e473c0b40f568299fdd6bb16fde226aeeb554e3bd004a2bbdc300423edc290ad8ac6f6fefa71a6276"
 	}
 	"ParentalSettings"
 	{
@@ -540,9 +540,9 @@
 	}
 	"apptickets"
 	{
-		"7"		"32000000040000008690b6130100100107000000660125b06400a8c000000000be4d9d663efdb866010000000000000000007b1fd5edb209831ee62cf4b4f3016bdf8ca66b096cc7dcb00263b8ec9391ab2bfab77f2a2ea2d72e17f43825a94ef8d700648cdda1861db38d81c33e0a3784dcdac6bb1f8959a00b9d67d69c42947d915b13a4a5486be35aa1aeb6caa947471077c4bb0c6a7951d1002ba3a472a4922130e0abd57d9d62dd8f993a3bb15d7df7"
+		"7"		"32000000040000008690b6130100100107000000660125b06400a8c000000000ec87a2666c37be6601000000000000000000b8d3ff4e32ee2439ad758b5a54a3a7aac108a38cbe2bced1447e001e1c5b0ea7a619fed6f90dc18d7f0257d5bc16f3bcd0541504f7683c049b6c834c8211af8e80df6da9b35df47c0bd5cf262208b69ddf8e7257f08a0f81603cdd109ac01ff276dd22761ef9244a1bf06129d8067d160a39192c89cc2af6a0088eadf84cd265"
 	}
-	"AppInfoChangeNumber"		"24452120"
+	"AppInfoChangeNumber"		"24512062"
 	"CloudKey"		"010000003b05dae08f48a3c114441b65cf75e96c2c21ae5e963745396f8ef67706c6f92ea8e8ab22"
 	"CloudKeyCRC"		"-109002501"
 	"Software"
@@ -648,9 +648,9 @@
 					}
 					"420"
 					{
-						"LastPlayed"		"1713983582"
-						"Playtime"		"476"
-						"Playtime2wks"		"2"
+						"LastPlayed"		"1721923234"
+						"Playtime"		"489"
+						"Playtime2wks"		"12"
 						"PlaytimeDisconnected"		"1"
 					}
 					"440"
@@ -876,9 +876,9 @@
 					}
 					"250820"
 					{
-						"LastPlayed"		"1721566840"
-						"Playtime2wks"		"39"
-						"Playtime"		"41964"
+						"LastPlayed"		"1721926774"
+						"Playtime2wks"		"327"
+						"Playtime"		"42238"
 					}
 					"251040"
 					{
@@ -1024,9 +1024,9 @@
 					}
 					"365670"
 					{
-						"LastPlayed"		"1721504411"
-						"Playtime"		"103461"
-						"Playtime2wks"		"3127"
+						"LastPlayed"		"1721927281"
+						"Playtime"		"104670"
+						"Playtime2wks"		"3066"
 						"PlaytimeDisconnected"		"1"
 					}
 					"379430"
@@ -1252,9 +1252,9 @@
 					}
 					"631510"
 					{
-						"LastPlayed"		"1721582543"
-						"Playtime"		"1465"
-						"Playtime2wks"		"26"
+						"LastPlayed"		"1721684605"
+						"Playtime"		"1618"
+						"Playtime2wks"		"179"
 					}
 					"632470"
 					{
@@ -1404,9 +1404,9 @@
 					}
 					"1091500"
 					{
-						"LastPlayed"		"1721254310"
-						"Playtime2wks"		"3"
-						"Playtime"		"10990"
+						"LastPlayed"		"1721750940"
+						"Playtime2wks"		"323"
+						"Playtime"		"11311"
 					}
 					"1151340"
 					{
@@ -1436,7 +1436,7 @@
 						"LastPlayed"		"1721321891"
 						"Playtime"		"6989"
 						"Playtime2wks"		"28"
-						"PlaytimeDisconnected"		"37"
+						"PlaytimeDisconnected"		"68"
 					}
 					"1240440"
 					{
@@ -1445,9 +1445,9 @@
 					}
 					"1245620"
 					{
-						"LastPlayed"		"1721147553"
-						"Playtime"		"19133"
-						"Playtime2wks"		"645"
+						"LastPlayed"		"1721593612"
+						"Playtime"		"19148"
+						"Playtime2wks"		"138"
 						"PlaytimeDisconnected"		"1"
 					}
 					"1252330"
@@ -1726,7 +1726,7 @@
 					"1517290"
 					{
 						"LastPlayed"		"1721497913"
-						"Playtime2wks"		"55"
+						"Playtime2wks"		"44"
 						"Playtime"		"2421"
 						"PlaytimeDisconnected"		"1"
 					}
@@ -1860,8 +1860,9 @@
 					}
 					"570940"
 					{
-						"LastPlayed"		"1717419398"
-						"Playtime"		"109"
+						"LastPlayed"		"1721839865"
+						"Playtime"		"576"
+						"Playtime2wks"		"466"
 					}
 					"236430"
 					{
@@ -1905,7 +1906,7 @@
 						"Playtime"		"107"
 					}
 				}
-				"LastPlayedTimesSyncTime"		"1721582543"
+				"LastPlayedTimesSyncTime"		"1721927281"
 			}
 		}
 	}
