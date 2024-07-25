@@ -24,7 +24,7 @@ float depthBias = 0;
 struct VertexShaderInput
 {
     float4 Position : POSITION0;
-    float3 Normal : NORMAL0;
+    float3 Normal : NORMAL1;
     
     float3 Tangent : TANGENT0;
     
@@ -91,16 +91,23 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 
     float4x4 boneTrans = GetBoneTransforms(input);
     
-    //float3 normal = GetTangentNormal(input.Normal, input.Tangent);
+
     
     float4x4 BonesWorld = mul(boneTrans, World);
 
+    float3 normal = mul(input.Normal, (float3x3)BonesWorld);
+
+    normal = normalize(normal);
+
     //output.normal = mul(input.Normal, (float3x3)BonesWorld);
 
-    input.Position-= float4(input.Normal*bias,0);
+    input.Position-= float4(input.Normal * bias,0);
     
     // Transform the vertex position to world space
     output.Position = mul(input.Position, BonesWorld);
+
+    output.Position -= float4(normal,0) * bias;
+
     output.Position = mul(output.Position, View);
     output.Position = mul(output.Position, Projection);
     output.Position.z -= depthBias;

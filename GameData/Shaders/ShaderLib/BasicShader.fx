@@ -798,7 +798,7 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
 
     float shadow = 0;
     
-    if(DirectBrightness<0.00001)
+    if(DirectBrightness == 0)
         return 0;
 
 
@@ -1108,10 +1108,13 @@ float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal, float ro
     float3 specular = CalculateSpecular(pixelInput.MyPosition, normal, dirToSurface, roughness, metalic, albedo);
 
 
-    float colorInstens = max(LightColors[i].x,(max(LightColors[i].y,LightColors[i].z)));
+    float colorInstens = abs( max(LightColors[i].x,(max(LightColors[i].y,LightColors[i].z))));
 
     intense = max(intense, 0) * colorInstens;
     float3 l = LightColors[i] * intense;
+
+    if(dot(l, float3(1,1,1))<0)
+        specular = 0;
 
     return (l + intense * specular) * notShadow * dirFactor;
 }
@@ -1157,7 +1160,7 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness, float me
 
     float shadow = 0;
 
-    shadow = 1 - max(0, dot(normal, normalize(-LightDirection) * 1));
+    
 
     if (isParticle)
         normal = -LightDirection;
@@ -1188,6 +1191,8 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness, float me
         #endif
     }
     
+    shadow = lerp(shadow, 1, 1 - max(0, dot(normal, normalize(-LightDirection) * 1)));
+
     
     shadow = saturate(shadow);
 
@@ -1205,16 +1210,24 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness, float me
     float3 light = DirectBrightness * GlobalLightColor;
     light *= (1.0f - shadow);
 
+    float3 skyColor = float3(0.72,0.72,1);
+
+    float3 globalLightColor = lerp(GlobalLightColor, skyColor, shadow);
+
     // Global ambient light
-    float3 globalLight = GlobalBrightness * GlobalLightColor * lerp(1.0f, 0.2f, max(dot(normal, LightDirection), 0.0f));
+    float3 globalLight = GlobalBrightness * globalLightColor * lerp(1.0f, 0.1f, (dot(normal, float3(0,-1,0))+1)/2);
     
 
     if(Viewmodel)
     {
-        globalLight += GlobalBrightness * GlobalLightColor * lerp(1.0f, 0.5f, max(dot(normal, LightDirection), 0.0f)) * 0.5;
+        //globalLight += GlobalBrightness * lerp(1.0f, 0.1f, (dot(normal, float3(0,-1,0))+1)/2)/3;
     }
 
     globalLight *= ao;
+
+    light += specular;
+    light = max(light, 0.0f);
+    light += globalLight;
 
     // Accumulate point light contributions
     for (int i = 0; i < MAX_POINT_LIGHTS; i++)
@@ -1223,9 +1236,7 @@ float3 CalculateLight(PixelInput input, float3 normal, float roughness, float me
     }
 
     // Combine contributions
-    light += specular;
-    light = max(light, 0.0f);
-    light += globalLight;
+
     //light += CalculateSsrSpecular(input, normal, roughness, metallic, albedo);
 
     return light;

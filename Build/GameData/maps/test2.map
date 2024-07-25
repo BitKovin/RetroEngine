@@ -11127,7 +11127,7 @@
 "origin" "-261 411 69"
 "radius" "20"
 "light_color" "0.160784 0.0117647 1"
-"intensity" "10"
+"intensity" "6"
 "dynamic" "true"
 "resolution" "512"
 }

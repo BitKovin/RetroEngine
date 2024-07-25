@@ -308,7 +308,7 @@ namespace RetroEngine
             graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 
-            if (Graphics.DirectLighting > 0.0001)
+            if (Graphics.DirectLighting > 0)
             {
                 ShadowMapEffect.Parameters["LightDirection"]?.SetValue(Graphics.LightDirection);
                 ShadowMapMaskedEffect.Parameters["LightDirection"]?.SetValue(Graphics.LightDirection);

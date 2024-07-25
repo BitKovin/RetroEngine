@@ -3,9 +3,11 @@
 // entity 0
 {
 "classname" "worldspawn"
-"globalLightBrightness" "0.15"
+"globalLightBrightness" "0.5"
 "directLightBrightness" "0.6"
 "_tb_textures" "textures;textures\brushes"
+"globalLightColor" "1 0.95 0.85"
+"geometricalShadowsEnabled" "false"
 // brush 0
 {
 ( 32 432 240 ) ( 32 -272 240 ) ( 32 -272 0 ) brushes/brickPBR 0 0 0 0.15 0.15
@@ -199,7 +201,7 @@
 // entity 1
 {
 "classname" "light_point"
-"origin" "-113 -31 193"
+"origin" "479 591 193"
 "radius" "15"
 "dynamic" "true"
 "intensity" "0.5"
@@ -207,28 +209,12 @@
 // entity 2
 {
 "classname" "light_point"
-"origin" "-113 369 193"
-"radius" "15"
-"dynamic" "true"
-"intensity" "0.5"
-}
-// entity 3
-{
-"classname" "light_point"
-"origin" "479 591 193"
-"radius" "15"
-"dynamic" "true"
-"intensity" "0.5"
-}
-// entity 4
-{
-"classname" "light_point"
 "origin" "79 591 193"
 "radius" "15"
 "dynamic" "true"
 "intensity" "0.5"
 }
-// entity 5
+// entity 3
 {
 "classname" "movebleBrush"
 "targetname" "door1"
@@ -243,32 +229,32 @@
 ( 448 444 80 ) ( 448 436 0 ) ( 448 436 80 ) foil 0 0 0 0.15 0.15
 }
 }
-// entity 6
+// entity 4
 {
 "classname" "weaponPickup"
 "origin" "300 512 20"
 }
-// entity 7
+// entity 5
 {
 "classname" "info.navpoint"
 "origin" "-108 -92 8"
 }
-// entity 8
+// entity 6
 {
 "classname" "info.navpoint"
 "origin" "-96 544 8"
 }
-// entity 9
+// entity 7
 {
 "classname" "info.navpoint"
 "origin" "668 588 8"
 }
-// entity 10
+// entity 8
 {
 "classname" "info.navpoint"
 "origin" "412 460 8"
 }
-// entity 11
+// entity 9
 {
 "classname" "trigger"
 "target" "door1"
@@ -285,26 +271,26 @@
 ( 464 524 44 ) ( 464 372 0 ) ( 464 372 44 ) brushes/trigger_t 104 0 0 1 1
 }
 }
-// entity 12
+// entity 10
 {
 "classname" "light_point"
 "origin" "703 4513 3071"
 "radius" "15"
 "intensity" "0.75"
 }
-// entity 13
+// entity 11
 {
 "classname" "cubeMap"
 "origin" "721 4511 3055"
 "radius" "2000"
 }
-// entity 14
+// entity 12
 {
 "classname" "info_player_start"
 "origin" "-112 -208 40"
 "angle" "90"
 }
-// entity 15
+// entity 13
 {
 "classname" "trigger"
 "target" "door2"
@@ -320,85 +306,85 @@
 ( 812 520 44 ) ( 812 656 44 ) ( 812 656 0 ) brushes/trigger_t -188 0 0 1 1
 }
 }
-// entity 16
+// entity 14
 {
 "classname" "movebleBrush"
 "targetname" "door2"
 "targetLocation" "0 4 0"
 // brush 0
 {
-( 724 640 112 ) ( 724 544 112 ) ( 724 544 0 ) brushes/trigger_t 576 0 180 0.15 -0.15
-( 724 544 112 ) ( 732 544 112 ) ( 732 544 0 ) brushes/trigger_t -895.99976 0 0 0.15 0.15
-( 732 544 0 ) ( 732 640 0 ) ( 724 640 0 ) brushes/trigger_t 576 895.99976 270 0.15 0.15
-( 724 640 112 ) ( 732 640 112 ) ( 732 544 112 ) brushes/trigger_t 576 895.99976 270 0.15 0.15
-( 732 640 0 ) ( 732 640 112 ) ( 724 640 112 ) brushes/trigger_t -895.99976 0 0 0.15 0.15
-( 732 544 112 ) ( 732 640 112 ) ( 732 640 0 ) brushes/trigger_t 576 0 180 0.15 -0.15
+( 724 640 112 ) ( 724 544 112 ) ( 724 544 0 ) brushes/hole_t 576 0 180 0.15 -0.15
+( 724 544 112 ) ( 732 544 112 ) ( 732 544 0 ) brushes/hole_t -895.99976 0 0 0.15 0.15
+( 732 544 0 ) ( 732 640 0 ) ( 724 640 0 ) brushes/hole_t 576 895.99976 270 0.15 0.15
+( 724 640 112 ) ( 732 640 112 ) ( 732 544 112 ) brushes/hole_t 576 895.99976 270 0.15 0.15
+( 732 640 0 ) ( 732 640 112 ) ( 724 640 112 ) brushes/hole_t -895.99976 0 0 0.15 0.15
+( 732 544 112 ) ( 732 640 112 ) ( 732 640 0 ) brushes/hole_t 576 0 180 0.15 -0.15
 }
 }
-// entity 17
+// entity 15
 {
 "classname" "spawner"
 "origin" "932 356 16"
 "targetname" "spawner_g1"
 }
-// entity 18
+// entity 16
 {
 "classname" "spawner"
 "origin" "952 388 16"
 "targetname" "spawner_g1"
 }
-// entity 19
+// entity 17
 {
 "classname" "spawner"
 "origin" "988 460 16"
 "targetname" "spawner_g1"
 }
-// entity 20
+// entity 18
 {
 "classname" "spawner"
 "origin" "996 540 32"
 "targetname" "spawner_g1"
 }
-// entity 21
+// entity 19
 {
 "classname" "spawner"
 "origin" "912 640 16"
 "targetname" "spawner_g1"
 }
-// entity 22
+// entity 20
 {
 "classname" "spawner"
 "origin" "912 492 16"
 "targetname" "spawner_g1"
 }
-// entity 23
+// entity 21
 {
 "classname" "spawner"
 "origin" "860 384 16"
 "targetname" "spawner_g1"
 }
-// entity 24
+// entity 22
 {
 "classname" "spawner"
 "origin" "864 536 16"
 "targetname" "spawner_g1"
 }
-// entity 25
+// entity 23
 {
 "classname" "info.navpoint"
 "origin" "1048 580 8"
 }
-// entity 26
+// entity 24
 {
 "classname" "info.navpoint"
 "origin" "692 204 8"
 }
-// entity 27
+// entity 25
 {
 "classname" "info.navpoint"
 "origin" "976 292 8"
 }
-// entity 28
+// entity 26
 {
 "classname" "trigger"
 "target" "spawner_g1"
@@ -414,7 +400,7 @@
 ( 876 516 44 ) ( 876 652 44 ) ( 876 652 0 ) brushes/trigger_t -184 0 0 1 1
 }
 }
-// entity 29
+// entity 27
 {
 "classname" "destructible"
 "paricleSystem" "destructionWood"
@@ -428,7 +414,7 @@
 ( 720 655.8898052433206 71.1629877237512 ) ( 720 528.1101947566794 88.83701227624879 ) ( 720 532.2512994783199 104.29182549687388 ) __TB_empty 8.877441 30.494934 345 1 1
 }
 }
-// entity 30
+// entity 28
 {
 "classname" "destructible"
 "paricleSystem" "destructionWood"
@@ -442,10 +428,26 @@
 ( 720 652 42.87116222687749 ) ( 720 524.2203895133589 60.54518677937507 ) ( 720 528.3614942349993 76 ) __TB_empty 5.312256 2.1603851 345 1 1
 }
 }
-// entity 31
+// entity 29
 {
 "classname" "point_rotation"
 "origin" "448 440 65"
 "angles" "0 -90 0"
 "targetname" "door1_rotation"
+}
+// entity 30
+{
+"classname" "light_point"
+"origin" "-127 -33 169"
+"radius" "25"
+"dynamic" "false"
+"intensity" "0"
+}
+// entity 31
+{
+"classname" "static_mesh"
+"origin" "-27 -71 35"
+"path" "models/sphere.obj"
+"scale" "0.7"
+"texture" "engine/textures/white.png"
 }

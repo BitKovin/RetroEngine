@@ -536,7 +536,7 @@ namespace RetroEngine
         internal virtual void DrawSplashIfNeed()
         {
 #if RELEASE
-            if (GameTotalTime.Elapsed.TotalSeconds < 2)
+            if (GameTotalTime.Elapsed.TotalSeconds < 3)
                 DrawSplash();
 #endif
         }
@@ -558,6 +558,11 @@ namespace RetroEngine
             Rectangle screenRectangle = new Rectangle(offsetX/2, 0, GameMain.Instance.GraphicsDevice.Viewport.Height, GameMain.Instance.GraphicsDevice.Viewport.Height);
 
             Texture2D background = AssetRegistry.LoadTextureFromFile("engine/textures/splash.png", false, false);
+
+            Point SizeSubtract = new Point((int)MathHelper.Lerp(-10,30, (float)GameTotalTime.Elapsed.TotalSeconds));
+
+            screenRectangle.Location += new Point(SizeSubtract.X / 2, SizeSubtract.Y / 2);
+            screenRectangle.Size -= SizeSubtract;
 
             // Draw the render target to the screen
             SpriteBatch.Draw(background, screenRectangle, Color.White);
