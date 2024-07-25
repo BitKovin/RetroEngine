@@ -32,13 +32,10 @@ namespace RetroEngine.Entities
             mesh.Scale = new Vector3(data.GetPropertyFloat("scale", 1)) * new Vector3(1,1,1);
 
 
-            Vector3 importRot = (data.GetPropertyVector("angles", Vector3.Zero) + new Vector3(0, 180, 0)).NormalizeAngles().NonZeroAngles() / 180 * (float)Math.PI;
+            Vector3 importRot = data.GetPropertyVector("angles", Vector3.Zero);
 
-            Matrix rotM = Matrix.CreateRotationX(-importRot.Z) *
-                            Matrix.CreateRotationZ(importRot.X) *
-                            Matrix.CreateRotationY(importRot.Y);
 
-            Vector3 rotation = rotM.DecomposeMatrix().Rotation;
+            Vector3 rotation = EntityData.ConvertRotation(importRot);
 
 
 

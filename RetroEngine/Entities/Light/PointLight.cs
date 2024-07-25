@@ -18,7 +18,7 @@ namespace RetroEngine.Entities.Light
 
         static List<PointLight> lights = new List<PointLight>();
 
-        static List<PointLight> finalLights = new List<PointLight>();
+        //static List<PointLight> finalLights = new List<PointLight>();
 
         internal BoundingSphere lightSphere = new BoundingSphere();
 
@@ -122,7 +122,7 @@ namespace RetroEngine.Entities.Light
             if (Level.ChangingLevel == false) return;
 
             if(Level.ChangingLevel== true)
-                Render();
+                Render(lightData);
 
             TestFaceSide();
 
@@ -242,9 +242,10 @@ namespace RetroEngine.Entities.Light
         {
             base.FinalizeFrame();
 
+
             if (finalizedFrame == true) return;
 
-            finalLights = new List<PointLight>(lights);
+            //finalLights = new List<PointLight>(lights);
 
             finalizedFrame = true;
 
@@ -276,13 +277,6 @@ namespace RetroEngine.Entities.Light
 
         public override void LateUpdate()
         {
-            lightData.Position = Position;
-            lightData.Radius = radius;
-
-            lightData.Color = Color * Intensity;
-
-            lightData.MinDot = MinDot;
-            lightData.Direction = Rotation.GetForwardVector();
 
 
 
@@ -293,8 +287,17 @@ namespace RetroEngine.Entities.Light
 
             if (enabled == false) return;
 
-            float cameraDist = Vector3.Distance(Camera.finalizedPosition, Position);
+            float cameraDist = Vector3.Distance(Camera.finalizedPosition, lightData.Position);
             bool visible = (lightVisibilityCheckMesh.IsVisible() == false && cameraDist > lightData.Radius * 1.2)==false;
+
+
+            lightData.Position = Position;
+            lightData.Radius = radius;
+
+            lightData.Color = Color * Intensity;
+
+            lightData.MinDot = MinDot;
+            lightData.Direction = Rotation.GetForwardVector();
 
             if ((IsBoundingSphereInFrustum(lightSphere) && visible) || Level.ChangingLevel)
             LightManager.AddPointLight(lightData);
@@ -320,7 +323,7 @@ namespace RetroEngine.Entities.Light
                 light.dirty = true;
                 light.LateUpdate();
                 LightManager.ClearPointLights();
-                light.Render();
+                light.Render(light.lightData);
                 light.LateUpdate();
             }
 
@@ -336,9 +339,9 @@ namespace RetroEngine.Entities.Light
 
         internal static void DrawDirtyPointLights()
         {
-            foreach (var light in finalLights)
+            foreach (var light in LightManager.FinalPointLights)
             {
-                light.Render();
+                light.shadowData.Render(light);
             }
         }
 
@@ -371,7 +374,7 @@ namespace RetroEngine.Entities.Light
 
         }
 
-        void Render()
+        void Render(LightManager.PointLightData pointLightData)
         {
 
             if (Destroyed)
@@ -396,21 +399,21 @@ namespace RetroEngine.Entities.Light
                 if (enabled == false)
                     return;
 
-                DynamicUpdateDystance = (lightData.Radius + 10) * 6;
+                DynamicUpdateDystance = (pointLightData.Radius + 10) * 6;
 
-                float cameraDist = Vector3.Distance(Camera.finalizedPosition, Position);
+                float cameraDist = Vector3.Distance(Camera.finalizedPosition, pointLightData.Position);
                 if (cameraDist >= DynamicUpdateDystance)
                     return;
 
 
-                BoundingSphere boundingSphere = new BoundingSphere(lightData.Position, lightData.Radius);
+                BoundingSphere boundingSphere = new BoundingSphere(pointLightData.Position, pointLightData.Radius);
 
                 if (Camera.frustum.Contains(boundingSphere) == ContainmentType.Disjoint)
                     return;
 
 
 
-                if (lightVisibilityCheckMesh.IsVisible() == false && cameraDist > lightData.Radius * 1.5) 
+                if (lightVisibilityCheckMesh.IsVisible() == false && cameraDist > pointLightData.Radius * 1.5) 
                     return;
 
 
@@ -423,14 +426,14 @@ namespace RetroEngine.Entities.Light
             RetroEngine.Render.IgnoreFrustrumCheck = true;
 
 
-            lightData.Radius = radius;
+            //lightData.Radius = radius;
 
-            RenderFace(CubeMapFace.PositiveX);
-            RenderFace(CubeMapFace.NegativeX);
-            RenderFace(CubeMapFace.PositiveY);
-            RenderFace(CubeMapFace.NegativeY);
-            RenderFace(CubeMapFace.PositiveZ);
-            RenderFace(CubeMapFace.NegativeZ);
+            RenderFace(CubeMapFace.PositiveX, pointLightData);
+            RenderFace(CubeMapFace.NegativeX, pointLightData);
+            RenderFace(CubeMapFace.PositiveY, pointLightData);
+            RenderFace(CubeMapFace.NegativeY, pointLightData);
+            RenderFace(CubeMapFace.PositiveZ, pointLightData);
+            RenderFace(CubeMapFace.NegativeZ, pointLightData);
             RetroEngine.Render.IgnoreFrustrumCheck = false;
 
             bool wasDirty = dirty;
@@ -438,7 +441,7 @@ namespace RetroEngine.Entities.Light
             dirty = false;
         }
 
-        void RenderFace(CubeMapFace face)
+        void RenderFace(CubeMapFace face, LightManager.PointLightData lightData)
         {
 
             if (GameMain.SkipFrames < 1 && facesToUpdate.Contains(face) == false)
@@ -446,7 +449,7 @@ namespace RetroEngine.Entities.Light
 
             //DrawDebug.Line(Position, Position + GetCubemapDirection(face));
 
-            var view = GetViewForFace(face);
+            var view = GetViewForFace(face, lightData);
             var projection = Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.ToRadians(90f), 1, 0.005f, lightData.Radius*1.5f);
 
 
@@ -459,11 +462,11 @@ namespace RetroEngine.Entities.Light
             GameMain.Instance.render.BoundingSphere.Center = lightData.Position;
 
             GameMain.Instance.render.OcclusionEffect.Parameters["ViewProjection"].SetValue(view * projection);
-            GameMain.Instance.render.OcclusionEffect.Parameters["CameraPos"].SetValue(Position);
+            GameMain.Instance.render.OcclusionEffect.Parameters["CameraPos"].SetValue(lightData.Position);
             GameMain.Instance.render.OcclusionEffect.Parameters["pointDistance"].SetValue(true);
 
             GameMain.Instance.render.OcclusionStaticEffect.Parameters["ViewProjection"].SetValue(view * projection);
-            GameMain.Instance.render.OcclusionStaticEffect.Parameters["CameraPos"].SetValue(Position);
+            GameMain.Instance.render.OcclusionStaticEffect.Parameters["CameraPos"].SetValue(lightData.Position);
             GameMain.Instance.render.OcclusionStaticEffect.Parameters["pointDistance"].SetValue(true);
 
             GameMain.Instance.render.RenderLevelGeometryDepth(l, OnlyStatic: !isDynamic(), onlyShadowCasters: true, pointLight: true);
@@ -472,22 +475,22 @@ namespace RetroEngine.Entities.Light
             graphicsDevice.SetRenderTarget(null);
         }
 
-        Matrix GetViewForFace(CubeMapFace face)
+        Matrix GetViewForFace(CubeMapFace face, LightManager.PointLightData lightData)
         {
             switch (face)
             {
                 case CubeMapFace.NegativeX:
-                    return Matrix.CreateLookAt(Position + Vector3.Zero, Position + new Vector3(1, 0, 0), Vector3.Up);
+                    return Matrix.CreateLookAt(lightData.Position + Vector3.Zero, lightData.Position + new Vector3(1, 0, 0), Vector3.Up);
                 case CubeMapFace.PositiveX:
-                    return Matrix.CreateLookAt(Position + Vector3.Zero, Position + new Vector3(-1, 0, 0), Vector3.Up);
+                    return Matrix.CreateLookAt(lightData.Position + Vector3.Zero, lightData.Position + new Vector3(-1, 0, 0), Vector3.Up);
                 case CubeMapFace.PositiveY:
-                    return Matrix.CreateLookAt(Position + Vector3.Zero, Position + new Vector3(0, 1, 0), new Vector3(0, 0, -1));
+                    return Matrix.CreateLookAt(lightData.Position + Vector3.Zero, lightData.Position + new Vector3(0, 1, 0), new Vector3(0, 0, -1));
                 case CubeMapFace.NegativeY:
-                    return Matrix.CreateLookAt(Position + Vector3.Zero, Position + new Vector3(0, -1, 0), new Vector3(0, 0, 1));
+                    return Matrix.CreateLookAt(lightData.Position + Vector3.Zero, lightData.Position + new Vector3(0, -1, 0), new Vector3(0, 0, 1));
                 case CubeMapFace.PositiveZ:
-                    return Matrix.CreateLookAt(Position + Vector3.Zero, Position + new Vector3(0, 0, 1), Vector3.Up);
+                    return Matrix.CreateLookAt(lightData.Position + Vector3.Zero, lightData.Position + new Vector3(0, 0, 1), Vector3.Up);
                 case CubeMapFace.NegativeZ:
-                    return Matrix.CreateLookAt(Position + Vector3.Zero, Position + new Vector3(0, 0, -1), Vector3.Up);
+                    return Matrix.CreateLookAt(lightData.Position + Vector3.Zero, lightData.Position + new Vector3(0, 0, -1), Vector3.Up);
             }
 
             return Matrix.Identity;

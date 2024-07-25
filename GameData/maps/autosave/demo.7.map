@@ -223,7 +223,6 @@
 {
 "classname" "movebleBrush"
 "targetname" "door1"
-"rotationPointName" "rotation"
 // brush 0
 {
 ( 384 436 80 ) ( 384 444 0 ) ( 384 444 80 ) foil 0 0 0 0.15 0.15
@@ -265,7 +264,6 @@
 "target" "door1"
 "onEnterAction" "open"
 "onExitAction" "close"
-"targetname" ""
 // brush 0
 {
 ( 368 372 44 ) ( 368 524 0 ) ( 368 524 44 ) brushes/trigger_t 104 0 0 1 1
@@ -432,11 +430,4 @@
 ( 720 652 42.87116222687749 ) ( 716 647.8588952783596 27.41634900625239 ) ( 720 647.8588952783596 27.41634900625239 ) __TB_empty 0 -3.6165047 0 1 0.9659258
 ( 720 652 42.87116222687749 ) ( 720 524.2203895133589 60.54518677937507 ) ( 720 528.3614942349993 76 ) __TB_empty 5.312256 2.1603851 345 1 1
 }
-}
-// entity 31
-{
-"classname" "point_rotation"
-"origin" "448 440 65"
-"angles" "0 -90 0"
-"targetname" "door1_rotation"
 }

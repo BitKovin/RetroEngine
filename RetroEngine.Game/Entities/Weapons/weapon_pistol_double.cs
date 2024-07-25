@@ -360,8 +360,8 @@ namespace RetroEngine.Game.Entities.Weapons
 
             mesh.SetInterpolationEnabled(true);
 
-            mesh.PlayAnimation("draw", false);
-            mesh2.PlayAnimation("draw",false);
+            mesh.PlayAnimation("draw", false,0);
+            mesh2.PlayAnimation("draw",false,0);
 
             mesh.Position = Camera.position;
             

@@ -58,6 +58,7 @@
 @SolidClass base(Entity) = movebleBrush : "Moveable Brush"
 [
 	targetLocation(Vector3) : "Target Location" : "0 3 0"
+	rotationPointName(string) : "rotationPointName" : ""
 	time(float) : "Time" : "2"
 ]
 
@@ -98,10 +99,15 @@
 	fadeTime(float) : "fade time" : "1"
 ]
 
+@PointClass base(Entity) size(-2 -2 -3, 2 2 3) color(20 20 20) = point_rotation : "Point" 
+[
+	angles(Vector3) : "angles" : "0 0 0"
+]
+
 @PointClass base(Entity) size(-10 -10 -10, 10 10 10) color(255 255 0) = event_start : "Event" 
 [
 	target(string) : "Target" : ""
-	actionName(string) : "Action Name" : ""
+
 ]
 
 @PointClass base(Entity) size(-5 -5 -5, 5 5 5) color(255 0 0) model({ "path": path, "scale": scale * 32}) = static_mesh: "Mesh" 

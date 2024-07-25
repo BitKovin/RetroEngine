@@ -13,6 +13,8 @@ using RetroEngine.Entities.Light;
 using MonoGame.Framework.Content.Pipeline.Builder;
 using RetroEngine.PhysicsSystem;
 using System.Globalization;
+using SharpFont;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace RetroEngine.Map
 {
@@ -228,6 +230,8 @@ namespace RetroEngine.Map
 
     }
 
+   
+
     public class EntityData
     {
         public string Classname { get; set; }
@@ -310,6 +314,20 @@ namespace RetroEngine.Map
             if(Properties.ContainsKey(name))
                 return Properties[name];
             return defaultValue;
+        }
+
+        public static Vector3 ConvertRotation(Vector3 importRot)
+        {
+
+            importRot = (importRot + new Vector3(0, 180, 0)).NormalizeAngles().NonZeroAngles() / 180 * (float)Math.PI;
+
+            Matrix rotM = Matrix.CreateRotationX(-importRot.Z) *
+                            Matrix.CreateRotationZ(importRot.X) *
+                            Matrix.CreateRotationY(importRot.Y);
+
+            Vector3 rotation = rotM.DecomposeMatrix().Rotation;
+
+            return rotation;
         }
 
     }

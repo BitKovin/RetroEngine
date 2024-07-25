@@ -24,12 +24,17 @@ namespace RetroEngine.Entities.Brushes
         [JsonInclude]
         public bool open = false;
 
+        Vector3 offsetPosition = Vector3.Zero;
+        Vector3 offsetRotation = Vector3.Zero;
+
         public MovebleBrush() 
         {
             mergeBrushes = true;
 
             SaveGame = true;
         }
+
+        string offsetPointName;
 
         public override void FromData(EntityData data)
         {
@@ -43,6 +48,21 @@ namespace RetroEngine.Entities.Brushes
             {
                 mesh.Static = false;
             }
+
+            offsetPointName = data.GetPropertyString("rotationPointName");
+
+        }
+
+        public override void Start()
+        {
+            base.Start();
+
+            Entity offsetPoint = Level.GetCurrent().FindEntityByName(offsetPointName);
+
+            if (offsetPoint == null) return;
+
+            offsetPosition = offsetPoint.Position;
+            offsetRotation = offsetPoint.Rotation;
 
         }
 
@@ -78,17 +98,33 @@ namespace RetroEngine.Entities.Brushes
 
             progress = Math.Clamp(progress, 0, 1);  
 
+            
+
+
             Position = Vector3.Lerp(Vector3.Zero, targetLocation, progress);
 
-            foreach(var body in bodies)
+            Rotation = Vector3.Lerp(Vector3.Zero, offsetRotation, progress);
+
+
+            Position -= offsetPosition;
+
+            Position = Vector3.Transform(Position, Matrix.CreateRotationX(offsetRotation.X / 180 * (float)Math.PI) *
+                                Matrix.CreateRotationY(offsetRotation.Y / 180 * (float)Math.PI) *
+                                Matrix.CreateRotationZ(offsetRotation.Z / 180 * (float)Math.PI));
+
+            Position += offsetPosition;
+
+            foreach (var body in bodies)
             {
                 body.SetPosition(Position);
+                body.SetRotation(Rotation);
             }
 
 
             foreach(var mesh in meshes)
             {
                 mesh.Position = Position;
+                mesh.Rotation = Rotation;
             }
 
         }

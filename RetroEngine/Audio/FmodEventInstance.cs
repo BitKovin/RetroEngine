@@ -162,7 +162,7 @@ namespace RetroEngine.Audio
                 if (sound == null)
                 {
 
-                    Logger.Log($"FMOD programmer sound '{soundName}' not found");
+                    //Logger.Log($"FMOD programmer sound '{soundName}' not found");
 
                     return FMOD.RESULT.OK;
                 }

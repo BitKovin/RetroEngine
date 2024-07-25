@@ -303,7 +303,7 @@ namespace RetroEngine
             RenderPrepass(renderList);
             
 
-            PointLight.DrawDirtyPointLights();
+            
 
             graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
@@ -324,10 +324,10 @@ namespace RetroEngine
             //EndOcclusionTest(renderList);
             //return DeferredOutput;
 
-            
 
 
 
+            PointLight.DrawDirtyPointLights();
             RenderForwardPath(renderList);
             
 
