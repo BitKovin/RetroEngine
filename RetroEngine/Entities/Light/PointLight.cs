@@ -425,6 +425,7 @@ namespace RetroEngine.Entities.Light
 
             RetroEngine.Render.IgnoreFrustrumCheck = true;
 
+            //DrawDebug.Sphere(lightData.Radius, lightData.Position, Vector3.One, 0.01f);
 
             //lightData.Radius = radius;
 
@@ -457,6 +458,7 @@ namespace RetroEngine.Entities.Light
 
             graphicsDevice.SetRenderTarget(renderTargetCube, face);
             graphicsDevice.Clear(Microsoft.Xna.Framework.Color.Black);
+
 
             GameMain.Instance.render.BoundingSphere.Radius = lightData.Radius;
             GameMain.Instance.render.BoundingSphere.Center = lightData.Position;

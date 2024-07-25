@@ -110,8 +110,8 @@ namespace RetroEngine
 
             float radius = 1;
 
-            const int segments = 8;
-            const int rings = 8;
+            const int segments = 24*2;
+            const int rings = 24;
             var vertices = new List<VertexPositionColor>();
             var indices = new List<int>();
 

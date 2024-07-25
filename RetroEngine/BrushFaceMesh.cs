@@ -388,7 +388,7 @@ namespace RetroEngine
 
                 }
 
-                if(transperent)
+                if(transperent && false)
                 {
 
                     foreach(BrushFaceMesh mesh in keyValuePairs[texture])
@@ -413,10 +413,14 @@ namespace RetroEngine
 
                 BrushFaceMesh brushFaceMesh = new BrushFaceMesh(MergeModels(models), texture);
 
+                brushFaceMesh.textureName = keyValuePairs[texture][0].textureName;
+
                 brushFaceMesh.textureSearchPaths.Add("textures/brushes");
                 brushFaceMesh.textureSearchPaths.Add("textures/");
                 brushFaceMesh.Masked = masked;
                 brushFaceMesh.GenerateBoundingBox();
+
+                brushFaceMesh.Transperent = transperent;
 
                 brushFaceMesh.avgVertexPosition = brushFaceMesh.CalculateAvgVertexLocation();
 
@@ -690,6 +694,7 @@ namespace RetroEngine
 
         public override bool IntersectsBoundingSphere(BoundingSphere sphere)
         {
+
             return BoundingBox.Intersects(sphere);
         }
 
