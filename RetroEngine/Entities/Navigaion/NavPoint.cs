@@ -16,6 +16,8 @@ namespace RetroEngine.Entities.Navigaion
         public List<NavPoint> staticConnected = new List<NavPoint>();
         public List<NavPoint> connected = new List<NavPoint>();
 
+        static bool drawNavigation = false;
+
         int MaxDepth = 30;
 
         int spawnedId = 0;
@@ -29,7 +31,7 @@ namespace RetroEngine.Entities.Navigaion
             Navigation.AddPoint(this);
         }
 
-        public override void AsyncUpdate()
+        public override void Update()
         {
             base.AsyncUpdate();
 
@@ -38,10 +40,14 @@ namespace RetroEngine.Entities.Navigaion
             if ((Time.FrameCount % total) != spawnedId) return;
 
             UpdateInternalConnected();
-            return;
+
+            if(drawNavigation == false) return;
+
+            //DrawDebug.Text(Position, connected.Count.ToString(), 0.1f);
+
             foreach(NavPoint p in connected)
             {
-                DrawDebug.Line(Position, p.Position, Vector3.UnitZ, 0.1f);
+                DrawDebug.Line(Position, p.Position, Vector3.UnitZ, 0.01f);
             }
 
         }
@@ -82,6 +88,11 @@ namespace RetroEngine.Entities.Navigaion
                 if (p == this) continue;
 
                 var hit = Physics.LineTrace(Position.ToPhysics(), p.Position.ToPhysics(), bodyType: PhysicsSystem.BodyType.World);
+
+                if (hit.HasHit)
+                {
+                    //DrawDebug.Line(Position, p.Position);
+                }
 
                 if (hit.HasHit) continue;
                 newConnected.Add(p);
@@ -179,6 +190,12 @@ namespace RetroEngine.Entities.Navigaion
 
             return vectors;
 
+        }
+
+        [ConsoleCommand("nav.draw")]
+        public static void SetDrawNavigation(bool value)
+        {
+            drawNavigation = value;
         }
 
     }

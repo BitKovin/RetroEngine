@@ -53,6 +53,8 @@ namespace RetroEngine.SaveSystem
 
             string save = JsonSerializer.Serialize(data, options);
 
+            Directory.CreateDirectory(GetProfilePath());
+
             var stream = File.CreateText(GetProfilePath() + fileName);
             stream.Write(save);
             stream.Close();

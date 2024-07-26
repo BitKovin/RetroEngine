@@ -220,6 +220,29 @@ namespace RetroEngine.UI
             return screenSpacePosition;
         }
 
+        public static Vector2 WorldToScreenSpace(Vector3 pos, out bool inScreen)
+        {
+            Vector4 position = new Vector4(pos, 1);
+            Matrix ViewProjection = Camera.CalculateView() * Camera.projection;
+            Vector4 projectedPosition = Vector4.Transform(position, ViewProjection);
+
+            // Normalize the projected position
+            Vector2 screenSpacePosition = new Vector2(
+                projectedPosition.X / projectedPosition.W,
+                projectedPosition.Y / projectedPosition.W);
+
+            // Map to the screen coordinates
+            float halfScreenWidth = UiViewport.GetViewportHeight() * Camera.HtW / 2f;
+            float halfScreenHeight = UiViewport.GetViewportHeight() / 2f;
+
+            screenSpacePosition.X = halfScreenWidth + halfScreenWidth * screenSpacePosition.X;
+            screenSpacePosition.Y = halfScreenHeight - halfScreenHeight * screenSpacePosition.Y;
+
+            inScreen = projectedPosition.Z > 0;
+
+            return screenSpacePosition;
+        }
+
 
         public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {

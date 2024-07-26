@@ -1,6 +1,7 @@
 ﻿using BulletSharp;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using RetroEngine.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +33,14 @@ namespace RetroEngine
             lock (commands)
             {
                 commands.Add(new DrawShapeLine(pointA, pointB, col, duration));
+            }
+        }
+
+        public static void Text(Vector3 position, string text, float duration = 1)
+        {
+            lock (commands)
+            {
+                commands.Add(new DrawText(position, text, Vector3.One, duration));
             }
         }
 
@@ -92,7 +101,18 @@ namespace RetroEngine
 
         public override void Draw3DText(ref System.Numerics.Vector3 location, string textString)
         {
+            SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
 
+            spriteBatch.Begin(transformMatrix: Camera.UiMatrix, blendState: BlendState.AlphaBlend);
+
+
+
+            Vector2 pos = UiElement.WorldToScreenSpace(location, out var found);
+
+            if(found)
+            spriteBatch.DrawString(GameMain.Instance.DefaultFont, textString, pos, Color.White,0, new Vector2(0.0f),0.2f,SpriteEffects.None,0);
+
+            spriteBatch.End();
         }
 
         public override void ReportErrorWarning(string warningString)
@@ -225,6 +245,30 @@ namespace RetroEngine
 
             public virtual void Draw(DebugDraw draw)
             {
+
+            }
+
+        }
+
+        class DrawText : DrawShapeCommand
+        {
+
+            System.Numerics.Vector3 position;
+            string text;
+            Vector3 Color;
+
+            public DrawText(Vector3 Position, string text, Vector3 Color, float time) : base(time)
+            {
+                position = Position.ToPhysics();
+                this.text = text;
+                this.Color = Color;
+            }
+
+            public override void Draw(DebugDraw draw)
+            {
+                base.Draw(draw);
+
+                draw.Draw3DText(ref position, text);
 
             }
 
