@@ -643,6 +643,8 @@ namespace RetroEngine
             _graphics.PreferredBackBufferHeight = _height;
             _graphics.ApplyChanges();
 
+
+
             _graphics.IsFullScreen = true;
             _graphics.ApplyChanges();
         }

@@ -45,58 +45,94 @@ namespace RetroEngine.Windows
             base.CheckWindowFullscreenStatus();
 
 
-            try
-            {
-                var form = Form.ActiveForm;
-
-                if (form != null)
+            if (_graphics.HardwareModeSwitch)
+                try
                 {
-                    form1 = form;
-                }
-                else
-                {
-                    form = form1;
-                }
+                    var form = Form.ActiveForm;
 
-                bool focused = IsWindowFocused(Window.Handle);
-
-                if (_isFullscreen && _graphics.IsFullScreen && focused == false)
-                {
-                    _graphics.IsFullScreen = false;
-                    _graphics.ApplyChanges();
-                    Window.
-
-                }
-                else if (_isFullscreen && _graphics.IsFullScreen == false && focused)
-                {
-                    _graphics.IsFullScreen = false;
-                    _graphics.ApplyChanges();
-                    form.Focus();
-                    Thread.Sleep(100);
-                    form.Focus();
-                    Thread.Sleep(100);
-                    form.Focus();
-                    Thread.Sleep(100);
-                    form.Focus();
-                    _graphics.IsFullScreen = true;
-                    _graphics.ApplyChanges();
-                }
-
-                if (form != null) //some times ActiveForm sets to null on alt tab and I have 0 idea why. It continues code(even with this check)
-                {
-
-                    if (form != null && _graphics.IsFullScreen && form.FormBorderStyle != FormBorderStyle.None)
+                    if (form != null)
                     {
+                        form1 = form;
+                    }
+                    else
+                    {
+                        form = form1;
+                    }
+
+                    if (form != null) //some times ActiveForm sets to null on alt tab and I have 0 idea why. It continues code(even with this check)
+                    {
+
+                        if (_isFullscreen)
+                        {
+                            if (Level.ChangingLevel == true)
+                            {
+                                //form.TopMost = true;
+                                form.Focus();
+                                form.WindowState = FormWindowState.Maximized;
+                            }
+                            else
+                            {
+                                //form.TopMost = false;
+                            }
+                        }
+
+                        if (form != null && _graphics.IsFullScreen && form.FormBorderStyle != FormBorderStyle.None)
+                        {
+                            form.FormBorderStyle = FormBorderStyle.None;
+                            Window.Position = new Point(0, 0);
+                        }
+                        else if (form != null && _graphics.IsFullScreen == false && form.FormBorderStyle == FormBorderStyle.None)
+                        {
+                            form.FormBorderStyle = FormBorderStyle.Sizable;
+                        }
+                    }
+
+                    bool focused = IsWindowFocused(Window.Handle);
+
+                    if (_isFullscreen && _graphics.IsFullScreen && focused == false)
+                    {
+                        //form.TopMost = false;
+                        _graphics.IsFullScreen = false;
+                        form.FormBorderStyle = FormBorderStyle.Sizable;
+                        form.WindowState = FormWindowState.Minimized;
+                        _graphics.ApplyChanges();
+
+                    }
+                    else if (_isFullscreen && _graphics.IsFullScreen == false && focused && form.WindowState != FormWindowState.Minimized)
+                    {
+
+                        int _width = Graphics.Resolution.X;
+                        int _height = Graphics.Resolution.Y;
+
                         form.FormBorderStyle = FormBorderStyle.None;
                         Window.Position = new Point(0, 0);
+
+                        _graphics.PreferredBackBufferWidth = _width;
+                        _graphics.PreferredBackBufferHeight = _height;
+                        _graphics.HardwareModeSwitch = true;
+                        _graphics.IsFullScreen = false;
+                        _graphics.ApplyChanges();
+                        form.WindowState = FormWindowState.Maximized;
+                        form.Focus();
+                        Thread.Sleep(100);
+                        form.Focus();
+                        _graphics.PreferredBackBufferWidth = _width;
+                        _graphics.PreferredBackBufferHeight = _height;
+                        _graphics.ApplyChanges();
+                        Thread.Sleep(100);
+                        form.WindowState = FormWindowState.Maximized;
+                        form.Focus();
+                        Thread.Sleep(100);
+                        _graphics.PreferredBackBufferWidth = _width;
+                        _graphics.PreferredBackBufferHeight = _height;
+                        form.Focus();
+                        _graphics.IsFullScreen = true;
+                        _graphics.ApplyChanges();
                     }
-                    else if (form != null && _graphics.IsFullScreen == false && form.FormBorderStyle == FormBorderStyle.None)
-                    {
-                        form.FormBorderStyle = FormBorderStyle.Sizable;
-                    }
+                    return;
+
                 }
-            }
-            catch (Exception ex) { }
+                catch (Exception ex) { }
 
         }
 

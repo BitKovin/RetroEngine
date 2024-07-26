@@ -112,7 +112,7 @@ namespace RetroEngine.Entities.Light
             lightData.Resolution = resolution;
 
             mesh.LoadFromFile("models/cube.obj");
-            //meshes.Add(mesh);
+            meshes.Add(mesh);
             //mesh.Visible = false;
 
             lightData.shadowData = this;
@@ -140,10 +140,22 @@ namespace RetroEngine.Entities.Light
 
             if (Level.ChangingLevel == false) return;
 
-            if(Level.ChangingLevel== true)
+            TestFaceSide();
+
+            if (Level.ChangingLevel== true)
+            {
+
+                LateUpdate();
+
+                dirty = true;
+
                 Render(lightData);
 
-            TestFaceSide();
+                dirty = true;
+            }
+               
+
+
 
             mesh.Visible = true;
             mesh.Position = Position;
@@ -226,6 +238,7 @@ namespace RetroEngine.Entities.Light
         public override void AsyncUpdate()
         {
             base.Update();
+
 
             //Rotation += new Vector3(0, Time.DeltaTime * 300, 0);
 
@@ -341,7 +354,7 @@ namespace RetroEngine.Entities.Light
             {
                 light.dirty = true;
                 light.LateUpdate();
-                LightManager.ClearPointLights();
+                //LightManager.ClearPointLights();
                 light.Render(light.lightData);
                 light.LateUpdate();
             }
@@ -360,7 +373,14 @@ namespace RetroEngine.Entities.Light
         {
             foreach (var light in LightManager.FinalPointLights)
             {
-                light.shadowData.Render(light);
+                if (Level.ChangingLevel)
+                {
+                    light.shadowData.Render(light.shadowData.lightData);
+                }
+                else
+                {
+                    light.shadowData.Render(light);
+                }
             }
         }
 
@@ -385,7 +405,7 @@ namespace RetroEngine.Entities.Light
                 GameMain.pendingDispose.Add(renderTargetCube);
             }
 
-            renderTargetCube = new RenderTargetCube(graphicsDevice, lightData.Resolution, false, SurfaceFormat.Single, DepthFormat.Depth24);
+            renderTargetCube = new RenderTargetCube(graphicsDevice, lightData.Resolution, false, resolution>400 ? SurfaceFormat.Single : SurfaceFormat.HalfSingle, DepthFormat.Depth24);
 
             mesh.texture = renderTargetCube;
 
@@ -441,12 +461,13 @@ namespace RetroEngine.Entities.Light
             if (CastShadows == false) return;
 
 
-
             RetroEngine.Render.IgnoreFrustrumCheck = true;
 
             //DrawDebug.Sphere(lightData.Radius, lightData.Position, Vector3.One, 0.01f);
 
             //lightData.Radius = radius;
+
+
 
             RenderFace(CubeMapFace.PositiveX, pointLightData);
             RenderFace(CubeMapFace.NegativeX, pointLightData);
@@ -464,7 +485,7 @@ namespace RetroEngine.Entities.Light
         void RenderFace(CubeMapFace face, LightManager.PointLightData lightData)
         {
 
-            if (GameMain.SkipFrames < 1 && facesToUpdate.Contains(face) == false)
+            if ((GameMain.SkipFrames < 1 || Level.ChangingLevel == false) && facesToUpdate.Contains(face) == false)
                 return;
 
             //DrawDebug.Line(Position, Position + GetCubemapDirection(face));

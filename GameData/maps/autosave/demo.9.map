@@ -466,6 +466,6 @@
 "light_angle" "45"
 "intensity" "3"
 "light_color" "1 0 0"
-"collisionTestRadius" "0"
-"dynamic" "false"
+"collisionTestRadius" "1"
+"dynamic" "true"
 }

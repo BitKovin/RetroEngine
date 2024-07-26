@@ -172,6 +172,8 @@ namespace RetroEngine
 
             LoadingScreen.Update(0.85f);
 
+            Level.GetCurrent().RenderPreparation();
+
             GameMain.Instance.curentLevel.StartEnities();
 
 
@@ -367,7 +369,7 @@ namespace RetroEngine
             foreach(Entity entity in list)
             { 
                 if (entity != null)
-                    if (renderLayers.Contains(entity.Layer))
+                    if (renderLayers.Contains(entity.Layer) || Level.ChangingLevel || GameMain.SkipFrames>0)
                     {
 
                         entity.FinalizeFrame();
@@ -397,7 +399,7 @@ namespace RetroEngine
 
             foreach (Entity ent in entities)
             {
-                if (renderLayers.Contains(ent.Layer) == false) continue;
+                if (renderLayers.Contains(ent.Layer) == false && Level.ChangingLevel == false && GameMain.SkipFrames == 0) continue;
                 if (ent.loadedAssets == false || ent.Visible == false) continue;
                 if (ent.meshes != null)
                 {
@@ -405,6 +407,8 @@ namespace RetroEngine
                     {
 
                         if (mesh.Visible == false) continue;
+
+                        allMeshes.Add(mesh);
 
                         if (mesh.inFrustrum == false && mesh.CastShadows == false) continue;
 
@@ -417,7 +421,7 @@ namespace RetroEngine
                         else
                             renderList.Add(mesh);
 
-                        allMeshes.Add(mesh);
+                        
 
                     }
                 }
