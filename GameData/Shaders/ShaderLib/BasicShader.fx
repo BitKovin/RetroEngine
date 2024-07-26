@@ -833,13 +833,13 @@ if (lightCoordsVeryClose.x >= 0 && lightCoordsVeryClose.x <= 1 && lightCoordsVer
 
     if(dist>22 && dist<25)
     {
-        float close = GetShadowClose(lightCoordsClose, input, TangentNormal);
+        //float close = GetShadowClose(lightCoordsClose, input, TangentNormal);
 
         float bias = b * (1 - saturate(dot(input.Normal, -LightDirection))) + b / 2.0f;
         bias *= (LightDistanceMultiplier+1)/2;
-        float far = 1 - SampleShadowMap(ShadowMapSampler, lightCoords.xy, currentDepth - bias);
+        //float far = 1 - SampleShadowMap(ShadowMapSampler, lightCoords.xy, currentDepth - bias);
 
-        return lerp(close, far, (dist - 22)/3);
+        //return lerp(close, far, (dist - 22)/3);
         
     }
 }

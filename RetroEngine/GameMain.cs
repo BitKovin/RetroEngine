@@ -313,9 +313,12 @@ namespace RetroEngine
 
         void UpdateTime(GameTime gameTime)
         {
-            float newDeltaTime = (float)Math.Min(gameTime.ElapsedGameTime.TotalSeconds, 0.04d);
+            float newDeltaTime = (float)Math.Min(gameTime.ElapsedGameTime.TotalSeconds, 0.05d);
 
             //Time.DeltaTime = newDeltaTime;
+
+            if (SkipFrames > 0)
+                newDeltaTime = 0.001f;
 
             Time.AddFrameTime(newDeltaTime);
 
