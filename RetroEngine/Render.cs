@@ -286,7 +286,7 @@ namespace RetroEngine
             InitRenderTargetIfNeed(ref FxaaOutput);
 
 
-            InitSizedRenderTargetIfNeed(ref ssaoOutput,512);
+            InitSizedRenderTargetIfNeed(ref ssaoOutput,GetScreenResolution().Y/3);
 
             InitSizedRenderTargetIfNeed(ref bloomSample, 64);
             InitSizedRenderTargetIfNeed(ref bloomSample2, 32);
