@@ -286,7 +286,7 @@ namespace RetroEngine
             InitRenderTargetIfNeed(ref FxaaOutput);
 
 
-            InitSizedRenderTargetIfNeed(ref ssaoOutput,GetScreenResolution().Y/3);
+            InitSizedRenderTargetIfNeed(ref ssaoOutput,(int)GetScreenResolution().Y/3);
 
             InitSizedRenderTargetIfNeed(ref bloomSample, 64);
             InitSizedRenderTargetIfNeed(ref bloomSample2, 32);
@@ -1172,6 +1172,8 @@ namespace RetroEngine
 
             DestroyRenderTarget(shadowMap);
 
+            Console.WriteLine("InitShadowMap");
+
             // Set the depth format based on your requirements
             DepthFormat depthFormat = DepthFormat.Depth16;
 
@@ -1190,6 +1192,8 @@ namespace RetroEngine
             if (target is not null && target.Height == Graphics.closeShadowMapResolution) return;
 
             DestroyRenderTarget(target);
+
+            Console.WriteLine("InitShadowMapClose");
 
             // Set the depth format based on your requirements
             DepthFormat depthFormat = DepthFormat.Depth16;
@@ -1210,6 +1214,8 @@ namespace RetroEngine
 
             DestroyRenderTarget(target);
 
+            Console.WriteLine("InitShadowMapVeryClose");
+
             // Set the depth format based on your requirements
             DepthFormat depthFormat = DepthFormat.Depth24;
 
@@ -1228,6 +1234,8 @@ namespace RetroEngine
             if (target is not null && target.Height == Graphics.ViewmodelShadowMapResolution) return;
 
             DestroyRenderTarget(target);
+
+            Console.WriteLine("InitShadowMapViemodel");
 
             // Set the depth format based on your requirements
             DepthFormat depthFormat = DepthFormat.Depth24;
@@ -1282,6 +1290,8 @@ namespace RetroEngine
             if (target is null || target.Width != (int)GetScreenResolution().X || target.Height != (int)GetScreenResolution().Y)
             {
 
+                    Console.WriteLine("InitRenderTargetIfNeed");
+
                     DestroyRenderTarget(target);
                     // Create the new render target with the specified depth format
                     target = new RenderTarget2D(
@@ -1301,6 +1311,8 @@ namespace RetroEngine
                 if (target is null || target.Width != (int)GetScreenResolution().X || target.Height != (int)GetScreenResolution().Y)
                 {
 
+                    Console.WriteLine("InitRenderTargetDepth");
+
                     DestroyRenderTarget(target);
                     // Create the new render target with the specified depth format
                     target = new RenderTarget2D(
@@ -1313,7 +1325,7 @@ namespace RetroEngine
                 }
         }
 
-        void InitSizedRenderTargetIfNeed(ref RenderTarget2D target, float height, DepthFormat depthFormat = DepthFormat.None, SurfaceFormat surfaceFormat = SurfaceFormat.Rgba64)
+        void InitSizedRenderTargetIfNeed(ref RenderTarget2D target, int height, DepthFormat depthFormat = DepthFormat.None, SurfaceFormat surfaceFormat = SurfaceFormat.Rgba64)
         {
 
             float ratio = ((float)GetScreenResolution().X) / ((float)GetScreenResolution().Y);
@@ -1325,6 +1337,8 @@ namespace RetroEngine
                 if (target is null || target.Width != width || target.Height != height)
                 {
                     DestroyRenderTarget(target);
+
+                    Console.WriteLine("InitSizedRenderTargetIfNeed");
 
                     // Create the new render target with the specified depth format
                     target = new RenderTarget2D(
@@ -1367,6 +1381,8 @@ namespace RetroEngine
 
                     DestroyRenderTarget(target);
 
+                    Console.WriteLine("InitRenderTargetVectorIfNeed");
+
                     // Set the depth format based on your requirements
                     DepthFormat depthFormat = DepthFormat.Depth24;
 
@@ -1395,6 +1411,8 @@ namespace RetroEngine
                 {
 
                     DestroyRenderTarget(target);
+
+                    Console.WriteLine("InitRenderTargetVectorSpaceIfNeed");
 
                     // Set the depth format based on your requirements
                     DepthFormat depthFormat = DepthFormat.Depth24;
