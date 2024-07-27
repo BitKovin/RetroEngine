@@ -18,8 +18,8 @@ namespace RetroEngine.Game.Entities.Player
         public PlayerUI(Entity plr) { player = plr; }
 
         Image crosshair = new Image();
-        Text health = new Text();
-        Text fps = new Text();
+        UiText health = new UiText();
+        UiText fps = new UiText();
 
         bool loaded = false;
 

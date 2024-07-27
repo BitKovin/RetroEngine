@@ -77,13 +77,13 @@ namespace RetroEngine.Game.Entities.MainMenu
             class MenuButton : Button
             {
 
-                public Text uiText;
+                public UiText uiText;
 
-                public string Text { get { return uiText.text; } set { uiText.text = value; } }
+                public string Text { get { return uiText.text.ToString(); } set { uiText.text = value; } }
 
                 public MenuButton() : base()
                 {
-                    uiText = new Text();
+                    uiText = new UiText();
                     uiText.text = "hello world";
 
                     uiText.Origin = new Vector2(0.5f);

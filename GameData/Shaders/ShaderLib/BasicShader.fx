@@ -1090,6 +1090,9 @@ float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal, float ro
 
                 float3 offset = (tangent * x + bitangent * y) * shadowBias * offsetScale;
                 float shadowDepth = GetPointLightDepth(i, lightDir + offset);
+
+                //shadowFactor += 1 - min((distanceToLight * distFactor + bias - shadowDepth)*LightResolutions[i] * distanceToLight,1);
+
                 shadowFactor += distanceToLight * distFactor + bias < shadowDepth ? 1.0 : 0.0;
                 samples++;
             }

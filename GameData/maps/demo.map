@@ -8,7 +8,7 @@
 "_tb_textures" "textures;textures\brushes"
 "globalLightColor" "1 0.95 0.85"
 "geometricalShadowsEnabled" "false"
-"dynamicSunShadowsEnabled" "false"
+"dynamicSunShadowsEnabled" "true"
 "visibleLayers" "Default Layer, "
 // brush 0
 {

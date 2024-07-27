@@ -6,14 +6,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
+using RetroEngine.Localization;
 
 namespace RetroEngine.UI
 {
-    public class Text : UiElement
+    public class UiText : UiElement
     {
         public SpriteFont Font;
-        public string text = "";
+
+        public Text text = new Text();
 
         public float FontSize = 24f;
 
@@ -21,7 +22,7 @@ namespace RetroEngine.UI
 
         public Color baseColor = Color.White;
 
-        public Text() : base()
+        public UiText() : base()
         {
             Font = GameMain.Instance.DefaultFont;
         }
@@ -36,14 +37,16 @@ namespace RetroEngine.UI
 
         public override Vector2 GetSize()
         {
-            return Font.MeasureString(text) / 72 * FontSize;
+            return Font.MeasureString(text.ToString()) / 72 * FontSize;
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             Vector2 pos = new Vector2(position.X + offset.X, position.Y + offset.Y);
 
-            Vector2 textSize = Font.MeasureString(text) * AlignProgress;
+            string text = this.text.ToString();
+
+            //Vector2 textSize = Font.MeasureString(text) * AlignProgress;
 
             spriteBatch.DrawString(Font, text, pos, baseColor, rotation,relativeOrigin,Vector2.One/72*FontSize,SpriteEffects.None,0);
 
