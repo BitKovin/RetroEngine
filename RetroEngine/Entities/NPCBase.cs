@@ -297,7 +297,7 @@ namespace RetroEngine.Entities
                 moveLocation = points[0];
             }else
             {
-                return;
+                moveLocation = targetLocation;
             }
 
             sm.Position = moveLocation;

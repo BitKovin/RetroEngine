@@ -14,15 +14,17 @@ namespace RetroEngine
 
         public static void SetPosition(this RigidBody body, Vector3 newPosition)
         {
-            lock (body) lock(Physics.dynamicsWorld)
-            {
+            lock (body) lock (Physics.dynamicsWorld)
+                {
 
-                // Directly set the position while keeping the existing rotation
-                var worldTransform = body.WorldTransform;
-                worldTransform.Translation = newPosition.ToPhysics();
-                body.WorldTransform = worldTransform;
+                    if (body.WorldTransform.Translation == newPosition) return;
 
-            }
+                    // Directly set the position while keeping the existing rotation
+                    var worldTransform = body.WorldTransform;
+                    worldTransform.Translation = newPosition.ToPhysics();
+                    body.WorldTransform = worldTransform;
+
+                }
         }
 
         public static void SetRotation(this RigidBody body, Quaternion newRotation)

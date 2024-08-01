@@ -21,6 +21,8 @@ sampler2D SSAOTextureSampler = sampler_state
     Texture = <SSAOTexture>;
 };
 
+float2 ssaoResolution;
+
 Texture2D BloomTexture;
 
 sampler2D BloomTextureSampler = sampler_state
@@ -120,6 +122,15 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 	
     float ssao = tex2D(SSAOTextureSampler, input.TextureCoordinates).r;
 	
+    float2 ssaoTexel = 1/ssaoResolution;
+
+    ssao += tex2D(SSAOTextureSampler, input.TextureCoordinates + float2(ssaoTexel.x, 0)).r;
+    ssao += tex2D(SSAOTextureSampler, input.TextureCoordinates - float2(ssaoTexel.x, 0)).r;
+    ssao += tex2D(SSAOTextureSampler, input.TextureCoordinates + float2(0, ssaoTexel.y)).r;
+    ssao += tex2D(SSAOTextureSampler, input.TextureCoordinates - float2(0, ssaoTexel.y)).r;
+
+    ssao/=5;
+
     float3 result = (color + bloomColor)*ssao;
 
     float3 lutResult = result;

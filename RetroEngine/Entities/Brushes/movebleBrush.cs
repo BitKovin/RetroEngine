@@ -1,5 +1,4 @@
-﻿using BulletSharp.SoftBody;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RetroEngine.Map;
 using System;
@@ -85,8 +84,9 @@ namespace RetroEngine.Entities.Brushes
 
         }
 
-        public override void FinalizeFrame()
+        public override void AsyncUpdate()
         {
+            base.AsyncUpdate();
 
             if(open)
             {
@@ -122,14 +122,11 @@ namespace RetroEngine.Entities.Brushes
             Position = Vector3.Transform(Position, Quaternion.CreateFromRotationMatrix(rotationMatrix));
 
             // Move position back to world space
-            Position += offsetPosition; 
-
+            Position += offsetPosition;
 
             foreach (var body in bodies)
             {
-                if(body.WorldTransform.Translation != Position)
-                    body.SetPosition(Position);
-
+                body.SetPosition(Position);
                 body.SetRotation(Rotation);
             }
 

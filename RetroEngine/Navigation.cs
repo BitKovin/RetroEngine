@@ -162,7 +162,7 @@ namespace RetroEngine
             if (startPoint is null)
                 return new List<Vector3>();
 
-            List<Vector3> points = startPoint.GetPathNext(new List<NavPoint>(), target, ref it, query);
+            List<Vector3> points = startPoint.GetPathNext(new List<NavPoint>(), new List<NavPoint>(), target, ref it, query);
             List<Vector3> result = new List<Vector3>(points);
 
             for (int i = points.Count - 1; i >= 0; i--)
@@ -198,7 +198,7 @@ namespace RetroEngine
 
             foreach (var point in navPoints)
             {
-                var hit = Physics.SphereTraceForStatic(start.ToNumerics(), point.Position.ToNumerics(), 0.3f);
+                var hit = Physics.SphereTrace(start.ToNumerics(), point.Position.ToNumerics(), 0.15f, bodyType: BodyType.World);
 
                 if (hit.HasHit == false)
                     return point;
@@ -374,7 +374,7 @@ namespace RetroEngine
             if (startPoint is null)
                 return new List<Vector3>();
 
-            List<Vector3> points = startPoint.GetPathNext(new List<NavPoint>(), target, ref it);
+            List<Vector3> points = startPoint.GetPathNext(new List<NavPoint>(), new List<NavPoint>(), target, ref it);
             List<Vector3> result = new List<Vector3>(points);
 
             for (int i = points.Count - 1; i >= 0; i--)

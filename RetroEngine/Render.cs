@@ -135,7 +135,7 @@ namespace RetroEngine
             //PostProcessingEffect = GameMain.content.Load<Effect>("PostProcessing");
             //ColorEffect = GameMain.content.Load<Effect>("ColorOutput");
             //ParticleColorEffect = GameMain.content.Load<Effect>("ParticleColorOutput");
-            SSAOEffect = AssetRegistry.GetShaderFromName("ssao");
+            SSAOEffect = GameMain.content.Load<Effect>("Shaders/ssao");
             BuffersEffect = GameMain.content.Load<Effect>("Shaders/GPathesOutput");
 
             DeferredEffect = GameMain.content.Load<Effect>("Shaders/DeferredShading");
@@ -286,7 +286,7 @@ namespace RetroEngine
             InitRenderTargetIfNeed(ref FxaaOutput);
 
 
-            InitSizedRenderTargetIfNeed(ref ssaoOutput,(int)GetScreenResolution().Y/3);
+            InitSizedRenderTargetIfNeed(ref ssaoOutput,(int)(GetScreenResolution().Y/2));
 
             InitSizedRenderTargetIfNeed(ref bloomSample, 64);
             InitSizedRenderTargetIfNeed(ref bloomSample2, 32);
@@ -915,7 +915,16 @@ namespace RetroEngine
 
             SSAOEffect.Parameters["Enabled"]?.SetValue(Graphics.EnableSSAO);
 
-            DrawFullScreenQuad(DepthPrepathOutput, SSAOEffect);
+
+            //DrawFullScreenQuad(DepthPrepathOutput, SSAOEffect);
+
+            SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
+
+            spriteBatch.Begin(effect: SSAOEffect, blendState: BlendState.NonPremultiplied);
+
+            DrawFullScreenQuad(spriteBatch, DepthPrepathOutput);
+
+            spriteBatch.End();
 
             graphics.GraphicsDevice.SetRenderTarget(null);
         }
@@ -976,6 +985,8 @@ namespace RetroEngine
                 if(LUT.IsDisposed==false)
                     lutSize = LUT.Height;
 
+
+            ComposeEffect.Parameters["ssaoResolution"].SetValue(new Vector2(ssaoOutput.Width, ssaoOutput.Height));
 
             ComposeEffect.Parameters["ColorTexture"].SetValue(TonemapResult);
             ComposeEffect.Parameters["SSAOTexture"]?.SetValue(ssaoOutput);

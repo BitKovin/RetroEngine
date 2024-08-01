@@ -43,7 +43,7 @@ namespace RetroEngine.Entities.Navigaion
 
             if(drawNavigation == false) return;
 
-            //DrawDebug.Text(Position, connected.Count.ToString(), 0.1f);
+            DrawDebug.Text(Position, ToString());
 
             foreach(NavPoint p in connected)
             {
@@ -103,7 +103,7 @@ namespace RetroEngine.Entities.Navigaion
 
         }
 
-        public List<Vector3> GetPathNext(List<NavPoint> history, Vector3 target, ref int totalItterations, PathfindingQuery query = null)
+        public List<Vector3> GetPathNext(List<NavPoint> history,List<NavPoint> blackList, Vector3 target, ref int totalItterations, PathfindingQuery query = null)
         {
             List<Vector3> output = new List<Vector3>();
 
@@ -135,11 +135,23 @@ namespace RetroEngine.Entities.Navigaion
 
             if (history.Count>MaxDepth)
             {
-                return new List<Vector3>();
+
+                if(history.Count>2)
+                {
+                    blackList.Add(history[history.Count-1]);
+                    return history[0].GetPathNext(new List<NavPoint>(), blackList, target, ref totalItterations, query);
+                }
+                else
+                {
+                    return new List<Vector3>();
+                }
+
+
+                
                 
             }
 
-            connected = connected.OrderByDescending(point => Vector3.Dot((point.Position - Position).Normalized(), (target - point.Position).Normalized())).ToList();
+            connected = connected.Where(p=> blackList.Contains(p) == false).OrderByDescending(point => Vector3.Dot((point.Position - Position).Normalized(), (target - point.Position).Normalized())).ToList();
 
             myHistory.Add(this);
 
@@ -161,7 +173,7 @@ namespace RetroEngine.Entities.Navigaion
                 {
                     if (myHistory.Contains(point)) continue;
 
-                    List<Vector3> result = point.GetPathNext(myHistory, target, ref totalItterations);
+                    List<Vector3> result = point.GetPathNext(myHistory,blackList, target, ref totalItterations);
 
                     if(result.Count>0)
                     {
