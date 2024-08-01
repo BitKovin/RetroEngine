@@ -135,7 +135,7 @@ namespace RetroEngine
             //PostProcessingEffect = GameMain.content.Load<Effect>("PostProcessing");
             //ColorEffect = GameMain.content.Load<Effect>("ColorOutput");
             //ParticleColorEffect = GameMain.content.Load<Effect>("ParticleColorOutput");
-            SSAOEffect = GameMain.content.Load<Effect>("Shaders/ssao");
+            SSAOEffect = AssetRegistry.GetShaderFromName("ssao");
             BuffersEffect = GameMain.content.Load<Effect>("Shaders/GPathesOutput");
 
             DeferredEffect = GameMain.content.Load<Effect>("Shaders/DeferredShading");
@@ -341,7 +341,7 @@ namespace RetroEngine
 
 
             if (Input.GetAction("test").Holding())
-                return DepthPrepathBufferOutput;
+                return ssaoOutput;
 
             return outputPath;
 
@@ -915,13 +915,8 @@ namespace RetroEngine
 
             SSAOEffect.Parameters["Enabled"]?.SetValue(Graphics.EnableSSAO);
 
-            SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
+            DrawFullScreenQuad(DepthPrepathOutput, SSAOEffect);
 
-            spriteBatch.Begin(effect: SSAOEffect);
-
-            DrawFullScreenQuad(spriteBatch, DepthPrepathOutput);
-
-            spriteBatch.End();
             graphics.GraphicsDevice.SetRenderTarget(null);
         }
 

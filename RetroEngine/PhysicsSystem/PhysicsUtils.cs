@@ -14,7 +14,7 @@ namespace RetroEngine
 
         public static void SetPosition(this RigidBody body, Vector3 newPosition)
         {
-            lock (body)
+            lock (body) lock(Physics.dynamicsWorld)
             {
 
                 // Directly set the position while keeping the existing rotation
@@ -27,8 +27,8 @@ namespace RetroEngine
 
         public static void SetRotation(this RigidBody body, Quaternion newRotation)
         {
-            lock (body)
-            {
+            lock (body) lock (Physics.dynamicsWorld)
+                {
 
                 // Create the new rotation matrix from the quaternion
                 var newTransform = System.Numerics.Matrix4x4.CreateFromQuaternion(newRotation.ToPhysics());

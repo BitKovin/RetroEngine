@@ -470,3 +470,13 @@
 "collisionTestRadius" "0"
 "dynamic" "false"
 }
+// entity 33
+{
+"classname" "info.navpoint"
+"origin" "312 248 8"
+}
+// entity 34
+{
+"classname" "info.navpoint"
+"origin" "776 584 8"
+}

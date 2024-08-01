@@ -504,23 +504,24 @@ namespace RetroEngine.PhysicsSystem
                 var preHit = LineTraceForStatic(rayStart, rayEnd);
                 if(preHit.HasHit == false)
                 {
-                    return new MyClosestRayResultCallback(ref rayStart, ref rayEnd);
+                    //return new MyClosestRayResultCallback(ref rayStart, ref rayEnd); // hopefully commenting doesn't fucking crash
                 }
             }
-
-            CollisionWorld world = dynamicsWorld;
-
-            MyClosestRayResultCallback rayCallback = new MyClosestRayResultCallback(ref rayStart, ref rayEnd);
-            rayCallback.BodyTypeMask = bodyType;
-            if (ignoreList is not null)
-                rayCallback.ignoreList = ignoreList;
-
             lock (dynamicsWorld)
             {
+                CollisionWorld world = dynamicsWorld;
+
+                MyClosestRayResultCallback rayCallback = new MyClosestRayResultCallback(ref rayStart, ref rayEnd);
+                rayCallback.BodyTypeMask = bodyType;
+                if (ignoreList is not null)
+                    rayCallback.ignoreList = ignoreList;
+
+
                 // Perform the ray cast
                 world.RayTest(rayStart, rayEnd, rayCallback);
+                return rayCallback;
             }
-            return rayCallback;
+
 
 
         }
@@ -558,32 +559,33 @@ namespace RetroEngine.PhysicsSystem
                 var preHit = SphereTraceForStatic(rayStart, rayEnd, radius);
                 if (preHit.HasHit == false)
                 {
-                    return new MyClosestConvexResultCallback(ref rayStart, ref rayEnd);
+                    //return new MyClosestConvexResultCallback(ref rayStart, ref rayEnd); // hopefully commenting doesn't fucking crash
                 }
             }
-
-            CollisionWorld world = dynamicsWorld;
-
-            // Create a sphere shape with the specified radius
-            SphereShape sphereShape = new SphereShape(radius);
-
-            Matrix4x4 start = Matrix4x4.CreateTranslation(rayStart);
-            Matrix4x4 end = Matrix4x4.CreateTranslation(rayEnd);
-
-
-            MyClosestConvexResultCallback convResultCallback = new MyClosestConvexResultCallback(ref rayStart, ref rayEnd);
-            convResultCallback.BodyTypeMask = bodyType;
-
-            if (ignoreList is not null)
-                convResultCallback.ignoreList = ignoreList;
-
             lock (dynamicsWorld)
             {
+                CollisionWorld world = dynamicsWorld;
+
+                // Create a sphere shape with the specified radius
+                SphereShape sphereShape = new SphereShape(radius);
+
+                Matrix4x4 start = Matrix4x4.CreateTranslation(rayStart);
+                Matrix4x4 end = Matrix4x4.CreateTranslation(rayEnd);
+
+
+                MyClosestConvexResultCallback convResultCallback = new MyClosestConvexResultCallback(ref rayStart, ref rayEnd);
+                convResultCallback.BodyTypeMask = bodyType;
+
+                if (ignoreList is not null)
+                    convResultCallback.ignoreList = ignoreList;
+
+
                 // Perform the sphere sweep
                 world.ConvexSweepTest(sphereShape, start, end, convResultCallback);
+                return convResultCallback;
             }
 
-            return convResultCallback;
+           
         }
 
         public static MyClosestRayResultCallback LineTraceForStatic(Vector3 rayStart, Vector3 rayEnd)
