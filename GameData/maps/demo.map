@@ -442,11 +442,12 @@
 // entity 30
 {
 "classname" "light_point"
-"origin" "-127 -33 169"
+"origin" "-127 -17 169"
 "radius" "25"
-"dynamic" "false"
-"intensity" "5"
+"dynamic" "true"
+"intensity" "-1"
 "shadows" "true"
+"dynamicSkipUp" "true"
 }
 // entity 31
 {

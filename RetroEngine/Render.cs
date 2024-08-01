@@ -1183,7 +1183,7 @@ namespace RetroEngine
                 Graphics.shadowMapResolution,
                 Graphics.shadowMapResolution,
                 false, // No mipmaps
-                SurfaceFormat.Single, // Color format
+                SurfaceFormat.HalfSingle, // Color format
                 depthFormat); // Depth format
         }
 
@@ -1299,7 +1299,7 @@ namespace RetroEngine
                     (int)GetScreenResolution().X,
                     (int)GetScreenResolution().Y,
                     false, // No mipmaps
-                    SurfaceFormat.Rgba64, // Color format
+                    UsesOpenGL ? SurfaceFormat.Color : SurfaceFormat.SRgb8A8Etc2, // Color format
                     depthFormat); // Depth format
             }
         }

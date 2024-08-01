@@ -438,7 +438,7 @@ namespace RetroEngine
                 bias = 0.001f;
 
             bias *= NormalBiasScale;
-
+            bias /= MathHelper.Lerp(Graphics.ShadowResolutionScale,1, 0.5f);
             bias *= Graphics.LightDistanceMultiplier;
 
             effect.Parameters["bias"].SetValue(bias);

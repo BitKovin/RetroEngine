@@ -274,8 +274,8 @@ struct VertexInput
     float3 Tangent : TANGENT0;
     float3 BiTangent : BINORMAL0;
     
-    float4 BlendIndices : BLENDINDICES0;
-    float4 BlendWeights : BLENDWEIGHT0;
+    half4 BlendIndices : BLENDINDICES0;
+    half4 BlendWeights : BLENDWEIGHT0;
 
     float4 Color : COLOR0;
 
@@ -284,16 +284,16 @@ struct VertexInput
 struct PixelInput //only color and texcoords or opengl might freak out
 {
     float4 Position : SV_POSITION;
-    float2 TexCoord : TEXCOORD0;
-    float3 Normal : TEXCOORD8; 
-    float4 lightPos : TEXCOORD1;
-    float4 lightPosClose : TEXCOORD2;
+    half2 TexCoord : TEXCOORD0;
+    half3 Normal : TEXCOORD8; 
+    half4 lightPos : TEXCOORD1;
+    half4 lightPosClose : TEXCOORD2;
     float3 MyPosition : TEXCOORD3;
-    float4 MyPixelPosition : TEXCOORD4;
-    float3 Tangent : TEXCOORD5;
-    float4 lightPosVeryClose : TEXCOORD6;
-    float3 BiTangent : TEXCOORD7;
-    float4 Color : COLOR0;
+    half4 MyPixelPosition : TEXCOORD4;
+    half3 Tangent : TEXCOORD5;
+    half4 lightPosVeryClose : TEXCOORD6;
+    half3 BiTangent : TEXCOORD7;
+    half4 Color : COLOR0;
 };
 
 struct PBRData
@@ -316,30 +316,30 @@ float3 normalize(float3 v)
     return rsqrt(dot(v, v)) * v;
 }
 
-float4x4 GetBoneTransforms(VertexInput input)
+half4x4 GetBoneTransforms(VertexInput input)
 {
     
-    float4x4 identity = float4x4(
+    half4x4 identity = half4x4(
     1.0, 0.0, 0.0, 0.0,
     0.0, 1.0, 0.0, 0.0,
     0.0, 0.0, 1.0, 0.0,
     0.0, 0.0, 0.0, 1.0);
     
-    float sum = input.BlendWeights.x + input.BlendWeights.y + input.BlendWeights.z + input.BlendWeights.w;
+    half sum = input.BlendWeights.x + input.BlendWeights.y + input.BlendWeights.z + input.BlendWeights.w;
     
     if (sum < 0.05f)
         return identity;
     
-    float4x4 mbones =
-    Bones[input.BlendIndices.x] * (float) input.BlendWeights.x / sum +
-    Bones[input.BlendIndices.y] * (float) input.BlendWeights.y / sum +
-    Bones[input.BlendIndices.z] * (float) input.BlendWeights.z / sum +
-    Bones[input.BlendIndices.w] * (float) input.BlendWeights.w / sum;
+    half4x4 mbones =
+    Bones[input.BlendIndices.x] * (half) input.BlendWeights.x / sum +
+    Bones[input.BlendIndices.y] * (half) input.BlendWeights.y / sum +
+    Bones[input.BlendIndices.z] * (half) input.BlendWeights.z / sum +
+    Bones[input.BlendIndices.w] * (half) input.BlendWeights.w / sum;
     
     return mbones;
 }
 
-float3 ApplyNormalTexture(float3 sampledNormalColor, float3 worldNormal, float3 worldTangent, float3 bitangent)
+half3 ApplyNormalTexture(half3 sampledNormalColor, half3 worldNormal, half3 worldTangent, half3 bitangent)
 {
     
     if (length(sampledNormalColor) < 0.1f)
@@ -368,7 +368,7 @@ float3 ApplyNormalTexture(float3 sampledNormalColor, float3 worldNormal, float3 
     return worldNormalFromTexture;
 }
 
-float3 GetTangentNormal(float3 worldNormal, float3 worldTangent, float3 bitangent)
+half3 GetTangentNormal(float3 worldNormal, float3 worldTangent, float3 bitangent)
 {
     return ApplyNormalTexture(float3(0.5,0.5,1),worldNormal, worldTangent, bitangent);
 }
@@ -457,7 +457,7 @@ void MaskedDiscard(float alpha)
 float SampleMaxDepth(float2 screenCoords)
 {
     
-    float2 texelSize = 1.1 / float2(ScreenWidth, ScreenHeight);
+    float2 texelSize = 0.7 / float2(ScreenWidth, ScreenHeight);
     
     float d = SampleDepth(screenCoords);
     float d1 = SampleDepth(screenCoords + texelSize);
@@ -471,7 +471,7 @@ float SampleMaxDepth(float2 screenCoords)
 
 
 
-float4 SampleCubemap(samplerCUBE s, float3 coords)
+half4 SampleCubemap(samplerCUBE s, float3 coords)
 {
     return texCUBE(s, coords * float3(-1,1,1));
 }
@@ -505,7 +505,7 @@ bool Dither(float2 screenCoords, float amount, float2 screenResolution) {
 }
 
 
-float GeometrySchlickGGX(float NdotV, float roughness)
+half GeometrySchlickGGX(float NdotV, float roughness)
 {
     float r = roughness + 1.0f;
     float k = (r * r) / 8.0f;
@@ -516,7 +516,7 @@ float GeometrySchlickGGX(float NdotV, float roughness)
     return num / denom;
 }
 
-float GeometrySmith(float3 N, float3 V, float3 L, float roughness)
+half GeometrySmith(float3 N, float3 V, float3 L, float roughness)
 {
     float NdotV = max(dot(N, V), 0.0f);
     float NdotL = max(dot(N, L), 0.0f);
@@ -526,12 +526,12 @@ float GeometrySmith(float3 N, float3 V, float3 L, float roughness)
     return ggx1 * ggx2;
 }
 
-float3 FresnelSchlick(float cosTheta, float3 F0)
+half3 FresnelSchlick(float cosTheta, float3 F0)
 {
     return F0 + (1.0f - F0) * pow(1.0f - cosTheta, 5.0f);
 }
 
-float DistributionGGX(float3 N, float3 H, float a)
+half DistributionGGX(float3 N, float3 H, float a)
 {
     float a2 = a * a;
     float NdotH = max(dot(N, H), 0.0);
@@ -544,7 +544,7 @@ float DistributionGGX(float3 N, float3 H, float a)
     return nom / denom;
 }
 
-float CalculateSpecular(float3 worldPos, float3 normal, float3 lightDir, float roughness, float metallic, float3 albedo)
+half CalculateSpecular(float3 worldPos, half3 normal, half3 lightDir, half roughness, half metallic, half3 albedo)
 {
 #ifdef NO_SPECULAR
     return 0;
@@ -553,27 +553,27 @@ float CalculateSpecular(float3 worldPos, float3 normal, float3 lightDir, float r
     if(dot(normal, lightDir)<0)
         return 0;
 
-    float3 vDir = normalize(viewPos - worldPos);
+    half3 vDir = normalize(viewPos - worldPos);
     lightDir = normalize(lightDir);
-    float3 halfwayDir = normalize(vDir + lightDir);
+    half3 halfwayDir = normalize(vDir + lightDir);
     
-    float NdotH = saturate(dot(normal, halfwayDir));
-    float NdotV = saturate(dot(normal, vDir));
-    float NdotL = saturate(dot(normal, lightDir));
+    half NdotH = saturate(dot(normal, halfwayDir));
+    half NdotV = saturate(dot(normal, vDir));
+    half NdotL = saturate(dot(normal, lightDir));
 
     // GGX Normal Distribution Function (NDF)
-    float roughnessSq = roughness * roughness;
-    float D = DistributionGGX(normal, halfwayDir, roughnessSq);
+    half roughnessSq = roughness * roughness;
+    half D = DistributionGGX(normal, halfwayDir, roughnessSq);
 
     // Geometry function using Smith's method
-    float G = GeometrySmith(normal, vDir, lightDir, roughnessSq);
+    half G = GeometrySmith(normal, vDir, lightDir, roughnessSq);
 
     // Fresnel term using Schlick's approximation
-    float3 F0 = lerp(float3(0.04f, 0.04f, 0.04f), albedo, metallic);
-    float3 F = FresnelSchlick(NdotH, F0);
+    half3 F0 = lerp(float3(0.04f, 0.04f, 0.04f), albedo, metallic);
+    half3 F = FresnelSchlick(NdotH, F0);
 
     // Specular BRDF
-    float3 specular = (D * G) / (4.0f * NdotV * NdotL + 0.001f);
+    half3 specular = (D * G) / (4.0f * NdotV * NdotL + 0.001f);
 
     return specular * 0.75;
 }
@@ -584,7 +584,7 @@ float3 offset_lookup(sampler2D map, float4 loc, float2 offset, float texelSize)
     return tex2Dproj(map, float4(loc.xy+offset*texelSize * loc.w,loc.z, loc.w));
 }
 
-float SampleShadowMap(sampler2D shadowMap, float2 coords, float compare)
+half SampleShadowMap(sampler2D shadowMap, float2 coords, float compare)
 {
     
     float4 sample = tex2D(shadowMap, coords);
@@ -600,19 +600,19 @@ float SampleShadowDif(sampler2D shadowMap, float2 coords, float compare)
     return sample;
 }
 
-float SampleShadowMapLinear(sampler2D shadowMap, float2 coords, float compare, float2 texelSize)
+half SampleShadowMapLinear(sampler2D shadowMap, float2 coords, float compare, half2 texelSize)
 {
     float2 pixelPos = coords / texelSize + float2(0.5, 0.5);
     float2 fracPart = frac(pixelPos);
     float2 startTexel = (pixelPos - fracPart) * texelSize;
 
-    float blTexel = SampleShadowMap(shadowMap, startTexel, compare);
-    float brTexel = SampleShadowMap(shadowMap, startTexel + float2(texelSize.x, 0.0), compare);
-    float tlTexel = SampleShadowMap(shadowMap, startTexel + float2(0.0, texelSize.y), compare);
-    float trTexel = SampleShadowMap(shadowMap, startTexel + texelSize, compare);
+    half blTexel = SampleShadowMap(shadowMap, startTexel, compare);
+    half brTexel = SampleShadowMap(shadowMap, startTexel + half2(texelSize.x, 0.0), compare);
+    half tlTexel = SampleShadowMap(shadowMap, startTexel + half2(0.0, texelSize.y), compare);
+    half trTexel = SampleShadowMap(shadowMap, startTexel + texelSize, compare);
 
-    float mixA = lerp(blTexel, tlTexel, fracPart.y);
-    float mixB = lerp(brTexel, trTexel, fracPart.y);
+    half mixA = lerp(blTexel, tlTexel, fracPart.y);
+    half mixB = lerp(brTexel, trTexel, fracPart.y);
 
     return lerp(mixA, mixB, fracPart.x);
 }
@@ -641,11 +641,11 @@ float GetShadowClose(float3 lightCoords, PixelInput input, float3 TangentNormal)
 
         bias*= lerp(15,1, f);
 
-        resolution = 2048;
+        resolution = ShadowMapResolutionClose;
         
         bias -= 0.00002;
         
-        float size = 0.7;
+        float size = 0.4;
    
         
 
@@ -873,16 +873,16 @@ if (lightCoordsVeryClose.x >= 0 && lightCoordsVeryClose.x <= 1 && lightCoordsVer
         float resolution = 1;
         
 
-        int numSamples = 2; // Number of samples in each direction (total samples = numSamples^2)
+        int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)
 
 
 
-        float bias = b * (1 - saturate(dot(input.Normal, -LightDirection))) + b / 2.0f;
-        resolution = ShadowMapResolution*2;
+        half bias = b * (1 - saturate(dot(input.Normal, -LightDirection))) + b / 2.0f;
+        resolution = ShadowMapResolution;
         
         bias *= (LightDistanceMultiplier+1)/2;
 
-        float f = abs(dot(input.Normal, LightDirection));
+        half f = abs(dot(input.Normal, LightDirection));
 
         f*=lerp(f,1,0.5); 
 
@@ -890,7 +890,7 @@ if (lightCoordsVeryClose.x >= 0 && lightCoordsVeryClose.x <= 1 && lightCoordsVer
 
         return 1 - SampleShadowMap(ShadowMapSampler, lightCoords.xy, currentDepth - bias);
         
-        float size = 0.7;
+        float size = 0.4;
         
         
         float texelSize = size / resolution; // Assuming ShadowMapSize is the size of your shadow map texture
@@ -920,31 +920,31 @@ if (lightCoordsVeryClose.x >= 0 && lightCoordsVeryClose.x <= 1 && lightCoordsVer
 float GetShadowViewmodel(float3 lightCoords, PixelInput input, float3 TangentNormal)
 {
     float resolution = 1;
-    float shadow = 0;
+    half shadow = 0;
 
     float currentDepth = lightCoords.z * 2 - 1;
 
     int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)
 
-    float b = -0.0003;
+    half b = -0.0003;
         
-    float bias = b * (1 - saturate(dot(input.Normal, -LightDirection))) + b / 2.0f;
+    half bias = b * (1 - saturate(dot(input.Normal, -LightDirection))) + b / 2.0f;
 
     bias*= lerp(3,1, abs(dot(input.Normal, -LightDirection)));
 
     bias += -0.0005;
 
-    float forceShadow = lerp(0, 1, saturate((dot(TangentNormal, LightDirection)+0.3)*(10/3)));
+    half forceShadow = lerp(0, 1, saturate((dot(TangentNormal, LightDirection)+0.3)*(10/3)));
         
     bias *= lerp(1,1,saturate(forceShadow*1.5));
 
     resolution = ShadowMapResolution;
 
-    float texelSize = 1 / resolution; // Assuming ShadowMapSize is the size of your shadow map texture
+    half texelSize = 1 / resolution; // Assuming ShadowMapSize is the size of your shadow map texture
 
     return 1 - SampleShadowMapLinear(ShadowMapSampler, lightCoords.xy, currentDepth + bias, float2(texelSize, texelSize));
         
-    float size = 1;
+    half size = 1;
         
         
     for (int i = -numSamples; i <= numSamples; ++i)
@@ -997,35 +997,35 @@ float GetPointLightDepth(int i, float3 lightDir)
 }
 
 
-float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal, float roughness, float metalic, float3 albedo)
+half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half roughness, half metalic, half3 albedo)
 {
     float3 lightVector = LightPositions[i] - pixelInput.MyPosition;
     float distanceToLight = length(lightVector);
 
     if(distanceToLight> LightRadiuses[i])
-        return float3(0,0,0);
+        return half3(0,0,0);
     
 
     if(isParticle)
         normal = normalize(lightVector);
 
     // Calculate the dot product between the normalized light vector and light direction
-    float lightDot = dot(normalize(-lightVector), normalize(LightDirections[i].xyz));
+    half lightDot = dot(normalize(-lightVector), normalize(LightDirections[i].xyz));
 
     // Define the inner and outer angles of the spotlight in radians
-    float innerConeAngle = LightDirections[i].w;
-    float outerConeAngle = innerConeAngle - 0.1; // Adjust this value to control the smoothness
+    half innerConeAngle = LightDirections[i].w;
+    half outerConeAngle = innerConeAngle - 0.1; // Adjust this value to control the smoothness
 
     // Calculate the smooth transition factor using smoothstep
-    float dirFactor = smoothstep(outerConeAngle, innerConeAngle, lightDot);
+    half dirFactor = smoothstep(outerConeAngle, innerConeAngle, lightDot);
 
 
     if(dirFactor<=0.001)
         return 0;
 
-    float offsetScale = 1 / (LightResolutions[i] / 40);// / lerp(distanceToLight,1, 0.7);
+    half offsetScale = 1 / (LightResolutions[i] / 40);// / lerp(distanceToLight,1, 0.7);
     offsetScale *= lerp(abs(dot(normal, normalize(lightVector))), 0.7, 1);
-    float notShadow = 1;
+    half notShadow = 1;
 
     if(dot(normal, normalize(lightVector))<-0.01)
     {
@@ -1104,20 +1104,20 @@ float3 CalculatePointLight(int i, PixelInput pixelInput, float3 normal, float ro
     }
 
     float dist = (distanceToLight / LightRadiuses[i]);
-    float intense = saturate(1.0 - dist * dist);
-    float distIntence = intense;
-    float3 dirToSurface = normalize(lightVector);
+    half intense = saturate(1.0 - dist * dist);
+    half distIntence = intense;
+    half3 dirToSurface = normalize(lightVector);
 
     intense *= saturate(dot(normal, dirToSurface));
-    float3 specular = CalculateSpecular(pixelInput.MyPosition, normal, dirToSurface, roughness, metalic, albedo);
+    half3 specular = CalculateSpecular(pixelInput.MyPosition, normal, dirToSurface, roughness, metalic, albedo);
 
 
-    float colorInstens = abs( max(LightColors[i].x,(max(LightColors[i].y,LightColors[i].z))));
+    half colorInstens = abs( max(LightColors[i].x,(max(LightColors[i].y,LightColors[i].z))));
 
     intense = max(intense, 0) * colorInstens;
-    float3 l = LightColors[i] * intense;
+    half3 l = LightColors[i] * intense;
 
-    if(dot(l, float3(1,1,1))<0)
+    if(dot(l, half3(1,1,1))<0)
         specular = 0;
 
     return (l + intense * specular) * notShadow * dirFactor;
@@ -1148,7 +1148,7 @@ float3 CalculateSsrSpecular(PixelInput input, float3 normal, float roughness, fl
     return saturate(color * intens * dot(lightDir, -normal));
 }
 
-float3 CalculateLight(PixelInput input, float3 normal, float roughness, float metallic, float ao, float3 albedo, float3 TangentNormal)
+half3 CalculateLight(PixelInput input, float3 normal, float roughness, float metallic, float ao, float3 albedo, float3 TangentNormal)
 {
     float3 lightCoords = input.lightPos.xyz / input.lightPos.w;
     lightCoords = (lightCoords + 1.0f) / 2.0f;

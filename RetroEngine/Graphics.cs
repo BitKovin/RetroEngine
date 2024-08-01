@@ -18,16 +18,18 @@ namespace RetroEngine
         public static Point Resolution = new Point(1280, 720);
 
         public static float ShadowBias = -0.000f;//0025f
-        public static int shadowMapResolution = 2048*2;
-        public static int closeShadowMapResolution = 2048;
-        public static int veryCloseShadowMapResolution = 2048;
-        public static int ViewmodelShadowMapResolution = 2048;
+        public static int shadowMapResolution { get { return (int)(2048 * 2 * ShadowResolutionScale); } }
+        public static int closeShadowMapResolution { get { return (int)(1024 * ShadowResolutionScale); } }
+        public static int veryCloseShadowMapResolution { get { return (int)(2048 * ShadowResolutionScale); } }
+        public static int ViewmodelShadowMapResolution { get { return (int)(2048 * ShadowResolutionScale); } }
+
+        public static float ShadowResolutionScale = 1f;
 
         public static bool GeometricalShadowsEnabled = true;
 
         public static bool DynamicSunShadowsEnabled = true;
 
-        public static bool ViewmodelShadows = false;
+        public static bool ViewmodelShadows = true;
 
         public static float SSRResolutionScale = 0.8f;
         public static bool EnableSSR = true;

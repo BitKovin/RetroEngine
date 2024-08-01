@@ -45,7 +45,7 @@ PixelInput VertexShaderFunction(VertexInput input)
 PixelOutput PixelShaderFunction(PixelInput input)
 {
     
-    float2 screenCoords = (input.MyPixelPosition.xyz / input.MyPixelPosition.w).xy;
+    half2 screenCoords = (input.MyPixelPosition.xyz / input.MyPixelPosition.w).xy;
     
     screenCoords = (screenCoords + 1.0f) / 2.0f;
 
@@ -62,9 +62,7 @@ PixelOutput PixelShaderFunction(PixelInput input)
     PixelOutput output = (PixelOutput)0;
     
     
-    float Depth = input.MyPixelPosition.z;
-    
-    float4 ColorRGBTA = tex2D(TextureSampler, input.TexCoord) * input.Color;
+    half4 ColorRGBTA = tex2D(TextureSampler, input.TexCoord) * input.Color;
     
     if(Masked && DitherDisolve>0)
         ColorRGBTA.a *= Dither(screenCoords, 1.0 - DitherDisolve, float2(ScreenWidth, ScreenHeight));
@@ -74,27 +72,27 @@ PixelOutput PixelShaderFunction(PixelInput input)
     if (ColorRGBTA.a < 0.001)
         discard;
 
-    float3 textureNormal = tex2D(NormalTextureSampler, input.TexCoord).rgb;
+    half3 textureNormal = tex2D(NormalTextureSampler, input.TexCoord).rgb;
     
-    float3 orm = tex2D(ORMTextureSampler, input.TexCoord).rgb;
+    half3 orm = tex2D(ORMTextureSampler, input.TexCoord).rgb;
     
-    float roughness = orm.g;
-    float metalic = orm.b;
-    float ao = orm.r;
+    half roughness = orm.g;
+    half metalic = orm.b;
+    half ao = orm.r;
     
     
-    float3 textureColor = ColorRGBTA.xyz;
-	float textureAlpha = ColorRGBTA.a;
+    half3 textureColor = ColorRGBTA.xyz;
+	half textureAlpha = ColorRGBTA.a;
 
-    float3 pixelNormal = ApplyNormalTexture(textureNormal, input.Normal, input.Tangent, input.BiTangent);
+    half3 pixelNormal = ApplyNormalTexture(textureNormal, input.Normal, input.Tangent, input.BiTangent);
     
     
-    float3 albedo = textureColor;
+    half3 albedo = textureColor;
     
     
-    float3 TangentNormal = GetTangentNormal(input.Normal, input.Tangent, input.Tangent);
+    half3 TangentNormal = GetTangentNormal(input.Normal, input.Tangent, input.Tangent);
 
-    float3 light = CalculateLight(input, pixelNormal, roughness, metalic, ao, albedo, TangentNormal);
+    half3 light = CalculateLight(input, pixelNormal, roughness, metalic, ao, albedo, TangentNormal);
     
     
 	textureColor *= light;

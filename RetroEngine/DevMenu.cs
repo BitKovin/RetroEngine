@@ -103,7 +103,7 @@ namespace RetroEngine
 
             ImGui.Checkbox("merge meshes", ref MapData.MergeBrushes);
 
-            ImGui.InputInt("shadowmap size", ref Graphics.shadowMapResolution);
+            ImGui.DragFloat("shadowmap size", ref Graphics.ShadowResolutionScale, 0.01f, 0.01f, 2);
 
             ImGui.Begin("Tonemapping");
 

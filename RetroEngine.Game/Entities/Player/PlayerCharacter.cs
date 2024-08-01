@@ -97,6 +97,8 @@ namespace RetroEngine.Game.Entities.Player
 
             PlayerUI = new PlayerUI(this);
 
+            
+
             SaveGame = true;
 
         }

@@ -577,12 +577,14 @@ namespace RetroEngine
             float bias = 0.06f;
 
             if (closeShadow)
-                bias = 0.027f;
+                bias = 0.035f;
 
             if (veryClose)
                 bias = 0.015f;
 
             bias *= NormalBiasScale;
+
+            bias /= Graphics.ShadowResolutionScale;
 
             bias *= Graphics.LightDistanceMultiplier;
 

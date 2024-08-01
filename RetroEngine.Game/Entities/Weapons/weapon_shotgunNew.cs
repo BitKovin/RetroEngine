@@ -205,8 +205,8 @@ namespace RetroEngine.Game.Entities.Weapons
             arms.LoadFromFile("models/weapons/arms_n.FBX");
             arms.textureSearchPaths.Add("textures/weapons/arms/");
 
-            mesh.DepthTestEqual = false;
-            mesh.Transparency = 0.5f;
+            //mesh.DepthTestEqual = false;
+            //mesh.Transparency = 0.5f;
             mesh.Transperent = true;
 
             mesh.textureSearchPaths.Add("textures/weapons/arms/");

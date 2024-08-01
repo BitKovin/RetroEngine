@@ -15,7 +15,7 @@
     <StartupObject>Program</StartupObject>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
-    <PublishAot>True</PublishAot>
+    <PublishAot>False</PublishAot>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Icon.ico" />

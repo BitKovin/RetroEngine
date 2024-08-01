@@ -8,6 +8,8 @@
 "_tb_textures" "textures;textures\brushes"
 "globalLightColor" "1 0.95 0.85"
 "geometricalShadowsEnabled" "false"
+"dynamicSunShadowsEnabled" "true"
+"visibleLayers" "Default Layer, "
 // brush 0
 {
 ( 32 432 240 ) ( 32 -272 240 ) ( 32 -272 0 ) brushes/brickPBR 0 0 0 0.15 0.15
@@ -440,10 +442,12 @@
 // entity 30
 {
 "classname" "light_point"
-"origin" "-127 -33 169"
+"origin" "-127 -17 169"
 "radius" "25"
-"dynamic" "false"
+"dynamic" "true"
 "intensity" "-1"
+"shadows" "true"
+"dynamicSkipUp" "true"
 }
 // entity 31
 {
@@ -456,13 +460,13 @@
 // entity 32
 {
 "classname" "light_point"
-"origin" "745 595 131"
-"radius" "5"
+"origin" "761 595 131"
+"radius" "10"
 "dynamicSkipUp" "true"
 "angles" "0 90 -90"
 "light_angle" "45"
 "intensity" "3"
 "light_color" "1 0 0"
-"collisionTestRadius" "1"
-"dynamic" "true"
+"collisionTestRadius" "0"
+"dynamic" "false"
 }
