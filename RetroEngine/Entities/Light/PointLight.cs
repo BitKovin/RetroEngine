@@ -493,6 +493,8 @@ namespace RetroEngine.Entities.Light
             var view = GetViewForFace(face, lightData);
             var projection = Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.ToRadians(90f), 1, 0.005f, lightData.Radius*1.5f);
 
+            if(customfrustrum)
+            RetroEngine.Render.CustomFrustrum = new BoundingFrustum(view * projection);
 
             var l = Level.GetCurrent().GetAllOpaqueMeshes();
 
@@ -512,6 +514,8 @@ namespace RetroEngine.Entities.Light
             GameMain.Instance.render.OcclusionStaticEffect.Parameters["pointDistance"].SetValue(true);
 
             GameMain.Instance.render.RenderLevelGeometryDepth(l, OnlyStatic: !isDynamic(), onlyShadowCasters: true, pointLight: true);
+
+            RetroEngine.Render.CustomFrustrum = null;
 
             GameMain.Instance.render.BoundingSphere.Radius = 0;
             graphicsDevice.SetRenderTarget(null);
@@ -546,6 +550,14 @@ namespace RetroEngine.Entities.Light
             lightVisibilityCheckMesh.texture = GameMain.Instance.render.black;
             meshes.Add(lightVisibilityCheckMesh);
 
+        }
+
+        static bool customfrustrum = true;
+
+        [ConsoleCommand("r.pointLightFrustrumCheck")]
+        public static void SetCustomFrustrumEnabled(bool value)
+        {
+            customfrustrum = value;
         }
 
 

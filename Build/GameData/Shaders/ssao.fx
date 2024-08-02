@@ -214,7 +214,7 @@ float CalculateSSAONew(float3 position, float currentDepth, float3 normal)
     float bias = -0.06;
 
     const float minRadius = 0.04; 
-    const float maxRadius = 0.5; 
+    const float maxRadius = 1; 
 
     const int samples = 100;
 
@@ -223,7 +223,7 @@ float CalculateSSAONew(float3 position, float currentDepth, float3 normal)
 
         float radius = lerp(minRadius, maxRadius, frac(Random(i)));
 
-        radius*= lerp(0.1 * distance(position, viewPos), 1, 0.1);
+        radius*= lerp(0.1 * distance(position, viewPos), 1, 0.5);
 
         //bias *= lerp(0.1 * distance(position, viewPos),1, 0.95);
 

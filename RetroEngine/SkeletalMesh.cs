@@ -13,6 +13,7 @@ using System.Text.Json;
 using System.Linq;
 using RetroEngine.PhysicsSystem;
 using System.Threading.Tasks;
+using Assimp;
 
 
 namespace RetroEngine
@@ -464,6 +465,8 @@ namespace RetroEngine
                 //graphicsDevice.RasterizerState = isNegativeScale() ? RasterizerState.CullCounterClockwise : RasterizerState.CullClockwise;
             }
 
+
+
             effect.Parameters["Bones"].SetValue(finalizedBones);
 
             if (closeShadow)
@@ -564,6 +567,13 @@ namespace RetroEngine
             if (RiggedModel != null)
             {
 
+                if (Render.CustomFrustrum != null)
+                {
+                    if (Render.CustomFrustrum.Contains(boundingSphere.Transform(frameStaticMeshData.World)) == ContainmentType.Disjoint)
+                    {
+                        return;
+                    }
+                }
 
                 graphicsDevice.RasterizerState = Graphics.DisableBackFaceCulling || TwoSided ? RasterizerState.CullNone : (isNegativeScale() ? RasterizerState.CullCounterClockwise : RasterizerState.CullClockwise);
 

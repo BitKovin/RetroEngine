@@ -112,6 +112,8 @@ namespace RetroEngine
 
         static internal bool IgnoreFrustrumCheck = false;
 
+        static internal BoundingFrustum CustomFrustrum = null;
+
         public static Texture2D LUT;
 
         public static bool StableDirectShadows = false;

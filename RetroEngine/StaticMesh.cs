@@ -694,6 +694,11 @@ namespace RetroEngine
             }
         }
 
+        protected virtual bool isObjectInsideFrustrum(BoundingFrustum frustum)
+        {
+            return true;
+        }
+
         public virtual void DrawDepth(bool pointLightDraw = false, bool renderTransperent = false)
         {
 
@@ -705,6 +710,8 @@ namespace RetroEngine
 
             if (Render.IgnoreFrustrumCheck == false)
             if (frameStaticMeshData.InFrustrum == false) return;
+
+            
 
             GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
             // Load the custom effect
@@ -737,9 +744,17 @@ namespace RetroEngine
                     if (frameStaticMeshData.model.Meshes is not null)
                         foreach (ModelMesh mesh in frameStaticMeshData.model.Meshes)
                         {
-
+                            if (Render.CustomFrustrum != null)
+                            {
+                                if (Render.CustomFrustrum.Contains(mesh.BoundingSphere.Transform(frameStaticMeshData.World))  == ContainmentType.Disjoint)
+                                {
+                                    continue;
+                                }
+                            }
                             foreach (ModelMeshPart meshPart in mesh.MeshParts)
                             {
+
+                                
 
                                 // Set the vertex buffer and index buffer for this mesh part
                                 graphicsDevice.SetVertexBuffer(meshPart.VertexBuffer);
