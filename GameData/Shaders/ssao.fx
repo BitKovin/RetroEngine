@@ -216,7 +216,7 @@ float CalculateSSAONew(float3 position, float currentDepth, float3 normal)
     const float minRadius = 0.04; 
     const float maxRadius = 1; 
 
-    const int samples = 100;
+    const int samples = 64;
 
     for (int i = 0; i < samples; i++)
     {

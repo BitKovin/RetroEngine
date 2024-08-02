@@ -13,7 +13,6 @@ using System.Text.Json;
 using System.Linq;
 using RetroEngine.PhysicsSystem;
 using System.Threading.Tasks;
-using Assimp;
 
 
 namespace RetroEngine
