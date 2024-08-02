@@ -202,7 +202,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR
     float2 texel = float2(1.5/SSRWidth, 1.5/SSRHeight);
     float3 factor = tex2D(FactorTextureSampler, input.TextureCoordinates).rgb;
 
-    float roughness = saturate(factor.g/1.25 - 0.1);
+    float roughness = saturate((factor.g*lerp(factor.g,1,0.7)) - 0.2);
 
     // Add noise to the reflection vector based on surface roughness
     float3 noise = RandomVector(input.TextureCoordinates, 1);

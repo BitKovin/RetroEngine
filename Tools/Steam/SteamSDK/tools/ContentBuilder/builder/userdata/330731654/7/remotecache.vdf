@@ -1,6 +1,6 @@
 "7"
 {
-	"ChangeNumber"		"58"
+	"ChangeNumber"		"60"
 	"ostype"		"0"
 	"serverbrowser_hist.vdf"
 	{
@@ -18,10 +18,10 @@
 	{
 		"root"		"0"
 		"size"		"952"
-		"localtime"		"1721216151"
-		"time"		"1721216151"
-		"remotetime"		"1721216151"
-		"sha"		"965667ab73e7565cbf986eb64e1603e1ee978ae5"
+		"localtime"		"1722512359"
+		"time"		"1722512359"
+		"remotetime"		"1722512359"
+		"sha"		"0d13c47b4330acfa538c0b5f00e131bf12eb430c"
 		"syncstate"		"1"
 		"persiststate"		"0"
 		"platformstosync2"		"-1"

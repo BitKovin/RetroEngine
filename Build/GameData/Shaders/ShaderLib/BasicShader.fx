@@ -1183,7 +1183,13 @@ half3 CalculateLight(PixelInput input, float3 normal, float roughness, float met
 
         if(Viewmodel && ViewmodelShadowsEnabled)
         {
-            shadow += GetShadowVeryClose(lightCoordsVeryClose, input, TangentNormal);
+            if(lightCoordsVeryClose.x>0 && lightCoordsVeryClose.x<1 &&lightCoordsVeryClose.y>0 && lightCoordsVeryClose.y<1)
+            {
+                shadow += GetShadowVeryClose(lightCoordsVeryClose, input, TangentNormal);
+            }else
+            {
+                shadow += GetShadowClose(lightCoordsClose, input, TangentNormal);
+            }
             shadow += GetShadowViewmodel(lightCoords, input, TangentNormal);
         }else
         {
@@ -1288,18 +1294,20 @@ float3 SampleColorWorldCoords(float3 pos)
     return tex2D(FrameTextureSampler, screenCoords).rgb;
 }
 
-float3 GetPosition(float2 UV, float depth)
+float3 GetPosition(float2 uv, float depth)
 {
     float4 position = 1.0f;
  
-    position.x = UV.x * 2.0f - 1.0f;
-    position.y = -(UV.y * 2.0f - 1.0f);
-
-    position.z = depth;
- 
-    position = mul(position, InverseViewProjection);
- 
-    position /= position.w;
+    // Convert screen space UV to normalized device coordinates (NDC)
+    float4 ndc = float4(uv * 2.0 - 1.0, depth, 1.0);
+    
+    // Transform NDC to world space using the inverse view projection matrix
+    float4 worldPos = mul(ndc, InverseViewProjection);
+    
+    // Perform perspective divide
+    worldPos /= worldPos.w;
+    
+    return worldPos.xyz;
 
     return position.xyz;
 }
