@@ -434,7 +434,7 @@ PixelInput DefaultVertexShaderFunction(VertexInput input)
 void DepthDiscard(float depth, PixelInput input)
 {
 
-    float b = 0.01;
+    float b = 0.005;
     if(Viewmodel)
     b = 0.000005f;
 
@@ -457,7 +457,7 @@ void MaskedDiscard(float alpha)
 float SampleMaxDepth(float2 screenCoords)
 {
     
-    float2 texelSize = 0.7 / float2(ScreenWidth, ScreenHeight);
+    float2 texelSize = 0.5 / float2(ScreenWidth, ScreenHeight);
     
     float d = SampleDepth(screenCoords);
     float d1 = SampleDepth(screenCoords + texelSize);

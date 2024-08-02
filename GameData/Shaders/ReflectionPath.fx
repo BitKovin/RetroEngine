@@ -202,7 +202,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR
     float2 texel = float2(1.5/SSRWidth, 1.5/SSRHeight);
     float3 factor = tex2D(FactorTextureSampler, input.TextureCoordinates).rgb;
 
-    float roughness = saturate((factor.g*lerp(factor.g,1,0.7)) - 0.2);
+    float roughness = saturate((factor.g*lerp(factor.g,1,0.9))*1.3 - 0.2);
 
     // Add noise to the reflection vector based on surface roughness
     float3 noise = RandomVector(input.TextureCoordinates, 1);
@@ -212,14 +212,14 @@ float4 MainPS(VertexShaderOutput input) : COLOR
     
     float3 cube = SampleCubemap(ReflectionCubemapSampler, reflection);
 
-    const int numSamples = 4;
+    const int numSamples = 8;
 
 
     float n = 1;
 
     for(int i = 0; i < numSamples; i++)
     {
-        cube += SampleCubemap(ReflectionCubemapSampler, normalize(reflectionBase + RandomVector(input.TextureCoordinates, (i*3)%3.12352 + 0.1) * roughness));
+        cube += SampleCubemap(ReflectionCubemapSampler, normalize(reflectionBase + RandomVector(input.TextureCoordinates + float2((i*3)%3.12352 + 0.1, i), (i*3)%3.12352 + 0.1) * roughness));
 
         n++;
     }

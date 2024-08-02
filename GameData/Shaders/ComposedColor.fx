@@ -11,6 +11,11 @@ Texture2D ColorTexture;
 
 sampler2D ColorTextureSampler = sampler_state
 {
+    MinFilter = Linear;
+    MagFilter = Linear;
+    AddressU = Clamp;
+    AddressV = Clamp;
+
 	Texture = <ColorTexture>;
 };
 
@@ -19,6 +24,11 @@ Texture2D SSAOTexture;
 sampler2D SSAOTextureSampler = sampler_state
 {
     Texture = <SSAOTexture>;
+
+    MinFilter = Linear;
+    MagFilter = Linear;
+    AddressU = Clamp;
+    AddressV = Clamp;
 };
 
 float2 ssaoResolution;
@@ -124,12 +134,27 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 	
     float2 ssaoTexel = 1/ssaoResolution;
 
-    ssao += tex2D(SSAOTextureSampler, input.TextureCoordinates + float2(ssaoTexel.x, 0)).r;
-    ssao += tex2D(SSAOTextureSampler, input.TextureCoordinates - float2(ssaoTexel.x, 0)).r;
-    ssao += tex2D(SSAOTextureSampler, input.TextureCoordinates + float2(0, ssaoTexel.y)).r;
-    ssao += tex2D(SSAOTextureSampler, input.TextureCoordinates - float2(0, ssaoTexel.y)).r;
+    int numSamples = 1;
 
-    ssao/=5;
+    int n = 1;
+
+    for (int i = -numSamples; i <= numSamples; ++i)
+    {
+        for (int j = -numSamples; j <= numSamples; ++j)
+        {
+
+            float2 offset = float2(i,j) * ssaoTexel;
+
+            ssao += tex2D(SSAOTextureSampler, input.TextureCoordinates + offset).r;
+            n++;
+        }
+    }
+
+    ssao/=n;
+
+    ssao = 1 - ssao;
+    ssao*= 1.4;
+    ssao = 1 - ssao;
 
     float3 result = (color + bloomColor)*ssao;
 

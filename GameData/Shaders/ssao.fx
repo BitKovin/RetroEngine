@@ -45,6 +45,8 @@ float ssaoRadius = 0.1;
 float ssaoBias = 0.01;
 float ssaoIntensity = 1.0;
 
+float3 cameraForward;
+
 float3 viewPos;
 
 bool Enabled;
@@ -207,16 +209,37 @@ float2 WorldToScreen(float3 pos)
     return screenCoords;
 }
 
+float map(float value, float inputMin, float inputMax, float outputMin, float outputMax)
+{
+    // Ensure input range is not zero to avoid division by zero
+    if (inputMin == inputMax)
+    {
+        return outputMin;
+    }
+
+    // Map value from input range to output range
+    float normalizedValue = (value - inputMin) / (inputMax - inputMin);
+    return outputMin + normalizedValue * (outputMax - outputMin);
+}
+
 float CalculateSSAONew(float3 position, float currentDepth, float3 normal)
 {
     float occlusion = 0;
 
-    float bias = -0.06;
+    float bias = 0.000;
 
     const float minRadius = 0.04; 
-    const float maxRadius = 1; 
+    float maxRadius = 0.6; 
 
-    const int samples = 64;
+    float distanceMultiplier = map(clamp(distance(viewPos, position),1,30), 1, 20, 1, 2);
+
+    maxRadius *= distanceMultiplier;
+
+    const int samples = 48;
+
+    float biasScale = 1 + 2 * (0.5 - distance(abs((normal, cameraForward)),0.5));
+
+    //bias *= biasScale;
 
     for (int i = 0; i < samples; i++)
     {
@@ -224,6 +247,8 @@ float CalculateSSAONew(float3 position, float currentDepth, float3 normal)
         float radius = lerp(minRadius, maxRadius, frac(Random(i)));
 
         radius*= lerp(0.1 * distance(position, viewPos), 1, 0.5);
+
+        
 
         //bias *= lerp(0.1 * distance(position, viewPos),1, 0.95);
 
@@ -236,16 +261,20 @@ float CalculateSSAONew(float3 position, float currentDepth, float3 normal)
 
         if(samplePos.x>1 || samplePos.x<0 ||samplePos.y>1 || samplePos.y<0)
         {
-            continue;
+            //continue;
         }
         
 
         
         float sampleDepth = tex2D(DepthTextureSampler, samplePos);
 
-        float rangeCheck = smoothstep(1, 0, (currentDepth - sampleDepth) / 2);
+        float3 sampleNormal = DecodeNormal(tex2D(NormalTextureSampler, samplePos).xyz);
 
-        occlusion += (sampleDepth >= currentDepth + bias ? 0.0 : 1.0) * rangeCheck;  
+        float normalDif = 1 - abs(dot(sampleNormal, normal));
+
+        float rangeCheck = smoothstep(1, 0, (currentDepth - sampleDepth) / (5 * distanceMultiplier));
+
+        occlusion += (sampleDepth >= currentDepth - bias ? 0 : 1.0) * rangeCheck * normalDif;  
         
     }
 
