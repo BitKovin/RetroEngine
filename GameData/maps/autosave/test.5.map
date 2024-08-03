@@ -18411,7 +18411,6 @@
 }
 // entity 11
 {
-"classname" "rootTest"
+"classname" "ent_cat_point"
 "origin" "176 128 32"
-"angles" "0 90 0"
 }

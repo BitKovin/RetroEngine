@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RetroEngine;
+using static RetroEngine.MathHelper;
 //using Microsoft.Xna.Framework.Input;
 
 //using System.IO;
@@ -106,6 +107,7 @@ namespace RetroEngine.Skeletal
 
         public Matrix World = Matrix.Identity;
 
+        public Vector3 TotalRootMotion = new Vector3();
 
         #region methods
 
@@ -166,12 +168,85 @@ namespace RetroEngine.Skeletal
         /// </summary>
         public void Update(float time)
         {
+
             if (animationRunning)
                 UpdateModelAnimations(time);
+
+            if(time > 0)
+            UpdateRootMotion();
 
             if (UpdateVisual == false) return;
             IterateUpdate(rootNodeOfTree);
             UpdateMeshTransforms();
+
+            
+
+        }
+
+        MathHelper.Transform OldRootTransform = new MathHelper.Transform();
+
+        void UpdateRootMotion()
+        {
+            if (rootNodeOfTree == null)
+            {
+                return;
+            }
+
+            var roots = rootNodeOfTree.children.Where(c => c.name.ToLower() == "root").ToArray();
+
+
+            RiggedModelNode root;
+            if (roots.Length > 0)
+            {
+                root = roots[0];
+            }else
+            {
+                return;
+            }
+
+            var transform = root.LocalFinalTransformMg.DecomposeMatrix();
+
+            Vector3 motionPos = transform.Position - OldRootTransform.Position;
+            Vector3 motionRot = transform.Rotation - OldRootTransform.Rotation;
+
+            TotalRootMotion += motionPos/100;
+
+            OldRootTransform = transform;
+
+
+        }
+
+        public Vector3 RootMotionOffset = new Vector3();
+
+        void RootMotionFinishAnimation()
+        {
+
+            if (rootNodeOfTree == null)
+            {
+                return;
+            }
+
+            var roots = rootNodeOfTree.children.Where(c => c.name.ToLower() == "root").ToArray();
+
+
+            RiggedModelNode root;
+            if (roots.Length > 0)
+            {
+                root = roots[0];
+            }
+            else
+            {
+                return;
+            }
+
+            var transform = root.LocalFinalTransformMg.DecomposeMatrix();
+
+            Vector3 motionPos = transform.Position;
+            Vector3 motionRot = OldRootTransform.Rotation;
+
+            RootMotionOffset += motionPos / 100;
+            //Console.WriteLine(motionPos);
+            //TotalRootMotion += motionPos / 100;
         }
 
         public void UpdatePose()
@@ -217,6 +292,8 @@ namespace RetroEngine.Skeletal
                 currentFrame = (int)(currentAnimationFrameTime / originalAnimations[currentAnimation].SecondsPerFrame);
                 int numbOfFrames = originalAnimations[currentAnimation].TotalFrames;
 
+                bool frameReset = false;
+
                 // usually we aren't using static frames and we might be looping.
                 if (currentAnimationFrameTime > animationTotalDuration)
                 {
@@ -236,6 +313,9 @@ namespace RetroEngine.Skeletal
                         //animationRunning = false;
                         //currentAnimationFrameTime = 0.0001f;
                     }
+                    frameReset = true;
+                    RootMotionFinishAnimation();
+
                 }
                 if (UpdateVisual == false) return;
                 // use the precalculated frame time lookups.
@@ -250,6 +330,10 @@ namespace RetroEngine.Skeletal
                             var animNodeframe = originalAnimations[currentAnimation].animatedNodes[nodeLooped];
                             var node = animNodeframe.nodeRef;
                             node.LocalTransformMg = animNodeframe.frameOrientations[currentFrame];
+
+                            if (node.RootMotionBone && frameReset)
+                                OldRootTransform = node.LocalFinalTransformMg.DecomposeMatrix();
+
                         }
                     }
                 }
@@ -264,6 +348,8 @@ namespace RetroEngine.Skeletal
                         var node = animNodeframe.nodeRef;
                         // use dynamic interpolated frames
                         node.LocalTransformMg = originalAnimations[currentAnimation].Interpolate(currentAnimationFrameTime, animNodeframe, loopAnimation);
+                        if (node.RootMotionBone && frameReset)
+                            OldRootTransform = node.LocalFinalTransformMg.DecomposeMatrix();
                     }
 
                 }
@@ -347,6 +433,7 @@ namespace RetroEngine.Skeletal
             }
             else
             {
+
                 node.CombinedTransformMg = additionalMesh * node.LocalTransformMg * additionalLocal;
                 node.LocalFinalTransformMg = node.CombinedTransformMg;
             }
@@ -670,6 +757,8 @@ namespace RetroEngine.Skeletal
             public RiggedModelNode parent;
             public List<RiggedModelNode> children = new List<RiggedModelNode>();
 
+            public bool RootMotionBone = false;
+
             // probably don't need most of these they are from the debug phase.
             public bool isTheRootNode = false;
             public bool isTheGlobalPreTransformNode = false; // marks the node prior to the first bone...   (which is a accumulated pre transform multiplier to other bones)?.
@@ -680,8 +769,6 @@ namespace RetroEngine.Skeletal
             public bool isThisAMeshNode = false; // is this actually a mesh node.
             public bool isThisTheFirstMeshNode = false;
             //public RiggedModelMesh meshRef; // no point in this as there can be many refs per node we link in the opposite direction.
-
-            
 
             /// <summary>
             /// The inverse offset takes one from model space to bone space to say it will have a position were the bone is in the world.
@@ -727,6 +814,8 @@ namespace RetroEngine.Skeletal
                 copy.isThisNodeTransformNecessary=isThisNodeTransformNecessary;
                 copy.isThisAMeshNode=isThisAMeshNode;
                 copy.isThisTheFirstMeshNode= isThisTheFirstMeshNode;
+
+                copy.RootMotionBone = RootMotionBone;
 
                 copy.InvOffsetMatrixMg = InvOffsetMatrixMg;
                 copy.OffsetMatrixMg = OffsetMatrixMg;

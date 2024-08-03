@@ -132,6 +132,8 @@ namespace RetroEngine
             public Quaternion RotationQuaternion;
             public Vector3 Scale;
 
+            
+
             public Transform()
             {
                 Position = new Vector3();

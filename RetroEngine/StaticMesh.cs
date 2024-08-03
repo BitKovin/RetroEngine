@@ -437,6 +437,11 @@ namespace RetroEngine
 
         }
 
+        protected virtual Matrix GetLocalOffset()
+        {
+            return Matrix.Identity;
+        }
+
         public virtual void DrawUnified()
         {
             if ((frameStaticMeshData.IsRendered == false) && frameStaticMeshData.Viewmodel == false || occluded) return;
@@ -1282,7 +1287,7 @@ namespace RetroEngine
                             Matrix.CreateRotationX(Rotation.X / 180 * (float)Math.PI) *
                             Matrix.CreateRotationY(Rotation.Y / 180 * (float)Math.PI) *
                             Matrix.CreateTranslation(Position);
-                return worldMatrix;
+                return worldMatrix * GetLocalOffset();
             }
             else
             {
@@ -1292,7 +1297,7 @@ namespace RetroEngine
                                 Matrix.CreateRotationY(Rotation.Y / 180 * (float)Math.PI) *
                                 Matrix.CreateRotationZ(Rotation.Z / 180 * (float)Math.PI) *
                                 Matrix.CreateTranslation(Position) * ParrentTransform;
-                return worldMatrix;
+                return worldMatrix * GetLocalOffset();
             }
         }
 

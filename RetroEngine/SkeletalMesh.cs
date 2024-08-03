@@ -46,6 +46,10 @@ namespace RetroEngine
 
         AnimationPose oldAnimPose;
 
+        Vector3 OldRootMotion = new Vector3();
+
+        Vector3 RootMotionPositionOffset = new Vector3();
+
         public SkeletalMesh() : base()
         {
 
@@ -94,6 +98,27 @@ namespace RetroEngine
 
 
             RiggedModel.overrideAnimationFrameTime = -1;
+        }
+
+        public Vector3 PullRootMotion()
+        {
+
+            if (RiggedModel == null) return Vector3.Zero;
+
+            Vector3 rootMotion = RiggedModel.TotalRootMotion - OldRootMotion + RiggedModel.RootMotionOffset;
+            RiggedModel.RootMotionOffset = Vector3.Zero;
+
+
+
+            if (rootMotion.Z < 0)
+                Console.WriteLine(OldRootMotion + "  " + RiggedModel.TotalRootMotion);
+
+            OldRootMotion = RiggedModel.TotalRootMotion;
+
+            RootMotionPositionOffset = -RiggedModel.TotalRootMotion;
+
+            return rootMotion;
+
         }
 
         public void CalculateBoundingSphere()
@@ -420,6 +445,11 @@ namespace RetroEngine
             return -1;
         }
 
+
+        protected override Matrix GetLocalOffset()
+        {
+            return Matrix.CreateTranslation(RootMotionPositionOffset);
+        }
 
         public override Matrix GetWorldMatrix()
         {

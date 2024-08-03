@@ -204,6 +204,12 @@ namespace RetroEngine.Skeletal
             if (OnlyAnimation == false)
                 CreateVerticeIndiceData(model, scene, 0);
 
+            foreach(var node in model.rootNodeOfTree.children)
+            {
+                if (node.name.ToLower() == "root")
+                    node.RootMotionBone = true;
+            }
+
             ResetPose(model);
 
             // this calls the models function to create the interpolated animtion frames.
@@ -369,6 +375,11 @@ namespace RetroEngine.Skeletal
             modelnode.name = curAssimpNode.Name;
             // set the initial local node transform.
             modelnode.LocalTransformMg = curAssimpNode.Transform.ToMgTransposed();
+
+            if(modelnode.name.ToLower() == "root")
+            {
+                modelnode.RootMotionBone = true;
+            }
 
             if (startupNodeTreeConsoleInfo)
                 Console.Write(ntab + "  Name: " + modelnode.name);
