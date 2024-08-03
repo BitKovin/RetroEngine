@@ -14,7 +14,7 @@ sampler2D SpriteTextureSampler = sampler_state
 	Texture = <SpriteTexture>;
 };
 
-float offset = 0.95f;
+float offset = 1.05f;
 
 float screenWidth = 1280; // Change to your actual screen width
 float screenHeight = 720; // Change to your actual screen height
@@ -25,6 +25,11 @@ struct VertexShaderOutput
 	float4 Color : COLOR0;
 	float2 TextureCoordinates : TEXCOORD0;
 };
+
+float CalcLuminance(float3 color)
+{
+    return dot(color, float3(0.299f, 0.587f, 0.114f));
+}
 
 float4 MainPS(VertexShaderOutput input) : COLOR
 {
@@ -37,6 +42,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 	
     float sampleRadius = 6;
 	
+    int n = 0;
 	
     for (int x = -1 * sampleRadius; x <= sampleRadius; x ++)
         for (int y = -1 * sampleRadius; y <= sampleRadius; y ++)
@@ -48,15 +54,17 @@ float4 MainPS(VertexShaderOutput input) : COLOR
                 continue;
 			
             float2 offsetCoords = TextureOffset / float2(screenWidth * 3, screenHeight * 3);
-			
-            color += saturate(tex2D(SpriteTextureSampler, input.TextureCoordinates + offsetCoords).rgb - offset) / (length(TextureOffset) + 1);
+			n++;
+            color += max( tex2D(SpriteTextureSampler, input.TextureCoordinates + offsetCoords).rgb - offset,0);
         }
 	
-    color = color / 35.0f;
+    color = color / n;
 	
-    color = length(color)*lerp(normalize(color), length(color), lerp(length(color),1,0.5));
+    //color = length(color)*lerp(normalize(color), length(color), lerp(length(color),1,0.5));
 	
-    return float4(color,1);
+    float l = CalcLuminance(color) * 2;
+
+    return float4(color*1.2,1);
 }
 
 technique SpriteDrawing

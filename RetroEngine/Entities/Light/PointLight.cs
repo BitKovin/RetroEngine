@@ -54,7 +54,9 @@ namespace RetroEngine.Entities.Light
         public int resolution = 512;
 
         public float radius = 10;
-        public float MinDot = -1f;
+        protected float MinDot = -1f;
+
+        float maxAngle = 360;
 
         public bool Dynamic = true;
         public bool CastShadows = false;
@@ -123,8 +125,11 @@ namespace RetroEngine.Entities.Light
 
         public void SetAngle(float angleInDegrees)
         {
+
             // Convert the angle from degrees to radians
             float angleInRadians = MathHelper.ToRadians(angleInDegrees);
+
+            maxAngle = angleInDegrees;
 
             // Compute the cosine of the angle
             float minDot = (float)Math.Cos(angleInRadians);
@@ -493,8 +498,20 @@ namespace RetroEngine.Entities.Light
             var view = GetViewForFace(face, lightData);
             var projection = Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.ToRadians(90f), 1, 0.005f, lightData.Radius*1.5f);
 
-            if(customfrustrum)
-            RetroEngine.Render.CustomFrustrum = new BoundingFrustum(view * projection);
+            if (customfrustrum)
+            {
+                if(maxAngle> 170)
+                {
+                    RetroEngine.Render.CustomFrustrum = new BoundingFrustum(view * projection);
+                }else
+                {
+                    RetroEngine.Render.CustomFrustrum = new BoundingFrustum(Matrix.CreateLookAt(lightData.Position, lightData.Position + lightData.Direction, Vector3.UnitY) *
+                                                                            Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.ToRadians(maxAngle), 1, 0.01f, lightData.Radius));
+                }
+
+                
+
+            }
 
             var l = Level.GetCurrent().GetAllOpaqueMeshes();
 
