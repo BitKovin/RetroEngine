@@ -19,7 +19,7 @@ namespace RetroEngine
 
         public static float ShadowBias = -0.000f;//0025f
         public static int shadowMapResolution { get { return (int)(2048 * 2 * ShadowResolutionScale); } }
-        public static int closeShadowMapResolution { get { return (int)(1024 * ShadowResolutionScale); } }
+        public static int closeShadowMapResolution { get { return (int)(2048 * ShadowResolutionScale); } }
         public static int veryCloseShadowMapResolution { get { return (int)(2048 * ShadowResolutionScale); } }
         public static int ViewmodelShadowMapResolution { get { return (int)(2048 * ShadowResolutionScale); } }
 

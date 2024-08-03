@@ -254,7 +254,7 @@ float CalculateSSAONew(float3 position, float currentDepth, float3 normal)
 
     maxRadius *= distanceMultiplier;
 
-    const int samples = 64;
+    const int samples = 160;
 
     float biasScale = 1 + 2 * (0.5 - distance(abs((normal, cameraForward)),0.5));
 
@@ -296,7 +296,7 @@ float CalculateSSAONew(float3 position, float currentDepth, float3 normal)
 
         //float normalDif = 1 - abs(dot(sampleNormal, normal));
 
-        float rangeCheck = smoothstep(1, 0, (currentDepth - sampleDepth) / (3.5 * distanceMultiplier));
+        float rangeCheck = smoothstep(0,1, smoothstep(1, 0, (currentDepth - sampleDepth) / (2 * distanceMultiplier)));
 
         
 
