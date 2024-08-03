@@ -328,6 +328,8 @@ namespace RetroEngine.Game.Entities.Player
 
             }
 
+            //bodyMesh.SetWorldPositionOverride("clavicle_l", new MathHelper.Transform { Position = new Vector3(0,3,0)}.ToMatrix());
+
             bodyMesh.PastePoseLocal(pose);
 
         }
@@ -533,7 +535,7 @@ namespace RetroEngine.Game.Entities.Player
             if (pos == Vector3.Zero)
                 return;
 
-            var hit = Physics.LineTrace(pos.ToPhysics(), (pos - new Vector3(0, 0.9f, 0)).ToPhysics(), new List<CollisionObject>() { body }, body.GetCollisionMask());
+            var hit = Physics.LineTrace(pos.ToPhysics(), (pos - new Vector3(0, 0.8f, 0)).ToPhysics(), new List<CollisionObject>() { body }, body.GetCollisionMask());
 
             if (hit.HasHit == false)
                 return;

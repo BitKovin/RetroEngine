@@ -147,6 +147,27 @@ namespace RetroEngine
 
         }
 
+        public void SetWorldPositionOverride(string name, Matrix transform)
+        {
+
+            if (RiggedModel == null) return;
+
+            if(RiggedModel.finalOverrides.ContainsKey(name) == false)
+            {
+                RiggedModel.finalOverrides.Add(name, transform);
+            }else
+            {
+                RiggedModel.finalOverrides[name] = transform;
+            }
+            
+            RiggedModel.World = GetWorldMatrix();
+
+        }
+
+        public void RemoveWorldPositionOverride(string name)
+        {
+            RiggedModel.finalOverrides.Remove(name);
+        }
 
         public AnimationPose GetPose()
         {
@@ -879,7 +900,8 @@ namespace RetroEngine
             {
                 RigidBody body = Physics.CreateBox(owner, hitbox.Size, 0);
 
-                body.UserIndex2 = (int)BodyType.HitBox;
+                body.SetBodyType(BodyType.HitBox);
+
 
                 hitbox.RigidBodyRef = body;
 

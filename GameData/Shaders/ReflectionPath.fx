@@ -212,7 +212,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR
     
     float3 cube = SampleCubemap(ReflectionCubemapSampler, reflection);
 
-    const int numSamples = 8;
+    const int numSamples = 5;
 
 
     float n = 1;

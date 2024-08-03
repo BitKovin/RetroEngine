@@ -104,6 +104,7 @@ namespace RetroEngine.Skeletal
 
         #endregion
 
+        public Matrix World = Matrix.Identity;
 
 
         #region methods
@@ -274,6 +275,28 @@ namespace RetroEngine.Skeletal
         /// </summary>
         private void IterateUpdate(RiggedModelNode node)
         {
+
+            if(finalOverrides.ContainsKey(node.name))
+            {
+                Matrix trans = Matrix.CreateScale(0.01f) * finalOverrides[node.name] * Matrix.Invert(World);
+
+                node.CombinedTransformMg = trans;
+
+                if (node.isThisARealBone && UpdateTransforms)
+                {
+                    globalShaderMatrixs[node.boneShaderFinalTransformIndex] = node.OffsetMatrixMg * node.CombinedTransformMg;
+                }
+
+                // Call children
+                for (int i = 0; i < node.children.Count; i++)
+                {
+                    IterateUpdate(node.children[i]);
+                }
+
+                return;
+
+            }
+
             // Cache frequently accessed values
             Matrix additionalMesh;
             Matrix additionalLocal;
