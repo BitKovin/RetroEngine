@@ -100,6 +100,7 @@ namespace RetroEngine.Skeletal
 
         public Dictionary<string, Matrix> additionalLocalOffsets = new Dictionary<string, Matrix>();
         public Dictionary<string, Matrix> additionalMeshOffsets = new Dictionary<string, Matrix>();
+        public Dictionary<string, Matrix> finalOverrides = new Dictionary<string, Matrix>();
 
         #endregion
 

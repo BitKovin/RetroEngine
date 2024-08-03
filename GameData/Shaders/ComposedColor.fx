@@ -153,7 +153,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR
     ssao/=n;
 
     ssao = 1 - ssao;
-    ssao*= 1.4;
+    ssao*= 2;
     ssao = 1 - ssao;
 
     float3 result = (color + bloomColor)*ssao;

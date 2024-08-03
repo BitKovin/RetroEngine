@@ -209,6 +209,25 @@ float2 WorldToScreen(float3 pos)
     return screenCoords;
 }
 
+float4 WorldToScreenProj(float3 pos)
+{
+    float4 position = float4(pos, 1);
+    
+    
+    float4 projection = mul(mul(position, View), Projection);
+    
+    float4 screenCoords = float4((projection.xyz / projection.w).xy, 0,0);
+    
+    screenCoords = (screenCoords + 1.0f) / 2.0f;
+
+    screenCoords.y = 1.0f - screenCoords.y;
+    
+    screenCoords.z = projection.z;
+    screenCoords.w = projection.w;
+    
+    return screenCoords;
+}
+
 float map(float value, float inputMin, float inputMax, float outputMin, float outputMax)
 {
     // Ensure input range is not zero to avoid division by zero
@@ -229,13 +248,13 @@ float CalculateSSAONew(float3 position, float currentDepth, float3 normal)
     float bias = 0.000;
 
     const float minRadius = 0.04; 
-    float maxRadius = 0.6; 
+    float maxRadius = 1; 
 
-    float distanceMultiplier = map(clamp(distance(viewPos, position),1,30), 1, 20, 1, 2);
+    float distanceMultiplier = map(clamp(distance(viewPos, position),1,30), 3, 30, 1, 4);
 
     maxRadius *= distanceMultiplier;
 
-    const int samples = 48;
+    const int samples = 64;
 
     float biasScale = 1 + 2 * (0.5 - distance(abs((normal, cameraForward)),0.5));
 
@@ -257,7 +276,9 @@ float CalculateSSAONew(float3 position, float currentDepth, float3 normal)
         if(dot(offset, normal) < 0)
             offset*= -1;
 
-        float2 samplePos = WorldToScreen(position + offset);
+        float4 proj = WorldToScreenProj(position + offset);
+
+        float2 samplePos = proj.xy;
 
         if(samplePos.x>1 || samplePos.x<0 ||samplePos.y>1 || samplePos.y<0)
         {
@@ -268,13 +289,18 @@ float CalculateSSAONew(float3 position, float currentDepth, float3 normal)
         
         float sampleDepth = tex2D(DepthTextureSampler, samplePos);
 
-        float3 sampleNormal = DecodeNormal(tex2D(NormalTextureSampler, samplePos).xyz);
+        if(sampleDepth < 0.1)
+            continue;
 
-        float normalDif = 1 - abs(dot(sampleNormal, normal));
+        //float3 sampleNormal = DecodeNormal(tex2D(NormalTextureSampler, samplePos).xyz);
 
-        float rangeCheck = smoothstep(1, 0, (currentDepth - sampleDepth) / (5 * distanceMultiplier));
+        //float normalDif = 1 - abs(dot(sampleNormal, normal));
 
-        occlusion += (sampleDepth >= currentDepth - bias ? 0 : 1.0) * rangeCheck * normalDif;  
+        float rangeCheck = smoothstep(1, 0, (currentDepth - sampleDepth) / (3.5 * distanceMultiplier));
+
+        
+
+        occlusion += (proj.z >= sampleDepth + bias ? 1 : 0) * rangeCheck;  
         
     }
 

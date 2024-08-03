@@ -1272,7 +1272,7 @@ namespace RetroEngine
             }
         }
 
-        protected virtual Matrix GetWorldMatrix()
+        public virtual Matrix GetWorldMatrix()
         {
 
             if (UseAlternativeRotationCalculation)

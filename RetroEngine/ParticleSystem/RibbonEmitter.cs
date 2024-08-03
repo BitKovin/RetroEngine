@@ -193,7 +193,7 @@ namespace RetroEngine.Particles
             frameStaticMeshData.InFrustrum = inFrustrum;
         }
 
-        protected override Matrix GetWorldMatrix()
+        public override Matrix GetWorldMatrix()
         {
             Matrix worldMatrix = Matrix.CreateScale(1) *
                             Matrix.CreateTranslation(Vector3.Zero);

@@ -23,7 +23,7 @@ namespace RetroEngine
 
         protected RiggedModelLoader modelReader = new RiggedModelLoader(GameMain.content, null);
 
-        BoundingSphere boundingSphere = new BoundingSphere();
+        public BoundingSphere boundingSphere = new BoundingSphere();
 
         protected static Dictionary<string, RiggedModel> LoadedRigModels = new Dictionary<string, RiggedModel>();
 
@@ -96,21 +96,28 @@ namespace RetroEngine
             RiggedModel.overrideAnimationFrameTime = -1;
         }
 
-        protected void CalculateBoundingSphere()
+        public void CalculateBoundingSphere()
         {
             List<Vector3> points = new List<Vector3>();
 
+            Vector3 pos = new Vector3();
+
+            int n = 0;
+
             if (RiggedModel != null)
             {
-                foreach (var b in RiggedModel.flatListToBoneNodes)
+                lock (RiggedModel)
                 {
-                    points.Add(b.CombinedTransformMg.Translation / 100);
+                    foreach (var b in RiggedModel.flatListToBoneNodes)
+                    {
+                        points.Add(b.CombinedTransformMg.Translation / 100);
+                    }
                 }
             }
 
             boundingSphere = BoundingSphere.CreateFromPoints(points);
-
-            boundingSphere.Radius *= 1.5f;
+            boundingSphere.Radius *= 1.1f;
+            boundingSphere.Radius += 0.3f;
 
         }
 
@@ -393,7 +400,7 @@ namespace RetroEngine
         }
 
 
-        protected override Matrix GetWorldMatrix()
+        public override Matrix GetWorldMatrix()
         {
             return Matrix.CreateScale(0.01f) * base.GetWorldMatrix();
         }
@@ -568,7 +575,7 @@ namespace RetroEngine
 
                 if (Render.CustomFrustrum != null)
                 {
-                    if (Render.CustomFrustrum.Contains(boundingSphere.Transform(frameStaticMeshData.World)) == ContainmentType.Disjoint)
+                    if (Render.CustomFrustrum.Contains(boundingSphere.Transform(base.GetWorldMatrix())) == ContainmentType.Disjoint)
                     {
                         return;
                     }
