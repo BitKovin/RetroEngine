@@ -290,6 +290,9 @@ namespace RetroEngine.PhysicsSystem
                                 ent.Position = Vector3.Lerp(previousPosition, currentPosition, interpolationFactor);
                             }
                         }
+
+                        
+
                         else
                         {
                             ent.Position = pos;

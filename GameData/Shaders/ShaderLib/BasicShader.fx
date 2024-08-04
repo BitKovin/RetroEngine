@@ -469,7 +469,9 @@ float SampleMaxDepth(float2 screenCoords)
 
 }
 
-
+float Gaussian(float x, float y, float sigma) {
+    return exp(-((x * x + y * y) / (2.0 * sigma * sigma))) / (2.0 * 3.14159265358979323846 * sigma * sigma);
+}
 
 half4 SampleCubemap(samplerCUBE s, float3 coords)
 {
@@ -1052,7 +1054,7 @@ half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half rough
 
         const int radius = 2;
 
-        float step = 0.66666666666665;
+        float step = 1;
 
 #if OPENGL
         step = radius;
@@ -1080,6 +1082,8 @@ half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half rough
         }else
         {
 
+        float weightSum = 0;
+
         for (float x = -radius; x <= radius; x+=step)
         {
             for (float y = -radius; y <= radius; y+=step)
@@ -1088,17 +1092,20 @@ half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half rough
                 if(length(float2(x,y))>1.1*radius)
                     continue;
 
+                float weight = Gaussian(x,y,radius);
+
                 float3 offset = (tangent * x + bitangent * y) * shadowBias * offsetScale;
                 float shadowDepth = GetPointLightDepth(i, lightDir + offset);
 
                 //shadowFactor += 1 - min((distanceToLight * distFactor + bias - shadowDepth)*LightResolutions[i] * distanceToLight,1);
 
-                shadowFactor += distanceToLight * distFactor + bias < shadowDepth ? 1.0 : 0.0;
+                shadowFactor += distanceToLight * distFactor + bias < shadowDepth ? weight : 0.0;
+                weightSum += weight;
                 samples++;
             }
         }
         
-        shadowFactor /= samples;
+        shadowFactor /= weightSum;
         notShadow = shadowFactor;
         }
     }
