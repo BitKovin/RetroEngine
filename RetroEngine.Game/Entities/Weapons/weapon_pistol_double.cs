@@ -318,7 +318,7 @@ namespace RetroEngine.Game.Entities.Weapons
             mesh.Transperent = true;
             mesh2.Transperent = true;
 
-            mesh.EmissionPower = mesh2.EmissionPower = 2;
+            mesh.EmissionPower = mesh2.EmissionPower = 1;
 
             //mesh2.CastShadows = false;
             mesh2.PreloadTextures();

@@ -90,8 +90,10 @@ float3 ToneMap(float3 color, float gamma, float exposure, float Saturation)
     
     float Bleach = 0;
     
-    color *= pow(2.0f, exposure); // Exposure
     color = pow(color, gamma); // Gamma
+
+    color *= pow(2.0f, exposure); // Exposure
+    
 
     const float3 coefLuma = float3(0.2126, 0.7152, 0.0722);
     float lum = dot(coefLuma, color);
@@ -170,7 +172,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR0
 	
     float3 color = tex2D(SpriteTextureSampler, input.TextureCoordinates).rgb;
 	
-    color = ToneMap(tonemap_filmic(color)* Brightness, 1, Exposure, Saturation);
+    color = ToneMap(color* Brightness, Gamma, Exposure, Saturation);
 	
     
     return float4(color, 1);

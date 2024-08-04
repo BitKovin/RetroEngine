@@ -66,7 +66,7 @@ namespace RetroEngine
         public Texture2D normalTexture;
         public Texture2D ormTexture;
         public List<string> textureSearchPaths = new List<string>();
-        public float EmissionPower = 1;
+        public float EmissionPower = 3;
 
 
         public bool isRendered = true;

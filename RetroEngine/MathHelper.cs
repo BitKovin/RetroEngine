@@ -176,6 +176,40 @@ namespace RetroEngine
                 };
             }
 
+            public static Transform operator *(Transform a, Transform b)
+            {
+                return new Transform
+                {
+                    Position = a.Position * b.Position,
+                    Rotation = a.Rotation * b.Rotation,
+                    RotationQuaternion = a.RotationQuaternion * Quaternion.Inverse(b.RotationQuaternion),
+                    Scale = a.Scale * b.Scale
+                };
+            }
+
+            public static Transform operator -(Transform a)
+            {
+                return new Transform
+                {
+                    Position = -a.Position,
+                    Rotation = -a.Rotation,
+                    RotationQuaternion = -a.RotationQuaternion,
+                    Scale = -a.Scale
+                };
+            }
+
+
+            public Transform RotateWithMatrix(Transform transform)
+            {
+                return new Transform
+                {
+                    Position = Position,
+                    Rotation = Rotation,
+                    RotationQuaternion = RotationQuaternion,
+                    Scale = Scale
+                };
+            }
+
             public override string ToString()
             {
                 return $"position: {Position} \nrotation: {Rotation}\n rotationQ: {RotationQuaternion}\n Scale:{Scale}";

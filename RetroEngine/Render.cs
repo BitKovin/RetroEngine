@@ -93,6 +93,8 @@ namespace RetroEngine
 
         public Effect BloomEffect;
 
+        public Effect BlurEffect;
+
         public Effect ComposeEffect;
         Effect TonemapperEffect;
 
@@ -158,6 +160,7 @@ namespace RetroEngine
 
             TonemapperEffect = GameMain.content.Load<Effect>("Shaders/Tonemap");
 
+            BlurEffect = GameMain.content.Load<Effect>("Shaders/SimpleBlur");
 
             ReflectionEffect = AssetRegistry.GetShaderFromName("ReflectionPath");
             ReflectionResultEffect = GameMain.content.Load<Effect>("Shaders/ReflectionResult");
@@ -290,9 +293,9 @@ namespace RetroEngine
 
             InitSizedRenderTargetIfNeed(ref ssaoOutput,(int)(GetScreenResolution().Y/2));
 
-            InitSizedRenderTargetIfNeed(ref bloomSample, 64);
-            InitSizedRenderTargetIfNeed(ref bloomSample2, 32);
-            InitSizedRenderTargetIfNeed(ref bloomSample3, 16);
+            InitSizedRenderTargetIfNeed(ref bloomSample, 360, surfaceFormat: SurfaceFormat.HalfVector4);
+            InitSizedRenderTargetIfNeed(ref bloomSample2, 240, surfaceFormat: SurfaceFormat.HalfVector4);
+            InitSizedRenderTargetIfNeed(ref bloomSample3, 128, surfaceFormat: SurfaceFormat.HalfVector4);
 
             InitRenderTargetIfNeed(ref postProcessingOutput);
 
@@ -1029,8 +1032,8 @@ namespace RetroEngine
 
             spriteBatch.End();
 
-            DownsampleToTexture(bloomSample, bloomSample2);
-            DownsampleToTexture(bloomSample, bloomSample3);
+            DownsampleToTexture(bloomSample, bloomSample2, true);
+            DownsampleToTexture(bloomSample2, bloomSample3, true);
 
         }
         public static bool performingOcclusionTest = false;
@@ -1076,8 +1079,9 @@ namespace RetroEngine
 
         }
 
-        void DownsampleToTexture(Texture2D source, RenderTarget2D target)
+        void DownsampleToTexture(Texture2D source, RenderTarget2D target, bool blur = false)
         {
+
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, target.Width, target.Height);
             graphics.GraphicsDevice.SetRenderTarget(target);
 
@@ -1085,7 +1089,10 @@ namespace RetroEngine
 
             SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
 
-            spriteBatch.Begin(blendState: BlendState.AlphaBlend);
+            BlurEffect.Parameters["screenWidth"].SetValue(target.Width);
+            BlurEffect.Parameters["screenHeight"].SetValue(target.Height);
+
+            spriteBatch.Begin(blendState: BlendState.AlphaBlend, effect: blur? BlurEffect : null);
 
             DrawFullScreenQuad(spriteBatch, source);
 

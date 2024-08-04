@@ -37,9 +37,9 @@ namespace RetroEngine
         public static bool EnableSSAO = true;
 
         public static float Brightness = 1;
-        public static float Gamma = 2.4f;
-        public static float Exposure = 0.35f;
-        public static float Saturation = 0;
+        public static float Gamma = 1.05f;
+        public static float Exposure = 0.5f;
+        public static float Saturation = 0.0f;
 
         public static float LightDistanceMultiplier = 1;
         public static Matrix LightViewProjection;
