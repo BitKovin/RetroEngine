@@ -802,7 +802,7 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
     float shadow = 0;
     
     if(DirectBrightness == 0)
-        return 0;
+        return 1;
 
 
     float dist = distance(viewPos, input.MyPosition);
