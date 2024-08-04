@@ -254,7 +254,7 @@ float CalculateSSAONew(float3 position, float currentDepth, float3 normal)
 
     maxRadius *= distanceMultiplier;
 
-    const int samples = 160;
+    const int samples = 64;
 
     float biasScale = 1 + 2 * (0.5 - distance(abs((normal, cameraForward)),0.5));
 

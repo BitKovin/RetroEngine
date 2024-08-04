@@ -1,0 +1,3 @@
+newmtl brushes/ground_pbr
+map_Kd textures/brushes/ground_pbr.png
+

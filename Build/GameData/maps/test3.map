@@ -1,0 +1,116 @@
+// Game: GenericEngine
+// Format: Standard
+// entity 0
+{
+"classname" "worldspawn"
+"_tb_textures" "textures/brushes"
+"visibleLayers" "Default Layer, layer2"
+// brush 0
+{
+( -128 -288 -16 ) ( -128 -284 -16 ) ( -128 -288 -15 ) brushes/ground_pbr 0 0 0 0.1 0.1
+( -128 -288 -16 ) ( -128 -288 -15 ) ( -125.37500000000003 -288 -16 ) brushes/ground_pbr 0.7619047 0 0 0.1 0.1
+( -128 -288 -16 ) ( -125.37500000000003 -288 -16 ) ( -128 -284 -16 ) brushes/ground_pbr 0.7619047 0 0 0.1 0.1
+( 208 224 16 ) ( 208 228 16 ) ( 210.625 224 16 ) brushes/ground_pbr 0.7619047 0 0 0.1 0.1
+( 208 224 16 ) ( 210.625 224 16 ) ( 208 224 17 ) brushes/ground_pbr 0.7619047 0 0 0.1 0.1
+( 208 224 16 ) ( 208 224 17 ) ( 208 228 16 ) brushes/ground_pbr 0 0 0 0.1 0.1
+}
+}
+// entity 1
+{
+"classname" "info_player_start"
+"origin" "64 -32 40"
+}
+// entity 2
+{
+"classname" "static_mesh"
+"origin" "139 -309 16"
+"path" "models/enviroment/door/door.obj"
+"scale" "2"
+"texture" "models/enviroment/door/door.png"
+"angles" "0 180 0"
+}
+// entity 3
+{
+"classname" "light_point"
+"origin" "-64 -304 160"
+"radius" "10"
+"intensity" "3"
+"light_color" "1 0.5 0.5"
+"dynamic" "true"
+"resolution" "1024"
+}
+// entity 4
+{
+"classname" "static_mesh"
+"origin" "-112 1760 -576"
+"path" "models\enviroment\testDawg\testDawg.fbx"
+"scale" "0.2"
+"texture" "models/enviroment/testDawg/"
+}
+// entity 5
+{
+"classname" "func_group"
+"_tb_type" "_tb_layer"
+"_tb_name" "layer2"
+"_tb_id" "1"
+"_tb_layer_sort_index" "0"
+// brush 0
+{
+( -48 64 128 ) ( -48 192 16 ) ( -48 192 128 ) brushes/ground_pbr 0 0 0 1 1
+( 176 64 128 ) ( -48 64 16 ) ( -48 64 128 ) brushes/ground_pbr 0 0 0 1 1
+( 176 192 16 ) ( -48 64 16 ) ( 176 64 16 ) brushes/ground_pbr 0 0 0 1 1
+( 176 192 128 ) ( -48 64 128 ) ( -48 192 128 ) brushes/ground_pbr 0 0 0 1 1
+( 176 192 128 ) ( -48 192 16 ) ( 176 192 16 ) brushes/ground_pbr 0 0 0 1 1
+( 176 192 128 ) ( 176 64 16 ) ( 176 64 128 ) brushes/ground_pbr 0 0 0 1 1
+}
+}
+// entity 6
+{
+"classname" "info.navpoint"
+"origin" "104 -184 24"
+"_tb_layer" "1"
+}
+// entity 7
+{
+"classname" "info.navpoint"
+"origin" "152 8 24"
+"_tb_layer" "1"
+}
+// entity 8
+{
+"classname" "info.navpoint"
+"origin" "168 -104 24"
+"_tb_layer" "1"
+}
+// entity 9
+{
+"classname" "func_group"
+"_tb_type" "_tb_layer"
+"_tb_name" "layer3"
+"_tb_id" "2"
+"_tb_layer_sort_index" "1"
+}
+// entity 10
+{
+"classname" "ent_cat_point"
+"origin" "176 -224 32"
+"_tb_layer" "2"
+}
+// entity 11
+{
+"classname" "ent_cat_point"
+"origin" "0 -128 32"
+"_tb_layer" "2"
+}
+// entity 12
+{
+"classname" "ent_cat_point"
+"origin" "64 -160 32"
+"_tb_layer" "2"
+}
+// entity 13
+{
+"classname" "ent_cat_point"
+"origin" "-48 -224 32"
+"_tb_layer" "2"
+}

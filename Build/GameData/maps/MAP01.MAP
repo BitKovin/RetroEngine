@@ -1,0 +1,693 @@
+// Map01 Entity File by Matthias Worch
+//
+// To add an entity uncomment it, to take it out comment the whole item
+// everything in the brackets.
+// If you don't know how certain entities are called refer to the Quake
+// Map-Specs. If you're not sure, leave the spawnflags as they are.
+//
+// To apply the changes use "qbsp -onlyents map01"
+//
+// My tip to make DM more DooM like: Put the rocket-launcher into the
+// shotgun-room, the grenade-launcher into the rocket room and the super
+// shotgun outside. (Nobody uses the SS in Quake and ppl hardly go into the
+// SS room with the original item layout.
+//
+// To add more DM starts and avoid telefrags in >4 player DM add some of the
+// given DM starts.
+
+// General info, leave intact.
+{
+  "classname" "worldspawn"
+  "wad" "C:\ANWEND\QUEST\QBSP\GFX\BASE.WAD"
+  "sounds" "6"
+  "message" "DooM II Map01"
+}
+// Green DM start
+{
+  "classname" "info_player_deathmatch"
+  "origin" "-505 78 28"
+  "angle" "0"
+}
+
+// Indigo DM start
+{
+  "classname" "info_player_deathmatch"
+  "origin" "116 72 28"
+  "angle" "0"
+}
+
+// Brown DM start
+{
+  "classname" "info_player_deathmatch"
+  "origin" "-185 -382 28"
+  "angle" "0"
+}
+
+// Red DM start
+{
+  "classname" "info_player_deathmatch"
+  "origin" "-722 -388 20"
+  "angle" "0"
+}
+
+// Alternate DM starts, uncomment to add to the level
+// Alternate start: SS room
+// {
+//  "classname" "info_player_deathmatch"
+//  "origin" "924 -192 20"
+//  "angle" "180"
+// }
+
+// Alternate DM start: Before rocket room
+// {
+//   "classname" "info_player_deathmatch"
+//   "origin" "309 -674 28"
+//   "angle" "90"
+// }
+
+// Alternate DM start: Near Exit
+// {
+//   "classname" "info_player_deathmatch"
+//   "origin" "-382 -998 12"
+//   "angle" "120"
+// }
+
+// Alternate DM start: Outside (has to wait until door opens)
+// {
+//   "classname" "info_player_deathmatch"
+//   "origin" "-991 -926 -4"
+//   "angle" "0"
+// }
+
+// Player 1 start platform: rocket launcher
+{
+  "classname" "weapon_rocketlauncher"
+  "origin" "-551 330 36"
+  "spawnflags" "1792"
+}
+
+// Player 1 start platform: Super Shotgun
+{
+  "classname" "weapon_supershotgun"
+  "origin" "-614 331 35"
+  "spawnflags" "1792"
+}
+
+// Player 1 start platform: Lighning gun (for BFG)
+{
+  "classname" "weapon_lightning"
+  "origin" "-677 328 36"
+  "spawnflags" "1792"
+}
+
+// Player 1 start platform: Chainsaw position, now 100% health
+// Uncomment to use (I didn't know what to use)
+// {
+//   "classname" "item_health"
+//   "origin" "-389 468 36"
+//   "spawnflags" "1794"
+// }
+
+// Start room: Lighning gun (for BFG)
+{
+  "classname" "weapon_lightning"
+  "origin" "-292 284 4"
+  "spawnflags" "1792"
+}
+
+// Start room: 15% health before column
+{
+  "classname" "item_health"
+  "origin" "-239 -116 12"
+  "spawnflags" "1"
+}
+
+// The well-known "Shit, I wanted to do another silent BFG!" chaingun
+{
+  "classname" "weapon_nailgun"
+  "origin" "310 71 27"
+  "spawnflags" "1792"
+}
+
+// SS room: Super Shotgun
+{
+  "classname" "weapon_supershotgun"
+  "origin" "781 -194 36"
+  "spawnflags" "1792"
+}
+
+// 15% health near Green Armor
+{
+  "classname" "item_health"
+  "origin" "1359 -514 28"
+  "spawnflags" "1"
+}
+{
+  "classname" "item_health"
+  "origin" "1255 -626 28"
+  "spawnflags" "1"
+}
+
+// Green Armor
+{
+  "classname" "item_armor1"
+  "origin" "1343 -578 28"
+}
+
+// 15% health before rocket room (for blue vials)
+{
+  "classname" "item_health"
+  "origin" "305 -631 68"
+  "spawnflags" "1"
+}
+
+// Rocket room: Rocket launcher
+{
+  "classname" "weapon_rocketlauncher"
+  "origin" "320 -828 44"
+}
+
+// Rocket room: 5 rockets
+{
+  "classname" "item_rockets"
+  "origin" "316 -790 48"
+}
+
+// Plasma room: Super Nailgun (for Plasma)
+{
+  "classname" "weapon_supernailgun"
+  "origin" "-615 -416 56"
+  "spawnflags" "1792"
+}
+
+// 15% health on elevator
+{
+  "classname" "item_health"
+  "origin" "-632 -107 176"
+  "spawnflags" "1"
+}
+
+// 25% health in exit room
+{
+  "classname" "item_health"
+  "origin" "-162 -951 59"
+}
+{
+  "classname" "item_health"
+  "origin" "-162 -1011 59"
+}
+{
+  "classname" "item_health"
+  "origin" "-162 -1071 59"
+}
+
+// 15% health in secret room
+{
+  "classname" "item_health"
+  "origin" "-690 -1237 20"
+  "spawnflags" "1"
+}
+
+// Outside: Grenade launcher (for Shotgun)
+{
+  "classname" "weapon_grenadelauncher"
+  "origin" "-946 -297 4"
+  "spawnflags" "1792"
+}
+
+// Outside: 5 rockets
+// {
+//   "classname" "item_rockets"
+//   "origin" "-918 -366 43"
+//   "spawnflags" "1792"
+// }
+
+// Monster and miscellaneous info, leave intact
+
+{
+  "classname" "monster_army"
+  "origin" "-149 102 4"
+  "angle" "0"
+}
+{
+  "classname" "monster_army"
+  "origin" "-85 6 20"
+  "angle" "0"
+}
+{
+  "classname" "monster_army"
+  "origin" "291 -234 52"
+  "angle" "90"
+  "target" "way1"
+}
+{
+  "classname" "monster_army"
+  "origin" "339 -370 52"
+  "angle" "90"
+  "target" "way2"
+}
+{
+  "classname" "path_corner"
+  "origin" "287 24 28"
+  "targetname" "way1"
+}
+{
+  "classname" "path_corner"
+  "origin" "319 72 28"
+  "targetname" "way2"
+}
+{
+  "classname" "monster_army"
+  "origin" "995 -346 84"
+  "angle" "180"
+}
+{
+  "classname" "monster_army"
+  "origin" "1123 -314 84"
+  "angle" "180"
+}
+{
+  "classname" "monster_army"
+  "origin" "1123 -74 84"
+  "angle" "180"
+}
+{
+  "classname" "monster_army"
+  "origin" "995 -42 84"
+  "angle" "180"
+}
+{
+  "classname" "monster_enforcer"
+  "origin" "891 -186 20"
+  "angle" "180"
+  "spawnflags" "768"
+}
+{
+  "classname" "monster_enforcer"
+  "origin" "979 -210 28"
+  "angle" "180"
+  "spawnflags" "768"
+}
+{
+  "classname" "monster_army"
+  "origin" "-157 -418 52"
+  "angle" "0"
+  "spawnflags" "1025"
+}
+{
+  "classname" "monster_enforcer"
+  "origin" "-157 -418 52"
+  "angle" "0"
+  "spawnflags" "769"
+}
+{
+  "classname" "monster_army"
+  "origin" "-69 -362 52"
+  "angle" "0"
+  "spawnflags" "1"
+}
+{
+  "classname" "monster_army"
+  "origin" "-621 -130 156"
+  "angle" "270"
+  "spawnflags" "1024"
+}
+{
+  "classname" "monster_army"
+  "origin" "299 -458 52"
+  "angle" "90"
+  "target" "way2"
+  "spawnflags" "768"
+}
+{
+  "classname" "monster_enforcer"
+  "origin" "339 -530 52"
+  "angle" "90"
+  "target" "way2"
+  "spawnflags" "768"
+}
+{
+  "classname" "monster_enforcer"
+  "origin" "-621 -130 156"
+  "angle" "270"
+  "spawnflags" "768"
+}
+{
+  "classname" "monster_enforcer"
+  "origin" "-621 22 156"
+  "angle" "270"
+  "spawnflags" "768"
+}
+{
+  "classname" "monster_enforcer"
+  "origin" "-621 -26 156"
+  "angle" "270"
+}
+{
+  "classname" "monster_enforcer"
+  "origin" "-413 -1210 12"
+  "angle" "90"
+}
+{
+  "classname" "monster_enforcer"
+  "origin" "-661 -1106 12"
+  "angle" "75"
+}
+{
+  "classname" "monster_enforcer"
+  "origin" "-685 -1026 12"
+  "angle" "75"
+  "spawnflags" "768"
+}
+{
+  "classname" "monster_enforcer"
+  "origin" "-1053 -426 12"
+  "angle" "270"
+}
+{
+  "classname" "monster_enforcer"
+  "origin" "-1005 -274 12"
+  "angle" "270"
+}
+{
+  "classname" "monster_enforcer"
+  "origin" "-941 -418 12"
+  "angle" "270"
+  "spawnflags" "768"
+}
+{
+  "classname" "monster_enforcer"
+  "origin" "-1061 -346 12"
+  "angle" "270"
+  "spawnflags" "768"
+}
+{
+  "classname" "weapon_supershotgun"
+  "origin" "-946 -297 4"
+  "spawnflags" "2048"
+}
+{
+  "classname" "item_shells"
+  "origin" "-918 -366 43"
+  "spawnflags" "2048"
+}
+{
+  "classname" "trigger_changelevel"
+  "map" "e1m2"
+  {
+	  ( -48 -1012 68 ) ( -48 -972 68 ) ( -44 -972 68 ) TRIGGER 0 0 0 1.0000 1.0000
+	  ( -44 -1012 -4 ) ( -44 -1012 68 ) ( -44 -972 68 ) TRIGGER 0 0 0 1.0000 1.0000
+	  ( -44 -972 -4 ) ( -44 -972 68 ) ( -48 -972 68 ) TRIGGER 0 0 0 1.0000 1.0000
+	  ( -48 -972 -4 ) ( -48 -972 68 ) ( -48 -1012 68 ) TRIGGER 0 -22 0 1.0000 0.7500
+	  ( -48 -1012 -4 ) ( -48 -1012 68 ) ( -44 -1012 68 ) TRIGGER 0 0 0 1.0000 1.0000
+	  ( -44 -1012 -4 ) ( -44 -972 -4 ) ( -48 -972 -4 ) TRIGGER 0 0 0 1.0000 1.0000
+  }
+}
+{
+  "classname" "func_wall"
+  "spawnflags" "1792"
+  {
+	  ( -56 -984 8 ) ( -56 -976 8 ) ( -48 -976 8 ) EMETAL1_3 0 0 0 1.0000 1.0000
+	  ( -48 -984 -16 ) ( -48 -984 8 ) ( -48 -976 8 ) EMETAL1_3 0 0 0 1.0000 1.0000
+	  ( -48 -976 -16 ) ( -48 -976 8 ) ( -56 -976 8 ) EMETAL1_3 0 0 0 1.0000 1.0000
+	  ( -56 -976 -16 ) ( -56 -976 8 ) ( -56 -984 8 ) EMETAL1_3 0 -22 0 1.0000 0.7500
+	  ( -56 -984 -16 ) ( -56 -984 8 ) ( -48 -984 8 ) EMETAL1_3 0 0 0 1.0000 1.0000
+	  ( -48 -984 -16 ) ( -48 -976 -16 ) ( -56 -976 -16 ) EMETAL1_3 0 0 0 1.0000 1.0000
+  }
+  {
+	  ( -56 -1008 8 ) ( -56 -1000 8 ) ( -48 -1000 8 ) EMETAL1_3 0 0 0 1.0000 1.0000
+	  ( -48 -1008 -16 ) ( -48 -1008 8 ) ( -48 -1000 8 ) EMETAL1_3 0 0 0 1.0000 1.0000
+	  ( -48 -1000 -16 ) ( -48 -1000 8 ) ( -56 -1000 8 ) EMETAL1_3 0 0 0 1.0000 1.0000
+	  ( -56 -1000 -16 ) ( -56 -1000 8 ) ( -56 -1008 8 ) EMETAL1_3 0 -22 0 1.0000 0.7500
+	  ( -56 -1008 -16 ) ( -56 -1008 8 ) ( -48 -1008 8 ) EMETAL1_3 0 0 0 1.0000 1.0000
+	  ( -48 -1008 -16 ) ( -48 -1000 -16 ) ( -56 -1000 -16 ) EMETAL1_3 0 0 0 1.0000 1.0000
+  }
+}
+{
+  "classname" "func_door"
+  "angle" "-1"
+  "speed" "150"
+  "wait" "-1"
+  "sounds" "2"
+  {
+	  ( 520 -256 96 ) ( 512 -256 96 ) ( 512 -128 96 ) DOOR03_3 0 0 0 1.0000 1.0000
+	  ( 520 -128 0 ) ( 520 -128 96 ) ( 512 -128 96 ) DOOR03_3 64 0 0 0.5000 0.7500
+	  ( 512 -128 0 ) ( 512 -128 96 ) ( 512 -256 96 ) DOOR03_3 0 0 0 1.0000 1.0000
+	  ( 512 -256 0 ) ( 512 -256 96 ) ( 520 -256 96 ) DOOR03_3 0 0 0 1.0000 1.0000
+	  ( 520 -256 0 ) ( 520 -256 96 ) ( 520 -128 96 ) DOOR03_3 0 0 0 1.0000 1.0000
+	  ( 520 -128 0 ) ( 512 -128 0 ) ( 512 -256 0 ) TECH02_6 0 0 0 1.0000 1.0000
+  }
+}
+{
+  "classname" "func_door"
+  "angle" "-2"
+  "lip" "-1"
+  "speed" "200"
+  "wait" "-1"
+  "targetname" "armor"
+  "sounds" "2"
+  "spawnflags" "1"
+  {
+	  ( 1360 -464 248 ) ( 1232 -592 248 ) ( 1216 -576 248 ) TECH05_2 0 0 0 1.0000 1.0000
+	  ( 1216 -576 120 ) ( 1216 -576 248 ) ( 1232 -592 248 ) TECH05_2 64 0 0 0.5000 0.7500
+	  ( 1232 -592 120 ) ( 1232 -592 248 ) ( 1360 -464 248 ) TECH05_2 0 0 0 1.0000 1.0000
+	  ( 1360 -464 120 ) ( 1360 -464 248 ) ( 1344 -448 248 ) TECH05_2 0 0 0 1.0000 1.0000
+	  ( 1344 -448 120 ) ( 1344 -448 248 ) ( 1216 -576 248 ) TECH05_2 0 -8 0 1.0000 1.0000
+	  ( 1216 -576 120 ) ( 1232 -592 120 ) ( 1360 -464 120 ) TLIGHT08 0 0 0 1.0000 1.0000
+  }
+}
+{
+  "classname" "trigger_once"
+  "target" "armor"
+  "health" "1"
+  {
+	  ( 1008 -262 40 ) ( 976 -262 40 ) ( 976 -254 40 ) TRIGGER 0 0 0 1.0000 1.0000
+	  ( 976 -262 8 ) ( 976 -262 40 ) ( 1008 -262 40 ) TRIGGER 0 -8 0 1.0000 1.0000
+	  ( 1008 -262 8 ) ( 1008 -262 40 ) ( 1008 -254 40 ) TRIGGER 0 -8 0 1.0000 1.0000
+	  ( 1008 -254 8 ) ( 1008 -254 40 ) ( 976 -254 40 ) TRIGGER 0 -8 0 1.0000 1.0000
+	  ( 976 -254 8 ) ( 976 -254 40 ) ( 976 -262 40 ) TRIGGER 0 -8 0 1.0000 1.0000
+	  ( 976 -262 8 ) ( 1008 -262 8 ) ( 1008 -254 8 ) TRIGGER 0 0 0 1.0000 1.0000
+  }
+}
+{
+  "classname" "func_door"
+  "angle" "-2"
+  "lip" "-8"
+  "speed" "30"
+  "wait" "-1"
+  "targetname" "platform"
+  "sounds" "1"
+  {
+	  ( 1152 -384 56 ) ( 1088 -384 56 ) ( 1088 -256 56 ) TECH10_1 0 0 0 1.0000 1.0000
+	  ( 1088 -384 -8 ) ( 1088 -384 56 ) ( 1152 -384 56 ) TECH10_1 0 -8 0 1.0000 1.0000
+	  ( 1152 -384 -8 ) ( 1152 -384 56 ) ( 1152 -256 56 ) TECH10_1 0 -8 0 1.0000 1.0000
+	  ( 1152 -256 -8 ) ( 1152 -256 56 ) ( 1088 -256 56 ) TECH10_1 0 -8 0 1.0000 1.0000
+	  ( 1088 -256 -8 ) ( 1088 -256 56 ) ( 1088 -384 56 ) TECH10_1 0 -8 0 1.0000 1.0000
+	  ( 1088 -384 -8 ) ( 1152 -384 -8 ) ( 1152 -256 -8 ) TECH10_1 0 0 0 1.0000 1.0000
+  }
+  {
+	  ( 1152 -128 56 ) ( 1088 -128 56 ) ( 1088 0 56 ) TECH10_1 0 0 0 1.0000 1.0000
+	  ( 1152 0 -8 ) ( 1152 0 56 ) ( 1088 0 56 ) TECH10_1 0 -8 0 1.0000 1.0000
+	  ( 1088 0 -8 ) ( 1088 0 56 ) ( 1088 -128 56 ) TECH10_1 0 -8 0 1.0000 1.0000
+	  ( 1088 -128 -8 ) ( 1088 -128 56 ) ( 1152 -128 56 ) TECH10_1 0 -8 0 1.0000 1.0000
+	  ( 1152 -128 -8 ) ( 1152 -128 56 ) ( 1152 0 56 ) TECH10_1 0 -8 0 1.0000 1.0000
+	  ( 1152 0 -8 ) ( 1088 0 -8 ) ( 1088 -128 -8 ) TECH10_1 0 0 0 1.0000 1.0000
+  }
+  {
+	  ( 1024 -128 56 ) ( 960 -128 56 ) ( 960 0 56 ) TECH10_1 0 0 0 1.0000 1.0000
+	  ( 1024 0 -8 ) ( 1024 0 56 ) ( 960 0 56 ) TECH10_1 0 -8 0 1.0000 1.0000
+	  ( 960 0 -8 ) ( 960 0 56 ) ( 960 -128 56 ) TECH10_1 0 -8 0 1.0000 1.0000
+	  ( 960 -128 -8 ) ( 960 -128 56 ) ( 1024 -128 56 ) TECH10_1 0 -8 0 1.0000 1.0000
+	  ( 1024 -128 -8 ) ( 1024 -128 56 ) ( 1024 0 56 ) TECH10_1 0 -8 0 1.0000 1.0000
+	  ( 1024 0 -8 ) ( 960 0 -8 ) ( 960 -128 -8 ) TECH10_1 0 0 0 1.0000 1.0000
+  }
+  {
+	  ( 1024 -384 56 ) ( 960 -384 56 ) ( 960 -256 56 ) TECH10_1 0 0 0 1.0000 1.0000
+	  ( 960 -384 -8 ) ( 960 -384 56 ) ( 1024 -384 56 ) TECH10_1 0 -8 0 1.0000 1.0000
+	  ( 1024 -384 -8 ) ( 1024 -384 56 ) ( 1024 -256 56 ) TECH10_1 0 -8 0 1.0000 1.0000
+	  ( 1024 -256 -8 ) ( 1024 -256 56 ) ( 960 -256 56 ) TECH10_1 0 -8 0 1.0000 1.0000
+	  ( 960 -256 -8 ) ( 960 -256 56 ) ( 960 -384 56 ) TECH10_1 0 -8 0 1.0000 1.0000
+	  ( 960 -384 -8 ) ( 1024 -384 -8 ) ( 1024 -256 -8 ) TECH10_1 0 0 0 1.0000 1.0000
+  }
+  {
+	  ( 1008 -264 40 ) ( 976 -264 40 ) ( 976 -256 40 ) BASEBUTN3 0 0 0 1.0000 1.0000
+	  ( 976 -264 8 ) ( 976 -264 40 ) ( 1008 -264 40 ) BASEBUTN3 0 -8 0 1.0000 1.0000
+	  ( 1008 -264 8 ) ( 1008 -264 40 ) ( 1008 -256 40 ) BASEBUTN3 0 -8 0 1.0000 1.0000
+	  ( 1008 -256 8 ) ( 1008 -256 40 ) ( 976 -256 40 ) BASEBUTN3 -16 -24 0 1.0000 1.0000
+	  ( 976 -256 8 ) ( 976 -256 40 ) ( 976 -264 40 ) BASEBUTN3 0 -8 0 1.0000 1.0000
+	  ( 976 -264 8 ) ( 1008 -264 8 ) ( 1008 -256 8 ) BASEBUTN3 0 0 0 1.0000 1.0000
+  }
+  {
+	  ( 1136 -128 40 ) ( 1104 -128 40 ) ( 1104 -120 40 ) BASEBUTN3 0 0 0 1.0000 1.0000
+	  ( 1104 -128 8 ) ( 1104 -128 40 ) ( 1136 -128 40 ) BASEBUTN3 16 8 0 1.0000 1.0000
+	  ( 1136 -128 8 ) ( 1136 -128 40 ) ( 1136 -120 40 ) BASEBUTN3 0 -8 0 1.0000 1.0000
+	  ( 1136 -120 8 ) ( 1136 -120 40 ) ( 1104 -120 40 ) BASEBUTN3 -16 -24 0 1.0000 1.0000
+	  ( 1104 -120 8 ) ( 1104 -120 40 ) ( 1104 -128 40 ) BASEBUTN3 0 -8 0 1.0000 1.0000
+	  ( 1104 -128 8 ) ( 1136 -128 8 ) ( 1136 -120 8 ) BASEBUTN3 0 0 0 1.0000 1.0000
+  }
+}
+{
+  "classname" "trigger_once"
+  "target" "platform"
+  "health" "1"
+  {
+	  ( 1136 -130 40 ) ( 1104 -130 40 ) ( 1104 -122 40 ) TRIGGER 0 0 0 1.0000 1.0000
+	  ( 1104 -130 8 ) ( 1104 -130 40 ) ( 1136 -130 40 ) TRIGGER 0 -8 0 1.0000 1.0000
+	  ( 1136 -130 8 ) ( 1136 -130 40 ) ( 1136 -122 40 ) TRIGGER 0 -8 0 1.0000 1.0000
+	  ( 1136 -122 8 ) ( 1136 -122 40 ) ( 1104 -122 40 ) TRIGGER 0 -8 0 1.0000 1.0000
+	  ( 1104 -122 8 ) ( 1104 -122 40 ) ( 1104 -130 40 ) TRIGGER 0 -8 0 1.0000 1.0000
+	  ( 1104 -130 8 ) ( 1136 -130 8 ) ( 1136 -122 8 ) TRIGGER 0 0 0 1.0000 1.0000
+  }
+}
+{
+  "classname" "func_door"
+  "angle" "-1"
+  "wait" "-1"
+  "targetname" "rocket"
+  "sounds" "2"
+  "lip" "-1"
+  {
+	  ( 352 -744 96 ) ( 288 -744 96 ) ( 288 -736 96 ) TLIGHT08 0 0 0 1.0000 1.0000
+	  ( 352 -736 0 ) ( 352 -736 96 ) ( 288 -736 96 ) TWALL2_3 0 0 0 1.0000 0.7500
+	  ( 288 -736 0 ) ( 288 -736 96 ) ( 288 -744 96 ) TWALL1_4 0 0 0 1.0000 1.0000
+	  ( 288 -744 0 ) ( 288 -744 96 ) ( 352 -744 96 ) TECH05_2 9 0 0 1.7500 0.7500
+	  ( 352 -744 0 ) ( 352 -744 96 ) ( 352 -736 96 ) TWALL1_4 0 0 0 1.0000 1.0000
+	  ( 352 -736 0 ) ( 288 -736 0 ) ( 288 -744 0 ) TLIGHT08 0 0 0 1.0000 1.0000
+  }
+}
+{
+  "classname" "func_door"
+  "angle" "-1"
+  "sounds" "2"
+  "spawnflags" "4"
+  "wait" "-1"
+  "health" "1"
+  {
+	  ( -584 -64 240 ) ( -648 -64 240 ) ( -648 -48 240 ) TECH10_1 0 0 0 1.0000 1.0000
+	  ( -648 -48 112 ) ( -648 -48 240 ) ( -648 -64 240 ) TECH10_1 0 0 0 1.0000 1.0000
+	  ( -648 -64 112 ) ( -648 -64 240 ) ( -584 -64 240 ) TECH10_1 8 48 0 1.0000 1.0000
+	  ( -584 -64 112 ) ( -584 -64 240 ) ( -584 -48 240 ) TECH10_1 0 0 0 1.0000 1.0000
+	  ( -584 -48 112 ) ( -584 -48 240 ) ( -648 -48 240 ) TECH10_1 0 0 0 1.0000 1.0000
+	  ( -648 -48 112 ) ( -648 -64 112 ) ( -584 -64 112 ) TLIGHT08 0 0 0 1.0000 1.0000
+  }
+}
+{
+  "classname" "func_door"
+  "angle" "-2"
+  "sounds" "3"
+  "spawnflags" "4"
+  "lip" "1"
+  "wait" "4"
+  "health" "1"
+  {
+	  ( -584 -184 112 ) ( -648 -184 112 ) ( -648 -64 112 ) PLAT_TOP1 8 -2 0 1.0000 0.9500
+	  ( -648 -64 -16 ) ( -648 -64 112 ) ( -648 -184 112 ) SFLOOR4_5 0 0 0 1.0000 1.0000
+	  ( -648 -184 -16 ) ( -648 -184 112 ) ( -584 -184 112 ) TECH10_1 8 -16 0 1.0000 1.0000
+	  ( -584 -184 -16 ) ( -584 -184 112 ) ( -584 -64 112 ) SFLOOR4_5 0 0 0 1.0000 1.0000
+	  ( -584 -64 -16 ) ( -584 -64 112 ) ( -648 -64 112 ) TECH04_3 8 0 0 1.0000 1.0000
+	  ( -648 -64 -16 ) ( -648 -184 -16 ) ( -584 -184 -16 ) SFLOOR4_5 0 0 0 1.0000 1.0000
+  }
+  {
+	  ( -600 -184 32 ) ( -632 -184 32 ) ( -632 -176 32 ) BASEBUTN3 8 -2 0 1.0000 0.9500
+	  ( -632 -176 0 ) ( -632 -176 32 ) ( -632 -184 32 ) BASEBUTN3 0 0 0 1.0000 1.0000
+	  ( -632 -184 0 ) ( -632 -184 32 ) ( -600 -184 32 ) BASEBUTN3 -8 0 0 1.0000 1.0000
+	  ( -600 -184 0 ) ( -600 -184 32 ) ( -600 -176 32 ) BASEBUTN3 0 0 0 1.0000 1.0000
+	  ( -600 -176 0 ) ( -600 -176 32 ) ( -632 -176 32 ) BASEBUTN3 0 0 0 1.0000 1.0000
+	  ( -632 -176 0 ) ( -632 -184 0 ) ( -600 -184 0 ) BASEBUTN3 0 0 0 1.0000 1.0000
+  }
+}
+{
+  "classname" "func_button"
+  "angle" "90"
+  "wait" "-1"
+  "target" "rocket"
+  {
+	  ( -600 48 160 ) ( -632 48 160 ) ( -632 56 160 ) TECH04_4 8 -2 0 1.0000 0.9500
+	  ( -632 56 128 ) ( -632 56 160 ) ( -632 48 160 ) TECH04_4 0 0 0 1.0000 1.0000
+	  ( -632 48 128 ) ( -632 48 160 ) ( -600 48 160 ) +0BASEBTN -8 0 0 1.0000 1.0000
+	  ( -600 48 128 ) ( -600 48 160 ) ( -600 56 160 ) TECH04_4 0 0 0 1.0000 1.0000
+	  ( -600 56 128 ) ( -600 56 160 ) ( -632 56 160 ) +0BASEBTN 0 0 0 1.0000 1.0000
+	  ( -632 56 128 ) ( -632 48 128 ) ( -600 48 128 ) TECH04_4 0 0 0 1.0000 1.0000
+  }
+}
+{
+  "classname" "func_door"
+  "angle" "-1"
+  "health" "1"
+  "sounds" "2"
+  "speed" "70"
+  {
+	  ( -704 -1160 68 ) ( -704 -1152 68 ) ( -640 -1152 68 ) UWALL1_2 0 0 0 1.0000 1.0000
+	  ( -640 -1160 -16 ) ( -640 -1160 68 ) ( -640 -1152 68 ) UWALL1_2 0 0 0 1.0000 1.0000
+	  ( -640 -1152 -16 ) ( -640 -1152 68 ) ( -704 -1152 68 ) UWALL1_2 0 0 0 1.0000 1.0000
+	  ( -704 -1152 -16 ) ( -704 -1152 68 ) ( -704 -1160 68 ) UWALL1_2 0 0 0 1.0000 1.0000
+	  ( -704 -1160 -16 ) ( -704 -1160 68 ) ( -640 -1160 68 ) UWALL1_2 0 0 0 1.0000 1.0000
+	  ( -640 -1160 -16 ) ( -640 -1152 -16 ) ( -704 -1152 -16 ) UWALL1_2 0 0 0 1.0000 1.0000
+  }
+}
+{
+  "classname" "func_door"
+  "angle" "-1"
+  "sounds" "2"
+  "wait" "-1"
+  "targetname" "rocket"
+  "lip" "-12"
+  {
+	  ( -833 -992 80 ) ( -855 -992 80 ) ( -855 -920 80 ) UWALL1_2 0 0 0 1.0000 1.0000
+	  ( -855 -992 -16 ) ( -855 -992 80 ) ( -833 -992 80 ) UWALL1_2 0 0 0 1.0000 1.0000
+	  ( -833 -992 -16 ) ( -833 -992 80 ) ( -833 -927 80 ) UWALL1_2 0 0 0 1.0000 1.0000
+	  ( -833 -927 -16 ) ( -833 -927 80 ) ( -855 -920 80 ) UWALL1_2 0 0 0 1.0000 1.0000
+	  ( -855 -920 -16 ) ( -855 -920 80 ) ( -855 -992 80 ) TECH04_3 0 0 0 1.0000 1.0000
+	  ( -855 -992 -16 ) ( -833 -992 -16 ) ( -833 -927 -16 ) UWALL1_2 0 0 0 1.0000 1.0000
+  }
+}
+{
+  "classname" "func_door"
+  "angle" "-1"
+  "wait" "4"
+  "sounds" "2"
+  "speed" "150"
+  {
+	  ( -225 -1024 80 ) ( -232 -1024 80 ) ( -232 -960 80 ) DOOR03_3 0 0 0 1.0000 1.0000
+	  ( -232 -1024 -16 ) ( -232 -1024 80 ) ( -225 -1024 80 ) DOOR03_3 0 0 0 1.0000 1.0000
+	  ( -225 -1024 -16 ) ( -225 -1024 80 ) ( -225 -960 80 ) DOOR03_3 0 0 0 1.0000 1.0000
+	  ( -225 -960 -16 ) ( -225 -960 80 ) ( -232 -960 80 ) DOOR03_3 0 0 0 1.0000 1.0000
+	  ( -232 -960 -16 ) ( -232 -960 80 ) ( -232 -1024 80 ) DOOR03_3 0 0 0 1.0000 1.0000
+	  ( -232 -1024 -16 ) ( -225 -1024 -16 ) ( -225 -960 -16 ) TECH02_6 0 0 0 1.0000 1.0000
+  }
+}
+{
+  "classname" "func_door"
+  "angle" "-1"
+  "health" "1"
+  "sounds" "2"
+  "speed" "200"
+  "wait" "-1"
+  "lip" "-8"
+  {
+	  ( -64 -1024 80 ) ( -64 -960 80 ) ( -56 -960 80 ) ECOP1_6 0 0 0 1.0000 1.0000
+	  ( -56 -1024 -16 ) ( -56 -1024 80 ) ( -56 -960 80 ) ECOP1_6 0 0 0 1.0000 1.0000
+	  ( -56 -960 -16 ) ( -56 -960 80 ) ( -64 -960 80 ) ECOP1_6 0 -22 0 1.0000 0.7500
+	  ( -64 -960 -16 ) ( -64 -960 80 ) ( -64 -1024 80 ) ECOP1_6 0 -22 0 1.0000 0.7500
+	  ( -64 -1024 -16 ) ( -64 -1024 80 ) ( -56 -1024 80 ) ECOP1_6 0 -22 0 1.0000 0.7500
+	  ( -56 -1024 -16 ) ( -56 -960 -16 ) ( -64 -960 -16 ) ECOP1_6 0 0 0 1.0000 1.0000
+  }
+  {
+	  ( -64 -1008 48 ) ( -64 -976 48 ) ( -56 -976 48 ) BASEBUTN3 0 0 0 1.0000 1.0000
+	  ( -56 -1008 16 ) ( -56 -1008 48 ) ( -56 -976 48 ) BASEBUTN3 0 0 0 1.0000 1.0000
+	  ( -56 -976 16 ) ( -56 -976 48 ) ( -64 -976 48 ) BASEBUTN3 0 0 0 1.0000 1.0000
+	  ( -64 -976 16 ) ( -64 -976 48 ) ( -64 -1008 48 ) BASEBUTN3 16 -16 0 1.0000 1.0000
+	  ( -64 -1008 16 ) ( -64 -1008 48 ) ( -56 -1008 48 ) BASEBUTN3 0 0 0 1.0000 1.0000
+	  ( -56 -1008 16 ) ( -56 -976 16 ) ( -64 -976 16 ) BASEBUTN3 0 0 0 1.0000 1.0000
+  }
+}
+{
+  "classname" "info_intermission"
+  "origin" "-734 -276 115"
+  "mangle" "170 135 180"
+}
+{
+  "classname" "info_player_start"
+  "origin" "-506 82 28"
+  "angle" "0"
+}
