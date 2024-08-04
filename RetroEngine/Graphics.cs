@@ -31,7 +31,7 @@ namespace RetroEngine
 
         public static bool ViewmodelShadows = true;
 
-        public static float SSRResolutionScale = 0.8f;
+        public static float SSRResolutionScale = 0.7f;
         public static bool EnableSSR = true;
 
         public static bool EnableSSAO = true;

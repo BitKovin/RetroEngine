@@ -857,10 +857,10 @@ namespace RetroEngine
 
             SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
 
-            DenoiseEffect.Parameters["screenWidth"]?.SetValue(ReflectionOutput.Width);
-            DenoiseEffect.Parameters["screenHeight"]?.SetValue(ReflectionOutput.Height);
+            ReflectionResultEffect.Parameters["screenWidth"]?.SetValue(ReflectionOutput.Width);
+            ReflectionResultEffect.Parameters["screenHeight"]?.SetValue(ReflectionOutput.Height);
 
-            spriteBatch.Begin(effect: DenoiseEffect, blendState: BlendState.NonPremultiplied);
+            spriteBatch.Begin(effect: ReflectionResultEffect, blendState: BlendState.NonPremultiplied);
 
             DrawFullScreenQuad(spriteBatch, reflection);
 

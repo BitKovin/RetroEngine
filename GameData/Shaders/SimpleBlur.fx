@@ -65,7 +65,7 @@ color = color / weightSum;
 	
     //float l = CalcLuminance(color) * 2;
 
-    return float4(color*5,1);
+    return float4(color,1);
 }
 
 technique SpriteDrawing
