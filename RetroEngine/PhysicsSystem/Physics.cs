@@ -229,21 +229,27 @@ namespace RetroEngine.PhysicsSystem
         {
             lock (dynamicsWorld)
             {
-                for (int i = 0; i < dynamicsWorld.CollisionObjectArray.Count; i++)
+                var collisionObjects = dynamicsWorld.CollisionObjectArray.ToArray();
+
+                Parallel.For(0, collisionObjects.Length, i =>
                 {
                     CollisionObject colObj = null;
                     try
                     {
-                        colObj = dynamicsWorld.CollisionObjectArray[i];
+                        colObj = collisionObjects[i];
+                    }
+                    catch (Exception ex) { Console.WriteLine(ex); }
 
-                    } catch(Exception ex) { Console.WriteLine(ex); }
                     // Check if the collision object is a rigid body
                     if (colObj is RigidBody rigidBody)
                     {
                         if (colObj.UserObject is null)
                         {
-                            dynamicsWorld.RemoveRigidBody((RigidBody)colObj);
-                            continue;
+                            lock (dynamicsWorld)
+                            {
+                                dynamicsWorld.RemoveRigidBody((RigidBody)colObj);
+                            }
+                            return;
                         }
                         if (colObj.UserIndex2 == -1)
                             colObj.SetBodyType(BodyType.MainBody);
@@ -251,44 +257,40 @@ namespace RetroEngine.PhysicsSystem
                         if (colObj.UserIndex == -1)
                             colObj.SetCollisionMask(BodyType.GroupCollisionTest);
 
-
                         BodyType bodyType = colObj.GetBodyType();
-
-
 
                         switch (bodyType)
                         {
                             case BodyType.World:
                             case BodyType.MainBody:
-
-
                                 break;
 
                             case BodyType.HitBox:
-                                continue;
+                                return;
                                 break;
-
-
                         }
-                        if (colObj.IsActive == false) continue;
+                        if (colObj.IsActive == false) return;
                         Entity ent = (Entity)colObj.UserObject;
 
                         Vector3 pos = colObj.WorldTransform.Translation;
 
                         // Assume this value is set based on your fixed physics update rate
-                        float fixedDeltaTime = Math.Max(1 / 50f,Time.DeltaTime);
+                        float fixedDeltaTime = Math.Max(1 / 50f, Time.DeltaTime);
 
                         if (ent.DisablePhysicsInterpolation == false)
                         {
-
                             // Store the previous and current positions of the entity
                             Vector3 previousPosition = ent.Position.ToPhysics(); // This should be updated each physics tick
                             Vector3 currentPosition = pos; // This is updated during the physics update
 
-                            // Interpolate the position based on the elapsed time in the current frame
-                            float interpolationFactor = Time.DeltaTime / fixedDeltaTime;
-                            ent.Position = Vector3.Lerp(previousPosition, currentPosition, interpolationFactor);
-                        }else
+                            if (previousPosition != currentPosition)
+                            {
+                                // Interpolate the position based on the elapsed time in the current frame
+                                float interpolationFactor = Time.DeltaTime / fixedDeltaTime;
+                                ent.Position = Vector3.Lerp(previousPosition, currentPosition, interpolationFactor);
+                            }
+                        }
+                        else
                         {
                             ent.Position = pos;
                         }
@@ -299,11 +301,99 @@ namespace RetroEngine.PhysicsSystem
                         Vector3 rotationEulerAngles = ToEulerAngles(rotation);
 
                         ent.Rotation = new Microsoft.Xna.Framework.Vector3((float)rotationEulerAngles.X, (float)rotationEulerAngles.Y, (float)rotationEulerAngles.Z);
-
                     }
-                }
+                });
             }
         }
+
+        /*
+         public static void Update()
+{
+    lock (dynamicsWorld)
+    {
+        for (int i = 0; i < dynamicsWorld.CollisionObjectArray.Count; i++)
+        {
+            CollisionObject colObj = null;
+            try
+            {
+                colObj = dynamicsWorld.CollisionObjectArray[i];
+
+            } catch(Exception ex) { Console.WriteLine(ex); }
+            // Check if the collision object is a rigid body
+            if (colObj is RigidBody rigidBody)
+            {
+                if (colObj.UserObject is null)
+                {
+                    dynamicsWorld.RemoveRigidBody((RigidBody)colObj);
+                    continue;
+                }
+                if (colObj.UserIndex2 == -1)
+                    colObj.SetBodyType(BodyType.MainBody);
+
+                if (colObj.UserIndex == -1)
+                    colObj.SetCollisionMask(BodyType.GroupCollisionTest);
+
+
+                BodyType bodyType = colObj.GetBodyType();
+
+
+
+                switch (bodyType)
+                {
+                    case BodyType.World:
+                    case BodyType.MainBody:
+
+
+                        break;
+
+                    case BodyType.HitBox:
+                        continue;
+                        break;
+
+
+                }
+                if (colObj.IsActive == false) continue;
+                Entity ent = (Entity)colObj.UserObject;
+
+                Vector3 pos = colObj.WorldTransform.Translation;
+
+                // Assume this value is set based on your fixed physics update rate
+                float fixedDeltaTime = Math.Max(1 / 50f,Time.DeltaTime);
+
+                if (ent.DisablePhysicsInterpolation == false)
+                {
+
+                    // Store the previous and current positions of the entity
+                    Vector3 previousPosition = ent.Position.ToPhysics(); // This should be updated each physics tick
+                    Vector3 currentPosition = pos; // This is updated during the physics update
+
+                    if (previousPosition == currentPosition)
+                    {
+                    }
+                    else
+                    {
+
+                        // Interpolate the position based on the elapsed time in the current frame
+                        float interpolationFactor = Time.DeltaTime / fixedDeltaTime;
+                        ent.Position = Vector3.Lerp(previousPosition, currentPosition, interpolationFactor);
+                    }
+                }else
+                {
+                    ent.Position = pos;
+                }
+
+                Matrix4x4 rotationMatrix = rigidBody.WorldTransform.GetBasis();
+                Quaternion rotation = Quaternion.CreateFromRotationMatrix(rotationMatrix);
+
+                Vector3 rotationEulerAngles = ToEulerAngles(rotation);
+
+                ent.Rotation = new Microsoft.Xna.Framework.Vector3((float)rotationEulerAngles.X, (float)rotationEulerAngles.Y, (float)rotationEulerAngles.Z);
+
+            }
+        }
+    }
+}
+         */ // old not parallel version
 
         public static Vector3 ToEulerAngles(Quaternion quaternion)
         {
