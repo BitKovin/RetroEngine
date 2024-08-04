@@ -43,7 +43,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             fireSoundPlayer2 = Level.GetCurrent().AddEntity(new SoundPlayer()) as SoundPlayer;
             fireSoundPlayer2.SetSound(FmodEventInstance.Create("event:/Weapons/pistol/pistol_fire"));
-            fireSoundPlayer2.SetEventProperty("pistol_right_hand", -1);
+            fireSoundPlayer2.SetEventProperty("pistol_right_hand", 1);
 
             ShowHandL = false;
 
@@ -205,7 +205,7 @@ namespace RetroEngine.Game.Entities.Weapons
                 fireSoundPlayer2.Play(true);
 
 
-            pistolAnimationAim.PlayAnimation(0, false);
+            pistolAnimationAim.PlayAnimation(0, false,0.05f);
 
             Bullet bullet = new Bullet();
             bullet.ignore.Add(player);
@@ -320,7 +320,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             mesh.SetInterpolationEnabled(true);
 
-            mesh.PlayAnimation("draw", false);
+            mesh.PlayAnimation("draw", false,0);
 
             mesh.Position = Camera.position;
             

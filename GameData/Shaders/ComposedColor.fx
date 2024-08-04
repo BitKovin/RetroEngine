@@ -97,6 +97,8 @@ int lutSize;
 float3 GetFromLUT(float3 color)
 {
 
+    color = saturate(color);
+
 	float COLORS = lutSize;
 	float2  _LUT_TexelSize = float2(lutSize* lutSize, lutSize);
 	float maxColor = COLORS - 1.0;
