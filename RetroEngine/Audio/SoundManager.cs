@@ -25,7 +25,7 @@ namespace RetroEngine.Audio
 
         public static bool UseFmod = true;
 
-        public static float Volume = 0.3f;
+        public static float Volume = 0.2f;
 
 
         public static void Init()

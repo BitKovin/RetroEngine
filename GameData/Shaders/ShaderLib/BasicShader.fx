@@ -1054,7 +1054,7 @@ half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half rough
 
         const int radius = 2;
 
-        float step = 1;
+        float step = 0.5;
 
 #if OPENGL
         step = radius;
@@ -1334,7 +1334,7 @@ float ReflectionMapping(float x)
 float CalculateReflectiveness(float roughness, float metallic, float3 vDir, float3 normal)
 {
 
-    return lerp(0.04, 1, metallic) * (lerp(0.1, 1, (1-roughness)*(1-roughness)));
+    return lerp(0.04, 1, metallic) * (lerp(0.2, 1, (1-roughness)*(1-roughness)));
 
     // Calculate the base reflectiveness based on metallic
     float baseReflectiveness = metallic;

@@ -197,7 +197,7 @@ namespace RetroEngine.Game.Entities.Weapons
             
 
 
-            mesh.PlayAnimation("fire", false);
+            mesh.PlayAnimation("fire", false, 0.05f);
 
             if (a)
                 fireSoundPlayer.Play(true);

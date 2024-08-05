@@ -556,12 +556,14 @@ namespace RetroEngine.PhysicsSystem
         }
 
 
-        public static RigidBody CreateCharacterCapsule(Entity entity, float HalfHeight, float radius, float mass = 1, CollisionFlags collisionFlags = CollisionFlags.None)
+        public static RigidBody CreateCharacterCapsule(Entity entity, float Height, float radius, float mass = 1, CollisionFlags collisionFlags = CollisionFlags.None)
         {
             RigidBody RigidBody;
 
             // Create a sphere shape
-            var Shape = new CapsuleShape(radius, HalfHeight);
+            var Shape = new CapsuleShape(radius, Height - radius*2);
+            Shape.Margin = 0;
+
             Shape.UserObject = new CollisionShapeData();
             var motionState = new DefaultMotionState(Matrix4x4.CreateTranslation(0, 0, 0));
 
@@ -575,6 +577,7 @@ namespace RetroEngine.PhysicsSystem
 
             RigidBody.SetCollisionMask(BodyType.GroupCollisionTest);
             RigidBody.SetBodyType(BodyType.CharacterCapsule);
+
 
             lock (dynamicsWorld)
             dynamicsWorld.AddRigidBody(RigidBody);

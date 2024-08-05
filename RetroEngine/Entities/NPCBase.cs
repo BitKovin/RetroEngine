@@ -66,7 +66,7 @@ namespace RetroEngine.Entities
         {
             base.Start();
 
-            body = Physics.CreateCharacterCapsule(this, 1, 0.5f, 1);
+            body = Physics.CreateCharacterCapsule(this, 1.8f, 0.4f, 1);
             body.Gravity = new Vector3(0, -35, 0).ToNumerics();
             body.SetPosition(Position.ToPhysics());
 
@@ -194,7 +194,7 @@ namespace RetroEngine.Entities
             MoveDirection = Vector3.Lerp(MoveDirection, DesiredMoveDirection, Time.DeltaTime * 3);
 
 
-            mesh.Position = Position - new Vector3(0, 1.05f, 0);
+            mesh.Position = Position - new Vector3(0, 0.93f, 0);
 
             mesh.Rotation = new Vector3(0, MathHelper.FindLookAtRotation(Vector3.Zero, MoveDirection).Y, 0);
 

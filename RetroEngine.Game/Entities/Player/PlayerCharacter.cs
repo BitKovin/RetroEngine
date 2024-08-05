@@ -160,10 +160,10 @@ namespace RetroEngine.Game.Entities.Player
         {
             base.Start();
 
-            body = Physics.CreateCharacterCapsule(this, 1, 0.5f, 2);
+            body = Physics.CreateCharacterCapsule(this, 1.8f, 0.35f, 2);
             //body.UserIndex = (int)BodyType.HitTest;
             //body.UserIndex2 = (int)BodyType.CharacterCapsule;
-            body.Gravity = new Vector3(0, -25, 0).ToNumerics();
+            body.Gravity = new Vector3(0, -27, 0).ToNumerics();
 
 
             body.SetPosition(Position.ToPhysics());
@@ -535,7 +535,7 @@ namespace RetroEngine.Game.Entities.Player
             if (pos == Vector3.Zero)
                 return;
 
-            var hit = Physics.LineTrace(pos.ToPhysics(), (pos - new Vector3(0, 0.8f, 0)).ToPhysics(), new List<CollisionObject>() { body }, body.GetCollisionMask());
+            var hit = Physics.LineTrace(pos.ToPhysics(), (pos - new Vector3(0, 0.73f, 0)).ToPhysics(), new List<CollisionObject>() { body }, body.GetCollisionMask());
 
             if (hit.HasHit == false)
                 return;
@@ -568,11 +568,11 @@ namespace RetroEngine.Game.Entities.Player
             }
 
 
-            hitPoint.Y += 1.4f;
+            hitPoint.Y += 1.5f;
 
             DrawDebug.Sphere(0.5f, hitPoint, Vector3.UnitY);
 
-            Vector3 lerpPose = Vector3.Lerp(Position, hitPoint, 0.5f);
+            Vector3 lerpPose = Vector3.Lerp(Position, hitPoint, 0.4f);
 
             body.SetPosition(lerpPose);
 
@@ -636,7 +636,7 @@ namespace RetroEngine.Game.Entities.Player
 
             UpdatePlayerInput();
 
-            bodyMesh.Position = interpolatedPosition - Camera.rotation.GetForwardVector().XZ().Normalized() * 0.25f - new Vector3(0, 1.0f, 0);
+            bodyMesh.Position = interpolatedPosition - Camera.rotation.GetForwardVector().XZ().Normalized() * 0.25f - new Vector3(0, 0.93f, 0);
             bodyMesh.Rotation = new Vector3(0, Camera.rotation.Y, 0);
 
 

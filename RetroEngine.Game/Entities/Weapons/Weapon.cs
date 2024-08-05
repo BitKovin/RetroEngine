@@ -122,7 +122,6 @@ namespace RetroEngine.Game.Entities.Weapons
 
         void UpdateSway()
         {
-            return;
             if (GameMain.Instance.paused) return;
 
             Sway -= new Vector3(Input.MouseDelta.X,-Input.MouseDelta.Y,0)/3000;
