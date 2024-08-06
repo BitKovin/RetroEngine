@@ -255,7 +255,6 @@ namespace RetroEngine
                 effect.Parameters["SSRWidth"]?.SetValue(reflection.Height);
             }
 
-            effect.Parameters["earlyZ"]?.SetValue(Graphics.EarlyDepthDiscardShader);
             effect.Parameters["ViewmodelShadowsEnabled"]?.SetValue(Graphics.ViewmodelShadows);
 
 

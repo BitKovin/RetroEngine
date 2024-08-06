@@ -250,8 +250,9 @@ namespace RetroEngine
 
             effect.Parameters["DitherDisolve"]?.SetValue(DitherDisolve);
 
+            effect.Parameters["earlyZ"]?.SetValue(Graphics.EarlyDepthDiscardShader && Transperent == false);
 
-            if(Viewmodel&&Graphics.ViewmodelShadows)
+            if (Viewmodel&&Graphics.ViewmodelShadows)
             {
 
                 effect.Parameters["ShadowMap"]?.SetValue(GameMain.Instance.render.shadowMapViewmodel);
@@ -426,7 +427,7 @@ namespace RetroEngine
             if (SimpleTransperent && Transperent)
             {
                 graphicsDevice.DepthStencilState = DepthStencilState.DepthRead;
-                graphicsDevice.RasterizerState = RasterizerState.CullClockwise;
+                graphicsDevice.RasterizerState = Graphics.DisableBackFaceCulling || TwoSided ? RasterizerState.CullNone : (isNegativeScale() ? RasterizerState.CullCounterClockwise : RasterizerState.CullClockwise);
             }
             else
             {

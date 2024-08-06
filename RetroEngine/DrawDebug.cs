@@ -110,7 +110,7 @@ namespace RetroEngine
             Vector2 pos = UiElement.WorldToScreenSpace(location, out var found);
 
             if(found)
-            spriteBatch.DrawString(GameMain.Instance.DefaultFont, textString, pos, Color.White,0, new Vector2(0.0f),0.2f,SpriteEffects.None,0);
+            spriteBatch.DrawString(GameMain.Instance.DefaultFont, textString, pos * Render.ResolutionScale, Color.White,0, new Vector2(0.0f),0.2f,SpriteEffects.None,0);
 
             spriteBatch.End();
         }

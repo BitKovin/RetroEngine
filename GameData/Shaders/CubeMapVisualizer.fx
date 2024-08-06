@@ -32,7 +32,7 @@ PixelOutput output = (PixelOutput) 0;
     
     float depthIn = SampleMaxDepth(screenCoords);
     
-    DepthDiscard(depthIn, input);
+    DepthDiscard(depthIn + 1, input);
     
     
     

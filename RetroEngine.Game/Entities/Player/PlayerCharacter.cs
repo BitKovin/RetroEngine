@@ -535,7 +535,7 @@ namespace RetroEngine.Game.Entities.Player
             if (pos == Vector3.Zero)
                 return;
 
-            var hit = Physics.LineTrace(pos.ToPhysics(), (pos - new Vector3(0, 0.73f, 0)).ToPhysics(), new List<CollisionObject>() { body }, body.GetCollisionMask());
+            var hit = Physics.LineTrace(pos.ToPhysics(), (pos - new Vector3(0, 0.73f, 0)).ToPhysics(), new List<CollisionObject>() { body }, BodyType.World & BodyType.MainBody);
 
             if (hit.HasHit == false)
                 return;

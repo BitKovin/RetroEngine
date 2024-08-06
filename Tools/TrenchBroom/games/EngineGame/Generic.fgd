@@ -44,7 +44,15 @@
 	onEnterAction(string) : "On Enter" : "trigger_enter"
 
 	onExitAction(string) : "On Exit" : "trigger_exit"
+]
 
+@SolidClass base(Entity) = water : "Liquids"
+[
+	target(string) : "Target Name" : ""
+
+	onEnterAction(string) : "On Enter" : "trigger_enter"
+
+	onExitAction(string) : "On Exit" : "trigger_exit"
 ]
 
 @PointClass base(Entity) size(-8 -8 -8, 8 8 48) color(70 70 255) = info.navpoint : "Nav Point" []

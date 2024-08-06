@@ -22,10 +22,12 @@ namespace RetroEngine.PhysicsSystem
         World = 4,             // 4
         CharacterCapsule = 8,  // 8
         NoRayTest = 16,         // 16
+        Liquid = 32,         // 16
 
-        GroupAll = MainBody | HitBox | World | CharacterCapsule | NoRayTest,
+        GroupAll = MainBody | HitBox | World | CharacterCapsule | NoRayTest | Liquid,
         GroupHitTest = GroupAll & ~CharacterCapsule,
         GroupCollisionTest = GroupAll & ~HitBox,
+        GroupAllPhysical = GroupHitTest & Liquid,
     }
 
     public class Physics

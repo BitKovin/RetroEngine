@@ -12,7 +12,7 @@ namespace RetroEngine
     public static class PhysicsUtils
     {
 
-        public static void SetPosition(this RigidBody body, Vector3 newPosition)
+        public static void SetPosition(this CollisionObject body, Vector3 newPosition)
         {
             lock (body) lock (Physics.dynamicsWorld)
                 {
@@ -27,22 +27,26 @@ namespace RetroEngine
                 }
         }
 
-        public static void SetRotation(this RigidBody body, Quaternion newRotation)
+        public static void SetRotation(this CollisionObject body, Quaternion newRotation)
         {
             lock (body) lock (Physics.dynamicsWorld)
                 {
 
-                // Create the new rotation matrix from the quaternion
-                var newTransform = System.Numerics.Matrix4x4.CreateFromQuaternion(newRotation.ToPhysics());
+                    // Create the new rotation matrix from the quaternion
+                    var newTransform = System.Numerics.Matrix4x4.CreateFromQuaternion(newRotation.ToPhysics());
 
-                // Preserve the existing translation
-                newTransform.Translation = body.WorldTransform.Translation;
+                    // Preserve the existing translation
+                    newTransform.Translation = body.WorldTransform.Translation;
 
-                // Update the body's world transform and motion state
-                body.WorldTransform = newTransform;
-                body.MotionState.WorldTransform = newTransform;
+                    // Update the body's world transform and motion state
+                    body.WorldTransform = newTransform;
 
-            }
+                    var rb = RigidBody.Upcast(body);
+
+                    if(rb != null)
+                    rb.MotionState.WorldTransform = newTransform;
+
+                }
         }
 
         public static void SetRotation(this RigidBody body, Vector3 Rotation)
