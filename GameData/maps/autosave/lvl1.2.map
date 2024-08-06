@@ -1,0 +1,37 @@
+// Game: GenericEngine
+// Format: Standard
+// entity 0
+{
+"classname" "worldspawn"
+"_tb_textures" "textures\brushes;textures\brushes\Ground"
+// brush 0
+{
+( -4864 -9984 0 ) ( -4864 3968 -272 ) ( -4864 3968 0 ) brushes/Ground/coast_sand 0 0 0 0.5 0.5
+( -768 -9984 16 ) ( -4864 -9984 0 ) ( -4864 3968 0 ) brushes/Ground/coast_sand 0 0 0 0.5 0.5
+( 4352 3968 16 ) ( -768 -9984 16 ) ( -4864 3968 0 ) brushes/Ground/coast_sand 0 0 0 0.5 0.5
+( -768 -9984 16 ) ( -4864 -9984 -256 ) ( -4864 -9984 0 ) brushes/Ground/coast_sand 0 0 0 0.5 0.5
+( 5632 -2432 16 ) ( 4992 2176 16 ) ( 5504 -640 16 ) brushes/Ground/coast_sand -512 0 0 0.5 0.5
+( 4352 3968 16 ) ( -4864 3968 -272 ) ( 4352 3968 -256 ) brushes/Ground/coast_sand 0 0 0 0.5 0.5
+( 4352 3968 -256 ) ( -4864 3968 -272 ) ( -4864 -9984 -256 ) brushes/Ground/coast_sand 0 0 0 0.5 0.5
+( 4352 3968 -256 ) ( -4864 -9984 -256 ) ( 4096 -7296 -240 ) brushes/Ground/coast_sand 0 0 0 0.5 0.5
+( 4096 -7296 -240 ) ( -4864 -9984 -256 ) ( 3456 -8192 -240 ) brushes/Ground/coast_sand 0 0 0 0.5 0.5
+( 3456 -8192 -240 ) ( -4864 -9984 -256 ) ( 2688 -8960 -240 ) brushes/Ground/coast_sand 0 0 0 0.5 0.5
+( 4864 -6016 -240 ) ( 4352 3968 -256 ) ( 4096 -7296 -240 ) brushes/Ground/coast_sand 0 0 0 0.5 0.5
+( 2688 -8960 -240 ) ( -4864 -9984 -256 ) ( 1536 -9600 -240 ) brushes/Ground/coast_sand 0 0 0 0.5 0.5
+( 1536 -9600 -240 ) ( -4864 -9984 -256 ) ( -768 -9984 -240 ) brushes/Ground/coast_sand 0 0 0 0.5 0.5
+( 5504 -4096 -240 ) ( 4352 3968 -256 ) ( 4864 -6016 -240 ) brushes/Ground/coast_sand -512 0 0 0.5 0.5
+( 5632 -2432 -240 ) ( 4352 3968 -256 ) ( 5504 -4096 -240 ) brushes/Ground/coast_sand -512 0 0 0.5 0.5
+( 5632 -2432 -240 ) ( 5504 -640 -240 ) ( 4352 3968 -256 ) brushes/Ground/coast_sand -512 0 0 0.5 0.5
+( 5504 -640 -240 ) ( 4992 2176 -240 ) ( 4352 3968 -256 ) brushes/Ground/coast_sand -512 0 0 0.5 0.5
+( 1536 -9600 16 ) ( -768 -9984 -240 ) ( -768 -9984 16 ) brushes/Ground/coast_sand -512 512 0 0.5 0.5
+( 2688 -8960 16 ) ( 1536 -9600 -240 ) ( 1536 -9600 16 ) brushes/Ground/coast_sand -512 512 0 0.5 0.5
+( 3456 -8192 16 ) ( 2688 -8960 -240 ) ( 2688 -8960 16 ) brushes/Ground/coast_sand 0 512 0 0.5 0.5
+( 4096 -7296 16 ) ( 3456 -8192 -240 ) ( 3456 -8192 16 ) brushes/Ground/coast_sand 0 512 0 0.5 0.5
+( 4864 -6016 16 ) ( 4096 -7296 -240 ) ( 4096 -7296 16 ) brushes/Ground/coast_sand 0 512 0 0.5 0.5
+( 4352 3968 -256 ) ( 4992 2176 16 ) ( 4352 3968 16 ) brushes/Ground/coast_sand 0 512 0 0.5 0.5
+( 5504 -4096 16 ) ( 4864 -6016 -240 ) ( 4864 -6016 16 ) brushes/Ground/coast_sand 0 512 0 0.5 0.5
+( 5504 -640 16 ) ( 4992 2176 -240 ) ( 5504 -640 -240 ) brushes/Ground/coast_sand 0 512 0 0.5 0.5
+( 5632 -2432 16 ) ( 5504 -4096 -240 ) ( 5504 -4096 16 ) brushes/Ground/coast_sand 0 512 0 0.5 0.5
+( 5632 -2432 16 ) ( 5504 -640 -240 ) ( 5632 -2432 -240 ) brushes/Ground/coast_sand 0 512 0 0.5 0.5
+}
+}

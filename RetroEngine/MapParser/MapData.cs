@@ -72,6 +72,10 @@ namespace RetroEngine.Map
 
                 LoadingScreen.Update(progress);
 
+#if DEBUG
+                BrushFaceMesh.loadedScenes.Clear();
+#endif
+
                 if (ent.Brushes.Count > 0)
                 {
                     if (entity is null)

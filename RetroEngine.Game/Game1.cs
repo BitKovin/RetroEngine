@@ -42,7 +42,7 @@ namespace RetroEngine.Game
             GameSpeedEvent = FmodEventInstance.Create("snapshot:/GameSpeed");
             GameSpeedEvent.Play();
 
-            Level.LoadFromFile("test");
+            Level.LoadFromFile("lvl1");
 
             base.GameInitialized();
 
@@ -62,7 +62,7 @@ namespace RetroEngine.Game
                 DefaultShader = null;
             }
 
-            //DefaultShader = AssetRegistry.GetShaderFromName("SimpleEffect");
+            DefaultShader = AssetRegistry.GetShaderFromName("SimpleEffect");
 
             base.Update(gameTime);
 

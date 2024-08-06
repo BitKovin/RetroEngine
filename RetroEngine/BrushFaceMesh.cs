@@ -54,12 +54,13 @@ namespace RetroEngine
             List<BrushFaceMesh> models = new List<BrushFaceMesh>();
             Assimp.AssimpContext importer = new Assimp.AssimpContext();
             Assimp.Scene scene;
+
             if (loadedScenes.ContainsKey(filePath))
                 scene = loadedScenes[filePath];
             else
             {
                 scene = importer.ImportFileFromStream(AssetRegistry.GetFileStreamFromPath(filePath), PostProcessSteps) ;
-                loadedScenes.Add(filePath, scene);
+                //loadedScenes.Add(filePath, scene);
             }
 
 

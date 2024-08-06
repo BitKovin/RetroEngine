@@ -34,7 +34,7 @@ namespace RetroEngine.Game.Entities.Player
         float maxSpeed = 8;
         float maxSpeedAir = 2;
         float acceleration = 90;
-        float airAcceleration = 40;
+        float airAcceleration = 20;
         bool tryLimit = false;
 
         [JsonInclude]
@@ -530,7 +530,7 @@ namespace RetroEngine.Game.Entities.Player
 
             if (stepDelay.Wait()) return;
 
-            Vector3 pos = Position + dir;
+            Vector3 pos = Position + dir/1.2f;
 
             if (pos == Vector3.Zero)
                 return;

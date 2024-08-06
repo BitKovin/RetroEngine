@@ -62,7 +62,7 @@ namespace RetroEngine.Game.Effects.Particles
             Particle particle = base.GetNewParticle();
 
             particle.Scale = 0.05f;
-            particle.color = new Vector4(0.7f,0,0,0.8f);
+            particle.color = new Vector4(0.5f,0,0,0.8f);
 
             particle.BouncePower = 0.1f;
 

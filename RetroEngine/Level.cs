@@ -103,6 +103,7 @@ namespace RetroEngine
 
             MapData.ClearMeshData();
 
+#if RELEASE
             if (name != GetCurrent().Name) 
             {
                 AssetRegistry.ConstantCache.Clear();
@@ -110,6 +111,9 @@ namespace RetroEngine
                 AssetRegistry.UnloadBanks();
                 StaticMesh.ClearCache();
             }
+
+#endif
+
             Time.DeltaTime = 0.001f;
 
             Navigation.WaitForProcess();
