@@ -31,7 +31,7 @@ PixelOutput PixelShaderFunction(PixelInput input)
     
     textureAlpha *= Transparency;
     
-    output.Color = float4(textureColor, textureAlpha);
+    output.Color = float4(textureColor, textureAlpha) * input.Color;
     
     output.Normal = float4((input.Normal + 1) / 2, 1);
     output.Reflectiveness = float4(0, 0, 0, 1);

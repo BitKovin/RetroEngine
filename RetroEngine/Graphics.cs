@@ -29,7 +29,7 @@ namespace RetroEngine
 
         public static bool DynamicSunShadowsEnabled = true;
 
-        public static bool ViewmodelShadows = true;
+        public static bool ViewmodelShadows = false;
 
         public static float SSRResolutionScale = 0.7f;
         public static bool EnableSSR = true;

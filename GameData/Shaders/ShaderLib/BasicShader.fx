@@ -1025,8 +1025,8 @@ half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half rough
     if(dirFactor<=0.001)
         return 0;
 
-    half offsetScale = 1 / (LightResolutions[i] / 40);// / lerp(distanceToLight,1, 0.7);
-    offsetScale *= lerp(abs(dot(normal, normalize(lightVector))), 0.7, 1);
+    half offsetScale = 1 / (LightResolutions[i] / 30);// / lerp(distanceToLight,1, 0.7);
+    offsetScale *= lerp(abs(dot(normal, normalize(lightVector))), 0.6, 1);
     half notShadow = 1;
 
     if(dot(normal, normalize(lightVector))<-0.01)

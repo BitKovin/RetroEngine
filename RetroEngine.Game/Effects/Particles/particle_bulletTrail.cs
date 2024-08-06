@@ -26,6 +26,8 @@ namespace RetroEngine.Game.Effects.Particles
         {
             TexturePath = "particles/trail.png";
 
+            Shader = AssetRegistry.GetShaderFromName("Unlit");
+
             InitialSpawnCount = 2;
             SpawnRate = 50;
             //BoundingRadius = 30000;
@@ -60,7 +62,7 @@ namespace RetroEngine.Game.Effects.Particles
             Particle particle = base.GetNewParticle();
 
             particle.Scale = 0.05f;
-            particle.color = new Vector4(1,0,0,1);
+            particle.color = new Vector4(0.7f,0,0,0.8f);
 
             particle.BouncePower = 0.1f;
 
