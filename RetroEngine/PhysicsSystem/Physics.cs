@@ -617,9 +617,31 @@ namespace RetroEngine.PhysicsSystem
                 world.RayTest(rayStart, rayEnd, rayCallback);
                 return rayCallback;
             }
+        }
+
+        public static MyAllRayResultCallback MultiLineTrace(Microsoft.Xna.Framework.Vector3 rayStart, Microsoft.Xna.Framework.Vector3 rayEnd, List<CollisionObject> ignoreList = null, BodyType bodyType = BodyType.GroupAll)
+        {
+            lock (dynamicsWorld)
+            {
+
+                Vector3 start = rayStart.ToPhysics();
+                Vector3 end = rayEnd.ToPhysics();
+
+                CollisionWorld world = dynamicsWorld;
+
+                MyAllRayResultCallback rayCallback = new MyAllRayResultCallback(start, end);
+                rayCallback.BodyTypeMask = bodyType;
+                if (ignoreList is not null)
+                    rayCallback.ignoreList = ignoreList;
 
 
+                // Perform the ray cast
+                world.RayTest(start, end, rayCallback);
 
+                rayCallback.Hits = rayCallback.Hits.OrderBy(h => h.ClosestHitFraction).ToList();
+
+                return rayCallback;
+            }
         }
 
         public static MyClosestConvexResultCallback SphereTraceForStatic(Vector3 rayStart, Vector3 rayEnd, float radius = 0.5f)

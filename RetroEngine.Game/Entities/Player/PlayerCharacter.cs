@@ -659,6 +659,20 @@ namespace RetroEngine.Game.Entities.Player
             UpdatePlayerLight();
 
             
+            if(Input.GetAction("test").Pressed())
+            {
+                var result = Physics.MultiLineTrace(Camera.position, Camera.position + Camera.Forward * 50, new List<CollisionObject>() { body }, BodyType.GroupHitTest);
+
+                int i = 0;
+
+                foreach(var hit in result.Hits)
+                {
+                    DrawDebug.Text(hit.HitPointWorld, i.ToString(), 30);
+                    i++;
+                }
+
+            }
+
 
             cylinder.Position = Position + Camera.rotation.GetForwardVector().XZ() * 3;
         }
