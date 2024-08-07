@@ -125,7 +125,8 @@
 // entity 1
 {
 "classname" "info_player_start"
-"origin" "4384 -6824 56"
+"origin" "4752 -6824 56"
+"angle" "180"
 }
 // entity 2
 {
@@ -153,5 +154,14 @@
 "classname" "cubeMap"
 "origin" "367 -4545 128.312"
 "radius" "1000"
+"_tb_layer" "1"
+}
+// entity 5
+{
+"classname" "weaponPickup"
+"origin" "4764 -6812 44"
+"type" "weapon_pistol"
+"unique" "true"
+"targetname" "pistols_start_pickup"
 "_tb_layer" "1"
 }

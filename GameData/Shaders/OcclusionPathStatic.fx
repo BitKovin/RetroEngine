@@ -22,6 +22,7 @@ struct VertexShaderInput
 {
     float4 Position : POSITION0;
     float2 TexCoords : TEXCOORD0;
+    float4 Color : COLOR0;
 };
 
 Texture2D Texture;
@@ -38,6 +39,7 @@ struct VertexShaderOutput
     float4 MyPosition : TEXCOORD0;
     float3 WorldPos : TEXCOORD1;
     float2 TexCoords : TEXCOORD2;
+    float4 Color : COLOR0;
 };
 
 VertexShaderOutput MainVS(in VertexShaderInput input)
@@ -54,6 +56,8 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
     output.MyPosition = output.Position;
 
     output.TexCoords = input.TexCoords;
+
+    output.Color = input.Color;
 
     return output;
 }
@@ -72,13 +76,13 @@ PS_Out MainPS(VertexShaderOutput input)
         depth = distance(input.WorldPos, CameraPos);
     
 #if OPENGL
-    if (Masked && tex2D(TextureSampler, input.TexCoords).a < 0.99)
+    if (Masked && tex2D(TextureSampler, input.TexCoords).a * input.Color.a < 0.99)
         discard;
 #else 
 
     if(Masked)
         {
-            if(tex2D(TextureSampler, input.TexCoords).a < 0.99)
+            if(tex2D(TextureSampler, input.TexCoords).a* input.Color.a < 0.99)
                 discard;
         }
 #endif

@@ -33,10 +33,6 @@ namespace RetroEngine.Entities
 
             
 
-            foreach (var mesh in meshes) 
-            { 
-                mesh.TwoSided = true;
-            }
 
         }
 
