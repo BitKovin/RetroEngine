@@ -169,9 +169,6 @@
 {
 "classname" "event_start"
 "origin" "4134 -6742 58.2166"
-"target" "m1"
-"targetname" "start"
-"actionName" "play"
 "_tb_layer" "1"
 }
 // entity 7
@@ -179,6 +176,5 @@
 "classname" "music_player"
 "origin" "4271 -6657 31.1803"
 "targetname" "m1"
-"eventName" "event:/Music/testchoir"
 "_tb_layer" "1"
 }

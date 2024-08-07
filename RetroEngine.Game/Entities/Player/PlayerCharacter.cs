@@ -87,6 +87,7 @@ namespace RetroEngine.Game.Entities.Player
         Shader underWaterEffect;
         PostProcessStep waterPP = new PostProcessStep();
 
+        FmodEventInstance underWaterSound;
 
         //particle_system_meleeTrail meleeTrail;
         public PlayerCharacter() : base()
@@ -176,6 +177,7 @@ namespace RetroEngine.Game.Entities.Player
             //body.UserIndex2 = (int)BodyType.CharacterCapsule;
             body.Gravity = new Vector3(0, -27, 0).ToNumerics();
 
+            underWaterSound = FmodEventInstance.Create("snapshot:/UnderWater");
 
             body.SetPosition(Position.ToPhysics());
 
@@ -290,11 +292,13 @@ namespace RetroEngine.Game.Entities.Player
         void EnteredWater()
         {
             PostProcessStep.StepsBefore.Add(waterPP);
+            underWaterSound.StartEvent();
         }
 
         void ExitedWater()
         {
             PostProcessStep.StepsBefore.Remove(waterPP);
+            underWaterSound.Stop();
         }
 
         public override void AsyncUpdate()
@@ -647,6 +651,13 @@ namespace RetroEngine.Game.Entities.Player
 
         }
 
+        public override void Destroy()
+        {
+
+            ExitedWater();
+
+            base.Destroy();
+        }
 
         bool CheckGroundAtOffset(Vector3 offset)
         {
