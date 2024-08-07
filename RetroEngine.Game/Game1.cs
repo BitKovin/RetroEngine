@@ -71,6 +71,10 @@ namespace RetroEngine.Game
                 NavigationSystem.RecastDebugDraw.DebugDrawNavMeshPolys(NavigationSystem.Recast.dtNavMesh);
             }
 
+
+            NavigationSystem.Recast.TileCache?.Update();
+
+
             if (Input.GetAction("fullscreen").Pressed())
                 ToggleFullscreen();
         }
@@ -83,7 +87,7 @@ namespace RetroEngine.Game
             AssetRegistry.LoadFmodBankIntoMemory("Sounds/banks/Master.strings.bank");
 
 
-            NavigationSystem.Recast.LoadSampleNavMesh();
+            NavigationSystem.Recast.BuildNavigationData();
 
 
             //PostProcessStep.StepsAfter.Add(new TestPP());
@@ -124,6 +128,7 @@ namespace RetroEngine.Game
 
             Input.AddAction("test").AddKeyboardKey(Keys.R);
             Input.AddAction("test2").AddKeyboardKey(Keys.E);
+            Input.AddAction("test3").AddKeyboardKey(Keys.F);
 
             Input.AddAction("qSave").AddKeyboardKey(Keys.F5);
             Input.AddAction("qLoad").AddKeyboardKey(Keys.F8);

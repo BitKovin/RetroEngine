@@ -37,12 +37,27 @@ namespace RetroEngine.Game.Entities
 
             }
 
+            if (Input.GetAction("test3").Pressed())
+            {
+
+                var hit = Physics.LineTrace(Camera.position, Camera.position + Camera.Forward * 100, null, bodyType: BodyType.World);
+
+                NavigationSystem.Recast.TileCache.AddObstacle(((Vector3)hit.HitPointWorld).ToRc(), 2, 2);
+
+
+
+
+                DrawDebug.Sphere(2, hit.HitPointWorld, Vector3.UnitZ, 500);
+
+            }
+
 
         }
 
         void FindPath()
         {
-            DtNavMeshQuery navMeshQuery = new DtNavMeshQuery(NavigationSystem.Recast.dtNavMesh);
+            DtNavMeshQuery navMeshQuery = new DtNavMeshQuery(NavigationSystem.Recast.TileCache.GetNavMesh());
+
 
             IDtQueryFilter filter = new DtQueryDefaultFilter();
 
@@ -69,7 +84,7 @@ namespace RetroEngine.Game.Entities
 
             rcTestNavMeshTool.FindFollowPath(NavigationSystem.Recast.dtNavMesh, navMeshQuery, startRef, endRef, startPos.ToRc(), endPos.ToRc(), filter, true, ref longs, 0, ref path);
 
-            DrawDebug.Path(path.ConvertPath(), Vector3.UnitZ, 10);
+            DrawDebug.Path(path.ConvertPath(), Vector3.UnitZ, 2);
 
         }
 

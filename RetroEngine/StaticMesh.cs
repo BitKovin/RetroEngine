@@ -231,6 +231,54 @@ namespace RetroEngine
             }
         }
 
+        public struct MeshData
+        {
+            public List<Vector3> vertices;
+            public List<int> indices;
+        }
+
+        public virtual List<MeshData> GetMeshData()
+        {
+
+            List<MeshData> meshData = new List<MeshData>();
+
+            foreach(ModelMesh mesh in model.Meshes)
+                foreach(ModelMeshPart meshPart in mesh.MeshParts)
+                {
+
+                    VertexData[] vertexData = new VertexData[meshPart.VertexBuffer.VertexCount];
+                    int[] indices = new int[meshPart.IndexBuffer.IndexCount];
+
+                    meshPart.VertexBuffer.GetData(vertexData);
+                    meshPart.IndexBuffer.GetData(indices);
+
+                    List<Vector3> positions = new List<Vector3>();
+
+                    if (Position != Vector3.Zero || Rotation != Vector3.Zero || Scale != Vector3.Zero)
+                    {
+
+                        foreach (VertexData data in vertexData)
+                        {
+                            positions.Add(Vector3.Transform(data.Position, GetWorldMatrix()));
+                        }
+                    }
+                    else
+                    {
+                        foreach (VertexData data in vertexData)
+                        {
+                            positions.Add(data.Position);   
+                        }
+                    }
+
+
+                    meshData.Add(new MeshData { indices = indices.ToList(), vertices = positions });
+
+                }
+
+            return meshData;
+
+        }
+
         public bool isNegativeScale()
         {
             return (Scale.X * Scale.Y * Scale.Z) < 0;

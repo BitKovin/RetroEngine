@@ -20,26 +20,15 @@ using MonoGame.Extended.ECS;
 using DotRecast.Recast.Toolset;
 using DotRecast.Recast.Toolset.Geom;
 using RetroEngine.Map;
+using Assimp;
+using DotRecast.Detour.TileCache;
+using DotRecast.Detour.TileCache.Io.Compress;
+using DotRecast.Core.Collections;
 
 namespace RetroEngine.NavigationSystem
 {
     public static class Recast
     {
-
-        private const float m_cellSize = 0.3f;
-        private const float m_cellHeight = 0.2f;
-        private const float m_agentHeight = 2.0f;
-        private const float m_agentRadius = 0.6f;
-        private const float m_agentMaxClimb = 0.9f;
-        private const float m_agentMaxSlope = 45.0f;
-        private const int m_regionMinSize = 8;
-        private const int m_regionMergeSize = 20;
-        private const float m_edgeMaxLen = 12.0f;
-        private const float m_edgeMaxError = 1.3f;
-        private const int m_vertsPerPoly = 6;
-        private const float m_detailSampleDist = 6.0f;
-        private const float m_detailSampleMaxError = 1.0f;
-        private static RcPartition m_partitionType = RcPartition.WATERSHED;
 
         public static DtNavMesh dtNavMesh;
 
@@ -48,7 +37,7 @@ namespace RetroEngine.NavigationSystem
         public static void LoadSampleNavMesh()
         {
 
-            var partitionType = RcPartition.LAYERS;
+            var partitionType = RcPartition.WATERSHED;
 
             string filename = AssetRegistry.ROOT_PATH + $"GameData/maps/{Level.GetCurrent().Name.Replace(".map",".obj")}";
 
@@ -56,16 +45,17 @@ namespace RetroEngine.NavigationSystem
 
             filename = Path.GetFullPath(filename);
 
-            m_partitionType = partitionType;
             DemoInputGeomProvider geomProvider = DemoInputGeomProvider.LoadFile(filename, 1f/MapData.UnitSize);
 
             TileNavMeshBuilder tileNavMeshBuilder = new TileNavMeshBuilder();
 
             RcNavMeshBuildSettings rcNavMeshBuildSettings = new RcNavMeshBuildSettings();
 
-            rcNavMeshBuildSettings.cellSize = 0.2f;
+            rcNavMeshBuildSettings.cellSize = 0.1f;
+            rcNavMeshBuildSettings.agentRadius = 0.5f;
 
             var buildResult = tileNavMeshBuilder.Build(geomProvider, rcNavMeshBuildSettings);
+
 
             if (buildResult.Success)
             {
@@ -77,78 +67,174 @@ namespace RetroEngine.NavigationSystem
 
         }
 
-        private static void SaveObj(string filename, RcPolyMesh mesh)
+        public static void BuildNavigationData()
         {
-            try
+
+
+            float[] verts = new float[0];
+            int[] faces = new int[0];
+
+            List<StaticMesh.MeshData> meshDatas = new List<StaticMesh.MeshData>();  
+
+            foreach(Entity entity in Level.GetCurrent().entities)
             {
-                string path = Path.Combine("test-output", filename);
-                Directory.CreateDirectory(Path.GetDirectoryName(path));
-                using StreamWriter fw = new StreamWriter(path);
-                for (int v = 0; v < mesh.nverts; v++)
+
+                if (entity.Static == false) continue;
+
+                foreach(StaticMesh mesh in entity.meshes)
                 {
-                    fw.Write("v " + (mesh.bmin.X + mesh.verts[v * 3] * mesh.cs) + " "
-                             + (mesh.bmin.Y + mesh.verts[v * 3 + 1] * mesh.ch) + " "
-                             + (mesh.bmin.Z + mesh.verts[v * 3 + 2] * mesh.cs) + "\n");
+                    if (mesh.Static == false) continue;
+
+                    meshDatas.AddRange(mesh.GetMeshData());
+
                 }
 
-                for (int i = 0; i < mesh.npolys; i++)
-                {
-                    int p = i * mesh.nvp * 2;
-                    fw.Write("f ");
-                    for (int j = 0; j < mesh.nvp; ++j)
-                    {
-                        int v = mesh.polys[p + j];
-                        if (v == RC_MESH_NULL_IDX)
-                        {
-                            break;
-                        }
-
-                        fw.Write((v + 1) + " ");
-                    }
-
-                    fw.Write("\n");
-                }
-
-                fw.Close();
             }
-            catch (Exception e)
+
+            MergeMeshes(meshDatas, out verts, out faces);
+
+            DemoInputGeomProvider geomProvider = new DemoInputGeomProvider(verts, faces);
+
+            TileNavMeshBuilder tileNavMeshBuilder = new TileNavMeshBuilder();
+
+            RcNavMeshBuildSettings rcNavMeshBuildSettings = new RcNavMeshBuildSettings();
+
+            rcNavMeshBuildSettings.cellSize = 0.1f;
+            rcNavMeshBuildSettings.agentRadius = 0.5f;
+
+            var buildResult = Build(geomProvider, rcNavMeshBuildSettings, RcByteOrder.BIG_ENDIAN, true);//tileNavMeshBuilder.Build(geomProvider, rcNavMeshBuildSettings);
+
+            if (buildResult.Success)
             {
-                Console.WriteLine(e);
+                dtNavMesh = buildResult.NavMesh;
+            }
+            else
+            {
+                Logger.Log("Error generating nav mesh");
             }
         }
 
-        private static void SaveObj(string filename, RcPolyMeshDetail dmesh)
+        private static IDtTileCacheCompressorFactory _comp = DtTileCacheCompressorFactory.Shared;
+        private static DemoDtTileCacheMeshProcess _proc = new DemoDtTileCacheMeshProcess();
+        public static DtTileCache TileCache;
+
+        static NavMeshBuildResult Build(IInputGeomProvider geom, RcNavMeshBuildSettings setting, RcByteOrder order, bool cCompatibility)
         {
-            try
+            if (null == geom || null == geom.GetMesh())
             {
-                string filePath = Path.Combine("test-output", filename);
-                Directory.CreateDirectory(Path.GetDirectoryName(filePath));
-                using StreamWriter fw = new StreamWriter(filePath);
-                for (int v = 0; v < dmesh.nverts; v++)
-                {
-                    fw.Write(
-                        "v " + dmesh.verts[v * 3] + " " + dmesh.verts[v * 3 + 1] + " " + dmesh.verts[v * 3 + 2] + "\n");
-                }
-
-                for (int m = 0; m < dmesh.nmeshes; m++)
-                {
-                    int vfirst = dmesh.meshes[m * 4];
-                    int tfirst = dmesh.meshes[m * 4 + 2];
-                    for (int f = 0; f < dmesh.meshes[m * 4 + 3]; f++)
-                    {
-                        fw.Write("f " + (vfirst + dmesh.tris[(tfirst + f) * 4] + 1) + " "
-                                 + (vfirst + dmesh.tris[(tfirst + f) * 4 + 1] + 1) + " "
-                                 + (vfirst + dmesh.tris[(tfirst + f) * 4 + 2] + 1) + "\n");
-                    }
-                }
-
-                fw.Close();
+                //m_ctx->log(RC_LOG_ERROR, "buildTiledNavigation: No vertices and triangles.");
+                return new NavMeshBuildResult();
             }
-            catch (Exception e)
+
+            _proc.Init(geom);
+
+            // Init cache
+            var bmin = geom.GetMeshBoundsMin();
+            var bmax = geom.GetMeshBoundsMax();
+            RcRecast.CalcGridSize(bmin, bmax, setting.cellSize, out var gw, out var gh);
+            int ts = setting.tileSize;
+            int tw = (gw + ts - 1) / ts;
+            int th = (gh + ts - 1) / ts;
+
+            // Generation params.
+            var walkableRadius = (int)MathF.Ceiling(setting.agentRadius / setting.cellSize); // Reserve enough padding.
+            RcConfig cfg = new RcConfig(
+                true, setting.tileSize, setting.tileSize,
+                walkableRadius + 3,
+                RcPartitionType.OfValue(setting.partitioning),
+                setting.cellSize, setting.cellHeight,
+                setting.agentMaxSlope, setting.agentHeight, setting.agentRadius, setting.agentMaxClimb,
+                (int)RcMath.Sqr(setting.minRegionSize), (int)RcMath.Sqr(setting.mergedRegionSize), // Note: area = size*size
+                (int)(setting.edgeMaxLen / setting.cellSize), setting.edgeMaxError,
+                setting.vertsPerPoly,
+                setting.detailSampleDist, setting.detailSampleMaxError,
+                true, true, true,
+                SampleAreaModifications.SAMPLE_AREAMOD_WALKABLE, true);
+
+            var builder = new DtTileCacheLayerBuilder(DtTileCacheCompressorFactory.Shared);
+            var storageParams = new DtTileCacheStorageParams(order, cCompatibility);
+            var results = builder.Build(geom, cfg, storageParams, 8, tw, th);
+
+            var layers = results
+                .SelectMany(x => x.layers)
+                .ToList();
+
+            TileCache = CreateTileCache(geom, setting, tw, th, order, cCompatibility);
+
+            for (int i = 0; i < layers.Count; ++i)
             {
-                Console.WriteLine(e);
+                var layer = layers[i];
+                var refs = TileCache.AddTile(layer, 0);
+                TileCache.BuildNavMeshTile(refs);
             }
+
+            return new NavMeshBuildResult(RcImmutableArray<RcBuilderResult>.Empty, TileCache.GetNavMesh());
         }
+
+        static DtTileCache CreateTileCache(IInputGeomProvider geom, RcNavMeshBuildSettings setting, int tw, int th, RcByteOrder order, bool cCompatibility)
+        {
+            DtTileCacheParams option = new DtTileCacheParams();
+            option.ch = setting.cellHeight;
+            option.cs = setting.cellSize;
+            option.orig = geom.GetMeshBoundsMin();
+            option.height = setting.tileSize;
+            option.width = setting.tileSize;
+            option.walkableHeight = setting.agentHeight;
+            option.walkableRadius = setting.agentRadius;
+            option.walkableClimb = setting.agentMaxClimb;
+            option.maxSimplificationError = setting.edgeMaxError;
+            option.maxTiles = tw * th * 4; // for test EXPECTED_LAYERS_PER_TILE;
+            option.maxObstacles = 128;
+
+            DtNavMeshParams navMeshParams = new DtNavMeshParams();
+            navMeshParams.orig = geom.GetMeshBoundsMin();
+            navMeshParams.tileWidth = setting.tileSize * setting.cellSize;
+            navMeshParams.tileHeight = setting.tileSize * setting.cellSize;
+            navMeshParams.maxTiles = 256; // ..
+            navMeshParams.maxPolys = 16384;
+
+            var navMesh = new DtNavMesh();
+            navMesh.Init(navMeshParams, 6);
+            var comp = _comp.Create(cCompatibility ? 0 : 1);
+            var storageParams = new DtTileCacheStorageParams(order, cCompatibility);
+            DtTileCache tc = new DtTileCache(option, storageParams, navMesh, comp, _proc);
+
+
+            return tc;
+        }
+
+        static void MergeMeshes(List<StaticMesh.MeshData> meshDataList, out float[] verts, out int[] faces)
+        {
+            List<float> mergedVertices = new List<float>();
+            List<int> mergedIndices = new List<int>();
+
+            int vertexOffset = 0;
+
+            foreach (var meshData in meshDataList)
+            {
+                // Add vertices to the merged list
+                foreach (var vertex in meshData.vertices)
+                {
+                    mergedVertices.Add(vertex.X);
+                    mergedVertices.Add(vertex.Y);
+                    mergedVertices.Add(vertex.Z);
+                }
+
+                // Add indices to the merged list
+                foreach (var index in meshData.indices)
+                {
+                    mergedIndices.Add(index + vertexOffset);
+                }
+
+                // Update the vertex offset
+                vertexOffset += meshData.vertices.Count;
+            }
+
+            // Convert lists to arrays
+            verts = mergedVertices.ToArray();
+            faces = mergedIndices.ToArray();
+        }
+
 
     }
 
