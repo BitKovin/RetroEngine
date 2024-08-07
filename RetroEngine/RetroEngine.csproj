@@ -42,6 +42,14 @@
   <ItemGroup>
     <ProjectReference Include="..\Libs\FmodForFoxes\FmodForFoxes.csproj" />
     <ProjectReference Include="..\Libs\MonoGame.ImGuiNet\Monogame.ImGuiNet.csproj" />
+    <ProjectReference Include="..\Libs\Navigation\DotRecast.Core\DotRecast.Core.csproj" />
+    <ProjectReference Include="..\Libs\Navigation\DotRecast.Detour.Crowd\DotRecast.Detour.Crowd.csproj" />
+    <ProjectReference Include="..\Libs\Navigation\DotRecast.Detour.Dynamic\DotRecast.Detour.Dynamic.csproj" />
+    <ProjectReference Include="..\Libs\Navigation\DotRecast.Detour.Extras\DotRecast.Detour.Extras.csproj" />
+    <ProjectReference Include="..\Libs\Navigation\DotRecast.Detour.TileCache\DotRecast.Detour.TileCache.csproj" />
+    <ProjectReference Include="..\Libs\Navigation\DotRecast.Detour\DotRecast.Detour.csproj" />
+    <ProjectReference Include="..\Libs\Navigation\DotRecast.Recast.Toolset\DotRecast.Recast.Toolset.csproj" />
+    <ProjectReference Include="..\Libs\Navigation\DotRecast.Recast\DotRecast.Recast.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="calibri.ttf">

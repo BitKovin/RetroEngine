@@ -805,7 +805,7 @@ namespace RetroEngine.Game.Entities.Player
             UpdatePlayerLight();
 
             
-            if(Input.GetAction("test").Pressed())
+            if(Input.GetAction("test").Pressed() && false)
             {
                 var result = Physics.MultiLineTrace(Camera.position, Camera.position + Camera.Forward * 50, new List<CollisionObject>() { body }, BodyType.GroupHitTest);
 

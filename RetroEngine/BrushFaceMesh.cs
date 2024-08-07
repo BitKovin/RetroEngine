@@ -216,7 +216,7 @@ namespace RetroEngine
                 scene = loadedScenes[filePath];
             else
             {
-                scene = importer.ImportFileFromStream(AssetRegistry.GetFileStreamFromPath(filePath), PostProcessSteps);
+                scene = importer.ImportFileFromStream(AssetRegistry.GetFileStreamFromPath(filePath), PostProcessSteps, "obj");
                 loadedScenes.Add(filePath, scene);
             }
 

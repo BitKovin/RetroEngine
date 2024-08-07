@@ -42,7 +42,7 @@ namespace RetroEngine.Game
             GameSpeedEvent = FmodEventInstance.Create("snapshot:/GameSpeed");
             GameSpeedEvent.Play();
 
-            Level.LoadFromFile("lvl1");
+            Level.LoadFromFile("recastTest");
 
             base.GameInitialized();
 
@@ -66,6 +66,11 @@ namespace RetroEngine.Game
 
             base.Update(gameTime);
 
+            if (NavigationSystem.Recast.dtNavMesh != null && GameMain.Instance.paused == false)
+            {
+                NavigationSystem.RecastDebugDraw.DebugDrawNavMeshPolys(NavigationSystem.Recast.dtNavMesh);
+            }
+
             if (Input.GetAction("fullscreen").Pressed())
                 ToggleFullscreen();
         }
@@ -77,8 +82,8 @@ namespace RetroEngine.Game
             AssetRegistry.LoadFmodBankIntoMemory("Sounds/banks/Master.bank");
             AssetRegistry.LoadFmodBankIntoMemory("Sounds/banks/Master.strings.bank");
 
-            
-            
+
+            NavigationSystem.Recast.LoadSampleNavMesh();
 
 
             //PostProcessStep.StepsAfter.Add(new TestPP());

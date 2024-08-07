@@ -21,6 +21,8 @@ namespace RetroEngine
 
         public static bool Enabled = false;
 
+
+
         public static void Line(Vector3 pointA, Vector3 pointB, Vector3? color =  null, float duration = 1)
         {
             if (!Enabled) return;
@@ -35,6 +37,25 @@ namespace RetroEngine
                 commands.Add(new DrawShapeLine(pointA, pointB, col, duration));
             }
         }
+
+        public static void Path(List<Vector3> points, Vector3? color = null, float duration = 1)
+        {
+            if (!Enabled) return;
+
+            Vector3 col = Vector3.UnitX;
+
+            if (color != null)
+                col = color.Value;
+
+            lock (commands)
+            {
+                for(int i = 0; i < points.Count - 1; i++)
+                {
+                    commands.Add(new DrawShapeLine(points[i], points[i+1], col, duration));
+                }
+            }
+        }
+
 
         public static void Text(Vector3 position, string text, float duration = 1)
         {
