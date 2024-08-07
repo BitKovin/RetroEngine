@@ -25,8 +25,8 @@ namespace RetroEngine.PhysicsSystem
         Liquid = 32,         // 16
 
         GroupAll = MainBody | HitBox | World | CharacterCapsule | NoRayTest | Liquid,
-        GroupHitTest = GroupAll & ~CharacterCapsule,
-        GroupCollisionTest = GroupAll & ~HitBox,
+        GroupHitTest = GroupAll & ~CharacterCapsule & ~Liquid,
+        GroupCollisionTest = GroupAll & ~HitBox & ~Liquid,
         GroupAllPhysical = GroupHitTest & Liquid,
     }
 
@@ -594,12 +594,15 @@ namespace RetroEngine.PhysicsSystem
             return RigidBody;
         }
 
-        public static MyClosestRayResultCallback LineTrace(Vector3 rayStart, Vector3 rayEnd, List<CollisionObject> ignoreList = null, BodyType bodyType = BodyType.GroupAll)
+        public static MyClosestRayResultCallback LineTrace(Microsoft.Xna.Framework.Vector3 rayStart, Microsoft.Xna.Framework.Vector3 rayEnd, List<CollisionObject> ignoreList = null, BodyType bodyType = BodyType.GroupAll)
         {
+
+            Vector3 start = rayStart.ToPhysics();
+            Vector3 end = rayEnd.ToPhysics();
 
             if(Thread.CurrentThread != GameMain.RenderThread && Thread.CurrentThread != GameMain.GameThread)
             {
-                var preHit = LineTraceForStatic(rayStart, rayEnd);
+                var preHit = LineTraceForStatic(start, end);
                 if(preHit.HasHit == false)
                 {
                     //return new MyClosestRayResultCallback(ref rayStart, ref rayEnd); // hopefully commenting doesn't fucking crash
@@ -609,14 +612,14 @@ namespace RetroEngine.PhysicsSystem
             {
                 CollisionWorld world = dynamicsWorld;
 
-                MyClosestRayResultCallback rayCallback = new MyClosestRayResultCallback(ref rayStart, ref rayEnd);
+                MyClosestRayResultCallback rayCallback = new MyClosestRayResultCallback(ref start, ref end);
                 rayCallback.BodyTypeMask = bodyType;
                 if (ignoreList is not null)
                     rayCallback.ignoreList = ignoreList;
 
 
                 // Perform the ray cast
-                world.RayTest(rayStart, rayEnd, rayCallback);
+                world.RayTest(start, end, rayCallback);
                 return rayCallback;
             }
         }

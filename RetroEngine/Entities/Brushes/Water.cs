@@ -24,9 +24,14 @@ namespace RetroEngine.Entities
 
         public override void Start()
         {
-
-
             base.Start();
+
+            foreach (var body in bodies)
+            {
+                body.SetBodyType(PhysicsSystem.BodyType.Liquid);
+            }
+
+            
 
             foreach (var mesh in meshes) 
             { 
@@ -52,6 +57,8 @@ namespace RetroEngine.Entities
         {
             base.OnTriggerEnter(entity);
 
+            entity?.OnAction("water_enter");
+
             if (entity.Tags.Contains("player"))
             {
                 var ents = Level.GetCurrent().FindAllEntitiesWithName(target);
@@ -69,6 +76,8 @@ namespace RetroEngine.Entities
         public override void OnTriggerExit(Entity entity)
         {
             base.OnTriggerExit(entity);
+
+            entity?.OnAction("water_exit");
 
             if (entity.Tags.Contains("player"))
             {

@@ -712,8 +712,11 @@ namespace RetroEngine
 
             PerformReflection();
             ApplyReflection();
-            
-            PerformPostProcessingShaders(ForwardOutput);
+
+            lock (PostProcessStep.StepsBefore)
+            {
+                PerformPostProcessingShaders(ForwardOutput);
+            }
             
             PerformSSAO();
 
@@ -723,9 +726,10 @@ namespace RetroEngine
 
             PerformCompose();
 
-
-            PerformPostProcessingShaders(ComposedOutput, true);
-
+            lock (PostProcessStep.StepsAfter)
+            {
+                PerformPostProcessingShaders(ComposedOutput, true);
+            }
 
             PerformFXAA();
 
@@ -756,6 +760,8 @@ namespace RetroEngine
         {
             InitRenderTargetVectorIfNeed(ref targetA);
             InitRenderTargetVectorIfNeed(ref targetB);
+
+            
 
             if (after == false)
                 if (PostProcessStep.StepsBefore.Count == 0)

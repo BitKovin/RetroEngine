@@ -18,6 +18,7 @@ using RetroEngine.Entities.Light;
 using RetroEngine.Game.Effects.Particles;
 using RetroEngine.PhysicsSystem;
 using BulletSharp.SoftBody;
+using RetroEngine.Graphic;
 
 namespace RetroEngine.Game.Entities.Player
 {
@@ -81,6 +82,12 @@ namespace RetroEngine.Game.Entities.Player
         PointLight PlayerFlashLight;
         PointLight PlayerAmbientLight;
 
+        float Gravity = -27;
+
+        Shader underWaterEffect;
+        PostProcessStep waterPP = new PostProcessStep();
+
+
         //particle_system_meleeTrail meleeTrail;
         public PlayerCharacter() : base()
         {
@@ -138,6 +145,10 @@ namespace RetroEngine.Game.Entities.Player
             //meshes.Add(testCube);
 
             AssetRegistry.LoadFmodBankIntoMemory("Sounds/banks/SFX.bank");
+
+            underWaterEffect = AssetRegistry.GetPostProcessShaderFromName("UnderWater");
+            waterPP.Shader = underWaterEffect;
+
 
             Weapon.PreloadAllWeapons();
             PlayerUI.Load();
@@ -208,10 +219,40 @@ namespace RetroEngine.Game.Entities.Player
 
         }
 
+        bool oldInWater = false;
+
         void UpdatePlayerInput()
         {
 
-            
+
+            CheckUnderWater();
+
+            bool inWater = isInWater();
+
+            if(inWater)
+            {
+                Gravity = -10;
+            }
+            else
+            {
+                Gravity = -27;
+            }
+
+            if(oldInWater != inWater)
+            {
+
+                if(inWater)
+                {
+                    EnteredWater();
+                }
+                else
+                {
+                    ExitedWater();
+                }
+
+            }
+
+            oldInWater = inWater;
 
             UpdateMovement();
 
@@ -244,6 +285,16 @@ namespace RetroEngine.Game.Entities.Player
             if(Input.GetAction("test2").Pressed())
                 flashlightEnabled = ! flashlightEnabled;
 
+        }
+
+        void EnteredWater()
+        {
+            PostProcessStep.StepsBefore.Add(waterPP);
+        }
+
+        void ExitedWater()
+        {
+            PostProcessStep.StepsBefore.Remove(waterPP);
         }
 
         public override void AsyncUpdate()
@@ -395,6 +446,8 @@ namespace RetroEngine.Game.Entities.Player
 
             // Ground movement
 
+            body.Gravity = new System.Numerics.Vector3(0, Gravity, 0);
+
             velocity = body.LinearVelocity;
             body.Friction = 0.0f;
             if (input.Length() > 0.1f)
@@ -472,6 +525,88 @@ namespace RetroEngine.Game.Entities.Player
 
         }
 
+        void UpdateMovementWater()
+        {
+
+            Vector2 input = new Vector2();
+
+            if (Input.GetAction("moveForward").Holding())
+                input += new Vector2(0, 1);
+
+            if (Input.GetAction("moveBackward").Holding())
+                input -= new Vector2(0, 1);
+
+            if (Input.GetAction("moveRight").Holding())
+                input += new Vector2(1, 0);
+
+            if (Input.GetAction("moveLeft").Holding())
+                input -= new Vector2(1, 0);
+
+
+            Vector3 motion = new Vector3();
+
+            Vector3 right = Camera.rotation.GetRightVector().XZ();
+            Vector3 forward = Camera.rotation.GetForwardVector();
+
+            body.Activate(true);
+
+
+            body.Gravity = new System.Numerics.Vector3(0, -2, 0);
+
+            // Ground movement
+
+            //velocity = body.LinearVelocity;
+            body.Friction = 0.0f;
+            if (input.Length() > 0.1f)
+            {
+                input.Normalize();
+
+                motion += right * input.X;
+                motion += forward * input.Y;
+
+                
+
+                    if (Math.Sin(bobProgress * bobSpeed * 2) <= 0 && Math.Sin((bobProgress + Time.DeltaTime) * bobSpeed * 2) > 0)
+                    {
+                        stepSoundPlayer.Play(true);
+                    }
+
+                    bobProgress += Time.DeltaTime;
+
+
+                    velocity = UpdateGroundVelocity(motion, velocity);
+
+                    body.LinearVelocity = new Vector3(velocity.X, velocity.Y, velocity.Z).ToPhysics();
+
+
+                
+            }
+            else
+            {
+
+                if (onGround)
+                {
+                    velocity = Friction(velocity);
+                    body.LinearVelocity = new Vector3(velocity.X, body.LinearVelocity.Y, velocity.Z).ToPhysics();
+                }
+                else
+                {
+                    velocity = UpdateAirVelocity(new Vector3(), velocity);
+                    body.LinearVelocity = new Vector3(velocity.X, body.LinearVelocity.Y, velocity.Z).ToPhysics();
+                }
+                // No input, apply friction
+                body.Friction = 0.2f;
+            }
+
+
+            cameraRoll = MathHelper.Lerp(cameraRoll, input.X * 1.5f, Time.DeltaTime * 10);
+
+            Camera.roll = cameraRoll;
+
+            stepSoundPlayer.Position = interpolatedPosition - Vector3.Up;
+
+        }
+
         void CheckGround()
         {
             onGround = false;
@@ -515,7 +650,7 @@ namespace RetroEngine.Game.Entities.Player
 
         bool CheckGroundAtOffset(Vector3 offset)
         {
-            var hit = Physics.LineTrace(Position.ToNumerics() + offset.ToNumerics(), (Position - new Vector3(0, 1.05f, 0) + offset).ToNumerics(), new List<CollisionObject>() { body });
+            var hit = Physics.LineTrace(Position.ToNumerics() + offset.ToNumerics(), (Position - new Vector3(0, 1.05f, 0) + offset).ToNumerics(), new List<CollisionObject>() { body }, bodyType: BodyType.GroupCollisionTest);
 
             if(hit.HasHit == false)
                 return false;
@@ -694,7 +829,7 @@ namespace RetroEngine.Game.Entities.Player
         void Jump()
         {
             
-            if (onGround)
+            if (onGround && isInWater() == false)
             {
                 body.LinearVelocity = new Vector3(body.LinearVelocity.X, 9.5f, body.LinearVelocity.Z).ToNumerics();
                 jumpDelay.AddDelay(0.1f);
@@ -802,6 +937,43 @@ namespace RetroEngine.Game.Entities.Player
         {
             weapons.Add(weaponData);
                 SwitchToSlot(weapons.Count - 1,true);
+        }
+
+        bool isInWater()
+        {
+            return waterBodies > 0 && underWater;
+        }
+
+        int waterBodies = 0;
+
+        public override void OnAction(string action)
+        {
+            base.OnAction(action);
+
+            if(action == "water_enter")
+            {
+                waterBodies++;
+            }
+
+            if(action == "water_exit")
+            {
+                waterBodies--;
+            }
+
+
+        }
+
+
+        bool underWater = false;
+        void CheckUnderWater()
+        {
+
+            Vector3 waterCheckPos = interpolatedPosition + Vector3.UnitY * 0.8f;
+
+            var hit = Physics.LineTrace(waterCheckPos + Vector3.UnitY * 100, waterCheckPos, bodyType: BodyType.Liquid);
+
+            underWater = hit.HasHit;
+
         }
 
         protected override EntitySaveData SaveData(EntitySaveData baseData)
