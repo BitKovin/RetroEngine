@@ -29,7 +29,7 @@ namespace RetroEngine.Game.Entities
             if (Input.GetAction("test2").Pressed())
             {
                 
-                var hit = Physics.LineTrace(Camera.position.ToPhysics(), (Camera.position + Camera.Forward*100).ToPhysics(), null, bodyType: BodyType.World & BodyType.MainBody);
+                var hit = Physics.LineTrace(Camera.position.ToPhysics(), (Camera.position + Camera.Forward*100).ToPhysics(), null, bodyType: BodyType.World | BodyType.MainBody);
 
                 Position = hit.HitPointWorld;
 
@@ -40,7 +40,7 @@ namespace RetroEngine.Game.Entities
             if (Input.GetAction("test3").Pressed())
             {
 
-                var hit = Physics.LineTrace(Camera.position.ToPhysics(), (Camera.position + Camera.Forward * 100).ToPhysics(), null, bodyType: BodyType.World & BodyType.MainBody);
+                var hit = Physics.LineTrace(Camera.position.ToPhysics(), (Camera.position + Camera.Forward * 100).ToPhysics(), null, bodyType: BodyType.World | BodyType.MainBody);
 
                 NavigationSystem.Recast.AddObstacleCapsule(hit.HitPointWorld, 2, 2);
 
