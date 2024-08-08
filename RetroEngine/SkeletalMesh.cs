@@ -959,25 +959,37 @@ namespace RetroEngine
 
         }
 
+        Dictionary<string, SkeletalMeshMeta> loadedMeta = new Dictionary<string, SkeletalMeshMeta>();
 
         public void LoadMeshMetaFromFile(string path)
         {
             path = AssetRegistry.FindPathForFile(path);
 
-            if (File.Exists(path + ".skeletaldata") == false) return;
+            SkeletalMeshMeta meta;
 
-            var stream = AssetRegistry.GetFileStreamFromPath(path + ".skeletaldata");
+            if (loadedMeta.ContainsKey(path))
+            {
+                meta = loadedMeta[path];
+            }
+            else
+            {
 
-            var reader = new StreamReader(stream);
+                if (File.Exists(path + ".skeletaldata") == false) return;
 
-            string text = reader.ReadToEnd();
+                var stream = AssetRegistry.GetFileStreamFromPath(path + ".skeletaldata");
 
-            JsonSerializerOptions options = new JsonSerializerOptions();
+                var reader = new StreamReader(stream);
 
-            foreach (var conv in Helpers.JsonConverters.GetAll())
-                options.Converters.Add(conv);
+                string text = reader.ReadToEnd();
 
-            SkeletalMeshMeta meta = JsonSerializer.Deserialize<SkeletalMeshMeta>(text, options);
+                JsonSerializerOptions options = new JsonSerializerOptions();
+
+                foreach (var conv in Helpers.JsonConverters.GetAll())
+                    options.Converters.Add(conv);
+
+                meta = JsonSerializer.Deserialize<SkeletalMeshMeta>(text, options);
+                loadedMeta.Add(path, meta);
+            }
 
             hitboxes = meta.hitboxes.ToList();
 
