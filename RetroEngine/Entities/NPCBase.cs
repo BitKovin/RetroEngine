@@ -304,9 +304,8 @@ namespace RetroEngine.Entities
 
             Vector3 newMoveDirection = moveLocation - Position;
 
-            DesiredMoveDirection = newMoveDirection;
+            DesiredMoveDirection = newMoveDirection.XZ().Normalized();
 
-            DesiredMoveDirection.Normalize();
         }
 
         static void UpdateNPCList()

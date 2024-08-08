@@ -38,6 +38,21 @@ namespace RetroEngine
             }
         }
 
+        public static void Box(Vector3 min, Vector3 max, Vector3? color = null, float duration = 1)
+        {
+            if (!Enabled) return;
+
+            Vector3 col = Vector3.UnitX;
+
+            if (color != null)
+                col = color.Value;
+
+            lock (commands)
+            {
+                commands.Add(new DrawShapeBox(min, max, col, duration));
+            }
+        }
+
         public static void Path(List<Vector3> points, Vector3? color = null, float duration = 1)
         {
             if (!Enabled) return;
@@ -318,6 +333,31 @@ namespace RetroEngine
             }
 
         }
+
+        class DrawShapeBox : DrawShapeCommand
+        {
+
+            System.Numerics.Vector3 pointA;
+            System.Numerics.Vector3 pointB;
+            System.Numerics.Vector3 Color;
+
+            public DrawShapeBox(Vector3 min, Vector3 max, Vector3 color, float time) : base(time)
+            {
+                pointA = min.ToNumerics();
+                pointB = max.ToNumerics();
+                Color = color.ToNumerics();
+            }
+
+            public override void Draw(DebugDraw draw)
+            {
+                base.Draw(draw);
+
+                draw.DrawBox(ref pointA, ref pointB, ref Color);
+
+            }
+
+        }
+
 
         class DrawShapeSphere : DrawShapeCommand
         {

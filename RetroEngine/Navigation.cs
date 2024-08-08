@@ -1,6 +1,7 @@
 ﻿using BulletSharp.SoftBody;
 using Microsoft.Xna.Framework;
 using RetroEngine.Entities.Navigaion;
+using RetroEngine.NavigationSystem;
 using RetroEngine.PhysicsSystem;
 using System;
 using System.Collections;
@@ -144,7 +145,17 @@ namespace RetroEngine
                 }
             }
 
+            if (Recast.dtNavMesh != null && GameMain.Instance.paused == false)
+            {
 
+                lock (Recast.TileCache)
+                {
+
+                    Recast.TileCache?.Update();
+
+                    RecastDebugDraw.DebugDrawNavMeshPolys(Recast.dtNavMesh);
+                }
+            }
 
 
         }
@@ -297,6 +308,16 @@ namespace RetroEngine
 
         void Process(Vector3 start, Vector3 target)
         {
+
+            var result = Recast.FindPathSimple(start, target);
+
+            if(result.Count>0)
+                result.RemoveAt(0);
+
+            OnPathFound.Invoke(result);
+
+            return;
+
 
             start = Navigation.ProjectToGround(start);
             target = Navigation.ProjectToGround(target);

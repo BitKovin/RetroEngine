@@ -66,13 +66,10 @@ namespace RetroEngine.Game
 
             base.Update(gameTime);
 
-            if (NavigationSystem.Recast.dtNavMesh != null && GameMain.Instance.paused == false)
-            {
-                NavigationSystem.RecastDebugDraw.DebugDrawNavMeshPolys(NavigationSystem.Recast.dtNavMesh);
-            }
+            
 
 
-            NavigationSystem.Recast.TileCache?.Update();
+            
 
 
             if (Input.GetAction("fullscreen").Pressed())

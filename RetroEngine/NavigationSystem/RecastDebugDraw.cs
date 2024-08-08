@@ -38,8 +38,10 @@ namespace RetroEngine.NavigationSystem
 
         public static void DebugDrawNavMeshPolys(DtNavMesh mesh)
         {
+
             for (int i = 0; i < mesh.GetMaxTiles(); ++i)
             {
+
                 DtMeshTile tile = mesh.GetTile(i);
                 if (tile == null || tile.data == null || tile.data.header == null)
                 {
@@ -48,11 +50,15 @@ namespace RetroEngine.NavigationSystem
 
                 long @base = mesh.GetPolyRefBase(tile);
 
-                for (int j = 0; j < tile.data.header.polyCount; ++j)
-                {
-                    DtPoly p = tile.data.polys[j];
 
-                    DebugDrawNavMeshPoly(mesh, @base | (long)j, 0);
+                for (long j = 0; j < tile.data.header.polyCount; ++j)
+                {
+
+                    Vector3 p = (tile.data.header.bmax + tile.data.header.bmin).FromRc();
+                    p /= 2;
+
+                    if(Vector3.Distance(p, Camera.position) < 30)
+                        DebugDrawNavMeshPoly(mesh, @base | j, 0);
                 }
             }
         }

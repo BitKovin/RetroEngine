@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RetroEngine.Map;
+using RetroEngine.NavigationSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,6 +54,8 @@ namespace RetroEngine.Entities.Brushes
 
         }
 
+        long[] obstacles = new long[8];
+
         public override void Start()
         {
             base.Start();
@@ -63,6 +66,11 @@ namespace RetroEngine.Entities.Brushes
 
             offsetPosition = offsetPoint.Position;
             offsetRotation = offsetPoint.Rotation;
+
+            for (int i = 0; i < obstacles.Length; i++)
+            {
+                obstacles[i] = NavigationSystem.Recast.TileCache.AddBoxObstacle(new DotRecast.Core.Numerics.RcVec3f(), new DotRecast.Core.Numerics.RcVec3f());
+            }
 
         }
 
@@ -96,10 +104,10 @@ namespace RetroEngine.Entities.Brushes
                 progress -= Time.DeltaTime/time;
             }
 
-            progress = Math.Clamp(progress, 0, 1);  
+            progress = Math.Clamp(progress, 0, 1);
 
-            
 
+            Vector3 startPos = Position;
 
             Position = Vector3.Lerp(Vector3.Zero, targetLocation, progress);
 
@@ -124,6 +132,8 @@ namespace RetroEngine.Entities.Brushes
             // Move position back to world space
             Position += offsetPosition;
 
+            if (Position == startPos && SpawnTime + 1 < Time.gameTime) return;
+
             foreach (var body in bodies)
             {
                 body.SetPosition(Position);
@@ -135,13 +145,22 @@ namespace RetroEngine.Entities.Brushes
             {
                 mesh.Position = Position;
                 mesh.Rotation = Rotation;
+
+                var boxes = mesh.GetSubdividedBoundingBoxes();
+
+                int i = 0;
+                foreach(var box in boxes)
+                {
+
+                    Recast.TileCache.RemoveObstacle(obstacles[i]);
+                    obstacles[i] = Recast.TileCache.AddBoxObstacle(box.Min.ToRc(), box.Max.ToRc());
+
+                    DrawDebug.Box(box.Min, box.Max, Vector3.Zero, 0.01f);
+
+                    i++;
+                }
+
             }
-
         }
-
-
-
-
-
     }
 }

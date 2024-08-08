@@ -476,108 +476,111 @@ namespace DotRecast.Detour.TileCache
          */
         public bool Update()
         {
-            if (0 == m_update.Count)
-            {
-                // Process requests.
-                foreach (DtObstacleRequest req in m_reqs)
+            lock (m_obstacles) lock (m_update)
                 {
-                    int idx = DecodeObstacleIdObstacle(req.refs);
-                    if (idx >= m_obstacles.Count)
+                    if (0 == m_update.Count)
                     {
-                        continue;
-                    }
-
-                    DtTileCacheObstacle ob = m_obstacles[idx];
-                    int salt = DecodeObstacleIdSalt(req.refs);
-                    if (ob.salt != salt)
-                    {
-                        continue;
-                    }
-
-                    if (req.action == DtObstacleRequestAction.REQUEST_ADD)
-                    {
-                        // Find touched tiles.
-                        RcVec3f bmin = new RcVec3f();
-                        RcVec3f bmax = new RcVec3f();
-                        GetObstacleBounds(ob, ref bmin, ref bmax);
-                        ob.touched = QueryTiles(bmin, bmax);
-                        // Add tiles to update list.
-                        ob.pending.Clear();
-                        foreach (long j in ob.touched)
+                        // Process requests.
+                        foreach (DtObstacleRequest req in m_reqs)
                         {
-                            if (!Contains(m_update, j))
+                            int idx = DecodeObstacleIdObstacle(req.refs);
+                            if (idx >= m_obstacles.Count)
                             {
-                                m_update.Add(j);
+                                continue;
                             }
 
-                            ob.pending.Add(j);
-                        }
-                    }
-                    else if (req.action == DtObstacleRequestAction.REQUEST_REMOVE)
-                    {
-                        // Prepare to remove obstacle.
-                        ob.state = DtObstacleState.DT_OBSTACLE_REMOVING;
-                        // Add tiles to update list.
-                        ob.pending.Clear();
-                        foreach (long j in ob.touched)
-                        {
-                            if (!Contains(m_update, j))
+                            DtTileCacheObstacle ob = m_obstacles[idx];
+                            if (ob == null) continue;
+                            int salt = DecodeObstacleIdSalt(req.refs);
+                            if (ob.salt != salt)
                             {
-                                m_update.Add(j);
+                                continue;
                             }
 
-                            ob.pending.Add(j);
-                        }
-                    }
-                }
-
-                m_reqs.Clear();
-            }
-
-            // Process updates
-            if (0 < m_update.Count)
-            {
-                long refs = m_update[0];
-                m_update.RemoveAt(0);
-                // Build mesh
-                BuildNavMeshTile(refs);
-
-                // Update obstacle states.
-                for (int i = 0; i < m_obstacles.Count; ++i)
-                {
-                    DtTileCacheObstacle ob = m_obstacles[i];
-                    if (ob.state == DtObstacleState.DT_OBSTACLE_PROCESSING
-                        || ob.state == DtObstacleState.DT_OBSTACLE_REMOVING)
-                    {
-                        // Remove handled tile from pending list.
-                        ob.pending.Remove(refs);
-
-                        // If all pending tiles processed, change state.
-                        if (0 == ob.pending.Count)
-                        {
-                            if (ob.state == DtObstacleState.DT_OBSTACLE_PROCESSING)
+                            if (req.action == DtObstacleRequestAction.REQUEST_ADD)
                             {
-                                ob.state = DtObstacleState.DT_OBSTACLE_PROCESSED;
-                            }
-                            else if (ob.state == DtObstacleState.DT_OBSTACLE_REMOVING)
-                            {
-                                ob.state = DtObstacleState.DT_OBSTACLE_EMPTY;
-                                // Update salt, salt should never be zero.
-                                ob.salt = (ob.salt + 1) & ((1 << 16) - 1);
-                                if (ob.salt == 0)
+                                // Find touched tiles.
+                                RcVec3f bmin = new RcVec3f();
+                                RcVec3f bmax = new RcVec3f();
+                                GetObstacleBounds(ob, ref bmin, ref bmax);
+                                ob.touched = QueryTiles(bmin, bmax);
+                                // Add tiles to update list.
+                                ob.pending.Clear();
+                                foreach (long j in ob.touched)
                                 {
-                                    ob.salt++;
-                                }
+                                    if (!Contains(m_update, j))
+                                    {
+                                        m_update.Add(j);
+                                    }
 
-                                // Return obstacle to free list.
-                                ob.next = m_nextFreeObstacle;
-                                m_nextFreeObstacle = ob;
+                                    ob.pending.Add(j);
+                                }
+                            }
+                            else if (req.action == DtObstacleRequestAction.REQUEST_REMOVE)
+                            {
+                                // Prepare to remove obstacle.
+                                ob.state = DtObstacleState.DT_OBSTACLE_REMOVING;
+                                // Add tiles to update list.
+                                ob.pending.Clear();
+                                foreach (long j in ob.touched)
+                                {
+                                    if (!Contains(m_update, j))
+                                    {
+                                        m_update.Add(j);
+                                    }
+
+                                    ob.pending.Add(j);
+                                }
+                            }
+                        }
+
+                        m_reqs.Clear();
+                    }
+
+                    // Process updates
+                    if (0 < m_update.Count)
+                    {
+                        long refs = m_update[0];
+                        m_update.RemoveAt(0);
+                        // Build mesh
+                        BuildNavMeshTile(refs);
+
+                        // Update obstacle states.
+                        for (int i = 0; i < m_obstacles.Count; ++i)
+                        {
+                            DtTileCacheObstacle ob = m_obstacles[i];
+                            if (ob.state == DtObstacleState.DT_OBSTACLE_PROCESSING
+                                || ob.state == DtObstacleState.DT_OBSTACLE_REMOVING)
+                            {
+                                // Remove handled tile from pending list.
+                                ob.pending.Remove(refs);
+
+                                // If all pending tiles processed, change state.
+                                if (0 == ob.pending.Count)
+                                {
+                                    if (ob.state == DtObstacleState.DT_OBSTACLE_PROCESSING)
+                                    {
+                                        ob.state = DtObstacleState.DT_OBSTACLE_PROCESSED;
+                                    }
+                                    else if (ob.state == DtObstacleState.DT_OBSTACLE_REMOVING)
+                                    {
+                                        ob.state = DtObstacleState.DT_OBSTACLE_EMPTY;
+                                        // Update salt, salt should never be zero.
+                                        ob.salt = (ob.salt + 1) & ((1 << 16) - 1);
+                                        if (ob.salt == 0)
+                                        {
+                                            ob.salt++;
+                                        }
+
+                                        // Return obstacle to free list.
+                                        ob.next = m_nextFreeObstacle;
+                                        m_nextFreeObstacle = ob;
+                                    }
+                                }
                             }
                         }
                     }
                 }
-            }
-
             return 0 == m_update.Count && 0 == m_reqs.Count;
         }
 

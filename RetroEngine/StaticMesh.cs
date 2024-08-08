@@ -279,6 +279,120 @@ namespace RetroEngine
 
         }
 
+        List<Vector3> vertexPosCache;
+
+        public virtual List<Vector3> GetMeshVertices()
+        {
+
+            List<Vector3> positions = new List<Vector3>();
+
+            if (vertexPosCache == null)
+            {
+
+                vertexPosCache = new List<Vector3>();
+
+                foreach (ModelMesh mesh in model.Meshes)
+                    foreach (ModelMeshPart meshPart in mesh.MeshParts)
+                    {
+
+                        VertexData[] vertexData = new VertexData[meshPart.VertexBuffer.VertexCount];
+                        int[] indices = new int[meshPart.IndexBuffer.IndexCount];
+
+                        meshPart.VertexBuffer.GetData(vertexData);
+                        meshPart.IndexBuffer.GetData(indices);
+
+                        foreach (VertexData data in vertexData)
+                        {
+                            vertexPosCache.Add(data.Position);
+                        }
+                    }
+            }
+
+            foreach (Vector3 pos in vertexPosCache)
+            {
+                if (Position != Vector3.Zero || Rotation != Vector3.Zero || Scale != Vector3.Zero)
+                {
+
+
+                    positions.Add(Vector3.Transform(pos, GetWorldMatrix()));
+
+                }
+                else
+                {
+
+                    positions.Add(pos);
+
+                }
+            }
+
+            return positions;
+
+        }
+
+
+        public List<BoundingBox> GetSubdividedBoundingBoxes()
+        {
+
+            var data = GetMeshVertices();
+            var result = GenerateBoundingBoxes(data, 2);
+
+            return result;
+
+        }
+
+        public static List<BoundingBox> GenerateBoundingBoxes(List<Vector3> vertices, int boxesPerAxis)
+        {
+            if (boxesPerAxis <= 0)
+            {
+                throw new ArgumentException("Number of boxes per axis must be greater than zero.");
+            }
+
+            // Determine the min and max bounds of the mesh
+            Vector3 min = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
+            Vector3 max = new Vector3(float.MinValue, float.MinValue, float.MinValue);
+
+            foreach (var vertex in vertices)
+            {
+                min = Vector3.Min(min, vertex);
+                max = Vector3.Max(max, vertex);
+            }
+
+            // Calculate the size of each box
+            Vector3 size = (max - min) / boxesPerAxis;
+            List<BoundingBox> allBoundingBoxes = new List<BoundingBox>();
+
+            // Generate the bounding boxes
+            for (int x = 0; x < boxesPerAxis; x++)
+            {
+                for (int y = 0; y < boxesPerAxis; y++)
+                {
+                    for (int z = 0; z < boxesPerAxis; z++)
+                    {
+                        Vector3 boxMin = min + new Vector3(x, y, z) * size;
+                        Vector3 boxMax = boxMin + size;
+                        allBoundingBoxes.Add(new BoundingBox(boxMin, boxMax));
+                    }
+                }
+            }
+
+            // Filter out bounding boxes that do not contain any vertices
+            List<BoundingBox> filteredBoundingBoxes = new List<BoundingBox>();
+
+            foreach (var box in allBoundingBoxes)
+            {
+                foreach (var vertex in vertices)
+                {
+                    if (box.Contains(vertex) != ContainmentType.Disjoint)
+                    {
+                        filteredBoundingBoxes.Add(box);
+                        break;
+                    }
+                }
+            }
+
+            return filteredBoundingBoxes;
+        }
+
         public bool isNegativeScale()
         {
             return (Scale.X * Scale.Y * Scale.Z) < 0;

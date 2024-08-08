@@ -46,7 +46,6 @@ namespace RetroEngine.Game.Entities
 
 
 
-
                 DrawDebug.Sphere(2, hit.HitPointWorld, Vector3.UnitZ, 500);
 
             }

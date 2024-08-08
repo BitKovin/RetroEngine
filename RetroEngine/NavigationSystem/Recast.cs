@@ -24,6 +24,7 @@ using Assimp;
 using DotRecast.Detour.TileCache;
 using DotRecast.Detour.TileCache.Io.Compress;
 using DotRecast.Core.Collections;
+using DotRecast.Recast.Toolset.Tools;
 
 namespace RetroEngine.NavigationSystem
 {
@@ -52,7 +53,7 @@ namespace RetroEngine.NavigationSystem
             RcNavMeshBuildSettings rcNavMeshBuildSettings = new RcNavMeshBuildSettings();
 
             rcNavMeshBuildSettings.cellSize = 0.1f;
-            rcNavMeshBuildSettings.agentRadius = 0.5f;
+            rcNavMeshBuildSettings.agentRadius = 0.3f;
 
             var buildResult = tileNavMeshBuilder.Build(geomProvider, rcNavMeshBuildSettings);
 
@@ -64,6 +65,41 @@ namespace RetroEngine.NavigationSystem
             {
                 Logger.Log("Error generating nav mesh");
             }
+
+        }
+
+        public static List<Vector3> FindPathSimple(Vector3 start, Vector3 end)
+        {
+            List<RcVec3f> path = new List<RcVec3f>();
+            lock (TileCache)
+            {
+
+                DtNavMeshQuery navMeshQuery = new DtNavMeshQuery(NavigationSystem.Recast.TileCache.GetNavMesh());
+
+
+                IDtQueryFilter filter = new DtQueryDefaultFilter();
+
+                List<long> longs = new List<long>();
+
+                RcTestNavMeshTool rcTestNavMeshTool = new RcTestNavMeshTool();
+
+                long startRef = 0;
+                long endRef = 0;
+
+
+
+                RcVec3f m_polyPickExt = new RcVec3f(2, 4, 2);
+
+
+
+                navMeshQuery.FindNearestPoly(start.ToRc(), m_polyPickExt, filter, out startRef, out var _, out var _);
+                navMeshQuery.FindNearestPoly(end.ToRc(), m_polyPickExt, filter, out endRef, out var _, out var _);
+
+                
+
+                rcTestNavMeshTool.FindFollowPath(NavigationSystem.Recast.dtNavMesh, navMeshQuery, startRef, endRef, start.ToRc(), end.ToRc(), filter, true, ref longs, 0, ref path);
+            }
+            return path.ConvertPath();
 
         }
 
@@ -99,10 +135,10 @@ namespace RetroEngine.NavigationSystem
 
             RcNavMeshBuildSettings rcNavMeshBuildSettings = new RcNavMeshBuildSettings();
 
-            rcNavMeshBuildSettings.cellSize = 0.1f;
+            rcNavMeshBuildSettings.cellSize = 0.3f;
             rcNavMeshBuildSettings.agentRadius = 0.5f;
 
-            var buildResult = Build(geomProvider, rcNavMeshBuildSettings, RcByteOrder.BIG_ENDIAN, true);//tileNavMeshBuilder.Build(geomProvider, rcNavMeshBuildSettings);
+            var buildResult = Build(geomProvider, rcNavMeshBuildSettings, RcByteOrder.LITTLE_ENDIAN, true);//tileNavMeshBuilder.Build(geomProvider, rcNavMeshBuildSettings);
 
             if (buildResult.Success)
             {
@@ -184,14 +220,14 @@ namespace RetroEngine.NavigationSystem
             option.walkableClimb = setting.agentMaxClimb;
             option.maxSimplificationError = setting.edgeMaxError;
             option.maxTiles = tw * th * 4; // for test EXPECTED_LAYERS_PER_TILE;
-            option.maxObstacles = 128;
+            option.maxObstacles = 2048;
 
             DtNavMeshParams navMeshParams = new DtNavMeshParams();
             navMeshParams.orig = geom.GetMeshBoundsMin();
             navMeshParams.tileWidth = setting.tileSize * setting.cellSize;
             navMeshParams.tileHeight = setting.tileSize * setting.cellSize;
-            navMeshParams.maxTiles = 256; // ..
-            navMeshParams.maxPolys = 16384;
+            navMeshParams.maxTiles = tw * th * 4; // ..
+            navMeshParams.maxPolys = 16384*2 *2;
 
             var navMesh = new DtNavMesh();
             navMesh.Init(navMeshParams, 6);
