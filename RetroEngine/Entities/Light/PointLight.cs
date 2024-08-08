@@ -506,7 +506,7 @@ namespace RetroEngine.Entities.Light
                 }else
                 {
                     RetroEngine.Render.CustomFrustrum = new BoundingFrustum(Matrix.CreateLookAt(lightData.Position, lightData.Position + lightData.Direction, Vector3.UnitY) *
-                                                                            Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.ToRadians(maxAngle), 1, 0.01f, lightData.Radius));
+                                                                            Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.ToRadians(Math.Min(maxAngle*2, 179)), 1, 0.01f, lightData.Radius));
                 }
 
                 

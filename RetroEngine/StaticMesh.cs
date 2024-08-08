@@ -877,7 +877,7 @@ namespace RetroEngine
             if (DitherDisolve > 0) return;
 
             if (Render.IgnoreFrustrumCheck == false)
-            if (frameStaticMeshData.InFrustrum == false) return;
+                if (frameStaticMeshData.InFrustrum == false) return;
 
             
 

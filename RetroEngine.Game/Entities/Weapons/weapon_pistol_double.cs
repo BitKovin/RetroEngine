@@ -196,6 +196,9 @@ namespace RetroEngine.Game.Entities.Weapons
                 meshTp.Rotation = character.GetSkeletalMesh().Rotation;
                 //mesh.PastePose(character.GetSkeletalMesh().GetPose());
             }
+
+            //mesh.Visible = mesh2.Visible = arms.Visible = arms2.Visible = true;
+
         }
         bool r;
         void Shoot()
@@ -364,7 +367,8 @@ namespace RetroEngine.Game.Entities.Weapons
             mesh2.PlayAnimation("draw",false,0);
 
             mesh.Position = Camera.position;
-            
+
+            mesh.Visible = mesh2.Visible = arms.Visible = arms2.Visible = false;
 
             Console.WriteLine("loaded pistol double");
 
