@@ -28,6 +28,16 @@ namespace RetroEngine
 
         internal static List<PathfindingQuery> PendingPathfindingQueries = new List<PathfindingQuery>();
 
+        internal static bool DrawNavigation = false;
+
+
+
+        [ConsoleCommand("nav.draw")]
+        public static void SetDrawNavigation(bool value)
+        {
+            DrawNavigation = value;
+        }
+
         public static void ClearNavData()
         {
             navPoints.Clear();
@@ -153,7 +163,8 @@ namespace RetroEngine
 
                     Recast.TileCache?.Update();
 
-                    RecastDebugDraw.DebugDrawNavMeshPolys(Recast.dtNavMesh);
+                    if(DrawNavigation)
+                        RecastDebugDraw.DebugDrawNavMeshPolys(Recast.dtNavMesh);
                 }
             }
 

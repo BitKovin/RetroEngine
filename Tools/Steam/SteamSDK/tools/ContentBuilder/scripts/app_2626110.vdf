@@ -1,7 +1,7 @@
 "appbuild"
 {
 	"appid" "2626110"
-	"desc" "engine game(unstable posiible low fps)"
+	"desc" "engine game(new navigation system)"
 	"buildoutput" "F:\Git\RetroEngine\Tools\Steam\SteamSDK\tools\ContentBuilder\output"
 	"contentroot" ""
 	"setlive" "engine_game"

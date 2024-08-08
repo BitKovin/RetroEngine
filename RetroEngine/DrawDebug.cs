@@ -22,6 +22,12 @@ namespace RetroEngine
         public static bool Enabled = false;
 
 
+        [ConsoleCommand("DrawDebug")]
+        public static void DrawDebugEnable(bool value)
+        {
+            Enabled = value;
+        }
+
 
         public static void Line(Vector3 pointA, Vector3 pointB, Vector3? color =  null, float duration = 1)
         {

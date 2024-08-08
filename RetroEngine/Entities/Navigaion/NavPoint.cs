@@ -16,7 +16,6 @@ namespace RetroEngine.Entities.Navigaion
         public List<NavPoint> staticConnected = new List<NavPoint>();
         public List<NavPoint> connected = new List<NavPoint>();
 
-        static bool drawNavigation = false;
 
         int MaxDepth = 30;
 
@@ -41,7 +40,7 @@ namespace RetroEngine.Entities.Navigaion
 
             UpdateInternalConnected();
 
-            if(drawNavigation == false) return;
+            if(Navigation.DrawNavigation == false) return;
 
             DrawDebug.Text(Position, ToString());
 
@@ -202,12 +201,6 @@ namespace RetroEngine.Entities.Navigaion
 
             return vectors;
 
-        }
-
-        [ConsoleCommand("nav.draw")]
-        public static void SetDrawNavigation(bool value)
-        {
-            drawNavigation = value;
         }
 
     }
