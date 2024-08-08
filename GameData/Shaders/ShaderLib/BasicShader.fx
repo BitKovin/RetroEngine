@@ -34,16 +34,6 @@ sampler ShadowMapCloseSampler = sampler_state
     AddressV = Clamp;
 };
 
-texture ShadowMapVeryClose;
-sampler ShadowMapVeryCloseSampler = sampler_state
-{
-    texture = <ShadowMapVeryClose>;
-    MinFilter = Point;
-    MagFilter = Point;
-    AddressU = Clamp;
-    AddressV = Clamp;
-};
-
 texture DepthTexture;
 sampler DepthTextureSampler = sampler_state
 {
@@ -686,7 +676,7 @@ float GetShadowClose(float3 lightCoords, PixelInput input, float3 TangentNormal)
 
                 float2 offsetCoords = lightCoords.xy + float2(i, j) * texelSize;
                 float closestDepth;
-                closestDepth = SampleShadowMap(ShadowMapCloseSampler, offsetCoords, currentDepth + bias*(lerp(length(float2(i,j)),1,0.5)));
+                closestDepth = SampleShadowMap(ShadowMapCloseSampler, offsetCoords/float2(2,1), currentDepth + bias*(lerp(length(float2(i,j)),1,0.5)));
 
                 closestDepth = saturate(closestDepth);
 
@@ -758,7 +748,7 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input, float3 TangentNor
         //return 1 - SampleShadowMapLinear(ShadowMapVeryCloseSampler, lightCoords.xy, currentDepth - bias, float2(texelSize, texelSize));
 
         #ifdef SIMPLE_SHADOWS
-        return 1 - SampleShadowMapLinear(ShadowMapVeryCloseSampler, lightCoords.xy, currentDepth - bias, float2(texelSize, texelSize));
+        return 1 - SampleShadowMapLinear(ShadowMapCloseSampler, lightCoords.xy/float2(2,1) + float2(0.5,0), currentDepth - bias, float2(texelSize/2, texelSize));
         #endif
 
 
@@ -779,7 +769,7 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input, float3 TangentNor
 
                 float2 offsetCoords = lightCoords.xy + float2(i, j) * texelSize;
                 float closestDepth;
-                closestDepth = SampleShadowMapLinear(ShadowMapVeryCloseSampler, offsetCoords, currentDepth - bias, float2(texelSize, texelSize));
+                closestDepth = SampleShadowMapLinear(ShadowMapCloseSampler, offsetCoords/float2(2,1) + float2(0.5,0), currentDepth - bias, float2(texelSize/2, texelSize));
 
                 shadow += closestDepth;
                 n++;

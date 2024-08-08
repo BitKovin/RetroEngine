@@ -38,7 +38,6 @@ namespace RetroEngine
         public RenderTarget2D shadowMapViewmodel;
         public RenderTarget2D shadowMap;
         public RenderTarget2D shadowMapClose;
-        public RenderTarget2D shadowMapVeryClose;
 
         public Texture2D black;
 
@@ -201,7 +200,7 @@ namespace RetroEngine
 
             effect.Parameters["ShadowMap"]?.SetValue(GameMain.Instance.render.shadowMap);
             effect.Parameters["ShadowMapClose"]?.SetValue(GameMain.Instance.render.shadowMapClose);
-            effect.Parameters["ShadowMapVeryClose"]?.SetValue(GameMain.Instance.render.shadowMapVeryClose);
+            //effect.Parameters["ShadowMapVeryClose"]?.SetValue(GameMain.Instance.render.shadowMapVeryClose);
 
 
             effect.Parameters["InverseViewProjection"]?.SetValue(Matrix.Invert(Camera.finalizedView * Camera.finalizedProjection));
@@ -317,8 +316,9 @@ namespace RetroEngine
             {
                 ShadowMapEffect.Parameters["LightDirection"]?.SetValue(Graphics.LightDirection);
                 ShadowMapMaskedEffect.Parameters["LightDirection"]?.SetValue(Graphics.LightDirection);
-                RenderShadowMapClose(renderList);
+                
                 RenderShadowMap(renderList);
+                RenderShadowMapClose(renderList);
                 RenderShadowMapVeryClose(renderList);
                 RenderShadowMapViewmodel(renderList);
             }
@@ -579,6 +579,8 @@ namespace RetroEngine
 
             graphics.GraphicsDevice.BlendState = BlendState.NonPremultiplied;
 
+
+
             // Iterate through meshes and draw shadows
             foreach (StaticMesh mesh in renderList)
             {
@@ -592,14 +594,16 @@ namespace RetroEngine
         {
             InitShadowMapClose(ref shadowMapClose);
 
-            if(renderShadow() && StableDirectShadows == false) return;
+            
 
             // Set up the shadow map render target with the desired resolution
             graphics.GraphicsDevice.SetRenderTarget(shadowMapClose);
-            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, Graphics.closeShadowMapResolution, Graphics.closeShadowMapResolution);
+            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, shadowMapClose.Height, shadowMapClose.Height);
 
             // Clear the shadow map with the desired clear color (e.g., Color.White)
             graphics.GraphicsDevice.Clear(Color.Black);
+
+            if (renderShadow() && StableDirectShadows == false) return;
 
             SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
             spriteBatch.Begin(effect: maxDepth, sortMode: SpriteSortMode.FrontToBack);
@@ -627,15 +631,15 @@ namespace RetroEngine
 
         internal void RenderShadowMapVeryClose(List<StaticMesh> renderList)
         {
-            InitShadowMapVeryClose(ref shadowMapVeryClose);
+            InitShadowMapVeryClose(ref shadowMapClose);
 
 
             // Set up the shadow map render target with the desired resolution
-            graphics.GraphicsDevice.SetRenderTarget(shadowMapVeryClose);
-            graphics.GraphicsDevice.Viewport = new Viewport(0, 0, shadowMapVeryClose.Width, shadowMapVeryClose.Height);
+            graphics.GraphicsDevice.SetRenderTarget(shadowMapClose);
+            graphics.GraphicsDevice.Viewport = new Viewport(shadowMapClose.Height, 0, shadowMapClose.Height, shadowMapClose.Height);
 
             // Clear the shadow map with the desired clear color (e.g., Color.White)
-            graphics.GraphicsDevice.Clear(Color.Black);
+            //graphics.GraphicsDevice.Clear(Color.Black);
 
             SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
             spriteBatch.Begin(effect: maxDepth, sortMode: SpriteSortMode.FrontToBack);
@@ -1221,7 +1225,7 @@ namespace RetroEngine
             // Create the new render target with the specified depth format
             target = new RenderTarget2D(
                 graphics.GraphicsDevice,
-                Graphics.closeShadowMapResolution,
+                Graphics.closeShadowMapResolution*2,
                 Graphics.closeShadowMapResolution,
                 false, // No mipmaps
                 SurfaceFormat.Single, // Color format
