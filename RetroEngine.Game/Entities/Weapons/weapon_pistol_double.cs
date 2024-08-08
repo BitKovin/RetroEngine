@@ -365,6 +365,8 @@ namespace RetroEngine.Game.Entities.Weapons
 
             mesh.PlayAnimation("draw", false,0);
             mesh2.PlayAnimation("draw",false,0);
+            arms.PastePoseLocal(mesh.GetPoseLocal());
+            arms2.PastePoseLocal(mesh2.GetPoseLocal());
 
             mesh.Position = Camera.position;
 
