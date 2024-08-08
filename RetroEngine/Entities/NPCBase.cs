@@ -189,6 +189,8 @@ namespace RetroEngine.Entities
 
             body.Activate();
 
+            TryStep(MoveDirection/1.5f);
+
             body.LinearVelocity = new System.Numerics.Vector3(MoveDirection.X * speed, body.LinearVelocity.Y, MoveDirection.Z * speed);
 
             MoveDirection = Vector3.Lerp(MoveDirection, DesiredMoveDirection, Time.DeltaTime * 3);
@@ -325,6 +327,63 @@ namespace RetroEngine.Entities
                     }
                 currentUpdateNPCs.Add(npcList[currentUpdateIndex]);
             }
+        }
+
+        Delay stepDelay = new Delay();
+
+        void TryStep(Vector3 dir)
+        {
+
+            if (stepDelay.Wait()) return;
+
+            Vector3 pos = Position + dir / 1.2f;
+
+            if (pos == Vector3.Zero)
+                return;
+
+            var hit = Physics.LineTrace(pos.ToPhysics(), (pos - new Vector3(0, 0.73f, 0)).ToPhysics(), new List<CollisionObject>() { body }, BodyType.World);
+
+            if (hit.HasHit == false)
+                return;
+
+            DrawDebug.Line(hit.HitPointWorld, hit.HitPointWorld + hit.HitNormalWorld, Vector3.UnitX);
+            if (hit.HitNormalWorld.Y < 0.95)
+                return;
+
+
+
+            Vector3 hitPoint = hit.HitPointWorld;
+
+            if (hitPoint == Vector3.Zero)
+                return;
+
+
+
+            if (hitPoint.Y > Position.Y - 1 + 1)
+                return;
+
+            if (Vector3.Distance(hitPoint, Position) > 1.4)
+                return;
+
+            hit = Physics.LineTrace(Position.ToPhysics(), Vector3.Lerp(Position, hitPoint, 1.1f).ToPhysics() + Vector3.UnitY.ToPhysics() * 0.2f, new List<CollisionObject>() { body }, body.GetCollisionMask());
+
+            if (hit.HasHit)
+            {
+                //DrawDebug.Sphere(0.1f, hit.HitPointWorld, Vector3.Zero, 3);
+                return;
+            }
+
+
+            hitPoint.Y += 1.5f;
+
+            DrawDebug.Sphere(0.5f, hitPoint, Vector3.UnitY);
+
+            Vector3 lerpPose = Vector3.Lerp(Position, hitPoint, 0.4f);
+
+            body.SetPosition(lerpPose);
+
+            stepDelay.AddDelay(0.1f);
+
         }
 
 

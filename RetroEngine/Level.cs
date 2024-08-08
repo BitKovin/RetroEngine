@@ -104,6 +104,8 @@ namespace RetroEngine
 
             MapData.ClearMeshData();
 
+            bool rebuild = false;
+
 #if RELEASE
             if (name != GetCurrent().Name) 
             {
@@ -111,8 +113,12 @@ namespace RetroEngine
                 AssetRegistry.ClearAllTextures();
                 AssetRegistry.UnloadBanks();
                 StaticMesh.ClearCache();
+
+                rebuild = true;
             }
 
+#else
+            rebuild = true;
 #endif
 
             Time.DeltaTime = 0.001f;
@@ -139,6 +145,8 @@ namespace RetroEngine
             {
                 entity.Destroy();
             }
+
+            NavigationSystem.Recast.RemoveAllObstacles();
 
             Physics.Simulate();
 
@@ -197,6 +205,11 @@ namespace RetroEngine
             GameMain.Instance.curentLevel.LoadAssets();
             AssetRegistry.WaitForAssetsToLoad();
             GameMain.SkipFrames = 5;
+
+            LoadingScreen.Update(0.95f);
+
+            if(rebuild)
+                NavigationSystem.Recast.BuildNavigationData();
 
             GC.Collect();
 

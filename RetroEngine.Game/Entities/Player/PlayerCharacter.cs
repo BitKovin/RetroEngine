@@ -676,12 +676,12 @@ namespace RetroEngine.Game.Entities.Player
 
             if (stepDelay.Wait()) return;
 
-            Vector3 pos = Position + dir/1.2f;
+            Vector3 pos = Position + dir / 1.2f;
 
             if (pos == Vector3.Zero)
                 return;
 
-            var hit = Physics.LineTrace(pos.ToPhysics(), (pos - new Vector3(0, 0.73f, 0)).ToPhysics(), new List<CollisionObject>() { body }, BodyType.World & BodyType.MainBody);
+            var hit = Physics.LineTrace(pos.ToPhysics(), (pos - new Vector3(0, 0.73f, 0)).ToPhysics(), new List<CollisionObject>() { body }, BodyType.World | BodyType.MainBody);
 
             if (hit.HasHit == false)
                 return;
@@ -981,7 +981,7 @@ namespace RetroEngine.Game.Entities.Player
 
             Vector3 waterCheckPos = interpolatedPosition + Vector3.UnitY * 0.8f;
 
-            var hit = Physics.LineTrace(waterCheckPos + Vector3.UnitY * 100, waterCheckPos, bodyType: BodyType.Liquid);
+            var hit = Physics.LineTrace((waterCheckPos + Vector3.UnitY * 100).ToPhysics(), waterCheckPos.ToPhysics(), bodyType: BodyType.Liquid);
 
             underWater = hit.HasHit;
 

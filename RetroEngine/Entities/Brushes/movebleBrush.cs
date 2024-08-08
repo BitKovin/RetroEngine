@@ -28,6 +28,8 @@ namespace RetroEngine.Entities.Brushes
         Vector3 offsetPosition = Vector3.Zero;
         Vector3 offsetRotation = Vector3.Zero;
 
+        DynamicObstacleHelper DynamicObstacleHelper = new DynamicObstacleHelper();
+
         public MovebleBrush() 
         {
             mergeBrushes = true;
@@ -52,9 +54,17 @@ namespace RetroEngine.Entities.Brushes
 
             offsetPointName = data.GetPropertyString("rotationPointName");
 
+            DynamicObstacleHelper.Meshes = meshes;
+
         }
 
-        long[] obstacles = new long[8];
+        public override void Destroy()
+        {
+
+            DynamicObstacleHelper?.Destroy();
+
+            base.Destroy();
+        }
 
         public override void Start()
         {
@@ -67,10 +77,7 @@ namespace RetroEngine.Entities.Brushes
             offsetPosition = offsetPoint.Position;
             offsetRotation = offsetPoint.Rotation;
 
-            for (int i = 0; i < obstacles.Length; i++)
-            {
-                obstacles[i] = NavigationSystem.Recast.TileCache.AddBoxObstacle(new DotRecast.Core.Numerics.RcVec3f(), new DotRecast.Core.Numerics.RcVec3f());
-            }
+            DynamicObstacleHelper.Update();
 
         }
 
@@ -146,19 +153,7 @@ namespace RetroEngine.Entities.Brushes
                 mesh.Position = Position;
                 mesh.Rotation = Rotation;
 
-                var boxes = mesh.GetSubdividedBoundingBoxes();
-
-                int i = 0;
-                foreach(var box in boxes)
-                {
-
-                    Recast.TileCache.RemoveObstacle(obstacles[i]);
-                    obstacles[i] = Recast.TileCache.AddBoxObstacle(box.Min.ToRc(), box.Max.ToRc());
-
-                    DrawDebug.Box(box.Min, box.Max, Vector3.Zero, 0.01f);
-
-                    i++;
-                }
+                DynamicObstacleHelper.Update();
 
             }
         }

@@ -29,7 +29,7 @@ namespace RetroEngine.Game.Entities
             if (Input.GetAction("test2").Pressed())
             {
                 
-                var hit = Physics.LineTrace(Camera.position, Camera.position + Camera.Forward*100, null, bodyType: BodyType.World);
+                var hit = Physics.LineTrace(Camera.position.ToPhysics(), (Camera.position + Camera.Forward*100).ToPhysics(), null, bodyType: BodyType.World & BodyType.MainBody);
 
                 Position = hit.HitPointWorld;
 
@@ -40,9 +40,9 @@ namespace RetroEngine.Game.Entities
             if (Input.GetAction("test3").Pressed())
             {
 
-                var hit = Physics.LineTrace(Camera.position, Camera.position + Camera.Forward * 100, null, bodyType: BodyType.World);
+                var hit = Physics.LineTrace(Camera.position.ToPhysics(), (Camera.position + Camera.Forward * 100).ToPhysics(), null, bodyType: BodyType.World & BodyType.MainBody);
 
-                NavigationSystem.Recast.TileCache.AddObstacle(((Vector3)hit.HitPointWorld).ToRc(), 2, 2);
+                NavigationSystem.Recast.AddObstacleCapsule(hit.HitPointWorld, 2, 2);
 
 
 
@@ -55,7 +55,7 @@ namespace RetroEngine.Game.Entities
 
         void FindPath()
         {
-            DtNavMeshQuery navMeshQuery = new DtNavMeshQuery(NavigationSystem.Recast.TileCache.GetNavMesh());
+            DtNavMeshQuery navMeshQuery = new DtNavMeshQuery(NavigationSystem.Recast.dtNavMesh);
 
 
             IDtQueryFilter filter = new DtQueryDefaultFilter();

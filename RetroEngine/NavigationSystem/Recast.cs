@@ -90,18 +90,58 @@ namespace RetroEngine.NavigationSystem
 
                 RcVec3f m_polyPickExt = new RcVec3f(2, 4, 2);
 
-
-
                 navMeshQuery.FindNearestPoly(start.ToRc(), m_polyPickExt, filter, out startRef, out var _, out var _);
                 navMeshQuery.FindNearestPoly(end.ToRc(), m_polyPickExt, filter, out endRef, out var _, out var _);
-
-                
+              
 
                 rcTestNavMeshTool.FindFollowPath(NavigationSystem.Recast.dtNavMesh, navMeshQuery, startRef, endRef, start.ToRc(), end.ToRc(), filter, true, ref longs, 0, ref path);
             }
             return path.ConvertPath();
 
         }
+
+        static List<long> allObstacles = new List<long>();
+
+        public static long AddObstacleBox(Vector3 min, Vector3 max)
+        {
+            long obst = TileCache.AddBoxObstacle(min.ToRc(), max.ToRc());
+            lock(allObstacles)
+            {
+                allObstacles.Add(obst);
+            }
+            return obst;
+        }
+
+        public static long AddObstacleCapsule(Vector3 pos, float radius, float height)
+        {
+            long obst = TileCache.AddObstacle(pos.ToRc(), radius, height);
+            lock (allObstacles)
+            {
+                allObstacles.Add(obst);
+            }
+            return obst;
+        }
+
+        public static void RemoveObstacle(long id)
+        {
+            TileCache.RemoveObstacle(id);
+            allObstacles.Remove(id);
+        }
+
+        public static void RemoveAllObstacles()
+        {
+
+            lock(allObstacles)
+            {
+                foreach(long obst in allObstacles)
+                    TileCache.RemoveObstacle(obst);
+
+                allObstacles.Clear();
+
+            }
+
+        }
+
 
         public static void BuildNavigationData()
         {
@@ -136,7 +176,7 @@ namespace RetroEngine.NavigationSystem
             RcNavMeshBuildSettings rcNavMeshBuildSettings = new RcNavMeshBuildSettings();
 
             rcNavMeshBuildSettings.cellSize = 0.3f;
-            rcNavMeshBuildSettings.agentRadius = 0.5f;
+            rcNavMeshBuildSettings.agentRadius = 0.2f;
 
             var buildResult = Build(geomProvider, rcNavMeshBuildSettings, RcByteOrder.LITTLE_ENDIAN, true);//tileNavMeshBuilder.Build(geomProvider, rcNavMeshBuildSettings);
 
@@ -152,7 +192,7 @@ namespace RetroEngine.NavigationSystem
 
         private static IDtTileCacheCompressorFactory _comp = DtTileCacheCompressorFactory.Shared;
         private static DemoDtTileCacheMeshProcess _proc = new DemoDtTileCacheMeshProcess();
-        public static DtTileCache TileCache;
+        internal static DtTileCache TileCache;
 
         static NavMeshBuildResult Build(IInputGeomProvider geom, RcNavMeshBuildSettings setting, RcByteOrder order, bool cCompatibility)
         {

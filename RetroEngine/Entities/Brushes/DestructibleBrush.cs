@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RetroEngine.Map;
+using RetroEngine.NavigationSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +25,8 @@ namespace RetroEngine.Entities.Brushes
             SaveGame = true;
         }
 
+        DynamicObstacleHelper DynamicObstacleHelper = new DynamicObstacleHelper();
+
         public override void FromData(EntityData data)
         {
             base.FromData(data);
@@ -39,6 +42,9 @@ namespace RetroEngine.Entities.Brushes
             {
                 mesh.Static = false;
             }
+
+            DynamicObstacleHelper.Meshes = meshes;
+            DynamicObstacleHelper.Update();
 
         }
 
@@ -62,6 +68,21 @@ namespace RetroEngine.Entities.Brushes
 
         }
 
+        public override void Update()
+        {
+            base.Update();
+
+            DynamicObstacleHelper.DebugDraw();
+
+        }
+
+        public override void Destroy()
+        {
+
+            DynamicObstacleHelper.Destroy();
+
+            base.Destroy();
+        }
 
         void CalculateParticleSpawnLocations()
         {

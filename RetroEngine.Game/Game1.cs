@@ -84,7 +84,7 @@ namespace RetroEngine.Game
             AssetRegistry.LoadFmodBankIntoMemory("Sounds/banks/Master.strings.bank");
 
 
-            NavigationSystem.Recast.BuildNavigationData();
+            
 
 
             //PostProcessStep.StepsAfter.Add(new TestPP());
