@@ -18,7 +18,7 @@ namespace RetroEngine
         public static Point Resolution = new Point(1280, 720);
 
         public static float ShadowBias = -0.000f;//0025f
-        public static int shadowMapResolution { get { return (int)(2048 * ShadowResolutionScale); } }
+        public static int shadowMapResolution { get { return (int)(2048 * 2 * ShadowResolutionScale); } }
         public static int closeShadowMapResolution { get { return (int)(2048 * ShadowResolutionScale); } }
         public static int veryCloseShadowMapResolution { get { return (int)(2048 * ShadowResolutionScale); } }
         public static int ViewmodelShadowMapResolution { get { return (int)(2048 * ShadowResolutionScale); } }
@@ -46,7 +46,7 @@ namespace RetroEngine
         public static Matrix LightViewProjectionViewmodel;
         public static Matrix LightViewProjectionClose;
         public static Matrix LightViewProjectionVeryClose;
-        public static float LightDistance = 150;
+        public static float LightDistance = 170;
         public static float CloseLightDistance = 51;
         public static float VeryCloseLightDistance = 16;
 
