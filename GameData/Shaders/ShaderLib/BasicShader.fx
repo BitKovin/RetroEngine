@@ -46,7 +46,7 @@ sampler DepthTextureSampler = sampler_state
 
 };
 
-texture FrameTexture;
+texture FrameTexture; //ssr
 sampler FrameTextureSampler = sampler_state
 {
     texture = <FrameTexture>;
@@ -68,7 +68,7 @@ sampler ReflectionTextureSampler = sampler_state
     AddressV = Clamp;
 };
 
-texture ReflectionCubemap;
+texture ReflectionCubemap; //ssr
 sampler ReflectionCubemapSampler = sampler_state
 {
     texture = <ReflectionCubemap>;
@@ -189,46 +189,6 @@ texture PointLightCubemap6;
 sampler PointLightCubemap6Sampler = sampler_state
 {
     texture = <PointLightCubemap6>;
-    MinFilter = Linear;
-    MagFilter = Linear;
-    AddressU = Clamp;
-    AddressV = Clamp;
-};
-
-texture PointLightCubemap7;
-sampler PointLightCubemap7Sampler = sampler_state
-{
-    texture = <PointLightCubemap7>;
-    MinFilter = Linear;
-    MagFilter = Linear;
-    AddressU = Clamp;
-    AddressV = Clamp;
-};
-
-texture PointLightCubemap8;
-sampler PointLightCubemap8Sampler = sampler_state
-{
-    texture = <PointLightCubemap8>;
-    MinFilter = Linear;
-    MagFilter = Linear;
-    AddressU = Clamp;
-    AddressV = Clamp;
-};
-
-texture PointLightCubemap9;
-sampler PointLightCubemap9Sampler = sampler_state
-{
-    texture = <PointLightCubemap9>;
-    MinFilter = Linear;
-    MagFilter = Linear;
-    AddressU = Clamp;
-    AddressV = Clamp;
-};
-
-texture PointLightCubemap10;
-sampler PointLightCubemap10Sampler = sampler_state
-{
-    texture = <PointLightCubemap10>;
     MinFilter = Linear;
     MagFilter = Linear;
     AddressU = Clamp;

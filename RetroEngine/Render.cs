@@ -317,6 +317,8 @@ namespace RetroEngine
                 ShadowMapEffect.Parameters["LightDirection"]?.SetValue(Graphics.LightDirection);
                 ShadowMapMaskedEffect.Parameters["LightDirection"]?.SetValue(Graphics.LightDirection);
                 
+
+
                 RenderShadowMap(renderList);
                 RenderShadowMapClose(renderList);
                 RenderShadowMapVeryClose(renderList);
