@@ -603,7 +603,7 @@ namespace RetroEngine
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, shadowMapClose.Height, shadowMapClose.Height);
 
             // Clear the shadow map with the desired clear color (e.g., Color.White)
-            graphics.GraphicsDevice.Clear(Color.Black);
+            //graphics.GraphicsDevice.Clear(Color.Black);
 
             if (renderShadow() && StableDirectShadows == false) return;
 
