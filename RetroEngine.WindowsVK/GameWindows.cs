@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Media;
 using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -21,12 +22,20 @@ namespace RetroEngine.Windows
         public GameWindows()
         {
             AllowAsyncAssetLoading = true;
+            TrySetFormBgColor();
+        }
+
+        protected override void Initialize()
+        {
+            TrySetFormBgColor();
+            base.Initialize();    
         }
 
         protected override void Update(GameTime gameTime)
         {
 
             CheckWindowFullscreenStatus();
+            TrySetFormBgColor();
             base.Update(gameTime);
         }
 
@@ -62,13 +71,15 @@ namespace RetroEngine.Windows
                     if (form != null) //some times ActiveForm sets to null on alt tab and I have 0 idea why. It continues code(even with this check)
                     {
 
+                        
+
                         if (_isFullscreen)
                         {
                             if (Level.ChangingLevel == true)
                             {
                                 //form.TopMost = true;
-                                form.Focus();
-                                form.WindowState = FormWindowState.Maximized;
+                                //form.Focus();
+                                //form.WindowState = FormWindowState.Maximized;
                             }
                             else
                             {
@@ -94,8 +105,9 @@ namespace RetroEngine.Windows
                         //form.TopMost = false;
                         _graphics.IsFullScreen = false;
                         form.FormBorderStyle = FormBorderStyle.Sizable;
-                        form.WindowState = FormWindowState.Minimized;
+                        //form.WindowState = FormWindowState.Minimized;
                         _graphics.ApplyChanges();
+                        form.Update();
 
                     }
                     else if (_isFullscreen && _graphics.IsFullScreen == false && focused && form.WindowState != FormWindowState.Minimized)
@@ -134,6 +146,112 @@ namespace RetroEngine.Windows
                 }
                 catch (Exception ex) { }
 
+        }
+
+        public override bool IsGameWindowFocused()
+        {
+
+            var form = Form.ActiveForm;
+
+            if (Form.ActiveForm == null)
+                return false;
+
+            if (form != null)
+            {
+                form1 = form;
+            }
+            else
+            {
+                form = form1;
+            }
+
+            if (form == null)
+                return false;
+
+            return base.IsGameWindowFocused() && form.Focused && IsWindowFocused(Window.Handle) && form.WindowState != FormWindowState.Minimized;
+        }
+
+        public override void FocusGameWindow()
+        {
+            var form = Form.ActiveForm;
+
+            if (form != null)
+            {
+                form1 = form;
+            }
+            else
+            {
+                form = form1;
+            }
+
+            if (form != null)
+                form.Focus();
+
+        }
+
+        bool FormBgColorInit = false;
+
+
+        void TrySetFormBgColor()
+        {
+
+            if (FormBgColorInit) return;
+
+            var form = Form.ActiveForm;
+
+            if (form != null)
+            {
+                form1 = form;
+            }
+            else
+            {
+                form = form1;
+            }
+
+            if (form == null) return;
+
+
+            form.Invoke(() => { form.BackColor = System.Drawing.Color.FromArgb(6, 5, 15); });
+
+            FormBgColorInit = true;
+
+        }
+
+
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool FlashWindowEx(ref FLASHWINFO pwfi);
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct FLASHWINFO
+        {
+            public uint cbSize;
+            public IntPtr hwnd;
+            public uint dwFlags;
+            public uint uCount;
+            public uint dwTimeout;
+        }
+
+        public const uint FLASHW_STOP = 0;
+        public const uint FLASHW_CAPTION = 1;
+        public const uint FLASHW_TRAY = 2;
+        public const uint FLASHW_ALL = 3;
+        public const uint FLASHW_TIMER = 4;
+        public const uint FLASHW_TIMERNOFG = 12;
+
+        public override void FlashWindow()
+        {
+
+            FLASHWINFO fw = new FLASHWINFO();
+
+            fw.cbSize = Convert.ToUInt32(Marshal.SizeOf(fw));
+            fw.hwnd = Window.Handle;
+            fw.dwFlags = FLASHW_TRAY | FLASHW_TIMERNOFG;
+            fw.uCount = uint.MaxValue;
+            fw.dwTimeout = 0;
+
+            FlashWindowEx(ref fw);
+            SystemSounds.Exclamation.Play();
         }
 
         protected override void SetFullscreen()

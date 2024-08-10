@@ -19,7 +19,8 @@ namespace RetroEngine
 
             if(GameMain.CanLoadAssetsOnThisThread() == false) return;
 
-
+            GameMain.Instance.CheckWindowFullscreenStatus();
+            if (GameMain.Instance.IsGameWindowFocused() == false) return;
 
 
             GameMain.Instance.GraphicsDevice.Clear(Color.Blue);
@@ -37,6 +38,7 @@ namespace RetroEngine
 
             SpriteBatch.End();
 
+            if (GameMain.Instance.IsGameWindowFocused() == false) return;
             GameMain.Instance.DrawSplashIfNeed();
 
             SpriteBatch.Begin();
@@ -50,7 +52,9 @@ namespace RetroEngine
             SpriteBatch.End();
 
 
+            if (GameMain.Instance.IsGameWindowFocused() == false) return;
             GameMain.Instance.CheckWindowFullscreenStatus();
+            if (GameMain.Instance.IsGameWindowFocused() == false) return;
             GameMain.Instance.GraphicsDevice.Present();
             GameMain.Instance.CheckWindowFullscreenStatus();
 

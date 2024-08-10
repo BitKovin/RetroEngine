@@ -115,6 +115,8 @@ namespace RetroEngine
 
             base.Initialize();
 
+            FocusGameWindow();
+
             Window.ClientSizeChanged += Window_ClientSizeChanged;
 
             Input.AddAction("click").LMB = true;
@@ -367,6 +369,21 @@ namespace RetroEngine
 
         }
 
+        public virtual bool IsGameWindowFocused()
+        {
+            return IsActive;
+        }
+
+        public virtual void FocusGameWindow()
+        {
+
+        }
+
+        public virtual void FlashWindow()
+        {
+
+        }
+
         void PerformReservedTimeTasks()
         {
             Stopwatch sw = Stopwatch.StartNew();
@@ -465,18 +482,20 @@ namespace RetroEngine
                 return;
             }
 
-
-            //CheckWindowFullscreenStatus();
-            if (AllowAsyncAssetLoading && Render.AsyncPresent)
+            if (IsGameWindowFocused())
             {
-                presentingFrame = true;
-                presentFrameTask = Task.Factory.StartNew(() => { PresentFrame(); });
-            }
-            else
-            {
-                PresentFrame();
-            }
+                //CheckWindowFullscreenStatus();
+                if (AllowAsyncAssetLoading && Render.AsyncPresent)
+                {
 
+                    presentingFrame = true;
+                    presentFrameTask = Task.Factory.StartNew(() => { PresentFrame(); });
+                }
+                else
+                {
+                    PresentFrame();
+                }
+            }
 
             //Level.GetCurrent().EndOcclusionCheck();
 
@@ -496,7 +515,9 @@ namespace RetroEngine
             presentingFrame = true;
             GraphicsDevice.SetRenderTarget(null);
             Stats.StartRecord("Frame Present");
+
             GraphicsDevice.Present();
+
             Stats.StopRecord("Frame Present");
             presentingFrame = false;
             Stats.StopRecord("Render");
@@ -636,6 +657,9 @@ namespace RetroEngine
         }
         protected virtual void SetFullscreen()
         {
+
+            FocusGameWindow();
+
             _width = Graphics.Resolution.X;
            _height = Graphics.Resolution.Y;
 

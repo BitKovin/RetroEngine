@@ -217,6 +217,9 @@ namespace RetroEngine
 
             GetCurrent().RenderPreparation();
 
+            if(GameMain.Instance.IsGameWindowFocused() == false)
+                GameMain.Instance.FlashWindow();
+
             ChangingLevel = false;
 
         }

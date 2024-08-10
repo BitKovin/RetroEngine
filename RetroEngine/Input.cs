@@ -44,12 +44,10 @@ namespace RetroEngine
         public static void UpdateMouse()
         {
 
-            
-
             Vector2 mousePos = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
-           
 
-            
+
+
 
             if (MouseMoveCalculatorObject != null)
             {
@@ -106,8 +104,9 @@ namespace RetroEngine
 
         public static void CenterCursor()
         {
-            if(GameMain.CanLoadAssetsOnThisThread())
+            if(GameMain.CanLoadAssetsOnThisThread() && GameMain.Instance.IsGameWindowFocused())
             {
+
                 Mouse.SetPosition((int)windowCenter.X, (int)windowCenter.Y);
                 MousePos = windowCenter;
                 MouseDelta = new Vector2();
