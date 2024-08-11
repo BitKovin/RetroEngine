@@ -202,6 +202,7 @@ namespace RetroEngine.NavigationSystem
                 return new NavMeshBuildResult();
             }
 
+
             _proc.Init(geom);
 
             // Init cache
@@ -229,7 +230,7 @@ namespace RetroEngine.NavigationSystem
 
             var builder = new DtTileCacheLayerBuilder(DtTileCacheCompressorFactory.Shared);
             var storageParams = new DtTileCacheStorageParams(order, cCompatibility);
-            var results = builder.Build(geom, cfg, storageParams, 8, tw, th);
+            var results = builder.Build(geom, cfg, storageParams, Environment.ProcessorCount, tw, th);
 
             var layers = results
                 .SelectMany(x => x.layers)
@@ -243,6 +244,7 @@ namespace RetroEngine.NavigationSystem
                 var refs = TileCache.AddTile(layer, 0);
                 TileCache.BuildNavMeshTile(refs);
             }
+
 
             return new NavMeshBuildResult(RcImmutableArray<RcBuilderResult>.Empty, TileCache.GetNavMesh());
         }

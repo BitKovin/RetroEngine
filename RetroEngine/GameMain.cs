@@ -482,7 +482,7 @@ namespace RetroEngine
                 return;
             }
 
-            if (IsGameWindowFocused())
+            if (IsGameWindowFocused() || _isFullscreen == false)
             {
                 //CheckWindowFullscreenStatus();
                 if (AllowAsyncAssetLoading && Render.AsyncPresent)

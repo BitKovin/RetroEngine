@@ -35,7 +35,9 @@ namespace RetroEngine.NavigationSystem
                     if(updated)
                         Recast.RemoveObstacle(obstacles[i]);
 
-                    obstacles[i] = Recast.AddObstacleBox(box.Min, box.Max);
+                    
+
+                    obstacles[i] = Recast.AddObstacleBox(box.Min - Vector3.UnitY*2f, box.Max);
 
                     //DrawDebug.Box(box.Min, box.Max, Vector3.Zero, 0.01f);
 
@@ -61,7 +63,7 @@ namespace RetroEngine.NavigationSystem
 
                 foreach (var box in boxes)
                 {
-                    DrawDebug.Box(box.Min, box.Max, Vector3.Zero, 0.01f);
+                    DrawDebug.Box(box.Min - Vector3.UnitY * 2f, box.Max, Vector3.Zero, 0.01f);
                 }
             }
 

@@ -72,6 +72,7 @@ namespace RetroEngine.Entities.Brushes
         {
             base.Update();
 
+            DynamicObstacleHelper.Update();
             DynamicObstacleHelper.DebugDraw();
 
         }

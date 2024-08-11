@@ -215,8 +215,9 @@ namespace RetroEngine.Game.Entities.Player
 
             PlayerFlashLight.Start();
 
+            interpolatedPosition = Position;
 
-            if(Level.GetCurrent().FindEntityByName("PlayerGlobal") == null)
+            if (Level.GetCurrent().FindEntityByName("PlayerGlobal") == null)
                 Level.GetCurrent().AddEntity(new Entities.Player.PlayerGlobal());
 
         }
@@ -1007,6 +1008,8 @@ namespace RetroEngine.Game.Entities.Player
 
             body.SetPosition(Position);
             Camera.rotation = Rotation;
+            Camera.position = Position + Vector3.UnitY;
+            interpolatedPosition = Position;
 
         }
 

@@ -13,6 +13,7 @@ namespace RetroEngine.Entities.Brushes
         public GroupBrush() 
         {
             mergeBrushes = true;
+            Static = true;
         }
 
     }
