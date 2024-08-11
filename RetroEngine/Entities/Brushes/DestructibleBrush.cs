@@ -44,7 +44,7 @@ namespace RetroEngine.Entities.Brushes
             }
 
             DynamicObstacleHelper.Meshes = meshes;
-            DynamicObstacleHelper.Update();
+            //DynamicObstacleHelper.Update();
 
         }
 
@@ -72,8 +72,10 @@ namespace RetroEngine.Entities.Brushes
         {
             base.Update();
 
-            DynamicObstacleHelper.Update();
-            DynamicObstacleHelper.DebugDraw();
+            if(GameMain.SkipFrames>0)
+                DynamicObstacleHelper.Update();
+
+            //DynamicObstacleHelper.DebugDraw();
 
         }
 

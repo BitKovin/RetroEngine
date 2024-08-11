@@ -977,6 +977,8 @@ half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half rough
 
     half offsetScale = 1 / (LightResolutions[i] / 30);// / lerp(distanceToLight,1, 0.7);
     offsetScale *= lerp(abs(dot(normal, normalize(lightVector))), 0.6, 1);
+
+
     half notShadow = 1;
 
     if(dot(normal, normalize(lightVector))<-0.01)
@@ -1002,9 +1004,9 @@ half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half rough
         int samples = 0;
         float shadowFactor = 0.0;
 
-        const int radius = 2;
+        const int radius = 3;
 
-        float step = 0.5;
+        float step = 1;
 
 #if OPENGL
         step = radius;
@@ -1045,7 +1047,7 @@ half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half rough
                 float weight = Gaussian(x,y,radius);
 
                 float3 offset = (tangent * x + bitangent * y) * shadowBias * offsetScale;
-                float shadowDepth = GetPointLightDepth(i, lightDir + offset);
+                float shadowDepth = GetPointLightDepth(i, lightDir + offset*1.5);
 
                 //shadowFactor += 1 - min((distanceToLight * distFactor + bias - shadowDepth)*LightResolutions[i] * distanceToLight,1);
 
