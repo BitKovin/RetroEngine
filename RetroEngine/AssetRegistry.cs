@@ -19,6 +19,8 @@ using FmodForFoxes;
 using System.Runtime.InteropServices;
 using FmodForFoxes.Studio;
 using MonoGame.Extended.Text;
+using MonoGame.Extended.Framework.Media;
+using MonoGame.Extended.VideoPlayback;
 
 namespace RetroEngine
 {
@@ -51,85 +53,123 @@ namespace RetroEngine
 
         public static Texture2D LoadTextureFromFile(string path, bool ignoreErrors = false, bool generateMipMaps = true)
         {
-
-            if (textures.ContainsKey(path))
-                return (Texture2D)textures[path];
-
-            if(nullTextures.Contains(path))
-                return null;
-
-            if (GameMain.CanLoadAssetsOnThisThread() == false) 
+            lock (textures)
             {
-                Logger.Log($"THREAD ERROR:  attempted to load texture from not render thread. Texture: {path}");
-                return GameMain.Instance.render.black;
-            }
+                if (textures.ContainsKey(path))
+                    return (Texture2D)textures[path];
 
-            string filePath = FindPathForFile(path);
+                if (nullTextures.Contains(path))
+                    return null;
 
-            try
-            {
+                if (GameMain.CanLoadAssetsOnThisThread() == false)
+                {
+                    Logger.Log($"THREAD ERROR:  attempted to load texture from not render thread. Texture: {path}");
+                    return GameMain.Instance.render.black;
+                }
 
-                lock (textures)
+                string filePath = FindPathForFile(path);
+
+                try
                 {
 
-                    using (Stream stream = GetFileStreamFromPath(filePath))
+                    lock (textures)
                     {
-                        if (generateMipMaps && AllowGeneratingMipMaps)
+
+                        using (Stream stream = GetFileStreamFromPath(filePath))
                         {
-                            Texture2D tex = Texture2D.FromStream(GameMain.Instance.GraphicsDevice, stream);
+                            if (generateMipMaps && AllowGeneratingMipMaps)
+                            {
+                                Texture2D tex = Texture2D.FromStream(GameMain.Instance.GraphicsDevice, stream);
 
-                            textures.Add(path, GenerateMipMaps(tex));
+                                textures.Add(path, GenerateMipMaps(tex));
 
+                            }
+                            else
+                            {
+                                textures.Add(path, Texture2D.FromStream(GameMain.Instance.GraphicsDevice, stream));
+                            }
+
+                            textures[path].Name = path;
+
+                            texturesHistory.Add(path);
+
+                            Logger.Log($"loaded texture {path}. Current texture cache: {textures.Count}");
+
+                            return (Texture2D)textures[path];
                         }
-                        else
-                        {
-                            textures.Add(path, Texture2D.FromStream(GameMain.Instance.GraphicsDevice, stream));
-                        }
-
-                        textures[path].Name = path;
-
-                        texturesHistory.Add(path);
-
-                        Logger.Log($"loaded texture {path}. Current texture cache: {textures.Count}");
-
-                        return (Texture2D)textures[path];
                     }
                 }
+                catch (Exception ex)
+                {
+                    if (!ignoreErrors)
+                        Logger.Log("Failed to load texture: " + ex.Message);
+                    nullTextures.Add(path);
+                    return null;
+                }
             }
-            catch (Exception ex)
-            {
-                if(!ignoreErrors)
-                    Logger.Log("Failed to load texture: " + ex.Message);
-                nullTextures.Add(path);
-                return null;
-            }
-
         }
 
         static FontManager FontManager = new FontManager();
         static Dictionary<string, DynamicSpriteFont> loadedFonts = new Dictionary<string, DynamicSpriteFont>();
         public static DynamicSpriteFont LoadFontSpriteFromFile(string path)
         {
+            lock (loadedFonts)
+            {
+                if (loadedFonts.ContainsKey(path))
+                    return loadedFonts[path];
 
-            if(loadedFonts.ContainsKey(path))
-                return loadedFonts[path];
+                path = FindPathForFile(path);
 
-            path = FindPathForFile(path);
+                if (loadedFonts.ContainsKey(path))
+                    return loadedFonts[path];
 
-            if (loadedFonts.ContainsKey(path))
-                return loadedFonts[path];
+                var stream = GetFileStreamFromPath(path);
 
-            var stream = GetFileStreamFromPath(path);
+                var font = FontManager.LoadFont(path, 72);
 
-            var font = FontManager.LoadFont(path, 72);
-
-            DynamicSpriteFont dynamicSpriteFont = new DynamicSpriteFont(GameMain.Instance.GraphicsDevice, font);
+                DynamicSpriteFont dynamicSpriteFont = new DynamicSpriteFont(GameMain.Instance.GraphicsDevice, font);
 
 
-            loadedFonts.Add(path, dynamicSpriteFont);
+                loadedFonts.Add(path, dynamicSpriteFont);
 
-            return dynamicSpriteFont;
+                return dynamicSpriteFont;
+            }
 
+        }
+
+        static Dictionary<string, Video> loadedVideos = new Dictionary<string, Video>();
+
+        public static Video LoadVideoFromFile(string path)
+        {
+            lock (loadedVideos)
+            {
+                if (loadedVideos.ContainsKey(path))
+                    return loadedVideos[path];
+
+                path = FindPathForFile(path);
+
+                if (loadedVideos.ContainsKey(path))
+                    return loadedVideos[path];
+
+                var video = VideoHelper.LoadFromFile(path);
+
+                loadedVideos.Add(path, video);
+
+                return video;
+            }
+        }
+
+        public static void UnloadVideos()
+        {
+            lock (loadedVideos)
+            {
+                foreach (var v in loadedVideos.Values)
+                {
+                    v?.Dispose();
+                }
+
+                loadedVideos.Clear();
+            }
         }
         public static FileStream GetFileStreamFromPath(string path)
         {

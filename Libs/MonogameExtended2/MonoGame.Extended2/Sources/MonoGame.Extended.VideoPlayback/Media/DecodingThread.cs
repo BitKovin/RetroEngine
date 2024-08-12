@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Threading;
 using Microsoft.Xna.Framework.Media;
@@ -63,7 +63,7 @@ internal sealed class DecodingThread
 
         if (SystemThread.IsAlive)
         {
-            SystemThread.Join();
+            //SystemThread.Join();
         }
     }
 
@@ -171,7 +171,7 @@ internal sealed class DecodingThread
             // So we have to wrap another exception, e.g. ApplicationException.
             // And then when the ApplicationException in the main thread is caught (see AppDomain.UnhandledException event),
             // use its InnerException property to get the real exception, and the correct source location.
-            self._mainThreadSynchronizationContext.Post(_ => throw new ApplicationException(ex.Message, ex), null);
+            self.Terminate();
         }
     }
 
@@ -198,7 +198,7 @@ internal sealed class DecodingThread
 
     private readonly SynchronizationContext _mainThreadSynchronizationContext;
 
-    private volatile bool _continueWorking = true;
+    public bool _continueWorking = true;
 
     private readonly VideoPlayer _videoPlayer;
 

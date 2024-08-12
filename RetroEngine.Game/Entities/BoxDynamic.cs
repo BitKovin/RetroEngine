@@ -13,6 +13,8 @@ using RetroEngine.Entities;
 using RetroEngine.SaveSystem;
 using RetroEngine.PhysicsSystem;
 using BulletSharp.SoftBody;
+using MonoGame.Extended.Framework.Media;
+using System.Threading;
 
 namespace RetroEngine.Game.Entities
 {
@@ -30,6 +32,8 @@ namespace RetroEngine.Game.Entities
 
         FmodEventInstance FmodEventInstance;
 
+        VideoPlayer videoPlayer;
+        Video video;
         public BoxDynamic() : base()
         {            
 
@@ -51,6 +55,9 @@ namespace RetroEngine.Game.Entities
 
             soundPlayer.Position = Position;
 
+            videoPlayer = new VideoPlayer(GameMain.Instance.GraphicsDevice);
+
+
         }
 
         protected override void LoadAssets()
@@ -69,7 +76,39 @@ namespace RetroEngine.Game.Entities
 
             //mesh.CastGeometricShadow = true;
 
+            video = AssetRegistry.LoadVideoFromFile("test.mp4");
+
+            
+
+
             meshes.Add(mesh);
+
+        }
+
+        bool pendingPlay = false;
+
+        public override void FinalizeFrame()
+        {
+            base.FinalizeFrame();
+
+            if(Thread.CurrentThread == GameMain.RenderThread)
+            {
+
+                if(pendingPlay)
+                {
+                    videoPlayer.Play(video);
+                    pendingPlay = false;
+                }
+
+                try
+                {
+                    if(videoPlayer.Video != null)
+                        mesh.texture = videoPlayer.GetTexture();
+                }catch
+                { videoPlayer.Play(video); }
+            }
+
+            
 
         }
 
@@ -77,8 +116,19 @@ namespace RetroEngine.Game.Entities
         {
             base.OnDamaged(damage, causer, weapon);
 
+            pendingPlay = true;
+
             soundPlayer.Position = Position;
             soundPlayer.Play();
+
+        }
+
+        public override void Destroy()
+        {
+
+            base.Destroy();
+
+            videoPlayer.Dispose();
 
         }
 

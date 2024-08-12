@@ -140,7 +140,7 @@ namespace RetroEngine.Particles
                 SetupBlending();
                 _graphicsDevice.RasterizerState = RasterizerState.CullNone;
                 ApplyShaderParams(effect, null);
-                effect.Parameters["isParticle"].SetValue(true);
+                effect.Parameters["isParticle"]?.SetValue(true);
 
                 _graphicsDevice.SetVertexBuffer(vertexBuffer);
                 _graphicsDevice.Indices = indexBuffer;
@@ -163,7 +163,7 @@ namespace RetroEngine.Particles
 
                 }
 
-                effect.Parameters["isParticle"].SetValue(false);
+                effect.Parameters["isParticle"]?.SetValue(false);
 
             
         }

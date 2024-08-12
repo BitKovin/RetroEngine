@@ -1,4 +1,4 @@
-﻿//#define TEST_ASS
+//#define TEST_ASS
 //#define TEST_SRT
 //#define TEST_WMV_FILE
 
@@ -94,7 +94,7 @@ public sealed class Game1 : Game
         _video = VideoHelper.LoadFromFile(@"Content/SampleVideo_1280x720_1mb.mp4");
 #endif
 
-        _videoPlayer.IsLooped = true;
+        _videoPlayer.IsLooped = false;
         _videoPlayer.Play(_video);
     }
 
@@ -139,6 +139,7 @@ public sealed class Game1 : Game
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
         // TODO: Add your drawing code here
+
         var videoTexture = _videoPlayer.GetTexture();
 
         _spriteBatch.Begin();

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework;
@@ -311,6 +311,8 @@ public sealed partial class VideoPlayer : DisposableBase
 
         Debug.Assert(texture != null, nameof(texture) + " != null");
 
+        if(_decodingThread._continueWorking == false) return texture;
+
         if (texture.IsDisposed)
         {
             throw new ObjectDisposedException(nameof(texture), "Texture cache is disposed");
@@ -368,6 +370,8 @@ public sealed partial class VideoPlayer : DisposableBase
     {
         EnsureNotDisposed();
 
+        Stop();
+
         LoadVideo(video);
 
         ResetAndPlayVideoFromStart(video);
@@ -410,7 +414,9 @@ public sealed partial class VideoPlayer : DisposableBase
 
         using (var seAccess = AccessSoundEffect())
         {
-            seAccess.SoundEffect?.Stop();
+            if(seAccess.SoundEffect != null)
+            if(seAccess.SoundEffect.IsDisposed == false)
+                seAccess.SoundEffect?.Stop();
         }
 
         _decodingThread?.Terminate();
@@ -543,7 +549,8 @@ public sealed partial class VideoPlayer : DisposableBase
 
         if (_decodingThread.ExceptionalExit.HasValue && _decodingThread.ExceptionalExit.Value)
         {
-            throw new FFmpegException("Decoding thread exited unexpectedly.");
+            //throw new FFmpegException("Decoding thread exited unexpectedly.");
+            return false;
         }
 
         var video = Video;
@@ -617,6 +624,9 @@ public sealed partial class VideoPlayer : DisposableBase
 
     private void ResetAndPlayVideoFromStart(Video? video)
     {
+
+        
+
         ref var decodingThread = ref _decodingThread;
 
         decodingThread?.Terminate();

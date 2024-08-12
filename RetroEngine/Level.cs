@@ -112,6 +112,7 @@ namespace RetroEngine
                 AssetRegistry.ConstantCache.Clear();
                 AssetRegistry.ClearAllTextures();
                 AssetRegistry.UnloadBanks();
+                AssetRegistry.UnloadVideos();
                 StaticMesh.ClearCache();
 
                 rebuild = true;
