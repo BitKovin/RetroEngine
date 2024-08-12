@@ -1,11 +1,17 @@
 ﻿#define NO_SPECULAR
 //#define SIMPLE_SHADOWS
-#include "ShaderLib/BasicShader.fx"
+
 
 texture Texture;
 sampler TextureSampler = sampler_state
 {
     texture = <Texture>;
+
+    MinFilter = Point;
+    MagFilter = Point;
+
+    MipLODBias = -0.5;
+
     AddressU = Wrap;
     AddressV = Wrap;
 };
@@ -13,25 +19,17 @@ texture EmissiveTexture;
 sampler EmissiveTextureSampler = sampler_state
 {
     texture = <EmissiveTexture>;
+
+    MinFilter = Point;
+    MagFilter = Point;
+
+    
+
     AddressU = Wrap;
     AddressV = Wrap;
 };
 
-texture NormalTexture;
-sampler NormalTextureSampler = sampler_state
-{
-    texture = <NormalTexture>;
-    AddressU = Wrap;
-    AddressV = Wrap;
-};
-
-texture ORMTexture;
-sampler ORMTextureSampler = sampler_state
-{
-    texture = <ORMTexture>;
-    AddressU = Wrap;
-    AddressV = Wrap;
-};
+#include "ShaderLib/BasicShader.fx"
 
 bool earlyZ;
 
@@ -67,7 +65,7 @@ PixelOutput PixelShaderFunction(PixelInput input)
     if (ColorRGBTA.a < 0.001)
         discard;
 
-    float3 textureNormal = tex2D(NormalTextureSampler, input.TexCoord).rgb;
+    //float3 textureNormal = tex2D(NormalTextureSampler, input.TexCoord).rgb;
     
     float3 orm = float3(1,1,0);
     
@@ -82,7 +80,7 @@ PixelOutput PixelShaderFunction(PixelInput input)
     if (textureAlpha < 0.01)
         discard;
 
-    float3 pixelNormal = input.Normal;ApplyNormalTexture(textureNormal, input.Normal, input.Tangent, input.BiTangent);
+    float3 pixelNormal = input.Normal;//ApplyNormalTexture(textureNormal, input.Normal, input.Tangent, input.BiTangent);
     
     
     float3 albedo = textureColor;

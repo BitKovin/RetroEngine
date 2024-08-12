@@ -689,7 +689,8 @@ namespace RetroEngine
         {
             foreach (string arg in args)
             {
-                LaunchArguments += arg;
+                LaunchArguments += " " + arg;
+                Console.WriteLine(arg);
             }
         }
 
@@ -708,6 +709,7 @@ namespace RetroEngine
             foreach (string command in commands)
             {
                 ConsoleCommands.ProcessCommand(command);
+                Console.WriteLine(command);
             }
 
             

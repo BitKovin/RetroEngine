@@ -616,7 +616,7 @@ namespace RetroEngine.Game.Entities.Player
         {
             onGround = false;
 
-            float radius = 0.4f;
+            float radius = 0.25f;
 
             if (CheckGroundAtOffset(new Vector3(0, 0, 0)))
                 onGround = true;
@@ -703,6 +703,12 @@ namespace RetroEngine.Game.Entities.Player
             if (hitPoint.Y > Position.Y - 1 + 1)
                 return;
 
+            if (Physics.SphereTrace(hitPoint + Vector3.UnitY*0.33f, hitPoint + Vector3.UnitY, 0.3f, null, bodyType: BodyType.World).HasHit)
+                return;
+
+            if (Physics.SphereTrace(Position, Position + dir.Normalized()*0.2f, 0.3f, null, bodyType: BodyType.World).HasHit)
+                return;
+
             if (Vector3.Distance(hitPoint, Position) > 1.4)
                 return;
 
@@ -783,7 +789,7 @@ namespace RetroEngine.Game.Entities.Player
 
             UpdatePlayerInput();
 
-            bodyMesh.Position = interpolatedPosition - Camera.rotation.GetForwardVector().XZ().Normalized() * 0.25f - new Vector3(0, 0.93f, 0);
+            bodyMesh.Position = interpolatedPosition - Camera.rotation.GetForwardVector().XZ().Normalized() * 0.35f - new Vector3(0, 0.93f, 0);
             bodyMesh.Rotation = new Vector3(0, Camera.rotation.Y, 0);
 
 

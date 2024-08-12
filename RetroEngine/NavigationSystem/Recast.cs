@@ -261,7 +261,7 @@ namespace RetroEngine.NavigationSystem
             option.walkableRadius = setting.agentRadius;
             option.walkableClimb = setting.agentMaxClimb;
             option.maxSimplificationError = setting.edgeMaxError;
-            option.maxTiles = tw * th * 4; // for test EXPECTED_LAYERS_PER_TILE;
+            option.maxTiles = tw * th * 15; // for test EXPECTED_LAYERS_PER_TILE;
             option.maxObstacles = 2048;
 
             DtNavMeshParams navMeshParams = new DtNavMeshParams();

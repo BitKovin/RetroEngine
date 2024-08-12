@@ -55,7 +55,7 @@ namespace RetroEngine
                             if (arguments.Length == parameters.Length)
                             {
                                 // Convert arguments to the appropriate types
-                                object[] convertedArgs = arguments.Select((arg, index) => Convert.ChangeType(arg, parameters[index].ParameterType)).ToArray();
+                                object[] convertedArgs = arguments.Select((arg, index) => Convert.ChangeType(arg, parameters[index].ParameterType, System.Globalization.CultureInfo.InvariantCulture)).ToArray();
 
 
                                 // Invoke the method

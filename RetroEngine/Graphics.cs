@@ -36,6 +36,8 @@ namespace RetroEngine
 
         public static bool EnableSSAO = true;
 
+        public static int MipLevel = 0;
+
         public static float Brightness = 1;
         public static float Gamma = 1.05f;
         public static float Exposure = 0.5f;
@@ -177,7 +179,11 @@ namespace RetroEngine
             
         }
 
-
+        [ConsoleCommand("g.miplevel")]
+        public static void SetMipLevel(int mipLevel)
+        {
+            MipLevel = mipLevel;
+        }
 
         static Vector3 GetCameraPositionByPixelGrid(float lightDistance)
         {

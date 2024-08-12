@@ -166,7 +166,7 @@ namespace RetroEngine
 
             
 
-            InitSampler();
+            //InitSampler();
         }
 
         public void UpdateShaderFrameData()
@@ -326,7 +326,7 @@ namespace RetroEngine
             }
             graphics.GraphicsDevice.RasterizerState = Graphics.DisableBackFaceCulling? RasterizerState.CullCounterClockwise : RasterizerState.CullNone;
                 
-            InitSampler(25);
+            //InitSampler(4);
 
             //EndOcclusionTest(renderList);
             //return DeferredOutput;
@@ -365,7 +365,7 @@ namespace RetroEngine
             samplerState.AddressV = TextureAddressMode.Wrap;
             samplerState.AddressW = TextureAddressMode.Wrap;
 
-            samplerState.MipMapLevelOfDetailBias = -7;
+            samplerState.MipMapLevelOfDetailBias = Graphics.MipLevel;
             samplerState.MaxAnisotropy = 16;
 
             int i = 0;

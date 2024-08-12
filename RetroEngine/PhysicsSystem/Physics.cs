@@ -674,16 +674,12 @@ namespace RetroEngine.PhysicsSystem
             return convResultCallback;
         }
 
-        public static MyClosestConvexResultCallback SphereTrace(Vector3 rayStart, Vector3 rayEnd, float radius = 0.5f, List<CollisionObject> ignoreList = null, BodyType bodyType = BodyType.GroupAll)
+        public static MyClosestConvexResultCallback SphereTrace(Microsoft.Xna.Framework.Vector3 rayStart, Microsoft.Xna.Framework.Vector3 rayEnd, float radius = 0.5f, List<CollisionObject> ignoreList = null, BodyType bodyType = BodyType.GroupAll)
         {
 
             if (Thread.CurrentThread != GameMain.RenderThread && Thread.CurrentThread != GameMain.GameThread)
             {
-                var preHit = SphereTraceForStatic(rayStart, rayEnd, radius);
-                if (preHit.HasHit == false)
-                {
-                    //return new MyClosestConvexResultCallback(ref rayStart, ref rayEnd); // hopefully commenting doesn't fucking crash
-                }
+
             }
             lock (dynamicsWorld)
             {
@@ -692,11 +688,14 @@ namespace RetroEngine.PhysicsSystem
                 // Create a sphere shape with the specified radius
                 SphereShape sphereShape = new SphereShape(radius);
 
-                Matrix4x4 start = Matrix4x4.CreateTranslation(rayStart);
-                Matrix4x4 end = Matrix4x4.CreateTranslation(rayEnd);
+                Vector3 rStart = rayStart.ToPhysics();
+                Vector3 rEnd = rayEnd.ToPhysics();
+
+                Matrix4x4 start = Matrix4x4.CreateTranslation(rayStart.ToPhysics());
+                Matrix4x4 end = Matrix4x4.CreateTranslation(rayEnd.ToPhysics());
 
 
-                MyClosestConvexResultCallback convResultCallback = new MyClosestConvexResultCallback(ref rayStart, ref rayEnd);
+                MyClosestConvexResultCallback convResultCallback = new MyClosestConvexResultCallback(ref rStart, ref rEnd);
                 convResultCallback.BodyTypeMask = bodyType;
 
                 if (ignoreList is not null)
