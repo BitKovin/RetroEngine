@@ -7,12 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using RetroEngine.Localization;
+using MonoGame.Extended.Text;
+using MonoGame.Extended.Text.Extensions;
 
 namespace RetroEngine.UI
 {
     public class UiText : UiElement
     {
-        public SpriteFont Font;
+        public DynamicSpriteFont Font;
 
         public Text text = new Text();
 
@@ -37,6 +39,7 @@ namespace RetroEngine.UI
 
         public override Vector2 GetSize()
         {
+
             return Font.MeasureString(text.ToString()) / 72 * FontSize;
         }
 
@@ -48,7 +51,7 @@ namespace RetroEngine.UI
 
             //Vector2 textSize = Font.MeasureString(text) * AlignProgress;
 
-            spriteBatch.DrawString(Font, text, pos, baseColor, rotation,relativeOrigin,Vector2.One/72*FontSize,SpriteEffects.None,0);
+            spriteBatch.DrawString(Font, text, pos, Vector2.Zero, Vector2.One/72 * FontSize, Vector2.One * 5, baseColor);
 
             base.Draw(gameTime, spriteBatch);
 

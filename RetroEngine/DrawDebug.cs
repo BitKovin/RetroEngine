@@ -1,6 +1,8 @@
 ﻿using BulletSharp;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Text;
+using MonoGame.Extended.Text.Extensions;
 using RetroEngine.UI;
 using System;
 using System.Collections.Generic;
@@ -151,9 +153,11 @@ namespace RetroEngine
 
             Vector2 pos = UiElement.WorldToScreenSpace(location, out var found);
 
-            if(found)
-            spriteBatch.DrawString(GameMain.Instance.DefaultFont, textString, pos * Render.ResolutionScale, Color.White,0, new Vector2(0.0f),0.2f,SpriteEffects.None,0);
+            if (found)
+            {
 
+                spriteBatch.DrawString(GameMain.Instance.DefaultFont, textString, pos * Render.ResolutionScale, Vector2.Zero, Vector2.One / 72 * 14, Vector2.One, Color.White);
+            }
             spriteBatch.End();
         }
 

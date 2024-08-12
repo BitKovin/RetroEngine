@@ -18,6 +18,7 @@ using BulletSharp;
 using FmodForFoxes;
 using System.Runtime.InteropServices;
 using FmodForFoxes.Studio;
+using MonoGame.Extended.Text;
 
 namespace RetroEngine
 {
@@ -29,6 +30,7 @@ namespace RetroEngine
         static Dictionary<string, SoundEffect> sounds = new Dictionary<string, SoundEffect>();
         static Dictionary<string, Sound> soundsFmod = new Dictionary<string, Sound>();
         static Dictionary<string, Bank> fmodBanks = new Dictionary<string, Bank>();
+
 
         static Dictionary<string, Shader> effects = new Dictionary<string, Shader>();
         static Dictionary<string, Shader> effectsPP = new Dictionary<string, Shader>();
@@ -104,6 +106,31 @@ namespace RetroEngine
 
         }
 
+        static FontManager FontManager = new FontManager();
+        static Dictionary<string, DynamicSpriteFont> loadedFonts = new Dictionary<string, DynamicSpriteFont>();
+        public static DynamicSpriteFont LoadFontSpriteFromFile(string path)
+        {
+
+            if(loadedFonts.ContainsKey(path))
+                return loadedFonts[path];
+
+            path = FindPathForFile(path);
+
+            if (loadedFonts.ContainsKey(path))
+                return loadedFonts[path];
+
+            var stream = GetFileStreamFromPath(path);
+
+            var font = FontManager.LoadFont(path, 72);
+
+            DynamicSpriteFont dynamicSpriteFont = new DynamicSpriteFont(GameMain.Instance.GraphicsDevice, font);
+
+
+            loadedFonts.Add(path, dynamicSpriteFont);
+
+            return dynamicSpriteFont;
+
+        }
         public static FileStream GetFileStreamFromPath(string path)
         {
             return File.OpenRead(path);

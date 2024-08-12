@@ -16,7 +16,6 @@ using static DotRecast.Recast.RcRecast;
 using static DotRecast.Recast.RcAreas;
 using System.IO;
 using System.Runtime.CompilerServices;
-using MonoGame.Extended.ECS;
 using DotRecast.Recast.Toolset;
 using DotRecast.Recast.Toolset.Geom;
 using RetroEngine.Map;

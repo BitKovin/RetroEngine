@@ -15,6 +15,7 @@ using System.Threading;
 using System.Diagnostics;
 using System.Collections.Generic;
 using RetroEngine.PhysicsSystem;
+using MonoGame.Extended.Text;
 
 namespace RetroEngine
 {
@@ -27,7 +28,7 @@ namespace RetroEngine
 
     public class GameMain : Microsoft.Xna.Framework.Game
     {
-        public SpriteFont DefaultFont;
+        public DynamicSpriteFont DefaultFont;
 
         public Effect DefaultShader = null;
 
@@ -199,7 +200,7 @@ namespace RetroEngine
             content = Content;
             // TODO: use this.Content to load your game content here
 
-            DefaultFont = Content.Load<SpriteFont>("Fonts/Font");
+            DefaultFont = AssetRegistry.LoadFontSpriteFromFile("Fonts/dos.ttf");// Content.Load<SpriteFont>("Fonts/Font");
 
             curentLevel.Start();
 
