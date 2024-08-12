@@ -305,7 +305,7 @@ namespace RetroEngine.Particles
             // Load the custom effect
             Effect effect = Shader;
 
-            effect.Parameters["isParticle"].SetValue(isParticle);
+            effect.Parameters["isParticle"]?.SetValue(isParticle);
 
             GameMain.Instance.render.UpdateDataForShader((RetroEngine.Graphic.Shader)effect);
 
