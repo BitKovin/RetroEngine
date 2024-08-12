@@ -30,6 +30,7 @@ namespace RetroEngine.Entities
             }
             collisionCallback.CollisionEvent += TriggerEntered;
             collisionCallback.owner = this;
+            collisionCallback.collidesWith = BodyType.CharacterCapsule;
             //meshes[0].Transperent = true;
         }
 
