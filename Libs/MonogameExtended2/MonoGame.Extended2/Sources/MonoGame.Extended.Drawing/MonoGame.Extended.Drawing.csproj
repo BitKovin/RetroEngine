@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <OutputType>Library</OutputType>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <LangVersion>10</LangVersion>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\thirdparty\AdaptiveSubdivision\src\Agg.AdaptiveSubdivision\Agg.AdaptiveSubdivision.csproj" />
+    <ProjectReference Include="..\MonoGame.Extended.Text\MonoGame.Extended.Text.csproj" />
+    <ProjectReference Include="..\MonoGame.Extended2\MonoGame.Extended2.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Effects\Resources\BitmapBrush.fx" />
+    <EmbeddedResource Include="Effects\Resources\BitmapBrush.fx.dx11.mgfxo" />
+    <EmbeddedResource Include="Effects\Resources\BitmapBrush.fx.ogl.mgfxo" />
+    <Content Include="Effects\Resources\LinearGradientBrush.fx" />
+    <EmbeddedResource Include="Effects\Resources\LinearGradientBrush.fx.dx11.mgfxo" />
+    <EmbeddedResource Include="Effects\Resources\LinearGradientBrush.fx.ogl.mgfxo" />
+    <EmbeddedResource Include="Effects\Resources\SolidColorBrush.fx.dx11.mgfxo" />
+    <EmbeddedResource Include="Effects\Resources\SolidColorBrush.fx.ogl.mgfxo" />
+    <Content Include="Effects\Resources\SolidColorBrush.fx" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="JetBrains.Annotations" Version="2022.3.1" />
+    <PackageReference Include="LibTessDotNet" Version="1.1.15" />
+    <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.1.303" />
+    <PackageReference Include="SharpFont.NetStandard" Version="1.0.5" />
+  </ItemGroup>
+</Project>

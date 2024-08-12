@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assassin", "Assassin\Assassin.csproj", "{D021EBF9-5854-4805-996E-E0E0B5ED099B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{9E52BE91-AB07-463A-8FA9-65D713624A89}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3EA97376-B889-4469-8063-5250BB0C4262}"
+ProjectSection(SolutionItems) = preProject
+	..\.gitignore = ..\.gitignore
+	..\LICENSE.txt = ..\LICENSE.txt
+	..\README.md = ..\README.md
+EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D021EBF9-5854-4805-996E-E0E0B5ED099B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D021EBF9-5854-4805-996E-E0E0B5ED099B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D021EBF9-5854-4805-996E-E0E0B5ED099B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D021EBF9-5854-4805-996E-E0E0B5ED099B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E52BE91-AB07-463A-8FA9-65D713624A89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E52BE91-AB07-463A-8FA9-65D713624A89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E52BE91-AB07-463A-8FA9-65D713624A89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E52BE91-AB07-463A-8FA9-65D713624A89}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

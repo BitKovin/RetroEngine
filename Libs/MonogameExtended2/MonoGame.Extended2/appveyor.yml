@@ -1,0 +1,31 @@
+# https://www.appveyor.com/docs/appveyor-yml/
+
+version: 0.1.2.{build}
+image: Visual Studio 2022
+environment:
+  Configuration: Release
+build_script:
+  - cmd: msbuild MonoGame.Extended2.sln /p:Configuration=%CONFIGURATION% /verbosity:minimal /p:nowarn="1574,1591"
+before_build:
+  - cmd: nuget update -self
+  - cmd: git submodule update --init --recursive
+  - ps: scripts\nuget_restore.ps1
+#artifacts:
+#  - path:
+#    name:
+assembly_info:
+  patch: true
+  file: AssemblyInfo.*
+  assembly_version: "{version}"
+  assembly_file_version: "{version}"
+  assembly_informational_version: "{version}"
+deploy:
+  - provider: GitHub
+    description: MonoGame.Extended2
+    auth_token:
+      secure: u+MFjjY665AT4PHJ2bFMINBLnnnwSj1jLnNeFZoWfeYbomTNSPOmdahffmZa+dRH
+    artifact: WithVersion            # upload all NuGet packages to release assets
+    draft: false
+    prerelease: true
+    on:
+      appveyor_repo_tag: true        # deploy on tag push only

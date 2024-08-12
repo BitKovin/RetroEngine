@@ -1,0 +1,9 @@
+.vs
+.idea
+
+_ReSharper*
+
+*.user
+
+[Bb]in
+[Oo]bj
