@@ -55,6 +55,7 @@ namespace RetroEngine.Entities.Light
 
         public float radius = 10;
         protected float MinDot = -1f;
+        protected float InnterMinDot = -1f;
 
         float maxAngle = 360;
 
@@ -134,7 +135,27 @@ namespace RetroEngine.Entities.Light
             // Compute the cosine of the angle
             float minDot = (float)Math.Cos(angleInRadians);
 
+            if(InnterMinDot<minDot)
+                InnterMinDot = minDot;
+
             MinDot = minDot;
+        }
+
+        public void SetInnterAngle(float angleInDegrees)
+        {
+
+            // Convert the angle from degrees to radians
+            float angleInRadians = MathHelper.ToRadians(angleInDegrees);
+
+            maxAngle = angleInDegrees;
+
+            // Compute the cosine of the angle
+            float minDot = (float)Math.Cos(angleInRadians);
+
+            if (MinDot > minDot)
+                MinDot = minDot;
+
+            InnterMinDot = minDot;
         }
 
         public override void Start()
@@ -334,6 +355,7 @@ namespace RetroEngine.Entities.Light
             lightData.Color = Color * Intensity;
 
             lightData.MinDot = MinDot;
+            lightData.InnerMinDot = InnterMinDot;
             lightData.Direction = Rotation.GetForwardVector();
 
             if ((IsBoundingSphereInFrustum(lightSphere) && visible) || Level.ChangingLevel)

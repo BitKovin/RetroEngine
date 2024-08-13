@@ -450,7 +450,7 @@ namespace RetroEngine
 
             if (Graphics.GlobalPointLights == false)
             {
-                Vector3[] LightPos = new Vector3[LightManager.MAX_POINT_LIGHTS];
+                Vector4[] LightPos = new Vector4[LightManager.MAX_POINT_LIGHTS];
                 Vector3[] LightColor = new Vector3[LightManager.MAX_POINT_LIGHTS];
                 float[] LightRadius = new float[LightManager.MAX_POINT_LIGHTS];
                 float[] LightRes = new float[LightManager.MAX_POINT_LIGHTS];
@@ -502,7 +502,7 @@ namespace RetroEngine
 
                 for (int i = 0; i < objectLights.Count; i++)
                 {
-                    LightPos[i] = objectLights[i].Position;
+                    LightPos[i] = new Vector4(objectLights[i].Position, objectLights[i].InnerMinDot);
                     LightColor[i] = objectLights[i].Color;
                     LightRadius[i] = objectLights[i].Radius;
                     LightRes[i] = objectLights[i].shadowData.resolution;

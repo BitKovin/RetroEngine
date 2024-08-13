@@ -209,11 +209,13 @@ namespace RetroEngine.Game.Entities.Player
 
             PlayerFlashLight.enabled = true;
 
-            PlayerFlashLight.SetAngle(25);
+            PlayerFlashLight.SetAngle(35);
             PlayerFlashLight.radius = 30;
             PlayerFlashLight.Intensity = 1;
 
             PlayerFlashLight.Start();
+
+            PlayerFlashLight.SetInnterAngle(20);
 
             interpolatedPosition = Position;
 

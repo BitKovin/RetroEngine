@@ -153,7 +153,7 @@ namespace RetroEngine
 
                 var video = VideoHelper.LoadFromFile(path);
 
-                loadedVideos.Add(path, video);
+                //loadedVideos.Add(path, video);
 
                 return video;
             }

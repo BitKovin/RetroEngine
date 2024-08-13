@@ -129,6 +129,7 @@ namespace RetroEngine.Game.Entities
             base.Destroy();
 
             videoPlayer.Dispose();
+            video.Dispose();
 
         }
 

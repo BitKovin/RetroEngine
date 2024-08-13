@@ -128,7 +128,7 @@ bool skeletalMesh;
 #define MAX_POINT_LIGHTS 6
 #endif
 
-float3 LightPositions[MAX_POINT_LIGHTS];
+float4 LightPositions[MAX_POINT_LIGHTS];
 float3 LightColors[MAX_POINT_LIGHTS];
 float LightRadiuses[MAX_POINT_LIGHTS];
 float LightResolutions[MAX_POINT_LIGHTS];
@@ -951,7 +951,7 @@ float GetPointLightDepth(int i, float3 lightDir)
 
 half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half roughness, half metalic, half3 albedo)
 {
-    float3 lightVector = LightPositions[i] - pixelInput.MyPosition;
+    float3 lightVector = LightPositions[i].xyz - pixelInput.MyPosition;
     float distanceToLight = length(lightVector);
 
     if(distanceToLight> LightRadiuses[i])
@@ -965,8 +965,8 @@ half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half rough
     half lightDot = dot(normalize(-lightVector), normalize(LightDirections[i].xyz));
 
     // Define the inner and outer angles of the spotlight in radians
-    half innerConeAngle = LightDirections[i].w;
-    half outerConeAngle = innerConeAngle - 0.1; // Adjust this value to control the smoothness
+    half innerConeAngle = LightPositions[i].w;
+    half outerConeAngle = LightDirections[i].w; // Adjust this value to control the smoothness
 
     // Calculate the smooth transition factor using smoothstep
     half dirFactor = smoothstep(outerConeAngle, innerConeAngle, lightDot);

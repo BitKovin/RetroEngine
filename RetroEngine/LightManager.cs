@@ -62,6 +62,7 @@ namespace RetroEngine
             public Vector3 Color = new Vector3(0,0,0);
             public Vector3 Direction = new Vector3(0,0,0);
             public float MinDot = 0;
+            public float InnerMinDot = 0;
             public float Radius = 0;
             public int Resolution = 256;
             public PointLight shadowData = null;

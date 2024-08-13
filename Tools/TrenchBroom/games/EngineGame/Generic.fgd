@@ -74,6 +74,11 @@
 [
 ]
 
+@SolidClass base(Entity) = videoBrush : "Video Brush"
+[
+	fileName(sting) : "File Name" : ""
+]
+
 @PointClass base(Entity) size(-15 -15 -15, 15 15 15) color(255 200 0) model({ "path": "models/tools/spotlight.obj", "scale": radius * 32 * 2}) = light_point : "Graphics" 
 [
 	radius(float) : "Radius" : "5"
