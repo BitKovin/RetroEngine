@@ -98,7 +98,10 @@ namespace RetroEngine.Entities.Light
 
             Rotation = EntityData.ConvertRotation(importRot);
 
-            SetAngle(data.GetPropertyFloat("light_angle", 180));
+            float angle = data.GetPropertyFloat("light_angle", 180);
+
+            SetAngle(angle);
+            SetInnterAngle(angle>=180? 180: angle/2);
 
             //DrawDebug.Line(Position, Position + Rotation.GetForwardVector() * 4, Vector3.One, 40);
 
