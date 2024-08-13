@@ -50,8 +50,6 @@ namespace RetroEngine.Particles
 
             OverrideBlendState = BlendState.NonPremultiplied;
 
-            Shader = AssetRegistry.GetShaderFromName("ParticleUnifiedOutput");
-
             DisableOcclusionCulling = true;
 
         }
@@ -303,7 +301,7 @@ namespace RetroEngine.Particles
 
             GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
             // Load the custom effect
-            Effect effect = Shader;
+            Effect effect = Shader.GetAndApply(Graphic.SurfaceShaderInstance.ShaderSurfaceType.Instanced);
 
             effect.Parameters["isParticle"]?.SetValue(isParticle);
 

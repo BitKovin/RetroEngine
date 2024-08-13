@@ -92,7 +92,7 @@ namespace RetroEngine.Game.Entities.Player
         void LoadWorldCrosshair()
         {
             crosshairMesh.LoadFromFile("models/ui/crosshair.obj");
-            crosshairMesh.Shader = AssetRegistry.GetShaderFromName("unlit");
+            crosshairMesh.Shader = new Graphic.SurfaceShaderInstance("unlit");
             crosshairMesh.texture = AssetRegistry.LoadTextureFromFile("engine/textures/white.png");
             player.meshes.Add(crosshairMesh);
         }

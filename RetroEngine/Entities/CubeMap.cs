@@ -59,7 +59,7 @@ namespace RetroEngine.Entities
             mesh.Visible = true;
             mesh.Position = Position;
             mesh.texture = map;
-            mesh.Shader = AssetRegistry.GetShaderFromName("CubeMapVisualizer");
+            mesh.Shader = new Graphic.SurfaceShaderInstance("CubeMapVisualizer");
 
         }
 

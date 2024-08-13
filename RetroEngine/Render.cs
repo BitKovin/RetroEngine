@@ -291,9 +291,9 @@ namespace RetroEngine
 
             InitSizedRenderTargetIfNeed(ref ssaoOutput,(int)(GetScreenResolution().Y/2));
 
-            InitSizedRenderTargetIfNeed(ref bloomSample, 360, surfaceFormat: SurfaceFormat.HalfVector4);
-            InitSizedRenderTargetIfNeed(ref bloomSample2, 240, surfaceFormat: SurfaceFormat.HalfVector4);
-            InitSizedRenderTargetIfNeed(ref bloomSample3, 128, surfaceFormat: SurfaceFormat.HalfVector4);
+            InitSizedRenderTargetIfNeed(ref bloomSample, 256, surfaceFormat: SurfaceFormat.HalfVector4);
+            InitSizedRenderTargetIfNeed(ref bloomSample2, 128, surfaceFormat: SurfaceFormat.HalfVector4);
+            InitSizedRenderTargetIfNeed(ref bloomSample3, 32, surfaceFormat: SurfaceFormat.HalfVector4);
 
             InitRenderTargetIfNeed(ref postProcessingOutput);
 
@@ -1033,7 +1033,7 @@ namespace RetroEngine
 
             BloomEffect.Parameters["screenWidth"].SetValue(bloomSample.Width);
             BloomEffect.Parameters["screenHeight"].SetValue(bloomSample.Height);
-            BloomEffect.Parameters["offset"].SetValue(0.85f);
+            BloomEffect.Parameters["offset"].SetValue(0.95f);
 
 
             SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;

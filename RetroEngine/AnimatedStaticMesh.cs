@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using RetroEngine.Graphic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -99,7 +100,7 @@ namespace RetroEngine
 
             GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
             // Load the custom effect
-            Effect effect = Shader;
+            Effect effect = Shader.GetAndApply(Transperent ? SurfaceShaderInstance.ShaderSurfaceType.Transperent : SurfaceShaderInstance.ShaderSurfaceType.Default);
 
             SetupBlending();
 

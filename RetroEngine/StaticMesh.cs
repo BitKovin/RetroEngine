@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using RetroEngine.PhysicsSystem;
+using RetroEngine.Graphic;
 
 namespace RetroEngine
 {
@@ -103,7 +104,7 @@ namespace RetroEngine
         public bool occluded = false;
         internal bool inFrustrum = true;
 
-        public Effect Shader;
+        public SurfaceShaderInstance Shader;
 
         public bool OverrideBlend = false;
         public BlendState OverrideBlendState = BlendState.Additive;
@@ -148,10 +149,10 @@ namespace RetroEngine
             if(GameMain.CompatibilityMode == false)
             OcclusionQuery = new OcclusionQuery(GameMain.Instance.GraphicsDevice);
 
-            Shader = GameMain.Instance.DefaultShader;
+            Shader = new SurfaceShaderInstance(GameMain.Instance.DefaultShader);
 
             if (GameMain.Instance.DefaultShader == null)
-                Shader = AssetRegistry.GetShaderFromName("UnifiedOutput");
+                Shader = new SurfaceShaderInstance("UnifiedOutput");
 
         }
 
@@ -611,7 +612,7 @@ namespace RetroEngine
 
             GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
             // Load the custom effect
-            Effect effect = Shader;
+            Effect effect = Shader.GetAndApply(Transperent ? SurfaceShaderInstance.ShaderSurfaceType.Transperent : SurfaceShaderInstance.ShaderSurfaceType.Default);
 
 
             if (frameStaticMeshData.model is not null)
@@ -1327,7 +1328,7 @@ namespace RetroEngine
                 }
 
             name = name.ToLower();
-            name = name.Replace(".png", $"{sufix}.png");
+            name = name.Replace(".", $"{sufix}.");
 
             if (textures.ContainsKey(name))
                 return textures[name];

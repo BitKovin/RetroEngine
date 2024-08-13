@@ -26,7 +26,7 @@ namespace RetroEngine.Game.Effects.Particles
         {
             TexturePath = "particles/trail.png";
 
-            Shader = AssetRegistry.GetShaderFromName("Unlit");
+            Shader = new Graphic.SurfaceShaderInstance("Unlit");
 
             InitialSpawnCount = 2;
             SpawnRate = 50;

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using RetroEngine.Graphic;
 using RetroEngine.Map;
 using RetroEngine.PhysicsSystem;
 using SharpFont;
@@ -191,7 +192,7 @@ namespace RetroEngine.Entities.Light
 
             
 
-            mesh.Shader = AssetRegistry.GetShaderFromName("CubeMapVisualizer");
+            mesh.Shader = new SurfaceShaderInstance("CubeMapVisualizer");
 
         }
 

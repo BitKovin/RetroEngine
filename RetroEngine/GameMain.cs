@@ -30,7 +30,7 @@ namespace RetroEngine
     {
         public DynamicSpriteFont DefaultFont;
 
-        public Effect DefaultShader = null;
+        public string DefaultShader = null;
 
         public GraphicsDeviceManager _graphics;
         public SpriteBatch SpriteBatch;

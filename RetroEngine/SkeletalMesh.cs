@@ -13,6 +13,7 @@ using System.Text.Json;
 using System.Linq;
 using RetroEngine.PhysicsSystem;
 using System.Threading.Tasks;
+using RetroEngine.Graphic;
 
 
 namespace RetroEngine
@@ -730,7 +731,7 @@ namespace RetroEngine
 
             GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
             // Load the custom effect
-            Effect effect = Shader;
+            Effect effect = Shader.GetAndApply(Transperent? SurfaceShaderInstance.ShaderSurfaceType.Transperent : SurfaceShaderInstance.ShaderSurfaceType.Default);
 
 
             effect.Parameters["Bones"].SetValue(finalizedBones);

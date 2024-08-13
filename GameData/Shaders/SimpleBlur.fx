@@ -45,14 +45,14 @@ float2 texelSize = 1 / float2(screenWidth, screenHeight);
 float weightSum = 0.0;
 color = float3(0, 0, 0);
 
-float2 blurRadius = float2(2,2);
+float2 blurRadius = float2(3,3);
 
 for (int x = -blurRadius.x; x <= blurRadius.x; x++) {
     for (int y = -blurRadius.y; y <= blurRadius.y; y++) {
 
         float2 TextureOffset = float2(x, y);
         float2 offsetCoords = TextureOffset * texelSize;
-        float weight = Gaussian(x, y, sigma);
+        float weight = Gaussian(x, y, 2);
         weightSum += weight;
         color += tex2D(SpriteTextureSampler, input.TextureCoordinates + offsetCoords).rgb * weight;
     }

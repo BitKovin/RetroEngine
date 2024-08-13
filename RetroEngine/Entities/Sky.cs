@@ -20,7 +20,7 @@ namespace RetroEngine.Entities
             mesh.LoadFromFile("models/sky.obj");
             mesh.texture = AssetRegistry.LoadCubeTextureFromFile(texturePath);
             mesh.Static = true;
-            mesh.Shader = AssetRegistry.GetShaderFromName("CubeMapVisualizer");
+            mesh.Shader = new Graphic.SurfaceShaderInstance("CubeMapVisualizer");
 
             meshes.Add(mesh);
         }

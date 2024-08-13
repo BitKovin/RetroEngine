@@ -13,6 +13,9 @@ namespace RetroEngine.Graphic
 
 
         public Dictionary<string, float> FloatValues = new Dictionary<string, float>();
+        public Dictionary<string, Vector3> Vector3Values = new Dictionary<string, Vector3>();
+        public Dictionary<string, Vector4> Vector4Values = new Dictionary<string, Vector4>();
+        public Dictionary<string, Vector2> Vector2Values = new Dictionary<string, Vector2>();
         public Dictionary<string, Matrix> MatrixValues = new Dictionary<string, Matrix>();
         public Dictionary<string, Texture> TextureValues = new Dictionary<string, Texture>();
 
@@ -44,6 +47,22 @@ namespace RetroEngine.Graphic
             {
                 Parameters[key].SetValue(TextureValues[key]);
             }
+
+            foreach (string key in Vector3Values.Keys)
+            {
+                Parameters[key].SetValue(Vector3Values[key]);
+            }
+
+            foreach (string key in Vector4Values.Keys)
+            {
+                Parameters[key].SetValue(Vector4Values[key]);
+            }
+
+            foreach (string key in Vector2Values.Keys)
+            {
+                Parameters[key].SetValue(Vector2Values[key]);
+            }
+
         }
 
     }

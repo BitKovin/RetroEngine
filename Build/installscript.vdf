@@ -1,0 +1,16 @@
+"InstallScript"
+{
+	"Run Process"
+	{
+		"Net8"
+		{
+			"Process 1"		"%INSTALLDIR%\\redist\\windowsdesktop-runtime-8.0.7-win-x64.exe"
+			"command 1"		"/install /quiet /norestart"
+			"NoCleanUp"		"0"
+		}
+	}
+}
+"kvsignatures"
+{
+	"InstallScript"		"4bac379a5009ae3dd96359573fedebd0b51d62a7ce253eb9121671bca716ae743d0373530b8cb217321c3ca316877c0ff5c17172feba428bf55a277d0a469c5b78f31cab6e6b302e62daa6aa6ce0cabb517e62a19e9c8578df078604c7e31809c53f98280910cb9e4d777b28ae7e6f515de5b33c6117511077e4b9b0bd98def2"
+}

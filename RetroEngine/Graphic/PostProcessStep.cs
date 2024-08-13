@@ -20,6 +20,9 @@ namespace RetroEngine.Graphic
         public Dictionary<string, float> FloatValues = new Dictionary<string, float>();
         public Dictionary<string, Matrix> MatrixValues = new Dictionary<string, Matrix>();
         public Dictionary<string, Texture> TextureValues = new Dictionary<string, Texture>();
+        public Dictionary<string, Vector3> Vector3Values = new Dictionary<string, Vector3>();
+        public Dictionary<string, Vector4> Vector4Values = new Dictionary<string, Vector4>();
+        public Dictionary<string, Vector2> Vector2Values = new Dictionary<string, Vector2>();
 
         internal RenderTarget2D RenderTarget;
 
@@ -71,6 +74,9 @@ namespace RetroEngine.Graphic
             Shader.FloatValues = FloatValues;
             Shader.MatrixValues = MatrixValues;
             Shader.TextureValues = TextureValues;
+            Shader.Vector2Values = Vector2Values;
+            Shader.Vector3Values = Vector3Values;
+            Shader.Vector4Values = Vector4Values;
 
             Shader.ApplyValues();
 

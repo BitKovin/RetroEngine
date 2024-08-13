@@ -126,6 +126,7 @@ namespace RetroEngine
                 var stream = GetFileStreamFromPath(path);
 
                 var font = FontManager.LoadFont(path, 72);
+                Logger.Log("reading file:" + path);
 
                 DynamicSpriteFont dynamicSpriteFont = new DynamicSpriteFont(GameMain.Instance.GraphicsDevice, font);
 
@@ -146,6 +147,7 @@ namespace RetroEngine
                 if (loadedVideos.ContainsKey(path))
                     return loadedVideos[path];
 
+                Logger.Log("reading file:" + path);
                 path = FindPathForFile(path);
 
                 if (loadedVideos.ContainsKey(path))
@@ -173,6 +175,7 @@ namespace RetroEngine
         }
         public static FileStream GetFileStreamFromPath(string path)
         {
+            Logger.Log("reading file:" + path);
             return File.OpenRead(path);
         }
 
@@ -306,20 +309,42 @@ namespace RetroEngine
             graphicsDevice.SetRenderTarget(null);
         }
 
+        static List<string> nullShaders = new List<string>();
+
         public static Effect GetShaderFromName(string path)
         {
 
             path = "Shaders/" + path;
 
+            if (nullShaders.Contains(path))
+                return null;
+
             if (effects.ContainsKey(path))
             {
                 return effects[path];
             }
+            Effect effect = null;
+            try 
+            {
+                effect = GameMain.content.Load<Effect>(path);
+            }
 
-            var effect = GameMain.content.Load<Effect>(path);
+            catch (Exception e) { }
+            
+            if(effect == null)
+            {
+                nullShaders.Add(path);
+                return null;
+            }
+
+            if(effect.GraphicsDevice == null)
+            {
+                Logger.Log("Error: shader misses graphics devise   " + path);
+                return null;
+            }
 
             effects.Add(path, new Shader(effect));
-            effect.Dispose();
+            //effect.Dispose();
 
             return effects[path];
 

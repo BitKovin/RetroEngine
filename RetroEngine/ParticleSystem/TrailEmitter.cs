@@ -17,7 +17,7 @@ namespace RetroEngine.Particles
 
         public TrailEmitter():base()
         {
-            Shader = AssetRegistry.GetShaderFromName("UnifiedOutput");
+            Shader = new Graphic.SurfaceShaderInstance("UnifiedOutput");
             isParticle = true;
 
             CastShadows = false;
@@ -128,7 +128,7 @@ namespace RetroEngine.Particles
                 { Console.WriteLine("empty vertex buffer"); return; }
 
 
-                Effect effect = Shader;
+                Effect effect = Shader.GetAndApply(Graphic.SurfaceShaderInstance.ShaderSurfaceType.Transperent);
 
                 SetupBlending();
                 _graphicsDevice.RasterizerState = RasterizerState.CullNone;

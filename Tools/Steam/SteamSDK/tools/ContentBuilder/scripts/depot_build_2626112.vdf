@@ -30,7 +30,7 @@
 	"FileExclusion" "*.pdb" // exclude all .PDB files everywhere
 	"FileExclusion" "bin\tools*" // exclude all files under bin/tools/
 
-	"InstallScript" "localization\german\german_installscript.vdf"
+	"InstallScript" "installscript.vdf"
 
 	"FileProperties"
 	{
