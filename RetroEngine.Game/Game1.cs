@@ -55,11 +55,11 @@ namespace RetroEngine.Game
 
             if (Graphics.DefaultUnlit)
             {
-                DefaultShader = "Unlit";
+                //DefaultShader = "Unlit";
             }
             else
             {
-                DefaultShader = null;
+                //DefaultShader = null;
             }
 
             //DefaultShader = AssetRegistry.GetShaderFromName("SimpleEffect");

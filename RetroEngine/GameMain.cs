@@ -30,7 +30,7 @@ namespace RetroEngine
     {
         public DynamicSpriteFont DefaultFont;
 
-        public string DefaultShader = null;
+        public string DefaultShader = "";
 
         public GraphicsDeviceManager _graphics;
         public SpriteBatch SpriteBatch;
@@ -745,6 +745,12 @@ namespace RetroEngine
         public static void SetMaxFPS(int value)
         {
             MaxFPS = value;
+        }
+
+        [ConsoleCommand("g.defaultshader")]
+        public static void SetDefaultShader(string name)
+        {
+            Instance.DefaultShader = name;
         }
 
     }

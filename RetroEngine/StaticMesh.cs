@@ -151,7 +151,7 @@ namespace RetroEngine
 
             Shader = new SurfaceShaderInstance(GameMain.Instance.DefaultShader);
 
-            if (GameMain.Instance.DefaultShader == null)
+            if (GameMain.Instance.DefaultShader == "")
                 Shader = new SurfaceShaderInstance("UnifiedOutput");
 
         }
