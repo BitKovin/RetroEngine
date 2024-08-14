@@ -159,6 +159,8 @@ namespace RetroEngine
 
             GameTotalTime.Start();
 
+            SoundManager.Init();
+
         }
 
         public virtual void CheckWindowFullscreenStatus()
@@ -194,7 +196,6 @@ namespace RetroEngine
                 ImGui.StyleColorsDark();
                 ImGui.GetIO().ConfigFlags |= ImGuiConfigFlags.DockingEnable;
             }
-            SoundManager.Init();
 
             SpriteBatch = new SpriteBatch(GraphicsDevice);
             content = Content;
@@ -483,20 +484,7 @@ namespace RetroEngine
                 return;
             }
 
-            if (IsGameWindowFocused() || _isFullscreen == false)
-            {
-                //CheckWindowFullscreenStatus();
-                if (AllowAsyncAssetLoading && Render.AsyncPresent)
-                {
-
-                    presentingFrame = true;
-                    presentFrameTask = Task.Factory.StartNew(() => { PresentFrame(); });
-                }
-                else
-                {
-                    PresentFrame();
-                }
-            }
+            
 
             //Level.GetCurrent().EndOcclusionCheck();
 
@@ -506,6 +494,8 @@ namespace RetroEngine
 
 
         }
+
+
 
         Task presentFrameTask;
 
@@ -544,6 +534,22 @@ namespace RetroEngine
         protected override void EndDraw()
         {
 
+            if (GameMain.SkipFrames > 0) return;
+
+            if (IsGameWindowFocused() || _isFullscreen == false)
+            {
+                //CheckWindowFullscreenStatus();
+                if (AllowAsyncAssetLoading && Render.AsyncPresent)
+                {
+
+                    presentingFrame = true;
+                    presentFrameTask = Task.Factory.StartNew(() => { PresentFrame(); });
+                }
+                else
+                {
+                    PresentFrame();
+                }
+            }
         }
 
 
@@ -739,6 +745,33 @@ namespace RetroEngine
 
             SaveSystem.SaveManager.LoadSaveIfPending();
 
+        }
+
+
+
+        public void DoGameInitialized()
+        {
+            Initialize();
+        }
+
+        public void DoLoadContent()
+        {
+            LoadContent();
+        }
+
+        public void DoUnloadContent()
+        {
+            UnloadContent();
+        }
+
+        public void DoUpdate(GameTime gameTime)
+        {
+            Update(gameTime);
+        }
+
+        public void DoDraw(GameTime gameTime)
+        {
+            Draw(gameTime);
         }
 
         [ConsoleCommand("g.maxfps")]

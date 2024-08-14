@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Runtime.Versioning;
 using System.Windows.Forms;
 using Demo.WinForms.WindowsDX.Test;
@@ -53,6 +53,9 @@ public partial class Form1 : Form
 
     private void RegisterEventHandlers()
     {
+
+        var game = new Microsoft.Xna.Framework.Game();
+
         gameControl.GameInitialize += GameControl_GameInitialize;
         gameControl.GameLoadContents += GameControl_GameLoadContents;
         gameControl.GameUnloadContents += GameControl_GameUnloadContents;

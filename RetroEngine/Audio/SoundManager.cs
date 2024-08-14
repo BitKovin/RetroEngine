@@ -34,7 +34,7 @@ namespace RetroEngine.Audio
 
             if (UseFmod == false) return;
 
-            
+            Logger.Log("Initialized sound system");
 
 #if DEBUG
             FmodManager.Init(nativeFmodLibrary, FmodInitMode.CoreAndStudio, AssetRegistry.ROOT_PATH, studioInitFlags: FMOD.Studio.INITFLAGS.NORMAL | FMOD.Studio.INITFLAGS.LIVEUPDATE);
