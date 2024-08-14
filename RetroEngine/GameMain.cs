@@ -116,6 +116,8 @@ namespace RetroEngine
 
             base.Initialize();
 
+            content = Content;
+
             FocusGameWindow();
 
             Window.ClientSizeChanged += Window_ClientSizeChanged;
@@ -198,7 +200,6 @@ namespace RetroEngine
             }
 
             SpriteBatch = new SpriteBatch(GraphicsDevice);
-            content = Content;
             // TODO: use this.Content to load your game content here
 
             DefaultFont = AssetRegistry.LoadFontSpriteFromFile("Fonts/dos.ttf");// Content.Load<SpriteFont>("Fonts/Font");

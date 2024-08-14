@@ -15,6 +15,8 @@ public partial class Form1 : Form
 
         game1 = game;
 
+        GameMain.AsyncGameThread = false;
+
         InitializeComponent();
         RegisterEventHandlers();
     }
