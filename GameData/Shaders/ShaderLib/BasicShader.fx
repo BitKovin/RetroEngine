@@ -407,7 +407,7 @@ void MaskedDiscard(float alpha)
 float SampleMaxDepth(float2 screenCoords)
 {
     
-    float2 texelSize = 0.5 / float2(ScreenWidth, ScreenHeight);
+    float2 texelSize = 1 / float2(ScreenWidth, ScreenHeight);
     
     float d = SampleDepth(screenCoords);
     float d1 = SampleDepth(screenCoords + texelSize);
@@ -808,7 +808,7 @@ if (lightCoordsVeryClose.x >= 0 && lightCoordsVeryClose.x <= 1 && lightCoordsVer
             }
         }
         
-        if (dist < 25)
+        if (dist < 10)
         {
             if (lightCoordsClose.x >= 0 && lightCoordsClose.x <= 1 && lightCoordsClose.y >= 0 && lightCoordsClose.y <= 1)
             {
@@ -1361,4 +1361,50 @@ float3 ApplyReflectionOnSurface(float3 color,float3 albedo,float2 screenCoords, 
     float3 reflectionIntens = lerp(0, reflectiveness, metalic);
 
     return lerp(color, reflection * albedo, reflectiveness);
+}
+
+// Function to generate a random float based on the surface coordinates
+float Random (float2 uv)
+{
+    return frac(sin(dot(uv,float2(12.9898,78.233)*21))*78.5453123);
+}
+
+// Function to generate a random vector based on the surface coordinates and roughness
+float3 RandomVector(float2 uv, float roughness)
+{
+    
+    float3 randomVec;
+    randomVec.x = Random(uv + roughness);
+    randomVec.y = Random(uv + roughness * 2.0);
+    randomVec.z = Random(uv + roughness * 3.0);
+    return normalize(randomVec * 2.0 - 1.0);
+}
+
+float3 ApplyReflectionCubemapOnSurface(float3 color,float3 albedo, float reflectiveness, float metalic,float roughness, float2 texCoord, float3 reflectionBase)
+{
+    
+    float3 cube = SampleCubemap(ReflectionCubemapSampler, reflectionBase);
+
+    const int numSamples = 8;
+
+    roughness = saturate((roughness*lerp(roughness,1,0.7)) - 0.03);
+
+    float n = 1;
+
+    for(int i = 0; i < numSamples; i++)
+    {
+        cube += SampleCubemap(ReflectionCubemapSampler, normalize(reflectionBase + RandomVector(texCoord + float2((i*3)%3.12352 + 0.1, i), (i*3)%3.12352 + 0.1) * roughness));
+
+        n++;
+    }
+    cube/=n;
+
+    //reflection = saturate(reflection);
+
+    float lum = 0;// saturate(CalcLuminance(reflection))/30;
+    
+
+    float3 reflectionIntens = lerp(0, reflectiveness, metalic);
+
+    return lerp(color, cube * albedo, reflectiveness);
 }

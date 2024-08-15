@@ -88,7 +88,8 @@ public partial class Form1 : Form
     private void GameControl_GameInitialize(object sender, EventArgs e)
     {
         //InputManager.Initialize(new ControlInputManager());
-        lock(game1)
+        game1.GraphicsDevice = gameControl.GraphicsDeviceService.GraphicsDevice;
+        game1.SwapChainRenderTarget = gameControl.WindowBackend.GetSwapChainRenderTarget();
         game1.DoGameInitialized();
     }
 

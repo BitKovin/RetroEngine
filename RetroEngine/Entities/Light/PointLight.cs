@@ -436,7 +436,7 @@ namespace RetroEngine.Entities.Light
                 GameMain.pendingDispose.Add(renderTargetCube);
             }
 
-            renderTargetCube = new RenderTargetCube(graphicsDevice, lightData.Resolution, false, resolution>400 ? SurfaceFormat.Single : SurfaceFormat.HalfSingle, DepthFormat.Depth24);
+            renderTargetCube = new RenderTargetCube(graphicsDevice, lightData.Resolution, false, resolution>400 ? SurfaceFormat.Single : SurfaceFormat.HalfSingle, DepthFormat.Depth24, 0, RenderTargetUsage.DiscardContents);
 
             mesh.texture = renderTargetCube;
 
@@ -561,7 +561,7 @@ namespace RetroEngine.Entities.Light
             RetroEngine.Render.CustomFrustrum = null;
 
             GameMain.Instance.render.BoundingSphere.Radius = 0;
-            graphicsDevice.SetRenderTarget(null);
+            //graphicsDevice.SetRenderTarget(null);
         }
 
         Matrix GetViewForFace(CubeMapFace face, LightManager.PointLightData lightData)

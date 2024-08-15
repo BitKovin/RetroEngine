@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Extended.WinForms;
@@ -15,5 +15,7 @@ public interface IWindowBackend : IDisposable
     void EndDraw(GraphicsDeviceControl control);
 
     void OnWindowSizeChanged(GraphicsDeviceControl control);
+
+    public RenderTarget2D? GetSwapChainRenderTarget();
 
 }

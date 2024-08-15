@@ -104,7 +104,7 @@ namespace RetroEngine
 
             SetupBlending();
 
-            AddFrameVertexData();
+            //AddFrameVertexData();
             
                 if (frameStaticMeshData.model is not null)
                 {
@@ -118,12 +118,12 @@ namespace RetroEngine
                             ModelMeshPart meshPart1 = frameStaticMeshData.model.Meshes[j].MeshParts[i];
                             ModelMeshPart meshPart2 = frameStaticMeshData.model2.Meshes[j].MeshParts[i];
 
-                            VertexBuffer result = CreateVertexBufferIfNeeded($"m_{j}_p_{i}", meshPart1.VertexBuffer, graphicsDevice);
+                            //VertexBuffer result = CreateVertexBufferIfNeeded($"m_{j}_p_{i}", meshPart1.VertexBuffer, graphicsDevice);
 
-                            LerpVertexBuffers(graphicsDevice, result, meshPart1.VertexBuffer, meshPart2.VertexBuffer, finalAnimationTime / frameTime - (float)Math.Truncate((double)(finalAnimationTime / frameTime)));
+                            //LerpVertexBuffers(graphicsDevice, result, meshPart1.VertexBuffer, meshPart2.VertexBuffer, finalAnimationTime / frameTime - (float)Math.Truncate((double)(finalAnimationTime / frameTime)));
 
                             // Set the vertex buffer and index buffer for this mesh part
-                            graphicsDevice.SetVertexBuffer(result);
+                            graphicsDevice.SetVertexBuffer(meshPart1.VertexBuffer);
                             graphicsDevice.Indices = meshPart1.IndexBuffer;
 
 
@@ -166,14 +166,14 @@ namespace RetroEngine
                     for (int i = 0; i < model.Meshes[j].MeshParts.Count; i++)
                     {
                         ModelMeshPart meshPart1 = frameStaticMeshData.model.Meshes[j].MeshParts[i];
-                        ModelMeshPart meshPart2 = frameStaticMeshData.model2.Meshes[j].MeshParts[i];
+                        //ModelMeshPart meshPart2 = frameStaticMeshData.model2.Meshes[j].MeshParts[i];
 
-                        VertexBuffer result = CreateVertexBufferIfNeeded($"m_{j}_p_{i}", meshPart1.VertexBuffer, graphicsDevice);
+                        //VertexBuffer result = CreateVertexBufferIfNeeded($"m_{j}_p_{i}", meshPart1.VertexBuffer, graphicsDevice);
 
-                        LerpVertexBuffers(graphicsDevice, result, meshPart1.VertexBuffer, meshPart2.VertexBuffer, finalAnimationTime / frameTime - (float)Math.Truncate((double)(finalAnimationTime / frameTime)));
+                        //LerpVertexBuffers(graphicsDevice, result, meshPart1.VertexBuffer, meshPart2.VertexBuffer, finalAnimationTime / frameTime - (float)Math.Truncate((double)(finalAnimationTime / frameTime)));
 
                         // Set the vertex buffer and index buffer for this mesh part
-                        graphicsDevice.SetVertexBuffer(result);
+                        graphicsDevice.SetVertexBuffer(meshPart1.VertexBuffer);
                         graphicsDevice.Indices = meshPart1.IndexBuffer;
 
                         MeshPartData meshPartData = (MeshPartData)meshPart1.Tag;

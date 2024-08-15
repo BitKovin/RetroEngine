@@ -119,10 +119,11 @@ namespace RetroEngine.Entities
             mesh.CastShadows = true;
             //meshes.Add(sm);
 
+            mesh.PreloadTextures();
 
             sm.Transperent = false;
 
-            sm.Scale =new Vector3(0.7f);
+            sm.Scale = new Vector3(0.7f);
 
             deathSoundPlayer = (SoundPlayer)Level.GetCurrent().AddEntity(new SoundPlayer());
             deathSoundPlayer.SetSound(AssetRegistry.LoadSoundFmodFromFile("sounds/mew2.wav"));

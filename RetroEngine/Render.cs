@@ -274,7 +274,7 @@ namespace RetroEngine
             InitRenderTargetDepth(ref DepthPrepathOutput);
             InitRenderTargetDepth(ref DepthPrepathBufferOutput);
 
-            InitRenderTargetVectorIfNeed(ref ForwardOutput);
+            InitRenderTargetVectorIfNeed(ref ForwardOutput, true);
 
             InitRenderTargetIfNeed(ref ReflectivenessOutput);
 
@@ -299,8 +299,8 @@ namespace RetroEngine
 
             GameMain.Instance.WaitForFramePresent();
 
-            if (outputPath!=null)
-            DownsampleToTexture(ForwardOutput, oldFrame);
+            //if (outputPath!=null)
+            //DownsampleToTexture(ForwardOutput, oldFrame);
 
             List<StaticMesh> renderList = level.GetMeshesToRender();
 
@@ -343,7 +343,7 @@ namespace RetroEngine
 
             
             PerformPostProcessing();
-            graphics.GraphicsDevice.SetRenderTarget(null);
+            graphics.GraphicsDevice.SetRenderTarget(GameMain.Instance.SwapChainRenderTarget);
 
 
             if (Input.GetAction("test").Holding())
@@ -543,7 +543,7 @@ namespace RetroEngine
 
             // End the SpriteBatch
             spriteBatch.End();
-            graphics.GraphicsDevice.SetRenderTarget(null);
+            //graphics.GraphicsDevice.SetRenderTarget(null);
         }
 
         public bool renderShadow()
@@ -943,7 +943,7 @@ namespace RetroEngine
 
             spriteBatch.End();
 
-            graphics.GraphicsDevice.SetRenderTarget(null);
+            //graphics.GraphicsDevice.SetRenderTarget(null);
         }
 
         void PerformFXAA()
@@ -1020,7 +1020,7 @@ namespace RetroEngine
             DrawFullScreenQuad(spriteBatch, TonemapResult);
 
             spriteBatch.End();
-            graphics.GraphicsDevice.SetRenderTarget(null);
+            //graphics.GraphicsDevice.SetRenderTarget(null);
         }
 
         void CalculateBloom()
@@ -1292,7 +1292,7 @@ namespace RetroEngine
                 480,
                 false, // No mipmaps
                 SurfaceFormat.HalfSingle, // Color format
-                depthFormat); // Depth format
+                depthFormat, 0, RenderTargetUsage.DiscardContents); // Depth format
         }
 
         void InitCloseShadowMap(ref RenderTarget2D target)
@@ -1327,7 +1327,7 @@ namespace RetroEngine
                     (int)GetScreenResolution().Y,
                     false, // No mipmaps
                     UsesOpenGL ? SurfaceFormat.Color : SurfaceFormat.SRgb8A8Etc2, // Color format
-                    depthFormat); // Depth format
+                    depthFormat, 0, RenderTargetUsage.DiscardContents); // Depth format
             }
         }
 
@@ -1348,7 +1348,7 @@ namespace RetroEngine
                     (int)GetScreenResolution().Y,
                     false, // No mipmaps
                     SurfaceFormat.Single, // Color format
-                    depthFormat); // Depth format
+                    depthFormat,0, RenderTargetUsage.DiscardContents); // Depth format
                 }
         }
 
@@ -1374,7 +1374,7 @@ namespace RetroEngine
                         (int)height,
                         false, // No mipmaps
                         surfaceFormat, // Color format
-                        depthFormat); // Depth format
+                        depthFormat, 0, RenderTargetUsage.DiscardContents); // Depth format
                 }
         }
 
@@ -1400,7 +1400,7 @@ namespace RetroEngine
                 }
         }
 
-        void InitRenderTargetVectorIfNeed(ref RenderTarget2D target)
+        void InitRenderTargetVectorIfNeed(ref RenderTarget2D target, bool preserve = false)
         {
             if (GetScreenResolution().X > 0 && GetScreenResolution().Y > 0)
                 if (target is null || target.Width != (int)GetScreenResolution().X || target.Height != (int)GetScreenResolution().Y)
@@ -1420,7 +1420,7 @@ namespace RetroEngine
                         (int)GetScreenResolution().Y,
                         false, // No mipmaps
                         SurfaceFormat.HalfVector4, // Color format
-                        depthFormat,0,RenderTargetUsage.PreserveContents); // Depth format
+                        depthFormat, 0, preserve? RenderTargetUsage.PreserveContents : RenderTargetUsage.DiscardContents); // Depth format
 
 
 
@@ -1451,7 +1451,7 @@ namespace RetroEngine
                         (int)GetScreenResolution().Y,
                         false, // No mipmaps
                         SurfaceFormat.HalfVector4, // Color format
-                        depthFormat, 0, RenderTargetUsage.PreserveContents); // Depth format
+                        depthFormat, 0, RenderTargetUsage.DiscardContents); // Depth format
 
 
 

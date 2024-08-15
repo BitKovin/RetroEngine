@@ -49,7 +49,7 @@ namespace RetroEngine
         public static GameTime time;
 
         public Render render;
-        ImGuiRenderer ImGuiRenderer;
+        internal ImGuiRenderer ImGuiRenderer;
 
         public DevMenu devMenu;
 
@@ -90,6 +90,10 @@ namespace RetroEngine
 
         public static string LaunchArguments = "";
 
+        public new GraphicsDevice GraphicsDevice;
+
+        public RenderTarget2D SwapChainRenderTarget;
+
         public GameMain()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -115,6 +119,9 @@ namespace RetroEngine
             
 
             base.Initialize();
+
+            if (GraphicsDevice == null)
+                GraphicsDevice = base.GraphicsDevice;
 
             content = Content;
 
@@ -188,6 +195,10 @@ namespace RetroEngine
 
         protected override void LoadContent()
         {
+
+
+            if (GraphicsDevice == null)
+                GraphicsDevice = base.GraphicsDevice;
 
             if (DevMenuEnabled)
             {
@@ -435,7 +446,7 @@ namespace RetroEngine
 
 
 
-            GraphicsDevice.SetRenderTarget(null);
+            GraphicsDevice.SetRenderTarget(SwapChainRenderTarget);
 
 
 
@@ -476,13 +487,13 @@ namespace RetroEngine
             if (pendingGraphicsUpdate)
                 _graphics.ApplyChanges();
 
-            DrawSplashIfNeed();
+            //DrawSplashIfNeed();
 
             if (SkipFrames > 0)
             {
                 SkipFrames--;
-                LoadingScreen.Draw();
-                return;
+                //LoadingScreen.Draw();
+                //return;
             }
 
             
@@ -505,7 +516,7 @@ namespace RetroEngine
         void PresentFrame()
         {
             presentingFrame = true;
-            GraphicsDevice.SetRenderTarget(null);
+            GraphicsDevice.SetRenderTarget(SwapChainRenderTarget);
             Stats.StartRecord("Frame Present");
 
             GraphicsDevice.Present();

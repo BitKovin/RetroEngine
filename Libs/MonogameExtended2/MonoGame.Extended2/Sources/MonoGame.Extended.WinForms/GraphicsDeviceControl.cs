@@ -111,7 +111,7 @@ public abstract class GraphicsDeviceControl : Control
     /// <summary>
     /// To enable the backend's full life cycle, this property must be set in constructor.
     /// </summary>
-    protected IWindowBackend? WindowBackend { get; set; }
+    public IWindowBackend? WindowBackend { get; set; }
 
     protected override void OnPaintBackground(PaintEventArgs e)
     {

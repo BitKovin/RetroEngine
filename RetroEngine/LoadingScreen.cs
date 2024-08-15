@@ -51,6 +51,7 @@ namespace RetroEngine
 
             SpriteBatch.End();
 
+            GameMain.Instance.GraphicsDevice.SetRenderTarget(GameMain.Instance.SwapChainRenderTarget);
 
             if (GameMain.Instance.IsGameWindowFocused() == false) return;
             GameMain.Instance.CheckWindowFullscreenStatus();

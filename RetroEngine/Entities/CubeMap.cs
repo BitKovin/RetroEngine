@@ -177,7 +177,7 @@ namespace RetroEngine.Entities
 
             GameMain.Instance.render.RenderLevelGeometryForward(l, OnlyStatic: true);
 
-            graphicsDevice.SetRenderTarget(null);
+            //graphicsDevice.SetRenderTarget(null);
         }
 
         Matrix GetViewForFace(CubeMapFace face)

@@ -43,9 +43,16 @@ public sealed class D3DWindowBackend : DisposableBase, IWindowBackend
         _chain = new SwapChainRenderTarget(control.GraphicsDevice, control.Handle, width, height, mipMap, surfaceFormat, depthFormat, preferredMultiSampleCount, renderTargetUsage, presentInterval);
     }
 
+    public RenderTarget2D? GetSwapChainRenderTarget()
+    {
+        return _chain;
+    }
+
     public void PrepareDraw(GraphicsDeviceControl control)
     {
     }
+
+    
 
     public void BeginDraw(GraphicsDeviceControl control)
     {
@@ -55,6 +62,7 @@ public sealed class D3DWindowBackend : DisposableBase, IWindowBackend
         }
 
         var graphicsDevice = control.GraphicsDevice;
+
 
         graphicsDevice?.SetRenderTarget(_chain);
     }

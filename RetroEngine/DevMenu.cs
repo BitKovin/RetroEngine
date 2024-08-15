@@ -1,4 +1,5 @@
 ﻿using ImGuiNET;
+using RetroEngine.Graphic;
 using RetroEngine.Map;
 using RetroEngine.UI;
 using System;
@@ -39,7 +40,8 @@ namespace RetroEngine
             ImGui.DockSpaceOverViewport();
             ImGui.PopStyleColor(2);
 
-            
+
+            ImGui.Image(GameMain.Instance.render.positionPath.GetImGuiPointer(), new Vector2(100, 100));
 
             DrawStats();
 
@@ -122,10 +124,13 @@ namespace RetroEngine
 
             ImGui.End();
 
+            
+
+            
+
             ImGui.Checkbox("dev menu", ref GameMain.Instance.DevMenuEnabled);
 
             ImGui.End();
-
 
             //string consoleContent = sb.ToString();
 

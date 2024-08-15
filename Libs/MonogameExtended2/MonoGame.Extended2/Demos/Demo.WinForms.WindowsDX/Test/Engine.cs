@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Runtime.Versioning;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -57,7 +57,12 @@ public class Engine
 
     public void Draw(GameTime gameTime)
     {
+
+        _graphicsDevice.SetRenderTarget(null);
+
         _graphicsDevice.Clear(Color.Black);
+
+
 
         Rectangle paddleRect = new Rectangle((int)_paddleX, _graphicsDevice.Viewport.Height - PaddleBottomMargin, PaddleWidth, PaddleHeight);
 

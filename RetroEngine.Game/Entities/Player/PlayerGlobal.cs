@@ -30,6 +30,8 @@ namespace RetroEngine.Game.Entities.Player
 
             Input.LockCursor = !GameMain.Instance.paused;
 
+            Graphics.LowLatency = Input.GetAction("test3").Holding();
+
         }
 
         public override void Destroy()

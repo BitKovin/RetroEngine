@@ -167,23 +167,6 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
     
 }
 
-// Function to generate a random float based on the surface coordinates
-float Random (float2 uv)
-{
-    return frac(sin(dot(uv,float2(12.9898,78.233)*21))*78.5453123);
-}
-
-// Function to generate a random vector based on the surface coordinates and roughness
-float3 RandomVector(float2 uv, float roughness)
-{
-    
-    float3 randomVec;
-    randomVec.x = Random(uv + roughness);
-    randomVec.y = Random(uv + roughness * 2.0);
-    randomVec.z = Random(uv + roughness * 3.0);
-    return normalize(randomVec * 2.0 - 1.0);
-}
-
 float4 MainPS(VertexShaderOutput input) : COLOR
 {
 	
