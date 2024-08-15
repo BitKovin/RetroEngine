@@ -635,6 +635,9 @@ namespace RetroEngine
 
                 graphicsDevice.RasterizerState = Graphics.DisableBackFaceCulling || TwoSided ? RasterizerState.CullNone : (isNegativeScale() ? RasterizerState.CullCounterClockwise : RasterizerState.CullClockwise);
 
+                graphicsDevice.DepthStencilState = DepthStencilState.Default;
+                graphicsDevice.BlendState = BlendState.Opaque;
+
                 if (!mask)
                     effect.Techniques[0].Passes[0].Apply();
 

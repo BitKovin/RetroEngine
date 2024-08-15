@@ -347,7 +347,7 @@ namespace RetroEngine
 
 
             if (Input.GetAction("test").Holding())
-                return ssaoOutput;
+                return DepthPrepathOutput;
 
             return outputPath;
 
@@ -397,7 +397,8 @@ namespace RetroEngine
             graphics.GraphicsDevice.SetRenderTargets(ForwardOutput, normalPath, ReflectivenessOutput, positionPath);
             graphics.GraphicsDevice.Clear(ClearOptions.DepthBuffer, Color.Black, 1.0f, 0);
 
-            //graphics.GraphicsDevice.Clear(Color.Red);
+            if(GameMain.Instance.DefaultShader.ToLower() == "overdraw")
+                graphics.GraphicsDevice.Clear(Color.Black);
 
             graphics.GraphicsDevice.DepthStencilState = new DepthStencilState()
             {

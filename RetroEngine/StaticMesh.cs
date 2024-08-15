@@ -413,7 +413,7 @@ namespace RetroEngine
 
             effect.Parameters["DitherDisolve"]?.SetValue(DitherDisolve);
 
-            effect.Parameters["earlyZ"]?.SetValue(Graphics.EarlyDepthDiscardShader && Transperent == false);
+            effect.Parameters["earlyZ"]?.SetValue(Graphics.EarlyDepthDiscardShader && (SimpleTransperent == false || Transperent == false));
 
             if (Viewmodel&&Graphics.ViewmodelShadows)
             {
@@ -900,6 +900,7 @@ namespace RetroEngine
 
                 if (frameStaticMeshData.model is not null)
                 {
+
 
                     effect.Parameters["World"].SetValue(frameStaticMeshData.World);
                     effect.Parameters["Masked"]?.SetValue(mask);
