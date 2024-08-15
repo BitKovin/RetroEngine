@@ -13,13 +13,6 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin ../../GameData/Shaders/UnifiedOutput.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/processorParam:Defines=
-/build:../../GameData/Shaders/UnifiedOutput.fx;Shaders/UnifiedOutput.fx
-
 #begin ../../GameData/Shaders/BloomSampler.fx
 /importer:EffectImporter
 /processor:EffectProcessor
@@ -146,6 +139,13 @@
 /processorParam:Defines=
 /build:../../GameData/Shaders/OcclusionPathStatic.fx;Shaders/OcclusionPathStatic.fx
 
+#begin ../../GameData/Shaders/Overdraw.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/processorParam:Defines=
+/build:../../GameData/Shaders/Overdraw.fx;Shaders/Overdraw.fx
+
 #begin ../../GameData/Shaders/PostProcessing.fx
 /importer:EffectImporter
 /processor:EffectProcessor
@@ -181,6 +181,13 @@
 /processorParam:Defines=
 /build:../../GameData/Shaders/ShadowMapMasked.fx;Shaders/ShadowMapMasked.fx
 
+#begin ../../GameData/Shaders/SimpleBlur.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/processorParam:Defines=
+/build:../../GameData/Shaders/SimpleBlur.fx;Shaders/SimpleBlur.fx
+
 #begin ../../GameData/Shaders/SimpleEffect.fx
 /importer:EffectImporter
 /processor:EffectProcessor
@@ -209,26 +216,19 @@
 /processorParam:Defines=
 /build:../../GameData/Shaders/Tonemap.fx;Shaders/Tonemap.fx
 
-#begin ../../GameData/Shaders/Unlit.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/processorParam:Defines=
-/build:../../GameData/Shaders/Unlit.fx;Shaders/Unlit.fx
-
-#begin ../../GameData/Shaders/SimpleBlur.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/processorParam:Defines=
-/build:../../GameData/Shaders/SimpleBlur.fx;Shaders/SimpleBlur.fx
-
 #begin ../../GameData/Shaders/UnderWater.fx
 /importer:EffectImporter
 /processor:EffectProcessor
 /processorParam:DebugMode=Auto
 /processorParam:Defines=
 /build:../../GameData/Shaders/UnderWater.fx;Shaders/UnderWater.fx
+
+#begin ../../GameData/Shaders/UnifiedOutput.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/processorParam:Defines=
+/build:../../GameData/Shaders/UnifiedOutput.fx;Shaders/UnifiedOutput.fx
 
 #begin ../../GameData/Shaders/UnifiedOutput.instanced.fx
 /importer:EffectImporter
@@ -244,9 +244,9 @@
 /processorParam:Defines=
 /build:../../GameData/Shaders/UnifiedOutput.transperent.fx;Shaders/UnifiedOutput.transperent.fx
 
-#begin ../../GameData/Shaders/Overdraw.fx
+#begin ../../GameData/Shaders/Unlit.fx
 /importer:EffectImporter
 /processor:EffectProcessor
 /processorParam:DebugMode=Auto
 /processorParam:Defines=
-/build:../../GameData/Shaders/Overdraw.fx;Shaders/Overdraw.fx
+/build:../../GameData/Shaders/Unlit.fx;Shaders/Unlit.fx

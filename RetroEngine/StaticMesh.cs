@@ -893,7 +893,7 @@ namespace RetroEngine
             if (Transperent)
                 mask = true;
 
-            graphicsDevice.RasterizerState = Graphics.DisableBackFaceCulling || TwoSided ? RasterizerState.CullNone : (isNegativeScale() ? RasterizerState.CullCounterClockwise : RasterizerState.CullClockwise);
+            graphicsDevice.RasterizerState = Graphics.DisableBackFaceCulling || TwoSided ? RasterizerState.CullNone : ((isNegativeScale()) ? RasterizerState.CullCounterClockwise : RasterizerState.CullClockwise);
 
 
             if (GameMain.Instance.render.BoundingSphere.Radius == 0 || IntersectsBoundingSphere(GameMain.Instance.render.BoundingSphere))

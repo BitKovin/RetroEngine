@@ -119,7 +119,7 @@ namespace RetroEngine.Entities.Light
             lightData.Resolution = resolution;
 
             mesh.LoadFromFile("models/cube.obj");
-            //meshes.Add(mesh);
+            meshes.Add(mesh);
             //mesh.Visible = false;
 
             lightData.shadowData = this;
@@ -195,6 +195,8 @@ namespace RetroEngine.Entities.Light
             mesh.Shader = new SurfaceShaderInstance("CubeMapVisualizer");
 
         }
+
+        //to do: normal bias
 
         void TestFaceSide()
         {
@@ -552,9 +554,12 @@ namespace RetroEngine.Entities.Light
             GameMain.Instance.render.OcclusionEffect.Parameters["CameraPos"].SetValue(lightData.Position);
             GameMain.Instance.render.OcclusionEffect.Parameters["pointDistance"].SetValue(true);
 
+            GameMain.Instance.render.OcclusionEffect.Parameters["NormalBias"]?.SetValue(radius / resolution * 1.5f);
+
             GameMain.Instance.render.OcclusionStaticEffect.Parameters["ViewProjection"].SetValue(view * projection);
             GameMain.Instance.render.OcclusionStaticEffect.Parameters["CameraPos"].SetValue(lightData.Position);
             GameMain.Instance.render.OcclusionStaticEffect.Parameters["pointDistance"].SetValue(true);
+            GameMain.Instance.render.OcclusionStaticEffect.Parameters["NormalBias"]?.SetValue(radius / resolution* 1.5f);
 
             GameMain.Instance.render.RenderLevelGeometryDepth(l, OnlyStatic: !isDynamic(), onlyShadowCasters: true, pointLight: true);
 

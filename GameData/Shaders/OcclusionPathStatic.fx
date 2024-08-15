@@ -18,11 +18,16 @@ bool pointDistance;
 
 bool black = false;
 
+float NormalBias = 0;
+
 struct VertexShaderInput
 {
     float4 Position : POSITION0;
     float2 TexCoords : TEXCOORD0;
     float4 Color : COLOR0;
+
+    
+    float3 SmoothNormal : NORMAL1;
 };
 
 Texture2D Texture;
@@ -40,11 +45,16 @@ struct VertexShaderOutput
     float3 WorldPos : TEXCOORD1;
     float2 TexCoords : TEXCOORD2;
     float4 Color : COLOR0;
+    
 };
 
 VertexShaderOutput MainVS(in VertexShaderInput input)
 {
     VertexShaderOutput output;
+
+    
+    
+    input.Position -= float4(input.SmoothNormal*NormalBias,0);
 
     // Transform the vertex position to world space
     output.Position = mul(input.Position, World);

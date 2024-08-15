@@ -138,20 +138,23 @@ texture PointLightCubemap1;
 sampler PointLightCubemap1Sampler = sampler_state
 {
     texture = <PointLightCubemap1>;
-    MinFilter = Linear;
-    MagFilter = Linear;
+
+    MinFilter = Point;
+    MagFilter = Point;
     AddressU = Clamp;
     AddressV = Clamp;
+    AddressW = Clamp;
 };
 
 texture PointLightCubemap2;
 sampler PointLightCubemap2Sampler = sampler_state
 {
     texture = <PointLightCubemap2>;
-    MinFilter = Linear;
-    MagFilter = Linear;
+    MinFilter = Point;
+    MagFilter = Point;
     AddressU = Clamp;
     AddressV = Clamp;
+    AddressW = Clamp;
 
 };
 
@@ -159,18 +162,21 @@ texture PointLightCubemap3;
 sampler PointLightCubemap3Sampler = sampler_state
 {
     texture = <PointLightCubemap3>;
-    MinFilter = Linear;
-    MagFilter = Linear;
+    MinFilter = Point;
+    MagFilter = Point;
+    MipLODBias = -16;
     AddressU = Clamp;
     AddressV = Clamp;
+    AddressW = Clamp;
 };
 
 texture PointLightCubemap4;
 sampler PointLightCubemap4Sampler = sampler_state
 {
     texture = <PointLightCubemap4>;
-    MinFilter = Linear;
-    MagFilter = Linear;
+    MinFilter = Point;
+    MagFilter = Point;
+    MipLODBias = -16;
     AddressU = Clamp;
     AddressV = Clamp;
 };
@@ -179,20 +185,24 @@ texture PointLightCubemap5;
 sampler PointLightCubemap5Sampler = sampler_state
 {
     texture = <PointLightCubemap5>;
-    MinFilter = Linear;
-    MagFilter = Linear;
+    MinFilter = Point;
+    MagFilter = Point;
+    MipLODBias = -16;
     AddressU = Clamp;
     AddressV = Clamp;
+    AddressW = Clamp;
 };
 
 texture PointLightCubemap6;
 sampler PointLightCubemap6Sampler = sampler_state
 {
     texture = <PointLightCubemap6>;
-    MinFilter = Linear;
-    MagFilter = Linear;
+    MinFilter = Point;
+    MagFilter = Point;
+    MipLODBias = -16;
     AddressU = Clamp;
     AddressV = Clamp;
+    AddressW = Clamp;
 };
 
 #define BONE_NUM 128
@@ -926,6 +936,8 @@ float GetPointLightDepth(int i, float3 lightDir)
     float depth = 0.00;
 
     lightDir *= float3(1, -1, -1);
+
+    lightDir = normalize(lightDir);
 
     if (i == 0)
         depth = texCUBE(PointLightCubemap1Sampler, lightDir).r;

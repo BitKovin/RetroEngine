@@ -734,10 +734,7 @@ namespace RetroEngine
 
             GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
             // Load the custom effect
-            Effect effect = Shader.GetAndApply(Transperent? SurfaceShaderInstance.ShaderSurfaceType.Transperent : SurfaceShaderInstance.ShaderSurfaceType.Default);
-
-
-            effect.Parameters["Bones"].SetValue(finalizedBones);
+            
             if (RiggedModel != null)
             {
 
@@ -805,11 +802,22 @@ namespace RetroEngine
                 foreach (RiggedModel.RiggedModelMesh meshPart in RiggedModel.meshes)
                 {
 
+
+
+                    MeshPartData meshPartData = meshPart.Tag;
+
+                    bool transperent = meshPartData.textureName.Contains("_t.") || Transparency<1;
+
+                    Effect effect = Shader.GetAndApply(transperent ? SurfaceShaderInstance.ShaderSurfaceType.Transperent : SurfaceShaderInstance.ShaderSurfaceType.Default);
+
+
+                    effect.Parameters["Bones"].SetValue(finalizedBones);
+
                     // Set the vertex buffer and index buffer for this mesh part
                     graphicsDevice.SetVertexBuffer(meshPart.VertexBuffer);
                     graphicsDevice.Indices = meshPart.IndexBuffer;
 
-                    MeshPartData meshPartData = meshPart.Tag as MeshPartData;
+
 
                     ApplyShaderParams(effect, meshPartData);
 

@@ -22,6 +22,8 @@ bool pointDistance;
 
 matrix Bones[BONE_NUM];
 
+float NormalBias = 0;
+
 struct VertexShaderInput
 {
     float4 Position : POSITION0;
@@ -30,6 +32,7 @@ struct VertexShaderInput
     float4 BlendWeights : BLENDWEIGHT0;
 
     float4 Color : COLOR0;
+    float3 SmoothNormal : NORMAL1;
 
     float2 TexCoords : TEXCOORD0;
 
@@ -81,9 +84,13 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 
     float4x4 boneTrans = GetBoneTransforms(input);
     
+
     // Transform the vertex position to world space
     output.Position = mul(mul(input.Position, boneTrans), World);
     
+
+    input.Position -= float4(normalize((mul(mul(float4(input.SmoothNormal,0), boneTrans), World)*NormalBias).xyz),0);
+
     output.WorldPos = output.Position;
     
     output.Position = mul(output.Position, ViewProjection);
