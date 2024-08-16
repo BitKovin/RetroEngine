@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RetroEngine.PhysicsSystem;
+using RetroEngine.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -509,6 +510,16 @@ namespace RetroEngine.Particles
             public bool Collided = false;
 
             public bool destroyed = false;
+
+            public void SetRotationFromVelocity()
+            {
+
+                Vector2 p1 = UiElement.WorldToScreenSpace(position);
+                Vector2 p2 = UiElement.WorldToScreenSpace(position + velocity);
+
+                Rotation = MathHelper.FindLookAtRotation(p1, p2);
+
+            }
 
             public Particle()
             {

@@ -92,6 +92,23 @@ namespace RetroEngine
             return new Vector3(pitch, yaw, 0);
         }
 
+        /// <summary>
+        /// Calculates the angle of rotation required to look at a target point.
+        /// </summary>
+        /// <param name="origin">The starting point.</param>
+        /// <param name="target">The point to look at.</param>
+        /// <returns>Angle in radians required to look at the target point.</returns>
+        public static float FindLookAtRotation(Vector2 origin, Vector2 target)
+        {
+            // Get the direction vector from the origin to the target
+            Vector2 direction = target - origin;
+
+            // Calculate the angle of the direction vector
+            float angle = (float)Math.Atan2(direction.Y, direction.X);
+
+            return angle;
+        }
+
         public static Vector3 ToEulerAnglesDegrees(this Quaternion q)
         {
             Vector3 angles = new();

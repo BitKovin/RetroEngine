@@ -45,6 +45,8 @@ namespace RetroEngine.Game.Effects.Particles
 
             particle.transparency = Math.Max(particle.transparency -= Time.DeltaTime/1.5f, 0);
 
+            //particle.SetRotationFromVelocity();
+
             return particle;
         }
 
@@ -61,6 +63,7 @@ namespace RetroEngine.Game.Effects.Particles
             particle.velocity = randPos.Normalized()*0.5f;
             particle.transparency = 0.8f;
             particle.deathTime = 2;
+
 
             return particle;
         }
