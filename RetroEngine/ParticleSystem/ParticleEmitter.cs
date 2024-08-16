@@ -179,6 +179,49 @@ namespace RetroEngine.Particles
 
         Matrix GetWorldForParticle(Particle particle)
         {
+
+            if(particle.OrientRotationToVelocity)
+            {
+
+                // Normalize the velocity vector to use it as the right vector (X-axis)
+                Vector3 right = Vector3.Normalize(particle.velocity);
+
+                // Calculate the direction from the particle to the camera
+                Vector3 cameraToParticle = Vector3.Normalize(Camera.position - particle.position) * -1;
+
+                // Use the camera direction as the up vector (Y-axis), making sure it is perpendicular to the right vector
+                Vector3 up = Vector3.Cross(cameraToParticle, right);
+
+                // Recalculate the forward vector (Z-axis) to ensure it is perpendicular to both the right and up vectors
+                Vector3 forward = Vector3.Cross(right, up);
+
+                // If the forward vector is invalid, adjust it
+                if (forward.LengthSquared() == 0)
+                {
+                    forward = cameraToParticle;
+                }
+
+                // Construct the rotation matrix from the right, up, and forward vectors
+                Matrix rotationMatrix = new Matrix(
+                    right.X, right.Y, right.Z, 0,
+                    up.X, up.Y, up.Z, 0,
+                    forward.X, forward.Y, forward.Z, 0,
+                    0, 0, 0, 1
+                );
+
+                // Scale matrix
+                Matrix scaleMatrix = Matrix.CreateScale(particle.Scale);
+
+                // Translation matrix
+                Matrix translationMatrix = Matrix.CreateTranslation(particle.position);
+
+                // Combine scale, rotation, and translation matrices
+                Matrix worldMatrix = scaleMatrix * rotationMatrix * translationMatrix;
+
+                return worldMatrix;
+
+            }
+
             if (particle.useGlobalRotation == false)
             {
                 Matrix worldMatrix = Matrix.CreateScale(particle.Scale) *
@@ -510,6 +553,8 @@ namespace RetroEngine.Particles
             public bool Collided = false;
 
             public bool destroyed = false;
+
+            public bool OrientToVelocity = false;
 
             public void SetRotationFromVelocity()
             {
