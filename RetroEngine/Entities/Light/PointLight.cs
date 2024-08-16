@@ -563,6 +563,9 @@ namespace RetroEngine.Entities.Light
 
             GameMain.Instance.render.RenderLevelGeometryDepth(l, OnlyStatic: !isDynamic(), onlyShadowCasters: true, pointLight: true);
 
+            GameMain.Instance.render.OcclusionEffect.Parameters["NormalBias"]?.SetValue(0);
+            GameMain.Instance.render.OcclusionStaticEffect.Parameters["NormalBias"]?.SetValue(0);
+
             RetroEngine.Render.CustomFrustrum = null;
 
             GameMain.Instance.render.BoundingSphere.Radius = 0;

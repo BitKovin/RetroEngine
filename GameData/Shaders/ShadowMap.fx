@@ -7,6 +7,8 @@
 #define PS_SHADERMODEL ps_5_0
 #endif
 
+#include "ShaderLib/EngineConstants.fx"
+
 matrix World;
 matrix View;
 matrix Projection;
@@ -118,17 +120,8 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 
 float4 MainPS(VertexShaderOutput input) : SV_TARGET
 {
-/*
-    if(dot(normalize(input.normal), -normalize(LightDirection))>0.7)
-    {
-        discard;
-    }
-*/
     // Retrieve the depth value from the depth buffer
-    float depthValue = input.myPosition.z;
-    
-        
-	//depthValue /= 20;
+    float depthValue = input.myPosition.z - DIRECTIONAL_LIGHT_DEPTH_OFFSET;
 
     return float4(depthValue, depthValue, depthValue, 1);
 }

@@ -14,6 +14,8 @@ matrix View;
 matrix Projection;
 matrix ProjectionViewmodel;
 
+#include "EngineConstants.fx"
+
 texture ShadowMap;
 sampler ShadowMapSampler = sampler_state
 {
@@ -554,14 +556,6 @@ half SampleShadowMap(sampler2D shadowMap, float2 coords, float compare)
     return step(compare, sample.r);
 }
 
-float SampleShadowDif(sampler2D shadowMap, float2 coords, float compare)
-{
-    
-    float sample = tex2D(shadowMap, coords).r - compare;
-    
-    return sample;
-}
-
 half SampleShadowMapLinear(sampler2D shadowMap, float2 coords, float compare, half2 texelSize)
 {
     float2 pixelPos = coords / texelSize + float2(0.5, 0.5);
@@ -586,7 +580,7 @@ float GetShadowClose(float3 lightCoords, PixelInput input, float3 TangentNormal)
     float dist = distance(viewPos, input.MyPosition);
     
     
-        float currentDepth = lightCoords.z * 2 - 1;
+        float currentDepth = lightCoords.z * 2 - 1- DIRECTIONAL_LIGHT_DEPTH_OFFSET;
 
         float resolution = 1;
         
@@ -676,7 +670,7 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input, float3 TangentNor
 
     if (lightCoords.x >= 0 && lightCoords.x <= 1 && lightCoords.y >= 0 && lightCoords.y <= 1)
     {
-        float currentDepth = lightCoords.z * 2 - 1;
+        float currentDepth = lightCoords.z * 2 - 1- DIRECTIONAL_LIGHT_DEPTH_OFFSET;
 
         float resolution = 1;
         
@@ -778,7 +772,7 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
     {
         
         
-        float currentDepth = lightCoords.z * 2 - 1;
+        float currentDepth = lightCoords.z * 2 - 1 - DIRECTIONAL_LIGHT_DEPTH_OFFSET;
             
         #if OPENGL
         #else
@@ -795,13 +789,13 @@ if (lightCoordsVeryClose.x >= 0 && lightCoordsVeryClose.x <= 1 && lightCoordsVer
 
     if(dist>22 && dist<25)
     {
-        //float close = GetShadowClose(lightCoordsClose, input, TangentNormal);
+        float close = GetShadowClose(lightCoordsClose, input, TangentNormal);
 
         float bias = b * (1 - saturate(dot(input.Normal, -LightDirection))) + b / 2.0f;
         bias *= (LightDistanceMultiplier+1)/2;
-        //float far = 1 - SampleShadowMap(ShadowMapSampler, lightCoords.xy, currentDepth - bias);
+        float far = 1 - SampleShadowMap(ShadowMapSampler, lightCoords.xy, currentDepth - bias);
 
-        //return lerp(close, far, (dist - 22)/3);
+        return lerp(close, far, (dist - 22)/3);
         
     }
 }
@@ -828,7 +822,7 @@ if (lightCoordsVeryClose.x >= 0 && lightCoordsVeryClose.x <= 1 && lightCoordsVer
             }
         }
         
-    if (tex2D(ShadowMapSampler,lightCoords.xy).r<0.01)
+    if ((tex2D(ShadowMapSampler,lightCoords.xy).r + DIRECTIONAL_LIGHT_DEPTH_OFFSET)<0.01)
         return 0;
 
 
@@ -884,7 +878,8 @@ float GetShadowViewmodel(float3 lightCoords, PixelInput input, float3 TangentNor
     float resolution = 1;
     half shadow = 0;
 
-    float currentDepth = lightCoords.z * 2 - 1;
+    float currentDepth = lightCoords.z * 2 - 1 - DIRECTIONAL_LIGHT_DEPTH_OFFSET;
+    currentDepth -= DIRECTIONAL_LIGHT_DEPTH_OFFSET;
 
     int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)
 

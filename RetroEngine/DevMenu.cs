@@ -74,7 +74,7 @@ namespace RetroEngine
 
             ImGui.SliderFloat("resolution scale", ref Render.ResolutionScale, 0.2f, 6);
 
-            ImGui.SliderFloat("reflection resolution scale", ref Graphics.SSRResolutionScale, 0.2f, 1);
+            ImGui.DragFloat("reflection resolution scale", ref Graphics.SSRResolutionScale, 0.1f, 0.2f,3);
 
 
             ImGui.Checkbox("async present", ref Render.AsyncPresent);
