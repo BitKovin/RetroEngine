@@ -24,7 +24,7 @@ namespace RetroEngine.Game.Effects.Particles
     {
         public particle_hitSmoke()
         {
-            TexturePath = "textures/particles/trail.png";
+            TexturePath = "textures/particles/smoke.png";
 
             InitialSpawnCount = 10;
             SpawnRate = 0;
@@ -64,7 +64,7 @@ namespace RetroEngine.Game.Effects.Particles
             particle.transparency = 0.8f;
             particle.deathTime = 2;
 
-            particle.OrientRotationToVelocity = true;
+            //particle.OrientRotationToVelocity = true;
 
             return particle;
         }
