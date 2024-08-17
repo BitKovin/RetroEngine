@@ -10,9 +10,6 @@ map_Kd textures/brushes/Water/Water1_t.png
 newmtl brushes/Wood/wood1
 map_Kd textures/brushes/Wood/wood1.png
 
-newmtl brushes/cat
-map_Kd textures/brushes/cat.png
-
 newmtl brushes/grass
 map_Kd textures/brushes/grass.png
 

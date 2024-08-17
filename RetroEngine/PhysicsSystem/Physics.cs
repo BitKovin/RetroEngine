@@ -289,7 +289,7 @@ namespace RetroEngine.PhysicsSystem
                             {
                                 // Interpolate the position based on the elapsed time in the current frame
                                 float interpolationFactor = Time.DeltaTime / fixedDeltaTime;
-                                ent.Position = Vector3.Lerp(previousPosition, currentPosition, interpolationFactor);
+                                ent.Position = Vector3.Lerp(previousPosition, currentPosition, Math.Min(interpolationFactor,1));
                             }
                         }
 

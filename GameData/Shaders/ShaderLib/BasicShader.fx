@@ -764,7 +764,7 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
     if (dist > 150)
         return 0;
     
-        float b = 0.0002;
+        float b = 0.001;
 
     
 

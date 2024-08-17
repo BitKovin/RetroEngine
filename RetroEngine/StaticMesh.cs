@@ -743,7 +743,7 @@ namespace RetroEngine
 
             }
 
-            float bias = 0.06f;
+            float bias = 0.07f;
 
             if (closeShadow)
                 bias = 0.035f;

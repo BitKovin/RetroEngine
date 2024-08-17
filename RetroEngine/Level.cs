@@ -102,6 +102,16 @@ namespace RetroEngine
                 return;
             }
 
+            string path = AssetRegistry.FindPathForFile(name);
+
+            if (File.Exists(path) == false)
+            {
+                Logger.Log($"failed to find level {path}");
+                pendingLevelChange = null;
+                ChangingLevel = false;
+                return;
+            }
+
             MapData.ClearMeshData();
 
             bool rebuild = false;
@@ -129,15 +139,6 @@ namespace RetroEngine
             LoadingScreen.Update(0.02f);
 
             GameMain.Instance.paused = false;
-
-            string path = AssetRegistry.FindPathForFile(name);
-
-            if (File.Exists(path) == false)
-            {
-                Logger.Log($"failed to find level {path}");
-                pendingLevelChange = null;
-                return;
-            }
 
             List<Entity> list = new List<Entity>();
             list.AddRange(GameMain.Instance.curentLevel.entities);

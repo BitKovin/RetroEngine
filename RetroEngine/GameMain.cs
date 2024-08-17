@@ -256,6 +256,8 @@ namespace RetroEngine
 
             ScreenWidth = GraphicsDevice.PresentationParameters.Bounds.Width;
 
+            var physicsTask = Task.Factory.StartNew((Action)(() => { Physics.Simulate(); }));
+
             curentLevel.WaitForVisualUpdate();
             if (AsyncGameThread)
             {
@@ -291,7 +293,7 @@ namespace RetroEngine
                 pendingDispose.Clear();
 
             }
-            var physicsTask = Task.Factory.StartNew((Action)(() => { Physics.Simulate(); }));
+            
 
             Camera.ViewportUpdate();
 
@@ -756,6 +758,8 @@ namespace RetroEngine
             render.shadowPassRenderDelay = new Delay();
 
             SaveSystem.SaveManager.LoadSaveIfPending();
+
+            
 
         }
 

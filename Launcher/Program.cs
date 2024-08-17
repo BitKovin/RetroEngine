@@ -72,9 +72,9 @@ namespace Launcher
 
 #if RELEASE
 
-            executables.Add(GameExecutable.DirectX, "Engine/bin/Release/x64/DirectX/RetroEngine.Windows.exe");
-            executables.Add(GameExecutable.OpenGL, "Engine/bin/Release/x64/OpenGL/RetroEngine.Desktop.exe");
-            executables.Add(GameExecutable.Vulkan, "Engine/bin/Release/x64/Vulkan/RetroEngine.WindowsVK.exe");
+            executables.Add(GameExecutable.DirectX, "Engine/bin/Release/DirectX/RetroEngine.Windows.exe");
+            executables.Add(GameExecutable.OpenGL, "Engine/bin/Release/OpenGL/RetroEngine.Desktop.exe");
+            executables.Add(GameExecutable.Vulkan, "Engine/bin/Release/Vulkan/RetroEngine.WindowsVK.exe");
 #else
             executables.Add(GameExecutable.DirectX,ROOT_PATH + "RetroEngine.Windows/bin/Release/net7.0-windows/RetroEngine.Windows.exe");
             executables.Add(GameExecutable.OpenGL, ROOT_PATH + "RetroEngine.Desktop/bin/Release/net6.0/RetroEngine.Desktop.exe");

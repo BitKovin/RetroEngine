@@ -141,7 +141,7 @@ namespace RetroEngine
 
         public static Matrix GetLightView()
         {
-            return Matrix.CreateLookAt(GetCameraPositionByPixelGrid(LightDistance), GetCameraPositionByPixelGrid(LightDistance) + LightDirection, GetLightUpVector());
+            return Matrix.CreateLookAt(GetCameraPositionByPixelGrid(0), GetCameraPositionByPixelGrid(0) + LightDirection, Vector3.UnitZ);
         }
 
         public static Matrix GetLightViewViewmodel()

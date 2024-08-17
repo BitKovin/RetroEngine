@@ -37,9 +37,9 @@ internal class Program
             return;
         }
 
-        string winEXE = buildPath + "/Engine/bin/Release/x64/DirectX//RetroEngine.Windows.exe";
-        string glEXE = buildPath + "/Engine/bin/Release/x64/OpenGL/RetroEngine.Desktop.exe";
-        string vulkanEXE = buildPath + "/Engine/bin/Release/x64/Vulkan/RetroEngine.WindowsVK.exe";
+        string winEXE = buildPath + "/Engine/bin/Release/DirectX/RetroEngine.Windows.exe";
+        string glEXE = buildPath + "/Engine/bin/Release/OpenGL/RetroEngine.Desktop.exe";
+        string vulkanEXE = buildPath + "/Engine/bin/Release/Vulkan/RetroEngine.WindowsVK.exe";
 
         PublishPlatforms(solutionPath, buildPath);
 
@@ -80,9 +80,9 @@ internal class Program
     static void PublishPlatforms(string solutionPath, string buildPath)
     {
 
-        PublishProject(solutionPath + "RetroEngine.Windows/RetroEngine.Windows.csproj", buildPath + "Engine/bin/Release/x64/DirectX");
-        PublishProject(solutionPath + "RetroEngine.Desktop/RetroEngine.Desktop.csproj", buildPath + "Engine/bin/Release/x64/OpenGL");
-        PublishProject(solutionPath + "RetroEngine.WindowsVK/RetroEngine.WindowsVK.csproj", buildPath + "Engine/bin/Release/x64/Vulkan");
+        PublishProject(solutionPath + "RetroEngine.Windows/RetroEngine.Windows.csproj", buildPath + "Engine/bin/Release/DirectX");
+        PublishProject(solutionPath + "RetroEngine.Desktop/RetroEngine.Desktop.csproj", buildPath + "Engine/bin/Release/OpenGL");
+        PublishProject(solutionPath + "RetroEngine.WindowsVK/RetroEngine.WindowsVK.csproj", buildPath + "Engine/bin/Release/Vulkan");
     }
 
     static void CopyGameData(string solutionPath, string buildPath)
@@ -112,7 +112,6 @@ internal class Program
         ExecutePowerShellCommand($"dotnet publish {projectPath}" +
             " -c Release" +
             $" -o {outPath} " +
-            "-f net8.0-windows -r win-x64 " +
             "--no-self-contained " +
             "--no-restore");
     }

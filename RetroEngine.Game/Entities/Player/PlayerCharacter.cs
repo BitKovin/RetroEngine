@@ -405,7 +405,7 @@ namespace RetroEngine.Game.Entities.Player
 
             // Interpolate the position based on the elapsed time in the current frame
             float interpolationFactor = Time.DeltaTime / fixedDeltaTime;
-            interpolatedPosition = Vector3.Lerp(previousPosition, currentPosition, interpolationFactor);
+            interpolatedPosition = Vector3.Lerp(previousPosition, currentPosition, Math.Min(interpolationFactor,1));
 
 
         }

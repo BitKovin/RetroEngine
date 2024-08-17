@@ -119,7 +119,7 @@ namespace RetroEngine.Entities.Light
             lightData.Resolution = resolution;
 
             mesh.LoadFromFile("models/cube.obj");
-            meshes.Add(mesh);
+            //meshes.Add(mesh);
             //mesh.Visible = false;
 
             lightData.shadowData = this;

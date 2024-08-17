@@ -6,7 +6,7 @@
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
     <LangVersion>10</LangVersion>
     <Nullable>enable</Nullable>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <Compile Update="GraphicsDeviceControl.cs">
@@ -21,7 +21,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" Version="2022.3.1" />
-      <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.1.303">
+      <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.2.1105">
           <PrivateAssets>All</PrivateAssets>
       </PackageReference>
   </ItemGroup>
