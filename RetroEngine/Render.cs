@@ -343,7 +343,7 @@ namespace RetroEngine
 
             
             PerformPostProcessing();
-            graphics.GraphicsDevice.SetRenderTarget(GameMain.Instance.SwapChainRenderTarget);
+            graphics.GraphicsDevice.SetRenderTarget(null);
 
 
             if (Input.GetAction("test").Holding())

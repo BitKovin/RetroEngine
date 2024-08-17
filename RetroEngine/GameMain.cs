@@ -92,8 +92,6 @@ namespace RetroEngine
 
         public new GraphicsDevice GraphicsDevice;
 
-        public RenderTarget2D SwapChainRenderTarget;
-
         public GameMain()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -448,7 +446,7 @@ namespace RetroEngine
 
 
 
-            GraphicsDevice.SetRenderTarget(SwapChainRenderTarget);
+            GraphicsDevice.SetRenderTarget(null);
 
 
 
@@ -518,7 +516,7 @@ namespace RetroEngine
         void PresentFrame()
         {
             presentingFrame = true;
-            GraphicsDevice.SetRenderTarget(SwapChainRenderTarget);
+            GraphicsDevice.SetRenderTarget(null);
             Stats.StartRecord("Frame Present");
 
             GraphicsDevice.Present();
