@@ -25,6 +25,7 @@ namespace RetroEngine
             if (GameMain.Instance._graphics.HardwareModeSwitch)
                 if (GameMain.Instance.IsGameWindowFocused() == false) return;
 
+            GameMain.Instance.GraphicsDevice.SetRenderTarget(null);
 
             GameMain.Instance.GraphicsDevice.Clear(Color.Blue);
 
@@ -55,8 +56,6 @@ namespace RetroEngine
             SpriteBatch.Draw(white, loadingBar, Color.Red);
 
             SpriteBatch.End();
-
-            GameMain.Instance.GraphicsDevice.SetRenderTarget(GameMain.Instance.SwapChainRenderTarget);
 
             if (GameMain.Instance._graphics.HardwareModeSwitch)
                 if (GameMain.Instance.IsGameWindowFocused() == false) return;

@@ -1011,7 +1011,7 @@ half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half rough
         int samples = 0;
         float shadowFactor = 0.0;
 
-        const int radius = 2;
+        const int radius = 1;
 
         float step = 1;
 
@@ -1045,6 +1045,9 @@ half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half rough
 
         bool breakLoop = false;
 
+        float sDepth = GetPointLightDepth(i, lightDir);
+
+
         for (float x = -radius; x <= radius; x+=step)
         {
             for (float y = -radius; y <= radius; y+=step)
@@ -1058,27 +1061,10 @@ half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half rough
                 float3 offset = (tangent * x + bitangent * y) * shadowBias * offsetScale;
                 float shadowDepth = GetPointLightDepth(i, lightDir + offset*1.5);
 
-                if(x==0&&y==0)
-                {
-                    if(distanceToLight > shadowDepth + 1)
-                    {
-                        shadowFactor = 0;
-                        weightSum = 1;
-                        samples = 1;
-                        breakLoop = true;
-                        break;
-                    }
-                }
-
-                //shadowFactor += 1 - min((distanceToLight * distFactor + bias - shadowDepth)*LightResolutions[i] * distanceToLight,1);
-
                 shadowFactor += distanceToLight * distFactor + bias < shadowDepth ? weight : 0.0;
                 weightSum += weight;
                 samples++;
             }
-            
-            if(breakLoop)
-                break;
 
         }
         

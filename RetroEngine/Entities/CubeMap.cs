@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace RetroEngine.Entities
@@ -41,7 +42,7 @@ namespace RetroEngine.Entities
             map = new RenderTargetCube(graphicsDevice, resolution, false, SurfaceFormat.Color, DepthFormat.Depth24);
 
             mesh.LoadFromFile("models/cube.obj");
-            //meshes.Add(mesh);
+            meshes.Add(mesh);
             mesh.Visible = false;
 
             boundingSphere.Center = Position;
@@ -54,6 +55,11 @@ namespace RetroEngine.Entities
         public override void Start()
         {
             base.Start();
+
+            Console.WriteLine("rendering cubemap!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            //Thread.Sleep(2000);
+
+            graphicsDevice.Clear(Color.Black);
 
             Render();
             mesh.Visible = true;
