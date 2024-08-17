@@ -217,9 +217,9 @@ float4 MainPS(VertexShaderOutput input) : COLOR
     
     float4 ssr = float4(cube, 1);
     
-    if (factor.x > 0.2)
+    if (factor.x > 0.4)
     {
-        ssr = SampleSSR(reflection, worldPos, depth, normal, vDir, 40, 1.5);
+        ssr = SampleSSR(reflection, worldPos, depth, normal, vDir, 30, 1.6);
     }
     
     float3 reflectionColor = lerp(cube, ssr.rgb, ssr.w);
