@@ -114,6 +114,20 @@ internal class Program
             $" -o {outPath} " +
             "--no-self-contained " +
             "--no-restore");
+
+        var runtimes = Directory.GetDirectories(outPath + "\\runtimes\\");
+
+        foreach(var runtime in runtimes)
+        {
+            if(runtime.EndsWith("win-x64") == false)
+            {
+                Directory.Delete(runtime,true);
+            }    
+        }
+
+        File.Delete(outPath + "\\runtimes\\win-x64\\native\\" + "ffmpeg.exe");
+        File.Delete(outPath + "\\runtimes\\win-x64\\native\\" + "ffprobe.exe");
+
     }
 
     private static void CopyFilesRecursively(string sourcePath, string targetPath)

@@ -45,7 +45,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR
     color += saturate(tex2D(SpriteTextureSampler, input.TextureCoordinates).rgb - offset);
 	
 	
-    float sampleRadius = 4;
+    float sampleRadius = 3;
 	
 	
     float wSum = 0;

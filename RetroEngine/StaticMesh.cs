@@ -467,8 +467,10 @@ namespace RetroEngine
 
                 List<int> filled = new List<int>();
 
+                int shaderPointLightsShadowed = 7;
+
                 //shadows
-                for (int i = 0; i < LightManager.FinalPointLights.Count && filledLights < 7; i++)
+                for (int i = 0; i < LightManager.FinalPointLights.Count && filledLights < Math.Min(LightManager.MAX_POINT_LIGHTS, shaderPointLightsShadowed); i++)
                 {
                     if (LightManager.FinalPointLights[i].shadowData.CastShadows == false) continue;
                     bool intersects = IntersectsBoundingSphere(new BoundingSphere { Radius = LightManager.FinalPointLights[i].Radius, Center = LightManager.FinalPointLights[i].Position });
@@ -743,7 +745,7 @@ namespace RetroEngine
 
             }
 
-            float bias = 0.07f;
+            float bias = 0.052f;
 
             if (closeShadow)
                 bias = 0.035f;

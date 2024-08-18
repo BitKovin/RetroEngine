@@ -1,0 +1,18 @@
+newmtl __TB_empty
+map_Kd textures/__TB_empty.png
+
+newmtl brushes/brickPBR
+map_Kd textures/brushes/brickPBR.png
+
+newmtl brushes/ground_pbr
+map_Kd textures/brushes/ground_pbr.png
+
+newmtl brushes/hole_t
+map_Kd textures/brushes/hole_t.png
+
+newmtl brushes/trigger_t
+map_Kd textures/brushes/trigger_t.png
+
+newmtl foil
+map_Kd textures/foil.png
+

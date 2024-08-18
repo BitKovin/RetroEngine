@@ -487,13 +487,13 @@ namespace RetroEngine
             if (pendingGraphicsUpdate)
                 _graphics.ApplyChanges();
 
-            //DrawSplashIfNeed();
+            DrawSplashIfNeed();
 
             if (SkipFrames > 0)
             {
                 SkipFrames--;
-                //LoadingScreen.Draw();
-                //return;
+                LoadingScreen.Draw();
+                return;
             }
 
             
@@ -503,7 +503,22 @@ namespace RetroEngine
 
             Stats.StartRecord("frame change");
 
+            if (GameMain.SkipFrames > 0) return;
 
+            if (IsGameWindowFocused() || _isFullscreen == false)
+            {
+                //CheckWindowFullscreenStatus();
+                if (AllowAsyncAssetLoading && Render.AsyncPresent)
+                {
+
+                    presentingFrame = true;
+                    presentFrameTask = Task.Factory.StartNew(() => { PresentFrame(); });
+                }
+                else
+                {
+                    PresentFrame();
+                }
+            }
 
         }
 
@@ -546,22 +561,7 @@ namespace RetroEngine
         protected override void EndDraw()
         {
 
-            if (GameMain.SkipFrames > 0) return;
-
-            if (IsGameWindowFocused() || _isFullscreen == false)
-            {
-                //CheckWindowFullscreenStatus();
-                if (AllowAsyncAssetLoading && Render.AsyncPresent)
-                {
-
-                    presentingFrame = true;
-                    presentFrameTask = Task.Factory.StartNew(() => { PresentFrame(); });
-                }
-                else
-                {
-                    PresentFrame();
-                }
-            }
+            
         }
 
 

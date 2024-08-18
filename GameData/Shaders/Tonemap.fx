@@ -85,32 +85,32 @@ float3 TimothyTonemapper(float3 color)
     return color;
 }
 
-float3 ToneMap(float3 color, float gamma, float exposure, float Saturation)
+half3 ToneMap(half3 color, half gamma, half exposure)
 {
     
-    float Bleach = 0;
+    half Bleach = 0;
     
     color = pow(color, gamma); // Gamma
 
     color *= pow(2.0f, exposure); // Exposure
     
 
-    const float3 coefLuma = float3(0.2126, 0.7152, 0.0722);
-    float lum = dot(coefLuma, color);
+    const half3 coefLuma = half3(0.2126, 0.7152, 0.0722);
+    half lum = dot(coefLuma, color);
 	
-    float L = saturate(10.0 * (lum - 0.45));
-    float3 A2 = Bleach * color;
+    half L = saturate(10.0 * (lum - 0.45));
+    half A2 = Bleach * color;
 
-    float3 result1 = 2.0f * color * lum;
-    float3 result2 = 1.0f - 2.0f * (1.0f - lum) * (1.0f - color);
+    half3 result1 = 2.0f * color * lum;
+    half3 result2 = 1.0f - 2.0f * (1.0f - lum) * (1.0f - color);
 	
-    float3 newColor = lerp(result1, result2, L);
-    float3 mixRGB = A2 * newColor;
+    half3 newColor = lerp(result1, result2, L);
+    half3 mixRGB = A2 * newColor;
     color += ((1.0f - A2) * mixRGB);
 	
-    float3 middlegray = dot(color, (1.0 / 3.0));
-    float3 diffcolor = color - middlegray;
-    color = (color + diffcolor * Saturation) / (1 + (diffcolor * Saturation)); // Saturation
+    half3 middlegray = dot(color, (1.0 / 3.0));
+    half3 diffcolor = color - middlegray;
+    //color = (color + diffcolor * 0) / (1 + (diffcolor * 0)); // Saturation
     
     return color;
 }
@@ -172,7 +172,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR0
 	
     float3 color = tex2D(SpriteTextureSampler, input.TextureCoordinates).rgb;
 	
-    color = ToneMap(color* Brightness, Gamma, Exposure, Saturation);
+    color = ToneMap(color*  Brightness, Gamma, Exposure);
 	
     
     return float4(color, 1);

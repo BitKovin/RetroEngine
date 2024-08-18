@@ -75,7 +75,7 @@ namespace RetroEngine.Game
 
 
             if (Input.GetAction("fullscreen").Pressed())
-                ToggleFullscreen();
+                ToggleBorderless();
         }
 
 

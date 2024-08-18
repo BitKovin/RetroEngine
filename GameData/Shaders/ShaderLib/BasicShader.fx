@@ -465,8 +465,8 @@ float SampleMaxDepth(float2 screenCoords)
 
 }
 
-float Gaussian(float x, float y, float sigma) {
-    return exp(-((x * x + y * y) / (2.0 * sigma * sigma))) / (2.0 * 3.14159265358979323846 * sigma * sigma);
+float Gaussian(const float x,const float y, const float sigma) {
+    return exp(-((x * x + y * y) / (2.0 * sigma * sigma))) / (2.0 * 3.141 * sigma * sigma);
 }
 
 half4 SampleCubemap(samplerCUBE s, float3 coords)
@@ -815,13 +815,13 @@ if (lightCoordsClose.x >= 0 && lightCoordsClose.x <= 1 && lightCoordsClose.y >= 
 {
 if (lightCoordsVeryClose.x >= 0 && lightCoordsVeryClose.x <= 1 && lightCoordsVeryClose.y >= 0 && lightCoordsVeryClose.y <= 1)
 
-        if(dist>6 && dist<8)
+        if(dist>7 && dist<10)
         {
-            return lerp(GetShadowVeryClose(lightCoordsVeryClose, input, TangentNormal), GetShadowClose(lightCoordsClose, input, TangentNormal), (dist - 6)/2);
+            return lerp(GetShadowVeryClose(lightCoordsVeryClose, input, TangentNormal), GetShadowClose(lightCoordsClose, input, TangentNormal), (dist - 7)/3);
         }
 
 
-    if(dist>22 && dist<25)
+    if(dist>26 && dist<30)
     {
         float close = GetShadowClose(lightCoordsClose, input, TangentNormal);
 
@@ -829,13 +829,13 @@ if (lightCoordsVeryClose.x >= 0 && lightCoordsVeryClose.x <= 1 && lightCoordsVer
         bias *= (LightDistanceMultiplier+1)/2;
         float far = 1 - SampleShadowMap(ShadowMapSampler, lightCoords.xy, currentDepth - bias);
 
-        return lerp(close, far, (dist - 22)/3);
+        return lerp(close, far, (dist - 26)/4);
         
     }
 }
         #endif
         
-        if (dist < 7.0)
+        if (dist < 8.0)
         {
 
             
@@ -846,7 +846,7 @@ if (lightCoordsVeryClose.x >= 0 && lightCoordsVeryClose.x <= 1 && lightCoordsVer
             }
         }
         
-        if (dist < 10)
+        if (dist < 27)
         {
             if (lightCoordsClose.x >= 0 && lightCoordsClose.x <= 1 && lightCoordsClose.y >= 0 && lightCoordsClose.y <= 1)
             {
@@ -1028,7 +1028,7 @@ half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half rough
 
     half notShadow = 1;
 
-    if(dot(normal, normalize(lightVector))<-0.01)
+    if(dot(normal, normalize(lightVector))<0)
     {
         return float3(0,0,0);
     }
@@ -1055,22 +1055,22 @@ half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half rough
 
         float step = 1;
 
-#if OPENGL
-        step = radius;
-#endif
+        bool simpleShadows = false;
+
+
 
             
 
-        bool simpleShadows = false;
+
 
 #ifdef SIMPLE_SHADOWS
         simpleShadows = true;
 #endif
 
+
+
         float bias = -1/LightResolutions[i] * distanceToLight;
 
-        if(simpleShadows)
-            step = radius;
 
 
         float weightSum = 0;
@@ -1081,7 +1081,7 @@ half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half rough
 
         pixelSize*= -bias;
 
-        if(pixelSize>0.6)
+        if(pixelSize>0.6 || simpleShadows)
         {
 
             float sDepth = GetPointLightDepth(i, lightDir);
@@ -1099,7 +1099,7 @@ half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half rough
                 if(length(float2(x,y))>1.1*radius)
                     continue;
 
-                float weight = Gaussian(x,y,radius);
+                float weight = Gaussian(x,y,1);
 
                 float3 offset = (tangent * x + bitangent * y) * shadowBias * offsetScale;
                 float shadowDepth = GetPointLightDepth(i, lightDir + offset*2);

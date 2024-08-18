@@ -141,7 +141,7 @@ namespace RetroEngine
 
         public static Matrix GetLightView()
         {
-            return Matrix.CreateLookAt(GetCameraPositionByPixelGrid(0), GetCameraPositionByPixelGrid(0) + LightDirection, Vector3.UnitZ);
+            return Matrix.CreateLookAt(GetCameraPositionByPixelGrid(LightDistance), GetCameraPositionByPixelGrid(LightDistance) + LightDirection, Vector3.UnitZ);
         }
 
         public static Matrix GetLightViewViewmodel()
@@ -164,14 +164,14 @@ namespace RetroEngine
 
         public static Matrix GetLightViewClose()
         {
-            return Matrix.CreateLookAt(GetCameraPositionByPixelGrid(0), GetCameraPositionByPixelGrid(0) + LightDirection, Vector3.UnitZ);
+            return Matrix.CreateLookAt(GetCameraPositionByPixelGrid(CloseLightDistance), GetCameraPositionByPixelGrid(CloseLightDistance) + LightDirection, Vector3.UnitZ);
         }
         public static Matrix GetLightViewVeryClose()
         {
 
             if(DynamicSunShadowsEnabled)
             {
-                return Matrix.CreateLookAt(GetCameraPositionByPixelGrid(0), GetCameraPositionByPixelGrid(0) + LightDirection, Vector3.UnitZ);
+                return Matrix.CreateLookAt(GetCameraPositionByPixelGrid(VeryCloseLightDistance), GetCameraPositionByPixelGrid(VeryCloseLightDistance) + LightDirection, Vector3.UnitZ);
             }else
             {
                 return new Matrix(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
