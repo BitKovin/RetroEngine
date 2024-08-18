@@ -39,7 +39,7 @@ namespace RetroEngine
 
         static List<string> texturesHistory = new List<string>();
 
-        static List<string> nullTextures= new List<string>();
+        static List<string> nullAssets= new List<string>();
 
         public static string ROOT_PATH = "../../../../";
 
@@ -58,7 +58,7 @@ namespace RetroEngine
                 if (textures.ContainsKey(path))
                     return (Texture2D)textures[path];
 
-                if (nullTextures.Contains(path))
+                if (nullAssets.Contains(path))
                     return null;
 
                 if (GameMain.CanLoadAssetsOnThisThread() == false)
@@ -68,6 +68,12 @@ namespace RetroEngine
                 }
 
                 string filePath = FindPathForFile(path);
+
+                if (File.Exists(filePath) == false)
+                {
+                    nullAssets.Add(path);
+                    return null;
+                }    
 
                 try
                 {
@@ -103,7 +109,7 @@ namespace RetroEngine
                 {
                     if (!ignoreErrors)
                         Logger.Log("Failed to load texture: " + ex.Message);
-                    nullTextures.Add(path);
+                    nullAssets.Add(path);
                     return null;
                 }
             }
@@ -185,7 +191,7 @@ namespace RetroEngine
             if (textures.ContainsKey(path))
                 return (TextureCube)textures[path];
 
-            if (nullTextures.Contains(path))
+            if (nullAssets.Contains(path))
                 return null;
 
             if (GameMain.CanLoadAssetsOnThisThread() == false)
@@ -224,7 +230,7 @@ namespace RetroEngine
             {
                 if (!ignoreErrors)
                     Logger.Log("Failed to load texture: " + ex.Message);
-                nullTextures.Add(path);
+                nullAssets.Add(path);
                 return null;
             }
 

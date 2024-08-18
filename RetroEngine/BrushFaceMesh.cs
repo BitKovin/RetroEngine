@@ -60,7 +60,7 @@ namespace RetroEngine
             else
             {
                 scene = importer.ImportFileFromStream(AssetRegistry.GetFileStreamFromPath(filePath), PostProcessSteps) ;
-                //loadedScenes.Add(filePath, scene);
+                loadedScenes.Add(filePath, scene);
             }
 
 

@@ -49,7 +49,7 @@ namespace RetroEngine
         public static Matrix LightViewProjectionViewmodel;
         public static Matrix LightViewProjectionClose;
         public static Matrix LightViewProjectionVeryClose;
-        public static float LightDistance = 170;
+        public static float LightDistance = 200;
         public static float CloseLightDistance = 51;
         public static float VeryCloseLightDistance = 16;
 

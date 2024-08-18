@@ -745,7 +745,7 @@ namespace RetroEngine
 
             }
 
-            float bias = 0.052f;
+            float bias = 0.07f;
 
             if (closeShadow)
                 bias = 0.035f;
@@ -1475,7 +1475,7 @@ namespace RetroEngine
             avgVertexPosition = CalculateAvgVertexLocation();
         }
 
-        internal static Dictionary<string, Assimp.Scene> loadedScenes = new Dictionary<string, Assimp.Scene>();
+        public static Dictionary<string, Assimp.Scene> loadedScenes = new Dictionary<string, Assimp.Scene>();
         protected static Dictionary<string, Model> loadedModels = new Dictionary<string, Model>();
 
         protected virtual Model GetModelFromPath(string filePath, bool dynamicBuffer = false)

@@ -397,8 +397,6 @@ namespace RetroEngine
             graphics.GraphicsDevice.SetRenderTargets(ForwardOutput, normalPath, ReflectivenessOutput, positionPath);
             graphics.GraphicsDevice.Clear(ClearOptions.DepthBuffer, Color.Black, 1.0f, 0);
 
-            if(GameMain.Instance.DefaultShader.ToLower() == "overdraw")
-                graphics.GraphicsDevice.Clear(Color.Black);
 
             graphics.GraphicsDevice.DepthStencilState = new DepthStencilState()
             {
@@ -411,7 +409,7 @@ namespace RetroEngine
 
             if (Graphics.EarlyDepthDiscard)
             {
-                DepthApplyEffect.Parameters["OldFrame"].SetValue(oldFrame);
+                DepthApplyEffect.Parameters["OldFrame"].SetValue(GameMain.Instance.DefaultShader.ToLower() == "overdraw" ? black : oldFrame);
                 DrawFullScreenQuad(DepthPrepathBufferOutput, DepthApplyEffect);
             }
 

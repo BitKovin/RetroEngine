@@ -44,6 +44,10 @@ namespace RetroEngine.Map
 
             List<Vector3> pointLights = new List<Vector3>();
 
+#if DEBUG
+            BrushFaceMesh.loadedScenes.Clear();
+#endif
+
             foreach (EntityData ent in Entities)
             {
 
@@ -72,9 +76,7 @@ namespace RetroEngine.Map
 
                 LoadingScreen.Update(progress);
 
-#if DEBUG
-                BrushFaceMesh.loadedScenes.Clear();
-#endif
+
 
                 if (ent.Brushes.Count > 0)
                 {

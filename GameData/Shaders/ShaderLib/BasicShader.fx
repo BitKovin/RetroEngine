@@ -453,7 +453,7 @@ void MaskedDiscard(float alpha)
 float SampleMaxDepth(float2 screenCoords)
 {
     
-    float2 texelSize = 1 / float2(ScreenWidth, ScreenHeight);
+    float2 texelSize = 0.4 / float2(ScreenWidth, ScreenHeight);
     
     float d = SampleDepth(screenCoords);
     float d1 = SampleDepth(screenCoords + texelSize);
@@ -795,7 +795,7 @@ float GetShadow(float3 lightCoords,float3 lightCoordsClose,float3 lightCoordsVer
 
     float dist = distance(viewPos, input.MyPosition);
 
-    if (dist > 150)
+    if (dist > 160)
         return 0;
     
         float b = 0.0003;
@@ -1069,9 +1069,9 @@ half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half rough
 
 
 
-        float bias = -1/LightResolutions[i] * distanceToLight;
+        float bias = -8/LightResolutions[i] * distanceToLight;
 
-
+        bias = lerp(bias/12, bias, abs(dot(pixelInput.Normal, lightDir)));
 
         float weightSum = 0;
 
@@ -1079,7 +1079,7 @@ half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half rough
 
         float pixelSize = distance(viewPos, pixelInput.MyPosition);
 
-        pixelSize*= -bias;
+        pixelSize *= 1/(LightResolutions[i] * distanceToLight);
 
         if(pixelSize>0.6 || simpleShadows)
         {
