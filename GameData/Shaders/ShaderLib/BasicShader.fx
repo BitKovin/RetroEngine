@@ -453,7 +453,7 @@ void MaskedDiscard(float alpha)
 float SampleMaxDepth(float2 screenCoords)
 {
     
-    float2 texelSize = 0.4 / float2(ScreenWidth, ScreenHeight);
+    float2 texelSize = 1 / float2(ScreenWidth, ScreenHeight);
     
     float d = SampleDepth(screenCoords);
     float d1 = SampleDepth(screenCoords + texelSize);
@@ -821,7 +821,7 @@ if (lightCoordsVeryClose.x >= 0 && lightCoordsVeryClose.x <= 1 && lightCoordsVer
         }
 
 
-    if(dist>26 && dist<30)
+    if(dist>26 && dist<30 && false)
     {
         float close = GetShadowClose(lightCoordsClose, input, TangentNormal);
 

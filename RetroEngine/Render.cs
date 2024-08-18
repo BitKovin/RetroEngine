@@ -278,7 +278,7 @@ namespace RetroEngine
 
             InitRenderTargetIfNeed(ref ReflectivenessOutput);
 
-            InitRenderTargetVectorIfNeed(ref oldFrame);
+            InitRenderTargetVectorIfNeed(ref oldFrame, true);
 
             InitRenderTargetVectorSpaceIfNeed(ref positionPath);
 
@@ -300,7 +300,7 @@ namespace RetroEngine
             GameMain.Instance.WaitForFramePresent();
 
             //if (outputPath!=null)
-            //DownsampleToTexture(ForwardOutput, oldFrame);
+            DownsampleToTexture(ForwardOutput, oldFrame);
 
             List<StaticMesh> renderList = level.GetMeshesToRender();
 
