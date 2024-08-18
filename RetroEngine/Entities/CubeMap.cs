@@ -42,7 +42,7 @@ namespace RetroEngine.Entities
             map = new RenderTargetCube(graphicsDevice, resolution, false, SurfaceFormat.Color, DepthFormat.Depth24);
 
             mesh.LoadFromFile("models/cube.obj");
-            meshes.Add(mesh);
+            //meshes.Add(mesh);
             mesh.Visible = false;
 
             boundingSphere.Center = Position;

@@ -122,7 +122,7 @@ bool skeletalMesh;
 
 #ifndef MAX_POINT_LIGHTS_SHADOWS
 
-#define MAX_POINT_LIGHTS_SHADOWS 6
+#define MAX_POINT_LIGHTS_SHADOWS 7
 
 #endif
 
@@ -206,6 +206,40 @@ sampler PointLightCubemap6Sampler = sampler_state
     AddressV = Clamp;
     AddressW = Clamp;
 };
+texture PointLightCubemap7;
+sampler PointLightCubemap7Sampler = sampler_state
+{
+    texture = <PointLightCubemap7>;
+    MinFilter = Point;
+    MagFilter = Point;
+    MipLODBias = -16;
+    AddressU = Clamp;
+    AddressV = Clamp;
+    AddressW = Clamp;
+};
+texture PointLightCubemap8;
+sampler PointLightCubemap8Sampler = sampler_state
+{
+    texture = <PointLightCubemap8>;
+    MinFilter = Point;
+    MagFilter = Point;
+    MipLODBias = -16;
+    AddressU = Clamp;
+    AddressV = Clamp;
+    AddressW = Clamp;
+};
+texture PointLightCubemap9;
+sampler PointLightCubemap9Sampler = sampler_state
+{
+    texture = <PointLightCubemap9>;
+    MinFilter = Point;
+    MagFilter = Point;
+    MipLODBias = -16;
+    AddressU = Clamp;
+    AddressV = Clamp;
+    AddressW = Clamp;
+};
+
 
 #define BONE_NUM 128
 
@@ -946,6 +980,12 @@ float GetPointLightDepth(int i, float3 lightDir)
         depth = texCUBE(PointLightCubemap5Sampler, lightDir).r;
     else if (i == 5)
         depth = texCUBE(PointLightCubemap6Sampler, lightDir).r;
+    else if (i == 6)
+        depth = texCUBE(PointLightCubemap7Sampler, lightDir).r;
+    else if (i == 7)
+        depth = texCUBE(PointLightCubemap8Sampler, lightDir).r;
+    else if (i == 8)
+        depth = texCUBE(PointLightCubemap9Sampler, lightDir).r;
 
     if (depth == 0)
         return 10000;
@@ -1032,22 +1072,25 @@ half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half rough
         if(simpleShadows)
             step = radius;
 
-        if(simpleShadows&&false || isParticle)
-        {
-
-            float shadowDepth = GetPointLightDepth(i, lightDir);
-            notShadow = distanceToLight * distFactor + bias < shadowDepth ? 1.0 : 0.0;
-
-        }else
-        {
 
         float weightSum = 0;
 
         bool breakLoop = false;
 
-        float sDepth = GetPointLightDepth(i, lightDir);
+        float pixelSize = distance(viewPos, pixelInput.MyPosition);
 
+        pixelSize*= -bias;
 
+        if(pixelSize>0.6)
+        {
+
+            float sDepth = GetPointLightDepth(i, lightDir);
+
+            shadowFactor = distanceToLight * distFactor + bias < sDepth ? 1 : 0.0;
+            weightSum = 1;
+
+        }
+        else
         for (float x = -radius; x <= radius; x+=step)
         {
             for (float y = -radius; y <= radius; y+=step)
@@ -1059,7 +1102,7 @@ half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half rough
                 float weight = Gaussian(x,y,radius);
 
                 float3 offset = (tangent * x + bitangent * y) * shadowBias * offsetScale;
-                float shadowDepth = GetPointLightDepth(i, lightDir + offset*1.5);
+                float shadowDepth = GetPointLightDepth(i, lightDir + offset*2);
 
                 shadowFactor += distanceToLight * distFactor + bias < shadowDepth ? weight : 0.0;
                 weightSum += weight;
@@ -1070,7 +1113,7 @@ half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half rough
         
         shadowFactor /= weightSum;
         notShadow = shadowFactor;
-        }
+        
     }
 
     float dist = (distanceToLight / LightRadiuses[i]);
