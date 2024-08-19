@@ -86,7 +86,7 @@
 	light_color(Vector3) : "Color" : "1 1 1"
 	intensity(float) : "Intensity" : "1"
 	light_angle(float) : "Light Angle" : "180"
-	resolution(int) : "Resolution" : "256"
+	resolution(int) : "Resolution" : "512"
 	dynamic(bool) : "Dynamic" : "false"
 	shadows(bool) : "Shadows" : "true"
 	collisionTestRadius(float) : "CollisionTestRadius" : "0"

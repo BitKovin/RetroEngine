@@ -90,9 +90,9 @@ namespace RetroEngine.Entities.Light
             Dynamic = data.GetPropertyBool("dynamic");
 
             
-            resolution = 256;
+            resolution = 512;
 
-            resolution = (int)data.GetPropertyFloat("resolution", 256);
+            resolution = (int)data.GetPropertyFloat("resolution", 512);
 
             Vector3 importRot = data.GetPropertyVector("angles", Vector3.Zero);
 
