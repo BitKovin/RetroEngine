@@ -63,6 +63,7 @@ namespace RetroEngine
 
             if (GameMain.Instance._graphics.HardwareModeSwitch)
                 if (GameMain.Instance.IsGameWindowFocused() == false) return;
+
             GameMain.Instance.GraphicsDevice.Present();
             GameMain.Instance.CheckWindowFullscreenStatus();
 

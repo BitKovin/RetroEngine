@@ -142,6 +142,7 @@ namespace RetroEngine
 
             _graphics.SynchronizeWithVerticalRetrace = false;
 
+            _graphics.HardwareModeSwitch = false;
 
             _graphics.PreferMultiSampling = false;
 

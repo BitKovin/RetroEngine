@@ -141,22 +141,24 @@ sampler PointLightCubemap1Sampler = sampler_state
 {
     texture = <PointLightCubemap1>;
 
-    MinFilter = Point;
-    MagFilter = Point;
-    AddressU = Clamp;
-    AddressV = Clamp;
-    AddressW = Clamp;
+    MinFilter = Linear;
+    MagFilter = Linear;
+        MipLODBias = -16;
+    AddressU = Mirror;
+    AddressV = Mirror;
+    AddressW = Mirror;
 };
 
 texture PointLightCubemap2;
 sampler PointLightCubemap2Sampler = sampler_state
 {
     texture = <PointLightCubemap2>;
-    MinFilter = Point;
-    MagFilter = Point;
-    AddressU = Clamp;
-    AddressV = Clamp;
-    AddressW = Clamp;
+    MinFilter = Linear;
+    MagFilter = Linear;
+        MipLODBias = -16;
+    AddressU = Mirror;
+    AddressV = Mirror;
+    AddressW = Mirror;
 
 };
 
@@ -164,65 +166,65 @@ texture PointLightCubemap3;
 sampler PointLightCubemap3Sampler = sampler_state
 {
     texture = <PointLightCubemap3>;
-    MinFilter = Point;
-    MagFilter = Point;
+    MinFilter = Linear;
+    MagFilter = Linear;
     MipLODBias = -16;
-    AddressU = Clamp;
-    AddressV = Clamp;
-    AddressW = Clamp;
+    AddressU = Mirror;
+    AddressV = Mirror;
+    AddressW = Mirror;
 };
 
 texture PointLightCubemap4;
 sampler PointLightCubemap4Sampler = sampler_state
 {
     texture = <PointLightCubemap4>;
-    MinFilter = Point;
-    MagFilter = Point;
+    MinFilter = Linear;
+    MagFilter = Linear;
     MipLODBias = -16;
-    AddressU = Clamp;
-    AddressV = Clamp;
+    AddressU = Mirror;
+    AddressV = Mirror;
 };
 
 texture PointLightCubemap5;
 sampler PointLightCubemap5Sampler = sampler_state
 {
     texture = <PointLightCubemap5>;
-    MinFilter = Point;
-    MagFilter = Point;
+    MinFilter = Linear;
+    MagFilter = Linear;
     MipLODBias = -16;
-    AddressU = Clamp;
-    AddressV = Clamp;
-    AddressW = Clamp;
+    AddressU = Mirror;
+    AddressV = Mirror;
+    AddressW = Mirror;
 };
 
 texture PointLightCubemap6;
 sampler PointLightCubemap6Sampler = sampler_state
 {
     texture = <PointLightCubemap6>;
-    MinFilter = Point;
-    MagFilter = Point;
+    MinFilter = Linear;
+    MagFilter = Linear;
     MipLODBias = -16;
-    AddressU = Clamp;
-    AddressV = Clamp;
-    AddressW = Clamp;
+    AddressU = Mirror;
+    AddressV = Mirror;
+    AddressW = Mirror;
 };
 texture PointLightCubemap7;
 sampler PointLightCubemap7Sampler = sampler_state
 {
     texture = <PointLightCubemap7>;
-    MinFilter = Point;
-    MagFilter = Point;
+    MinFilter = Linear;
+    MagFilter = Linear;
     MipLODBias = -16;
-    AddressU = Clamp;
-    AddressV = Clamp;
-    AddressW = Clamp;
+    AddressU = Mirror;
+    AddressV = Mirror;
+    AddressW = Mirror;
 };
 texture PointLightCubemap8;
 sampler PointLightCubemap8Sampler = sampler_state
 {
     texture = <PointLightCubemap8>;
-    MinFilter = Point;
-    MagFilter = Point;
+    MinFilter = Linear;
+    MagFilter = Linear;
     MipLODBias = -16;
     AddressU = Clamp;
     AddressV = Clamp;
@@ -467,6 +469,10 @@ float SampleMaxDepth(float2 screenCoords)
 
 float Gaussian(const float x,const float y, const float sigma) {
     return exp(-((x * x + y * y) / (2.0 * sigma * sigma))) / (2.0 * 3.141 * sigma * sigma);
+}
+
+float Gaussian(const float3 v, const float sigma) {
+    return exp(-((v.x * v.x + v.y * v.y + v.z * v.z) / (2.0 * sigma * sigma))) / (2.0 * 3.141 * sigma * sigma);
 }
 
 half4 SampleCubemap(samplerCUBE s, float3 coords)
@@ -996,6 +1002,7 @@ float GetPointLightDepth(int i, float3 lightDir)
 }
 
 
+
 half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half roughness, half metalic, half3 albedo)
 {
     float3 lightVector = LightPositions[i].xyz - pixelInput.MyPosition;
@@ -1081,28 +1088,28 @@ half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half rough
 
         pixelSize *= 1/(LightResolutions[i] * distanceToLight);
 
-        if(pixelSize>0.6 || simpleShadows)
+        if(pixelSize>0.01 || simpleShadows)
         {
 
             float sDepth = GetPointLightDepth(i, lightDir);
 
-            shadowFactor = distanceToLight * distFactor + bias < sDepth ? 1 : 0.0;
+            shadowFactor =  distanceToLight * distFactor + bias < sDepth ? 1 : 0.0;
             weightSum = 1;
 
         }
         else
+        {
+            
         for (float x = -radius; x <= radius; x+=step)
         {
             for (float y = -radius; y <= radius; y+=step)
             {
 
-                if(length(float2(x,y))>1.1*radius)
-                    continue;
 
-                float weight = Gaussian(x,y,1);
+                float weight = 1;
 
                 float3 offset = (tangent * x + bitangent * y) * shadowBias * offsetScale;
-                float shadowDepth = GetPointLightDepth(i, lightDir + offset*2);
+                float shadowDepth = GetPointLightDepth(i, lightDir + offset*3);
 
                 shadowFactor += distanceToLight * distFactor + bias < shadowDepth ? weight : 0.0;
                 weightSum += weight;
@@ -1111,6 +1118,31 @@ half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half rough
 
         }
         
+/*
+const float3 sampleOffsetDirections[20] = 
+{
+    float3( 1,  1,  1), float3( 1, -1,  1), float3(-1, -1,  1), float3(-1,  1,  1),
+    float3( 1,  1, -1), float3( 1, -1, -1), float3(-1, -1, -1), float3(-1,  1, -1),
+    float3( 1,  1,  0), float3( 1, -1,  0), float3(-1, -1,  0), float3(-1,  1,  0),
+    float3( 1,  0,  1), float3(-1,  0,  1), float3( 1,  0, -1), float3(-1,  0, -1),
+    float3( 0,  1,  1), float3( 0, -1,  1), float3( 0, -1, -1), float3( 0,  1, -1)
+};
+
+            for(int itt = 0; itt < 20; itt++)
+            {
+
+                float3 offset = sampleOffsetDirections[itt] * offsetScale/7;
+                float shadowDepth = GetPointLightDepth(i, lightDir + offset);
+
+                float weight = 1;
+
+                shadowFactor += distanceToLight * distFactor + bias < shadowDepth ? weight : 0.0;
+                weightSum += weight;
+                samples++;
+
+            }
+            */
+        }
         shadowFactor /= weightSum;
         notShadow = shadowFactor;
         

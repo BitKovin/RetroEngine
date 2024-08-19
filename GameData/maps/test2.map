@@ -11090,7 +11090,7 @@
 // entity 26
 {
 "classname" "light_point"
-"origin" "-283 117 165"
+"origin" "-251 133 213"
 "radius" "20"
 "light_color" "0.160784 0.0117647 1"
 "intensity" "1"
@@ -11098,7 +11098,7 @@
 // entity 27
 {
 "classname" "light_point"
-"origin" "-283 -69 197"
+"origin" "-251 -53 245"
 "radius" "20"
 "light_color" "0.160784 0.0117647 1"
 "intensity" "1"
