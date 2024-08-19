@@ -141,8 +141,8 @@ sampler PointLightCubemap1Sampler = sampler_state
 {
     texture = <PointLightCubemap1>;
 
-    MinFilter = Linear;
-    MagFilter = Linear;
+    MinFilter = Point;
+    MagFilter = Point;
         MipLODBias = -16;
     AddressU = Mirror;
     AddressV = Mirror;
@@ -153,8 +153,8 @@ texture PointLightCubemap2;
 sampler PointLightCubemap2Sampler = sampler_state
 {
     texture = <PointLightCubemap2>;
-    MinFilter = Linear;
-    MagFilter = Linear;
+    MinFilter = Point;
+    MagFilter = Point;
         MipLODBias = -16;
     AddressU = Mirror;
     AddressV = Mirror;
@@ -166,8 +166,8 @@ texture PointLightCubemap3;
 sampler PointLightCubemap3Sampler = sampler_state
 {
     texture = <PointLightCubemap3>;
-    MinFilter = Linear;
-    MagFilter = Linear;
+    MinFilter = Point;
+    MagFilter = Point;
     MipLODBias = -16;
     AddressU = Mirror;
     AddressV = Mirror;
@@ -178,8 +178,8 @@ texture PointLightCubemap4;
 sampler PointLightCubemap4Sampler = sampler_state
 {
     texture = <PointLightCubemap4>;
-    MinFilter = Linear;
-    MagFilter = Linear;
+    MinFilter = Point;
+    MagFilter = Point;
     MipLODBias = -16;
     AddressU = Mirror;
     AddressV = Mirror;
@@ -189,8 +189,8 @@ texture PointLightCubemap5;
 sampler PointLightCubemap5Sampler = sampler_state
 {
     texture = <PointLightCubemap5>;
-    MinFilter = Linear;
-    MagFilter = Linear;
+    MinFilter = Point;
+    MagFilter = Point;
     MipLODBias = -16;
     AddressU = Mirror;
     AddressV = Mirror;
@@ -201,8 +201,8 @@ texture PointLightCubemap6;
 sampler PointLightCubemap6Sampler = sampler_state
 {
     texture = <PointLightCubemap6>;
-    MinFilter = Linear;
-    MagFilter = Linear;
+    MinFilter = Point;
+    MagFilter = Point;
     MipLODBias = -16;
     AddressU = Mirror;
     AddressV = Mirror;
@@ -212,8 +212,8 @@ texture PointLightCubemap7;
 sampler PointLightCubemap7Sampler = sampler_state
 {
     texture = <PointLightCubemap7>;
-    MinFilter = Linear;
-    MagFilter = Linear;
+    MinFilter = Point;
+    MagFilter = Point;
     MipLODBias = -16;
     AddressU = Mirror;
     AddressV = Mirror;
@@ -223,8 +223,8 @@ texture PointLightCubemap8;
 sampler PointLightCubemap8Sampler = sampler_state
 {
     texture = <PointLightCubemap8>;
-    MinFilter = Linear;
-    MagFilter = Linear;
+    MinFilter = Point;
+    MagFilter = Point;
     MipLODBias = -16;
     AddressU = Clamp;
     AddressV = Clamp;
@@ -1076,7 +1076,7 @@ half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half rough
 
 
 
-        float bias = -8/LightResolutions[i] * distanceToLight;
+        float bias = -10/LightResolutions[i] * distanceToLight;
 
         bias = lerp(bias/12, bias, abs(dot(pixelInput.Normal, lightDir)));
 
@@ -1109,7 +1109,7 @@ half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half rough
                 float weight = 1;
 
                 float3 offset = (tangent * x + bitangent * y) * shadowBias * offsetScale;
-                float shadowDepth = GetPointLightDepth(i, lightDir + offset*3);
+                float shadowDepth = GetPointLightDepth(i, lightDir + offset*2);
 
                 shadowFactor += distanceToLight * distFactor + bias < shadowDepth ? weight : 0.0;
                 weightSum += weight;
