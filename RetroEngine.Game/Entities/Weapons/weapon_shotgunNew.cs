@@ -115,7 +115,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             if (GameMain.Instance.paused) return;
 
-            if (Time.gameTime - SpawnTime > 0.02f)
+            if (Time.gameTime - SpawnTime > 0.02f && character.isFirstPerson())
                 Camera.rotation = mesh.GetBoneMatrix("camera", Camera.GetRotationMatrix()).DecomposeMatrix().Rotation;
 
             fireSoundPlayer.Position = Camera.position;
