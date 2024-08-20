@@ -451,99 +451,9 @@ namespace RetroEngine
 
             if (skipLight) return;
 
-            //ApplyPointLights(effect);
-
         }
-
-        static Vector4[] LightPos = new Vector4[LightManager.MAX_POINT_LIGHTS];
-        static Vector3[] LightColor = new Vector3[LightManager.MAX_POINT_LIGHTS];
-        static float[] LightRadius = new float[LightManager.MAX_POINT_LIGHTS];
-        static float[] LightRes = new float[LightManager.MAX_POINT_LIGHTS];
-        static Vector4[] LightDir = new Vector4[LightManager.MAX_POINT_LIGHTS];
-        static RenderTargetCube[] LightMaps = new RenderTargetCube[LightManager.MAX_POINT_LIGHTS];
 
         protected void ApplyPointLights(Effect effect)
-        {
-
-            if (Graphics.GlobalPointLights == false)
-            {
-                // Cache light data to avoid reinitializing each frame
-
-
-
-                // Sort lights by priority and distance
-                LightManager.FinalPointLights = LightManager.FinalPointLights
-                    .OrderBy(l => Vector3.Distance(l.Position, useAvgVertexPosition ? avgVertexPosition : Position) / l.shadowData.Priority)
-                    .ToList();
-
-                List<LightManager.PointLightData> objectLights = new List<LightManager.PointLightData>();
-
-                // HashSet to track already processed lights for shadowing
-                HashSet<int> filled = new HashSet<int>();
-                int filledLights = 0;
-                int shaderPointLightsShadowed = 7;
-
-                // Iterate through lights, handling shadowed lights first
-                for (int i = 0; i < LightManager.FinalPointLights.Count && filledLights < LightManager.MAX_POINT_LIGHTS; i++)
-                {
-                    var light = LightManager.FinalPointLights[i];
-                    bool intersects = IntersectsBoundingSphere(new BoundingSphere { Radius = light.Radius, Center = light.Position });
-
-                    if (!intersects) continue;
-
-                    // Handle shadowed lights first
-                    if (light.shadowData.CastShadows && filledLights < shaderPointLightsShadowed)
-                    {
-                        filled.Add(i);
-                        objectLights.Add(light);
-                        filledLights++;
-                    }
-                    // Handle non-shadowed lights
-                    else if (!light.shadowData.CastShadows && !filled.Contains(i))
-                    {
-                        objectLights.Add(light);
-                        filledLights++;
-                    }
-                }
-
-                // Sort shadowed lights to come first (already handled)
-                // No need for further sorting of objectLights
-
-                // Fill the light data arrays
-                for (int i = 0; i < objectLights.Count; i++)
-                {
-                    var light = objectLights[i];
-
-                    LightPos[i] = new Vector4(light.Position, light.InnerMinDot);
-                    LightColor[i] = light.Color;
-                    LightRadius[i] = light.Radius;
-                    LightRes[i] = light.shadowData.CastShadows ? light.shadowData.resolution : 0;
-                    LightDir[i] = new Vector4(light.Direction, light.MinDot);
-                    LightMaps[i] = light.shadowData.renderTargetCube;
-                }
-
-                // Upload light data to GPU
-                var lightPositionsParam = effect.Parameters["LightPositions"];
-                var lightColorsParam = effect.Parameters["LightColors"];
-                var lightRadiusesParam = effect.Parameters["LightRadiuses"];
-                var lightResolutionsParam = effect.Parameters["LightResolutions"];
-                var lightDirectionsParam = effect.Parameters["LightDirections"];
-
-                lightPositionsParam?.SetValue(LightPos);
-                lightColorsParam?.SetValue(LightColor);
-                lightRadiusesParam?.SetValue(LightRadius);
-                lightResolutionsParam?.SetValue(LightRes);
-                lightDirectionsParam?.SetValue(LightDir);
-
-                // Set cubemaps in a loop (minimized manual code)
-                for (int i = 0; i < Math.Min(LightMaps.Length, 10); i++)
-                {
-                    effect.Parameters[$"PointLightCubemap{i + 1}"]?.SetValue(LightMaps[i]);
-                }
-            }
-        }
-
-        void ApplyPointLightsOld(Effect effect)
         {
 
             if (Graphics.GlobalPointLights == false)
@@ -633,6 +543,7 @@ namespace RetroEngine
                 effect.Parameters["PointLightCubemap10"]?.SetValue(LightMaps[9]);
             }
         }
+
 
         public virtual bool IntersectsBoundingSphere(BoundingSphere sphere)
         {
