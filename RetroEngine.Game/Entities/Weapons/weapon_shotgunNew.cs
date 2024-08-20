@@ -113,6 +113,11 @@ namespace RetroEngine.Game.Entities.Weapons
                 //mesh.PastePose(character.GetSkeletalMesh().GetPose());
             }
 
+            if (GameMain.Instance.paused) return;
+
+            if (Time.gameTime - SpawnTime > 0.02f)
+                Camera.rotation = mesh.GetBoneMatrix("camera", Camera.GetRotationMatrix()).DecomposeMatrix().Rotation;
+
             fireSoundPlayer.Position = Camera.position;
         }
 
@@ -126,7 +131,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             fireSoundPlayer.Play(true);
 
-            mesh.PlayAnimation(0,false);
+            mesh.PlayAnimation(0,false,0);
             TpFire.PlayAnimation(0,false);
 
             for (float y = -3; y <= 3; y += 2f)
@@ -134,6 +139,8 @@ namespace RetroEngine.Game.Entities.Weapons
                 {
 
                     Vector2 v = new Vector2(x, y);
+
+                    x *= 1.2f;
 
                     if (v.Length() > 4)
                         continue;
@@ -243,6 +250,8 @@ namespace RetroEngine.Game.Entities.Weapons
             
 
             Console.WriteLine("loaded shotgun");
+
+            mesh.Update(0);
 
             meshes.Add(mesh);
             meshes.Add(arms);

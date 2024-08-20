@@ -259,6 +259,7 @@ namespace RetroEngine
             Dispose();
         }
 
+
         public virtual void Destroy(float delay)
         {
             destroyDelay.AddDelay(delay);

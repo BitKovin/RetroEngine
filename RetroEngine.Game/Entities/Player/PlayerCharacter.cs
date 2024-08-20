@@ -89,6 +89,8 @@ namespace RetroEngine.Game.Entities.Player
 
         FmodEventInstance underWaterSound;
 
+        Vector3 CameraRotation = new Vector3(); 
+
         //particle_system_meleeTrail meleeTrail;
         public PlayerCharacter() : base()
         {
@@ -412,17 +414,18 @@ namespace RetroEngine.Game.Entities.Player
 
         void UpdateCamera()
         {
+
             if (GameMain.SkipFrames == 0)
-                Camera.rotation += new Vector3(Input.MouseDelta.Y, -Input.MouseDelta.X, 10) / 2f;
+                CameraRotation += new Vector3(Input.MouseDelta.Y, -Input.MouseDelta.X, 0) / 2f;
 
-            Camera.rotation = new Vector3(Math.Clamp(Camera.rotation.X, -89, 89), Camera.rotation.Y, 0);
+            CameraRotation = new Vector3(Math.Clamp(CameraRotation.X, -89, 89), CameraRotation.Y, 0);
 
 
-            Camera.position = interpolatedPosition + new Vector3(0,0.7f,0) + Camera.rotation.GetForwardVector().XZ().Normalized()*0.1f;
+            Camera.position = interpolatedPosition + new Vector3(0,0.7f,0) + CameraRotation.GetForwardVector().XZ().Normalized()*0.1f;
 
             bob = Vector3.Zero;
 
-            bob += Camera.rotation.GetForwardVector() * (float)Math.Sin(bobProgress * 1 * bobSpeed * 1) * -0.5f;
+            bob += CameraRotation.GetForwardVector() * (float)Math.Sin(bobProgress * 1 * bobSpeed * 1) * -0.5f;
             //bob += Camera.rotation.GetUpVector() * (float)(Math.Abs(Math.Sin(bobProgress * bobSpeed * 1))) * 0.2f;
         }
 
@@ -805,10 +808,12 @@ namespace RetroEngine.Game.Entities.Player
                 FirstPersonCameraUpdate();
             }
 
+            Camera.rotation = CameraRotation;
+
             if (currentWeapon is not null)
             {
-                currentWeapon.Position = Camera.position + bob * 0.05f * currentWeapon.BobScale + Camera.rotation.GetForwardVector() * Camera.rotation.X / 2000f;
-                currentWeapon.Rotation = Camera.rotation + new Vector3(0, 0, (float)Math.Sin(bobProgress * -1 * bobSpeed) * -1.5f) * currentWeapon.BobScale;
+                currentWeapon.Position = Camera.position + bob * 0.05f * currentWeapon.BobScale + CameraRotation.GetForwardVector() * Camera.rotation.X / 2000f;
+                currentWeapon.Rotation = CameraRotation + new Vector3(0, 0, (float)Math.Sin(bobProgress * -1 * bobSpeed) * -1.5f) * currentWeapon.BobScale;
             }
 
             UpdatePlayerLight();

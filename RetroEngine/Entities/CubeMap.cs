@@ -136,6 +136,7 @@ namespace RetroEngine.Entities
             RenderFace(CubeMapFace.PositiveZ);
             RenderFace(CubeMapFace.NegativeZ);
 
+
             Camera.position = startPos;
             Camera.view = view;
             Camera.projection = projection;
@@ -183,7 +184,7 @@ namespace RetroEngine.Entities
 
             GameMain.Instance.render.RenderLevelGeometryForward(l, OnlyStatic: true);
 
-            //graphicsDevice.SetRenderTarget(null);
+            graphicsDevice.SetRenderTarget(null);
         }
 
         Matrix GetViewForFace(CubeMapFace face)

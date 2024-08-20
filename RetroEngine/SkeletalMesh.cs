@@ -410,13 +410,32 @@ namespace RetroEngine
 
         public Matrix GetBoneMatrix(string name)
         {
-
-
-
             if (RiggedModel == null) return Matrix.Identity;
 
             if (namesToBones.ContainsKey(name))
                 return namesToBones[name].CombinedTransformMg * GetWorldMatrix();
+
+            foreach (var bone in RiggedModel.flatListToAllNodes)
+            {
+                namesToBones.TryAdd(bone.name, bone);
+
+
+                if (bone.name == name)
+                {
+                    return bone.CombinedTransformMg * GetWorldMatrix();
+                }
+            }
+
+            return Matrix.Identity;
+
+        }
+
+        public Matrix GetBoneMatrix(string name, Matrix worldMatrix)
+        {
+            if (RiggedModel == null) return Matrix.Identity;
+
+            if (namesToBones.ContainsKey(name))
+                return namesToBones[name].CombinedTransformMg * worldMatrix;
 
             foreach (var bone in RiggedModel.flatListToAllNodes)
             {
@@ -446,6 +465,10 @@ namespace RetroEngine
             return -1;
         }
 
+        public bool IsAnimationPlaying()
+        {
+            return RiggedModel.animationRunning;
+        }
 
         protected override Matrix GetLocalOffset()
         {

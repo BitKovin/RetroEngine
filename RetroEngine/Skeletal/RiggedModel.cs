@@ -797,6 +797,11 @@ namespace RetroEngine.Skeletal
             /// </summary>
             public Matrix CombinedTransformMg { get; set; }
 
+            public override string ToString()
+            {
+                return name;
+            }
+
             public RiggedModelNode MakeCopy(Dictionary<RiggedModelNode, RiggedModelNode> keyValuePairs, RiggedModelNode copy)
             {
 
@@ -885,6 +890,10 @@ namespace RetroEngine.Skeletal
                 return copy;
             }
 
+            public override string ToString()
+            {
+                return animationName;
+            }
             public void SetAnimationFpsCreateFrames(int animationFramesPerSecond, RiggedModel model, bool loopAnimation)
             {
                 //Console.WriteLine("________________________________________________________");

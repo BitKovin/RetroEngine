@@ -510,6 +510,8 @@ namespace RetroEngine.Entities.Light
             RenderFace(CubeMapFace.NegativeZ, pointLightData);
             RetroEngine.Render.IgnoreFrustrumCheck = false;
 
+            graphicsDevice.SetRenderTarget(null);
+
             bool wasDirty = dirty;
 
             dirty = false;

@@ -109,7 +109,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             float progress = Math.Clamp((float)((Time.gameTime - SpawnTime)/DrawTime), 0, 1);
 
-            DrawRotation = new Vector3((1 - progress) * 20, (1 - progress) * 20, (1 - progress) * 30);
+            //DrawRotation = new Vector3((1 - progress) * 20, (1 - progress) * 20, (1 - progress) * 30);
 
 
 

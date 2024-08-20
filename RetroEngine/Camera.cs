@@ -81,6 +81,22 @@ namespace RetroEngine
 
         }
 
+        public static Matrix GetRotationMatrix()
+        {
+            return Matrix.CreateRotationX(rotation.X / 180 * (float)Math.PI) *
+                                Matrix.CreateRotationY(rotation.Y / 180 * (float)Math.PI) *
+                                Matrix.CreateRotationZ(rotation.Z / 180 * (float)Math.PI);
+        }
+
+        public static Matrix GetMatrix()
+        {
+            return Matrix.CreateScale(1) *
+                                Matrix.CreateRotationX(rotation.X / 180 * (float)Math.PI) *
+                                Matrix.CreateRotationY(rotation.Y / 180 * (float)Math.PI) *
+                                Matrix.CreateRotationZ(rotation.Z / 180 * (float)Math.PI) *
+                                Matrix.CreateTranslation(position);
+        }
+
         public static Matrix CalculateView()
         {
             return Matrix.CreateLookAt(position, position + rotation.GetForwardVector(), lastWorkingRotation.GetUpVector().RotateVector(rotation.GetForwardVector(), roll));
