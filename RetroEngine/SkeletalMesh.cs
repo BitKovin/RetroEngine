@@ -822,6 +822,8 @@ namespace RetroEngine
 
                 }
 
+                Effect lastEffect = null;
+
                 foreach (RiggedModel.RiggedModelMesh meshPart in RiggedModel.meshes)
                 {
 
@@ -833,6 +835,11 @@ namespace RetroEngine
 
                     Effect effect = Shader.GetAndApply(transperent ? SurfaceShaderInstance.ShaderSurfaceType.Transperent : SurfaceShaderInstance.ShaderSurfaceType.Default);
 
+                    if (lastEffect != effect)
+                        ApplyPointLights(effect);
+
+                    lastEffect = effect;
+                    
 
                     effect.Parameters["Bones"].SetValue(finalizedBones);
 

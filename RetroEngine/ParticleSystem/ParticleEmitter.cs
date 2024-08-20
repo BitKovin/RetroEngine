@@ -349,6 +349,8 @@ namespace RetroEngine.Particles
 
             effect.Parameters["isParticle"]?.SetValue(isParticle);
 
+            ApplyPointLights(effect);
+
             GameMain.Instance.render.UpdateDataForShader((RetroEngine.Graphic.Shader)effect);
 
             SetupBlending();

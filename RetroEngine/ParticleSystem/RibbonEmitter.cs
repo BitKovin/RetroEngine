@@ -15,7 +15,7 @@ namespace RetroEngine.Particles
         VertexBuffer vertexBuffer;
         IndexBuffer indexBuffer;
 
-        public RibbonEmitter():base()
+        public RibbonEmitter() : base()
         {
             Shader = new Graphic.SurfaceShaderInstance("UnifiedOutput");
             isParticle = true;
@@ -33,7 +33,7 @@ namespace RetroEngine.Particles
             vertexBuffer?.Dispose();
             indexBuffer?.Dispose();
             if (particles == null) return;
-           
+
             if (particles.Count < 2)
                 return;
 
@@ -51,12 +51,13 @@ namespace RetroEngine.Particles
 
                 Vector3 dir;
 
-                if(i<particles.Count-1)
+                if (i < particles.Count - 1)
                 {
-                    dir = Vector3.Normalize(particles[i].position - particles[i+1].position);
-                }else
+                    dir = Vector3.Normalize(particles[i].position - particles[i + 1].position);
+                }
+                else
                 {
-                    dir = Vector3.Normalize(particles[i-1].position - particles[i].position);
+                    dir = Vector3.Normalize(particles[i - 1].position - particles[i].position);
                 }
 
                 Vector3 cameraForward = p1 - Camera.position;
@@ -74,7 +75,7 @@ namespace RetroEngine.Particles
                 float texCoordYBottom = 1f;
 
                 // Add vertices to the list with texture coordinates
-                vertices.Add(new VertexData { Position = topLeft, TextureCoordinate = new Vector2(texCoordX, texCoordYTop), Color = particle.color});
+                vertices.Add(new VertexData { Position = topLeft, TextureCoordinate = new Vector2(texCoordX, texCoordYTop), Color = particle.color });
                 vertices.Add(new VertexData { Position = topRight, TextureCoordinate = new Vector2(texCoordX, texCoordYBottom), Color = particle.color });
 
 
@@ -90,7 +91,7 @@ namespace RetroEngine.Particles
                     indices.Add((short)(i * 2 - 1));
                 }
             }
-            
+
 
             // Create and set vertex buffer
             vertexBuffer = new VertexBuffer(_graphicsDevice, VertexData.VertexDeclaration, vertices.Count, BufferUsage.WriteOnly);
@@ -110,7 +111,7 @@ namespace RetroEngine.Particles
             if (destroyed) return;
 
             //if (Camera.frustum.Contains(new BoundingSphere(Position, BoundingRadius)) != ContainmentType.Disjoint)
-                DrawRibbon();
+            DrawRibbon();
         }
 
         public override void Destroyed()
@@ -127,45 +128,46 @@ namespace RetroEngine.Particles
         {
             GraphicsDevice _graphicsDevice = GameMain.Instance.GraphicsDevice;
 
-            
 
-                GenerateBuffers(finalizedParticles);
 
+            GenerateBuffers(finalizedParticles);
+
+            if (vertexBuffer == null || indexBuffer == null || vertexBuffer.IsDisposed || indexBuffer.IsDisposed)
+            { Console.WriteLine("empty vertex buffer"); return; }
+
+
+            Effect effect = Shader.GetAndApply(Graphic.SurfaceShaderInstance.ShaderSurfaceType.Transperent);
+
+            SetupBlending();
+            _graphicsDevice.RasterizerState = RasterizerState.CullNone;
+            ApplyPointLights(effect);
+            ApplyShaderParams(effect, null);
+            effect.Parameters["isParticle"]?.SetValue(true);
+
+            _graphicsDevice.SetVertexBuffer(vertexBuffer);
+            _graphicsDevice.Indices = indexBuffer;
+
+            if (vertexBuffer == null) return;
+
+            Stats.RenderedMehses++;
+            if (vertexBuffer == null) return;
+
+            lock (vertexBuffer)
+            {
                 if (vertexBuffer == null || indexBuffer == null || vertexBuffer.IsDisposed || indexBuffer.IsDisposed)
                 { Console.WriteLine("empty vertex buffer"); return; }
 
-
-                Effect effect = Shader.GetAndApply(Graphic.SurfaceShaderInstance.ShaderSurfaceType.Transperent);
-
-                SetupBlending();
-                _graphicsDevice.RasterizerState = RasterizerState.CullNone;
-                ApplyShaderParams(effect, null);
-                effect.Parameters["isParticle"]?.SetValue(true);
-
-                _graphicsDevice.SetVertexBuffer(vertexBuffer);
-                _graphicsDevice.Indices = indexBuffer;
-
-                if (vertexBuffer == null) return;
-
-                Stats.RenderedMehses++;
-                if (vertexBuffer == null) return;
-
-                lock (vertexBuffer)
+                if (destroyed == false)
                 {
-                    if (vertexBuffer == null || indexBuffer == null || vertexBuffer.IsDisposed || indexBuffer.IsDisposed)
-                    { Console.WriteLine("empty vertex buffer"); return; }
-
-                    if (destroyed == false)
-                    {
-                        effect.CurrentTechnique.Passes[0].Apply();
-                        _graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, vertexBuffer.VertexCount);
-                    }
-
+                    effect.CurrentTechnique.Passes[0].Apply();
+                    _graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, vertexBuffer.VertexCount);
                 }
 
-                effect.Parameters["isParticle"]?.SetValue(false);
+            }
 
-            
+            effect.Parameters["isParticle"]?.SetValue(false);
+
+
         }
 
         public override void RenderPreparation()

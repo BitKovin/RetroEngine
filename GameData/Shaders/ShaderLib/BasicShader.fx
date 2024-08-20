@@ -1049,10 +1049,9 @@ half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half rough
         float3 lightDir = normalize(lightVector);
         float shadowBias = 0.05;  // Adjust this bias for your specific scene
 
-        // Calculate tangent and bitangent vectors
-        float3 up = abs(normal.y) < 0.999 ? float3(0, 1, 0) : float3(1, 0, 0);
-        float3 tangent = normalize(cross(up, normal));
-        float3 bitangent = cross(normal, tangent);
+
+        float3 tangent = pixelInput.Tangent;
+        float3 bitangent = pixelInput.BiTangent;
 
         // PCF sampling
         int samples = 0;
@@ -1104,7 +1103,6 @@ half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half rough
         {
             for (float y = -radius; y <= radius; y+=step)
             {
-
 
                 float weight = 1;
 

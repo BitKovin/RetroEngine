@@ -104,6 +104,8 @@ namespace RetroEngine
 
             SetupBlending();
 
+            ApplyPointLights(effect);
+
             //AddFrameVertexData();
             
                 if (frameStaticMeshData.model is not null)

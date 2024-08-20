@@ -1,5 +1,6 @@
 ﻿#define NO_SPECULAR
 #define MAX_POINT_LIGHTS_SHADOWS 3
+#define SIMPLE_SHADOWS
 
 #include "ShaderLib/BasicShader.fx"
 
