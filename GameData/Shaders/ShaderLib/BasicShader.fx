@@ -1173,7 +1173,11 @@ float SamplePointLightPCFSample(sampler2D s ,int i, float3 tangent, float3 bitan
 
                     float2 TextureCoordinates = GetCubeSampleCoordinate(lightDir + offset);
 
+#if OPENGL
+                    shadowFactor += SamplePointLightCubemap(s, TextureCoordinates, distanceToLight + bias*lerp(1,2,length(float2(x,y))));
+#else
 					shadowFactor += SamplePointShadowMapLinear(s,TextureCoordinates, distanceToLight + bias*lerp(1,2,length(float2(x,y))), LightResolutions[i]);
+#endif
 					weightSum += weight;
 				}
 
