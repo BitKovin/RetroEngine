@@ -933,7 +933,7 @@ float2 GetCubeSampleCoordinate(float3 vec3)
 	vec3 *= -1;
 	vec3.y *= -1;
 
-	const float sixth = 1.0f / 6.0f;
+	const float sixth = 1.0f / 3.0f;
 
 	if (absVec.x >= absVec.y && absVec.x >= absVec.z)
 	{
@@ -984,6 +984,18 @@ float2 GetCubeSampleCoordinate(float3 vec3)
 	texCoord += 1;
 	texCoord /= 2;
 
+    texCoord.x/=2;
+
+	int addSlice = 0;
+
+    if(slice>2)
+    {
+
+        slice -=3;
+        texCoord.x +=0.5;
+
+    }
+
 	texCoord.y *= sixth;
 	texCoord += float2(0, slice) * sixth;
 
@@ -997,32 +1009,43 @@ float SamplePointLightCubemap(sampler2D s, float2 coords, float depth)
 
 float2 SnapToSlice(float2 coord, int slice, float texelSize)
 {
+
+	texelSize.x *= 2;
+
+	float2 slices;
+	if(slice > 2)
+	{
+		slices = float2(1, slice - 3);
+	}else
+	{
+		slices = float2(0, slice);
+	}
+
     //return coord;
-    coord.y*=6;
-    coord.y-=slice;
+    coord.y*=3;
+	coord.x*=2;
+
+    coord-=slices;
+
     coord = clamp(coord,texelSize,1-texelSize);
-    coord.y+=slice;
-    coord.y/=6;
-    return coord;
-    const float sliceSize = 1/6;
 
-    if(coord.x>1)
-    {
+    coord+=slices;
 
-            coord.x -= 1;
-            coord.y = frac(coord.y);
-    }
-    
+	coord.x/=2;
+    coord.y/=3;
+
     return coord;
 }
 
 half SamplePointShadowMapLinear(sampler2D shadowMap, float2 coords, float compare, float2 texelSize)
 {
 
-    texelSize = 1/texelSize;
-    texelSize.y/=6;
+    texelSize = 0.5/texelSize;
+    texelSize.y/=1.5;
 
-    int slice = floor(coords.y*6);
+    int slice = floor(coords.y*3);
+	if(coords.x>0.5)
+		slice += 3;
 
 
 	float2 pixelPos = coords / texelSize + float2(0.5, 0.5);
@@ -1034,7 +1057,7 @@ half SamplePointShadowMapLinear(sampler2D shadowMap, float2 coords, float compar
     float2 tlCoord = startTexel + half2(0.0, texelSize.y);
     float2 trCoord = startTexel + texelSize;
 
-    blCoord = SnapToSlice(blCoord, slice,texelSize.x);
+	blCoord = SnapToSlice(blCoord, slice,texelSize.x);
     brCoord = SnapToSlice(brCoord, slice,texelSize.x);
     tlCoord = SnapToSlice(tlCoord, slice,texelSize.x);
     trCoord = SnapToSlice(trCoord, slice,texelSize.x);
@@ -1096,7 +1119,7 @@ float GetPointLightDepth(int i, float3 lightDir, float d)
 		return 1;
 
 	float2 sampleCoords = GetCubeSampleCoordinate(lightDir);
-
+/*
     float2 texelSize = LightResolutions[i];
 
     texelSize = 1/texelSize;
@@ -1111,7 +1134,7 @@ float GetPointLightDepth(int i, float3 lightDir, float d)
 
     pixelPos = SnapToSlice(pixelPos, slice,texelSize.x);
     sampleCoords = pixelPos;
-
+*/
 	if (i == 0)
 		return SamplePointLightCubemap(PointLightCubemap1Sampler, sampleCoords, d);
 	else if (i == 1)
@@ -1338,6 +1361,13 @@ half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half rough
 
 		float pixelSize = ((1.0f/LightResolutions[i]) * distanceToLight) / distance(viewPos, pixelInput.MyPosition);
 
+
+        if(false)
+        {
+
+            notShadow = GetPointLightDepthLinear(i, lightDir,distanceToLight*distFactor + bias);
+
+        }else
 		if(pixelSize < 0.001)
         {
             notShadow = SamplePointLightPCF(i, tangent, bitangent, lightDir, distanceToLight*distFactor, bias, true);

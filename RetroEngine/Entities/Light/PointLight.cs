@@ -276,6 +276,8 @@ namespace RetroEngine.Entities.Light
 
             float dist = Vector3.Distance(Camera.position, Position);
 
+            if (true) { }
+            else
             if (dist < (lightData.Radius + 2) * 2)
             {
                 SetLightResolution(resolution);
@@ -429,7 +431,7 @@ namespace RetroEngine.Entities.Light
             if (renderTarget == null)
                 InitRenderTarget();
 
-            if(renderTarget.Width!= lightData.Resolution)
+            if(renderTarget.Width/2!= lightData.Resolution)
                 InitRenderTarget();
 
         }
@@ -442,7 +444,7 @@ namespace RetroEngine.Entities.Light
                 GameMain.pendingDispose.Add(renderTarget);
             }
 
-            renderTarget = new RenderTarget2D(graphicsDevice, lightData.Resolution, lightData.Resolution * 6,false, resolution > 400 ? SurfaceFormat.Single : SurfaceFormat.HalfSingle, DepthFormat.Depth24);
+            renderTarget = new RenderTarget2D(graphicsDevice, lightData.Resolution * 2, lightData.Resolution * 3,false, resolution > 400 ? SurfaceFormat.Single : SurfaceFormat.HalfSingle, DepthFormat.Depth24);
 
             //renderTarget = new RenderTargetCube(graphicsDevice, lightData.Resolution, false, resolution>400 ? SurfaceFormat.Single : SurfaceFormat.HalfSingle, DepthFormat.Depth24, 0, RenderTargetUsage.DiscardContents);
 
@@ -563,9 +565,17 @@ namespace RetroEngine.Entities.Light
             var l = Level.GetCurrent().GetAllOpaqueMeshes();
 
             graphicsDevice.SetRenderTarget(renderTarget);
-            graphicsDevice.Viewport = new Viewport(0, renderTarget.Width * slice, renderTarget.Width, renderTarget.Width);
-            //graphicsDevice.Clear(Microsoft.Xna.Framework.Color.Red);
 
+            Vector2 offset = new Vector2();
+
+            int res = renderTarget.Width / 2;
+
+            offset.X = slice > 2 ? 1 : 0;
+            offset.Y = slice > 2 ? slice - 3 : slice;
+
+            graphicsDevice.Viewport = new Viewport((int)offset.X * res, (int)offset.Y * res, res, res);
+            //graphicsDevice.Clear(Microsoft.Xna.Framework.Color.Red);
+            
 
             GameMain.Instance.render.BoundingSphere.Radius = lightData.Radius;
             GameMain.Instance.render.BoundingSphere.Center = lightData.Position;
@@ -579,7 +589,7 @@ namespace RetroEngine.Entities.Light
             GameMain.Instance.render.OcclusionStaticEffect.Parameters["ViewProjection"].SetValue(view * projection);
             GameMain.Instance.render.OcclusionStaticEffect.Parameters["CameraPos"].SetValue(lightData.Position);
             GameMain.Instance.render.OcclusionStaticEffect.Parameters["pointDistance"].SetValue(true);
-            GameMain.Instance.render.OcclusionStaticEffect.Parameters["NormalBias"]?.SetValue(radius / resolution* 1f);
+            GameMain.Instance.render.OcclusionStaticEffect.Parameters["NormalBias"]?.SetValue(radius / lightData.Resolution * 1f);
 
 
 
