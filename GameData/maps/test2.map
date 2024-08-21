@@ -11124,12 +11124,12 @@
 // entity 31
 {
 "classname" "light_point"
-"origin" "-261 411 69"
+"origin" "-261 411 213"
 "radius" "20"
 "light_color" "0.160784 0.0117647 1"
 "intensity" "3"
 "dynamic" "true"
-"resolution" "512"
+"resolution" "1024"
 }
 // entity 32
 {

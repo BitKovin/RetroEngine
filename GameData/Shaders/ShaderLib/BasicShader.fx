@@ -1097,6 +1097,22 @@ float GetPointLightDepth(int i, float3 lightDir, float d)
 
 	float2 sampleCoords = GetCubeSampleCoordinate(lightDir);
 
+    float2 texelSize = LightResolutions[i];
+
+    texelSize = 1/texelSize;
+    texelSize.y/=6;
+
+    int slice = floor(sampleCoords.y*6);
+
+
+	float2 pixelPos = sampleCoords / texelSize + float2(0.5, 0.5);
+	float2 fracPart = frac(pixelPos);
+	float2 startTexel = (pixelPos - fracPart) * texelSize;
+
+    float2 blCoord =  startTexel;
+
+    blCoord = SnapToSlice(blCoord, slice);
+    sampleCoords = blCoord;
 	//lightDir = normalize(lightDir);
 
 	if (i == 0)
@@ -1161,6 +1177,10 @@ float SamplePointLightPCFSample(sampler2D s ,int i, float3 tangent, float3 bitan
 
     float offsetSize = (1/(LightResolutions[i]))*2;
 
+#if OPENGL
+    smooth = false;
+#endif
+
     for (float x = -1; x <= 1; x += 1)
 			{
 				for (float y = -1; y <= 1; y += 1)
@@ -1173,11 +1193,18 @@ float SamplePointLightPCFSample(sampler2D s ,int i, float3 tangent, float3 bitan
 
                     float2 TextureCoordinates = GetCubeSampleCoordinate(lightDir + offset);
 
-#if OPENGL
-                    shadowFactor += SamplePointLightCubemap(s, TextureCoordinates, distanceToLight + bias*lerp(1,2,length(float2(x,y))));
-#else
-					shadowFactor += SamplePointShadowMapLinear(s,TextureCoordinates, distanceToLight + bias*lerp(1,2,length(float2(x,y))), LightResolutions[i]);
-#endif
+
+
+                    if(smooth)
+                    {
+                        shadowFactor += SamplePointShadowMapLinear(s,TextureCoordinates, distanceToLight + bias*lerp(1,2,length(float2(x,y))), LightResolutions[i]);
+                    }
+                    else
+                    {
+                        shadowFactor += SamplePointLightCubemap(s, TextureCoordinates, distanceToLight + bias*lerp(1,2,length(float2(x,y))));
+                    }
+					
+
 					weightSum += weight;
 				}
 
@@ -1259,17 +1286,15 @@ half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half rough
 		return float3(0, 0, 0);
 	}
 
-	float distFactor = 0.985;
+	float distFactor = 1;
 
-	distFactor = lerp(distFactor, 1.02, abs(dot(normal, normalize(lightVector))));
+	distFactor = lerp(distFactor, 1.02, abs(dot(normal, normalize(lightVector)))*abs(dot(normal, normalize(lightVector))));
 
-    distFactor = distFactor - 1;
-
-    distFactor /= 500 / LightResolutions[i];
-
-    distFactor += 1;
+    //distFactor *= 500 / LightResolutions[i];
 
     distFactor = saturate(distFactor);
+
+    distFactor = 1;
 
 	if (LightResolutions[i] > 10 && notShadow > 0)
 	{
@@ -1302,9 +1327,13 @@ half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half rough
 
 
 
-		float bias = -10 / LightResolutions[i] * distanceToLight;
+		float bias = -5 / LightResolutions[i] * distanceToLight;
 
-		bias = lerp(bias / 12, bias, abs(dot(pixelInput.Normal, lightDir)));
+        float slopeFactor = abs(dot(pixelInput.Normal, lightDir));
+        slopeFactor*=slopeFactor;
+        slopeFactor*=slopeFactor;
+
+		bias = lerp(bias, -2 / LightResolutions[i] * distanceToLight, slopeFactor);
 
 		float weightSum = 0;
 
@@ -1312,13 +1341,13 @@ half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half rough
 
 		float pixelSize = ((1.0f/LightResolutions[i]) * distanceToLight) / distance(viewPos, pixelInput.MyPosition);
 
-		if (pixelSize < 0.0015 || simpleShadows)
+		if (pixelSize < 0.0015 || simpleShadows || false)
 		{
 			notShadow = GetPointLightDepth(i, lightDir, distanceToLight * distFactor + bias);
 		}
 		else if(pixelSize < 0.01)
         {
-            notShadow = SamplePointLightPCF(i, tangent, bitangent, lightDir, distanceToLight*distFactor, bias, false);
+            notShadow = SamplePointLightPCF(i, tangent, bitangent, lightDir, distanceToLight*distFactor, bias, true);
         }
         else
         {

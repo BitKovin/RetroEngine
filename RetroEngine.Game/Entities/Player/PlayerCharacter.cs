@@ -795,6 +795,8 @@ namespace RetroEngine.Game.Entities.Player
 
             UpdatePlayerInput();
 
+            Camera.rotation = CameraRotation;
+
             bodyMesh.Position = interpolatedPosition - Camera.rotation.GetForwardVector().XZ().Normalized() * 0.35f - new Vector3(0, 0.93f, 0);
             bodyMesh.Rotation = new Vector3(0, Camera.rotation.Y, 0);
 
@@ -809,7 +811,7 @@ namespace RetroEngine.Game.Entities.Player
                 FirstPersonCameraUpdate();
             }
 
-            Camera.rotation = CameraRotation;
+
 
             if (currentWeapon is not null)
             {
