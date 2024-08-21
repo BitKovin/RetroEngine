@@ -134,7 +134,7 @@ namespace RetroEngine
             ShadowMapEffect = GameMain.content.Load<Effect>("Shaders/ShadowMap");
             ShadowMapMaskedEffect = GameMain.content.Load<Effect>("Shaders/ShadowMapMasked");
             fxaaEffect = GameMain.content.Load<Effect>("Shaders/fxaa");
-            maxDepth = GameMain.content.Load<Effect>("Shaders/maxDepth");
+            maxDepth = GameMain.content.Load<Effect>("Shaders/MaxDepth");
             //PostProcessingEffect = GameMain.content.Load<Effect>("PostProcessing");
             //ColorEffect = GameMain.content.Load<Effect>("ColorOutput");
             //ParticleColorEffect = GameMain.content.Load<Effect>("ParticleColorOutput");

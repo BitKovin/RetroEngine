@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Input;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using RetroEngine.Audio;
 using System;
 using System.Collections.Generic;
@@ -31,6 +32,14 @@ namespace RetroEngine.Game.Entities.Player
             Input.LockCursor = !GameMain.Instance.paused;
 
             Graphics.LowLatency = Input.GetAction("test3").Holding();
+
+            Vector3 offset = Camera.position + Camera.Forward + Camera.Right * 0.3f + Camera.Up*-0.3f;
+
+            DrawDebug.Line(offset, offset + Vector3.UnitX/2, Vector3.UnitX, 0.01f);
+
+            DrawDebug.Line(offset, offset + Vector3.UnitY/2, Vector3.UnitY, 0.01f);
+
+            DrawDebug.Line(offset, offset + Vector3.UnitZ/2, Vector3.UnitZ, 0.01f);
 
         }
 

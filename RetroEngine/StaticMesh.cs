@@ -463,7 +463,7 @@ namespace RetroEngine
                 float[] LightRadius = new float[LightManager.MAX_POINT_LIGHTS];
                 float[] LightRes = new float[LightManager.MAX_POINT_LIGHTS];
                 Vector4[] LightDir = new Vector4[LightManager.MAX_POINT_LIGHTS];
-                RenderTargetCube[] LightMaps = new RenderTargetCube[LightManager.MAX_POINT_LIGHTS];
+                Texture[] LightMaps = new Texture[LightManager.MAX_POINT_LIGHTS];
 
 
                 LightManager.FinalPointLights = LightManager.FinalPointLights.OrderBy(l => Vector3.Distance(l.Position, useAvgVertexPosition ? avgVertexPosition : Position) / l.shadowData.Priority).ToList();
@@ -472,7 +472,7 @@ namespace RetroEngine
 
                 int filledLights = 0;
 
-                List<int> filled = new List<int>();
+                List<LightManager.PointLightData> filled = new List<LightManager.PointLightData>();
 
                 int shaderPointLightsShadowed = 7;
 
@@ -484,7 +484,7 @@ namespace RetroEngine
 
                     if (intersects == false) continue;
 
-                    filled.Add(i);
+                    filled.Add(LightManager.FinalPointLights[i]);
 
                     objectLights.Add(LightManager.FinalPointLights[i]);
                     filledLights++;
@@ -496,7 +496,7 @@ namespace RetroEngine
                 {
                     //if (LightManager.FinalPointLights[i].shadowData.CastShadows == true) continue;
 
-                    if (filled.Contains(i))
+                    if (filled.Contains(LightManager.FinalPointLights[i]))
                         continue;
 
                     bool intersects = IntersectsBoundingSphere(new BoundingSphere { Radius = LightManager.FinalPointLights[i].Radius, Center = LightManager.FinalPointLights[i].Position });
@@ -515,14 +515,14 @@ namespace RetroEngine
                     LightPos[i] = new Vector4(objectLights[i].Position, objectLights[i].InnerMinDot);
                     LightColor[i] = objectLights[i].Color;
                     LightRadius[i] = objectLights[i].Radius;
-                    LightRes[i] = objectLights[i].shadowData.resolution;
+                    LightRes[i] = filled.Contains(objectLights[i]) ? objectLights[i].Resolution : 0;
 
                     if (objectLights[i].shadowData.CastShadows == false)
                         LightRes[i] = 0;
 
                     LightDir[i] = new Vector4(objectLights[i].Direction, objectLights[i].MinDot);
 
-                    LightMaps[i] = objectLights[i].shadowData.renderTargetCube;
+                    LightMaps[i] = objectLights[i].shadowData.renderTarget;
                 }
 
                 effect.Parameters["LightPositions"]?.SetValue(LightPos);

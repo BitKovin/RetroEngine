@@ -167,6 +167,7 @@ namespace RetroEngine.Game.Entities.Player
 
             name = "player";
             Camera.rotation = new Vector3(0, data.GetPropertyFloat("angle") + 90, 0);
+            CameraRotation = Camera.rotation;
 
         }
 
@@ -1021,6 +1022,7 @@ namespace RetroEngine.Game.Entities.Player
 
             body.SetPosition(Position);
             Camera.rotation = Rotation;
+            CameraRotation = Camera.rotation;
             Camera.position = Position + Vector3.UnitY;
             interpolatedPosition = Position;
 

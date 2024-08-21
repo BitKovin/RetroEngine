@@ -17,7 +17,7 @@ struct VertexShaderOutput
 
 float4 MainPS(VertexShaderOutput input) : COLOR
 {
-    return float4(1000000, 1000000, 1000000, 1);
+    return float4(10000, 10000, 10000, 1);
 
 }
 

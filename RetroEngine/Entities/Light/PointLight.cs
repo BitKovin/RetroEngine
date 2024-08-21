@@ -72,7 +72,7 @@ namespace RetroEngine.Entities.Light
 
         public bool enabled = true;
 
-        internal RenderTargetCube renderTargetCube;
+        internal RenderTarget2D renderTarget;
 
         LightVisibilityCheckMesh lightVisibilityCheckMesh = new LightVisibilityCheckMesh();
 
@@ -284,13 +284,17 @@ namespace RetroEngine.Entities.Light
             {
                 SetLightResolution((int)((float)resolution/1.5f));
             }
-            if (dist > (lightData.Radius+3) * 3)
+            if (dist > (lightData.Radius+1) * 3)
             {
                 SetLightResolution((int)((float)resolution / 2));
             }
-            if (dist > (lightData.Radius + 4) * 5)
+            if (dist > (lightData.Radius + 1) * 5)
             {
                 SetLightResolution(resolution / 3);
+            }
+            if (dist > (lightData.Radius + 2) * 8)
+            {
+                SetLightResolution(resolution / 5);
             }
 
             finalizedFrame = false;
@@ -324,7 +328,7 @@ namespace RetroEngine.Entities.Light
 
             lock(GameMain.pendingDispose)
             {
-                GameMain.pendingDispose.Add(renderTargetCube);
+                GameMain.pendingDispose.Add(renderTarget);
             }
             //renderTargetCube?.Dispose();
 
@@ -422,10 +426,10 @@ namespace RetroEngine.Entities.Light
 
             if (Destroyed) return;
 
-            if (renderTargetCube == null)
+            if (renderTarget == null)
                 InitRenderTarget();
 
-            if(renderTargetCube.Size!= lightData.Resolution)
+            if(renderTarget.Width!= lightData.Resolution)
                 InitRenderTarget();
 
         }
@@ -435,12 +439,14 @@ namespace RetroEngine.Entities.Light
         {
             lock (GameMain.pendingDispose)
             {
-                GameMain.pendingDispose.Add(renderTargetCube);
+                GameMain.pendingDispose.Add(renderTarget);
             }
 
-            renderTargetCube = new RenderTargetCube(graphicsDevice, lightData.Resolution, false, resolution>400 ? SurfaceFormat.Single : SurfaceFormat.HalfSingle, DepthFormat.Depth24, 0, RenderTargetUsage.DiscardContents);
+            renderTarget = new RenderTarget2D(graphicsDevice, lightData.Resolution, lightData.Resolution * 6,false, resolution > 400 ? SurfaceFormat.Single : SurfaceFormat.HalfSingle, DepthFormat.Depth24);
 
-            mesh.texture = renderTargetCube;
+            //renderTarget = new RenderTargetCube(graphicsDevice, lightData.Resolution, false, resolution>400 ? SurfaceFormat.Single : SurfaceFormat.HalfSingle, DepthFormat.Depth24, 0, RenderTargetUsage.DiscardContents);
+
+            mesh.texture = renderTarget;
 
             dirty = true;
 
@@ -465,11 +471,12 @@ namespace RetroEngine.Entities.Light
 
 
 
-            if (isDynamic() && Level.ChangingLevel == false)
+            if (isDynamic() && Level.ChangingLevel == false && dirty == false)
             {
 
                 if (enabled == false)
                     return;
+
 
                 DynamicUpdateDystance = (pointLightData.Radius + 10) * 6;
 
@@ -500,14 +507,24 @@ namespace RetroEngine.Entities.Light
 
             //lightData.Radius = radius;
 
+            graphicsDevice.SetRenderTarget(renderTarget);
+            graphicsDevice.Clear(Microsoft.Xna.Framework.Color.Black);
+            
+            SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
+            spriteBatch.Begin(effect: GameMain.Instance.render.maxDepth);
+            Rectangle screenRectangle = new Rectangle(0, 0, renderTarget.Width, renderTarget.Height);
 
+            // Draw the full-screen quad using SpriteBatch
+            spriteBatch.Draw(GameMain.Instance.render.black, screenRectangle, Microsoft.Xna.Framework.Color.White);
+            spriteBatch.End();
+            
 
-            RenderFace(CubeMapFace.PositiveX, pointLightData);
-            RenderFace(CubeMapFace.NegativeX, pointLightData);
-            RenderFace(CubeMapFace.PositiveY, pointLightData);
-            RenderFace(CubeMapFace.NegativeY, pointLightData);
-            RenderFace(CubeMapFace.PositiveZ, pointLightData);
-            RenderFace(CubeMapFace.NegativeZ, pointLightData);
+            RenderFace(CubeMapFace.PositiveX, pointLightData,0);
+            RenderFace(CubeMapFace.NegativeX, pointLightData,1);
+            RenderFace(CubeMapFace.PositiveY, pointLightData,2);
+            RenderFace(CubeMapFace.NegativeY, pointLightData,3);
+            RenderFace(CubeMapFace.PositiveZ, pointLightData,4);
+            RenderFace(CubeMapFace.NegativeZ, pointLightData,5);
             RetroEngine.Render.IgnoreFrustrumCheck = false;
 
             graphicsDevice.SetRenderTarget(null);
@@ -517,7 +534,7 @@ namespace RetroEngine.Entities.Light
             dirty = false;
         }
 
-        void RenderFace(CubeMapFace face, LightManager.PointLightData lightData)
+        void RenderFace(CubeMapFace face, LightManager.PointLightData lightData, int slice = 0)
         {
 
             if ((GameMain.SkipFrames < 1 || Level.ChangingLevel == false) && facesToUpdate.Contains(face) == false)
@@ -545,8 +562,9 @@ namespace RetroEngine.Entities.Light
 
             var l = Level.GetCurrent().GetAllOpaqueMeshes();
 
-            graphicsDevice.SetRenderTarget(renderTargetCube, face);
-            graphicsDevice.Clear(Microsoft.Xna.Framework.Color.Black);
+            graphicsDevice.SetRenderTarget(renderTarget);
+            graphicsDevice.Viewport = new Viewport(0, renderTarget.Width * slice, renderTarget.Width, renderTarget.Width);
+            //graphicsDevice.Clear(Microsoft.Xna.Framework.Color.Red);
 
 
             GameMain.Instance.render.BoundingSphere.Radius = lightData.Radius;
@@ -556,12 +574,15 @@ namespace RetroEngine.Entities.Light
             GameMain.Instance.render.OcclusionEffect.Parameters["CameraPos"].SetValue(lightData.Position);
             GameMain.Instance.render.OcclusionEffect.Parameters["pointDistance"].SetValue(true);
 
-            GameMain.Instance.render.OcclusionEffect.Parameters["NormalBias"]?.SetValue(radius / resolution * 1.5f);
+            GameMain.Instance.render.OcclusionEffect.Parameters["NormalBias"]?.SetValue(radius / resolution * 1f);
 
             GameMain.Instance.render.OcclusionStaticEffect.Parameters["ViewProjection"].SetValue(view * projection);
             GameMain.Instance.render.OcclusionStaticEffect.Parameters["CameraPos"].SetValue(lightData.Position);
             GameMain.Instance.render.OcclusionStaticEffect.Parameters["pointDistance"].SetValue(true);
-            GameMain.Instance.render.OcclusionStaticEffect.Parameters["NormalBias"]?.SetValue(radius / resolution* 1.5f);
+            GameMain.Instance.render.OcclusionStaticEffect.Parameters["NormalBias"]?.SetValue(radius / resolution* 1f);
+
+
+
 
             GameMain.Instance.render.RenderLevelGeometryDepth(l, OnlyStatic: !isDynamic(), onlyShadowCasters: true, pointLight: true);
 
@@ -579,9 +600,9 @@ namespace RetroEngine.Entities.Light
             switch (face)
             {
                 case CubeMapFace.NegativeX:
-                    return Matrix.CreateLookAt(lightData.Position + Vector3.Zero, lightData.Position + new Vector3(1, 0, 0), Vector3.Up);
-                case CubeMapFace.PositiveX:
                     return Matrix.CreateLookAt(lightData.Position + Vector3.Zero, lightData.Position + new Vector3(-1, 0, 0), Vector3.Up);
+                case CubeMapFace.PositiveX:
+                    return Matrix.CreateLookAt(lightData.Position + Vector3.Zero, lightData.Position + new Vector3(1, 0, 0), Vector3.Up);
                 case CubeMapFace.PositiveY:
                     return Matrix.CreateLookAt(lightData.Position + Vector3.Zero, lightData.Position + new Vector3(0, 1, 0), new Vector3(0, 0, -1));
                 case CubeMapFace.NegativeY:
