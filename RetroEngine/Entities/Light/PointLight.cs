@@ -574,7 +574,7 @@ namespace RetroEngine.Entities.Light
             GameMain.Instance.render.OcclusionEffect.Parameters["CameraPos"].SetValue(lightData.Position);
             GameMain.Instance.render.OcclusionEffect.Parameters["pointDistance"].SetValue(true);
 
-            GameMain.Instance.render.OcclusionEffect.Parameters["NormalBias"]?.SetValue(radius / resolution * 1f);
+            GameMain.Instance.render.OcclusionEffect.Parameters["NormalBias"]?.SetValue(radius / resolution * 2f);
 
             GameMain.Instance.render.OcclusionStaticEffect.Parameters["ViewProjection"].SetValue(view * projection);
             GameMain.Instance.render.OcclusionStaticEffect.Parameters["CameraPos"].SetValue(lightData.Position);

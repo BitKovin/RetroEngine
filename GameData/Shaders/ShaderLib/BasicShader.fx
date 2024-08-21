@@ -1153,7 +1153,7 @@ sampler2D GetPointLightSampler(int i)
 }
 */
 
-float SamplePointLightPCFSample(sampler2D s ,int i, float3 tangent, float3 bitangent, float3 lightDir, float distanceToLight, float bias)
+float SamplePointLightPCFSample(sampler2D s ,int i, float3 tangent, float3 bitangent, float3 lightDir, float distanceToLight, float bias, bool smooth)
 {
 
     float shadowFactor = 0;
@@ -1189,7 +1189,7 @@ float SamplePointLightPCFSample(sampler2D s ,int i, float3 tangent, float3 bitan
             
 }
 
-float SamplePointLightPCF(int i, float3 tangent, float3 bitangent, float3 lightDir, float distanceToLight, float bias)
+float SamplePointLightPCF(int i, float3 tangent, float3 bitangent, float3 lightDir, float distanceToLight, float bias, bool smooth)
 {
 	if (i >= MAX_POINT_LIGHTS_SHADOWS)
 		return 1;
@@ -1199,23 +1199,23 @@ float SamplePointLightPCF(int i, float3 tangent, float3 bitangent, float3 lightD
 	//lightDir = normalize(lightDir);
 
 	if (i == 0)
-		return SamplePointLightPCFSample(PointLightCubemap1Sampler, i, tangent, bitangent, lightDir, distanceToLight, bias);
+		return SamplePointLightPCFSample(PointLightCubemap1Sampler, i, tangent, bitangent, lightDir, distanceToLight, bias, smooth);
 	else if (i == 1)
-		return SamplePointLightPCFSample(PointLightCubemap2Sampler, i, tangent, bitangent, lightDir, distanceToLight, bias);
+		return SamplePointLightPCFSample(PointLightCubemap2Sampler, i, tangent, bitangent, lightDir, distanceToLight, bias, smooth);
 	else if (i == 2)
-		return SamplePointLightPCFSample(PointLightCubemap3Sampler, i, tangent, bitangent, lightDir, distanceToLight, bias);
+		return SamplePointLightPCFSample(PointLightCubemap3Sampler, i, tangent, bitangent, lightDir, distanceToLight, bias, smooth);
 	else if (i == 3)
-		return SamplePointLightPCFSample(PointLightCubemap4Sampler, i, tangent, bitangent, lightDir, distanceToLight, bias);
+		return SamplePointLightPCFSample(PointLightCubemap4Sampler, i, tangent, bitangent, lightDir, distanceToLight, bias, smooth);
 	else if (i == 4)
-		return SamplePointLightPCFSample(PointLightCubemap5Sampler, i, tangent, bitangent, lightDir, distanceToLight, bias);
+		return SamplePointLightPCFSample(PointLightCubemap5Sampler, i, tangent, bitangent, lightDir, distanceToLight, bias, smooth);
 	else if (i == 5)
-		return SamplePointLightPCFSample(PointLightCubemap6Sampler, i, tangent, bitangent, lightDir, distanceToLight, bias);
+		return SamplePointLightPCFSample(PointLightCubemap6Sampler, i, tangent, bitangent, lightDir, distanceToLight, bias, smooth);
 	else if (i == 6)
-		return SamplePointLightPCFSample(PointLightCubemap7Sampler, i, tangent, bitangent, lightDir, distanceToLight, bias);
+		return SamplePointLightPCFSample(PointLightCubemap7Sampler, i, tangent, bitangent, lightDir, distanceToLight, bias, smooth);
 	else if (i == 7)
-		return SamplePointLightPCFSample(PointLightCubemap8Sampler, i, tangent, bitangent, lightDir, distanceToLight, bias);
+		return SamplePointLightPCFSample(PointLightCubemap8Sampler, i, tangent, bitangent, lightDir, distanceToLight, bias, smooth);
 	else if (i == 8)
-		return SamplePointLightPCFSample(PointLightCubemap9Sampler, i, tangent, bitangent, lightDir, distanceToLight, bias);
+		return SamplePointLightPCFSample(PointLightCubemap9Sampler, i, tangent, bitangent, lightDir, distanceToLight, bias, smooth);
 	//depth += depth / (LightResolutions[i] * 3) + 0.04;
 
 	return 1;
@@ -1261,7 +1261,7 @@ half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half rough
 
 	float distFactor = 0.985;
 
-	distFactor = lerp(distFactor, 1.03, abs(dot(normal, normalize(lightVector))));
+	distFactor = lerp(distFactor, 1.02, abs(dot(normal, normalize(lightVector))));
 
     distFactor = distFactor - 1;
 
@@ -1310,55 +1310,20 @@ half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half rough
 
 		bool breakLoop = false;
 
-		float pixelSize = distance(viewPos, pixelInput.MyPosition);
+		float pixelSize = ((1.0f/LightResolutions[i]) * distanceToLight) / distance(viewPos, pixelInput.MyPosition);
 
-		pixelSize *= 1 / (LightResolutions[i] * distanceToLight);
-
-		if (pixelSize > 0.007 || simpleShadows)
+		if (pixelSize < 0.0015 || simpleShadows)
 		{
-
-			//return lightDir;
-
-			//return float3(GetCubeSampleCoordinate(lightDir),0);
-
-
-			float sDepth = GetPointLightDepth(i, lightDir, distanceToLight * distFactor + bias);  //
-
-			notShadow = sDepth;// distanceToLight * distFactor + bias < sDepth ? 1 : 0.0;
-			weightSum = 1;
-
+			notShadow = GetPointLightDepth(i, lightDir, distanceToLight * distFactor + bias);
 		}
-		else
-		{
+		else if(pixelSize < 0.01)
+        {
+            notShadow = SamplePointLightPCF(i, tangent, bitangent, lightDir, distanceToLight*distFactor, bias, false);
+        }
+        else
+        {
 
-			
-
-			/*
-			const float3 sampleOffsetDirections[20] =
-			{
-				float3( 1,  1,  1), float3( 1, -1,  1), float3(-1, -1,  1), float3(-1,  1,  1),
-				float3( 1,  1, -1), float3( 1, -1, -1), float3(-1, -1, -1), float3(-1,  1, -1),
-				float3( 1,  1,  0), float3( 1, -1,  0), float3(-1, -1,  0), float3(-1,  1,  0),
-				float3( 1,  0,  1), float3(-1,  0,  1), float3( 1,  0, -1), float3(-1,  0, -1),
-				float3( 0,  1,  1), float3( 0, -1,  1), float3( 0, -1, -1), float3( 0,  1, -1)
-			};
-
-						for(int itt = 0; itt < 20; itt++)
-						{
-
-							float3 offset = sampleOffsetDirections[itt] * offsetScale/7;
-							float shadowDepth = GetPointLightDepth(i, lightDir + offset);
-
-							float weight = 1;
-
-							shadowFactor += distanceToLight * distFactor + bias < shadowDepth ? weight : 0.0;
-							weightSum += weight;
-							samples++;
-
-						}
-						*/
-
-            notShadow = SamplePointLightPCF(i, tangent, bitangent, lightDir, distanceToLight*distFactor, bias);
+            notShadow = SamplePointLightPCF(i, tangent, bitangent, lightDir, distanceToLight*distFactor, bias, true);
 		}
 		
 		
