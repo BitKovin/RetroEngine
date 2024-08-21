@@ -995,12 +995,12 @@ float SamplePointLightCubemap(sampler2D s, float2 coords, float depth)
 	return step(depth, tex2D(s, coords).r);
 }
 
-float2 SnapToSlice(float2 coord, int slice)
+float2 SnapToSlice(float2 coord, int slice, float texelSize)
 {
     //return coord;
     coord.y*=6;
     coord.y-=slice;
-    coord = clamp(coord,0.005,0.995);
+    coord = clamp(coord,texelSize,1-texelSize);
     coord.y+=slice;
     coord.y/=6;
     return coord;
@@ -1034,10 +1034,10 @@ half SamplePointShadowMapLinear(sampler2D shadowMap, float2 coords, float compar
     float2 tlCoord = startTexel + half2(0.0, texelSize.y);
     float2 trCoord = startTexel + texelSize;
 
-    blCoord = SnapToSlice(blCoord, slice);
-    brCoord = SnapToSlice(brCoord, slice);
-    tlCoord = SnapToSlice(tlCoord, slice);
-    trCoord = SnapToSlice(trCoord, slice);
+    blCoord = SnapToSlice(blCoord, slice,texelSize.x);
+    brCoord = SnapToSlice(brCoord, slice,texelSize.x);
+    tlCoord = SnapToSlice(tlCoord, slice,texelSize.x);
+    trCoord = SnapToSlice(trCoord, slice,texelSize.x);
 
 
 	half blTexel = SamplePointLightCubemap(shadowMap, blCoord, compare);
@@ -1105,15 +1105,12 @@ float GetPointLightDepth(int i, float3 lightDir, float d)
     int slice = floor(sampleCoords.y*6);
 
 
-	float2 pixelPos = sampleCoords / texelSize + float2(0.5, 0.5);
-	float2 fracPart = frac(pixelPos);
-	float2 startTexel = (pixelPos - fracPart) * texelSize;
+	float2 pixelPos = sampleCoords / texelSize;
+	pixelPos = floor(pixelPos);
+	pixelPos*= texelSize;
 
-    float2 blCoord =  startTexel;
-
-    blCoord = SnapToSlice(blCoord, slice);
-    sampleCoords = blCoord;
-	//lightDir = normalize(lightDir);
+    pixelPos = SnapToSlice(pixelPos, slice,texelSize.x);
+    sampleCoords = pixelPos;
 
 	if (i == 0)
 		return SamplePointLightCubemap(PointLightCubemap1Sampler, sampleCoords, d);
@@ -1341,11 +1338,7 @@ half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half rough
 
 		float pixelSize = ((1.0f/LightResolutions[i]) * distanceToLight) / distance(viewPos, pixelInput.MyPosition);
 
-		if (pixelSize < 0.0015 || simpleShadows || false)
-		{
-			notShadow = GetPointLightDepth(i, lightDir, distanceToLight * distFactor + bias);
-		}
-		else if(pixelSize < 0.01)
+		if(pixelSize < 0.001)
         {
             notShadow = SamplePointLightPCF(i, tangent, bitangent, lightDir, distanceToLight*distFactor, bias, true);
         }
@@ -1370,13 +1363,17 @@ half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half rough
 
 	half colorInstens = abs(max(LightColors[i].x, (max(LightColors[i].y, LightColors[i].z))));
 
-	intense = max(intense, 0) * colorInstens;
+	intense = max(intense, 0);
+
+    intense = lerp(0,notShadow, intense);
+
+    intense *= colorInstens;
 	half3 l = LightColors[i] * intense;
 
 	if (dot(l, half3(1, 1, 1)) < 0)
 		specular = 0;
 
-	return (l + intense * specular) * notShadow * dirFactor;
+	return (l + intense * specular) * dirFactor;
 }
 
 float3 CalculateSsrSpecular(PixelInput input, float3 normal, float roughness, float metalic, float3 albedo)
