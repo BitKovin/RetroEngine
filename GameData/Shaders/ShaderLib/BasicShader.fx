@@ -1020,10 +1020,11 @@ float2 SnapToSlice(float2 coord, int slice)
     return coord;
 }
 
-half SamplePointShadowMapLinear(sampler2D shadowMap, float2 coords, float compare, half texelSize)
+half SamplePointShadowMapLinear(sampler2D shadowMap, float2 coords, float compare, float2 texelSize)
 {
 
     texelSize = 1/texelSize;
+    texelSize.y/=6;
 
     int slice = floor(coords.y*6);
 
@@ -1033,8 +1034,8 @@ half SamplePointShadowMapLinear(sampler2D shadowMap, float2 coords, float compar
 	float2 startTexel = (pixelPos - fracPart) * texelSize;
 
     float2 blCoord =  startTexel;
-    float2 brCoord = startTexel + half2(texelSize, 0.0);
-    float2 tlCoord = startTexel + half2(0.0, texelSize);
+    float2 brCoord = startTexel + half2(texelSize.x, 0.0);
+    float2 tlCoord = startTexel + half2(0.0, texelSize.y);
     float2 trCoord = startTexel + texelSize;
 
     blCoord = SnapToSlice(blCoord, slice);
@@ -1043,10 +1044,10 @@ half SamplePointShadowMapLinear(sampler2D shadowMap, float2 coords, float compar
     trCoord = SnapToSlice(trCoord, slice);
 
 
-	half blTexel = SamplePointLightCubemap(shadowMap, blCoord, compare);
-	half brTexel = SamplePointLightCubemap(shadowMap, brCoord, compare);
-	half tlTexel = SamplePointLightCubemap(shadowMap, tlCoord, compare);
-	half trTexel = SamplePointLightCubemap(shadowMap, trCoord, compare);
+	half blTexel = SamplePointLightCubemap(shadowMap, blCoord, compare*0.99);
+	half brTexel = SamplePointLightCubemap(shadowMap, brCoord, compare*0.99);
+	half tlTexel = SamplePointLightCubemap(shadowMap, tlCoord, compare*0.99);
+	half trTexel = SamplePointLightCubemap(shadowMap, trCoord, compare*0.99);
 
 	half mixA = lerp(blTexel, tlTexel, fracPart.y);
 	half mixB = lerp(brTexel, trTexel, fracPart.y);
@@ -1162,7 +1163,7 @@ float SamplePointLightPCFSample(sampler2D s ,int i, float3 tangent, float3 bitan
     float shadowFactor = 0;
     float weightSum = 0;
 
-    float offsetSize = (1/(LightResolutions[i]))*3;
+    float offsetSize = (1/(LightResolutions[i]))*2;
 
     for (float x = -1; x <= 1; x += 1)
 			{
@@ -1175,7 +1176,7 @@ float SamplePointLightPCFSample(sampler2D s ,int i, float3 tangent, float3 bitan
 
                     float2 TextureCoordinates = GetCubeSampleCoordinate(lightDir + offset);
 
-					shadowFactor += SamplePointLightCubemap(s,TextureCoordinates, distanceToLight + bias);
+					shadowFactor += SamplePointShadowMapLinear(s,TextureCoordinates, distanceToLight + bias*lerp(1,2,length(float2(x,y))), LightResolutions[i]);
 					weightSum += weight;
 				}
 
