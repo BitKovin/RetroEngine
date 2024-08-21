@@ -1119,22 +1119,25 @@ float GetPointLightDepth(int i, float3 lightDir, float d)
 		return 1;
 
 	float2 sampleCoords = GetCubeSampleCoordinate(lightDir);
-/*
-    float2 texelSize = LightResolutions[i];
+	int slice = floor(sampleCoords.y*3);
 
-    texelSize = 1/texelSize;
-    texelSize.y/=6;
+	if(sampleCoords.x>0.5)
+		slice += 3;
 
-    int slice = floor(sampleCoords.y*6);
+	float2 texelSize = LightResolutions[i];
 
+	texelSize = 0.5/texelSize;
+    texelSize.y/=1.5;
 
 	float2 pixelPos = sampleCoords / texelSize;
-	pixelPos = floor(pixelPos);
-	pixelPos*= texelSize;
+	float2 fracPart = frac(pixelPos);
+	float2 startTexel = (pixelPos - fracPart) * texelSize;
 
-    pixelPos = SnapToSlice(pixelPos, slice,texelSize.x);
-    sampleCoords = pixelPos;
-*/
+    float2 blCoord =  startTexel;
+
+	blCoord = SnapToSlice(blCoord, slice,texelSize.x);
+	sampleCoords=blCoord;
+
 	if (i == 0)
 		return SamplePointLightCubemap(PointLightCubemap1Sampler, sampleCoords, d);
 	else if (i == 1)
@@ -1221,6 +1224,26 @@ float SamplePointLightPCFSample(sampler2D s ,int i, float3 tangent, float3 bitan
                     }
                     else
                     {
+
+						int slice = floor(TextureCoordinates.y*3);
+
+						if(TextureCoordinates.x>0.5)
+							slice += 3;
+
+						float2 texelSize = LightResolutions[i];
+
+			    		texelSize = 0.5/texelSize;
+    					texelSize.y/=1.5;
+
+						float2 pixelPos = TextureCoordinates / texelSize;
+						float2 fracPart = frac(pixelPos);
+						float2 startTexel = (pixelPos - fracPart) * texelSize;
+
+    					float2 blCoord =  startTexel;
+
+						blCoord = SnapToSlice(blCoord, slice,texelSize.x);
+						TextureCoordinates=blCoord;
+
                         shadowFactor += SamplePointLightCubemap(s, TextureCoordinates, distanceToLight + bias*lerp(1,2,length(float2(x,y))));
                     }
 					
@@ -1362,15 +1385,15 @@ half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half rough
 		float pixelSize = ((1.0f/LightResolutions[i]) * distanceToLight) / distance(viewPos, pixelInput.MyPosition);
 
 
-        if(false)
+        if(pixelSize < 0.0006)
         {
 
-            notShadow = GetPointLightDepthLinear(i, lightDir,distanceToLight*distFactor + bias);
+            notShadow = GetPointLightDepth(i, lightDir,distanceToLight*distFactor + bias);
 
         }else
-		if(pixelSize < 0.001)
+		if(pixelSize < 0.002)
         {
-            notShadow = SamplePointLightPCF(i, tangent, bitangent, lightDir, distanceToLight*distFactor, bias, true);
+            notShadow = SamplePointLightPCF(i, tangent, bitangent, lightDir, distanceToLight*distFactor, bias, false);
         }
         else
         {

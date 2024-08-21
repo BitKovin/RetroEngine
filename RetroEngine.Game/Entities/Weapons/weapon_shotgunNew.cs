@@ -57,6 +57,7 @@ namespace RetroEngine.Game.Entities.Weapons
         {
             base.Update();
 
+            mesh.Visible = true;
             mesh.Update(Time.DeltaTime);
             TpFire.Update(Time.DeltaTime);
             

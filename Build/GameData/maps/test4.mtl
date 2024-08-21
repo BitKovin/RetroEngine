@@ -1,9 +1,0 @@
-newmtl brushes/brickPBR
-map_Kd textures/brushes/brickPBR.png
-
-newmtl brushes/light
-map_Kd textures/brushes/light.png
-
-newmtl brushes/mirror
-map_Kd textures/brushes/mirror.png
-
