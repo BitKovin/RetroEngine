@@ -137,7 +137,7 @@ float LightRadiuses[MAX_POINT_LIGHTS];
 float LightResolutions[MAX_POINT_LIGHTS];
 float4 LightDirections[MAX_POINT_LIGHTS];
 
-#define POINT_LIGHT_SAMPLER_PARAMS MinFilter = Point; MipFilter = Point; MagFilter = Linear ; MipLODBias = 0; AddressU = Clamp; AddressV = Clamp; AddressW = Clamp;
+#define POINT_LIGHT_SAMPLER_PARAMS MinFilter = Linear; MipFilter = Linear; MagFilter = Linear ; MipLODBias = 0; AddressU = Clamp; AddressV = Clamp; AddressW = Clamp;
 
 texture PointLightCubemap1;
 sampler2D PointLightCubemap1Sampler = sampler_state
@@ -1000,7 +1000,7 @@ float2 SnapToSlice(float2 coord, int slice)
     //return coord;
     coord.y*=6;
     coord.y-=slice;
-    saturate(coord);
+    coord = clamp(coord,0.005,0.995);
     coord.y+=slice;
     coord.y/=6;
     return coord;
@@ -1010,11 +1010,7 @@ float2 SnapToSlice(float2 coord, int slice)
     {
 
             coord.x -= 1;
-            coord.y += sliceSize*4;
-        
-
-
-        coord.y = frac(coord.y);
+            coord.y = frac(coord.y);
     }
     
     return coord;
@@ -1044,10 +1040,10 @@ half SamplePointShadowMapLinear(sampler2D shadowMap, float2 coords, float compar
     trCoord = SnapToSlice(trCoord, slice);
 
 
-	half blTexel = SamplePointLightCubemap(shadowMap, blCoord, compare*0.99);
-	half brTexel = SamplePointLightCubemap(shadowMap, brCoord, compare*0.99);
-	half tlTexel = SamplePointLightCubemap(shadowMap, tlCoord, compare*0.99);
-	half trTexel = SamplePointLightCubemap(shadowMap, trCoord, compare*0.99);
+	half blTexel = SamplePointLightCubemap(shadowMap, blCoord, compare);
+	half brTexel = SamplePointLightCubemap(shadowMap, brCoord, compare);
+	half tlTexel = SamplePointLightCubemap(shadowMap, tlCoord, compare);
+	half trTexel = SamplePointLightCubemap(shadowMap, trCoord, compare);
 
 	half mixA = lerp(blTexel, tlTexel, fracPart.y);
 	half mixB = lerp(brTexel, trTexel, fracPart.y);
@@ -1170,6 +1166,7 @@ float SamplePointLightPCFSample(sampler2D s ,int i, float3 tangent, float3 bitan
 				for (float y = -1; y <= 1; y += 1)
 				{
 
+
 					float weight = 1;
 
 					float3 offset = (tangent * x + bitangent * y)*offsetSize;
@@ -1258,9 +1255,17 @@ half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half rough
 		return float3(0, 0, 0);
 	}
 
-	float distFactor = 1;
+	float distFactor = 0.985;
 
-	distFactor = lerp(distFactor, 1, abs(dot(normal, normalize(lightVector))));
+	distFactor = lerp(distFactor, 1.03, abs(dot(normal, normalize(lightVector))));
+
+    distFactor = distFactor - 1;
+
+    distFactor /= 500 / LightResolutions[i];
+
+    distFactor += 1;
+
+    distFactor = saturate(distFactor);
 
 	if (LightResolutions[i] > 10 && notShadow > 0)
 	{
@@ -1305,7 +1310,7 @@ half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half rough
 
 		pixelSize *= 1 / (LightResolutions[i] * distanceToLight);
 
-		if (pixelSize > 0.01 || simpleShadows)
+		if (pixelSize > 0.007 || simpleShadows)
 		{
 
 			//return lightDir;
@@ -1315,7 +1320,7 @@ half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half rough
 
 			float sDepth = GetPointLightDepth(i, lightDir, distanceToLight * distFactor + bias);  //
 
-			shadowFactor = sDepth;// distanceToLight * distFactor + bias < sDepth ? 1 : 0.0;
+			notShadow = sDepth;// distanceToLight * distFactor + bias < sDepth ? 1 : 0.0;
 			weightSum = 1;
 
 		}
@@ -1348,9 +1353,11 @@ half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half rough
 
 						}
 						*/
+
+            notShadow = SamplePointLightPCF(i, tangent, bitangent, lightDir, distanceToLight*distFactor, bias);
 		}
 		
-		notShadow = SamplePointLightPCF(i, tangent, bitangent, lightDir, distanceToLight, bias);
+		
 
 	}
 
