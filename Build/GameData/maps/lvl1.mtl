@@ -1,0 +1,18 @@
+newmtl brushes/Ground/coast_sand
+map_Kd textures/brushes/Ground/coast_sand.png
+
+newmtl brushes/Metal/metal1
+map_Kd textures/brushes/Metal/metal1.png
+
+newmtl brushes/Water/Water1_t
+map_Kd textures/brushes/Water/Water1_t.png
+
+newmtl brushes/Wood/wood1
+map_Kd textures/brushes/Wood/wood1.png
+
+newmtl brushes/grass
+map_Kd textures/brushes/grass.png
+
+newmtl brushes/null_m
+map_Kd textures/brushes/null_m.png
+
