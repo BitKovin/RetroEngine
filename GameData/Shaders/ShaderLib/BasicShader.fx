@@ -7,6 +7,8 @@
 #define PS_SHADERMODEL ps_5_0
 #endif
 
+#include "GraphicsSettings.fx"
+
 #define PI 3.1415f
 
 matrix World;
@@ -733,7 +735,16 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input, float3 TangentNor
 
 				float2 offsetCoords = lightCoords.xy + float2(i, j) * texelSize;
 				float closestDepth;
-				closestDepth = SampleShadowMapLinear(ShadowMapCloseSampler, offsetCoords / float2(2, 1) + float2(0.5, 0), currentDepth - bias, float2(texelSize / 2, texelSize));
+
+				if(DirectionalLightShadowQuality<3)
+				{
+					closestDepth = SampleShadowMap(ShadowMapCloseSampler, offsetCoords / float2(2, 1) + float2(0.5, 0), currentDepth - bias);
+					
+				}else
+				{
+					closestDepth = SampleShadowMapLinear(ShadowMapCloseSampler, offsetCoords / float2(2, 1) + float2(0.5, 0), currentDepth - bias, float2(texelSize / 2, texelSize));
+				}
+					
 
 				shadow += closestDepth;
 				n++;
@@ -758,6 +769,8 @@ float GetShadow(float3 lightCoords, float3 lightCoordsClose, float3 lightCoordsV
 	if (DirectBrightness == 0)
 		return 1;
 
+if(DirectionalLightShadowQuality<1)
+	return 0;
 
 	float dist = distance(viewPos, input.MyPosition);
 
@@ -777,12 +790,16 @@ float GetShadow(float3 lightCoords, float3 lightCoordsClose, float3 lightCoordsV
 #if OPENGL
 #else
 
+		
 		if (lightCoordsClose.x >= 0 && lightCoordsClose.x <= 1 && lightCoordsClose.y >= 0 && lightCoordsClose.y <= 1)
 		{
+
+			if(DirectionalLightShadowQuality>1)
 			if (lightCoordsVeryClose.x >= 0 && lightCoordsVeryClose.x <= 1 && lightCoordsVeryClose.y >= 0 && lightCoordsVeryClose.y <= 1)
 
 				if (dist > 7 && dist < 10)
 				{
+					
 					return lerp(GetShadowVeryClose(lightCoordsVeryClose, input, TangentNormal), GetShadowClose(lightCoordsClose, input, TangentNormal), (dist - 7) / 3);
 				}
 
@@ -801,6 +818,7 @@ float GetShadow(float3 lightCoords, float3 lightCoordsClose, float3 lightCoordsV
 		}
 #endif
 
+		if(DirectionalLightShadowQuality>1)
 		if (dist < 8.0)
 		{
 
@@ -1200,9 +1218,14 @@ float SamplePointLightPCFSample(sampler2D s ,int i, float3 tangent, float3 bitan
 
     float offsetSize = (1/(LightResolutions[i]))*2;
 
+
+
 #if OPENGL
-    smooth = false;
+
+	smooth = false;
+
 #endif
+
 
     for (float x = -1; x <= 1; x += 1)
 			{
@@ -1365,9 +1388,16 @@ half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half rough
 
 
 #ifdef SIMPLE_SHADOWS
-		simpleShadows = true;
+
+	simpleShadows = true;
+
 #endif
 
+#if OPENGL
+
+	simpleShadows = true;
+
+#endif
 
 
 		float bias = -5 / LightResolutions[i] * distanceToLight;
@@ -1384,16 +1414,22 @@ half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half rough
 
 		float pixelSize = ((1.0f/LightResolutions[i]) * distanceToLight) / distance(viewPos, pixelInput.MyPosition);
 
-
-        if(pixelSize < 0.0006)
+		if(PointLightShadowQuality == 0)
+		{
+			notShadow = 1;
+		}else
+        if(pixelSize < 0.0006 || PointLightShadowQuality == 1)
         {
 
             notShadow = GetPointLightDepth(i, lightDir,distanceToLight*distFactor + bias);
 
         }else
-		if(pixelSize < 0.002)
+		if(pixelSize < 0.002 || simpleShadows || PointLightShadowQuality == 2)
         {
             notShadow = SamplePointLightPCF(i, tangent, bitangent, lightDir, distanceToLight*distFactor, bias, false);
+
+			//notShadow = GetPointLightDepthLinear(i, lightDir,distanceToLight*distFactor + bias*1.6);
+
         }
         else
         {
@@ -1732,17 +1768,17 @@ float3 RandomVector(float2 uv, float roughness)
 float3 ApplyReflectionCubemapOnSurface(float3 color, float3 albedo, float reflectiveness, float metalic, float roughness, float2 texCoord, float3 reflectionBase)
 {
 
-	float3 cube = SampleCubemap(ReflectionCubemapSampler, reflectionBase);
+	float3 cube = 0;SampleCubemap(ReflectionCubemapSampler, reflectionBase);
 
-	const int numSamples = 8;
+	const int numSamples = 2;
 
-	roughness = saturate((roughness * lerp(roughness, 1, 0.7)) - 0.03);
+	roughness = saturate((roughness * lerp(roughness, 1, 0.7)) - 0.03) / 1.5;
 
-	float n = 1;
+	float n = 0;
 
 	for (int i = 0; i < numSamples; i++)
 	{
-		cube += SampleCubemap(ReflectionCubemapSampler, normalize(reflectionBase + RandomVector(texCoord + float2((i * 3) % 3.12352 + 0.1, i), (i * 3) % 3.12352 + 0.1) * roughness));
+		cube += SampleCubemap(ReflectionCubemapSampler, normalize(reflectionBase + normalize(RandomVector(texCoord + float2((i * 3) % 3.123 + 0.1, i), (i * 3) % 3.12352 + 0.1)) * roughness));
 
 		n++;
 	}
@@ -1754,6 +1790,8 @@ float3 ApplyReflectionCubemapOnSurface(float3 color, float3 albedo, float reflec
 
 
 	float3 reflectionIntens = lerp(0, reflectiveness, metalic);
+
+	//return cube;
 
 	return lerp(color, cube * albedo, reflectiveness);
 }

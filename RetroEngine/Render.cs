@@ -21,10 +21,8 @@ namespace RetroEngine
     {
 
         RenderTarget2D colorPath;
-        RenderTarget2D emissivePath;
         internal RenderTarget2D normalPath;
         public RenderTarget2D positionPath;
-        RenderTarget2D depthPath;
 
         RenderTarget2D ForwardOutput;
         internal RenderTarget2D ReflectionOutput;
@@ -256,6 +254,8 @@ namespace RetroEngine
 
             effect.Parameters["ViewmodelShadowsEnabled"]?.SetValue(Graphics.ViewmodelShadows);
 
+            effect.Parameters["PointLightShadowQuality"]?.SetValue(Graphics.PointLightShadowQuality);
+            effect.Parameters["DirectionalLightShadowQuality"]?.SetValue(Graphics.DirectionalLightShadowQuality);
 
             effect.ApplyValues();
 
@@ -289,7 +289,7 @@ namespace RetroEngine
             InitRenderTargetIfNeed(ref FxaaOutput);
 
 
-            InitSizedRenderTargetIfNeed(ref ssaoOutput,(int)(GetScreenResolution().Y/2));
+            InitSizedRenderTargetIfNeed(ref ssaoOutput,(int)(GetScreenResolution().Y/4));
 
             InitSizedRenderTargetIfNeed(ref bloomSample, 256, surfaceFormat: SurfaceFormat.HalfVector4);
             InitSizedRenderTargetIfNeed(ref bloomSample2, 128, surfaceFormat: SurfaceFormat.HalfVector4);

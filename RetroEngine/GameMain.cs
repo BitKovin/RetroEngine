@@ -753,12 +753,10 @@ namespace RetroEngine
 
         public virtual void OnLevelChanged()
         {
-            //Time.gameTime = 0;
+            
             render.shadowPassRenderDelay = new Delay();
 
             SaveSystem.SaveManager.LoadSaveIfPending();
-
-            
 
         }
 

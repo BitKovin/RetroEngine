@@ -32,6 +32,10 @@ namespace RetroEngine
 
         public static bool ViewmodelShadows = false;
 
+
+        public static int PointLightShadowQuality = 3;
+        public static int DirectionalLightShadowQuality = 3;
+
         public static float SSRResolutionScale = 0.7f;
         public static bool EnableSSR = true;
 
@@ -184,6 +188,18 @@ namespace RetroEngine
         public static void SetMipLevel(int mipLevel)
         {
             MipLevel = mipLevel;
+        }
+
+        [ConsoleCommand("g.pointshadows")]
+        public static void SetPointLightShadowQuality(int value)
+        {
+            PointLightShadowQuality = value;
+        }
+
+        [ConsoleCommand("g.directshadows")]
+        public static void SetDirectionalLightShadowQuality(int value)
+        {
+            DirectionalLightShadowQuality = value;
         }
 
         static Vector3 GetCameraPositionByPixelGrid(float lightDistance)

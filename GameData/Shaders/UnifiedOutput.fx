@@ -1,4 +1,4 @@
-﻿//#define SIMPLE_SHADOWS
+﻿//#define SCREEN_SPACE_REFLECTIONS
 
 #include "ShaderLib/BasicShader.fx"
 
@@ -135,8 +135,16 @@ PixelOutput PixelShaderFunction(PixelInput input)
     output.Reflectiveness = float4(reflectiveness, roughness, 0, pbs);
     
     if(pbs>0.5)
-    textureColor = ApplyReflectionOnSurface(textureColor,albedo, screenCoords, reflectiveness, metalic);
-    output.Color = float4(textureColor, textureAlpha);
+    {
+        #ifdef SCREEN_SPACE_REFLECTIONS
+        textureColor = ApplyReflectionOnSurface(textureColor,albedo, screenCoords, reflectiveness, metalic);
+        #else
+        textureColor = ApplyReflectionCubemapOnSurface(textureColor,albedo, reflectiveness, metalic, roughness, screenCoords, reflection);
+        output.Reflectiveness = float4(0, 1, 0, pbs);
+        #endif
+    }
+        
+    output.Color = float4(textureColor, 1);
 
     return output;
 }

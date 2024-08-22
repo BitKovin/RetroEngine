@@ -247,14 +247,14 @@ float CalculateSSAONew(float3 position, float currentDepth, float3 normal)
 
     float bias = 0.000;
 
-    const float minRadius = 0.04; 
-    float maxRadius = 1; 
+    const float minRadius = 0.02; 
+    float maxRadius = 0.5; 
 
     float distanceMultiplier = map(clamp(distance(viewPos, position),1,30), 3, 30, 1, 4);
 
     maxRadius *= distanceMultiplier;
 
-    const int samples = 32;
+    const int samples = 48;
 
     float biasScale = 1 + 2 * (0.5 - distance(abs((normal, cameraForward)),0.5));
 
@@ -305,7 +305,7 @@ float CalculateSSAONew(float3 position, float currentDepth, float3 normal)
     }
 
     occlusion = (occlusion / samples);
-    occlusion*=occlusion;
+    occlusion*=lerp(occlusion,1,0.2);
 
     //occlusion *= 1.1;
 

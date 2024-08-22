@@ -761,8 +761,8 @@ namespace RetroEngine.Game.Entities.Player
         {
             MathHelper.Transform t = bodyMesh.GetBoneMatrix("head").DecomposeMatrix();
 
-            Camera.position = t.Position + Camera.rotation.GetForwardVector() * 0.2f;
-            Camera.position += Camera.rotation.GetUpVector() * 0.15f;
+            Camera.position = t.Position + Camera.rotation.GetForwardVector() * 0.1f;
+            Camera.position += Camera.rotation.GetUpVector() * 0.1f;
         }
 
         void ThirdPersonCameraUpdate()
@@ -809,6 +809,7 @@ namespace RetroEngine.Game.Entities.Player
             else
             {
                 FirstPersonCameraUpdate();
+                
             }
 
 

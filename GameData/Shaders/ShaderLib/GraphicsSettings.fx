@@ -1,0 +1,2 @@
+int PointLightShadowQuality;
+int DirectionalLightShadowQuality;

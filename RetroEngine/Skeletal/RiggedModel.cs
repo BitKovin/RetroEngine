@@ -948,8 +948,10 @@ namespace RetroEngine.Skeletal
                 double tq1 = 0, tq2 = 0, tp1 = 0, tp2 = 0, ts1 = 0, ts2 = 0;
 
                 // Find keyframes for quaternion, position, and scale in one loop
-                fixed (double* qrotTimes = nodeAnim.qrotTime.ToArray(), posTimes = nodeAnim.positionTime.ToArray(), scaleTimes = nodeAnim.scaleTime.ToArray())
-                {
+                var qrotTimes = nodeAnim.qrotTime;
+                var posTimes = nodeAnim.positionTime;
+                var scaleTimes = nodeAnim.scaleTime;
+                
                     for (int i = 0; i < qrotCount || i < posCount || i < scaleCount; i++)
                     {
                         if (i < qrotCount && animTime >= qrotTimes[i])
@@ -976,7 +978,7 @@ namespace RetroEngine.Skeletal
                             ts2 = scaleTimes[sIndex2] > ts1 ? scaleTimes[sIndex2] : scaleTimes[sIndex2] + durationSecs;
                         }
                     }
-                }
+                
 
                 Quaternion q1 = nodeAnim.qrot[qIndex1];
                 Quaternion q2 = nodeAnim.qrot[qIndex2];
