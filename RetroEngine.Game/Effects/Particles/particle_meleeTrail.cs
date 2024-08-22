@@ -62,6 +62,7 @@ namespace RetroEngine.Game.Effects.Particles
 
             particle.Scale = Math.Clamp(particle.Scale, 0, 1);
 
+
             //particle.color -= new Vector4(0, 1, 1, 0) * Time.DeltaTime * 10;
 
             //particle.velocity -= new Vector3(0, 2, 0) * (Time.DeltaTime / 2f);
@@ -81,7 +82,7 @@ namespace RetroEngine.Game.Effects.Particles
             particle.BouncePower = 0.1f;
 
             particle.transparency = 1f;
-            particle.color = Vector4.One;
+            particle.color = new Vector4(1,0.2f,0.2f,0.2f);
             particle.deathTime = 6;
 
             return particle;

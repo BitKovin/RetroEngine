@@ -409,7 +409,11 @@ namespace RetroEngine
 
             if (Graphics.EarlyDepthDiscard)
             {
-                graphics.GraphicsDevice.Clear(Color.Black);
+                if(GameMain.Instance.DefaultShader.ToLower() == "overdraw")
+                    graphics.GraphicsDevice.Clear(Color.Black);
+                else
+                    graphics.GraphicsDevice.Clear(ClearOptions.DepthBuffer, Color.Black, 1.0f, 0);
+
                 DepthApplyEffect.Parameters["OldFrame"].SetValue(GameMain.Instance.DefaultShader.ToLower() == "overdraw" ? black : oldFrame);
                 DrawFullScreenQuad(DepthPrepathBufferOutput, DepthApplyEffect);
             }else

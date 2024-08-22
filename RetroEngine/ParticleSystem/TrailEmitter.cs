@@ -17,7 +17,7 @@ namespace RetroEngine.Particles
 
         public TrailEmitter() : base()
         {
-            Shader = new Graphic.SurfaceShaderInstance("UnifiedOutput");
+            Shader = new Graphic.SurfaceShaderInstance("Unlit");
             isParticle = true;
 
             CastShadows = false;
@@ -134,7 +134,7 @@ namespace RetroEngine.Particles
             _graphicsDevice.RasterizerState = RasterizerState.CullNone;
             ApplyShaderParams(effect, null);
             ApplyPointLights(effect);
-            effect.Parameters["isParticle"]?.SetValue(true);
+            //effect.Parameters["isParticle"]?.SetValue(true);
 
             _graphicsDevice.SetVertexBuffer(vertexBuffer);
             _graphicsDevice.Indices = indexBuffer;
@@ -163,6 +163,11 @@ namespace RetroEngine.Particles
             effect.Parameters["isParticle"]?.SetValue(false);
 
 
+        }
+
+        public override bool IntersectsBoundingSphere(BoundingSphere sphere)
+        {
+            return true;
         }
 
         public override Particle GetNewParticle()
