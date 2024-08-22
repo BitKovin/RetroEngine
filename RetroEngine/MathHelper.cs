@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -35,10 +36,23 @@ namespace RetroEngine
             return new Vector3(vector.X, 0, vector.Z);
         }
 
+        public static float InvSqrt(float x)
+        {
+            float xhalf = 0.5f * x;
+            int i = BitConverter.SingleToInt32Bits(x);
+            i = 0x5f3759df - (i >> 1);
+            x = BitConverter.Int32BitsToSingle(i);
+            x = x * (1.5f - xhalf * x * x);
+            return x;
+        }
+        public static Vector3 FastNormalize(this Vector3 value)
+        {
+            float num = InvSqrt(value.X * value.X + value.Y * value.Y + value.Z * value.Z);
+            return new Vector3(value.X * num, value.Y * num, value.Z * num);
+        }
         public static Vector3 Normalized (this Vector3 vector)
         {
-            vector.Normalize();
-            return vector;
+            return vector.FastNormalize();
         }
 
         public static Vector3 Clamp(this Vector3 vector, float min, float max)

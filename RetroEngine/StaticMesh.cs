@@ -472,7 +472,7 @@ namespace RetroEngine
 
                 int filledLights = 0;
 
-                List<LightManager.PointLightData> filled = new List<LightManager.PointLightData>();
+                HashSet<int> filled = new HashSet<int>();
 
                 int shaderPointLightsShadowed = 7;
 
@@ -484,7 +484,7 @@ namespace RetroEngine
 
                     if (intersects == false) continue;
 
-                    filled.Add(LightManager.FinalPointLights[i]);
+                    filled.Add(i);
 
                     objectLights.Add(LightManager.FinalPointLights[i]);
                     filledLights++;
@@ -496,7 +496,7 @@ namespace RetroEngine
                 {
                     //if (LightManager.FinalPointLights[i].shadowData.CastShadows == true) continue;
 
-                    if (filled.Contains(LightManager.FinalPointLights[i]))
+                    if (filled.Contains(i))
                         continue;
 
                     bool intersects = IntersectsBoundingSphere(new BoundingSphere { Radius = LightManager.FinalPointLights[i].Radius, Center = LightManager.FinalPointLights[i].Position });
@@ -515,7 +515,7 @@ namespace RetroEngine
                     LightPos[i] = new Vector4(objectLights[i].Position, objectLights[i].InnerMinDot);
                     LightColor[i] = objectLights[i].Color;
                     LightRadius[i] = objectLights[i].Radius;
-                    LightRes[i] = filled.Contains(objectLights[i]) ? objectLights[i].Resolution : 0;
+                    LightRes[i] = objectLights[i].Resolution;
 
                     if (objectLights[i].shadowData.CastShadows == false)
                         LightRes[i] = 0;

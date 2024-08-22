@@ -15,6 +15,11 @@ namespace RetroEngine.Particles
         VertexBuffer vertexBuffer;
         IndexBuffer indexBuffer;
 
+        int primitiveCount = 0;
+
+        private static List<VertexBuffer> freeVertexBuffers = new List<VertexBuffer>();
+        private static List<IndexBuffer> freeIndexBuffers = new List<IndexBuffer>();
+
         public RibbonEmitter() : base()
         {
             Shader = new Graphic.SurfaceShaderInstance("UnifiedOutput");
@@ -28,42 +33,61 @@ namespace RetroEngine.Particles
             OverrideBlendState = BlendState.NonPremultiplied;
         }
 
+
         public void GenerateBuffers(List<Particle> particles)
         {
-            vertexBuffer?.Dispose();
-            indexBuffer?.Dispose();
-            if (particles == null) return;
-
-            if (particles.Count < 2)
+            if (particles == null || particles.Count < 2)
+            {
+                FreeBuffers();
                 return;
+            }
 
             GraphicsDevice _graphicsDevice = GameMain.Instance.GraphicsDevice;
 
-            // Initialize vertex and index lists
-            List<VertexData> vertices = new List<VertexData>();
-            List<short> indices = new List<short>();
+            // Calculate required vertex and index counts
+            int requiredVertexCount = particles.Count * 2;
+            int requiredIndexCount = (particles.Count - 1) * 6;
 
-            // Generate vertices for ribbon
+            // Check if buffers need resizing (allocate with some slack, e.g., 25%)
+            int vertexCapacityThreshold = vertexBuffer?.VertexCount ?? 0;
+            int indexCapacityThreshold = indexBuffer?.IndexCount ?? 0;
+
+            if (vertexBuffer == null || requiredVertexCount > vertexCapacityThreshold)
+            {
+                vertexCapacityThreshold = (int)(requiredVertexCount * 2f); // 25% extra space
+                vertexBuffer = ReuseOrCreateVertexBuffer(_graphicsDevice, vertexCapacityThreshold);
+            }
+
+            if (indexBuffer == null || requiredIndexCount > indexCapacityThreshold)
+            {
+                indexCapacityThreshold = (int)(requiredIndexCount * 2f); // 25% extra space
+                indexBuffer = ReuseOrCreateIndexBuffer(_graphicsDevice, indexCapacityThreshold);
+            }
+
+            // Initialize vertex and index arrays
+            VertexData[] vertices = new VertexData[requiredVertexCount];
+            short[] indices = new short[requiredIndexCount];
+
+            // Generate vertices and indices
             for (int i = 0; i < particles.Count; i++)
             {
                 Particle particle = particles[i];
                 Vector3 p1 = particle.position;
 
                 Vector3 dir;
-
                 if (i < particles.Count - 1)
                 {
-                    dir = Vector3.Normalize(particles[i].position - particles[i + 1].position);
+                    dir = MathHelper.FastNormalize(particles[i].position - particles[i + 1].position);
                 }
                 else
                 {
-                    dir = Vector3.Normalize(particles[i - 1].position - particles[i].position);
+                    dir = MathHelper.FastNormalize(particles[i - 1].position - particles[i].position);
                 }
 
                 Vector3 cameraForward = p1 - Camera.position;
-                cameraForward.Normalize();
+                cameraForward = cameraForward.Normalized();
                 Vector3 perp = Vector3.Cross(dir, cameraForward);
-                perp.Normalize();
+                perp = perp.Normalized();
 
                 // Calculate vertices for the quad
                 Vector3 topLeft = p1 + perp * (particle.Scale / 2);
@@ -74,39 +98,78 @@ namespace RetroEngine.Particles
                 float texCoordYTop = 0f;
                 float texCoordYBottom = 1f;
 
-                // Add vertices to the list with texture coordinates
-                vertices.Add(new VertexData { Position = topLeft, TextureCoordinate = new Vector2(texCoordX, texCoordYTop), Color = particle.color });
-                vertices.Add(new VertexData { Position = topRight, TextureCoordinate = new Vector2(texCoordX, texCoordYBottom), Color = particle.color });
-
+                // Add vertices to the array
+                vertices[i * 2] = new VertexData { Position = topLeft, TextureCoordinate = new Vector2(texCoordX, texCoordYTop), Color = particle.color };
+                vertices[i * 2 + 1] = new VertexData { Position = topRight, TextureCoordinate = new Vector2(texCoordX, texCoordYBottom), Color = particle.color };
 
                 // Add indices to form the quad
                 if (i > 0)
                 {
-                    indices.Add((short)(i * 2));
-                    indices.Add((short)(i * 2 - 1));
-                    indices.Add((short)(i * 2 - 2));
+                    int indexOffset = (i - 1) * 6;
+                    int vertexOffset = i * 2;
 
-                    indices.Add((short)(i * 2));
-                    indices.Add((short)(i * 2 + 1));
-                    indices.Add((short)(i * 2 - 1));
+                    indices[indexOffset] = (short)vertexOffset;
+                    indices[indexOffset + 1] = (short)(vertexOffset - 1);
+                    indices[indexOffset + 2] = (short)(vertexOffset - 2);
+
+                    indices[indexOffset + 3] = (short)vertexOffset;
+                    indices[indexOffset + 4] = (short)(vertexOffset + 1);
+                    indices[indexOffset + 5] = (short)(vertexOffset - 1);
                 }
             }
 
+            // Set buffer data
+            vertexBuffer.SetData(vertices, 0, requiredVertexCount);
+            indexBuffer.SetData(indices, 0, requiredIndexCount);
 
-            // Create and set vertex buffer
-            vertexBuffer = new VertexBuffer(_graphicsDevice, VertexData.VertexDeclaration, vertices.Count, BufferUsage.WriteOnly);
-            vertexBuffer.SetData(vertices.ToArray());
-
-            // Create and set index buffer
-            indexBuffer = new IndexBuffer(_graphicsDevice, IndexElementSize.SixteenBits, indices.Count, BufferUsage.WriteOnly);
-            indexBuffer.SetData(indices.ToArray());
-
-            // Set vertex and index buffers
-            _graphicsDevice.SetVertexBuffer(vertexBuffer);
-            _graphicsDevice.Indices = indexBuffer;
+            // Calculate the number of primitives to draw
+            primitiveCount = requiredIndexCount / 3;
         }
 
-        public override void DrawUnified()
+        private VertexBuffer ReuseOrCreateVertexBuffer(GraphicsDevice graphicsDevice, int requiredVertexCount)
+        {
+            // Try to reuse a buffer if available
+            VertexBuffer buffer = freeVertexBuffers.FirstOrDefault(vb => vb.VertexCount >= requiredVertexCount);
+            if (buffer != null)
+            {
+                freeVertexBuffers.Remove(buffer);
+                return buffer;
+            }
+
+            return new VertexBuffer(graphicsDevice, VertexData.VertexDeclaration, requiredVertexCount, BufferUsage.WriteOnly);
+        }
+
+        private IndexBuffer ReuseOrCreateIndexBuffer(GraphicsDevice graphicsDevice, int requiredIndexCount)
+        {
+            // Try to reuse a buffer if available
+            IndexBuffer buffer = freeIndexBuffers.FirstOrDefault(ib => ib.IndexCount >= requiredIndexCount);
+            if (buffer != null)
+            {
+                freeIndexBuffers.Remove(buffer);
+                return buffer;
+            }
+
+            return new IndexBuffer(graphicsDevice, IndexElementSize.SixteenBits, requiredIndexCount, BufferUsage.WriteOnly);
+        }
+
+        private void FreeBuffers()
+        {
+            // Return buffers to the pool for reuse
+            if (vertexBuffer != null)
+            {
+                freeVertexBuffers.Add(vertexBuffer);
+                vertexBuffer = null;
+            }
+
+            if (indexBuffer != null)
+            {
+                freeIndexBuffers.Add(indexBuffer);
+                indexBuffer = null;
+            }
+        }
+    
+
+    public override void DrawUnified()
         {
             if (destroyed) return;
 
@@ -160,7 +223,8 @@ namespace RetroEngine.Particles
                 if (destroyed == false)
                 {
                     effect.CurrentTechnique.Passes[0].Apply();
-                    _graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, vertexBuffer.VertexCount);
+                    if(primitiveCount>0)
+                    _graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, primitiveCount);
                 }
 
             }

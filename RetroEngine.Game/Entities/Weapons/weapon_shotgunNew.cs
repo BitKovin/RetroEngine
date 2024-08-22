@@ -128,7 +128,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             if (attackDelay.Wait()) return;
 
-            attackDelay.AddDelay(1f);
+            attackDelay.AddDelay(0.1f);
 
             fireSoundPlayer.Play(true);
 
