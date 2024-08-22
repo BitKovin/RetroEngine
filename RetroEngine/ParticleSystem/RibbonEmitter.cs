@@ -183,8 +183,8 @@ namespace RetroEngine.Particles
 
             destroyed = true;
 
-            GameMain.pendingDispose.Add(vertexBuffer);
-            GameMain.pendingDispose.Add(indexBuffer);
+            FreeBuffers();
+
         }
 
         void DrawRibbon()
