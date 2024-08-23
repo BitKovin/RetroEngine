@@ -831,7 +831,11 @@ namespace RetroEngine
 
                     MeshPartData meshPartData = meshPart.Tag;
 
-                    bool transperent = meshPartData.textureName.Contains("_t.") || Transparency<1;
+                    bool transperent = Transparency < 1;
+
+                    if(transperent == false)
+                    if (meshPartData.textureName != null)
+                        transperent = meshPartData.textureName.Contains("_t.");
 
                     Effect effect = Shader.GetAndApply(transperent ? SurfaceShaderInstance.ShaderSurfaceType.Transperent : SurfaceShaderInstance.ShaderSurfaceType.Default);
 
