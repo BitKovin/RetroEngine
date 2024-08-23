@@ -117,7 +117,13 @@ namespace RetroEngine.Game.Entities.Weapons
             if (GameMain.Instance.paused) return;
 
             if (Time.gameTime - SpawnTime > 0.02f && character.isFirstPerson())
-                Camera.rotation = mesh.GetBoneMatrix("camera", Camera.GetRotationMatrix()).DecomposeMatrix().Rotation;
+            {
+                var trans = mesh.GetBoneMatrix("camera", Matrix.CreateScale(0.01f)* Camera.GetMatrix()).DecomposeMatrix();
+
+                Camera.rotation = trans.Rotation;
+                Camera.position = trans.Position;
+
+            }
 
             fireSoundPlayer.Position = Camera.position;
         }
