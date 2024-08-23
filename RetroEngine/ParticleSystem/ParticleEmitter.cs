@@ -42,6 +42,49 @@ namespace RetroEngine.Particles
 
         public float ParticleSizeMultiplier = 1;
 
+        protected static List<VertexBuffer> freeVertexBuffers = new List<VertexBuffer>();
+        protected static List<VertexBuffer> freeIstanceBuffers = new List<VertexBuffer>();
+        protected static List<IndexBuffer> freeIndexBuffers = new List<IndexBuffer>();
+
+        protected VertexBuffer ReuseOrCreateVertexBuffer(GraphicsDevice graphicsDevice, int requiredVertexCount)
+        {
+            // Try to reuse a buffer if available
+            VertexBuffer buffer = freeVertexBuffers.FirstOrDefault(vb => vb.VertexCount >= requiredVertexCount);
+            if (buffer != null)
+            {
+                freeVertexBuffers.Remove(buffer);
+                return buffer;
+            }
+
+            return new VertexBuffer(graphicsDevice, VertexData.VertexDeclaration, requiredVertexCount, BufferUsage.WriteOnly);
+        }
+
+        protected VertexBuffer ReuseOrCreateInstanceBuffer(GraphicsDevice graphicsDevice, int requiredVertexCount)
+        {
+            // Try to reuse a buffer if available
+            VertexBuffer buffer = freeIstanceBuffers.FirstOrDefault(vb => vb.VertexCount >= requiredVertexCount);
+            if (buffer != null)
+            {
+                freeIstanceBuffers.Remove(buffer);
+                return buffer;
+            }
+
+            return new VertexBuffer(graphicsDevice, InstanceData.VertexDeclaration, requiredVertexCount, BufferUsage.WriteOnly);
+        }
+
+        protected IndexBuffer ReuseOrCreateIndexBuffer(GraphicsDevice graphicsDevice, int requiredIndexCount)
+        {
+            // Try to reuse a buffer if available
+            IndexBuffer buffer = freeIndexBuffers.FirstOrDefault(ib => ib.IndexCount >= requiredIndexCount);
+            if (buffer != null)
+            {
+                freeIndexBuffers.Remove(buffer);
+                return buffer;
+            }
+
+            return new IndexBuffer(graphicsDevice, IndexElementSize.SixteenBits, requiredIndexCount, BufferUsage.WriteOnly);
+        }
+
         public ParticleEmitter()
         {
             CastShadows = false;
@@ -169,11 +212,26 @@ namespace RetroEngine.Particles
 
             if (instanceData == null) return;
 
-            instanceBuffer?.Dispose();
+            if(instanceBuffer == null || instanceBuffer.VertexCount != instanceData.Length)
+            {
+                FreeBuffers();
 
-            instanceBuffer = new VertexBuffer(GameMain.Instance.GraphicsDevice, InstanceData.VertexDeclaration, instanceData.Length, BufferUsage.None);
+                instanceBuffer = ReuseOrCreateInstanceBuffer(GameMain.Instance.GraphicsDevice, instanceData.Length);
+
+            }
 
             instanceBuffer.SetData(instanceData);
+
+        }
+
+        private void FreeBuffers()
+        {
+            // Return buffers to the pool for reuse
+            if (instanceBuffer != null)
+            {
+                freeIstanceBuffers.Add(instanceBuffer);
+                instanceBuffer = null;
+            }
 
         }
 

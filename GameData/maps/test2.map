@@ -10,6 +10,7 @@
 "directLightBrightness" "0.04"
 "dynamicSunShadowsEnabled" "true"
 "geometricalShadowsEnabled" "false"
+"_tb_soft_map_bounds" "none"
 // brush 0
 {
 ( -896 288 272 ) ( -896 768 208 ) ( -896 768 272 ) brushes/bricks 0 0 0 0.75 0.75

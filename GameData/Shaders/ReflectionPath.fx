@@ -135,7 +135,7 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
         if (SampledDepth + 0.02 < dist&& SampledDepth>0.3f)
         {
 
-            if(distance(oldDepth, SampledDepth)<disToCamera/5)
+            if(distance(oldDepth, SampledDepth)<disToCamera/1)
                 outCoords = lerp(coords, oldCoords,1);
 
             Step /= factor;
@@ -223,7 +223,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 
     if (factor.x > 0.2)
     {
-        ssr = SampleSSR(reflection, worldPos, depth, normal, vDir, 30, 1.6);
+        ssr = SampleSSR(reflection, worldPos, depth, normal, vDir, 40, 1.5);
     }
     
     float3 reflectionColor = lerp(cube, ssr.rgb, ssr.w);

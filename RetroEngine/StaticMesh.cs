@@ -1521,6 +1521,8 @@ namespace RetroEngine
                 loadedScenes.Remove(loadedScenes.Keys.First());
             }
 
+            //scene.Materials[0].TextureSpecular.
+
             if (scene == null)
             {
                 // Error handling for failed file import
@@ -1537,8 +1539,6 @@ namespace RetroEngine
             foreach (var mesh in scene.Meshes)
             {
 
-
-
                 if (mesh.Name.Contains("op_"))
                 {
                     string name = mesh.Name;
@@ -1546,6 +1546,8 @@ namespace RetroEngine
                     name = name.Replace("_Mesh", "");
                     points.Add(name, new Vector3(-mesh.Vertices[0].X, mesh.Vertices[0].Y, mesh.Vertices[0].Z));
                 }
+
+                
 
                 var vertices = new List<VertexData>();
                 var indices = new List<int>();

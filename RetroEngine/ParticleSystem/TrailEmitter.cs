@@ -15,6 +15,8 @@ namespace RetroEngine.Particles
         VertexBuffer vertexBuffer;
         IndexBuffer indexBuffer;
 
+        int primitiveCount = 0;
+
         public TrailEmitter() : base()
         {
             Shader = new Graphic.SurfaceShaderInstance("Unlit");
@@ -30,14 +32,34 @@ namespace RetroEngine.Particles
 
         public void GenerateBuffers(List<Particle> particles)
         {
-            vertexBuffer?.Dispose();
-            indexBuffer?.Dispose();
-            if (particles == null) return;
-
-            if (particles.Count < 2)
+            if (particles == null || particles.Count < 2)
+            {
+                FreeBuffers();
                 return;
+            }
 
             GraphicsDevice _graphicsDevice = GameMain.Instance.GraphicsDevice;
+
+
+            // Calculate required vertex and index counts
+            int requiredVertexCount = particles.Count * 2;
+            int requiredIndexCount = (particles.Count - 1) * 6;
+
+            // Check if buffers need resizing (allocate with some slack, e.g., 25%)
+            int vertexCapacityThreshold = vertexBuffer?.VertexCount ?? 0;
+            int indexCapacityThreshold = indexBuffer?.IndexCount ?? 0;
+
+            if (vertexBuffer == null || requiredVertexCount > vertexCapacityThreshold)
+            {
+                vertexCapacityThreshold = (int)(requiredVertexCount * 2f); // 25% extra space
+                vertexBuffer = ReuseOrCreateVertexBuffer(_graphicsDevice, vertexCapacityThreshold);
+            }
+
+            if (indexBuffer == null || requiredIndexCount > indexCapacityThreshold)
+            {
+                indexCapacityThreshold = (int)(requiredIndexCount * 2f); // 25% extra space
+                indexBuffer = ReuseOrCreateIndexBuffer(_graphicsDevice, indexCapacityThreshold);
+            }
 
             // Initialize vertex and index lists
             List<VertexData> vertices = new List<VertexData>();
@@ -85,17 +107,28 @@ namespace RetroEngine.Particles
             }
 
 
-            // Create and set vertex buffer
-            vertexBuffer = new VertexBuffer(_graphicsDevice, VertexData.VertexDeclaration, vertices.Count, BufferUsage.WriteOnly);
-            vertexBuffer.SetData(vertices.ToArray());
+            // Set buffer data
+            vertexBuffer.SetData(vertices.ToArray(), 0, requiredVertexCount);
+            indexBuffer.SetData(indices.ToArray(), 0, requiredIndexCount);
 
-            // Create and set index buffer
-            indexBuffer = new IndexBuffer(_graphicsDevice, IndexElementSize.SixteenBits, indices.Count, BufferUsage.WriteOnly);
-            indexBuffer.SetData(indices.ToArray());
+            // Calculate the number of primitives to draw
+            primitiveCount = requiredIndexCount / 3;
+        }
 
-            // Set vertex and index buffers
-            _graphicsDevice.SetVertexBuffer(vertexBuffer);
-            _graphicsDevice.Indices = indexBuffer;
+        private void FreeBuffers()
+        {
+            // Return buffers to the pool for reuse
+            if (vertexBuffer != null)
+            {
+                freeVertexBuffers.Add(vertexBuffer);
+                vertexBuffer = null;
+            }
+
+            if (indexBuffer != null)
+            {
+                freeIndexBuffers.Add(indexBuffer);
+                indexBuffer = null;
+            }
         }
 
         public override void DrawUnified()
@@ -155,7 +188,7 @@ namespace RetroEngine.Particles
                 if (destroyed == false)
                 {
                     effect.CurrentTechnique.Passes[0].Apply();
-                    _graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, vertexBuffer.VertexCount);
+                    _graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, primitiveCount);
                 }
 
             }

@@ -534,10 +534,6 @@ half CalculateSpecular(float3 worldPos, half3 normal, half3 lightDir, half rough
 	// Geometry function using Smith's method
 	half G = GeometrySmith(normal, vDir, lightDir, roughnessSq);
 
-	// Fresnel term using Schlick's approximation
-	half3 F0 = lerp(float3(0.04f, 0.04f, 0.04f), albedo, metallic);
-	half3 F = FresnelSchlick(NdotH, F0);
-
 	// Specular BRDF
 	half3 specular = (D * G) / (4.0f * NdotV * NdotL + 0.001f);
 
@@ -1741,7 +1737,6 @@ float3 ApplyReflectionOnSurface(float3 color, float3 albedo, float2 screenCoords
 	//reflection = saturate(reflection);
 
 	float lum = 0;// saturate(CalcLuminance(reflection))/30;
-
 
 	float3 reflectionIntens = lerp(0, reflectiveness, metalic);
 

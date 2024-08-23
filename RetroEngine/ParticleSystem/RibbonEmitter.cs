@@ -17,9 +17,6 @@ namespace RetroEngine.Particles
 
         int primitiveCount = 0;
 
-        private static List<VertexBuffer> freeVertexBuffers = new List<VertexBuffer>();
-        private static List<IndexBuffer> freeIndexBuffers = new List<IndexBuffer>();
-
         public RibbonEmitter() : base()
         {
             Shader = new Graphic.SurfaceShaderInstance("UnifiedOutput");
@@ -124,32 +121,6 @@ namespace RetroEngine.Particles
 
             // Calculate the number of primitives to draw
             primitiveCount = requiredIndexCount / 3;
-        }
-
-        private VertexBuffer ReuseOrCreateVertexBuffer(GraphicsDevice graphicsDevice, int requiredVertexCount)
-        {
-            // Try to reuse a buffer if available
-            VertexBuffer buffer = freeVertexBuffers.FirstOrDefault(vb => vb.VertexCount >= requiredVertexCount);
-            if (buffer != null)
-            {
-                freeVertexBuffers.Remove(buffer);
-                return buffer;
-            }
-
-            return new VertexBuffer(graphicsDevice, VertexData.VertexDeclaration, requiredVertexCount, BufferUsage.WriteOnly);
-        }
-
-        private IndexBuffer ReuseOrCreateIndexBuffer(GraphicsDevice graphicsDevice, int requiredIndexCount)
-        {
-            // Try to reuse a buffer if available
-            IndexBuffer buffer = freeIndexBuffers.FirstOrDefault(ib => ib.IndexCount >= requiredIndexCount);
-            if (buffer != null)
-            {
-                freeIndexBuffers.Remove(buffer);
-                return buffer;
-            }
-
-            return new IndexBuffer(graphicsDevice, IndexElementSize.SixteenBits, requiredIndexCount, BufferUsage.WriteOnly);
         }
 
         private void FreeBuffers()

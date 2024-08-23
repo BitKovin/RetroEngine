@@ -1,4 +1,4 @@
-﻿//#define SCREEN_SPACE_REFLECTIONS
+﻿#define SCREEN_SPACE_REFLECTIONS
 
 #include "ShaderLib/BasicShader.fx"
 
