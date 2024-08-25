@@ -55,7 +55,6 @@ PixelOutput PixelShaderFunction(PixelInput input)
 
     if(earlyZ)
     {
-    
         DepthDiscard(depthIn,input);
     }
 
@@ -137,7 +136,7 @@ PixelOutput PixelShaderFunction(PixelInput input)
     if(pbs>0.5)
     {
         #ifdef SCREEN_SPACE_REFLECTIONS
-        textureColor = ApplyReflectionOnSurface(textureColor,albedo, screenCoords, reflectiveness, metalic);
+        textureColor = ApplyReflectionOnSurface(textureColor,albedo, screenCoords, reflectiveness, metalic, roughness);
         #else
         textureColor = ApplyReflectionCubemapOnSurface(textureColor,albedo, reflectiveness, metalic, roughness, screenCoords, reflection);
         output.Reflectiveness = float4(0, 1, 0, pbs);

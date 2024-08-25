@@ -22,8 +22,8 @@ namespace RetroEngine.Game.Entities
             base.Update();
 
 
-            if(Input.GetAction("test").Pressed())
-                FindPath();
+            //if(Input.GetAction("test").Pressed())
+                //FindPath();
 
 
             if (Input.GetAction("test2").Pressed())
@@ -31,7 +31,12 @@ namespace RetroEngine.Game.Entities
                 
                 var hit = Physics.LineTrace(Camera.position.ToPhysics(), (Camera.position + Camera.Forward*100).ToPhysics(), null, bodyType: BodyType.World | BodyType.MainBody);
 
-                Position = hit.HitPointWorld;
+                //Position = hit.HitPointWorld;
+
+                var ent = Level.GetCurrent().AddEntity(new testRecastNPC());
+
+                ent.Position = hit.HitPointWorld + Vector3.UnitY;
+                ent.Start();
 
                 DrawDebug.Sphere(0.2f, Position, Vector3.UnitX);
 

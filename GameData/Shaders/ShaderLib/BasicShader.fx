@@ -537,7 +537,7 @@ half CalculateSpecular(float3 worldPos, half3 normal, half3 lightDir, half rough
 	// Specular BRDF
 	half3 specular = (D * G) / (4.0f * NdotV * NdotL + 0.001f);
 
-	return specular * 0.75;
+	return specular * 1;
 }
 
 
@@ -1720,12 +1720,12 @@ float3 ApplyReflection(float3 inColor, float3 albedo, PixelInput input, float3 n
 	return lerp(inColor, reflectionColor, reflectiveness);*/
 }
 
-float3 ApplyReflectionOnSurface(float3 color, float3 albedo, float2 screenCoords, float reflectiveness, float metalic)
+float3 ApplyReflectionOnSurface(float3 color, float3 albedo, float2 screenCoords, float reflectiveness, float metalic, float roughness)
 {
 
 	float3 reflection = tex2D(ReflectionTextureSampler, screenCoords).rgb;
 
-	float2 texel = float2(1 / SSRWidth, 1 / SSRHeight);
+	float2 texel = roughness / float2(SSRWidth, SSRHeight) * 1.5;
 
 
 	reflection += tex2D(ReflectionTextureSampler, screenCoords + float2(texel.x, 0)).rgb / 2;

@@ -187,6 +187,9 @@ namespace RetroEngine.NavigationSystem
             {
                 Logger.Log("Error generating nav mesh");
             }
+
+            CrowdSystem.Init();
+
         }
 
         private static IDtTileCacheCompressorFactory _comp = DtTileCacheCompressorFactory.Shared;

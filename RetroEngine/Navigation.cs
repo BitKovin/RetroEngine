@@ -166,6 +166,9 @@ namespace RetroEngine
                     if(DrawNavigation)
                         RecastDebugDraw.DebugDrawNavMeshPolys(Recast.dtNavMesh);
                 }
+
+                CrowdSystem.Update();
+
             }
 
 
