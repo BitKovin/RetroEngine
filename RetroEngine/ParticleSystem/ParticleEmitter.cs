@@ -219,7 +219,6 @@ namespace RetroEngine.Particles
                 instanceBuffer = ReuseOrCreateInstanceBuffer(GameMain.Instance.GraphicsDevice, instanceData.Length);
 
             }
-
             instanceBuffer.SetData(instanceData);
 
         }
@@ -230,7 +229,6 @@ namespace RetroEngine.Particles
             if (instanceBuffer != null)
             {
                 freeIstanceBuffers.Add(instanceBuffer);
-                instanceBuffer = null;
             }
 
         }
@@ -413,6 +411,8 @@ namespace RetroEngine.Particles
 
             SetupBlending();
 
+            if(destroyed) return;
+
             if (frameStaticMeshData.model is not null)
             {
                 foreach (ModelMesh mesh in frameStaticMeshData.model.Meshes)
@@ -446,6 +446,8 @@ namespace RetroEngine.Particles
 
                             graphicsDevice.SetVertexBuffers(bindings);
 
+
+                            if (destroyed) return;
                             graphicsDevice.DrawInstancedPrimitives(
                                 PrimitiveType.TriangleList,
                                 meshPart.VertexOffset,

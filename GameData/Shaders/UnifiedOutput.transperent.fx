@@ -1,5 +1,4 @@
 ﻿#define SIMPLE_SHADOWS
-
 #include "ShaderLib/BasicShader.fx"
 
 texture Texture;
@@ -135,7 +134,7 @@ PixelOutput PixelShaderFunction(PixelInput input)
     output.Reflectiveness = float4(reflectiveness, roughness, 0, pbs);
 
     textureColor = ApplyReflectionCubemapOnSurface(textureColor,albedo, reflectiveness, metalic, roughness, screenCoords, reflection);
-    
+
     output.Color = float4(textureColor, textureAlpha);
 
     return output;

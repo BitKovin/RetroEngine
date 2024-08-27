@@ -221,7 +221,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR
     
 
 
-    if (factor.x > 0.7)
+    if (factor.y < 0.4)
     {
         ssr = SampleSSR(reflection, worldPos, depth, normal, vDir, 40, 1.5);
     }

@@ -289,7 +289,7 @@ namespace RetroEngine
             InitRenderTargetIfNeed(ref FxaaOutput);
 
 
-            InitSizedRenderTargetIfNeed(ref ssaoOutput,(int)(GetScreenResolution().Y/4));
+            InitSizedRenderTargetIfNeed(ref ssaoOutput,(int)(GetScreenResolution().Y/3));
 
             InitSizedRenderTargetIfNeed(ref bloomSample, 256, surfaceFormat: SurfaceFormat.HalfVector4);
             InitSizedRenderTargetIfNeed(ref bloomSample2, 128, surfaceFormat: SurfaceFormat.HalfVector4);

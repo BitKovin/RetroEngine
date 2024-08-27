@@ -714,6 +714,7 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input, float3 TangentNor
 #endif
 
 
+
 		numSamples = 2;
 
 		if (forceShadow > 0)
@@ -1220,6 +1221,10 @@ float SamplePointLightPCFSample(sampler2D s ,int i, float3 tangent, float3 bitan
 
 	smooth = false;
 
+#endif
+
+#ifdef SIMPLE_SHADOWS
+	smooth = false;
 #endif
 
 

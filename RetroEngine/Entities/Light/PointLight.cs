@@ -276,29 +276,31 @@ namespace RetroEngine.Entities.Light
 
             float dist = Vector3.Distance(Camera.position, Position);
 
-            if (true) { }
-            else
-            if (dist < (lightData.Radius + 2) * 2)
-            {
-                SetLightResolution(resolution);
-            }
-            if(dist > (lightData.Radius + 2) * 2)
-            {
-                SetLightResolution((int)((float)resolution/1.5f));
-            }
-            if (dist > (lightData.Radius+1) * 3)
-            {
-                SetLightResolution((int)((float)resolution / 2));
-            }
-            if (dist > (lightData.Radius + 1) * 5)
-            {
-                SetLightResolution(resolution / 3);
-            }
-            if (dist > (lightData.Radius + 2) * 8)
-            {
-                SetLightResolution(resolution / 5);
-            }
 
+            if (false) //causes statters on slower pc
+            {
+
+                if (dist < (lightData.Radius + 2) * 2)
+                {
+                    SetLightResolution(resolution);
+                }
+                if (dist > (lightData.Radius + 2) * 2)
+                {
+                    SetLightResolution((int)((float)resolution / 1.5f));
+                }
+                if (dist > (lightData.Radius + 1) * 3)
+                {
+                    SetLightResolution((int)((float)resolution / 2));
+                }
+                if (dist > (lightData.Radius + 1) * 5)
+                {
+                    SetLightResolution(resolution / 3);
+                }
+                if (dist > (lightData.Radius + 2) * 8)
+                {
+                    SetLightResolution(resolution / 5);
+                }
+            }
             finalizedFrame = false;
 
         }
@@ -355,6 +357,7 @@ namespace RetroEngine.Entities.Light
 
             lightSphere.Radius = lightData.Radius;
 
+            lightData.visible = false;
             if (enabled == false) return;
 
             float cameraDist = Vector3.Distance(Camera.finalizedPosition, lightData.Position);
@@ -370,8 +373,12 @@ namespace RetroEngine.Entities.Light
             lightData.InnerMinDot = InnterMinDot;
             lightData.Direction = Rotation.GetForwardVector();
 
+
             if ((IsBoundingSphereInFrustum(lightSphere) && visible) || Level.ChangingLevel)
+                lightData.visible = true;
+
             LightManager.AddPointLight(lightData);
+
         }
 
         protected Matrix GetWorldMatrix()

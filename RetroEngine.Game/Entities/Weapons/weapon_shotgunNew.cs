@@ -141,15 +141,15 @@ namespace RetroEngine.Game.Entities.Weapons
             mesh.PlayAnimation(0,false,0);
             TpFire.PlayAnimation(0,false);
 
-            for (float y = -3; y <= 3; y += 2f)
-                for (float x = -3; x <= 3; x += 2f)
+            for (float y = -4; y <= 4; y += 2f)
+                for (float x = -4; x <= 4; x += 2f)
                 {
 
                     Vector2 v = new Vector2(x, y);
 
                     x *= 1.2f;
 
-                    if (v.Length() > 4)
+                    if (v.Length() > 4.4)
                         continue;
 
                     Bullet bullet = new Bullet();

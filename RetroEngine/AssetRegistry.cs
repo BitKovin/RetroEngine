@@ -434,6 +434,7 @@ namespace RetroEngine
                 soundsFmod.TryAdd(path, sound);
             }
             sound.Volume = 0;
+            
 
             return sound;
         }

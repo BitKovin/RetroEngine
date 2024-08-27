@@ -67,6 +67,8 @@ namespace RetroEngine
             public int Resolution = 256;
             public PointLight shadowData = null;
 
+            public bool visible = true;
+
             public PointLightData()
             {
             }

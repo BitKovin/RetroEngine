@@ -10,6 +10,7 @@
 "directLightBrightness" "0.04"
 "dynamicSunShadowsEnabled" "true"
 "geometricalShadowsEnabled" "false"
+"_tb_soft_map_bounds" "none"
 // brush 0
 {
 ( -896 288 272 ) ( -896 768 208 ) ( -896 768 272 ) brushes/bricks 0 0 0 0.75 0.75
@@ -11475,99 +11476,91 @@
 }
 // entity 75
 {
-"classname" "light_point"
-"origin" "-283 -69 197"
-"radius" "20"
-"light_color" "0.160784 0.0117647 1"
-"intensity" "1"
-}
-// entity 76
-{
 "classname" "func_group"
 "_tb_type" "_tb_layer"
 "_tb_name" "navigation"
 "_tb_id" "1"
 "_tb_layer_sort_index" "0"
 }
-// entity 77
+// entity 76
 {
 "classname" "info.navpoint"
 "origin" "216 -584 24"
 "_tb_layer" "1"
 }
-// entity 78
+// entity 77
 {
 "classname" "info.navpoint"
 "origin" "-600 -840 24"
 "_tb_layer" "1"
 }
-// entity 79
+// entity 78
 {
 "classname" "info.navpoint"
 "origin" "840 -168 24"
 "_tb_layer" "1"
 }
-// entity 80
+// entity 79
 {
 "classname" "info.navpoint"
 "origin" "280 216 24"
 "_tb_layer" "1"
 }
-// entity 81
+// entity 80
 {
 "classname" "info.navpoint"
 "origin" "-184 456 24"
 "_tb_layer" "1"
 }
-// entity 82
+// entity 81
 {
 "classname" "info.navpoint"
 "origin" "648 744 24"
 "_tb_layer" "1"
 }
-// entity 83
+// entity 82
 {
 "classname" "info.navpoint"
 "origin" "856 -824 24"
 "_tb_layer" "1"
 }
-// entity 84
+// entity 83
 {
 "classname" "info.navpoint"
 "origin" "-184 -584 24"
 "_tb_layer" "1"
 }
-// entity 85
+// entity 84
 {
 "classname" "info.navpoint"
 "origin" "824 -520 24"
 "_tb_layer" "1"
 }
-// entity 86
+// entity 85
 {
 "classname" "info.navpoint"
 "origin" "-488 536 24"
 "_tb_layer" "1"
 }
-// entity 87
+// entity 86
 {
 "classname" "info.navpoint"
 "origin" "-632 -184 24"
 "_tb_layer" "1"
 }
-// entity 88
+// entity 87
 {
 "classname" "info.navpoint"
 "origin" "-808 -504 24"
 "_tb_layer" "1"
 }
-// entity 89
+// entity 88
 {
 "classname" "info.navpoint"
 "origin" "-88 72 24"
 "_tb_layer" "1"
 }
-// entity 90
+// entity 89
 {
 "classname" "info.navpoint"
 "origin" "-264 72 24"

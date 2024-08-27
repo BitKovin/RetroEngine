@@ -32,7 +32,10 @@ namespace RetroEngine.Particles
 
         public void GenerateBuffers(List<Particle> particles)
         {
-            if (particles == null || particles.Count < 2)
+
+            primitiveCount = 0;
+
+            if (particles == null || particles.Count < 2 || destroyed)
             {
                 FreeBuffers();
                 return;
@@ -106,7 +109,7 @@ namespace RetroEngine.Particles
                 }
             }
 
-
+            if (destroyed) return;
             // Set buffer data
             vertexBuffer.SetData(vertices.ToArray(), 0, requiredVertexCount);
             indexBuffer.SetData(indices.ToArray(), 0, requiredIndexCount);
@@ -121,13 +124,11 @@ namespace RetroEngine.Particles
             if (vertexBuffer != null)
             {
                 freeVertexBuffers.Add(vertexBuffer);
-                vertexBuffer = null;
             }
 
             if (indexBuffer != null)
             {
                 freeIndexBuffers.Add(indexBuffer);
-                indexBuffer = null;
             }
         }
 
@@ -188,7 +189,8 @@ namespace RetroEngine.Particles
                 if (destroyed == false)
                 {
                     effect.CurrentTechnique.Passes[0].Apply();
-                    _graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, primitiveCount);
+                    if(primitiveCount>0)
+                        _graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, primitiveCount);
                 }
 
             }

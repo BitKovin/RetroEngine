@@ -479,6 +479,7 @@ namespace RetroEngine
                 //shadows
                 for (int i = 0; i < LightManager.FinalPointLights.Count && filledLights < Math.Min(LightManager.MAX_POINT_LIGHTS, shaderPointLightsShadowed); i++)
                 {
+                    if (LightManager.FinalPointLights[i].visible == false) continue;
                     if (LightManager.FinalPointLights[i].shadowData.CastShadows == false) continue;
                     bool intersects = IntersectsBoundingSphere(new BoundingSphere { Radius = LightManager.FinalPointLights[i].Radius, Center = LightManager.FinalPointLights[i].Position });
 
@@ -495,6 +496,8 @@ namespace RetroEngine
                 for (int i = 0; i < LightManager.FinalPointLights.Count && filledLights < LightManager.MAX_POINT_LIGHTS; i++)
                 {
                     //if (LightManager.FinalPointLights[i].shadowData.CastShadows == true) continue;
+
+                    if (LightManager.FinalPointLights[i].visible == false) continue;
 
                     if (filled.Contains(i))
                         continue;
