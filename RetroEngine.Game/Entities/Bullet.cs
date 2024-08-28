@@ -113,7 +113,8 @@ namespace RetroEngine.Game.Entities
             base.Destroy();
 
             trail.Position = Position;
-            trail.Destroy(1);
+            //trail.StopAll();
+            trail.Destroy(1.4f);
 
         }
 

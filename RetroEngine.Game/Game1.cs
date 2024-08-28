@@ -43,7 +43,7 @@ namespace RetroEngine.Game
             GameSpeedEvent.Play();
 
 
-            DefaultShader = "SimpleEffect";
+            //DefaultShader = "SimpleEffect";
 
 
             Level.LoadFromFile("test2");

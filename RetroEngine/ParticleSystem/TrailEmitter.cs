@@ -19,7 +19,7 @@ namespace RetroEngine.Particles
 
         public TrailEmitter() : base()
         {
-            Shader = new Graphic.SurfaceShaderInstance("Unlit");
+            Shader = new Graphic.SurfaceShaderInstance("TrailUnlit");
             isParticle = true;
 
             CastShadows = false;
@@ -54,13 +54,21 @@ namespace RetroEngine.Particles
 
             if (vertexBuffer == null || requiredVertexCount > vertexCapacityThreshold)
             {
-                vertexCapacityThreshold = (int)(requiredVertexCount * 2f); // 25% extra space
+                vertexCapacityThreshold = (int)(requiredVertexCount * 1.5f); // 25% extra space
+
+                if(vertexBuffer!=null)
+                    freeVertexBuffers.Add(vertexBuffer);
+
                 vertexBuffer = ReuseOrCreateVertexBuffer(_graphicsDevice, vertexCapacityThreshold);
             }
 
             if (indexBuffer == null || requiredIndexCount > indexCapacityThreshold)
             {
-                indexCapacityThreshold = (int)(requiredIndexCount * 2f); // 25% extra space
+                indexCapacityThreshold = (int)(requiredIndexCount * 1.5f); // 25% extra space
+
+                if(indexBuffer!=null)
+                    freeIndexBuffers.Add(indexBuffer);
+
                 indexBuffer = ReuseOrCreateIndexBuffer(_graphicsDevice, indexCapacityThreshold);
             }
 
@@ -97,7 +105,7 @@ namespace RetroEngine.Particles
 
 
                 // Add indices to form the quad
-                if (i > 0)
+                if (i > 1)
                 {
                     indices.Add((short)(i * 2));
                     indices.Add((short)(i * 2 - 1));
@@ -106,6 +114,16 @@ namespace RetroEngine.Particles
                     indices.Add((short)(i * 2));
                     indices.Add((short)(i * 2 + 1));
                     indices.Add((short)(i * 2 - 1));
+                }
+                else if (i == 0)
+                {
+                    indices.Add((short)((i + 1) * 2));
+                    indices.Add((short)((i + 1) * 2 - 1));
+                    indices.Add((short)((i + 1) * 2 - 2));
+
+                    indices.Add((short)((i + 1) * 2));
+                    indices.Add((short)((i + 1) * 2 + 1));
+                    indices.Add((short)((i + 1) * 2 - 1));
                 }
             }
 

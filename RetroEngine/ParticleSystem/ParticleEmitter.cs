@@ -174,6 +174,8 @@ namespace RetroEngine.Particles
 
                 
 
+                List<Particle> removeList = new List<Particle>();
+
                 int n = particles.Count;
                 for (int i = 0; i < n; i++)
                 {
@@ -184,12 +186,12 @@ namespace RetroEngine.Particles
 
                     if (particle.lifeTime >= particle.deathTime)
                     {
-                        particle.destroyed = true;
+                        removeList.Add(particle);
                         particles[i] = particle;
                     }
                 }
-
-                particles = particles.Where(p=> p.destroyed ==false).ToList();
+                foreach(Particle particle in removeList)
+                    particles.Remove(particle);
 
                 for (int i = 0; i < particles.Count; i++)
                 {

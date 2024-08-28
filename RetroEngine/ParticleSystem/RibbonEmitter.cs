@@ -19,7 +19,7 @@ namespace RetroEngine.Particles
 
         public RibbonEmitter() : base()
         {
-            Shader = new Graphic.SurfaceShaderInstance("UnifiedOutput");
+            Shader = new Graphic.SurfaceShaderInstance("TrailUnlit");
             isParticle = true;
 
             CastShadows = false;
@@ -36,6 +36,7 @@ namespace RetroEngine.Particles
 
             primitiveCount = 0;
 
+
             lock (this)
             {
                 if (particles == null || particles.Count < 2 || destroyed)
@@ -45,6 +46,10 @@ namespace RetroEngine.Particles
                 }
 
                 GraphicsDevice _graphicsDevice = GameMain.Instance.GraphicsDevice;
+
+
+                //particles = new List<Particle>(particles);
+                //particles.Insert(0, particles[0]);
 
                 // Calculate required vertex and index counts
                 int requiredVertexCount = particles.Count * 2;
@@ -56,19 +61,24 @@ namespace RetroEngine.Particles
 
                 if (vertexBuffer == null || requiredVertexCount > vertexCapacityThreshold)
                 {
-                    vertexCapacityThreshold = (int)(requiredVertexCount * 2f); // 25% extra space
+                    vertexCapacityThreshold = (int)(requiredVertexCount); // 25% extra space
+                    if(vertexBuffer!=null)
+                    freeVertexBuffers.Add(vertexBuffer);
                     vertexBuffer = ReuseOrCreateVertexBuffer(_graphicsDevice, vertexCapacityThreshold);
                 }
 
                 if (indexBuffer == null || requiredIndexCount > indexCapacityThreshold)
                 {
-                    indexCapacityThreshold = (int)(requiredIndexCount * 2f); // 25% extra space
+                    indexCapacityThreshold = (int)(requiredIndexCount); // 25% extra space
+                    if(indexBuffer!=null)
+                    freeIndexBuffers.Add(indexBuffer);
                     indexBuffer = ReuseOrCreateIndexBuffer(_graphicsDevice, indexCapacityThreshold);
                 }
 
                 // Initialize vertex and index arrays
                 VertexData[] vertices = new VertexData[requiredVertexCount];
                 short[] indices = new short[requiredIndexCount];
+
 
                 // Generate vertices and indices
                 for (int i = 0; i < particles.Count; i++)
@@ -96,9 +106,12 @@ namespace RetroEngine.Particles
                     Vector3 topRight = p1 - perp * (particle.Scale / 2);
 
                     // Calculate texture coordinates
-                    float texCoordX = (float)i / (particles.Count - 1);
+                    float texCoordX = ((float)i - (1 - (float)i / (float)particles.Count)) / (particles.Count - 1);
+                    texCoordX = MathHelper.Saturate(texCoordX);
                     float texCoordYTop = 0f;
                     float texCoordYBottom = 1f;
+
+                    //DrawDebug.Text(particle.position, texCoordX.ToString(), 0.01f);
 
                     // Add vertices to the array
                     vertices[i * 2] = new VertexData { Position = topLeft, TextureCoordinate = new Vector2(texCoordX, texCoordYTop), Color = particle.color };
@@ -120,9 +133,14 @@ namespace RetroEngine.Particles
                     }
                 }
                 if (destroyed) return;
+
+
+
                 // Set buffer data
                 vertexBuffer.SetData(vertices, 0, requiredVertexCount);
                 indexBuffer.SetData(indices, 0, requiredIndexCount);
+
+
 
                 // Calculate the number of primitives to draw
                 primitiveCount = requiredIndexCount / 3;
@@ -151,8 +169,8 @@ namespace RetroEngine.Particles
 
             var p = particles.LastOrDefault();
 
-            if (p != null)
-                p.position = Position;
+            //if (p != null)
+                //p.position = Position;
 
             base.Update();
         }
