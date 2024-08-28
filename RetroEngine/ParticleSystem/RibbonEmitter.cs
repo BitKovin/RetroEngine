@@ -144,9 +144,21 @@ namespace RetroEngine.Particles
                 //indexBuffer = null;
             }
         }
-    
 
-    public override void DrawUnified()
+
+        public override void Update()
+        {
+
+            var p = particles.LastOrDefault();
+
+            if (p != null)
+                p.position = Position;
+
+            base.Update();
+        }
+
+
+        public override void DrawUnified()
         {
             if (destroyed) return;
 

@@ -29,7 +29,7 @@ namespace RetroEngine.Game.Effects.Particles
             Shader = new Graphic.SurfaceShaderInstance("Unlit");
 
             InitialSpawnCount = 2;
-            SpawnRate = 50;
+            SpawnRate = 10;
             //BoundingRadius = 30000;
             Emitting = true;
             
@@ -57,6 +57,7 @@ namespace RetroEngine.Game.Effects.Particles
             return particle;
         }
 
+
         public override Particle GetNewParticle()
         {
             Particle particle = base.GetNewParticle();
@@ -67,7 +68,7 @@ namespace RetroEngine.Game.Effects.Particles
             particle.BouncePower = 0.1f;
 
             particle.transparency = 0.8f;
-            particle.deathTime = 1.3f;
+            particle.deathTime = 1f;
 
             return particle;
         }

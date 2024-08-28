@@ -34,8 +34,6 @@ namespace RetroEngine.Entities
         {
 
 
-            return;
-
             if (GameMain.CanLoadAssetsOnThisThread() == false)
             {
                 Logger.Log("can't preload particle system on this thread");
@@ -149,6 +147,7 @@ namespace RetroEngine.Entities
             Rotation = MathHelper.FindLookAtRotation(p1, p2);
 
             ParticleSizeMultiplier = Vector3.Distance(p1,p2);
+
 
         }
 
