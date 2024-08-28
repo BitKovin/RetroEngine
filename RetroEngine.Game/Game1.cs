@@ -43,7 +43,7 @@ namespace RetroEngine.Game
             GameSpeedEvent.Play();
 
 
-            //DefaultShader = "SimpleEffect";
+            DefaultShader = "SimpleEffect";
 
 
             Level.LoadFromFile("test2");
@@ -133,6 +133,9 @@ namespace RetroEngine.Game
             Input.AddAction("qLoad").AddKeyboardKey(Keys.F8);
 
             Input.AddAction("fullscreen").AddKeyboardKey(Keys.F10);
+
+            Input.AddAction("dev").AddKeyboardKey(Keys.OemTilde);
+
         }
 
     }

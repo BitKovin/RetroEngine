@@ -512,7 +512,10 @@ namespace RetroEngine
 
             bool loaded = false;
 
-            List<Entity> list = new List<Entity>(entities);
+            Entity[] list;
+
+            lock (entities)
+                list = entities.ToArray();
 
             foreach (Entity ent in list)
             {

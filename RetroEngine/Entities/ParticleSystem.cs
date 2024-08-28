@@ -25,12 +25,16 @@ namespace RetroEngine.Entities
             {
                 emitter.Position = Position;
                 emitter.Start();
-                meshes.Add(emitter);
             }
+
+            updated = true;
         }
 
         public static void Preload(string systemName)
         {
+
+
+            return;
 
             if (GameMain.CanLoadAssetsOnThisThread() == false)
             {
@@ -84,10 +88,12 @@ namespace RetroEngine.Entities
                 Destroy();
 
         }
+        bool updated = false;
 
         public override void AsyncUpdate()
         {
             base.AsyncUpdate();
+
 
             List<ParticleEmitter> list = new List<ParticleEmitter>(emitters);
 
@@ -105,16 +111,28 @@ namespace RetroEngine.Entities
                     emitter.Update();
                 }
             }
+
+            updated = true;
+
         }
 
         protected override void LoadAssets()
         {
             base.LoadAssets();
 
+            lock (emitters)
+            {
+                foreach (var emitter in emitters)
+                {
+                    emitter.LoadAssets();
+                }
+            }
+
             foreach (var emitter in emitters)
             {
-                emitter.LoadAssets();
+                meshes.Add(emitter);
             }
+
         }
 
         public static ParticleSystem Create(string name)

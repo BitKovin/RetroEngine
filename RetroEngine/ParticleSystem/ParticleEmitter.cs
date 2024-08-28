@@ -56,6 +56,8 @@ namespace RetroEngine.Particles
                 return buffer;
             }
 
+            Logger.Log("Creating new vertex buffer for emitter with size" + requiredVertexCount);
+
             return new VertexBuffer(graphicsDevice, VertexData.VertexDeclaration, requiredVertexCount, BufferUsage.WriteOnly);
         }
 
@@ -68,6 +70,8 @@ namespace RetroEngine.Particles
                 freeIstanceBuffers.Remove(buffer);
                 return buffer;
             }
+
+            Logger.Log("Creating new instance buffer for emitter with size " + requiredVertexCount);
 
             return new VertexBuffer(graphicsDevice, InstanceData.VertexDeclaration, requiredVertexCount, BufferUsage.WriteOnly);
         }
@@ -82,6 +86,8 @@ namespace RetroEngine.Particles
                 return buffer;
             }
 
+            Logger.Log("Creating new index buffer for emitter with size  " + requiredIndexCount);
+
             return new IndexBuffer(graphicsDevice, IndexElementSize.SixteenBits, requiredIndexCount, BufferUsage.WriteOnly);
         }
 
@@ -95,6 +101,39 @@ namespace RetroEngine.Particles
             OverrideBlendState = BlendState.NonPremultiplied;
 
             DisableOcclusionCulling = true;
+
+        }
+
+        static bool createdBuffers = false;
+        void CreateInitialBuffers()
+        {
+
+            if (createdBuffers) return;
+
+            for (int j = 0; j < 4; j++)
+                for (int i = 1; i <= 300; i+=2)
+                {
+                    freeIstanceBuffers.Add(new VertexBuffer(GameMain.Instance.GraphicsDevice, InstanceData.VertexDeclaration, i, BufferUsage.WriteOnly));
+                    freeVertexBuffers.Add(new VertexBuffer(GameMain.Instance.GraphicsDevice, VertexData.VertexDeclaration, i, BufferUsage.WriteOnly));
+                    freeIndexBuffers.Add(new IndexBuffer(GameMain.Instance.GraphicsDevice, IndexElementSize.SixteenBits, i, BufferUsage.WriteOnly));
+                }
+
+            for (int j = 0; j < 3; j++)
+                for (int i = 300; i <= 1000; i+=4)
+                {
+                    freeVertexBuffers.Add(new VertexBuffer(GameMain.Instance.GraphicsDevice, VertexData.VertexDeclaration, i, BufferUsage.WriteOnly));
+                    freeIndexBuffers.Add(new IndexBuffer(GameMain.Instance.GraphicsDevice, IndexElementSize.SixteenBits, i, BufferUsage.WriteOnly));
+                }
+
+            for (int j = 0; j < 2; j++)
+                for (int i = 1000; i <= 2000; i += 10)
+                {
+                    freeVertexBuffers.Add(new VertexBuffer(GameMain.Instance.GraphicsDevice, VertexData.VertexDeclaration, i, BufferUsage.WriteOnly));
+                    freeIndexBuffers.Add(new IndexBuffer(GameMain.Instance.GraphicsDevice, IndexElementSize.SixteenBits, i, BufferUsage.WriteOnly));
+                }
+
+            createdBuffers = true;
+
 
         }
 
@@ -207,6 +246,8 @@ namespace RetroEngine.Particles
         public override void RenderPreparation()
         {
             base.RenderPreparation();
+
+            CreateInitialBuffers();
 
             UpdateInstancedData(finalizedParticles);
 

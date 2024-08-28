@@ -116,6 +116,8 @@ namespace RetroEngine.Game.Entities.Weapons
 
             if (GameMain.Instance.paused) return;
 
+            if (loadedAssets == false) return;
+
             if (Time.gameTime - SpawnTime > 0.02f && character.isFirstPerson())
             {
                 var trans = mesh.GetBoneMatrix("camera", Matrix.CreateScale(0.01f)* Camera.GetMatrix()).DecomposeMatrix();

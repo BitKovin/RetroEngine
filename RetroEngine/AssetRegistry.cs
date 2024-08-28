@@ -39,7 +39,7 @@ namespace RetroEngine
 
         static List<string> texturesHistory = new List<string>();
 
-        static List<string> nullAssets= new List<string>();
+        static List<string> nullAssets = new List<string>();
 
         public static string ROOT_PATH = "../../../../";
 
@@ -53,66 +53,72 @@ namespace RetroEngine
 
         public static Texture2D LoadTextureFromFile(string path, bool ignoreErrors = false, bool generateMipMaps = true)
         {
+
             lock (textures)
-            {
                 if (textures.ContainsKey(path))
                     return (Texture2D)textures[path];
 
-                if (nullAssets.Contains(path))
-                    return null;
+            if (nullAssets.Contains(path))
+                return null;
 
-                if (GameMain.CanLoadAssetsOnThisThread() == false)
+            if (Thread.CurrentThread == LoaderThread)
+                Thread.Sleep(1);
+
+            if (GameMain.CanLoadAssetsOnThisThread() == false)
+            {
+                Logger.Log($"THREAD ERROR:  attempted to load texture from not render thread. Texture: {path}");
+                return GameMain.Instance.render.black;
+            }
+
+            string filePath = FindPathForFile(path);
+
+            if (File.Exists(filePath) == false)
+            {
+                nullAssets.Add(path);
+                return null;
+            }
+
+            try
+            {
+
+
+
+                using (Stream stream = GetFileStreamFromPath(filePath))
                 {
-                    Logger.Log($"THREAD ERROR:  attempted to load texture from not render thread. Texture: {path}");
-                    return GameMain.Instance.render.black;
-                }
+                    if (generateMipMaps && AllowGeneratingMipMaps)
+                    {
+                        Texture2D tex = Texture2D.FromStream(GameMain.Instance.GraphicsDevice, stream);
 
-                string filePath = FindPathForFile(path);
+                        lock (textures)
+                            textures.Add(path, GenerateMipMaps(tex));
 
-                if (File.Exists(filePath) == false)
-                {
-                    nullAssets.Add(path);
-                    return null;
-                }    
+                    }
+                    else
+                    {
+                        lock (textures)
+                            textures.Add(path, Texture2D.FromStream(GameMain.Instance.GraphicsDevice, stream));
+                    }
 
-                try
-                {
+                    textures[path].Name = path;
+
+                    lock (texturesHistory)
+                        texturesHistory.Add(path);
+
+                    Logger.Log($"loaded texture {path}. Current texture cache: {textures.Count}");
 
                     lock (textures)
-                    {
-
-                        using (Stream stream = GetFileStreamFromPath(filePath))
-                        {
-                            if (generateMipMaps && AllowGeneratingMipMaps)
-                            {
-                                Texture2D tex = Texture2D.FromStream(GameMain.Instance.GraphicsDevice, stream);
-
-                                textures.Add(path, GenerateMipMaps(tex));
-
-                            }
-                            else
-                            {
-                                textures.Add(path, Texture2D.FromStream(GameMain.Instance.GraphicsDevice, stream));
-                            }
-
-                            textures[path].Name = path;
-
-                            texturesHistory.Add(path);
-
-                            Logger.Log($"loaded texture {path}. Current texture cache: {textures.Count}");
-
-                            return (Texture2D)textures[path];
-                        }
-                    }
+                        return (Texture2D)textures[path];
                 }
-                catch (Exception ex)
-                {
-                    if (!ignoreErrors)
-                        Logger.Log("Failed to load texture: " + ex.Message);
-                    nullAssets.Add(path);
-                    return null;
-                }
+
             }
+            catch (Exception ex)
+            {
+                if (!ignoreErrors)
+                    Logger.Log("Failed to load texture: " + ex.Message);
+                nullAssets.Add(path);
+                return null;
+            }
+
         }
 
         static FontManager FontManager = new FontManager();
@@ -205,7 +211,7 @@ namespace RetroEngine
             try
             {
 
-                Texture2D top = LoadTextureFromFile(filePpath.Replace(".","_top."));
+                Texture2D top = LoadTextureFromFile(filePpath.Replace(".", "_top."));
                 Texture2D bottom = LoadTextureFromFile(filePpath.Replace(".", "_bottom."));
                 Texture2D left = LoadTextureFromFile(filePpath.Replace(".", "_left."));
                 Texture2D right = LoadTextureFromFile(filePpath.Replace(".", "_right."));
@@ -238,10 +244,10 @@ namespace RetroEngine
 
         public static void UnloadTexture(Texture texture)
         {
-            if(textures.ContainsValue(texture))
+            if (textures.ContainsValue(texture))
             {
-                
-                foreach(string key in textures.Keys)
+
+                foreach (string key in textures.Keys)
                 {
                     if (textures[key] == texture)
                     {
@@ -257,7 +263,7 @@ namespace RetroEngine
 
         public static void ClearAllTextures()
         {
-            foreach(Texture tex in textures.Values)
+            foreach (Texture tex in textures.Values)
             {
                 tex?.Dispose();
             }
@@ -280,7 +286,7 @@ namespace RetroEngine
             graphicsDevice.SetRenderTarget(renderTarget);
             using (SpriteBatch sprite = new SpriteBatch(graphicsDevice))
             {
-                sprite.Begin(SpriteSortMode.Immediate, blendState,SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone,
+                sprite.Begin(SpriteSortMode.Immediate, blendState, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone,
                 effect: null);
                 sprite.Draw(intermediateTexture, new Vector2(0, 0), Color.White);
                 sprite.End();
@@ -292,18 +298,18 @@ namespace RetroEngine
             return texture;
         }
 
-        static void GenerateCubeFace(RenderTargetCube cube,Texture2D intermediateTexture, CubeMapFace face)
+        static void GenerateCubeFace(RenderTargetCube cube, Texture2D intermediateTexture, CubeMapFace face)
         {
 
             GraphicsDevice graphicsDevice = GameMain.Instance.GraphicsDevice;
 
-            
+
             BlendState blendState = BlendState.Opaque;
 
             graphicsDevice.SetRenderTarget(cube, face);
             using (SpriteBatch sprite = new SpriteBatch(graphicsDevice))
             {
-                sprite.Begin(SpriteSortMode.Immediate, blendState,SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone,
+                sprite.Begin(SpriteSortMode.Immediate, blendState, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone,
                 effect: null);
                 sprite.Draw(intermediateTexture, new Vector2(0, 0), Color.White);
                 sprite.End();
@@ -330,20 +336,20 @@ namespace RetroEngine
                 return effects[path];
             }
             Effect effect = null;
-            try 
+            try
             {
                 effect = GameMain.content.Load<Effect>(path);
             }
 
             catch (Exception e) { }
-            
-            if(effect == null)
+
+            if (effect == null)
             {
                 nullShaders.Add(path);
                 return null;
             }
 
-            if(effect.GraphicsDevice == null)
+            if (effect.GraphicsDevice == null)
             {
                 Logger.Log("Error: shader misses graphics devise   " + path);
                 return null;
@@ -381,7 +387,7 @@ namespace RetroEngine
         public static AudioClip LoadSoundFromFile(string path, bool legacyOnly = false)
         {
 
-            if(SoundManager.UseFmod && legacyOnly == false)
+            if (SoundManager.UseFmod && legacyOnly == false)
                 return LoadSoundFmodFromFile(path);
 
             if (sounds.ContainsKey(path))
@@ -434,7 +440,7 @@ namespace RetroEngine
                 soundsFmod.TryAdd(path, sound);
             }
             sound.Volume = 0;
-            
+
 
             return sound;
         }
@@ -443,7 +449,7 @@ namespace RetroEngine
         public static AudioClipFmod LoadSoundFmodFromFile(string path)
         {
 
-            if(SoundManager.UseFmod == false)
+            if (SoundManager.UseFmod == false)
             {
                 Logger.Log("tried to load FMOD sound " + path);
                 return null;
@@ -451,12 +457,12 @@ namespace RetroEngine
 
             return new AudioClipFmod(LoadSoundFmodNativeFromFile(path));
 
-            
+
         }
 
         public static Bank LoadFmodBankIntoMemory(string path)
         {
-            if(fmodBanks.ContainsKey(path))
+            if (fmodBanks.ContainsKey(path))
                 return fmodBanks[path];
 
             string filePath = FindPathForFile(path);
@@ -477,15 +483,15 @@ namespace RetroEngine
 
                 List<string> unloaded = new List<string>();
 
-                foreach(string name in fmodBanks.Keys)
+                foreach (string name in fmodBanks.Keys)
                 {
                     if (name.ToLower().Contains("master")) continue;
 
                     fmodBanks[name].Unload();
-                    unloaded.Add(name); 
+                    unloaded.Add(name);
                 }
 
-                foreach(string name in unloaded)
+                foreach (string name in unloaded)
                     fmodBanks.Remove(name);
 
             }
@@ -493,7 +499,7 @@ namespace RetroEngine
 
         public static void ClearTexturesIfNeeded()
         {
-            if(texturesHistory.Count>MaxTexturesInMemory)
+            if (texturesHistory.Count > MaxTexturesInMemory)
             {
                 int numToRemove = texturesHistory.Count - MaxTexturesInMemory;
 
@@ -504,7 +510,7 @@ namespace RetroEngine
 
 
                     texturesHistory.RemoveAt(0);
-                    
+
                 }
             }
         }
@@ -533,9 +539,16 @@ namespace RetroEngine
             return path;
         }
 
+        static Thread LoaderThread;
+
+
         public static void StartAsyncAssetLoader()
         {
-            Task.Run(() => { AsyncAssetLoaderLoop(); });
+            LoaderThread = new Thread(AsyncAssetLoaderLoop);
+            LoaderThread.Name = "Asset Loader";
+            LoaderThread.IsBackground = true;
+            LoaderThread.Priority = ThreadPriority.BelowNormal;
+            LoaderThread.Start();
         }
 
         public static void WaitForAssetsToLoad()
@@ -549,25 +562,25 @@ namespace RetroEngine
         static void AsyncAssetLoaderLoop()
         {
 
-            
+
             int ticksWithoutLoading = 0;
             while (true)
             {
                 bool loading = false;
 
-                try
-                {
-                    if (Level.ChangingLevel == false)
-                        if(GameMain.Instance.curentLevel.LoadAssets())
-                        {
-                            loading = true;
-                        }
-                }catch (Exception) {}
 
-                if(loading)
+                if (Level.ChangingLevel == false)
+                    if (GameMain.Instance.curentLevel.LoadAssets())
+                    {
+                        loading = true;
+                    }
+
+
+                if (loading)
                 {
-                    ticksWithoutLoading=0;
-                }else
+                    ticksWithoutLoading = 0;
+                }
+                else
                 {
                     ticksWithoutLoading++;
                 }
@@ -582,6 +595,6 @@ namespace RetroEngine
 
     }
 
-    
+
 
 }

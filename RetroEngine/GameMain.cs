@@ -70,7 +70,7 @@ namespace RetroEngine
 
         public static bool AllowAsyncAssetLoading = false;
 
-        public bool DevMenuEnabled = true;
+        public bool DevMenuEnabled = false;
 
         Stopwatch stopwatch = new Stopwatch();
 
@@ -199,15 +199,14 @@ namespace RetroEngine
             if (GraphicsDevice == null)
                 GraphicsDevice = base.GraphicsDevice;
 
-            if (DevMenuEnabled)
-            {
+            
                 ImGuiRenderer = new ImGuiRenderer(this);
                 ImGui.GetIO().Fonts.AddFontDefault();
                 font = ImGui.GetIO().Fonts.AddFontFromFileTTF("calibri.ttf", 16);
                 ImGuiRenderer.RebuildFontAtlas();
                 ImGui.StyleColorsDark();
                 ImGui.GetIO().ConfigFlags |= ImGuiConfigFlags.DockingEnable;
-            }
+            
 
             SpriteBatch = new SpriteBatch(GraphicsDevice);
             // TODO: use this.Content to load your game content here

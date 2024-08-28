@@ -35,6 +35,11 @@ namespace RetroEngine.Game.Entities.Player
 
             Vector3 offset = Camera.position + Camera.Forward + Camera.Right * 0.3f + Camera.Up*-0.3f;
 
+            if (Input.GetAction("dev").Pressed())
+                GameMain.Instance.DevMenuEnabled = !GameMain.Instance.DevMenuEnabled;
+
+            if (GameMain.Instance.paused) return;
+
             DrawDebug.Line(offset, offset + Vector3.UnitX/2, Vector3.UnitX, 0.01f);
 
             DrawDebug.Line(offset, offset + Vector3.UnitY/2, Vector3.UnitY, 0.01f);

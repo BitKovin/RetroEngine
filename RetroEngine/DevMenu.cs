@@ -235,7 +235,7 @@ namespace RetroEngine
 
         public virtual void Init() 
         {
-            if (GameMain.Instance.DevMenuEnabled == false) return;
+            //if (GameMain.Instance.DevMenuEnabled == false) return;
 
             ImGuiIOPtr io = ImGui.GetIO();
             ImGuiStylePtr style = ImGui.GetStyle();
