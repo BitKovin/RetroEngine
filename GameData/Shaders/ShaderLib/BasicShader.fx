@@ -22,8 +22,8 @@ texture ShadowMap;
 sampler ShadowMapSampler = sampler_state
 {
 	texture = <ShadowMap>;
-	MinFilter = Point;
-	MagFilter = Point;
+	MinFilter = Linear;
+	MagFilter = Linear;
 	AddressU = Clamp;
 	AddressV = Clamp;
 };

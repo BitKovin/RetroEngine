@@ -40,8 +40,10 @@ namespace RetroEngine
 
         }
 
-        public static List<BrushFaceMesh> GetFacesFromPath(string filePath, string objectName, float unitSize = 32)
+        public static List<BrushFaceMesh> GetFacesFromPath(string filePath, string objectName, float unitSize = -1)
         {
+
+            if(unitSize < 0) unitSize = MapData.UnitSize;
 
             if (GameMain.CanLoadAssetsOnThisThread() == false)
             {
@@ -192,8 +194,12 @@ namespace RetroEngine
         }
 
         internal static Dictionary<string, List<BrushFaceMesh>> loadedFaces = new Dictionary<string, List<BrushFaceMesh>>();
-        public static List<BrushFaceMesh> GetMergedFacesFromPath(string filePath, string objectName, float unitSize = 32)
+        public static List<BrushFaceMesh> GetMergedFacesFromPath(string filePath, string objectName, float unitSize = -1)
         {
+
+
+            if (unitSize < 0) unitSize = MapData.UnitSize;
+
             if (GameMain.CanLoadAssetsOnThisThread() == false)
             {
                 Logger.Log($"THREAD ERROR:  attempted to load merged model from not render thread. Model path: {filePath}  object name: {objectName}");
