@@ -99,6 +99,7 @@
 	radius(float) : "Radius" : "5"
 	size(Vector3) : "Size" : "5 5 5"
 	resolution(int) : "Resolution" : "256"
+	target(string) : "Target" : ""
 ]
 
 @PointClass base(Entity) size(-20 -20 -20, 20 20 20) color(255 0 0) = weaponPickup : "Weapon" 

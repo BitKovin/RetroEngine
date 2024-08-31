@@ -210,7 +210,7 @@ namespace RetroEngine.Game.Entities.Player
             PlayerFlashLight.CastShadows = true;
 
 
-            PlayerFlashLight.enabled = true;
+            PlayerFlashLight.enabled = false;
 
             PlayerFlashLight.SetAngle(35);
             PlayerFlashLight.radius = 30;

@@ -179,7 +179,8 @@ namespace RetroEngine.Entities.Light
 
                 dirty = true;
 
-                Render(lightData);
+                if(enabled)
+                    Render(lightData);
 
                 dirty = true;
             }
@@ -401,7 +402,9 @@ namespace RetroEngine.Entities.Light
                 light.dirty = true;
                 light.LateUpdate();
                 //LightManager.ClearPointLights();
-                light.Render(light.lightData);
+                if(light.enabled)
+                    light.Render(light.lightData);
+
                 light.LateUpdate();
             }
 

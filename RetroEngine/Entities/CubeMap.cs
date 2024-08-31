@@ -38,6 +38,8 @@ namespace RetroEngine.Entities
 
         public bool Infinite = false;
 
+        Vector3 initialPosition;
+
         public override void FromData(EntityData data)
         {
             base.FromData(data);
@@ -47,6 +49,14 @@ namespace RetroEngine.Entities
             resolution = (int)data.GetPropertyFloat("resolution",256);
 
             map = new RenderTargetCube(graphicsDevice, resolution, false, SurfaceFormat.Srgb8Etc2, DepthFormat.Depth24);
+
+            Entity target = Level.GetCurrent().FindEntityByName(data.GetPropertyString("target", "cubemapTarget_default"));
+
+            if(target != null)
+            {
+                Position = target.Position;
+                initialPosition = target.Position;
+            }
 
             if(meshes.Count == 0)
             {
@@ -92,6 +102,8 @@ namespace RetroEngine.Entities
 
             graphicsDevice.Clear(Color.Black);
 
+            initialPosition = Position;
+
             if (Infinite == false)
             {
                 Position = (boundingBoxMin + boundingBoxMax) / 2f;
@@ -123,9 +135,6 @@ namespace RetroEngine.Entities
             base.Update();
 
             cubeMaps.Clear();
-
-            DrawDebug.Text(boundingBoxMin, "min", 0.01f);
-            DrawDebug.Text(boundingBoxMax, "max", 0.01f);
 
             finalizedMaps = false;
 
@@ -162,7 +171,7 @@ namespace RetroEngine.Entities
             if (cubeMapsFinalized.Count == 0)
                 return null;
 
-            cubeMapsFinalized = cubeMapsFinalized.OrderBy(m => Vector3.Distance(m.Position, Camera.position) * (m.Infinite? 2 : 1)).ToList();
+            cubeMapsFinalized = cubeMapsFinalized.OrderBy(m => Vector3.Distance(m.initialPosition, Camera.position) + (m.Infinite? 2000 : 0)).ToList();
 
             var selected = cubeMapsFinalized[0];
 
@@ -179,8 +188,6 @@ namespace RetroEngine.Entities
             if (selected != null)
             {
                 lastCubemap = selected;
-
-                DrawDebug.Text(selected.Position, "current", 0.01f);
             }
             return selected;
 
@@ -232,7 +239,7 @@ namespace RetroEngine.Entities
             GameMain.Instance.render.FillPrepas();
 
             graphicsDevice.SetRenderTarget(GameMain.Instance.render.ReflectionOutput);
-            graphicsDevice.Clear(new Color(0.1f,0.1f,0.2f));
+            graphicsDevice.Clear(Color.Black);
             
             PointLight.LateUpdateAll();
             Level.GetCurrent().RenderPreparation();

@@ -5,7 +5,7 @@
       "Name": "player",
       "className": "info_player_start",
       "id": "info_player_start-player-0",
-      "saveData": "{\u0022velocity\u0022:{\u0022X\u0022:0,\u0022Y\u0022:2.2053719E-06,\u0022Z\u0022:0},\u0022weapons\u0022:[{\u0022weaponType\u0022:\u0022RetroEngine.Game.Entities.Weapons.weapon_hammer, RetroEngine.Game, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0022,\u0022ammo\u0022:1},{\u0022weaponType\u0022:\u0022RetroEngine.Game.Entities.Weapons.weapon_pistol_double, RetroEngine.Game, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0022,\u0022ammo\u0022:0}],\u0022currentSlot\u0022:-1,\u0022lastSlot\u0022:-1,\u0022thirdPerson\u0022:false,\u0022Position\u0022:{\u0022X\u0022:-7.1171646,\u0022Y\u0022:1.4399292,\u0022Z\u0022:3.0765693},\u0022Rotation\u0022:{\u0022X\u0022:20.533049,\u0022Y\u0022:157.33252,\u0022Z\u0022:0},\u0022name\u0022:\u0022player\u0022,\u0022Tags\u0022:[\u0022player\u0022]}"
+      "saveData": "{\u0022velocity\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0.007250905,\u0022Z\u0022:0},\u0022weapons\u0022:[{\u0022weaponType\u0022:\u0022RetroEngine.Game.Entities.Weapons.weapon_hammer, RetroEngine.Game, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0022,\u0022ammo\u0022:1},{\u0022weaponType\u0022:\u0022RetroEngine.Game.Entities.Weapons.weapon_shotgunNew, RetroEngine.Game, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0022,\u0022ammo\u0022:0}],\u0022currentSlot\u0022:-1,\u0022lastSlot\u0022:-1,\u0022thirdPerson\u0022:false,\u0022Position\u0022:{\u0022X\u0022:-100.55232,\u0022Y\u0022:1.4393492,\u0022Z\u0022:-20.767187},\u0022Rotation\u0022:{\u0022X\u0022:26.76587,\u0022Y\u0022:285.40823,\u0022Z\u0022:0},\u0022name\u0022:\u0022player\u0022,\u0022Tags\u0022:[\u0022player\u0022]}"
     },
     {
       "Name": "plank_2",
@@ -14,22 +14,27 @@
       "saveData": "{\u0022Position\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022plank_2\u0022,\u0022Tags\u0022:[]}"
     },
     {
+      "Name": "plank_1",
+      "className": "destructible",
+      "id": "destructible--1",
+      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022plank_1\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
       "Name": "",
       "className": "ent_cat_point",
       "id": "ent_cat_point--0",
-      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:7.503246,\u0022Y\u0022:1.0399998,\u0022Z\u0022:-5.0043855},\u0022Rotation\u0022:{\u0022X\u0022:1.6393993E-05,\u0022Y\u0022:0.0013257315,\u0022Z\u0022:-0.0006277408},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:8.215647,\u0022Y\u0022:1.04,\u0022Z\u0022:-4.708563},\u0022Rotation\u0022:{\u0022X\u0022:-90.00002,\u0022Y\u0022:-71.33175,\u0022Z\u0022:-179.99995},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
     },
     {
       "Name": "",
       "className": "weaponPickup",
-      "id": "weaponPickup--1",
-      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:5.125,\u0022Y\u0022:1.125,\u0022Z\u0022:-5.625},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+      "id": "weaponPickup--0",
+      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:1.625,\u0022Y\u0022:1.625,\u0022Z\u0022:-8.625},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
     }
   ],
-  "entityId": 121,
+  "entityId": 103,
   "deletedIDs": [
-    "weaponPickup--0",
-    "destructible--1"
+    "weaponPickup--1"
   ],
   "deletedNames": []
 }
