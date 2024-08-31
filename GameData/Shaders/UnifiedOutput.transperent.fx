@@ -133,7 +133,7 @@ PixelOutput PixelShaderFunction(PixelInput input)
     
     output.Reflectiveness = float4(reflectiveness, roughness, 0, pbs);
 
-    textureColor = ApplyReflectionCubemapOnSurface(textureColor,albedo, reflectiveness, metalic, roughness, screenCoords, reflection);
+    textureColor = ApplyReflectionCubemapOnSurface(textureColor,albedo, reflectiveness, metalic, roughness, screenCoords, reflection, input.MyPosition);
 
     output.Color = float4(textureColor, textureAlpha);
 

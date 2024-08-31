@@ -238,8 +238,19 @@ namespace RetroEngine
             effect.Parameters["FrameTexture"]?.SetValue(oldFrame);
 
             var cubeMap = CubeMap.GetClosestToCamera();
-            if(cubeMap!=null)
+            if (cubeMap != null)
+            {
                 effect.Parameters["ReflectionCubemap"]?.SetValue(cubeMap.map);
+                effect.Parameters["ReflectionCubemapMin"]?.SetValue(cubeMap.boundingBoxMin);
+                effect.Parameters["ReflectionCubemapMax"]?.SetValue(cubeMap.boundingBoxMax);
+                effect.Parameters["ReflectionCubemapPosition"]?.SetValue(cubeMap.Position);
+
+            }else
+            {
+                effect.Parameters["ReflectionCubemapMin"]?.SetValue(Vector3.Zero);
+                effect.Parameters["ReflectionCubemapMax"]?.SetValue(Vector3.Zero);
+                effect.Parameters["ReflectionCubemapPosition"]?.SetValue(Vector3.Zero);
+            }
 
             effect.Parameters["ScreenHeight"]?.SetValue(ForwardOutput.Height);
             effect.Parameters["ScreenWidth"]?.SetValue(ForwardOutput.Width);

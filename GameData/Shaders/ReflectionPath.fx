@@ -135,7 +135,7 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
         if (SampledDepth + 0.02 < dist&& SampledDepth>0.3f)
         {
 
-            if(distance(oldDepth, SampledDepth)<disToCamera/1)
+            if(distance(oldDepth, SampledDepth)<disToCamera/2)
                 outCoords = lerp(coords, oldCoords,1);
 
             Step /= factor;
@@ -185,7 +185,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR
     float2 texel = float2(1.5/SSRWidth, 1.5/SSRHeight);
     float3 factor = tex2D(FactorTextureSampler, input.TextureCoordinates).rgb;
 
-    float roughness = saturate((factor.g*lerp(factor.g,1,0.5)) - 0.2)/1.4;
+    float roughness = saturate((factor.g*lerp(factor.g,1,0.5)) - 0.2);
 
     // Add noise to the reflection vector based on surface roughness
     float3 noise = normalize(RandomVector(input.TextureCoordinates, 1));
@@ -204,11 +204,14 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 
     for(int i = 0; i < numSamples; i++)
     {
-        cube += SampleCubemap(ReflectionCubemapSampler, normalize(reflectionBase + normalize(RandomVector(input.TextureCoordinates + float2((i*3)%3.12352 + 0.1, i), (i*3)%3.12352 + 0.1)) * roughness));
+        //cube += SampleCubemap(ReflectionCubemapSampler, normalize(reflectionBase + normalize(RandomVector(input.TextureCoordinates + float2((i*3)%3.12352 + 0.1, i), (i*3)%3.12352 + 0.1)) * roughness));
+        cube += parallexCorrectedCubemap(worldPos, normalize(reflectionBase + normalize(RandomVector(input.TextureCoordinates + float2((i*3)%3.12352 + 0.1, i), (i*3)%3.12352 + 0.1)) * roughness)).rgb;
 
         n++;
     }
     cube/=n;
+
+    
 
     #if OPENGL
     return float4(cube, 1);

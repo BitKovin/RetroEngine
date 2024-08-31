@@ -83,6 +83,10 @@ sampler ReflectionCubemapSampler = sampler_state
 	AddressV = Clamp;
 };
 
+float3 ReflectionCubemapMin;
+float3 ReflectionCubemapMax;
+float3 ReflectionCubemapPosition;
+
 
 float DitherDisolve;
 
@@ -1383,11 +1387,6 @@ half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half rough
 		bool simpleShadows = false;
 
 
-
-
-
-
-
 #ifdef SIMPLE_SHADOWS
 
 	simpleShadows = true;
@@ -1751,7 +1750,7 @@ float3 ApplyReflectionOnSurface(float3 color, float3 albedo, float2 screenCoords
 // Function to generate a random float based on the surface coordinates
 float Random(float2 uv)
 {
-	return frac(sin(dot(uv, float2(12.9898, 78.233) * 21)) * 78.5453123);
+	return frac(sin(dot(uv, float2(12.9898, 78.233) * 21)) * 31.5453123);
 }
 
 // Function to generate a random vector based on the surface coordinates and roughness
@@ -1765,20 +1764,69 @@ float3 RandomVector(float2 uv, float roughness)
 	return normalize(randomVec * 2.0 - 1.0);
 }
 
-float3 ApplyReflectionCubemapOnSurface(float3 color, float3 albedo, float reflectiveness, float metalic, float roughness, float2 texCoord, float3 reflectionBase)
+float4 parallexCorrectedCubemap(float3 worldPos, float3 ray) 
+{
+
+	if(distance(ReflectionCubemapMax,ReflectionCubemapMin)<0.5)
+		return SampleCubemap(ReflectionCubemapSampler, ray);
+
+   // gets min / max intersections with ray and cube
+   // (not sure about this vector division or how it works tbh)
+   float3 planeIntersect1 = (ReflectionCubemapMax - worldPos) / ray;
+   float3 planeIntersect2 = (ReflectionCubemapMin - worldPos) / ray;
+
+   // pick the furthest intersection
+   float3 furthestPlane = max(planeIntersect1, planeIntersect2);
+
+   // get the distance to closest intersection on this cube plane
+   float dist = min(min(furthestPlane.x, furthestPlane.y), furthestPlane.z);
+
+   // use this to recover the final intersected world space
+   float3 intersectedWorldSpacePos = worldPos + ray * dist;
+   
+   // now get the ray in cubemap coords
+   ray = intersectedWorldSpacePos - ReflectionCubemapPosition;
+
+   return SampleCubemap(ReflectionCubemapSampler, ray);
+}
+
+float Random(int seed)
+{
+    // Use bitwise operations and constants to generate a pseudo-random value
+    seed = (seed << 31) ^ seed;
+    seed = (seed * (seed * seed * 13 + 721) + 3789);
+
+    // Normalize to [0, 1]
+    return frac(sin(seed) * 4823.4215453123);
+}
+
+float3 ApplyReflectionCubemapOnSurface(float3 color, float3 albedo, float reflectiveness, float metalic, float roughness, float2 texCoord, float3 reflectionBase, float3 worldPos)
 {
 
 	float3 cube = 0;SampleCubemap(ReflectionCubemapSampler, reflectionBase);
 
-	const int numSamples = 2;
+	const int numSamples = 8;
 
-	roughness = saturate((roughness * lerp(roughness, 1, 0.7)) - 0.03) / 1.5;
+	roughness = saturate((roughness * lerp(roughness, 1, 0.7)) - 0.03);
 
 	float n = 0;
 
 	for (int i = 0; i < numSamples; i++)
 	{
-		cube += SampleCubemap(ReflectionCubemapSampler, normalize(reflectionBase + normalize(RandomVector(texCoord + float2((i * 3) % 3.123 + 0.1, i), (i * 3) % 3.12352 + 0.1)) * roughness));
+		//cube += SampleCubemap(ReflectionCubemapSampler, normalize(reflectionBase + normalize(RandomVector(texCoord + float2((i * 3) % 3.123 + 0.1, i), (i * 3) % 3.12352 + 0.1)) * roughness));
+
+		float3 randVec;
+
+#if OPENGL
+		randVec = RandomVector(texCoord * 1000 + float2((i * 3) % 3.123 + 0.1, i), (i * 10) % 3.12352);
+#else
+		randVec = float3(Random((i+3)*130), Random((i+1)*310), Random((i+4)*470)) * 2 - 1;
+#endif
+
+		//randVec = RandomVector(texCoord * 1000 + float2((i * 3) % 3.123 + 0.1, i), (i * 10) % 3.12352);
+
+
+		cube += parallexCorrectedCubemap(worldPos, normalize(reflectionBase + normalize(randVec) * roughness));
 
 		n++;
 	}

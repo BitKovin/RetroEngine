@@ -94,9 +94,10 @@
 	dynamicSkipDown(bool) : "DynamicSkipDown" : "false"
 ]
 
-@PointClass base(light) size(-15 -15 -15, 15 15 15) color(255 255 255) model({ "path": "models/tools/radius.obj", "scale": radius * 32 * 2})  = cubeMap : "Graphics" 
+@SolidClass size(-15 -15 -15, 15 15 15) color(255 255 255) model({ "path": "models/tools/cubemap.obj", "scale": radius * 32})  = cubeMap : "Graphics" 
 [
 	radius(float) : "Radius" : "5"
+	size(Vector3) : "Size" : "5 5 5"
 	resolution(int) : "Resolution" : "256"
 ]
 

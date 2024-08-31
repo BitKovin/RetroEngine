@@ -1,7 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using BulletSharp;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RetroEngine.Entities.Light;
 using RetroEngine.Map;
+using RetroEngine.PhysicsSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +21,7 @@ namespace RetroEngine.Entities
 
         static internal List<CubeMap> cubeMapsFinalized = new List<CubeMap>();
 
-        static BoundingSphere cameraPoit = new BoundingSphere(Vector3.Zero, 0.1f);
+        static BoundingSphere cameraPoint = new BoundingSphere(Vector3.Zero, 0.1f);
 
         internal RenderTargetCube map;
 
@@ -29,7 +31,12 @@ namespace RetroEngine.Entities
 
         StaticMesh mesh = new StaticMesh();
 
-        BoundingSphere boundingSphere;
+        BoundingBox boundingBox;
+
+        public Vector3 boundingBoxMin = Vector3.Zero;
+        public Vector3 boundingBoxMax = Vector3.Zero;
+
+        public bool Infinite = false;
 
         public override void FromData(EntityData data)
         {
@@ -39,14 +46,38 @@ namespace RetroEngine.Entities
 
             resolution = (int)data.GetPropertyFloat("resolution",256);
 
-            map = new RenderTargetCube(graphicsDevice, resolution, false, SurfaceFormat.Color, DepthFormat.Depth24);
+            map = new RenderTargetCube(graphicsDevice, resolution, false, SurfaceFormat.Srgb8Etc2, DepthFormat.Depth24);
+
+            if(meshes.Count == 0)
+            {
+                boundingBoxMin = Vector3.Zero;
+                boundingBoxMax = Vector3.Zero;
+                Infinite = true;
+            }
+
+            List<Vector3> vertices = new List<Vector3>();
+
+            foreach (var m in meshes)
+            {
+
+                vertices.AddRange(m.GetMeshVertices());
+            }
+
+            if (vertices.Count > 0)
+            {
+                boundingBox = BoundingBox.CreateFromPoints(vertices.ToArray());
+
+                boundingBoxMin = boundingBox.Min;
+                boundingBoxMax = boundingBox.Max;
+            }
+
+            meshes.Clear();
 
             mesh.LoadFromFile("models/cube.obj");
             //meshes.Add(mesh);
             mesh.Visible = false;
 
-            boundingSphere.Center = Position;
-            boundingSphere.Radius = data.GetPropertyFloat("radius", 5);
+            boundingBox = new BoundingBox(boundingBoxMin, boundingBoxMax);
 
             StartOrder = 10;
 
@@ -61,11 +92,29 @@ namespace RetroEngine.Entities
 
             graphicsDevice.Clear(Color.Black);
 
+            if (Infinite == false)
+            {
+                Position = (boundingBoxMin + boundingBoxMax) / 2f;
+
+                Position = Navigation.ProjectToGround(Position) + Vector3.UnitY * 1.4f;
+            }
             Render();
             mesh.Visible = true;
             mesh.Position = Position;
             mesh.texture = map;
             mesh.Shader = new Graphic.SurfaceShaderInstance("CubeMapVisualizer");
+
+
+            foreach (RigidBody body in bodies)
+            {
+
+                body.CollisionFlags = BulletSharp.CollisionFlags.NoContactResponse;
+                body.SetBodyType(PhysicsSystem.BodyType.None);
+                body.SetCollisionMask(PhysicsSystem.BodyType.None);
+                Physics.Remove(body);
+            }
+
+            bodies.Clear();
 
         }
 
@@ -75,6 +124,9 @@ namespace RetroEngine.Entities
 
             cubeMaps.Clear();
 
+            DrawDebug.Text(boundingBoxMin, "min", 0.01f);
+            DrawDebug.Text(boundingBoxMax, "max", 0.01f);
+
             finalizedMaps = false;
 
         }
@@ -83,9 +135,9 @@ namespace RetroEngine.Entities
         {
             base.LateUpdate();
 
-            cameraPoit.Center = Camera.position;
+            cameraPoint.Center = Camera.position;
 
-            if (boundingSphere.Intersects(cameraPoit))
+            if (boundingBox.Intersects(cameraPoint) || Infinite)
             {
                 cubeMaps.Add(this);
             }
@@ -103,14 +155,34 @@ namespace RetroEngine.Entities
             finalizedMaps = true;
         }
 
+        static CubeMap lastCubemap = null;
+
         public static CubeMap GetClosestToCamera()
         {
             if (cubeMapsFinalized.Count == 0)
                 return null;
-            cubeMapsFinalized = cubeMapsFinalized.OrderBy(m => Vector3.Distance(m.Position, Camera.position)).ToList();
 
+            cubeMapsFinalized = cubeMapsFinalized.OrderBy(m => Vector3.Distance(m.Position, Camera.position) * (m.Infinite? 2 : 1)).ToList();
 
-            return cubeMapsFinalized[0];
+            var selected = cubeMapsFinalized[0];
+
+            if (selected == null || selected.Destroyed)
+            {
+                selected = lastCubemap;
+            }
+
+            if (selected == null || selected.Destroyed)
+            {
+                selected = null;
+            }
+
+            if (selected != null)
+            {
+                lastCubemap = selected;
+
+                DrawDebug.Text(selected.Position, "current", 0.01f);
+            }
+            return selected;
 
         }
 
