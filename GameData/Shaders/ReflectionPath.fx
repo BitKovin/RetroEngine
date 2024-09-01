@@ -125,7 +125,7 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
 
         }
         
-        if (inScreen == false || SampledDepth>1000)
+        if (inScreen == false || SampledDepth>120000)
         {
             Step /= 3;
             factor = lerp(factor, 1, 0.5);
@@ -157,7 +157,7 @@ float4 SampleSSR(float3 direction, float3 position, float currentDepth, float3 n
     
     weight = step(2,weight);
 
-    weight *= FadeDistance(DistanceToBorder(outCoords), 0, 0.1);
+    weight *= FadeDistance(DistanceToBorder(outCoords), 0, 0.02);
 
     //weight = saturate(weight);
 
@@ -226,7 +226,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 
     if (factor.y < 0.4)
     {
-        ssr = SampleSSR(reflection, worldPos, depth, normal, vDir, 40, 1.5);
+        ssr = SampleSSR(reflection, worldPos, depth, normal, vDir, 64, 1.3);
     }
     
     float3 reflectionColor = lerp(cube, ssr.rgb, ssr.w);

@@ -541,7 +541,7 @@ half CalculateSpecular(float3 worldPos, half3 normal, half3 lightDir, half rough
 	// Specular BRDF
 	half3 specular = (D * G) / (4.0f * NdotV * NdotL + 0.001f);
 
-	return specular * 1;
+	return specular * 0.2;
 }
 
 
