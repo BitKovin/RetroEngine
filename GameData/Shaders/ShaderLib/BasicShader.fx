@@ -539,9 +539,9 @@ half CalculateSpecular(float3 worldPos, half3 normal, half3 lightDir, half rough
 	half G = GeometrySmith(normal, vDir, lightDir, roughnessSq);
 
 	// Specular BRDF
-	half3 specular = (D * G) / (4.0f * NdotV * NdotL + 0.001f);
+	half3 specular = (D * G) / (4.0f * NdotV * NdotL + 0.1f);
 
-	return specular * 0.2;
+	return specular * 0.15;
 }
 
 
@@ -1554,8 +1554,7 @@ half3 CalculateLight(PixelInput input, float3 normal, float roughness, float met
 	float3 lightDir = normalize(-LightDirection);
 
 	// Calculate specular reflection
-	float3 specular = CalculateSpecular(input.MyPosition, normal, lightDir, roughness, metallic, albedo) * DirectBrightness;
-	specular *= max(1 - shadow, 0);
+
 
 	//float3 globalSpecularDir = normalize(-normal + float3(0, -5, 0) + LightDirection);
 	//specular += CalculateSpecular(input.MyPosition, normal, globalSpecularDir, roughness, metallic, albedo) * 0.02;
@@ -1570,6 +1569,8 @@ half3 CalculateLight(PixelInput input, float3 normal, float roughness, float met
 	// Global ambient light
 	float3 globalLight = GlobalBrightness * globalLightColor * lerp(1.0f, 0.1f, (dot(normal, float3(0, -1, 0)) + 1) / 2);
 
+	float3 specular = CalculateSpecular(input.MyPosition, normal, lightDir, roughness, metallic, albedo) * DirectBrightness * globalLightColor;
+	specular *= max(1 - shadow, 0);
 
 	if (Viewmodel)
 	{
