@@ -208,6 +208,17 @@ namespace RetroEngine.Skeletal
             {
                 if (node.name.ToLower() == "root")
                     node.RootMotionBone = true;
+
+                if(node.isThisAMeshNode)
+                    foreach(var index in node.meshIndices)
+                    {
+                        foreach(var mesh in  model.meshes)
+                        {
+                            if(mesh.Tag.MeshIndex ==  index)
+                                mesh.Tag.Name = node.name;
+                        }
+                    }
+
             }
 
             ResetPose(model);
@@ -267,6 +278,7 @@ namespace RetroEngine.Skeletal
             // create a new model.mesh per mesh in scene
             for (int mloop = 0; mloop < scene.Meshes.Count; mloop++)
             {
+
                 Mesh mesh = scene.Meshes[mloop];
                 var m = new RiggedModel.RiggedModelMesh();
                 m.nameOfMesh = mesh.Name;
@@ -290,7 +302,8 @@ namespace RetroEngine.Skeletal
                         var material = scene.Materials[i];
                         var t = material.GetAllMaterialTextures();
 
-                        m.Tag = new MeshPartData { textureName = Path.GetFileName(material.TextureDiffuse.FilePath) };
+
+                        m.Tag = new MeshPartData { textureName = Path.GetFileName(material.TextureDiffuse.FilePath), Name = m.nameOfMesh, MeshIndex = mloop };
 
                         for (int j = 0; j < t.Length; j++)
                         {
@@ -412,6 +425,7 @@ namespace RetroEngine.Skeletal
             if (curAssimpNode.HasMeshes)
             {
                 modelnode.isThisAMeshNode = true;
+                modelnode.meshIndices = curAssimpNode.MeshIndices;
                 // if its a node that represents a mesh it should also have references to a node for animations.
                 if (startupNodeTreeConsoleInfo)
                     Console.Write(" HasMeshes ... MeshIndices For This Node:  ");
@@ -419,6 +433,7 @@ namespace RetroEngine.Skeletal
                 // the mesh node doesn't normally have or need a bind pose matrix however im going to make one here because im actually going to need it.
                 // for complex mesh with bone animations were they are both in the same animation.
                 modelnode.InvOffsetMatrixMg = modelnode.LocalTransformMg.Invert();
+
 
                 // since i already copied over the meshes then i should set the meshes listed to have this node as the reference node.
                 foreach (var mi in curAssimpNode.MeshIndices)

@@ -313,6 +313,8 @@ namespace RetroEngine.Game.Entities.Weapons
             mesh.Viewmodel = true;
             mesh.UseAlternativeRotationCalculation = true;
 
+            mesh.MeshHideList.Add("muzzle");
+
             mesh2.LoadFromFile(pistolPath);
 
             mesh2.textureSearchPaths.Add("textures/weapons/pistol/");

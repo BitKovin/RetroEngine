@@ -335,6 +335,9 @@ namespace RetroEngine.Entities.Light
             {
                 GameMain.pendingDispose.Add(renderTarget);
             }
+
+            //renderTarget?.Dispose();
+
             //renderTargetCube?.Dispose();
 
 

@@ -571,6 +571,15 @@ namespace RetroEngine
                 }
                 foreach (RiggedModel.RiggedModelMesh meshPart in RiggedModel.meshes)
                 {
+
+                    MeshPartData meshPartData = meshPart.Tag as MeshPartData;
+
+                    if (meshPartData != null)
+                    {
+                        if (finalizedMeshHide.Contains(meshPartData.Name))
+                            continue;
+                    }
+
                     // Set the vertex buffer and index buffer for this mesh part
                     graphicsDevice.SetVertexBuffer(meshPart.VertexBuffer);
                     graphicsDevice.Indices = meshPart.IndexBuffer;
@@ -667,6 +676,16 @@ namespace RetroEngine
                 if (GameMain.Instance.render.BoundingSphere.Radius == 0 || IntersectsBoundingSphere(GameMain.Instance.render.BoundingSphere))
                     foreach (RiggedModel.RiggedModelMesh meshPart in RiggedModel.meshes)
                     {
+
+
+                        MeshPartData meshPartData = meshPart.Tag as MeshPartData;
+
+                        if (meshPartData != null)
+                        {
+                            if (finalizedMeshHide.Contains(meshPartData.Name))
+                                continue;
+                        }
+
                         // Set the vertex buffer and index buffer for this mesh part
                         graphicsDevice.SetVertexBuffer(meshPart.VertexBuffer);
                         graphicsDevice.Indices = meshPart.IndexBuffer;
@@ -677,7 +696,6 @@ namespace RetroEngine
                         if (mask)
                         {
 
-                            MeshPartData meshPartData = meshPart.Tag as MeshPartData;
                             ApplyShaderParams(effect, meshPartData);
 
                             effect.Parameters["Masked"].SetValue(mask);
@@ -830,6 +848,12 @@ namespace RetroEngine
 
 
                     MeshPartData meshPartData = meshPart.Tag;
+
+                    if (meshPartData != null)
+                    {
+                        if (finalizedMeshHide.Contains(meshPartData.Name))
+                            continue;
+                    }
 
                     bool transperent = Transparency < 1;
 

@@ -169,7 +169,7 @@ namespace RetroEngine
                     StartIndex = 0,
                     NumVertices = numVertices,
                     PrimitiveCount = primitiveCount,
-                    Tag = new MeshPartData {textureName = scene.Materials[mesh.MaterialIndex].Name }
+                    Tag = new MeshPartData {textureName = scene.Materials[mesh.MaterialIndex].Name, Name = mesh.Name }
                 };
 
                 var modelMesh = new ModelMesh(graphicsDevice, new List<ModelMeshPart> { meshPart })
@@ -331,7 +331,7 @@ namespace RetroEngine
                     StartIndex = 0,
                     NumVertices = numVertices,
                     PrimitiveCount = primitiveCount,
-                    Tag = new MeshPartData { textureName = scene.Materials[mesh.MaterialIndex].Name + ".png" }
+                    Tag = new MeshPartData { textureName = scene.Materials[mesh.MaterialIndex].Name + ".png", Name = mesh.Name }
                 };
 
                 var modelMesh = new ModelMesh(graphicsDevice, new List<ModelMeshPart> { meshPart })
@@ -479,7 +479,7 @@ namespace RetroEngine
                 StartIndex = 0,
                 NumVertices = numVertices,
                 PrimitiveCount = primitiveCount,
-                Tag = new MeshPartData { textureName = ((MeshPartData)models[0].Meshes[0].MeshParts[0].Tag).textureName }
+                Tag = new MeshPartData { textureName = ((MeshPartData)models[0].Meshes[0].MeshParts[0].Tag).textureName}
             };
 
             var modelMesh = new ModelMesh(graphicsDevice, new List<ModelMeshPart> { meshPart });

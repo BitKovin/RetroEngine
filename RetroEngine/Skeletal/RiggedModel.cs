@@ -757,6 +757,8 @@ namespace RetroEngine.Skeletal
             public RiggedModelNode parent;
             public List<RiggedModelNode> children = new List<RiggedModelNode>();
 
+            public List<int> meshIndices;
+
             public bool RootMotionBone = false;
 
             // probably don't need most of these they are from the debug phase.

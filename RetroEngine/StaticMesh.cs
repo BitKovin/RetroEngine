@@ -16,8 +16,12 @@ namespace RetroEngine
 
     public class MeshPartData
     {
+        public string Name = "";
         public string textureName = "";
         public Dictionary<string, Vector3> Points = new Dictionary<string, Vector3>();
+
+        public int MeshIndex = -1; //used during skeletal mesh loading
+
         //public VertexData[] Vertices;
     }
 
@@ -132,6 +136,9 @@ namespace RetroEngine
         public bool BackFaceShadows = false;
 
         public float NormalBiasScale = 1;
+
+        public List<string> MeshHideList = new List<string>();
+        protected string[] finalizedMeshHide = new string[0];
 
         public StaticMesh()
         {
@@ -713,6 +720,12 @@ namespace RetroEngine
 
                         MeshPartData meshPartData = meshPart.Tag as MeshPartData;
 
+                        if(meshPartData != null)
+                        {
+                            if (finalizedMeshHide.Contains(meshPartData.Name))
+                                continue;
+                        }
+
                         ApplyShaderParams(effect, meshPartData);
 
                         Stats.RenderedMehses++;
@@ -829,13 +842,22 @@ namespace RetroEngine
                     foreach (ModelMeshPart meshPart in mesh.MeshParts)
                     {
 
+                        MeshPartData meshPartData = meshPart.Tag as MeshPartData;
+
+                        if (meshPartData != null)
+                        {
+                            if (finalizedMeshHide.Contains(meshPartData.Name))
+                                continue;
+                        }
+
+
                         // Set the vertex buffer and index buffer for this mesh part
                         graphicsDevice.SetVertexBuffer(meshPart.VertexBuffer);
                         graphicsDevice.Indices = meshPart.IndexBuffer;
 
-                        MeshPartData meshPartData = meshPart.Tag as MeshPartData;
 
-                        if(Masked||Transperent)
+
+                        if (Masked||Transperent)
                             UpdateTextureParamIfNeeded(effect, "Texture", FindTexture(meshPartData.textureName));
 
                         // Set effect parameters
@@ -937,7 +959,14 @@ namespace RetroEngine
                             foreach (ModelMeshPart meshPart in mesh.MeshParts)
                             {
 
-                                
+
+                                MeshPartData meshPartData = meshPart.Tag as MeshPartData;
+
+                                if (meshPartData != null)
+                                {
+                                    if (finalizedMeshHide.Contains(meshPartData.Name))
+                                        continue;
+                                }
 
                                 // Set the vertex buffer and index buffer for this mesh part
                                 graphicsDevice.SetVertexBuffer(meshPart.VertexBuffer);
@@ -948,7 +977,6 @@ namespace RetroEngine
 
                                 if (mask)
                                 {
-                                    MeshPartData meshPartData = meshPart.Tag as MeshPartData;
                                     ApplyShaderParams(effect, meshPartData, true);
                                     effect.Parameters["Masked"]?.SetValue(mask);
 
@@ -1613,7 +1641,7 @@ namespace RetroEngine
                 boundingSphere = CalculateBoundingSphere(vertices.ToArray());
 
 
-                meshParts.Add(new ModelMeshPart { VertexBuffer = vertexBuffer, IndexBuffer = indexBuffer, StartIndex = 0, NumVertices = indices.Count, PrimitiveCount = primitiveCount, Tag = new MeshPartData { textureName = Path.GetFileName(scene.Materials[mesh.MaterialIndex].TextureDiffuse.FilePath), Points = points } });
+                meshParts.Add(new ModelMeshPart { VertexBuffer = vertexBuffer, IndexBuffer = indexBuffer, StartIndex = 0, NumVertices = indices.Count, PrimitiveCount = primitiveCount, Tag = new MeshPartData { textureName = Path.GetFileName(scene.Materials[mesh.MaterialIndex].TextureDiffuse.FilePath), Points = points, Name = mesh.Name } });
             }
 
 
@@ -1730,6 +1758,8 @@ namespace RetroEngine
             frameStaticMeshData.IsRendered = isRendered;
             frameStaticMeshData.IsRenderedShadow = isRenderedShadow;
             frameStaticMeshData.InFrustrum = inFrustrum;
+
+            finalizedMeshHide = MeshHideList.ToArray();
 
             if (DitherDisolve > 0)
                 Masked = true;
