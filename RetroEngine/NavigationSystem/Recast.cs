@@ -67,7 +67,7 @@ namespace RetroEngine.NavigationSystem
 
         }
 
-        public static List<Vector3> FindPathSimple(Vector3 start, Vector3 end)
+        public static List<Vector3> FindPathSimple(Vector3 start, Vector3 end, IDtQueryFilter filter = null)
         {
             List<RcVec3f> path = new List<RcVec3f>();
             lock (TileCache)
@@ -76,7 +76,8 @@ namespace RetroEngine.NavigationSystem
                 DtNavMeshQuery navMeshQuery = new DtNavMeshQuery(NavigationSystem.Recast.TileCache.GetNavMesh());
 
 
-                IDtQueryFilter filter = new DtQueryDefaultFilter();
+                if(filter == null)
+                    filter = new NavigationQueryFilter();
 
                 List<long> longs = new List<long>();
 
@@ -103,6 +104,10 @@ namespace RetroEngine.NavigationSystem
 
         public static long AddObstacleBox(Vector3 min, Vector3 max)
         {
+
+            if(TileCache == null)
+                return 0;
+
             long obst = TileCache.AddBoxObstacle(min.ToRc(), max.ToRc());
             lock(allObstacles)
             {
@@ -167,6 +172,9 @@ namespace RetroEngine.NavigationSystem
             }
 
             MergeMeshes(meshDatas, out verts, out faces);
+
+            if (verts.Length == 0)
+                return;
 
             DemoInputGeomProvider geomProvider = new DemoInputGeomProvider(verts, faces);
 

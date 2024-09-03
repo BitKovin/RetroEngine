@@ -323,7 +323,7 @@ namespace RetroEngine
         void Process(Vector3 start, Vector3 target)
         {
 
-            var result = Recast.FindPathSimple(start, target);
+            var result = Recast.FindPathSimple(start, target, new NavigationQueryFilterAvoidLOS());
 
             if(result.Count>0)
                 result.RemoveAt(0);

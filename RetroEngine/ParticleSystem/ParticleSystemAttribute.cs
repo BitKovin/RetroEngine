@@ -48,14 +48,20 @@ namespace RetroEngine
         {
             foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
-                foreach (Type type in assembly.GetTypes())
+
+                try
                 {
-                    var attribute = type.GetCustomAttribute<ParticleSystemAttribute>();
-                    if (attribute != null && attribute.TechnicalName == technicalName)
+
+                    foreach (Type type in assembly.GetTypes())
                     {
-                        return type;
+                        var attribute = type.GetCustomAttribute<ParticleSystemAttribute>();
+                        if (attribute != null && attribute.TechnicalName == technicalName)
+                        {
+                            return type;
+                        }
                     }
                 }
+                catch (Exception) { }
             }
 
             return null; // Class with the specified TechnicalName not found

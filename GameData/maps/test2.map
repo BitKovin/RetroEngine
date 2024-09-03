@@ -10,6 +10,7 @@
 "geometricalShadowsEnabled" "false"
 "_tb_soft_map_bounds" "none"
 "globalLightColor" "1 0.95 0.85"
+"skyColor" "0.82 0.82 1"
 // brush 0
 {
 ( -896 288 272 ) ( -896 768 208 ) ( -896 768 272 ) brushes/bricks 0 0 0 0.75 0.75

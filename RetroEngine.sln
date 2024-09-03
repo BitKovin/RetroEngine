@@ -69,6 +69,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Extended.WinForms.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Extended2", "Libs\MonogameExtended2\MonoGame.Extended2\Sources\MonoGame.Extended2\MonoGame.Extended2.csproj", "{AD0D5739-A705-46EC-8BE2-EA5B844A70A9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RetroEngine.Sandbox", "RetroEngine.Sandbox\RetroEngine.Sandbox.csproj", "{E107FC64-146D-46F6-AFE3-257A561FB0B5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -497,6 +499,22 @@ Global
 		{AD0D5739-A705-46EC-8BE2-EA5B844A70A9}.Release|x64.Build.0 = Release|Any CPU
 		{AD0D5739-A705-46EC-8BE2-EA5B844A70A9}.Release|x86.ActiveCfg = Release|Any CPU
 		{AD0D5739-A705-46EC-8BE2-EA5B844A70A9}.Release|x86.Build.0 = Release|Any CPU
+		{E107FC64-146D-46F6-AFE3-257A561FB0B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E107FC64-146D-46F6-AFE3-257A561FB0B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E107FC64-146D-46F6-AFE3-257A561FB0B5}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{E107FC64-146D-46F6-AFE3-257A561FB0B5}.Debug|ARM.Build.0 = Debug|Any CPU
+		{E107FC64-146D-46F6-AFE3-257A561FB0B5}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E107FC64-146D-46F6-AFE3-257A561FB0B5}.Debug|x64.Build.0 = Debug|Any CPU
+		{E107FC64-146D-46F6-AFE3-257A561FB0B5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E107FC64-146D-46F6-AFE3-257A561FB0B5}.Debug|x86.Build.0 = Debug|Any CPU
+		{E107FC64-146D-46F6-AFE3-257A561FB0B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E107FC64-146D-46F6-AFE3-257A561FB0B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E107FC64-146D-46F6-AFE3-257A561FB0B5}.Release|ARM.ActiveCfg = Release|Any CPU
+		{E107FC64-146D-46F6-AFE3-257A561FB0B5}.Release|ARM.Build.0 = Release|Any CPU
+		{E107FC64-146D-46F6-AFE3-257A561FB0B5}.Release|x64.ActiveCfg = Release|Any CPU
+		{E107FC64-146D-46F6-AFE3-257A561FB0B5}.Release|x64.Build.0 = Release|Any CPU
+		{E107FC64-146D-46F6-AFE3-257A561FB0B5}.Release|x86.ActiveCfg = Release|Any CPU
+		{E107FC64-146D-46F6-AFE3-257A561FB0B5}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -531,6 +549,7 @@ Global
 		{9D8BF19E-D8CF-4163-A086-79C75C66380F} = {DBF2DA5B-B901-4942-BB8D-25F90E182EA9}
 		{D10D3B11-77E9-49F8-A30C-FACAE619C17B} = {DBF2DA5B-B901-4942-BB8D-25F90E182EA9}
 		{AD0D5739-A705-46EC-8BE2-EA5B844A70A9} = {DBF2DA5B-B901-4942-BB8D-25F90E182EA9}
+		{E107FC64-146D-46F6-AFE3-257A561FB0B5} = {B079FE1C-C9E6-4F63-90E5-37D30BDDC832}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CD871269-795C-4097-8657-7A67207223D4}

@@ -30,7 +30,7 @@ namespace RetroEngine
 
         public static bool DynamicSunShadowsEnabled = true;
 
-        public static bool ViewmodelShadows = false;
+        public static bool ViewmodelShadows = true;
 
 
         public static int PointLightShadowQuality = 3;

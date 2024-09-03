@@ -257,3 +257,10 @@
 /processorParam:DebugMode=Auto
 /processorParam:Defines=
 /build:../../GameData/Shaders/TrailUnlit.fx;Shaders/TrailUnlit.fx
+
+#begin ../../GameData/Shaders/PointLightComplexity.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/processorParam:Defines=
+/build:../../GameData/Shaders/PointLightComplexity.fx;Shaders/PointLightComplexity.fx

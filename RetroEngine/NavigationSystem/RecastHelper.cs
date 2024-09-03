@@ -1,8 +1,10 @@
 ﻿using DotRecast.Core.Numerics;
+using DotRecast.Detour;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -33,6 +35,31 @@ namespace RetroEngine.NavigationSystem
             }
 
             return res;
+
+        }
+
+        public static Vector3 GetAvgVertexPositions(DtMeshTile curTile, DtPoly curPoly)
+        {
+            // Calculate the centroid of the current polygon
+            RcVec3f polyPos = new RcVec3f();
+            int vertCount = curPoly.vertCount;
+
+            // Iterate through each vertex of the polygon
+            for (int i = 0; i < vertCount; ++i)
+            {
+                int vertIndex = curPoly.verts[i] * 3;
+
+                polyPos.X += curTile.data.verts[vertIndex];
+                polyPos.Y += curTile.data.verts[vertIndex + 1];
+                polyPos.Z += curTile.data.verts[vertIndex + 2];
+            }
+
+            // Calculate the average to get the centroid position
+            polyPos.X /= vertCount;
+            polyPos.Y /= vertCount;
+            polyPos.Z /= vertCount;
+
+            return polyPos.FromRc();
 
         }
 

@@ -64,7 +64,6 @@ namespace RetroEngine.NavigationSystem
 
             dtCrowd.SetObstacleAvoidanceParams(3, option);
 
-            
 
         }
 
@@ -82,6 +81,8 @@ namespace RetroEngine.NavigationSystem
             agentParams.pathOptimizationRange = radius * 40;
             agentParams.obstacleAvoidanceType = _agCfg.obstacleAvoidanceType;
             agentParams.separationWeight = _agCfg.separationWeight;
+
+            agentParams.queryFilterType
 
             var agent = dtCrowd.AddAgent(position.ToRc(), agentParams);
 
