@@ -70,32 +70,35 @@ namespace RetroEngine.NavigationSystem
         public static List<Vector3> FindPathSimple(Vector3 start, Vector3 end, IDtQueryFilter filter = null)
         {
             List<RcVec3f> path = new List<RcVec3f>();
-            
-
-                DtNavMeshQuery navMeshQuery = new DtNavMeshQuery(NavigationSystem.Recast.TileCache.GetNavMesh());
 
 
-                if(filter == null)
-                    filter = new NavigationQueryFilter();
-
-                List<long> longs = new List<long>();
-
-                RcTestNavMeshTool rcTestNavMeshTool = new RcTestNavMeshTool();
-
-                long startRef = 0;
-                long endRef = 0;
+            DtNavMeshQuery navMeshQuery = new DtNavMeshQuery(NavigationSystem.Recast.TileCache.GetNavMesh());
 
 
+            if (filter == null)
+                filter = new NavigationQueryFilter();
 
-                RcVec3f m_polyPickExt = new RcVec3f(2, 4, 2);
+            List<long> longs = new List<long>();
 
-                navMeshQuery.FindNearestPoly(start.ToRc(), m_polyPickExt, filter, out startRef, out var _, out var _);
-                navMeshQuery.FindNearestPoly(end.ToRc(), m_polyPickExt, filter, out endRef, out var _, out var _);
-              
+            RcTestNavMeshTool rcTestNavMeshTool = new RcTestNavMeshTool();
 
-                rcTestNavMeshTool.FindFollowPath(NavigationSystem.Recast.dtNavMesh, navMeshQuery, startRef, endRef, start.ToRc(), end.ToRc(), filter, true, ref longs, 0, ref path);
-            
-            return path.ConvertPath();
+            long startRef = 0;
+            long endRef = 0;
+
+
+
+            RcVec3f m_polyPickExt = new RcVec3f(2, 4, 2);
+
+            navMeshQuery.FindNearestPoly(start.ToRc(), m_polyPickExt, filter, out startRef, out var _, out var _);
+            navMeshQuery.FindNearestPoly(end.ToRc(), m_polyPickExt, filter, out endRef, out var _, out var _);
+
+
+            var result = rcTestNavMeshTool.FindFollowPath(NavigationSystem.Recast.dtNavMesh, navMeshQuery, startRef, endRef, start.ToRc(), end.ToRc(), filter, true, ref longs, 0, ref path);
+
+            if(result.Succeeded())
+                return path.ConvertPath();
+
+            return new List<Vector3> { start, end };
 
         }
 
@@ -183,6 +186,7 @@ namespace RetroEngine.NavigationSystem
 
             rcNavMeshBuildSettings.cellSize = 0.3f;
             rcNavMeshBuildSettings.agentRadius = 0.2f;
+            rcNavMeshBuildSettings.tileSize = 32;
 
             var buildResult = Build(geomProvider, rcNavMeshBuildSettings, RcByteOrder.LITTLE_ENDIAN, true);//tileNavMeshBuilder.Build(geomProvider, rcNavMeshBuildSettings);
 

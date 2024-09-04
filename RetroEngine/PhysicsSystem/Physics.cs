@@ -600,14 +600,6 @@ namespace RetroEngine.PhysicsSystem
             Vector3 start = rayStart.ToPhysics();
             Vector3 end = rayEnd.ToPhysics();
 
-            if(Thread.CurrentThread != GameMain.RenderThread && Thread.CurrentThread != GameMain.GameThread)
-            {
-                var preHit = LineTraceForStatic(start, end);
-                if(preHit.HasHit == false)
-                {
-                    //return new MyClosestRayResultCallback(ref rayStart, ref rayEnd); // hopefully commenting doesn't fucking crash
-                }
-            }
             lock (dynamicsWorld)
             {
                 CollisionWorld world = dynamicsWorld;

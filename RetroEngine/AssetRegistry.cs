@@ -470,6 +470,7 @@ namespace RetroEngine
 
             Bank bank = StudioSystem.LoadBankFromStream(GetFileStreamFromPath(filePath), FMOD.Studio.LOAD_BANK_FLAGS.NORMAL);
 
+            lock(fmodBanks)
             fmodBanks.Add(path, bank);
 
             return bank;

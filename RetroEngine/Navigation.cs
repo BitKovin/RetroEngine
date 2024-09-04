@@ -153,6 +153,9 @@ namespace RetroEngine
             {
                 if (UpdateTask.IsCompleted || UpdateTask.IsFaulted)
                 {
+
+                    UpdateTask.Wait();
+
                     UpdateTask = Task.Factory.StartNew(() => { UpdateCycle(); });
                     Logger.Log("restarting nav task");
                 }
@@ -161,14 +164,12 @@ namespace RetroEngine
             if (Recast.dtNavMesh != null && GameMain.Instance.paused == false)
             {
 
-                lock (Recast.TileCache)
-                {
 
                     Recast.TileCache?.Update();
 
                     if(DrawNavigation)
                         RecastDebugDraw.DebugDrawNavMeshPolys(Recast.dtNavMesh);
-                }
+                
 
                 CrowdSystem.Update();
 
@@ -270,18 +271,31 @@ namespace RetroEngine
 
         internal Delay deathDelay = new Delay();
 
+        bool active = false;
+
         public void Start(Vector3 start, Vector3 target, IDtQueryFilter QueryFilter = null)
         {
-            if (Navigation.pathfindingQueries.Contains(this)) return;
-
 
             startLocation = start;
             endLocation = target;
 
             navFilter = QueryFilter;
-            
-            lock (Navigation.pathfindingQueries)
+
+
+            deathDelay.AddDelay(5);
+
+            if (deathDelay.Wait() == false)
+                active = false;
+
+            if (active) return;
+
+
+
+            lock (Navigation.PendingPathfindingQueries)
             {
+
+                active = true;
+
                 Navigation.PendingPathfindingQueries.Add(this);
             }
             return;
@@ -319,11 +333,30 @@ namespace RetroEngine
 
         }
 
+        private readonly TimeSpan _timeout = TimeSpan.FromSeconds(5);
+
         internal void Execute()
         {
-            deathDelay.AddDelay(5);
-            Process(startLocation, endLocation);
-            //Thread.Sleep(1);
+            var cts = new CancellationTokenSource(_timeout); // Cancel after timeout
+
+            try
+            {
+                Task task = Task.Run(() => Process(startLocation, endLocation), cts.Token);
+                task.Wait(cts.Token); // Wait for the task to complete or be cancelled
+                Thread.Sleep(10);
+            }
+            catch (OperationCanceledException)
+            {
+                Console.WriteLine("Process was aborted due to timeout.");
+
+                OnPathFound.Invoke(new List<Vector3> { endLocation});
+
+            }
+            catch (AggregateException ex) when (ex.InnerExceptions[0] is OperationCanceledException)
+            {
+                Console.WriteLine("Process was aborted due to timeout.");
+                OnPathFound.Invoke(new List<Vector3> { endLocation });
+            }
         }
 
         void Process(Vector3 start, Vector3 target)
@@ -335,7 +368,7 @@ namespace RetroEngine
                 result.RemoveAt(0);
 
             OnPathFound.Invoke(result);
-
+            active = false;
             return;
 
 

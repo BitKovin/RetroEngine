@@ -13,37 +13,31 @@ namespace RetroEngine.NavigationSystem
     public class NavigationQueryFilterAvoidLOS : NavigationQueryFilter
     {
 
-        public float LOSAvoidanceStrength = 2;
+        public float LOSAvoidanceStrength = 1;
 
         public override float GetCost(RcVec3f pa, RcVec3f pb, long prevRef, DtMeshTile prevTile, DtPoly prevPoly, long curRef, DtMeshTile curTile, DtPoly curPoly, long nextRef, DtMeshTile nextTile, DtPoly nextPoly)
         {
-
             float baseCost = base.GetCost(pa, pb, prevRef, prevTile, prevPoly, curRef, curTile, curPoly, nextRef, nextTile, nextPoly);
 
-            float additionalCoast = 0;
+            float additionalCost = 1f;
 
-            Vector3 polyPos = RecastHelper.GetAvgVertexPositions(curTile, curPoly);
+            Vector3 polyPos = RecastHelper.GetAvgVertexPosition(curTile, curPoly);
+            Vector3 toPolyDir = (polyPos - Camera.position).Normalized();
 
-            
-
+            // Line trace to check if the poly is in sight
             var hit = Physics.LineTraceForStatic(polyPos.ToPhysics(), Camera.position.ToPhysics());
 
-            if(hit.HasHit == false)
+            // Modify the cost based on LOS and the dot product
+            if (hit.HasHit == false)
             {
-                additionalCoast += LOSAvoidanceStrength; //Vector3.Distance(hit.HitPointWorld, Camera.position);
+                // In direct LOS, apply stronger penalty
 
-                additionalCoast *= Vector3.Dot(Camera.Forward, (polyPos - Camera.position).Normalized()) + 1;
-                additionalCoast /= 2;
+                additionalCost *= Vector3.Dot(Camera.Forward.XZ().Normalized(), toPolyDir.XZ().Normalized()) + 0.4f;
 
             }
-            else
-            {
-                additionalCoast = (Vector3.Dot(Camera.Forward, (polyPos - Camera.position).Normalized()) + 1)/5 * LOSAvoidanceStrength;
-            }
 
-            //DrawDebug.Text(polyPos, (baseCost + additionalCoast).ToString(), 0.1f);
-
-            return baseCost * additionalCoast;
+            // Add the additional cost to the base cost
+            return baseCost * additionalCost;
         }
 
     }

@@ -288,7 +288,7 @@ namespace RetroEngine.Entities
         void RequestNewTargetLocation()
         {
             if(pathfindingQuery.Processing ==false)
-                pathfindingQuery.Start(Position, targetLocation, new NavigationQueryFilterAvoidLOS());
+                pathfindingQuery.Start(Position, targetLocation);
         }
 
         private void PathfindingQuery_OnPathFound(List<Vector3> points)

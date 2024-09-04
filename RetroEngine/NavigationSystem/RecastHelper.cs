@@ -38,7 +38,7 @@ namespace RetroEngine.NavigationSystem
 
         }
 
-        public static Vector3 GetAvgVertexPositions(DtMeshTile curTile, DtPoly curPoly)
+        public static Vector3 GetAvgVertexPosition(DtMeshTile curTile, DtPoly curPoly)
         {
             // Calculate the centroid of the current polygon
             RcVec3f polyPos = new RcVec3f();
@@ -60,6 +60,30 @@ namespace RetroEngine.NavigationSystem
             polyPos.Z /= vertCount;
 
             return polyPos.FromRc();
+
+        }
+
+        public static List<Vector3> GetVertexPositions(DtMeshTile curTile, DtPoly curPoly)
+        {
+            int vertCount = curPoly.vertCount;
+
+            List<Vector3> vectors = new List<Vector3>();
+
+            // Iterate through each vertex of the polygon
+            for (int i = 0; i < vertCount; ++i)
+            {
+                int vertIndex = curPoly.verts[i] * 3;
+
+                Vector3 v = new Vector3();
+
+                v.X += curTile.data.verts[vertIndex];
+                v.Y += curTile.data.verts[vertIndex + 1];
+                v.Z += curTile.data.verts[vertIndex + 2];
+
+                vectors.Add(v);
+            }
+
+            return vectors;
 
         }
 
