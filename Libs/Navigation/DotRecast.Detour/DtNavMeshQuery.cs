@@ -3594,6 +3594,8 @@ namespace DotRecast.Detour
             do
             {
                 path.Add(curNode.id);
+                if (path.Count > 50000)
+                    return DtStatus.DT_OUT_OF_MEMORY;
                 DtNode nextNode = m_nodePool.GetNodeAtIdx(curNode.pidx);
                 if (curNode.shortcut != null)
                 {
@@ -3603,6 +3605,10 @@ namespace DotRecast.Detour
                         long id = curNode.shortcut[i];
                         if (id != curNode.id && id != nextNode.id)
                         {
+
+                            if (path.Count > 50000)
+                                return DtStatus.DT_OUT_OF_MEMORY;
+
                             path.Add(id);
                         }
                     }
