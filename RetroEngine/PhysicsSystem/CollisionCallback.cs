@@ -55,28 +55,28 @@ namespace RetroEngine
 
             if (owner == null)
             {
-                CollisionEvent?.Invoke(colObj0Wrap, colObj1Wrap, colObj1Wrap.CollisionObject.UserObject as Entity, cp);
+                CollisionEvent?.Invoke(colObj0Wrap, colObj1Wrap, ((RigidbodyData)colObj1Wrap.CollisionObject.UserObject).Entity, cp);
                 return 0;
             }
 
-            if (colObj0Wrap.CollisionObject.UserObject == owner)
+            if (((RigidbodyData)colObj0Wrap.CollisionObject.UserObject).Entity == owner)
             {
 
                 if (colObj1Wrap.CollisionObject.CollisionFlags.HasFlag(BulletSharp.CollisionFlags.NoContactResponse)) return 0;
 
-                if (ignore.Contains(colObj1Wrap.CollisionObject.UserObject as Entity))
+                if (ignore.Contains(((RigidbodyData)colObj1Wrap.CollisionObject.UserObject).Entity))
                     return 0;
 
-                CollisionEvent?.Invoke(colObj0Wrap, colObj1Wrap, colObj1Wrap.CollisionObject.UserObject as Entity, cp);
+                CollisionEvent?.Invoke(colObj0Wrap, colObj1Wrap, ((RigidbodyData)colObj1Wrap.CollisionObject.UserObject).Entity, cp);
             }
             else 
             {
                 if (colObj0Wrap.CollisionObject.CollisionFlags.HasFlag(BulletSharp.CollisionFlags.NoContactResponse)) return 0;
 
-                if (ignore.Contains(colObj0Wrap.CollisionObject.UserObject as Entity))
+                if (ignore.Contains(((RigidbodyData)colObj0Wrap.CollisionObject.UserObject).Entity))
                     return 0;
 
-                CollisionEvent?.Invoke(colObj1Wrap, colObj0Wrap, colObj0Wrap.CollisionObject.UserObject as Entity, cp);
+                CollisionEvent?.Invoke(colObj1Wrap, colObj0Wrap, ((RigidbodyData)colObj0Wrap.CollisionObject.UserObject).Entity, cp);
             }
 
             return 0;

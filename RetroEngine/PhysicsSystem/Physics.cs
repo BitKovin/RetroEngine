@@ -30,6 +30,19 @@ namespace RetroEngine.PhysicsSystem
         GroupAllPhysical = GroupHitTest & Liquid,
     }
 
+    public struct RigidbodyData
+    {
+        public Entity Entity;
+
+        public string HitboxName;
+
+        public RigidbodyData(Entity entity)
+        {
+            Entity = entity;
+        }
+
+    }
+
     public class Physics
     {
 
@@ -58,7 +71,10 @@ namespace RetroEngine.PhysicsSystem
 
         public static void DebugDraw()
         {
-            dynamicsWorld.DebugDrawWorld();
+            lock (dynamicsWorld)
+            {
+                dynamicsWorld.DebugDrawWorld();
+            }
         }
 
         public static void Start()
@@ -157,6 +173,28 @@ namespace RetroEngine.PhysicsSystem
 
         }
 
+        public static Generic6DofConstraint CreateGenericConstraint(RigidBody body1, RigidBody body2, Matrix4x4? transform1 = null, Matrix4x4? transform2 = null)
+        {
+            var constraint = new Generic6DofConstraint(body1, body2, transform1 == null ? Matrix4x4.Identity : transform1.Value, transform2 == null ? Matrix4x4.Identity : transform2.Value, false);
+
+            // Set linear limits (translation). The first vector is the lower limit, and the second is the upper limit.
+            // Use Vector3.Zero for no movement in a particular axis.
+            constraint.LinearLowerLimit = Vector3.Zero; // Example limits
+            constraint.LinearUpperLimit = Vector3.Zero;     // Example limits
+
+            // Set angular limits (rotation). The first vector is the lower limit, and the second is the upper limit.
+            // Values are in radians. Use Vector3.Zero for no rotation in a particular axis.
+            constraint.AngularLowerLimit = (new Vector3(0, 0, -3.14f / 4)); // Example limits
+            constraint.AngularUpperLimit = (new Vector3(0, 0, 3.14f / 4));     // Example limits
+
+
+            lock (dynamicsWorld)
+                dynamicsWorld.AddConstraint(constraint, true);
+
+            return constraint;
+
+        }
+
         public static void PerformContactCheck(CollisionObject collisionObject, CollisionCallback callback)
         {
 
@@ -227,6 +265,18 @@ namespace RetroEngine.PhysicsSystem
 
         }
 
+        public static void Remove(Generic6DofConstraint constraint)
+        {
+            lock(dynamicsWorld)
+            {
+
+                if(constraint == null) return;
+
+                dynamicsWorld.RemoveConstraint(constraint);
+            }
+
+        }
+
         public static void Update()
         {
             lock (dynamicsWorld)
@@ -272,7 +322,7 @@ namespace RetroEngine.PhysicsSystem
                                 break;
                         }
                         if (colObj.IsActive == false) return;
-                        Entity ent = (Entity)colObj.UserObject;
+                        Entity ent = ((RigidbodyData)colObj.UserObject).Entity;
 
                         Vector3 pos = colObj.WorldTransform.Translation;
 
@@ -460,7 +510,7 @@ namespace RetroEngine.PhysicsSystem
             RigidBody = new RigidBody(sphereRigidBodyInfo);
             RigidBody.CollisionFlags = collisionFlags;
 
-            RigidBody.UserObject = entity;
+            RigidBody.UserObject = new RigidbodyData(entity);
 
             lock(dynamicsWorld)
                 dynamicsWorld.AddRigidBody(RigidBody);
@@ -494,7 +544,7 @@ namespace RetroEngine.PhysicsSystem
             RigidBody = new RigidBody(boxRigidBodyInfo);
             RigidBody.CollisionFlags = collisionFlags;
 
-            RigidBody.UserObject = entity;
+            RigidBody.UserObject = new RigidbodyData(entity);
 
             lock(dynamicsWorld)
             dynamicsWorld.AddRigidBody(RigidBody);
@@ -525,7 +575,7 @@ namespace RetroEngine.PhysicsSystem
             RigidBody = new RigidBody(boxRigidBodyInfo);
             RigidBody.CollisionFlags = collisionFlags;
 
-            RigidBody.UserObject = entity;
+            RigidBody.UserObject = new RigidbodyData(entity);
 
             lock(dynamicsWorld)
             dynamicsWorld.AddRigidBody(RigidBody);
@@ -575,7 +625,7 @@ namespace RetroEngine.PhysicsSystem
             RigidBody = new RigidBody(boxRigidBodyInfo);
             RigidBody.CollisionFlags = collisionFlags;
 
-            RigidBody.UserObject = entity;
+            RigidBody.UserObject = new RigidbodyData(entity);
 
             RigidBody.SetCollisionMask(BodyType.GroupCollisionTest);
             RigidBody.SetBodyType(BodyType.CharacterCapsule);

@@ -38,6 +38,19 @@ namespace SkeletalMeshEditor
             }
 
             skeletalMesh.UpdateHitboxes();
+
+            skeletalMesh.CopyRagdollToBodies();
+
+        }
+
+        public void CreateRagdoll()
+        {
+            skeletalMesh.CreateRagdollBodies(this);
+        }
+
+        public void StopRagdoll()
+        {
+            skeletalMesh.ClearRagdollBodies();
         }
 
 

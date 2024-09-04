@@ -134,7 +134,7 @@ namespace RetroEngine.Game.Entities
             if (hit.HasHit)
             {
 
-                Entity ent = hit.CollisionObject.UserObject as Entity;
+                Entity ent = ((RigidbodyData)hit.CollisionObject.UserObject).Entity;
 
                 if (ent == null) return;
 

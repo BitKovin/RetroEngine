@@ -155,7 +155,22 @@ namespace RetroEngine
             return angles;
         }
 
+        /// <summary>
+        /// Converts a world transformation matrix into a local transformation matrix relative to another world transformation matrix.
+        /// </summary>
+        /// <param name="worldTransform">The world transformation matrix to be converted.</param>
+        /// <param name="relativeToWorldTransform">The world transformation matrix to which the local transformation will be relative.</param>
+        /// <returns>The local transformation matrix.</returns>
+        public static Matrix WorldToLocal(Matrix worldTransform, Matrix relativeToWorldTransform)
+        {
+            // Invert the relative world transformation matrix
+            Matrix inverseRelativeWorld = Matrix.Invert(relativeToWorldTransform);
 
+            // Multiply the world transformation by the inverse of the relative world transformation
+            Matrix localTransform = worldTransform * inverseRelativeWorld;
+
+            return localTransform;
+        }
         public struct Transform
         {
             public Vector3 Position;

@@ -34,7 +34,7 @@ namespace RetroEngine.Sandbox
             devMenu = new SandboxMenu();
             devMenu.Init();
 
-            DevMenuEnabled = true;
+            
 
             MaxFPS = 140;
 
@@ -57,6 +57,14 @@ namespace RetroEngine.Sandbox
             AsyncGameThread = false;
 
             Level.LoadFromFile("empty");
+
+        }
+
+        protected override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+
+            DevMenuEnabled = true;
 
         }
 

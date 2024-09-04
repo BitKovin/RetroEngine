@@ -349,13 +349,13 @@ namespace RetroEngine
             {
                 Console.WriteLine("Process was aborted due to timeout.");
 
-                OnPathFound.Invoke(new List<Vector3> { endLocation});
+                OnPathFound?.Invoke(new List<Vector3> { endLocation});
 
             }
             catch (AggregateException ex) when (ex.InnerExceptions[0] is OperationCanceledException)
             {
                 Console.WriteLine("Process was aborted due to timeout.");
-                OnPathFound.Invoke(new List<Vector3> { endLocation });
+                OnPathFound?.Invoke(new List<Vector3> { endLocation });
             }
         }
 
@@ -367,7 +367,7 @@ namespace RetroEngine
             if(result.Count>0)
                 result.RemoveAt(0);
 
-            OnPathFound.Invoke(result);
+            OnPathFound?.Invoke(result);
             active = false;
             return;
 

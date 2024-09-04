@@ -134,20 +134,26 @@ namespace RetroEngine
 
             //string consoleContent = sb.ToString();
 
+            DrawConsole();
+
+        }
+
+        protected void DrawConsole()
+        {
             ImGui.Begin("Console");
-            
+
 
             //ImGui.InputTextMultiline("log", ref consoleContent, uint.MaxValue, new Vector2(ImGui.GetWindowWidth(), ImGui.GetWindowHeight()-60),ImGuiInputTextFlags.ReadOnly);
 
             ImGui.BeginChild("ScrollingRegion", new Vector2(ImGui.GetWindowWidth(), ImGui.GetWindowHeight() - 70));
 
-            foreach(var item in log)
+            foreach (var item in log)
             {
-                if(item is not null)
-                if(ImGui.Selectable(item))
-                {
-                    ImGui.SetClipboardText(item);
-                }
+                if (item is not null)
+                    if (ImGui.Selectable(item))
+                    {
+                        ImGui.SetClipboardText(item);
+                    }
             }
 
             //ImGui.InputTextMultiline("log", ref consoleContent, uint.MaxValue, new Vector2(ImGui.GetWindowWidth(), ImGui.GetWindowHeight() - 60), ImGuiInputTextFlags.ReadOnly);
@@ -161,13 +167,12 @@ namespace RetroEngine
             ImGui.EndChild();
 
             ImGui.PushItemWidth(ImGui.GetWindowWidth() - 100);
-            if (ImGui.InputText("", ref input, 1000000,ImGuiInputTextFlags.EnterReturnsTrue)) submitInput();
+            if (ImGui.InputText("", ref input, 1000000, ImGuiInputTextFlags.EnterReturnsTrue)) submitInput();
             ImGui.PopItemWidth();
             ImGui.SameLine();
             if (ImGui.Button("SUBMIT")) submitInput();
-            
-            ImGui.End();
 
+            ImGui.End();
         }
 
         protected virtual void DrawEntityList()

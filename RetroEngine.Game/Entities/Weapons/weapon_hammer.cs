@@ -113,7 +113,7 @@ namespace RetroEngine.Game.Entities.Weapons
                     //RigidBody.Upcast(hit.CollisionObject).Activate(true);
                     //RigidBody.Upcast(hit.CollisionObject).ApplyCentralImpulse(Camera.rotation.GetForwardVector().ToPhysics() * 10);
 
-                    Entity hitEnt = hit.CollisionObject.UserObject as Entity;
+                    Entity hitEnt = ((RigidbodyData)hit.CollisionObject.UserObject).Entity;
 
                     Console.WriteLine((hit.CollisionObject.CollisionShape.UserObject as Physics.CollisionShapeData).surfaceType);
 

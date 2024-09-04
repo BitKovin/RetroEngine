@@ -1,5 +1,6 @@
 ﻿using ImGuiNET;
 using RetroEngine;
+using RetroEngine.Skeletal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +31,8 @@ namespace SkeletalMeshEditor
             ImGui.PushStyleColor(ImGuiCol.WindowBg, new Vector4(0));
             ImGui.DockSpaceOverViewport();
             ImGui.PopStyleColor(2);
+
+            DrawConsole();
 
             ImGui.BeginMainMenuBar();
 
@@ -66,7 +69,7 @@ namespace SkeletalMeshEditor
                 Level.GetCurrent().AddEntity(new SkeletalMeshPreview());
 
                 SkeletalMeshPreview.instance.skeletalMesh.LoadFromFile(path);
-                SkeletalMeshPreview.instance.skeletalMesh.texture = AssetRegistry.LoadTextureFromFile("__TB_empty.png");
+                SkeletalMeshPreview.instance.skeletalMesh.texture = AssetRegistry.LoadTextureFromFile("cat.png"); //"__TB_empty.png"
             }
 
             ImGui.Spacing();
@@ -111,6 +114,16 @@ namespace SkeletalMeshEditor
 
             ImGui.End();
 
+            if(ImGui.Button("Ragdoll"))
+            {
+                SkeletalMeshPreview.instance.CreateRagdoll();
+            }
+            if (ImGui.Button("Stop Ragdoll"))
+            {
+                SkeletalMeshPreview.instance.StopRagdoll();
+            }
+
+
             HitboxEditor();
         }
 
@@ -126,10 +139,99 @@ namespace SkeletalMeshEditor
 
             ImGui.Begin("hitbox editor");
 
+
             ImGui.InputText("bone", ref hitbox.Bone, 25);
             ImGui.DragFloat3("size", ref hitbox.Size, 0.005f);
             ImGui.DragFloat3("position", ref hitbox.Position, 0.015f);
             ImGui.DragFloat3("rotation", ref hitbox.Rotation, 0.15f);
+
+            ImGui.Text("Constrains");
+            ImGui.InputText("parrent", ref hitbox.Parrent, 25);
+            
+            if(ImGui.Button("auto parent"))
+            {
+
+                bool found = false;
+
+                RiggedModel.RiggedModelNode riggedModelNode = null;
+
+                riggedModelNode = SkeletalMeshPreview.instance.skeletalMesh.GetBoneByName(hitbox.Bone);
+
+                while (found == false)
+                {
+
+                    if (riggedModelNode.parent == null)
+                        break;
+
+                    foreach(var box in SkeletalMeshPreview.instance.skeletalMesh.hitboxes)
+                    {
+
+                        if (riggedModelNode.parent == null)
+                            continue;
+
+                        if(box.Bone.ToLower() == riggedModelNode.parent.name.ToLower())
+                        {
+
+                            hitbox.Parrent = box.Bone;
+                            found = true;
+                            break;
+
+                        }
+                    }
+
+                    riggedModelNode = riggedModelNode.parent;
+
+
+                }
+            }
+
+            if (ImGui.Button("auto parent all"))
+            {
+
+                foreach(HitboxInfo hbox in SkeletalMeshPreview.instance.skeletalMesh.hitboxes)
+                {
+                    bool found = false;
+
+                    RiggedModel.RiggedModelNode riggedModelNode = null;
+
+                    riggedModelNode = SkeletalMeshPreview.instance.skeletalMesh.GetBoneByName(hbox.Bone);
+
+                    while (found == false)
+                    {
+
+                        if (riggedModelNode.parent == null)
+                            break;
+
+                        foreach (var box in SkeletalMeshPreview.instance.skeletalMesh.hitboxes)
+                        {
+
+                            if (riggedModelNode.parent == null)
+                                continue;
+
+                            if (box.Bone.ToLower() == riggedModelNode.parent.name.ToLower())
+                            {
+
+                                hbox.Parrent = box.Bone;
+                                found = true;
+                                break;
+
+                            }
+                        }
+
+                        riggedModelNode = riggedModelNode.parent;
+
+
+                    }
+                }
+
+                
+            }
+
+
+            ImGui.DragFloat3("Constrain Position", ref hitbox.ConstrainPosition, 0.15f);
+
+
+            //DrawDebug.Sphere(0.1f, hitbox.ConstrainPosition, Vector3.One, Time.DeltaTime * 2);
 
             ImGui.End();
 

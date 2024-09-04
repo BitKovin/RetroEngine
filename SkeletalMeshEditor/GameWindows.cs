@@ -34,6 +34,8 @@ namespace RetroEngine.Windows
 
             Graphics.DrawPhysics = true;
 
+            DevMenuEnabled = true;
+
             MaxFPS = 140;
 
             Graphics.LightDistanceMultiplier = 0.5f;
