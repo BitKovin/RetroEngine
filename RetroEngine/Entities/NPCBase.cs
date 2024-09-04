@@ -1,5 +1,6 @@
 ﻿using BulletSharp;
 using Microsoft.Xna.Framework;
+using RetroEngine.NavigationSystem;
 using RetroEngine.PhysicsSystem;
 using RetroEngine.SaveSystem;
 using RetroEngine.Skeletal;
@@ -287,7 +288,7 @@ namespace RetroEngine.Entities
         void RequestNewTargetLocation()
         {
             if(pathfindingQuery.Processing ==false)
-                pathfindingQuery.Start(Position, targetLocation);
+                pathfindingQuery.Start(Position, targetLocation, new NavigationQueryFilterAvoidLOS());
         }
 
         private void PathfindingQuery_OnPathFound(List<Vector3> points)

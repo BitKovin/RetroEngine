@@ -1,4 +1,5 @@
 ﻿using BulletSharp.SoftBody;
+using DotRecast.Detour;
 using Microsoft.Xna.Framework;
 using RetroEngine.Entities.Navigaion;
 using RetroEngine.NavigationSystem;
@@ -267,9 +268,11 @@ namespace RetroEngine
         Vector3 startLocation;
         Vector3 endLocation;
 
+        IDtQueryFilter navFilter = null;
+
         internal Delay deathDelay = new Delay();
 
-        public void Start(Vector3 start, Vector3 target)
+        public void Start(Vector3 start, Vector3 target, IDtQueryFilter QueryFilter = null)
         {
             if (Navigation.pathfindingQueries.Contains(this)) return;
 
@@ -277,6 +280,7 @@ namespace RetroEngine
             startLocation = start;
             endLocation = target;
 
+            navFilter = QueryFilter;
             
             lock (Navigation.pathfindingQueries)
             {
@@ -327,7 +331,7 @@ namespace RetroEngine
         void Process(Vector3 start, Vector3 target)
         {
 
-            var result = Recast.FindPathSimple(start, target, new NavigationQueryFilterAvoidLOS());
+            var result = Recast.FindPathSimple(start, target, navFilter);
 
             if(result.Count>0)
                 result.RemoveAt(0);
