@@ -70,8 +70,7 @@ namespace RetroEngine.NavigationSystem
         public static List<Vector3> FindPathSimple(Vector3 start, Vector3 end, IDtQueryFilter filter = null)
         {
             List<RcVec3f> path = new List<RcVec3f>();
-            lock (TileCache)
-            {
+            
 
                 DtNavMeshQuery navMeshQuery = new DtNavMeshQuery(NavigationSystem.Recast.TileCache.GetNavMesh());
 
@@ -95,7 +94,7 @@ namespace RetroEngine.NavigationSystem
               
 
                 rcTestNavMeshTool.FindFollowPath(NavigationSystem.Recast.dtNavMesh, navMeshQuery, startRef, endRef, start.ToRc(), end.ToRc(), filter, true, ref longs, 0, ref path);
-            }
+            
             return path.ConvertPath();
 
         }

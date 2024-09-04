@@ -13,7 +13,7 @@ namespace RetroEngine.NavigationSystem
     public class NavigationQueryFilterAvoidLOS : NavigationQueryFilter
     {
 
-        public float LOSAvoidanceStrength = 100;
+        public float LOSAvoidanceStrength = 2;
 
         public override float GetCost(RcVec3f pa, RcVec3f pb, long prevRef, DtMeshTile prevTile, DtPoly prevPoly, long curRef, DtMeshTile curTile, DtPoly curPoly, long nextRef, DtMeshTile nextTile, DtPoly nextPoly)
         {
@@ -32,7 +32,7 @@ namespace RetroEngine.NavigationSystem
             {
                 additionalCoast += LOSAvoidanceStrength; //Vector3.Distance(hit.HitPointWorld, Camera.position);
 
-                additionalCoast *= Vector3.Dot(Camera.Forward, (polyPos - Camera.position).Normalized()) + 2;
+                additionalCoast *= Vector3.Dot(Camera.Forward, (polyPos - Camera.position).Normalized()) + 1;
                 additionalCoast /= 2;
 
             }
@@ -43,7 +43,7 @@ namespace RetroEngine.NavigationSystem
 
             //DrawDebug.Text(polyPos, (baseCost + additionalCoast).ToString(), 0.1f);
 
-            return baseCost + additionalCoast;
+            return baseCost * additionalCoast;
         }
 
     }

@@ -123,6 +123,8 @@ namespace RetroEngine
 
             content = Content;
 
+            InactiveSleepTime = TimeSpan.Zero;
+
             FocusGameWindow();
 
             Window.ClientSizeChanged += Window_ClientSizeChanged;

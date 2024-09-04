@@ -60,8 +60,13 @@ namespace RetroEngine
 
         static void UpdateCycle()
         {
+
+
+            Thread.CurrentThread.IsBackground = true;
+
             while (true)
             {
+
 
                 ProcessingPathfinding = false;
 
@@ -100,7 +105,6 @@ namespace RetroEngine
                 {
                     item?.Execute();
                     removeList.Add(item);
-                    Thread.Sleep(1);
                 }
                 lock (pathfindingQueries)
                 {

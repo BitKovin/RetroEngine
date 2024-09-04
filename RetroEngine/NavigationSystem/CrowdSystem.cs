@@ -82,7 +82,6 @@ namespace RetroEngine.NavigationSystem
             agentParams.obstacleAvoidanceType = _agCfg.obstacleAvoidanceType;
             agentParams.separationWeight = _agCfg.separationWeight;
 
-            agentParams.queryFilterType
 
             var agent = dtCrowd.AddAgent(position.ToRc(), agentParams);
 

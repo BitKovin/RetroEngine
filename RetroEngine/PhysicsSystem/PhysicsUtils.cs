@@ -14,8 +14,7 @@ namespace RetroEngine
 
         public static void SetPosition(this CollisionObject body, Vector3 newPosition)
         {
-            lock (body) lock (Physics.dynamicsWorld)
-                {
+            
 
                     if (body.WorldTransform.Translation == newPosition) return;
 
@@ -24,13 +23,12 @@ namespace RetroEngine
                     worldTransform.Translation = newPosition.ToPhysics();
                     body.WorldTransform = worldTransform;
 
-                }
+                
         }
 
         public static void SetRotation(this CollisionObject body, Quaternion newRotation)
         {
-            lock (body) lock (Physics.dynamicsWorld)
-                {
+            
 
                     // Create the new rotation matrix from the quaternion
                     var newTransform = System.Numerics.Matrix4x4.CreateFromQuaternion(newRotation.ToPhysics());
@@ -46,7 +44,7 @@ namespace RetroEngine
                     if(rb != null)
                     rb.MotionState.WorldTransform = newTransform;
 
-                }
+                
         }
 
         public static void SetRotation(this RigidBody body, Vector3 Rotation)

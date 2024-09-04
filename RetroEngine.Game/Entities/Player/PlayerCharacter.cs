@@ -91,7 +91,7 @@ namespace RetroEngine.Game.Entities.Player
 
         Vector3 CameraRotation = new Vector3(); 
 
-        particle_system_meleeTrail meleeTrail;
+        //particle_system_meleeTrail meleeTrail;
         public PlayerCharacter() : base()
         {
             if (GameMain.platform == Platform.Mobile)
@@ -122,9 +122,9 @@ namespace RetroEngine.Game.Entities.Player
         {
             base.LoadAssets();
 
-            meleeTrail = ParticleSystemFactory.CreateByTechnicalName("meleeTrail") as particle_system_meleeTrail;
+            //meleeTrail = ParticleSystemFactory.CreateByTechnicalName("meleeTrail") as particle_system_meleeTrail;
 
-            Level.GetCurrent().AddEntity(meleeTrail);
+            //Level.GetCurrent().AddEntity(meleeTrail);
 
             bodyMesh.LoadFromFile("models/player_model_full.FBX");
 
@@ -812,7 +812,7 @@ namespace RetroEngine.Game.Entities.Player
                 
             }
 
-            meleeTrail.SetTrailTransform(bodyMesh.GetBoneMatrix("hand_r").Translation, bodyMesh.GetBoneMatrix("clavicle_r").Translation);
+            //meleeTrail.SetTrailTransform(bodyMesh.GetBoneMatrix("hand_r").Translation, bodyMesh.GetBoneMatrix("clavicle_r").Translation);
 
             if (currentWeapon is not null)
             {
