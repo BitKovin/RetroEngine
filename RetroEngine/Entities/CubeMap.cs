@@ -38,7 +38,9 @@ namespace RetroEngine.Entities
 
         public bool Infinite = false;
 
-        Vector3 initialPosition;
+        Vector3 initialPosition = Vector3.Zero;
+
+        string targetName = "";
 
         public override void FromData(EntityData data)
         {
@@ -50,13 +52,7 @@ namespace RetroEngine.Entities
 
             map = new RenderTargetCube(graphicsDevice, resolution, false, SurfaceFormat.Srgb8Etc2, DepthFormat.Depth24);
 
-            Entity target = Level.GetCurrent().FindEntityByName(data.GetPropertyString("target", "cubemapTarget_default"));
-
-            if(target != null)
-            {
-                Position = target.Position;
-                initialPosition = target.Position;
-            }
+            targetName = data.GetPropertyString("target", "cubemapTarget_default");
 
             if(meshes.Count == 0)
             {
@@ -69,7 +65,6 @@ namespace RetroEngine.Entities
 
             foreach (var m in meshes)
             {
-
                 vertices.AddRange(m.GetMeshVertices());
             }
 
@@ -104,12 +99,20 @@ namespace RetroEngine.Entities
 
             initialPosition = Position;
 
-            if (Infinite == false)
+            Entity target = Level.GetCurrent().FindEntityByName(targetName);
+
+            if (target != null)
+            {
+                Position = target.Position;
+                initialPosition = target.Position;
+            }
+            else if (Infinite == false && initialPosition!= Vector3.Zero)
             {
                 Position = (boundingBoxMin + boundingBoxMax) / 2f;
 
                 Position = Navigation.ProjectToGround(Position) + Vector3.UnitY * 1.4f;
             }
+
             Render();
             mesh.Visible = true;
             mesh.Position = Position;
@@ -127,7 +130,6 @@ namespace RetroEngine.Entities
             }
 
             bodies.Clear();
-
         }
 
         public override void Update()
@@ -253,6 +255,8 @@ namespace RetroEngine.Entities
             }
 
             GameMain.Instance.render.RenderShadowMap(l);
+            GameMain.Instance.render.RenderShadowMapClose(l);
+            GameMain.Instance.render.RenderShadowMapVeryClose(l);
 
             GameMain.Instance.render.UpdateShaderFrameData();
 

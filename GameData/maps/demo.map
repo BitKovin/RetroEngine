@@ -445,7 +445,7 @@
 "origin" "-127 -17 169"
 "radius" "25"
 "dynamic" "true"
-"intensity" "-1"
+"intensity" "1"
 "shadows" "true"
 "dynamicSkipUp" "true"
 }

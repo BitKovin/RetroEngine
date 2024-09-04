@@ -93,8 +93,6 @@ namespace RetroEngine
                 }
                 
 
-                ParallelOptions options = new ParallelOptions();
-                options.MaxDegreeOfParallelism = 8;
                 List<PathfindingQuery> queries;
                 lock (pathfindingQueries)
                 {
