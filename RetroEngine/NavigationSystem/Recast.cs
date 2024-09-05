@@ -89,14 +89,23 @@ namespace RetroEngine.NavigationSystem
 
             RcVec3f m_polyPickExt = new RcVec3f(2, 4, 2);
 
-            navMeshQuery.FindNearestPoly(start.ToRc(), m_polyPickExt, filter, out startRef, out var _, out var _);
-            navMeshQuery.FindNearestPoly(end.ToRc(), m_polyPickExt, filter, out endRef, out var _, out var _);
+            lock (NavigationSystem.Recast.TileCache.GetNavMesh())
+                navMeshQuery.FindNearestPoly(start.ToRc(), m_polyPickExt, filter, out startRef, out var _, out var _);
+
+            lock (NavigationSystem.Recast.TileCache.GetNavMesh())
+                navMeshQuery.FindNearestPoly(end.ToRc(), m_polyPickExt, filter, out endRef, out var _, out var _);
 
 
-            var result = rcTestNavMeshTool.FindFollowPath(NavigationSystem.Recast.dtNavMesh, navMeshQuery, startRef, endRef, start.ToRc(), end.ToRc(), filter, true, ref longs, 0, ref path);
+            DtStatus result;
 
-            if(result.Succeeded())
+            lock (NavigationSystem.Recast.TileCache.GetNavMesh())
+                result = rcTestNavMeshTool.FindFollowPath(NavigationSystem.Recast.dtNavMesh, navMeshQuery, startRef, endRef, start.ToRc(), end.ToRc(), filter, true, ref longs, 0, ref path);
+
+            if (result.Succeeded())
                 return path.ConvertPath();
+
+
+
 
             return new List<Vector3> { start, end };
 
@@ -107,15 +116,22 @@ namespace RetroEngine.NavigationSystem
         public static long AddObstacleBox(Vector3 min, Vector3 max)
         {
 
-            if(TileCache == null)
-                return 0;
-
-            long obst = TileCache.AddBoxObstacle(min.ToRc(), max.ToRc());
-            lock(allObstacles)
+            lock (TileCache)
             {
-                allObstacles.Add(obst);
+
+                if (TileCache == null)
+                    return 0;
+
+                long obst = TileCache.AddBoxObstacle(min.ToRc(), max.ToRc());
+                lock (allObstacles)
+                {
+                    allObstacles.Add(obst);
+                }
+
+                return obst;
+
             }
-            return obst;
+            
         }
 
         public static long AddObstacleCapsule(Vector3 pos, float radius, float height)

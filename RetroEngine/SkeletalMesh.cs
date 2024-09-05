@@ -1067,6 +1067,9 @@ namespace RetroEngine
 
                 RigidBody body = Physics.CreateBox(owner, hitbox.Size);
 
+                body.Restitution = 0;
+                body.DeactivationTime = 0;
+
                 body.SetMassProps(mass, body.CollisionShape.CalculateLocalInertia(mass));
 
                 body.SetDamping(0.8f, 0.8f);
@@ -1160,8 +1163,8 @@ namespace RetroEngine
 
                 hitbox.Constraint = Physics.CreateGenericConstraint(hitbox.RagdollRigidBodyRef, hitbox.RagdollParrentRigidBody, transform1: hitbox.ConstrainLocal1.ToPhysics(), hitbox.ConstrainLocal2.ToPhysics());
 
-                hitbox.Constraint.AngularLowerLimit = (-hitbox.AngularUpperLimit / 180 * (float)Math.PI);
-                hitbox.Constraint.AngularUpperLimit = (-hitbox.AngularLowerLimit / 180 * (float)Math.PI);
+                hitbox.Constraint.AngularLowerLimit = (hitbox.AngularLowerLimit / 180 * (float)Math.PI);
+                hitbox.Constraint.AngularUpperLimit = (hitbox.AngularUpperLimit / 180 * (float)Math.PI);
 
                 hitbox.Constraint.BuildJacobian();
                 hitbox.Constraint.CalcAnchorPos();

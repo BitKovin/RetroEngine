@@ -127,6 +127,7 @@ namespace RetroEngine
 
             FocusGameWindow();
 
+
             Window.ClientSizeChanged += Window_ClientSizeChanged;
 
             Input.AddAction("click").LMB = true;
@@ -171,6 +172,12 @@ namespace RetroEngine
 
             SoundManager.Init();
 
+        }
+
+        protected override void OnExiting(object sender, ExitingEventArgs args)
+        {
+            Environment.Exit(0);
+            base.OnExiting(sender, args);
         }
 
         public virtual void CheckWindowFullscreenStatus()

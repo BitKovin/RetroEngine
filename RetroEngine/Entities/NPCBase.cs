@@ -107,7 +107,8 @@ namespace RetroEngine.Entities
         {
             base.LoadAssets();
 
-            mesh.LoadFromFile("models/skeletal_test.fbx");
+            mesh.LoadFromFile("models/player_model_full.FBX");
+            mesh.LoadMeshMetaFromFile("models/skeletal_test.fbx");
             mesh.ReloadHitboxes(this);
 
             mesh.texture = AssetRegistry.LoadTextureFromFile("cat.png");
@@ -175,6 +176,8 @@ namespace RetroEngine.Entities
                 return;
             }
 
+
+            if(player != null)
 
             targetLocation = player.Position;
 
