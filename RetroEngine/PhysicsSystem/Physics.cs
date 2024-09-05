@@ -534,7 +534,7 @@ namespace RetroEngine.PhysicsSystem
             sphereShape.UserObject = new CollisionShapeData();
             var motionState = new DefaultMotionState(Matrix4x4.CreateTranslation(0, 0, 0));
 
-            sphereShape.Margin = 0;
+            //sphereShape.Margin = 0;
 
             Vector3 inertia = Vector3.Zero;
             sphereShape.CalculateLocalInertia(mass, out inertia);

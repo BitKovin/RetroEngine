@@ -39,7 +39,7 @@ namespace SkeletalMeshEditor
 
             skeletalMesh.UpdateHitboxes();
 
-            skeletalMesh.CopyRagdollToBodies();
+            skeletalMesh.ApplyRagdollToMesh();
 
         }
 

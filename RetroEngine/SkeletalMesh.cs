@@ -1061,20 +1061,19 @@ namespace RetroEngine
             foreach (HitboxInfo hitbox in hitboxes)
             {
 
-                float mass = 0.4f;
+                float mass = 0.1f;
 
 
+                RigidBody body = Physics.CreateBox(owner, hitbox.Size);
 
-                RigidBody body = Physics.CreateBox(owner, hitbox.Size, mass);
+                body.SetMassProps(1, body.CollisionShape.CalculateLocalInertia(1));
 
-                body.Gravity = new System.Numerics.Vector3(0,-5,0);
+                body.Friction = 0.3f;
 
                 body.SetBodyType(BodyType.MainBody);
-                body.SetCollisionMask(BodyType.World);
+                body.SetCollisionMask(BodyType.World | BodyType.MainBody);
 
                 RigidbodyData data = (RigidbodyData)body.UserObject;
-
-                
 
                 data.HitboxName = hitbox.Bone;
 
@@ -1094,12 +1093,6 @@ namespace RetroEngine
 
                 if (GetBoneByName(hitbox.Parrent).parent == null) continue;
 
-                bool exit = false;
-
-
-
-                RiggedModelNode checkNode = null;
-
 
                 RigidBody parrent = keyValuePairs[hitbox.Parrent].RagdollRigidBodyRef;
 
@@ -1111,9 +1104,30 @@ namespace RetroEngine
 
             }
 
-            PastePoseIntoRagdoll();
+            foreach(HitboxInfo hitbox in hitboxes)
+            {
+
+                var matrix = Matrix.CreateRotationZ(hitbox.Rotation.Z / 180 * (float)Math.PI) *
+            Matrix.CreateRotationX(hitbox.Rotation.X / 180 * (float)Math.PI) *
+            Matrix.CreateRotationY(hitbox.Rotation.Y / 180 * (float)Math.PI) *
+    Matrix.CreateTranslation(hitbox.Position) * GetBoneMatrix(hitbox.Bone);
+
+
+
+                var boneTrans = matrix.DecomposeMatrix();
+                hitbox.RagdollRigidBodyRef.SetPosition(boneTrans.Position);
+                hitbox.RagdollRigidBodyRef.SetRotation(boneTrans.Rotation);
+
+                hitbox.StartBoneMatrix = hitbox.RagdollRigidBodyRef.WorldTransform;
+
+            }
+
+            
+            CalculateRagdollRestPose();
 
             CreateConstrains();
+
+            ApplyPoseIntoRagdoll();
 
         }
 
@@ -1124,54 +1138,92 @@ namespace RetroEngine
 
                 if(hitbox.RagdollParrentRigidBody == null) continue;
 
-                var localMatrix1 = hitbox.RagdollRigidBodyRef.WorldTransform * Matrix.Invert(hitbox.BoneMatrix);//calculate relative transformation
-                localMatrix1 = Matrix.Invert(localMatrix1);
+                if(hitbox.ConstrainLocal1 == Matrix.Identity)
+                {
+                    hitbox.ConstrainLocal1 = hitbox.RagdollRigidBodyRef.WorldTransform * Matrix.Invert(hitbox.BoneMatrix);//calculate relative transformation
+                    hitbox.ConstrainLocal1 = Matrix.Invert(hitbox.ConstrainLocal1);
+                }
 
-                var localMatrix2 = hitbox.BoneMatrix * Matrix.Invert(hitbox.RagdollParrentRigidBody.WorldTransform);//calculate relative transformation
-                //localMatrix2 = Matrix.Invert(localMatrix2);
 
-                DrawDebug.Sphere(0.04f, (localMatrix2 * localMatrix1 * hitbox.RagdollRigidBodyRef.WorldTransform).Translation, Vector3.Zero, 10);
+                if (hitbox.ConstrainLocal2 == Matrix.Identity)
+                {
+                    hitbox.ConstrainLocal2 = hitbox.BoneMatrix * Matrix.Invert(hitbox.RagdollParrentRigidBody.WorldTransform);//calculate relative transformation
+                    //hitbox.ConstrainLocal2 = Matrix.Invert(hitbox.ConstrainLocal2);
+                }
 
-                hitbox.Constraint = Physics.CreateGenericConstraint(hitbox.RagdollRigidBodyRef, hitbox.RagdollParrentRigidBody, transform1: localMatrix1.ToPhysics(), localMatrix2.ToPhysics());
 
-                //hitbox.Constraint.CalcAnchorPos();
+                hitbox.Constraint = Physics.CreateGenericConstraint(hitbox.RagdollRigidBodyRef, hitbox.RagdollParrentRigidBody, transform1: hitbox.ConstrainLocal1.ToPhysics(), hitbox.ConstrainLocal2.ToPhysics());
 
-                //hitbox.Constraint.LinearUpperLimit = Vector3.Zero.ToPhysics();
 
             }
         }
 
-        public void PastePoseIntoRagdoll()
+        public void CalculateRagdollRestPose()
         {
             foreach (HitboxInfo hitbox in hitboxes)
             {
                 if (hitbox.RagdollRigidBodyRef == null) continue;
 
-                var matrix = Matrix.CreateRotationZ(hitbox.Rotation.Z / 180 * (float)Math.PI) *
-                            Matrix.CreateRotationX(hitbox.Rotation.X / 180 * (float)Math.PI) *
-                            Matrix.CreateRotationY(hitbox.Rotation.Y / 180 * (float)Math.PI) *
-                    Matrix.CreateTranslation(hitbox.Position) * GetBoneMatrix(hitbox.Bone);
+                hitbox.StartBoneMatrix = hitbox.RagdollRigidBodyRef.WorldTransform;
+
+                if (hitbox.RigidBodyMatrix == Matrix.Identity)
+                {
+
+                    var matrix = Matrix.CreateRotationZ(hitbox.Rotation.Z / 180 * (float)Math.PI) *
+                                Matrix.CreateRotationX(hitbox.Rotation.X / 180 * (float)Math.PI) *
+                                Matrix.CreateRotationY(hitbox.Rotation.Y / 180 * (float)Math.PI) *
+                        Matrix.CreateTranslation(hitbox.Position) * GetBoneMatrix(hitbox.Bone);
 
 
 
-                var boneTrans = matrix.DecomposeMatrix();
-                hitbox.RagdollRigidBodyRef.SetPosition(boneTrans.Position);
-                hitbox.RagdollRigidBodyRef.SetRotation(boneTrans.Rotation);
+                    var boneTrans = matrix.DecomposeMatrix();
+                    hitbox.RagdollRigidBodyRef.SetPosition(boneTrans.Position);
+                    hitbox.RagdollRigidBodyRef.SetRotation(boneTrans.Rotation);
 
 
-                hitbox.BoneMatrix = Matrix.CreateRotationX(boneTrans.Rotation.X / 180 * (float)Math.PI) *
-                Matrix.CreateRotationY(boneTrans.Rotation.Y / 180 * (float)Math.PI) *
-                Matrix.CreateRotationZ(boneTrans.Rotation.Z / 180 * (float)Math.PI);
-                hitbox.BoneMatrix.Translation = matrix.Translation;
+                    hitbox.BoneMatrix = Matrix.CreateRotationX(boneTrans.Rotation.X / 180 * (float)Math.PI) *
+                    Matrix.CreateRotationY(boneTrans.Rotation.Y / 180 * (float)Math.PI) *
+                    Matrix.CreateRotationZ(boneTrans.Rotation.Z / 180 * (float)Math.PI);
+                    hitbox.BoneMatrix.Translation = boneTrans.Position;
 
+                    hitbox.RigidBodyMatrix = hitbox.RagdollRigidBodyRef.WorldTransform;
+
+                    hitbox.savedRigidBodyMatrix = hitbox.RigidBodyMatrix;
+
+                }
+                else
+                {
+                    hitbox.RagdollRigidBodyRef.WorldTransform = hitbox.savedRigidBodyMatrix.ToPhysics();
+                }
 
             }
         }
 
-        public void CopyRagdollToBodies()
+        public void ApplyPoseIntoRagdoll()
         {
+
             foreach (HitboxInfo hitbox in hitboxes)
             {
+
+                hitbox.RagdollRigidBodyRef.WorldTransform = hitbox.StartBoneMatrix.ToPhysics();
+
+            }
+
+
+        }
+
+        public void ApplyRagdollToMesh()
+        {
+
+            Vector3[] positions = new Vector3[hitboxes.Count];
+
+            int i = -1;
+
+            foreach (HitboxInfo hitbox in hitboxes)
+            {
+
+                i++;
+
                 if (hitbox.RagdollRigidBodyRef == null) continue;
 
                 // Get the world transform matrix from the ragdoll rigid body
@@ -1184,12 +1236,17 @@ namespace RetroEngine
 
                 var finalMatrix = Matrix.Invert(matrix) * worldTransform;
 
+                positions[i] = finalMatrix.Translation;
+
                 SetWorldPositionOverride(hitbox.Bone, finalMatrix);
 
             }
+
+            boundingSphere = BoundingSphere.CreateFromPoints(positions);
+
         }
 
-        static Dictionary<string, SkeletalMeshMeta> loadedMeta = new Dictionary<string, SkeletalMeshMeta>();
+        Dictionary<string, SkeletalMeshMeta> loadedMeta = new Dictionary<string, SkeletalMeshMeta>();
 
         public void LoadMeshMetaFromFile(string path)
         {
@@ -1219,6 +1276,9 @@ namespace RetroEngine
 
                 meta = JsonSerializer.Deserialize<SkeletalMeshMeta>(text, options);
                 loadedMeta.Add(path, meta);
+
+                stream.Close();
+
             }
 
             hitboxes = meta.hitboxes.ToList();
@@ -1399,11 +1459,23 @@ namespace RetroEngine
         public System.Numerics.Vector3 Size;
 
         [JsonInclude]
-        public System.Numerics.Vector3 ConstrainPosition;
+        public Matrix ConstrainLocal1 = Matrix.Identity;
+
+        [JsonInclude]
+        public Matrix ConstrainLocal2 = Matrix.Identity;
+
+        public Matrix RigidBodyMatrix = Matrix.Identity;
+
+        [JsonInclude]
+        public Matrix savedRigidBodyMatrix = Matrix.Identity;
+
 
         public HitboxInfo ParrentHitbox;
 
-        public Matrix BoneMatrix;
+
+        public Matrix BoneMatrix = Matrix.Identity;
+
+        public Matrix StartBoneMatrix = Matrix.Identity;
 
         public RigidBody HitboxRigidBodyRef;
 
@@ -1411,6 +1483,7 @@ namespace RetroEngine
         public RigidBody RagdollParrentRigidBody;
 
         public Generic6DofConstraint Constraint;
+
 
     }
 

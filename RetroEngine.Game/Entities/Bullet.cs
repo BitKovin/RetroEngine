@@ -138,8 +138,13 @@ namespace RetroEngine.Game.Entities
 
                 if (ent == null) return;
 
+                Console.WriteLine(((RigidbodyData)hit.CollisionObject.UserObject).HitboxName);
+
                 hit.CollisionObject?.Activate();
                 RigidBody.Upcast(hit.CollisionObject)?.ApplyCentralImpulse(startRotation.GetForwardVector().ToNumerics() * Damage / 2f);
+
+                if(RigidBody.Upcast(hit.CollisionObject) != null)
+                RigidBody.Upcast(hit.CollisionObject).LinearVelocity = startRotation.GetForwardVector().ToNumerics() * Damage / 2f;
 
                 ent.OnPointDamage(Damage, hit.HitPointWorld, Rotation.GetForwardVector(), this, this);
 

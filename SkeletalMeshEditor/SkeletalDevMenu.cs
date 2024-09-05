@@ -112,9 +112,20 @@ namespace SkeletalMeshEditor
                 SkeletalMeshPreview.Animation.PlayAnimation(animId);
             }
 
-            ImGui.End();
+            ImGui.Spacing();
+            ImGui.Spacing();
+            ImGui.Spacing();
 
-            if(ImGui.Button("Ragdoll"))
+            ImGui.Text("Ragdoll Tools");
+
+            ImGui.Spacing();
+
+            ImGui.Text("rest_pose->reset->ragdoll before saving!");
+
+            ImGui.Spacing();
+            ImGui.Spacing();
+
+            if (ImGui.Button("Ragdoll"))
             {
                 SkeletalMeshPreview.instance.CreateRagdoll();
             }
@@ -122,6 +133,61 @@ namespace SkeletalMeshEditor
             {
                 SkeletalMeshPreview.instance.StopRagdoll();
             }
+
+            if (ImGui.Button("reset"))
+            {
+
+                foreach (var box in SkeletalMeshPreview.instance.skeletalMesh.hitboxes)
+                {
+
+                    box.ConstrainLocal1 = Microsoft.Xna.Framework.Matrix.Identity;
+                    box.ConstrainLocal2 = Microsoft.Xna.Framework.Matrix.Identity;
+                    box.RigidBodyMatrix = Microsoft.Xna.Framework.Matrix.Identity;
+
+                }
+
+                    foreach (HitboxInfo hbox in SkeletalMeshPreview.instance.skeletalMesh.hitboxes)
+                {
+                    bool found = false;
+
+                    RiggedModel.RiggedModelNode riggedModelNode = null;
+
+                    riggedModelNode = SkeletalMeshPreview.instance.skeletalMesh.GetBoneByName(hbox.Bone);
+
+                    while (found == false)
+                    {
+
+                        if (riggedModelNode.parent == null)
+                            break;
+
+                        foreach (var box in SkeletalMeshPreview.instance.skeletalMesh.hitboxes)
+                        {
+
+                            if (riggedModelNode.parent == null)
+                                continue;
+
+                            if (box.Bone.ToLower() == riggedModelNode.parent.name.ToLower())
+                            {
+
+                                hbox.Parrent = box.Bone;
+                                found = true;
+                                break;
+
+                            }
+                        }
+
+                        riggedModelNode = riggedModelNode.parent;
+
+
+                    }
+                }
+
+
+            }
+
+            ImGui.End();
+
+
 
 
             HitboxEditor();
@@ -184,51 +250,6 @@ namespace SkeletalMeshEditor
 
                 }
             }
-
-            if (ImGui.Button("auto parent all"))
-            {
-
-                foreach(HitboxInfo hbox in SkeletalMeshPreview.instance.skeletalMesh.hitboxes)
-                {
-                    bool found = false;
-
-                    RiggedModel.RiggedModelNode riggedModelNode = null;
-
-                    riggedModelNode = SkeletalMeshPreview.instance.skeletalMesh.GetBoneByName(hbox.Bone);
-
-                    while (found == false)
-                    {
-
-                        if (riggedModelNode.parent == null)
-                            break;
-
-                        foreach (var box in SkeletalMeshPreview.instance.skeletalMesh.hitboxes)
-                        {
-
-                            if (riggedModelNode.parent == null)
-                                continue;
-
-                            if (box.Bone.ToLower() == riggedModelNode.parent.name.ToLower())
-                            {
-
-                                hbox.Parrent = box.Bone;
-                                found = true;
-                                break;
-
-                            }
-                        }
-
-                        riggedModelNode = riggedModelNode.parent;
-
-
-                    }
-                }
-
-                
-            }
-
-
-            ImGui.DragFloat3("Constrain Position", ref hitbox.ConstrainPosition, 0.15f);
 
 
             //DrawDebug.Sphere(0.1f, hitbox.ConstrainPosition, Vector3.One, Time.DeltaTime * 2);

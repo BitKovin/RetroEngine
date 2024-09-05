@@ -145,7 +145,14 @@ namespace RetroEngine.Entities
         {
             base.OnDamaged(damage, causer, weapon);
 
-            Destroy();
+            //Destroy();
+            if(dead) return;
+
+            dead = true;
+
+            mesh.CreateRagdollBodies(this);
+            mesh.ClearHitboxBodies();
+            body.CollisionShape = new SphereShape(0);
 
             deathSoundPlayer.Position = Position;
             deathSoundPlayer.Play();
@@ -157,6 +164,16 @@ namespace RetroEngine.Entities
 
         public override void AsyncUpdate()
         {
+
+            if (dead)
+            {
+                mesh.Position = Vector3.Zero;
+                mesh.Rotation = Vector3.Zero;
+                mesh.ApplyRagdollToMesh();
+                mesh.Update(0);
+                return;
+            }
+
 
             targetLocation = player.Position;
 
@@ -202,6 +219,9 @@ namespace RetroEngine.Entities
 
             mesh.Rotation = new Vector3(0, MathHelper.FindLookAtRotation(Vector3.Zero, MoveDirection).Y, 0);
 
+            
+
+            
 
             if (updateDelay.Wait()) return;
             RequestNewTargetLocation();
@@ -211,9 +231,13 @@ namespace RetroEngine.Entities
 
         }
 
+        bool dead = false;
+
         public override void VisualUpdate()
         {
             base.VisualUpdate();
+
+            if (dead) return;
 
             float cameraDistance = Vector3.Distance(Position, Camera.position);
 

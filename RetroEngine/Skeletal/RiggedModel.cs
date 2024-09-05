@@ -183,6 +183,7 @@ namespace RetroEngine.Skeletal
 
         }
 
+
         MathHelper.Transform OldRootTransform = new MathHelper.Transform();
 
         void UpdateRootMotion()
