@@ -175,7 +175,7 @@ namespace RetroEngine.PhysicsSystem
 
         public static Generic6DofConstraint CreateGenericConstraint(RigidBody body1, RigidBody body2, Matrix4x4? transform1 = null, Matrix4x4? transform2 = null)
         {
-            var constraint = new Generic6DofConstraint(body1, body2, transform1 == null ? Matrix4x4.Identity : transform1.Value, transform2 == null ? Matrix4x4.Identity : transform2.Value, false);
+            var constraint = new Generic6DofConstraint(body1, body2, transform1 == null ? Matrix4x4.Identity : transform1.Value, transform2 == null ? Matrix4x4.Identity : transform2.Value, true);
 
 
             //constraint.InternalSetAppliedImpulse(0);
@@ -185,12 +185,39 @@ namespace RetroEngine.PhysicsSystem
             constraint.LinearLowerLimit = Vector3.Zero; // Example limits
             constraint.LinearUpperLimit = Vector3.Zero;     // Example limits
 
-            constraint.TranslationalLimitMotor.MaxMotorForce = Vector3.One* 10000000f;
 
+            constraint.SetParam(ConstraintParam.StopErp,0.85f);
+            constraint.SetParam(ConstraintParam.StopCfm, 0.85f);
+
+            constraint.SetParam(ConstraintParam.Erp, 0.85f);
+            constraint.SetParam(ConstraintParam.Cfm, 0.85f);
+
+            //constraint.TranslationalLimitMotor.StopErp = Vector3.One * 100;
+
+            //constraint.TranslationalLimitMotor.MaxMotorForce = Vector3.One* 10000000f;
+            //constraint.TranslationalLimitMotor.Damping = 0;
+            //constraint.TranslationalLimitMotor.LimitSoftness = 0;
             // Set angular limits (rotation). The first vector is the lower limit, and the second is the upper limit.
             // Values are in radians. Use Vector3.Zero for no rotation in a particular axis.
             constraint.AngularLowerLimit = (new Vector3(-3.14f / 15, -3.14f / 15, -3.14f / 4)); // Example limits
             constraint.AngularUpperLimit = (new Vector3(3.14f / 15, 3.14f / 15, 3.14f / 4));     // Example limits
+
+
+            lock (dynamicsWorld)
+                dynamicsWorld.AddConstraint(constraint, true);
+
+            return constraint;
+
+        }
+
+        public static HingeConstraint CreateHingeConstraint(RigidBody body1, RigidBody body2, Matrix4x4? transform1 = null, Matrix4x4? transform2 = null)
+        {
+
+            return null;
+
+            var constraint = new HingeConstraint(body1, body2, transform1 == null ? Matrix4x4.Identity : transform1.Value, transform2 == null ? Matrix4x4.Identity : transform2.Value, true);
+
+            constraint.SetLimit(0, 1);
 
 
             lock (dynamicsWorld)
@@ -259,20 +286,20 @@ namespace RetroEngine.PhysicsSystem
             {
                 dynamicsWorld.RemoveRigidBody(body);
                 dynamicsWorld.CollisionObjectArray.Remove(body);
+
+                collisionObjects.Remove(body);
+                body.ClearForces();
+
+
+                body.UserObject = null;
+                body.MotionState.Dispose();
+                body.CollisionShape.Dispose();
+
+                body.Dispose();
             }
-            collisionObjects.Remove(body);
-            body.ClearForces();
-
-
-            body.UserObject = null;
-            body.MotionState.Dispose();
-            body.CollisionShape.Dispose();
-
-            body.Dispose();
-
         }
 
-        public static void Remove(Generic6DofConstraint constraint)
+        public static void Remove(TypedConstraint constraint)
         {
             lock(dynamicsWorld)
             {

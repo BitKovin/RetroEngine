@@ -1045,6 +1045,7 @@ namespace RetroEngine
             {
                 Physics.Remove(hitbox.RagdollRigidBodyRef);
                 Physics.Remove(hitbox.Constraint);
+                Physics.Remove(hitbox.Constraint2);
 
                 hitbox.RagdollRigidBodyRef = null;
 
@@ -1072,15 +1073,14 @@ namespace RetroEngine
 
                 body.SetMassProps(mass, body.CollisionShape.CalculateLocalInertia(mass));
 
-                body.SetDamping(0.8f, 0.8f);
+                body.SetDamping(0.5f, 0.5f);
 
-                body.Friction = 0.8f;
 
-                body.CcdMotionThreshold = 0.0001f;
-                body.CcdSweptSphereRadius = Math.Min(hitbox.Size.X/2,Math.Min(hitbox.Size.Y / 2, hitbox.Size.Z / 2));
+                //body.CcdMotionThreshold = 0.0001f;
+               // body.CcdSweptSphereRadius = Math.Min(hitbox.Size.X/2,Math.Min(hitbox.Size.Y / 2, hitbox.Size.Z / 2));
 
                 body.SetBodyType(BodyType.MainBody);
-                body.SetCollisionMask(BodyType.World | BodyType.MainBody);
+                body.SetCollisionMask(BodyType.World);
 
                 RigidbodyData data = (RigidbodyData)body.UserObject;
 
@@ -1140,6 +1140,27 @@ namespace RetroEngine
 
         }
 
+        public void UpdateRagdollBodies()
+        {
+            return;
+            foreach(HitboxInfo hitbox in hitboxes)
+            {
+
+                if (hitbox.RagdollRigidBodyRef == null) continue;
+
+                if (hitbox.RagdollParrentRigidBody == null) continue;
+
+
+                Vector3 pos1 = (Matrix.Invert(hitbox.Constraint.FrameOffsetA) * hitbox.RagdollRigidBodyRef.WorldTransform).Translation;
+
+                //DrawDebug.Text(pos1, hitbox.ConstrainLocal1.Translation.ToString(), 0.01f);
+
+                DrawDebug.Sphere(0.05f, pos1, Vector3.Zero, 0.01f);
+
+
+            }
+        }
+
         public void CreateConstrains()
         {
             foreach(HitboxInfo hitbox in hitboxes)
@@ -1160,14 +1181,34 @@ namespace RetroEngine
                     //hitbox.ConstrainLocal2 = Matrix.Invert(hitbox.ConstrainLocal2);
                 }
 
-
+                
                 hitbox.Constraint = Physics.CreateGenericConstraint(hitbox.RagdollRigidBodyRef, hitbox.RagdollParrentRigidBody, transform1: hitbox.ConstrainLocal1.ToPhysics(), hitbox.ConstrainLocal2.ToPhysics());
 
                 hitbox.Constraint.AngularLowerLimit = (hitbox.AngularLowerLimit / 180 * (float)Math.PI);
                 hitbox.Constraint.AngularUpperLimit = (hitbox.AngularUpperLimit / 180 * (float)Math.PI);
 
+
+                hitbox.Constraint.TranslationalLimitMotor.MaxMotorForce = Vector3.Zero.ToPhysics();
+
+                hitbox.Constraint.TranslationalLimitMotor.LimitSoftness = 0;
+
                 hitbox.Constraint.BuildJacobian();
                 hitbox.Constraint.CalcAnchorPos();
+                
+                
+                var constraint2 = Physics.CreateGenericConstraint(hitbox.RagdollParrentRigidBody, hitbox.RagdollRigidBodyRef, hitbox.ConstrainLocal2.ToPhysics(), hitbox.ConstrainLocal1.ToPhysics());
+
+                constraint2.AngularUpperLimit = (-hitbox.AngularLowerLimit / 180 * (float)Math.PI);
+                constraint2.AngularLowerLimit = (-hitbox.AngularUpperLimit / 180 * (float)Math.PI);
+                constraint2.TranslationalLimitMotor.MaxMotorForce = Vector3.Zero.ToPhysics();
+                constraint2.TranslationalLimitMotor.LimitSoftness = 0;
+
+                constraint2.BuildJacobian();
+                constraint2.CalcAnchorPos();
+
+                hitbox.Constraint2 = constraint2;
+                
+                
 
             }
         }
@@ -1218,7 +1259,6 @@ namespace RetroEngine
 
             foreach (HitboxInfo hitbox in hitboxes)
             {
-
                 hitbox.RagdollRigidBodyRef.WorldTransform = hitbox.StartBoneMatrix.ToPhysics();
 
             }
@@ -1228,6 +1268,8 @@ namespace RetroEngine
 
         public void ApplyRagdollToMesh()
         {
+
+            UpdateRagdollBodies();
 
             Vector3[] positions = new Vector3[hitboxes.Count];
 
@@ -1254,9 +1296,13 @@ namespace RetroEngine
 
                 SetWorldPositionOverride(hitbox.Bone, finalMatrix);
 
+                //if (hitbox.Constraint != null)
+                    //DrawDebug.Text(hitbox.RagdollRigidBodyRef.WorldTransform.Translation, hitbox.Constraint.TranslationalLimitMotor.CurrentLinearDiff.ToString(), 0.01f);
+
+
             }
 
-            if(positions.Length > 0)
+            if (positions.Length > 0)
                 boundingSphere = BoundingSphere.CreateFromPoints(positions);
 
         }
@@ -1503,6 +1549,7 @@ namespace RetroEngine
         public RigidBody RagdollParrentRigidBody;
 
         public Generic6DofConstraint Constraint;
+        public TypedConstraint Constraint2;
 
 
     }
