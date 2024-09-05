@@ -246,22 +246,23 @@ namespace RetroEngine
             if (pose == null) return;
 
             Dictionary<string, Matrix> p = new Dictionary<string, Matrix>(pose);
-
-            foreach (string key in p.Keys)
+            lock (namesToBones)
             {
-                if (namesToBones.ContainsKey(key) == false) continue;
-
-                var node = namesToBones[key];
-
-                if (node.isThisARealBone)
+                foreach (string key in p.Keys)
                 {
-                    if (p.ContainsKey(key) == false) continue;
-                    node.LocalTransformMg = p[key];
+                    if (namesToBones.ContainsKey(key) == false) continue;
+                    var node = namesToBones[key];
 
-                    RiggedModel.globalShaderMatrixs[node.boneShaderFinalTransformIndex] = node.OffsetMatrixMg * p[key];
+                    if (node.isThisARealBone)
+                    {
+                        if (p.ContainsKey(key) == false) continue;
+                        node.LocalTransformMg = p[key];
+
+                        RiggedModel.globalShaderMatrixs[node.boneShaderFinalTransformIndex] = node.OffsetMatrixMg * p[key];
+                    }
+
+
                 }
-
-
             }
 
         }
@@ -1061,17 +1062,19 @@ namespace RetroEngine
             foreach (HitboxInfo hitbox in hitboxes)
             {
 
-                float mass = 1f;
+                float mass = 0.6f;
 
 
                 RigidBody body = Physics.CreateBox(owner, hitbox.Size);
 
                 body.SetMassProps(mass, body.CollisionShape.CalculateLocalInertia(mass));
 
-                body.SetDamping(0.4f, 0.6f);
+                body.SetDamping(0.8f, 0.8f);
 
                 body.Friction = 0.8f;
 
+                body.CcdMotionThreshold = 0.0001f;
+                body.CcdSweptSphereRadius = Math.Min(hitbox.Size.X/2,Math.Min(hitbox.Size.Y / 2, hitbox.Size.Z / 2));
 
                 body.SetBodyType(BodyType.MainBody);
                 body.SetCollisionMask(BodyType.World | BodyType.MainBody);
@@ -1157,6 +1160,11 @@ namespace RetroEngine
 
                 hitbox.Constraint = Physics.CreateGenericConstraint(hitbox.RagdollRigidBodyRef, hitbox.RagdollParrentRigidBody, transform1: hitbox.ConstrainLocal1.ToPhysics(), hitbox.ConstrainLocal2.ToPhysics());
 
+                hitbox.Constraint.AngularLowerLimit = (-hitbox.AngularUpperLimit / 180 * (float)Math.PI);
+                hitbox.Constraint.AngularUpperLimit = (-hitbox.AngularLowerLimit / 180 * (float)Math.PI);
+
+                hitbox.Constraint.BuildJacobian();
+                hitbox.Constraint.CalcAnchorPos();
 
             }
         }
@@ -1245,7 +1253,8 @@ namespace RetroEngine
 
             }
 
-            boundingSphere = BoundingSphere.CreateFromPoints(positions);
+            if(positions.Length > 0)
+                boundingSphere = BoundingSphere.CreateFromPoints(positions);
 
         }
 
@@ -1472,6 +1481,11 @@ namespace RetroEngine
         [JsonInclude]
         public Matrix savedRigidBodyMatrix = Matrix.Identity;
 
+        [JsonInclude]
+        public System.Numerics.Vector3 AngularLowerLimit = new System.Numerics.Vector3(-3.14f / 15, -3.14f / 15, -3.14f / 4) / (float)Math.PI * 180;
+
+        [JsonInclude]
+        public System.Numerics.Vector3 AngularUpperLimit = new System.Numerics.Vector3(3.14f / 15, 3.14f / 15, 3.14f / 4) / (float)Math.PI * 180;
 
         public HitboxInfo ParrentHitbox;
 

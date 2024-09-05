@@ -123,6 +123,13 @@ namespace RetroEngine
             return angle;
         }
 
+        public static Matrix GetRotationMatrix(Vector3 rotation)
+        {
+            return Matrix.CreateRotationX(rotation.X / 180 * (float)Math.PI) *
+                                Matrix.CreateRotationY(rotation.Y / 180 * (float)Math.PI) *
+                                Matrix.CreateRotationZ(rotation.Z / 180 * (float)Math.PI);
+        }
+
         public static Vector3 ToEulerAnglesDegrees(this Quaternion q)
         {
             Vector3 angles = new();

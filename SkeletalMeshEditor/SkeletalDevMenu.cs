@@ -251,6 +251,11 @@ namespace SkeletalMeshEditor
                 }
             }
 
+            ImGui.Text("Constrains");
+            ImGui.DragFloat3("Min Angular Rotation", ref hitbox.AngularLowerLimit, 0.15f);
+            ImGui.DragFloat3("Max Angular Rotation", ref hitbox.AngularUpperLimit, 0.15f);
+
+            DebugVisualizeHitboxConstrains(hitbox);
 
             //DrawDebug.Sphere(0.1f, hitbox.ConstrainPosition, Vector3.One, Time.DeltaTime * 2);
 
@@ -263,6 +268,113 @@ namespace SkeletalMeshEditor
             }
 
             oldSize = hitbox.Size;
+
+        }
+
+        void DebugVisualizeHitboxConstrains(HitboxInfo hitbox)
+        {
+            if (hitbox == null) return;
+
+            if(hitbox.HitboxRigidBodyRef == null) return;
+
+            var trans = SkeletalMeshPreview.instance.skeletalMesh.GetBoneMatrix(hitbox.Bone).DecomposeMatrix();
+
+            var bonePosition = trans.Position;
+
+            //DrawDebug.Line(Vector3.Zero, Vector3.One);
+            /*
+            for (int i = 0; i < 30; i++)
+            {
+
+                float progress = (float)i / (float)30;
+
+                Vector3 rotation = Vector3.Lerp(hitbox.AngularLowerLimit, hitbox.AngularUpperLimit, progress);
+
+                rotation.Y = 0;
+                rotation.Z = 0;
+
+                Microsoft.Xna.Framework.Matrix rotationMatrix = MathHelper.GetRotationMatrix(rotation);
+                var vector = Microsoft.Xna.Framework.Vector3.Transform(Vector3.UnitZ, rotationMatrix);
+
+                DrawDebug.Line(bonePosition, bonePosition + vector, Vector3.UnitX, Time.DeltaTime * 2);
+
+            }
+
+            for (int i = 0; i < 30; i++)
+            {
+
+                float progress = (float)i / (float)30;
+
+                Vector3 rotation = Vector3.Lerp(hitbox.AngularLowerLimit, hitbox.AngularUpperLimit, progress);
+
+                rotation.X = 0;
+                rotation.Z = 0;
+
+                Microsoft.Xna.Framework.Matrix rotationMatrix = MathHelper.GetRotationMatrix(rotation);
+                var vector = Microsoft.Xna.Framework.Vector3.Transform(Vector3.UnitZ, rotationMatrix);
+
+                DrawDebug.Line(bonePosition, bonePosition + vector, Vector3.UnitY, Time.DeltaTime * 2);
+
+            }
+            */
+            for (int i = 0; i < 30; i++)
+            {
+
+                float progress = (float)i / (float)30;
+
+                Vector3 rotation = Vector3.Lerp(hitbox.AngularLowerLimit, hitbox.AngularUpperLimit, progress);
+
+                rotation.X = rotation.Z;
+                rotation.Y = 0;
+                rotation.Z = 0;
+
+                Microsoft.Xna.Framework.Matrix rotationMatrix = MathHelper.GetRotationMatrix(rotation);
+                var vector = Microsoft.Xna.Framework.Vector3.Transform(Vector3.UnitZ, rotationMatrix);
+
+                DrawDebug.Line(bonePosition, bonePosition + vector, Vector3.UnitZ, Time.DeltaTime * 2);
+
+            }
+
+            for (int i = 0; i < 30; i++)
+            {
+
+                float progress = (float)i / (float)30;
+
+                Vector3 rotation = Vector3.Lerp(hitbox.AngularLowerLimit, hitbox.AngularUpperLimit, progress);
+
+                rotation.Y = rotation.X;
+                rotation.X = 0;
+                rotation.Z = 0;
+
+
+
+                Microsoft.Xna.Framework.Matrix rotationMatrix = MathHelper.GetRotationMatrix(rotation);
+                var vector = Microsoft.Xna.Framework.Vector3.Transform(Vector3.UnitZ, rotationMatrix);
+
+                DrawDebug.Line(bonePosition, bonePosition + vector, Vector3.UnitX, Time.DeltaTime * 2);
+
+            }
+
+            for (int i = 0; i < 30; i++)
+            {
+
+                float progress = (float)i / (float)30;
+
+                Vector3 rotation = Vector3.Lerp(hitbox.AngularLowerLimit, hitbox.AngularUpperLimit, progress);
+
+                
+                rotation.X = 0;
+                rotation.Z = rotation.Y;
+                rotation.Y = 0;
+
+
+
+                Microsoft.Xna.Framework.Matrix rotationMatrix = MathHelper.GetRotationMatrix(rotation);
+                var vector = Microsoft.Xna.Framework.Vector3.Transform(Vector3.UnitY, rotationMatrix);
+
+                DrawDebug.Line(bonePosition, bonePosition + vector, Vector3.UnitY, Time.DeltaTime * 2);
+
+            }
 
         }
 

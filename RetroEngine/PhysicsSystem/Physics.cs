@@ -177,10 +177,15 @@ namespace RetroEngine.PhysicsSystem
         {
             var constraint = new Generic6DofConstraint(body1, body2, transform1 == null ? Matrix4x4.Identity : transform1.Value, transform2 == null ? Matrix4x4.Identity : transform2.Value, false);
 
+
+            //constraint.InternalSetAppliedImpulse(0);
+
             // Set linear limits (translation). The first vector is the lower limit, and the second is the upper limit.
             // Use Vector3.Zero for no movement in a particular axis.
             constraint.LinearLowerLimit = Vector3.Zero; // Example limits
             constraint.LinearUpperLimit = Vector3.Zero;     // Example limits
+
+            constraint.TranslationalLimitMotor.MaxMotorForce = Vector3.One* 10000000f;
 
             // Set angular limits (rotation). The first vector is the lower limit, and the second is the upper limit.
             // Values are in radians. Use Vector3.Zero for no rotation in a particular axis.
