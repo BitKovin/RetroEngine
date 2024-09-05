@@ -1061,14 +1061,17 @@ namespace RetroEngine
             foreach (HitboxInfo hitbox in hitboxes)
             {
 
-                float mass = 0.1f;
+                float mass = 1f;
 
 
                 RigidBody body = Physics.CreateBox(owner, hitbox.Size);
 
-                body.SetMassProps(1, body.CollisionShape.CalculateLocalInertia(1));
+                body.SetMassProps(mass, body.CollisionShape.CalculateLocalInertia(mass));
 
-                body.Friction = 0.3f;
+                body.SetDamping(0.4f, 0.6f);
+
+                body.Friction = 0.8f;
+
 
                 body.SetBodyType(BodyType.MainBody);
                 body.SetCollisionMask(BodyType.World | BodyType.MainBody);

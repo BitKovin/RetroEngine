@@ -147,7 +147,7 @@ namespace RetroEngine.PhysicsSystem
 
             lock (collisionObjects)
             {
-                foreach (CollisionObject collisionObject in collisionObjects)
+                foreach (CollisionObject collisionObject in collisionObjects.ToArray())
                 {
 
                     RigidBody body = RigidBody.Upcast(collisionObject);
@@ -184,8 +184,8 @@ namespace RetroEngine.PhysicsSystem
 
             // Set angular limits (rotation). The first vector is the lower limit, and the second is the upper limit.
             // Values are in radians. Use Vector3.Zero for no rotation in a particular axis.
-            constraint.AngularLowerLimit = (new Vector3(0, 0, -3.14f / 4)); // Example limits
-            constraint.AngularUpperLimit = (new Vector3(0, 0, 3.14f / 4));     // Example limits
+            constraint.AngularLowerLimit = (new Vector3(-3.14f / 15, -3.14f / 15, -3.14f / 4)); // Example limits
+            constraint.AngularUpperLimit = (new Vector3(3.14f / 15, 3.14f / 15, 3.14f / 4));     // Example limits
 
 
             lock (dynamicsWorld)
@@ -210,6 +210,8 @@ namespace RetroEngine.PhysicsSystem
             catch (Exception e) { Logger.Log(e.Message); }
         }
 
+        public static long SimulationTicks = 0;
+
         public static void Simulate()
         {
             lock (staticWorld)
@@ -223,8 +225,7 @@ namespace RetroEngine.PhysicsSystem
             {
                 if (GameMain.Instance.paused == false)
                 {
-                    for(int i = 0; i<steps; i++)
-                    dynamicsWorld.StepSimulation(Time.DeltaTime / steps, 5, 1f/50f);
+                    SimulationTicks+=dynamicsWorld.StepSimulation(Time.DeltaTime, 5, 1f / 50f);
                 }
             }
         }
@@ -236,11 +237,12 @@ namespace RetroEngine.PhysicsSystem
             lock (dynamicsWorld)
             {
                 dynamicsWorld.RemoveCollisionObject(collisionObject);
+
+                collisionObjects.Remove(collisionObject);
+                collisionObject.UserObject = null;
+                collisionObject.CollisionShape.Dispose();
+                collisionObject.Dispose();
             }
-            collisionObjects.Remove(collisionObject);
-            collisionObject.UserObject = null;
-            collisionObject.CollisionShape.Dispose();
-            collisionObject.Dispose();
 
         }
 

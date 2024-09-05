@@ -149,14 +149,15 @@ namespace RetroEngine.Entities
             if(dead) return;
 
             dead = true;
-
-            mesh.CreateRagdollBodies(this);
             mesh.ClearHitboxBodies();
+            mesh.CreateRagdollBodies(this);
             body.CollisionShape = new SphereShape(0);
 
             deathSoundPlayer.Position = Position;
             deathSoundPlayer.Play();
             deathSoundPlayer.Destroy(2);
+
+            AsyncUpdate();
 
         }
 
