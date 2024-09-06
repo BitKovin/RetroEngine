@@ -445,7 +445,7 @@
 "origin" "-127 -17 169"
 "radius" "25"
 "dynamic" "true"
-"intensity" "-1"
+"intensity" "1"
 "shadows" "true"
 "dynamicSkipUp" "true"
 }
@@ -479,4 +479,56 @@
 {
 "classname" "info.navpoint"
 "origin" "776 584 8"
+}
+// entity 35
+{
+"classname" "func_group"
+"_tb_type" "_tb_layer"
+"_tb_name" "cubemaps"
+"_tb_id" "1"
+"_tb_layer_sort_index" "0"
+}
+// entity 36
+{
+"classname" "cubeMap"
+"target" "cubemap_point_1"
+"_tb_layer" "1"
+// brush 0
+{
+( -256 448 240 ) ( -256 -256 240 ) ( -256 -256 0 ) brushes/hole_t 0 0 0 0.5 0.5
+( -256 -256 240 ) ( 32 -256 240 ) ( 32 -256 0 ) brushes/hole_t 0 0 0 0.5 0.5
+( 32 -256 0 ) ( 32 448 0 ) ( -256 448 0 ) brushes/hole_t 0 0 0 0.5 0.5
+( -256 448 240 ) ( 32 448 240 ) ( 32 -256 240 ) brushes/hole_t 0 0 0 0.5 0.5
+( 32 448 0 ) ( 32 448 240 ) ( -256 448 240 ) brushes/hole_t 0 0 0 0.5 0.5
+( 32 -256 240 ) ( 32 448 240 ) ( 32 448 0 ) brushes/hole_t 0 0 0 0.5 0.5
+}
+}
+// entity 37
+{
+"classname" "cubeMap"
+"target" "cubemap_point_2"
+"_tb_layer" "1"
+// brush 0
+{
+( -256 736 240 ) ( -256 448 240 ) ( -256 448 0 ) brushes/hole_t 0 0 0 0.5 0.5
+( -256 448 240 ) ( 720 448 240 ) ( 720 448 0 ) brushes/hole_t 0 0 0 0.5 0.5
+( 720 448 0 ) ( 720 736 0 ) ( -256 736 0 ) brushes/hole_t 0 0 0 0.5 0.5
+( -256 736 240 ) ( 720 736 240 ) ( 720 448 240 ) brushes/hole_t 0 0 0 0.5 0.5
+( 720 736 0 ) ( 720 736 240 ) ( -256 736 240 ) brushes/hole_t 0 0 0 0.5 0.5
+( 720 448 240 ) ( 720 736 240 ) ( 720 736 0 ) brushes/hole_t 0 0 0 0.5 0.5
+}
+}
+// entity 38
+{
+"classname" "point_rotation"
+"origin" "-110 414 51"
+"targetname" "cubemap_point_1"
+"_tb_layer" "1"
+}
+// entity 39
+{
+"classname" "point_rotation"
+"origin" "418 590 51"
+"targetname" "cubemap_point_2"
+"_tb_layer" "1"
 }

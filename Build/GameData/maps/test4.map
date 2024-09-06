@@ -3,7 +3,7 @@
 // entity 0
 {
 "classname" "worldspawn"
-"geometricalShadowsEnabled" "true"
+"geometricalShadowsEnabled" "false"
 "_tb_textures" "textures;textures\brushes"
 "dynamicSunShadowsEnabled" "true"
 "globalLightDirection" "-0.1 -1 -0.3"
@@ -87,22 +87,30 @@
 }
 // entity 2
 {
-"classname" "cubeMap"
-"origin" "-799 769 111"
-"radius" "100"
-}
-// entity 3
-{
 "classname" "light_point"
 "origin" "-703 321 193"
 "radius" "20"
 "dynamic" "true"
 "dynamicSkipUp" "false"
 }
-// entity 4
+// entity 3
 {
 "classname" "light_point"
 "origin" "-783 1167 159"
 "radius" "20"
 "light_color" "1 1 1"
+}
+// entity 4
+{
+"classname" "cubeMap"
+"radius" "3"
+// brush 0
+{
+( -1360 1464 208 ) ( -1360 -16 208 ) ( -1360 -16 16 ) brushes/hole_t 0 0 0 0.5 0.5
+( -1360 -16 208 ) ( 16 -16 208 ) ( 16 -16 16 ) brushes/hole_t 0 0 0 0.5 0.5
+( 16 -16 16 ) ( 16 1464 16 ) ( -1360 1464 16 ) brushes/hole_t 0 0 0 0.5 0.5
+( -1360 1464 208 ) ( 16 1464 208 ) ( 16 -16 208 ) brushes/hole_t 0 0 0 0.5 0.5
+( 16 1464 16 ) ( 16 1464 208 ) ( -1360 1464 208 ) brushes/hole_t 0 0 0 0.5 0.5
+( 16 -16 208 ) ( 16 1464 208 ) ( 16 1464 16 ) brushes/hole_t 0 0 0 0.5 0.5
+}
 }

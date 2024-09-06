@@ -45,6 +45,7 @@ namespace SkeletalMeshEditor
 
         public void CreateRagdoll()
         {
+            //skeletalMesh.ClearHitboxBodies();
             skeletalMesh.CreateRagdollBodies(this);
         }
 

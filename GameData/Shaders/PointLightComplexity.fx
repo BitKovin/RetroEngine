@@ -87,7 +87,8 @@ PixelOutput PixelShaderFunction(PixelInput input)
     float complexity = 0;
 
     
-
+#if OPENGL
+#else
     for(int i = 0; i < MAX_POINT_LIGHTS; i++)
     {
 
@@ -110,7 +111,7 @@ PixelOutput PixelShaderFunction(PixelInput input)
     }
     
     complexity/=10;
-
+#endif
     //float reflectiveness = CalculateReflectiveness(roughness, metalic, vDir / 3, pixelNormal);
     
     //reflectiveness = saturate(reflectiveness);

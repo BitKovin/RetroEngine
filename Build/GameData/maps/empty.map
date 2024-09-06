@@ -5,9 +5,18 @@
 "classname" "worldspawn"
 "globalLightBrightness" "0.4"
 "directLightBrightness" "0.6"
+// brush 0
+{
+( -128 -128 -16 ) ( -128 -127 -16 ) ( -128 -128 -15 ) brushes/bricks 0 0 0 0.5 0.5
+( -128 -128 -16 ) ( -128 -128 -15 ) ( -127 -128 -16 ) brushes/bricks 0 0 0 0.5 0.5
+( -128 -128 -16 ) ( -127 -128 -16 ) ( -128 -127 -16 ) brushes/bricks 0 0 0 0.5 0.5
+( 128 128 0 ) ( 128 129 0 ) ( 129 128 0 ) brushes/bricks 0 0 0 0.5 0.5
+( 128 128 0 ) ( 129 128 0 ) ( 128 128 1 ) brushes/bricks 0 0 0 0.5 0.5
+( 128 128 0 ) ( 128 128 1 ) ( 128 129 0 ) brushes/bricks 0 0 0 0.5 0.5
+}
 }
 // entity 1
 {
 "classname" "cubeMap"
-"origin" "-160 -80 2128"
+"origin" "0 0 64"
 }

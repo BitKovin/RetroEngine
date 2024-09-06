@@ -213,7 +213,6 @@ namespace RetroEngine.PhysicsSystem
         public static HingeConstraint CreateHingeConstraint(RigidBody body1, RigidBody body2, Matrix4x4? transform1 = null, Matrix4x4? transform2 = null)
         {
 
-            return null;
 
             var constraint = new HingeConstraint(body1, body2, transform1 == null ? Matrix4x4.Identity : transform1.Value, transform2 == null ? Matrix4x4.Identity : transform2.Value, true);
 
@@ -224,6 +223,29 @@ namespace RetroEngine.PhysicsSystem
                 dynamicsWorld.AddConstraint(constraint, true);
 
             return constraint;
+
+        }
+
+        public static Point2PointConstraint Create2PointConstraint(RigidBody body1, RigidBody body2, Vector3 attachPoint)
+        {
+
+
+            Matrix4x4.Invert(body1.WorldTransform, out var m1);
+            Matrix4x4.Invert(body2.WorldTransform, out var m2);
+
+            // Calculate the pivot points in the local space of each rigid body
+            Vector3 pivotInA = Vector3.Transform(attachPoint, m1);
+            Vector3 pivotInB = Vector3.Transform(attachPoint, m2);
+
+            // Create the point-to-point constraint
+            Point2PointConstraint p2pConstraint = new Point2PointConstraint(body1, body2, pivotInA, pivotInB);
+
+
+
+            lock (dynamicsWorld)
+                dynamicsWorld.AddConstraint(p2pConstraint, true);
+
+            return p2pConstraint;
 
         }
 
@@ -670,6 +692,40 @@ namespace RetroEngine.PhysicsSystem
 
             RigidBody.Friction = 0f;
             RigidBody.SetDamping(0.1f, 0.1f);
+            RigidBody.Restitution = 0f;
+            RigidBody.CollisionShape = Shape;
+
+            collisionObjects.Add(RigidBody);
+
+            return RigidBody;
+        }
+
+        public static RigidBody CreateCapsule(Entity entity, float Height, float radius, float mass = 1, CollisionFlags collisionFlags = CollisionFlags.None)
+        {
+            RigidBody RigidBody;
+
+            // Create a sphere shape
+            var Shape = new CapsuleShape(radius, Height - radius * 2);
+            Shape.Margin = 0;
+
+            Shape.UserObject = new CollisionShapeData();
+            var motionState = new DefaultMotionState(Matrix4x4.CreateTranslation(0, 0, 0));
+
+
+            // Create a rigid body for the sphere
+            var boxRigidBodyInfo = new RigidBodyConstructionInfo(collisionFlags == CollisionFlags.StaticObject ? 0 : mass, motionState, Shape);
+            RigidBody = new RigidBody(boxRigidBodyInfo);
+            RigidBody.CollisionFlags = collisionFlags;
+
+            RigidBody.UserObject = new RigidbodyData(entity);
+
+            RigidBody.SetCollisionMask(BodyType.GroupCollisionTest);
+            RigidBody.SetBodyType(BodyType.MainBody);
+
+
+            lock (dynamicsWorld)
+                dynamicsWorld.AddRigidBody(RigidBody);
+
             RigidBody.Restitution = 0f;
             RigidBody.CollisionShape = Shape;
 

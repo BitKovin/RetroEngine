@@ -50,7 +50,7 @@ namespace RetroEngine.Entities
 
             resolution = (int)data.GetPropertyFloat("resolution",256);
 
-            map = new RenderTargetCube(graphicsDevice, resolution, false, SurfaceFormat.Srgb8Etc2, DepthFormat.Depth24);
+            map = new RenderTargetCube(graphicsDevice, resolution, false, SurfaceFormat.ColorSRgb, DepthFormat.Depth24);
 
             targetName = data.GetPropertyString("target", "cubemapTarget_default");
 

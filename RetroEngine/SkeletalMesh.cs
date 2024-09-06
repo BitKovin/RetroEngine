@@ -1066,12 +1066,29 @@ namespace RetroEngine
                 float mass = 0.6f;
 
 
-                RigidBody body = Physics.CreateBox(owner, hitbox.Size);
+
+                // Create a compound shape
+                CompoundShape compoundShape = new CompoundShape();
+
+                // Create a transform for the offset
+                Matrix offsetTransform = Matrix.CreateTranslation(hitbox.Position/100);
+
+                BoxShape boxShape = new BoxShape(hitbox.Size * 0.5f);  // Bullet expects half extents
+
+                // Add the box shape to the compound shape with the offset
+                compoundShape.AddChildShape(offsetTransform.ToPhysics(), boxShape);
+
+                RigidBody body = Physics.CreateFromShape(owner, Vector3.One.ToPhysics(), compoundShape);
+
+
+
+
+                body.CollisionShape = compoundShape;
 
                 body.Restitution = 0;
                 body.DeactivationTime = 0;
 
-                body.SetMassProps(mass, body.CollisionShape.CalculateLocalInertia(mass));
+                //body.SetMassProps(mass, body.CollisionShape.CalculateLocalInertia(mass));
 
                 body.SetDamping(0.5f, 0.5f);
 
@@ -1123,6 +1140,7 @@ namespace RetroEngine
 
 
 
+
                 var boneTrans = matrix.DecomposeMatrix();
                 hitbox.RagdollRigidBodyRef.SetPosition(boneTrans.Position);
                 hitbox.RagdollRigidBodyRef.SetRotation(boneTrans.Rotation);
@@ -1168,11 +1186,9 @@ namespace RetroEngine
 
                 if(hitbox.RagdollParrentRigidBody == null) continue;
 
-                if(hitbox.ConstrainLocal1 == Matrix.Identity)
-                {
-                    hitbox.ConstrainLocal1 = hitbox.RagdollRigidBodyRef.WorldTransform * Matrix.Invert(hitbox.BoneMatrix);//calculate relative transformation
-                    hitbox.ConstrainLocal1 = Matrix.Invert(hitbox.ConstrainLocal1);
-                }
+                // Calculate the bone's world position (the pivot point for the constraint)
+                Vector3 boneWorldPosition = hitbox.BoneMatrix.Translation;
+
 
 
                 if (hitbox.ConstrainLocal2 == Matrix.Identity)
@@ -1181,8 +1197,8 @@ namespace RetroEngine
                     //hitbox.ConstrainLocal2 = Matrix.Invert(hitbox.ConstrainLocal2);
                 }
 
-                
-                hitbox.Constraint = Physics.CreateGenericConstraint(hitbox.RagdollRigidBodyRef, hitbox.RagdollParrentRigidBody, transform1: hitbox.ConstrainLocal1.ToPhysics(), hitbox.ConstrainLocal2.ToPhysics());
+
+                hitbox.Constraint = Physics.CreateGenericConstraint(hitbox.RagdollRigidBodyRef, hitbox.RagdollParrentRigidBody, transform1: Matrix.Identity.ToPhysics(), hitbox.ConstrainLocal2.ToPhysics());
 
                 hitbox.Constraint.AngularLowerLimit = (hitbox.AngularLowerLimit / 180 * (float)Math.PI);
                 hitbox.Constraint.AngularUpperLimit = (hitbox.AngularUpperLimit / 180 * (float)Math.PI);
@@ -1227,7 +1243,7 @@ namespace RetroEngine
                     var matrix = Matrix.CreateRotationZ(hitbox.Rotation.Z / 180 * (float)Math.PI) *
                                 Matrix.CreateRotationX(hitbox.Rotation.X / 180 * (float)Math.PI) *
                                 Matrix.CreateRotationY(hitbox.Rotation.Y / 180 * (float)Math.PI) *
-                        Matrix.CreateTranslation(hitbox.Position) * GetBoneMatrix(hitbox.Bone);
+                        Matrix.CreateTranslation(Vector3.Zero) * GetBoneMatrix(hitbox.Bone);
 
 
 
@@ -1287,8 +1303,7 @@ namespace RetroEngine
 
                 var matrix = Matrix.CreateRotationZ(hitbox.Rotation.Z / 180 * (float)Math.PI) *
             Matrix.CreateRotationX(hitbox.Rotation.X / 180 * (float)Math.PI) *
-            Matrix.CreateRotationY(hitbox.Rotation.Y / 180 * (float)Math.PI) *
-    Matrix.CreateTranslation(hitbox.Position/100);
+            Matrix.CreateRotationY(hitbox.Rotation.Y / 180 * (float)Math.PI);
 
                 var finalMatrix = Matrix.Invert(matrix) * worldTransform;
 
