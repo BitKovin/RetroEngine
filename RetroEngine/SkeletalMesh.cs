@@ -1071,7 +1071,7 @@ namespace RetroEngine
                 CompoundShape compoundShape = new CompoundShape();
 
                 // Create a transform for the offset
-                Matrix offsetTransform = Matrix.CreateTranslation(hitbox.Position/100);
+                Matrix offsetTransform = MathHelper.GetRotationMatrix(hitbox.Rotation) * Matrix.CreateTranslation(hitbox.Position/100);
 
                 BoxShape boxShape = new BoxShape(hitbox.Size * 0.5f);  // Bullet expects half extents
 
@@ -1133,10 +1133,7 @@ namespace RetroEngine
             foreach(HitboxInfo hitbox in hitboxes)
             {
 
-                var matrix = Matrix.CreateRotationZ(hitbox.Rotation.Z / 180 * (float)Math.PI) *
-            Matrix.CreateRotationX(hitbox.Rotation.X / 180 * (float)Math.PI) *
-            Matrix.CreateRotationY(hitbox.Rotation.Y / 180 * (float)Math.PI) *
-    Matrix.CreateTranslation(hitbox.Position) * GetBoneMatrix(hitbox.Bone);
+                var matrix = GetBoneMatrix(hitbox.Bone);
 
 
 
@@ -1204,26 +1201,6 @@ namespace RetroEngine
                 hitbox.Constraint.AngularUpperLimit = (hitbox.AngularUpperLimit / 180 * (float)Math.PI);
 
 
-                hitbox.Constraint.TranslationalLimitMotor.MaxMotorForce = Vector3.Zero.ToPhysics();
-
-                hitbox.Constraint.TranslationalLimitMotor.LimitSoftness = 0;
-
-                hitbox.Constraint.BuildJacobian();
-                hitbox.Constraint.CalcAnchorPos();
-                
-                
-                var constraint2 = Physics.CreateGenericConstraint(hitbox.RagdollParrentRigidBody, hitbox.RagdollRigidBodyRef, hitbox.ConstrainLocal2.ToPhysics(), hitbox.ConstrainLocal1.ToPhysics());
-
-                constraint2.AngularUpperLimit = (-hitbox.AngularLowerLimit / 180 * (float)Math.PI);
-                constraint2.AngularLowerLimit = (-hitbox.AngularUpperLimit / 180 * (float)Math.PI);
-                constraint2.TranslationalLimitMotor.MaxMotorForce = Vector3.Zero.ToPhysics();
-                constraint2.TranslationalLimitMotor.LimitSoftness = 0;
-
-                constraint2.BuildJacobian();
-                constraint2.CalcAnchorPos();
-
-                hitbox.Constraint2 = constraint2;
-                
                 
 
             }
@@ -1240,10 +1217,7 @@ namespace RetroEngine
                 if (hitbox.RigidBodyMatrix == Matrix.Identity)
                 {
 
-                    var matrix = Matrix.CreateRotationZ(hitbox.Rotation.Z / 180 * (float)Math.PI) *
-                                Matrix.CreateRotationX(hitbox.Rotation.X / 180 * (float)Math.PI) *
-                                Matrix.CreateRotationY(hitbox.Rotation.Y / 180 * (float)Math.PI) *
-                        Matrix.CreateTranslation(Vector3.Zero) * GetBoneMatrix(hitbox.Bone);
+                    var matrix = GetBoneMatrix(hitbox.Bone);
 
 
 
@@ -1301,11 +1275,8 @@ namespace RetroEngine
                 // Get the world transform matrix from the ragdoll rigid body
                 var worldTransform = hitbox.RagdollRigidBodyRef.WorldTransform;
 
-                var matrix = Matrix.CreateRotationZ(hitbox.Rotation.Z / 180 * (float)Math.PI) *
-            Matrix.CreateRotationX(hitbox.Rotation.X / 180 * (float)Math.PI) *
-            Matrix.CreateRotationY(hitbox.Rotation.Y / 180 * (float)Math.PI);
 
-                var finalMatrix = Matrix.Invert(matrix) * worldTransform;
+                var finalMatrix = worldTransform;
 
                 positions[i] = finalMatrix.Translation;
 

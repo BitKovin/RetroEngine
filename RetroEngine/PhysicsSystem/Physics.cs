@@ -195,8 +195,8 @@ namespace RetroEngine.PhysicsSystem
             //constraint.TranslationalLimitMotor.StopErp = Vector3.One * 100;
 
             //constraint.TranslationalLimitMotor.MaxMotorForce = Vector3.One* 10000000f;
-            //constraint.TranslationalLimitMotor.Damping = 0;
-            //constraint.TranslationalLimitMotor.LimitSoftness = 0;
+            constraint.TranslationalLimitMotor.Damping = 0;
+            constraint.TranslationalLimitMotor.LimitSoftness = 0;
             // Set angular limits (rotation). The first vector is the lower limit, and the second is the upper limit.
             // Values are in radians. Use Vector3.Zero for no rotation in a particular axis.
             constraint.AngularLowerLimit = (new Vector3(-3.14f / 15, -3.14f / 15, -3.14f / 4)); // Example limits
@@ -323,12 +323,18 @@ namespace RetroEngine.PhysicsSystem
 
         public static void Remove(TypedConstraint constraint)
         {
-            lock(dynamicsWorld)
+
+            if(constraint is null) return;
+
+            lock (constraint)
             {
+                lock (dynamicsWorld)
+                {
 
-                if(constraint == null) return;
+                    if (constraint == null) return;
 
-                dynamicsWorld.RemoveConstraint(constraint);
+                    dynamicsWorld.RemoveConstraint(constraint);
+                }
             }
 
         }
