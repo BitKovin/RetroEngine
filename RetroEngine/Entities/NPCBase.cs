@@ -150,8 +150,7 @@ namespace RetroEngine.Entities
             if(dead) return;
 
             dead = true;
-            mesh.ClearHitboxBodies();
-            mesh.CreateRagdollBodies(this);
+            mesh.StartRagdoll();
             body.CollisionShape = new SphereShape(0);
 
             deathSoundPlayer.Position = Position;

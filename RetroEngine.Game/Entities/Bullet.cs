@@ -133,7 +133,6 @@ namespace RetroEngine.Game.Entities
             if (WairingForSimulationTick>0 && WairingForSimulationTick<=Physics.SimulationTicks)
             {
 
-                Console.WriteLine("a");
 
                 var physHit = Physics.SphereTrace(OldPos.ToNumerics(), Position.ToNumerics(),0.05f, ignoreObjects, PhysicsSystem.BodyType.GroupHitTest);
                 if (physHit.HasHit)
@@ -142,8 +141,6 @@ namespace RetroEngine.Game.Entities
                     Entity ent = ((RigidbodyData)physHit.HitCollisionObject.UserObject).Entity;
 
                     if (ent == null) return;
-
-                    Console.WriteLine(((RigidbodyData)physHit.HitCollisionObject.UserObject).HitboxName);
 
                     physHit.HitCollisionObject?.Activate();
                     RigidBody.Upcast(physHit.HitCollisionObject)?.ApplyCentralImpulse(startRotation.GetForwardVector().ToNumerics() * Damage / 2f * ImpactForce);
@@ -173,7 +170,7 @@ namespace RetroEngine.Game.Entities
             if (hit.HasHit)
             {
 
-                WairingForSimulationTick = Physics.SimulationTicks + 1;
+                WairingForSimulationTick = Physics.SimulationTicks + 2;
 
                 Entity ent = ((RigidbodyData)hit.CollisionObject.UserObject).Entity;
 

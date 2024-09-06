@@ -41,7 +41,7 @@ namespace SkeletalMeshEditor
 
                 if (ImGui.Button("New"))
                 {
-                    SkeletalMeshPreview.instance.skeletalMesh.ClearHitboxBodies();
+                    SkeletalMeshPreview.instance.skeletalMesh.ClearRagdollBodies();
                     SkeletalMeshPreview.instance.skeletalMesh.hitboxes = new List<HitboxInfo>();
                 }
 
@@ -92,8 +92,8 @@ namespace SkeletalMeshEditor
             ImGui.Spacing();
             if(ImGui.Button("refreshHitboxes") || Input.GetAction("r").Pressed())
             {
-                SkeletalMeshPreview.instance.skeletalMesh.ClearHitboxBodies();
-                SkeletalMeshPreview.instance.skeletalMesh.CreateHitboxBodies(SkeletalMeshPreview.instance);
+                SkeletalMeshPreview.instance.skeletalMesh.ClearRagdollBodies();
+                SkeletalMeshPreview.instance.skeletalMesh.CreateRagdollBodies(SkeletalMeshPreview.instance);
             }
 
             ImGui.Spacing();
@@ -263,8 +263,8 @@ namespace SkeletalMeshEditor
 
             if(oldSize!= hitbox.Size)
             {
-                SkeletalMeshPreview.instance.skeletalMesh.ClearHitboxBodies();
-                SkeletalMeshPreview.instance.skeletalMesh.CreateHitboxBodies(SkeletalMeshPreview.instance);
+                SkeletalMeshPreview.instance.skeletalMesh.ClearRagdollBodies();
+                SkeletalMeshPreview.instance.skeletalMesh.CreateRagdollBodies(SkeletalMeshPreview.instance);
             }
 
             oldSize = hitbox.Size;
@@ -275,12 +275,12 @@ namespace SkeletalMeshEditor
         {
             if (hitbox == null) return;
 
-            if(hitbox.HitboxRigidBodyRef == null) return;
+            if(hitbox.RagdollRigidBodyRef == null) return;
 
 
             var trans = SkeletalMeshPreview.instance.skeletalMesh.GetBoneMatrix(hitbox.Bone).DecomposeMatrix();
 
-            var bodyRotation = ((Microsoft.Xna.Framework.Matrix)hitbox.HitboxRigidBodyRef.WorldTransform).DecomposeMatrix().Rotation;
+            var bodyRotation = ((Microsoft.Xna.Framework.Matrix)hitbox.RagdollRigidBodyRef.WorldTransform).DecomposeMatrix().Rotation;
 
             trans.Scale = Vector3.One;
 

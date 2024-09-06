@@ -15,7 +15,7 @@ namespace RetroEngine.Entities
         {
             Static = true;
 
-            ConvexBrush = true;
+            ConvexBrush = false;
 
         }
 

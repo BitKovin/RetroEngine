@@ -45,13 +45,12 @@ namespace SkeletalMeshEditor
 
         public void CreateRagdoll()
         {
-            //skeletalMesh.ClearHitboxBodies();
-            skeletalMesh.CreateRagdollBodies(this);
+            skeletalMesh.StartRagdoll();
         }
 
         public void StopRagdoll()
         {
-            skeletalMesh.ClearRagdollBodies();
+            skeletalMesh.StopRagdoll();
         }
 
 

@@ -51,6 +51,8 @@ namespace RetroEngine
 
         Vector3 RootMotionPositionOffset = new Vector3();
 
+        public bool isRagdoll {  get; protected set; }
+
         public SkeletalMesh() : base()
         {
 
@@ -965,7 +967,7 @@ namespace RetroEngine
 
         public override void Destroyed()
         {
-            ClearHitboxBodies();
+            ClearRagdollBodies();
             if (RiggedModel == null) return;
             //namesToBones = null;
             RiggedModel.Destroy();
@@ -979,58 +981,25 @@ namespace RetroEngine
 
         public void ReloadHitboxes(Entity entity)
         {
-            ClearHitboxBodies();
-            CreateHitboxBodies(entity);
+            ClearRagdollBodies();
+            CreateRagdollBodies(entity);
         }
 
-        public void ClearHitboxBodies()
-        {
-            foreach (HitboxInfo hitbox in hitboxes)
-            {
-                Physics.Remove(hitbox.HitboxRigidBodyRef);
-
-                hitbox.HitboxRigidBodyRef = null;
-
-            }
-
-        }
-
-        public void CreateHitboxBodies(Entity owner)
-        {
-            foreach (HitboxInfo hitbox in hitboxes)
-            {
-                RigidBody body = Physics.CreateBox(owner, hitbox.Size, 0);
-
-                body.SetBodyType(BodyType.HitBox);
-
-                RigidbodyData data = (RigidbodyData)body.UserObject;
-
-                data.HitboxName = hitbox.Bone;
-
-                body.UserObject = data;
-
-                hitbox.HitboxRigidBodyRef = body;
-                
-
-
-            }
-        }
 
         public void UpdateHitboxes()
         {
 
+            if (isRagdoll) return;
+
             foreach (HitboxInfo hitbox in hitboxes)
             {
-                if (hitbox.HitboxRigidBodyRef == null) continue;
+                if (hitbox.RagdollRigidBodyRef == null) continue;
 
-                var matrix = Matrix.CreateRotationZ(hitbox.Rotation.Z / 180 * (float)Math.PI) *
-                            Matrix.CreateRotationX(hitbox.Rotation.X / 180 * (float)Math.PI) *
-                            Matrix.CreateRotationY(hitbox.Rotation.Y / 180 * (float)Math.PI) *
-                    Matrix.CreateTranslation(hitbox.Position) * GetBoneMatrix(hitbox.Bone);
+                var matrix = GetBoneMatrix(hitbox.Bone);
 
                 var boneTrans = matrix.DecomposeMatrix();
-                hitbox.HitboxRigidBodyRef.SetPosition(boneTrans.Position);
-                hitbox.HitboxRigidBodyRef.SetRotation(boneTrans.Rotation);
+                hitbox.RagdollRigidBodyRef.SetPosition(boneTrans.Position);
+                hitbox.RagdollRigidBodyRef.SetRotation(boneTrans.Rotation);
 
             }
 
@@ -1039,7 +1008,7 @@ namespace RetroEngine
         public void ClearRagdollBodies()
         {
 
-            RiggedModel.finalOverrides?.Clear();
+            RiggedModel?.finalOverrides?.Clear();
 
             foreach (HitboxInfo hitbox in hitboxes)
             {
@@ -1056,6 +1025,7 @@ namespace RetroEngine
         public void CreateRagdollBodies(Entity owner)
         {
 
+
             ClearRagdollBodies();
 
             Dictionary<string, HitboxInfo> keyValuePairs = new Dictionary<string, HitboxInfo>();
@@ -1063,7 +1033,7 @@ namespace RetroEngine
             foreach (HitboxInfo hitbox in hitboxes)
             {
 
-                float mass = 0.6f;
+                float mass = 0.7f;
 
 
 
@@ -1071,33 +1041,36 @@ namespace RetroEngine
                 CompoundShape compoundShape = new CompoundShape();
 
                 // Create a transform for the offset
-                Matrix offsetTransform = MathHelper.GetRotationMatrix(hitbox.Rotation) * Matrix.CreateTranslation(hitbox.Position/100);
+                Matrix offsetTransform = MathHelper.GetRotationMatrix(hitbox.Rotation) * Matrix.CreateTranslation(hitbox.Position / 100);
 
                 BoxShape boxShape = new BoxShape(hitbox.Size * 0.5f);  // Bullet expects half extents
 
                 // Add the box shape to the compound shape with the offset
                 compoundShape.AddChildShape(offsetTransform.ToPhysics(), boxShape);
 
+                compoundShape.UserObject = new Physics.CollisionShapeData { surfaceType = "flesh" };
+
                 RigidBody body = Physics.CreateFromShape(owner, Vector3.One.ToPhysics(), compoundShape);
-
-
-
 
                 body.CollisionShape = compoundShape;
 
                 body.Restitution = 0;
                 body.DeactivationTime = 0;
 
-                //body.SetMassProps(mass, body.CollisionShape.CalculateLocalInertia(mass));
+                body.Gravity = Vector3.Zero.ToPhysics();
+
+                body.Friction = 1;
+
+                body.SetMassProps(mass, body.CollisionShape.CalculateLocalInertia(mass));
 
                 body.SetDamping(0.5f, 0.5f);
 
 
                 //body.CcdMotionThreshold = 0.0001f;
-               // body.CcdSweptSphereRadius = Math.Min(hitbox.Size.X/2,Math.Min(hitbox.Size.Y / 2, hitbox.Size.Z / 2));
+                // body.CcdSweptSphereRadius = Math.Min(hitbox.Size.X/2,Math.Min(hitbox.Size.Y / 2, hitbox.Size.Z / 2));
 
-                body.SetBodyType(BodyType.MainBody);
-                body.SetCollisionMask(BodyType.World);
+                body.SetBodyType(BodyType.HitBox);
+                body.SetCollisionMask(BodyType.HitBox);
 
                 RigidbodyData data = (RigidbodyData)body.UserObject;
 
@@ -1107,7 +1080,7 @@ namespace RetroEngine
 
                 hitbox.RagdollRigidBodyRef = body;
 
-                
+
 
                 keyValuePairs.Add(hitbox.Bone, hitbox);
             }
@@ -1122,7 +1095,7 @@ namespace RetroEngine
 
                 RigidBody parrent = keyValuePairs[hitbox.Parrent].RagdollRigidBodyRef;
 
-                
+
 
                 hitbox.RagdollParrentRigidBody = parrent;
                 hitbox.ParrentHitbox = keyValuePairs[hitbox.Parrent];
@@ -1130,7 +1103,7 @@ namespace RetroEngine
 
             }
 
-            foreach(HitboxInfo hitbox in hitboxes)
+            foreach (HitboxInfo hitbox in hitboxes)
             {
 
                 var matrix = GetBoneMatrix(hitbox.Bone);
@@ -1146,13 +1119,58 @@ namespace RetroEngine
 
             }
 
-            
+
             CalculateRagdollRestPose();
 
             CreateConstrains();
 
             ApplyPoseIntoRagdoll();
 
+        }
+
+        public void StartRagdoll()
+        {
+
+            foreach(HitboxInfo hitbox in hitboxes)
+            {
+                if(hitbox.RagdollRigidBodyRef == null) continue;
+
+                var body = hitbox.RagdollRigidBodyRef;
+
+                body.Gravity = new System.Numerics.Vector3(0,-9,0);
+
+                body.CcdSweptSphereRadius = 0.02f;
+                body.CcdMotionThreshold = 0.00001f;
+
+                body.SetCollisionMask(BodyType.World | BodyType.MainBody | BodyType.HitBox);
+
+            }
+
+            isRagdoll = true;
+
+
+        }
+
+        public void StopRagdoll()
+        {
+
+            RiggedModel?.finalOverrides?.Clear();
+
+            foreach (HitboxInfo hitbox in hitboxes)
+            {
+                if (hitbox.RagdollRigidBodyRef == null) continue;
+
+                var body = hitbox.RagdollRigidBodyRef;
+
+                body.Gravity = new System.Numerics.Vector3(0, 0, 0);
+
+                body.CcdSweptSphereRadius = 0.00f;
+
+                body.SetCollisionMask(BodyType.HitBox);
+
+            }
+
+            isRagdoll = false;
         }
 
         public void UpdateRagdollBodies()
@@ -1182,10 +1200,6 @@ namespace RetroEngine
             {
 
                 if(hitbox.RagdollParrentRigidBody == null) continue;
-
-                // Calculate the bone's world position (the pivot point for the constraint)
-                Vector3 boneWorldPosition = hitbox.BoneMatrix.Translation;
-
 
 
                 if (hitbox.ConstrainLocal2 == Matrix.Identity)
@@ -1258,6 +1272,8 @@ namespace RetroEngine
 
         public void ApplyRagdollToMesh()
         {
+
+            if (isRagdoll == false) return;
 
             UpdateRagdollBodies();
 
@@ -1528,8 +1544,6 @@ namespace RetroEngine
         public Matrix BoneMatrix = Matrix.Identity;
 
         public Matrix StartBoneMatrix = Matrix.Identity;
-
-        public RigidBody HitboxRigidBodyRef;
 
         public RigidBody RagdollRigidBodyRef;
         public RigidBody RagdollParrentRigidBody;
