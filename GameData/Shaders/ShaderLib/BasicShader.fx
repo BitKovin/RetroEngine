@@ -514,34 +514,50 @@ half DistributionGGX(float3 N, float3 H, float a)
 	return nom / denom;
 }
 
-half CalculateSpecular(float3 worldPos, half3 normal, half3 lightDir, half roughness, half metallic, half3 albedo)
+half CalculateSpecular(float3 worldPos, half3 normal, half3 lightDir, half roughness, half metallic, float3 albedo)
 {
 #ifdef NO_SPECULAR
-	return 0;
+    return 0;
 #endif
 
-	if (dot(normal, lightDir) < 0)
-		return 0;
+    // Avoid light behind the surface
+    if (dot(normal, lightDir) < 0)
+        return 0;
 
-	half3 vDir = normalize(viewPos - worldPos);
-	lightDir = normalize(lightDir);
-	half3 halfwayDir = normalize(vDir + lightDir);
+    // View direction
+    half3 vDir = normalize(viewPos - worldPos);
 
-	half NdotH = saturate(dot(normal, halfwayDir));
-	half NdotV = saturate(dot(normal, vDir));
-	half NdotL = saturate(dot(normal, lightDir));
+    // Light direction
+    lightDir = normalize(lightDir);
+    
+    // Halfway vector
+    half3 halfwayDir = normalize(vDir + lightDir);
 
-	// GGX Normal Distribution Function (NDF)
-	half roughnessSq = roughness * roughness;
-	half D = DistributionGGX(normal, halfwayDir, roughnessSq);
+    // NdotH, NdotV, NdotL calculations (saturated to avoid negative values)
+    half NdotH = saturate(dot(normal, halfwayDir));
+    half NdotV = saturate(dot(normal, vDir));
+    half NdotL = saturate(dot(normal, lightDir));
 
-	// Geometry function using Smith's method
-	half G = GeometrySmith(normal, vDir, lightDir, roughnessSq);
+    // GGX Normal Distribution Function (NDF)
+    half roughnessSq = roughness * roughness;
+    half D = DistributionGGX(normal, halfwayDir, roughnessSq);
 
-	// Specular BRDF
-	half3 specular = (D * G) / (4.0f * NdotV * NdotL + 0.1f);
+    // Geometry function using Smith's method
+    half G = GeometrySmith(normal, vDir, lightDir, roughnessSq);
 
-	return specular * 0.15;
+    // Fresnel-Schlick approximation (with energy conservation)
+    half F0 = lerp(0.04, 1.0, metallic);  // F0 is 0.04 for dielectrics, 1.0 for metals
+    half3 F = F0 + (1.0 - F0) * pow(1.0 - NdotV, 5.0);  // Fresnel-Schlick approximation
+
+    // Specular BRDF (Fresnel * NDF * Geometry) / (4 * NdotV * NdotL)
+    half3 specular = (F * D * G) / max(4.0 * NdotV * NdotL, 0.001f);  // Avoid divide by zero
+    
+    // Energy conservation factor: Scale specular to avoid overwhelming brightness
+    half energyFactor = saturate(1.0 - roughness * 0.5);  // More roughness = less specular
+    specular *= energyFactor;
+
+    // Cap the specular contribution to prevent brightness overload
+    return specular * 0.05;
 }
 
 
@@ -1462,7 +1478,7 @@ half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half rough
 	if (dot(l, half3(1, 1, 1)) < 0)
 		specular = 0;
 
-	return (l + intense * specular) * dirFactor;
+	return (l + distIntence * specular * notShadow) * dirFactor;
 }
 
 float3 CalculateSsrSpecular(PixelInput input, float3 normal, float roughness, float metalic, float3 albedo)
@@ -1545,6 +1561,8 @@ half3 CalculateLight(PixelInput input, float3 normal, float roughness, float met
 #endif
 	}
 
+	float shadowed = shadow;
+
 	shadow = lerp(shadow, 1, 1 - max(0, dot(normal, normalize(-LightDirection) * 1)));
 
 
@@ -1570,7 +1588,7 @@ half3 CalculateLight(PixelInput input, float3 normal, float roughness, float met
 	float3 globalLight = GlobalBrightness * globalLightColor * lerp(1.0f, 0.1f, (dot(normal, float3(0, -1, 0)) + 1) / 2);
 
 	float3 specular = CalculateSpecular(input.MyPosition, normal, lightDir, roughness, metallic, albedo) * DirectBrightness * globalLightColor;
-	specular *= max(1 - shadow, 0);
+	specular *= max(1 - shadowed, 0);
 
 	if (Viewmodel)
 	{

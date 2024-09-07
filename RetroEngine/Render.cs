@@ -46,6 +46,7 @@ namespace RetroEngine
         RenderTarget2D bloomSample;
         RenderTarget2D bloomSample2;
         RenderTarget2D bloomSample3;
+        RenderTarget2D bloomSample4;
 
         RenderTarget2D outputPath;
 
@@ -304,7 +305,8 @@ namespace RetroEngine
 
             InitSizedRenderTargetIfNeed(ref bloomSample, 256, surfaceFormat: SurfaceFormat.HalfVector4);
             InitSizedRenderTargetIfNeed(ref bloomSample2, 128, surfaceFormat: SurfaceFormat.HalfVector4);
-            InitSizedRenderTargetIfNeed(ref bloomSample3, 32, surfaceFormat: SurfaceFormat.HalfVector4);
+            InitSizedRenderTargetIfNeed(ref bloomSample3, 64, surfaceFormat: SurfaceFormat.HalfVector4);
+            InitSizedRenderTargetIfNeed(ref bloomSample4, 32, surfaceFormat: SurfaceFormat.HalfVector4);
 
             InitRenderTargetIfNeed(ref postProcessingOutput);
 
@@ -428,12 +430,10 @@ namespace RetroEngine
             DrawFullScreenQuad(DepthPrepathBufferOutput, DepthApplyEffect);
 
 
-
-
-
-            //particlesToDraw.Clear();
-
             RenderLevelGeometryForward(renderList);
+
+
+
 
             if (Graphics.GeometricalShadowsEnabled)
             {
@@ -456,14 +456,18 @@ namespace RetroEngine
 
         }
 
-        public void RenderLevelGeometryForward(List<StaticMesh> renderList, bool onlyTransperent = false, bool OnlyStatic = false)
+        public void RenderLevelGeometryForward(List<StaticMesh> renderList, bool onlyTransperent = false, bool OnlyStatic = false, bool skipTransparent = false)
         {
 
             foreach (StaticMesh mesh in renderList)
             {
+
+                if (skipTransparent && mesh.Transperent) continue;
+
                 if (mesh == null) continue;
                 if (mesh.Transperent || onlyTransperent == false)
                 {
+                    
                     if(mesh.Static || OnlyStatic==false)
                         mesh.DrawUnified();
 
@@ -1024,6 +1028,7 @@ namespace RetroEngine
             ComposeEffect.Parameters["BloomTexture"]?.SetValue(bloomSample);
             ComposeEffect.Parameters["Bloom2Texture"]?.SetValue(bloomSample2);
             ComposeEffect.Parameters["Bloom3Texture"]?.SetValue(bloomSample3);
+            ComposeEffect.Parameters["Bloom3Texture"]?.SetValue(bloomSample4);
             ComposeEffect.Parameters["LutTexture"]?.SetValue(LUT);
             ComposeEffect.Parameters["lutSize"]?.SetValue(lutSize);
 
@@ -1060,6 +1065,7 @@ namespace RetroEngine
 
             DownsampleToTexture(bloomSample, bloomSample2, true);
             DownsampleToTexture(bloomSample2, bloomSample3, true);
+            DownsampleToTexture(bloomSample3, bloomSample4, true);
 
         }
         public static bool performingOcclusionTest = false;

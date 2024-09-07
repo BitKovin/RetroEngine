@@ -555,7 +555,7 @@ namespace RetroEngine.PhysicsSystem
             return new Quaternion(x, y, z, w);
         }
 
-        public static RigidBody CreateSphere(Entity entity, float mass = 1, float radius = 1, CollisionFlags collisionFlags = CollisionFlags.None)
+        public static RigidBody CreateSphere(Entity entity, float mass = 10, float radius = 1, CollisionFlags collisionFlags = CollisionFlags.None)
         {
             RigidBody RigidBody;
 
@@ -586,7 +586,7 @@ namespace RetroEngine.PhysicsSystem
             return RigidBody;
         }
 
-        public static RigidBody CreateBox(Entity entity, Vector3 size, float mass = 1, CollisionFlags collisionFlags = CollisionFlags.None)
+        public static RigidBody CreateBox(Entity entity, Vector3 size, float mass = 10, CollisionFlags collisionFlags = CollisionFlags.None)
         {
             RigidBody RigidBody;
 
@@ -621,7 +621,7 @@ namespace RetroEngine.PhysicsSystem
         }
 
 
-        public static RigidBody CreateFromShape(Entity entity, Vector3 size, CollisionShape shape, float mass = 1, CollisionFlags collisionFlags = CollisionFlags.None, BodyType bodyType = BodyType.MainBody)
+        public static RigidBody CreateFromShape(Entity entity, Vector3 size, CollisionShape shape, float mass = 10, CollisionFlags collisionFlags = CollisionFlags.None, BodyType bodyType = BodyType.MainBody)
         {
             RigidBody RigidBody;
 
@@ -670,7 +670,7 @@ namespace RetroEngine.PhysicsSystem
         }
 
 
-        public static RigidBody CreateCharacterCapsule(Entity entity, float Height, float radius, float mass = 1, CollisionFlags collisionFlags = CollisionFlags.None)
+        public static RigidBody CreateCharacterCapsule(Entity entity, float Height, float radius, float mass = 50, CollisionFlags collisionFlags = CollisionFlags.None)
         {
             RigidBody RigidBody;
 
@@ -706,7 +706,7 @@ namespace RetroEngine.PhysicsSystem
             return RigidBody;
         }
 
-        public static RigidBody CreateCapsule(Entity entity, float Height, float radius, float mass = 1, CollisionFlags collisionFlags = CollisionFlags.None)
+        public static RigidBody CreateCapsule(Entity entity, float Height, float radius, float mass = 10, CollisionFlags collisionFlags = CollisionFlags.None)
         {
             RigidBody RigidBody;
 

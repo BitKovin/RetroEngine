@@ -31,7 +31,7 @@ namespace RetroEngine.Game.Entities
 
         ParticleSystem trail;
 
-        public float ImpactForce = 1;
+        public float ImpactForce = 10;
 
         public Bullet() 
         {

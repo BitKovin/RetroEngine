@@ -142,11 +142,12 @@ namespace RetroEngine
                     }
                 }
             }
-
-            boundingSphere = BoundingSphere.CreateFromPoints(points);
-            boundingSphere.Radius *= 1.1f;
-            boundingSphere.Radius += 0.3f;
-
+            if (points.Count > 0)
+            {
+                boundingSphere = BoundingSphere.CreateFromPoints(points).Transform(base.GetWorldMatrix());
+                boundingSphere.Radius *= 1.1f;
+                boundingSphere.Radius += 0.3f;
+            }
         }
 
         public void SetBoneLocalTransformModification(string name, Matrix tranform)
@@ -567,10 +568,10 @@ namespace RetroEngine
                 if (Graphics.LightDistanceMultiplier > 0.9)
                 {
                     if (closeShadow)
-                        if (Graphics.DirectionalLightFrustrumClose.Contains(boundingSphere.Transform(GetWorldMatrix())) == ContainmentType.Disjoint) return;
+                        if (Graphics.DirectionalLightFrustrumClose.Contains(boundingSphere) == ContainmentType.Disjoint) return;
 
                     if (veryClose)
-                        if (Graphics.DirectionalLightFrustrumVeryClose.Contains(boundingSphere.Transform(GetWorldMatrix())) == ContainmentType.Disjoint) return;
+                        if (Graphics.DirectionalLightFrustrumVeryClose.Contains(boundingSphere) == ContainmentType.Disjoint) return;
                 }
                 foreach (RiggedModel.RiggedModelMesh meshPart in RiggedModel.meshes)
                 {
@@ -662,7 +663,7 @@ namespace RetroEngine
 
                 if (Render.CustomFrustrum != null)
                 {
-                    if (Render.CustomFrustrum.Contains(boundingSphere.Transform(base.GetWorldMatrix())) == ContainmentType.Disjoint)
+                    if (Render.CustomFrustrum.Contains(boundingSphere) == ContainmentType.Disjoint)
                     {
                         return;
                     }
@@ -925,7 +926,7 @@ namespace RetroEngine
 
             if (RiggedModel is not null)
             {
-                intersects = boundingSphere.Transform(base.GetWorldMatrix()).Intersects(sphere);
+                intersects = boundingSphere.Intersects(sphere);
 
                 if (ParrentBounds != null)
                     intersects = intersects || ParrentBounds.IntersectsBoundingSphere(sphere);
@@ -946,16 +947,18 @@ namespace RetroEngine
 
             WorldMatrix = GetWorldMatrix();
 
-            if (Camera.frustum.Contains(boundingSphere.Transform(base.GetWorldMatrix())) != ContainmentType.Disjoint)
+            CalculateBoundingSphere();
+
+            if (Camera.frustum.Contains(boundingSphere) != ContainmentType.Disjoint)
             {
                 inFrustrum = true;
             }
 
             if (ParrentBounds != null)
-                if (Camera.frustum.Contains(ParrentBounds.boundingSphere.Transform(base.GetWorldMatrix())) != ContainmentType.Disjoint)
+                if (Camera.frustum.Contains(ParrentBounds.boundingSphere) != ContainmentType.Disjoint)
                     inFrustrum = true;
 
-            if (Graphics.DirectionalLightFrustrum.Contains(boundingSphere.Transform(base.GetWorldMatrix())) != ContainmentType.Disjoint)
+            if (Graphics.DirectionalLightFrustrum.Contains(boundingSphere) != ContainmentType.Disjoint)
             {
                 isRenderedShadow = true;
 
@@ -1033,7 +1036,7 @@ namespace RetroEngine
             foreach (HitboxInfo hitbox in hitboxes)
             {
 
-                float mass = 0.7f;
+                float mass = 10;
 
 
 
@@ -1066,8 +1069,9 @@ namespace RetroEngine
                 body.SetDamping(0.5f, 0.5f);
 
 
-                //body.CcdMotionThreshold = 0.0001f;
-                // body.CcdSweptSphereRadius = Math.Min(hitbox.Size.X/2,Math.Min(hitbox.Size.Y / 2, hitbox.Size.Z / 2));
+                body.CcdMotionThreshold = 0.00001f;
+                body.CcdSweptSphereRadius = 0.1f;
+
 
                 body.SetBodyType(BodyType.HitBox);
                 body.SetCollisionMask(BodyType.HitBox);
@@ -1139,8 +1143,6 @@ namespace RetroEngine
 
                 body.Gravity = new System.Numerics.Vector3(0,-9,0);
 
-                body.CcdSweptSphereRadius = 0.02f;
-                body.CcdMotionThreshold = 0.00001f;
 
                 body.SetCollisionMask(BodyType.World | BodyType.MainBody | BodyType.HitBox);
 
@@ -1164,7 +1166,6 @@ namespace RetroEngine
 
                 body.Gravity = new System.Numerics.Vector3(0, 0, 0);
 
-                body.CcdSweptSphereRadius = 0.00f;
 
                 body.SetCollisionMask(BodyType.HitBox);
 
@@ -1209,13 +1210,10 @@ namespace RetroEngine
                 }
 
 
-                hitbox.Constraint = Physics.CreateGenericConstraint(hitbox.RagdollRigidBodyRef, hitbox.RagdollParrentRigidBody, transform1: Matrix.Identity.ToPhysics(), hitbox.ConstrainLocal2.ToPhysics());
+                hitbox.Constraint = Physics.CreateGenericConstraint(hitbox.RagdollRigidBodyRef, hitbox.RagdollParrentRigidBody, Matrix.Identity.ToPhysics(), hitbox.ConstrainLocal2.ToPhysics());
 
                 hitbox.Constraint.AngularLowerLimit = (hitbox.AngularLowerLimit / 180 * (float)Math.PI);
                 hitbox.Constraint.AngularUpperLimit = (hitbox.AngularUpperLimit / 180 * (float)Math.PI);
-
-
-                
 
             }
         }
@@ -1266,9 +1264,8 @@ namespace RetroEngine
                 hitbox.RagdollRigidBodyRef.WorldTransform = hitbox.StartBoneMatrix.ToPhysics();
 
             }
-
-
         }
+
 
         public void ApplyRagdollToMesh()
         {
@@ -1304,8 +1301,6 @@ namespace RetroEngine
 
             }
 
-            if (positions.Length > 0)
-                boundingSphere = BoundingSphere.CreateFromPoints(positions);
 
         }
 

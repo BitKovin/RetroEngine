@@ -71,6 +71,19 @@ sampler2D Bloom3TextureSampler = sampler_state
 
 };
 
+Texture2D Bloom4Texture;
+
+sampler2D Bloom4TextureSampler = sampler_state
+{
+    Texture = <Bloom3Texture>;
+
+    MinFilter = Anisotropic;
+    MagFilter = Anisotropic;
+    AddressU = Clamp;
+    AddressV = Clamp;
+
+};
+
 Texture2D LutTexture;
 
 sampler2D LutTextureSampler = sampler_state
@@ -122,7 +135,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 	
     float3 color = tex2D(ColorTextureSampler, input.TextureCoordinates).rgb;
 	
-    float3 bloomColor = tex2D(BloomTextureSampler, input.TextureCoordinates).rgb / 2 + tex2D(Bloom2TextureSampler, input.TextureCoordinates).rgb / 2 + tex2D(Bloom3TextureSampler, input.TextureCoordinates).rgb / 3;
+    float3 bloomColor = tex2D(BloomTextureSampler, input.TextureCoordinates).rgb / 2 + tex2D(Bloom2TextureSampler, input.TextureCoordinates).rgb / 2 + tex2D(Bloom3TextureSampler, input.TextureCoordinates).rgb / 3 + tex2D(Bloom4TextureSampler, input.TextureCoordinates).rgb / 4;
 	
     float bloomL = length(bloomColor);
 	
