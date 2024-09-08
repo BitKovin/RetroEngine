@@ -57,6 +57,7 @@ namespace RetroEngine
         public static float CloseLightDistance = 51;
         public static float VeryCloseLightDistance = 16;
 
+        public static float LightNearDistance = 200;
 
         public static bool EnablePostPocessing = true;
         public static bool TextureFiltration = true;
@@ -128,19 +129,19 @@ namespace RetroEngine
         public static Matrix GetLightProjection()
         {
 
-            return Matrix.CreateOrthographic(LightDistance* LightDistanceMultiplier, LightDistance* LightDistanceMultiplier, -100, 100);
+            return Matrix.CreateOrthographic(LightDistance* LightDistanceMultiplier, LightDistance* LightDistanceMultiplier, -LightNearDistance, 100);
         }
 
         public static Matrix GetCloseLightProjection()
         {
 
-            return Matrix.CreateOrthographic(CloseLightDistance * LightDistanceMultiplier, CloseLightDistance * LightDistanceMultiplier, -100, CloseLightDistance);
+            return Matrix.CreateOrthographic(CloseLightDistance * LightDistanceMultiplier, CloseLightDistance * LightDistanceMultiplier, -LightNearDistance, CloseLightDistance);
         }
 
         public static Matrix GetVeryCloseLightProjection()
         {
 
-            return Matrix.CreateOrthographic(VeryCloseLightDistance * LightDistanceMultiplier, VeryCloseLightDistance * LightDistanceMultiplier, -100, VeryCloseLightDistance);
+            return Matrix.CreateOrthographic(VeryCloseLightDistance * LightDistanceMultiplier, VeryCloseLightDistance * LightDistanceMultiplier, -LightNearDistance, VeryCloseLightDistance);
         }
 
         public static Matrix GetLightView()

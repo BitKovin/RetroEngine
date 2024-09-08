@@ -202,6 +202,7 @@ internal class Program
 
     static void ExecutePowerShellCommand(string command)
     {
+
         try
         {
             // Start PowerShell process
