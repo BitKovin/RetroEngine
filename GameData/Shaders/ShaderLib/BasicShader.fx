@@ -695,7 +695,7 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input, float3 TangentNor
 
 		int numSamples = 2; // Number of samples in each direction (total samples = numSamples^2)
 
-		float b = 0.00003;
+		float b = 0.00001;
 
 		float bias = b * (1 - saturate(dot(input.Normal, -LightDirection))) + b / 2.0f;
 
@@ -705,7 +705,7 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input, float3 TangentNor
 
 		bias *= lerp(12, 1, f);
 
-		bias += 0.00016;
+		//bias += 0.00016;
 
 		bias *= (LightDistanceMultiplier + 1) / 2;
 

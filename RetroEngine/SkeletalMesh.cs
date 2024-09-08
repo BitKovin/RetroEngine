@@ -518,7 +518,7 @@ namespace RetroEngine
                 bias = 0.013f;
 
             if (veryClose)
-                bias = 0.0055f;
+                bias = 0.006f;
 
             if (viewmodel)
                 bias = 0.001f;

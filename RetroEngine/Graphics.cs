@@ -57,7 +57,7 @@ namespace RetroEngine
         public static float CloseLightDistance = 51;
         public static float VeryCloseLightDistance = 16;
 
-        public static float LightNearDistance = 200;
+        public static float LightNearDistance = 300;
 
         public static bool EnablePostPocessing = true;
         public static bool TextureFiltration = true;
