@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Numerics;
 using System.Threading;
+using System.Runtime.ExceptionServices;
+using System.Security;
 
 
 namespace RetroEngine.PhysicsSystem
@@ -279,7 +281,7 @@ namespace RetroEngine.PhysicsSystem
             {
                 if (GameMain.Instance.paused == false)
                 {
-                    SimulationTicks+=dynamicsWorld.StepSimulation(Time.DeltaTime, 5, 1f / 100f);
+                    SimulationTicks+=dynamicsWorld.StepSimulation(Time.DeltaTime, 1, Time.DeltaTime);
                 }
             }
         }
@@ -293,9 +295,6 @@ namespace RetroEngine.PhysicsSystem
                 dynamicsWorld.RemoveCollisionObject(collisionObject);
 
                 collisionObjects.Remove(collisionObject);
-                collisionObject.UserObject = null;
-                collisionObject.CollisionShape.Dispose();
-                collisionObject.Dispose();
             }
 
         }
@@ -307,19 +306,11 @@ namespace RetroEngine.PhysicsSystem
             lock (dynamicsWorld)
             {
                 dynamicsWorld.RemoveRigidBody(body);
-                dynamicsWorld.CollisionObjectArray.Remove(body);
-
-                collisionObjects.Remove(body);
-                body.ClearForces();
-
-
-                body.UserObject = null;
-                body.MotionState.Dispose();
-                body.CollisionShape.Dispose();
-
-                body.Dispose();
+                lock(dynamicsWorld.CollisionObjectArray)
+                    dynamicsWorld.CollisionObjectArray.Remove(body);
             }
         }
+
 
         public static void Remove(TypedConstraint constraint)
         {

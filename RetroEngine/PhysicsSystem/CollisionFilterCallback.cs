@@ -12,6 +12,7 @@ namespace RetroEngine.PhysicsSystem
 
     internal class CollisionFilterCallback : OverlapFilterCallback
     {
+
         public override bool NeedBroadphaseCollision(BroadphaseProxy proxy0, BroadphaseProxy proxy1)
         {
 
@@ -25,7 +26,8 @@ namespace RetroEngine.PhysicsSystem
             if (colObj0 == null || colObj1 == null)
                 return false;
 
-
+            if (colObj0.CollisionFlags.HasFlag(CollisionFlags.NoContactResponse)) return false;
+            if (colObj1.CollisionFlags.HasFlag(CollisionFlags.NoContactResponse)) return false;
 
             BodyType collidesWith1 = (BodyType)colObj0.UserIndex;
             BodyType bodyType1 = (BodyType)colObj0.UserIndex2;

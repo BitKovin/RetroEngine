@@ -120,8 +120,6 @@ namespace RetroEngine.Game.Entities
 
         }
 
-        long WairingForSimulationTick = -1;
-
         public override void Update()
         {
             base.Update();
@@ -130,33 +128,7 @@ namespace RetroEngine.Game.Entities
 
             MyClosestRayResultCallback hit;
 
-            if (WairingForSimulationTick>0 && WairingForSimulationTick<=Physics.SimulationTicks)
-            {
-
-
-                var physHit = Physics.SphereTrace(OldPos.ToNumerics(), Position.ToNumerics(),0.05f, ignoreObjects, PhysicsSystem.BodyType.GroupHitTest);
-                if (physHit.HasHit)
-                {
-
-                    Entity ent = ((RigidbodyData)physHit.HitCollisionObject.UserObject).Entity;
-
-                    if (ent == null) return;
-
-                    physHit.HitCollisionObject?.Activate();
-                    RigidBody.Upcast(physHit.HitCollisionObject)?.ApplyCentralImpulse(startRotation.GetForwardVector().ToNumerics() * Damage / 2f * ImpactForce);
-
-                    
-                }
-
-                Destroy();
-
-                return;
-
-            }
-            else if(WairingForSimulationTick > 0)
-            {
-                return;
-            }
+            
 
             if (!destroyDelay.Wait())
             {
@@ -170,7 +142,7 @@ namespace RetroEngine.Game.Entities
             if (hit.HasHit)
             {
 
-                WairingForSimulationTick = Physics.SimulationTicks + 2;
+
 
                 Entity ent = ((RigidbodyData)hit.CollisionObject.UserObject).Entity;
 
@@ -178,8 +150,14 @@ namespace RetroEngine.Game.Entities
 
                 ent.OnPointDamage(Damage, hit.HitPointWorld, Rotation.GetForwardVector(), this, this);
 
-                OldPos -= Rotation.GetForwardVector() * Speed * 0.03f;
-                Position += Rotation.GetForwardVector() * Speed * 0.03f;
+                hit.CollisionObject?.Activate();
+
+                if (hit.CollisionObject == null)
+                {
+                    return;
+                }
+                RigidBody.Upcast(hit.CollisionObject)?.ApplyCentralImpulse(startRotation.GetForwardVector().ToNumerics() * Damage / 2f * ImpactForce);
+
                 return;
 
             }

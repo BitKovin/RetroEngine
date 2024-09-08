@@ -1013,11 +1013,17 @@ namespace RetroEngine
 
             RiggedModel?.finalOverrides?.Clear();
 
+            foreach(HitboxInfo hitbox in hitboxes)
+            {
+                Physics.Remove(hitbox.Constraint);
+                Physics.Remove(hitbox.Constraint2);
+                hitbox.Constraint = null;
+                hitbox.Constraint2 = null;
+            }
+
             foreach (HitboxInfo hitbox in hitboxes)
             {
                 Physics.Remove(hitbox.RagdollRigidBodyRef);
-                Physics.Remove(hitbox.Constraint);
-                Physics.Remove(hitbox.Constraint2);
 
                 hitbox.RagdollRigidBodyRef = null;
 
@@ -1062,6 +1068,8 @@ namespace RetroEngine
 
                 body.Gravity = Vector3.Zero.ToPhysics();
 
+                body.Flags = RigidBodyFlags.DisableWorldGravity;
+
                 body.Friction = 1;
 
                 body.SetMassProps(mass, body.CollisionShape.CalculateLocalInertia(mass));
@@ -1072,9 +1080,11 @@ namespace RetroEngine
                 body.CcdMotionThreshold = 0.00001f;
                 body.CcdSweptSphereRadius = 0.1f;
 
+                body.CollisionFlags = CollisionFlags.NoContactResponse;
 
                 body.SetBodyType(BodyType.HitBox);
-                body.SetCollisionMask(BodyType.HitBox);
+                body.SetCollisionMask(BodyType.None);
+
 
                 RigidbodyData data = (RigidbodyData)body.UserObject;
 
@@ -1124,25 +1134,32 @@ namespace RetroEngine
             }
 
 
-            CalculateRagdollRestPose();
-
-            CreateConstrains();
-
-            ApplyPoseIntoRagdoll();
 
         }
 
         public void StartRagdoll()
         {
 
-            foreach(HitboxInfo hitbox in hitboxes)
+
+            CalculateRagdollRestPose();
+
+            CreateConstrains();
+
+            ApplyPoseIntoRagdoll();
+
+            foreach (HitboxInfo hitbox in hitboxes)
             {
                 if(hitbox.RagdollRigidBodyRef == null) continue;
 
                 var body = hitbox.RagdollRigidBodyRef;
 
+                body.Activate(true);
+
+                body.Flags = RigidBodyFlags.None;
+
                 body.Gravity = new System.Numerics.Vector3(0,-9,0);
 
+                body.CollisionFlags = CollisionFlags.None;
 
                 body.SetCollisionMask(BodyType.World | BodyType.MainBody | BodyType.HitBox);
 
@@ -1214,6 +1231,8 @@ namespace RetroEngine
 
                 hitbox.Constraint.AngularLowerLimit = (hitbox.AngularLowerLimit / 180 * (float)Math.PI);
                 hitbox.Constraint.AngularUpperLimit = (hitbox.AngularUpperLimit / 180 * (float)Math.PI);
+
+                //hitbox.Constraint.OverrideNumSolverIterations = 1;
 
             }
         }
