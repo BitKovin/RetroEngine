@@ -1,4 +1,5 @@
 ﻿using BulletSharp;
+using DotRecast.Detour.Crowd;
 using Microsoft.Xna.Framework;
 using RetroEngine.NavigationSystem;
 using RetroEngine.PhysicsSystem;
@@ -58,6 +59,8 @@ namespace RetroEngine.Entities
 
         Entity player;
 
+        DtCrowdAgent crowdAgent;
+
         public NPCBase()
         {
             SaveGame = true;
@@ -79,6 +82,8 @@ namespace RetroEngine.Entities
             //npcList.Add(this);
 
             pathfindingQuery.OnPathFound += PathfindingQuery_OnPathFound;
+
+            crowdAgent = CrowdSystem.CreateAgent(this, Navigation.ProjectToGround(Position), speed: maxSpeed);
 
             InitDirectionsLUT();
         }
@@ -180,6 +185,14 @@ namespace RetroEngine.Entities
 
             targetLocation = player.Position;
 
+            MoveDirection = crowdAgent.vel.FromRc().XZ().FastNormalize();
+
+            float heightDif = crowdAgent.npos.Y - Position.Y;
+
+            crowdAgent.npos = (Position + Vector3.UnitY * heightDif).ToRc();
+
+            DrawDebug.Text(crowdAgent.npos.FromRc(), Vector3.Distance((body.WorldTransform.Translation - Vector3.UnitY), crowdAgent.npos.FromRc()).ToString(), 0.02f);
+
             float angleDif = MathHelper.FindLookAtRotation(Position, targetLocation).Y - mesh.Rotation.Y;
 
             MathHelper.Transform transform = new MathHelper.Transform();
@@ -222,15 +235,7 @@ namespace RetroEngine.Entities
 
             mesh.Rotation = new Vector3(0, MathHelper.FindLookAtRotation(Vector3.Zero, MoveDirection).Y, 0);
 
-            
-
-            
-
-            if (updateDelay.Wait()) return;
-            RequestNewTargetLocation();
-            updateDelay.AddDelay(Math.Min(Vector3.Distance(Position, targetLocation)/50,0.2f) + Random.Shared.NextSingle()/3f);
-
-
+            crowdAgent.SetAgentTargetPosition(targetLocation);
 
         }
 

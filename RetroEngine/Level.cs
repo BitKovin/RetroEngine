@@ -197,6 +197,8 @@ namespace RetroEngine
             Navigation.RebuildConnectionsData();
 
 
+            if (rebuild)
+                NavigationSystem.Recast.BuildNavigationData();
 
             AssetRegistry.AllowGeneratingMipMaps = false;
 
@@ -210,8 +212,6 @@ namespace RetroEngine
 
             LoadingScreen.Update(0.95f);
 
-            if(rebuild)
-                NavigationSystem.Recast.BuildNavigationData();
 
             GC.Collect();
 

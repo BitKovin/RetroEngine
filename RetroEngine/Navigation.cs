@@ -362,47 +362,24 @@ namespace RetroEngine
         void Process(Vector3 start, Vector3 target)
         {
 
-            var result = Recast.FindPathSimple(start, target, navFilter);
+            var points = Recast.FindPathSimple(start, target, navFilter);
 
-            if(result.Count>0)
-                result.RemoveAt(0);
+            List<Vector3> result = new List<Vector3>(points);
+
+            for (int i = points.Count - 1; i >= 0; i--)
+            {
+                var hit = Physics.SphereTrace(start.ToNumerics(), points[i].ToNumerics(), bodyType: PhysicsSystem.BodyType.World);
+
+                if (hit.HasHit == false)
+                {
+                    result.RemoveRange(0, i); break;
+                }
+
+            }
 
             OnPathFound?.Invoke(result);
             active = false;
-            return;
-
-
-            start = Navigation.ProjectToGround(start);
-            target = Navigation.ProjectToGround(target);
-
-            var hit = Physics.SphereTrace(start.ToPhysics() + Vector3.UnitY.ToPhysics() * 0.3f, target.ToPhysics() + Vector3.UnitY.ToPhysics() * 0.3f, 0.3f, bodyType: PhysicsSystem.BodyType.World);
-
-            if (hit.HasHit == false)
-            {
-                OnPathFound?.Invoke(new List<Vector3>() { target });
-                return;
-            }
-
-            List<Vector3> points1;
-            List<Vector3> points2;
-            points1 = Navigation.FindPath(start, target);
-            points2 = Navigation.FindPath(target, start);
-            points2.Reverse();
-            if (points2.Count > 0)
-            {
-                points2.RemoveAt(0);
-                points2.Add(target);
-            }
             
-
-            float dist1 = CalculatePathDistance(points1, start);
-            float dist2 = CalculatePathDistance(points1, target);
-
-
-            List<Vector3> points = (dist2 > dist1) || (points2.Count < 2) ? points1 : points2;
-
-            OnPathFound?.Invoke(points);
-
         }
 
         float CalculatePathDistance(List<Vector3> points, Vector3 startPoint)
