@@ -104,7 +104,8 @@ namespace RetroEngine.PhysicsSystem
 
             // Create a collision configuration and dispatcher
             var collisionConfig = new DefaultCollisionConfiguration();
-            
+
+
             dispatcher = new CollisionDispatcher(collisionConfig);
 
 
@@ -121,8 +122,8 @@ namespace RetroEngine.PhysicsSystem
             dynamicsWorld = new DiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfig);
             dynamicsWorld.Gravity = new Vector3(0, -9.81f, 0); // Set gravity
             dynamicsWorld.DispatchInfo.UseContinuous = true;
-            dynamicsWorld.SolverInfo.NumIterations = 3;
-            dynamicsWorld.SolverInfo.SplitImpulse = 0;
+            //dynamicsWorld.SolverInfo.NumIterations = 3;
+            //dynamicsWorld.SolverInfo.SplitImpulse = 0;
 
 
             broadphase.OverlappingPairCache.SetOverlapFilterCallback(collisionFilterCallback);

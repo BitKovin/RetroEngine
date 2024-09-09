@@ -156,7 +156,10 @@ namespace RetroEngine.Game.Entities
 
                 hited = true;
 
-                Destroy(1);
+                Destroy();
+
+
+                //trail.StopAll();
 
                 Speed = 0;
                 meshes.Clear();

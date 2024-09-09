@@ -1077,7 +1077,7 @@ namespace RetroEngine
 
 
                 body.CcdMotionThreshold = 0.00001f;
-                body.CcdSweptSphereRadius = 0.1f;
+                body.CcdSweptSphereRadius = 0.0f;
 
                 body.CollisionFlags = CollisionFlags.NoContactResponse;
 
@@ -1159,6 +1159,9 @@ namespace RetroEngine
 
                 body.CollisionFlags = CollisionFlags.None;
 
+                body.CcdMotionThreshold = 0.00001f;
+                body.CcdSweptSphereRadius = 0.1f;
+
                 body.SetCollisionMask(BodyType.World | BodyType.MainBody | BodyType.HitBox);
 
             }
@@ -1183,6 +1186,7 @@ namespace RetroEngine
 
 
                 body.SetCollisionMask(BodyType.HitBox);
+
 
             }
 

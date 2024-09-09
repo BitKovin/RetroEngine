@@ -1,5 +1,6 @@
 ﻿using ImGuiNET;
 using RetroEngine;
+using RetroEngine.PhysicsSystem;
 using RetroEngine.Skeletal;
 using System;
 using System.Collections.Generic;
@@ -77,7 +78,7 @@ namespace SkeletalMeshEditor
 
             var names = GetHitboxNames();
             ImGui.Text("selected: " + selectedHitbox.ToString());
-            ImGui.ListBox("hitboxes", ref selectedHitbox, names, names.Length);
+            ImGui.ListBox("hitboxes", ref selectedHitbox, names, names.Length, 20);
 
             if (ImGui.Button("Add"))
                 SkeletalMeshPreview.instance.skeletalMesh.hitboxes.Add(new HitboxInfo());
@@ -86,7 +87,10 @@ namespace SkeletalMeshEditor
             {
                 ImGui.SameLine();
                 if (ImGui.Button("Remove"))
+                {
+                    Physics.Remove(SkeletalMeshPreview.instance.skeletalMesh.hitboxes[selectedHitbox].RagdollRigidBodyRef);
                     SkeletalMeshPreview.instance.skeletalMesh.hitboxes.RemoveAt(selectedHitbox);
+                }    
             }
             ImGui.Spacing();
             ImGui.Spacing();
@@ -194,6 +198,8 @@ namespace SkeletalMeshEditor
         }
 
         static Vector3 oldSize;
+        static Vector3 oldPos;
+        static Vector3 oldRot;
 
         void HitboxEditor()
         {
@@ -261,13 +267,15 @@ namespace SkeletalMeshEditor
 
             ImGui.End();
 
-            if(oldSize!= hitbox.Size)
+            if(oldSize!= hitbox.Size || oldRot!= hitbox.Rotation || oldPos != hitbox.Position)
             {
                 SkeletalMeshPreview.instance.skeletalMesh.ClearRagdollBodies();
                 SkeletalMeshPreview.instance.skeletalMesh.CreateRagdollBodies(SkeletalMeshPreview.instance);
             }
 
             oldSize = hitbox.Size;
+            oldPos = hitbox.Position;
+            oldRot = hitbox.Rotation;
 
         }
 
