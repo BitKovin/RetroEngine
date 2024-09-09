@@ -33,6 +33,8 @@ namespace RetroEngine.Game.Entities
 
         public float ImpactForce = 10;
 
+        bool hited = false;
+
         public Bullet() 
         {
             mesh.EmissionPower = 1;
@@ -128,7 +130,7 @@ namespace RetroEngine.Game.Entities
 
             MyClosestRayResultCallback hit;
 
-            
+            if (hited) return;
 
             if (!destroyDelay.Wait())
             {
@@ -151,6 +153,13 @@ namespace RetroEngine.Game.Entities
                 ent.OnPointDamage(Damage, hit.HitPointWorld, Rotation.GetForwardVector(), this, this);
 
                 hit.CollisionObject?.Activate();
+
+                hited = true;
+
+                Destroy(1);
+
+                Speed = 0;
+                meshes.Clear();
 
                 if (hit.CollisionObject == null)
                 {

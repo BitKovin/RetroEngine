@@ -24,6 +24,8 @@ using DotRecast.Detour.TileCache;
 using DotRecast.Detour.TileCache.Io.Compress;
 using DotRecast.Core.Collections;
 using DotRecast.Recast.Toolset.Tools;
+using Sdcb.FFmpeg.Filters;
+using System.Collections;
 
 namespace RetroEngine.NavigationSystem
 {
@@ -108,6 +110,31 @@ namespace RetroEngine.NavigationSystem
 
 
             return new List<Vector3> { start, end };
+
+        }
+
+        public static bool IsPointOnNavmesh(Vector3 point)
+        {
+
+            DtNavMeshQuery navMeshQuery = new DtNavMeshQuery(NavigationSystem.Recast.TileCache.GetNavMesh());
+
+            var filter = new NavigationQueryFilter();
+
+            List<long> longs = new List<long>();
+
+            RcTestNavMeshTool rcTestNavMeshTool = new RcTestNavMeshTool();
+
+            long startRef = 0;
+            long endRef = 0;
+
+            bool isOver;
+
+            RcVec3f m_polyPickExt = new RcVec3f(0, 0.1f, 0);
+
+            lock (NavigationSystem.Recast.TileCache.GetNavMesh()) 
+                navMeshQuery.FindNearestPoly(point.ToRc(), m_polyPickExt, filter, out startRef, out var _, out isOver);
+
+            return isOver;
 
         }
 
@@ -201,7 +228,7 @@ namespace RetroEngine.NavigationSystem
             RcNavMeshBuildSettings rcNavMeshBuildSettings = new RcNavMeshBuildSettings();
 
             rcNavMeshBuildSettings.cellSize = 0.3f;
-            rcNavMeshBuildSettings.agentRadius = 0.2f;
+            rcNavMeshBuildSettings.agentRadius = 0f;
             rcNavMeshBuildSettings.tileSize = 32;
 
             var buildResult = Build(geomProvider, rcNavMeshBuildSettings, RcByteOrder.LITTLE_ENDIAN, true);//tileNavMeshBuilder.Build(geomProvider, rcNavMeshBuildSettings);

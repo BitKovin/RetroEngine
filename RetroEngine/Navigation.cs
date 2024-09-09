@@ -343,7 +343,7 @@ namespace RetroEngine
             {
                 Task task = Task.Run(() => Process(startLocation, endLocation), cts.Token);
                 task.Wait(cts.Token); // Wait for the task to complete or be cancelled
-                Thread.Sleep(10);
+                Thread.Sleep(5);
             }
             catch (OperationCanceledException)
             {
@@ -368,7 +368,7 @@ namespace RetroEngine
 
             for (int i = points.Count - 1; i >= 0; i--)
             {
-                var hit = Physics.SphereTrace(start.ToNumerics(), points[i].ToNumerics(), bodyType: PhysicsSystem.BodyType.World);
+                var hit = Physics.SphereTrace(start.ToNumerics(), points[i].ToNumerics() + Vector3.UnitY, bodyType: PhysicsSystem.BodyType.World);
 
                 if (hit.HasHit == false)
                 {

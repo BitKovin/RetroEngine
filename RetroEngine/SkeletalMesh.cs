@@ -1001,8 +1001,7 @@ namespace RetroEngine
                 var matrix = GetBoneMatrix(hitbox.Bone);
 
                 var boneTrans = matrix.DecomposeMatrix();
-                hitbox.RagdollRigidBodyRef.SetPosition(boneTrans.Position);
-                hitbox.RagdollRigidBodyRef.SetRotation(boneTrans.Rotation);
+                hitbox.RagdollRigidBodyRef.SetTransform(boneTrans.Position, boneTrans.Rotation);
 
             }
 
@@ -1126,8 +1125,7 @@ namespace RetroEngine
 
 
                 var boneTrans = matrix.DecomposeMatrix();
-                hitbox.RagdollRigidBodyRef.SetPosition(boneTrans.Position);
-                hitbox.RagdollRigidBodyRef.SetRotation(boneTrans.Rotation);
+                hitbox.RagdollRigidBodyRef.SetTransform(boneTrans.Position, boneTrans.Rotation);
 
                 hitbox.StartBoneMatrix = hitbox.RagdollRigidBodyRef.WorldTransform;
 
@@ -1253,8 +1251,7 @@ namespace RetroEngine
 
 
                     var boneTrans = matrix.DecomposeMatrix();
-                    hitbox.RagdollRigidBodyRef.SetPosition(boneTrans.Position);
-                    hitbox.RagdollRigidBodyRef.SetRotation(boneTrans.Rotation);
+                    hitbox.RagdollRigidBodyRef.SetTransform(boneTrans.Position, boneTrans.Rotation);
 
 
                     hitbox.BoneMatrix = Matrix.CreateRotationX(boneTrans.Rotation.X / 180 * (float)Math.PI) *

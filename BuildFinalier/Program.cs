@@ -50,7 +50,7 @@ internal class Program
         
 
         PatchEXE(winEXE);
-        PatchEXE(glEXE);
+        //PatchEXE(glEXE);
         PatchEXE(vulkanEXE);
 
         Console.Write("Finished");
@@ -81,7 +81,7 @@ internal class Program
     {
 
         PublishProject(solutionPath + "RetroEngine.Windows/RetroEngine.Windows.csproj", buildPath + "Engine/bin/Release/DirectX");
-        PublishProject(solutionPath + "RetroEngine.Desktop/RetroEngine.Desktop.csproj", buildPath + "Engine/bin/Release/OpenGL");
+        //PublishProject(solutionPath + "RetroEngine.Desktop/RetroEngine.Desktop.csproj", buildPath + "Engine/bin/Release/OpenGL");
         PublishProject(solutionPath + "RetroEngine.WindowsVK/RetroEngine.WindowsVK.csproj", buildPath + "Engine/bin/Release/Vulkan");
     }
 

@@ -104,9 +104,7 @@ namespace RetroEngine.PhysicsSystem
 
             // Create a collision configuration and dispatcher
             var collisionConfig = new DefaultCollisionConfiguration();
-            collisionConfig.SetConvexConvexMultipointIterations();
-            collisionConfig.SetPlaneConvexMultipointIterations();
-
+            
             dispatcher = new CollisionDispatcher(collisionConfig);
 
 
@@ -123,6 +121,9 @@ namespace RetroEngine.PhysicsSystem
             dynamicsWorld = new DiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfig);
             dynamicsWorld.Gravity = new Vector3(0, -9.81f, 0); // Set gravity
             dynamicsWorld.DispatchInfo.UseContinuous = true;
+            dynamicsWorld.SolverInfo.NumIterations = 3;
+            dynamicsWorld.SolverInfo.SplitImpulse = 0;
+
 
             broadphase.OverlappingPairCache.SetOverlapFilterCallback(collisionFilterCallback);
             //dynamicsWorld.ForceUpdateAllAabbs = false;
@@ -281,7 +282,7 @@ namespace RetroEngine.PhysicsSystem
             {
                 if (GameMain.Instance.paused == false)
                 {
-                    SimulationTicks+=dynamicsWorld.StepSimulation(Time.DeltaTime, 1, Time.DeltaTime);
+                    SimulationTicks+=dynamicsWorld.StepSimulation(Time.DeltaTime, 5, 1f/50f);
                 }
             }
         }

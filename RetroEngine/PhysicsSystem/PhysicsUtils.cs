@@ -54,6 +54,14 @@ namespace RetroEngine
                                 Matrix.CreateRotationZ(Rotation.Z / 180 * (float)Math.PI)));
         }
 
+        public static void SetTransform(this RigidBody body, Vector3 Position, Vector3 Rotation)
+        {
+             body.WorldTransform = (Matrix.CreateRotationX(Rotation.X / 180 * (float)Math.PI) *
+                                Matrix.CreateRotationY(Rotation.Y / 180 * (float)Math.PI) *
+                                Matrix.CreateRotationZ(Rotation.Z / 180 * (float)Math.PI) * Matrix.CreateTranslation(Position)).ToPhysics();
+
+        }
+
         public static System.Numerics.Vector3 ToPhysics(this Microsoft.Xna.Framework.Vector3 vector)
         {
             return new System.Numerics.Vector3(vector.X, vector.Y, vector.Z);
