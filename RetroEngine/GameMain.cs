@@ -236,6 +236,7 @@ namespace RetroEngine
 
         }
 
+        internal static Task physicsTask;
         protected override void Update(GameTime gameTime)
         {
 
@@ -263,7 +264,7 @@ namespace RetroEngine
 
             ScreenWidth = GraphicsDevice.PresentationParameters.Bounds.Width;
 
-            var physicsTask = Task.Factory.StartNew((Action)(() => { Physics.Simulate(); }));
+            physicsTask = Task.Factory.StartNew((Action)(() => { Physics.Simulate(); }));
 
             curentLevel.WaitForVisualUpdate();
             if (AsyncGameThread)
@@ -316,9 +317,6 @@ namespace RetroEngine
 
 
 
-            Stats.StartRecord("waiting for physics");
-            physicsTask.Wait();
-            Stats.StopRecord("waiting for physics");
 
             bool changedLevel = Level.LoadPendingLevel();
 
@@ -354,6 +352,11 @@ namespace RetroEngine
         {
 
             GameThread = Thread.CurrentThread;
+
+
+            Stats.StartRecord("waiting for physics");
+            physicsTask.Wait();
+            Stats.StopRecord("waiting for physics");
 
             Stats.StartRecord("GameLogic");
 

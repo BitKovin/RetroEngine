@@ -112,6 +112,7 @@ namespace RetroEngine.Entities
 
             mesh.LoadFromFile("models/player_model_full.FBX");
             mesh.LoadMeshMetaFromFile("models/skeletal_test.fbx");
+            
             mesh.ReloadHitboxes(this);
 
             mesh.texture = AssetRegistry.LoadTextureFromFile("cat.png");

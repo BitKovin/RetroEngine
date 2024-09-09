@@ -46,6 +46,8 @@ namespace RetroEngine.Windows
 
             Input.MouseMoveCalculatorObject = calc;
 
+            DrawDebug.Enabled = true;
+
             Window.Title = "Skeletal Mesh Editor";
 
 #if DEBUG

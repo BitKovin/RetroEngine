@@ -73,7 +73,13 @@ namespace RetroEngine
             if (pendingLevelChange != null)
             {
 
+
                 GameMain.Instance.WaitForFramePresent();
+
+
+                Stats.StartRecord("waiting for physics");
+                GameMain.physicsTask.Wait();
+                Stats.StopRecord("waiting for physics");
 
                 LoadFromFile(pendingLevelChange, true);
 

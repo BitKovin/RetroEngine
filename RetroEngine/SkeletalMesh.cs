@@ -1037,12 +1037,11 @@ namespace RetroEngine
             ClearRagdollBodies();
 
             Dictionary<string, HitboxInfo> keyValuePairs = new Dictionary<string, HitboxInfo>();
-
+            
             foreach (HitboxInfo hitbox in hitboxes)
             {
 
                 float mass = 10;
-
 
 
                 // Create a compound shape
@@ -1060,6 +1059,7 @@ namespace RetroEngine
 
                 RigidBody body = Physics.CreateFromShape(owner, Vector3.One.ToPhysics(), compoundShape);
 
+
                 body.CollisionShape = compoundShape;
 
                 body.Restitution = 0;
@@ -1067,19 +1067,18 @@ namespace RetroEngine
 
                 body.Gravity = Vector3.Zero.ToPhysics();
 
-                body.Flags = RigidBodyFlags.DisableWorldGravity;
 
                 body.Friction = 1;
 
                 body.SetMassProps(mass, body.CollisionShape.CalculateLocalInertia(mass));
 
-                body.SetDamping(0.5f, 0.5f);
-
+                body.SetDamping(0.0f, 0f);
 
                 body.CcdMotionThreshold = 0.00001f;
-                body.CcdSweptSphereRadius = 0.0f;
+                body.CcdSweptSphereRadius = 0.1f;
 
-                body.CollisionFlags = CollisionFlags.NoContactResponse;
+                body.CollisionFlags = CollisionFlags.NoContactResponse | CollisionFlags.CustomMaterialCallback;
+                body.Flags = RigidBodyFlags.DisableWorldGravity;
 
                 body.SetBodyType(BodyType.HitBox);
                 body.SetCollisionMask(BodyType.None);
@@ -1094,7 +1093,6 @@ namespace RetroEngine
                 hitbox.RagdollRigidBodyRef = body;
 
 
-
                 keyValuePairs.Add(hitbox.Bone, hitbox);
             }
 
@@ -1105,9 +1103,7 @@ namespace RetroEngine
 
                 if (GetBoneByName(hitbox.Parrent).parent == null) continue;
 
-
                 RigidBody parrent = keyValuePairs[hitbox.Parrent].RagdollRigidBodyRef;
-
 
 
                 hitbox.RagdollParrentRigidBody = parrent;
@@ -1120,8 +1116,6 @@ namespace RetroEngine
             {
 
                 var matrix = GetBoneMatrix(hitbox.Bone);
-
-
 
 
                 var boneTrans = matrix.DecomposeMatrix();
@@ -1151,7 +1145,10 @@ namespace RetroEngine
 
                 var body = hitbox.RagdollRigidBodyRef;
 
-                body.Activate(true);
+
+                body.ActivationState = ActivationState.WantsDeactivation;
+
+                
 
                 body.Flags = RigidBodyFlags.None;
 
@@ -1162,7 +1159,12 @@ namespace RetroEngine
                 body.CcdMotionThreshold = 0.00001f;
                 body.CcdSweptSphereRadius = 0.1f;
 
-                body.SetCollisionMask(BodyType.World | BodyType.MainBody | BodyType.HitBox);
+                body.ActivationState = ActivationState.WantsDeactivation;
+
+
+                body.SetCollisionMask(BodyType.World);
+
+                body.Activate(true);
 
             }
 
@@ -1184,6 +1186,7 @@ namespace RetroEngine
 
                 body.Gravity = new System.Numerics.Vector3(0, 0, 0);
 
+                //body.CollisionFlags = CollisionFlags.NoContactResponse | CollisionFlags.CharacterObject | CollisionFlags.KinematicObject | CollisionFlags.DisableSpuCollisionProcessing;
 
                 body.SetCollisionMask(BodyType.HitBox);
 
@@ -1221,6 +1224,9 @@ namespace RetroEngine
 
                 if(hitbox.RagdollParrentRigidBody == null) continue;
 
+
+                Physics.Remove(hitbox.Constraint);
+                Physics.Remove(hitbox.Constraint2);
 
                 if (hitbox.ConstrainLocal2 == Matrix.Identity)
                 {

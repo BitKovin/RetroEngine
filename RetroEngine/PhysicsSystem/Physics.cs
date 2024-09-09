@@ -10,6 +10,8 @@ using System.Numerics;
 using System.Threading;
 using System.Runtime.ExceptionServices;
 using System.Security;
+using System.Diagnostics;
+using System.Timers;
 
 
 namespace RetroEngine.PhysicsSystem
@@ -104,7 +106,8 @@ namespace RetroEngine.PhysicsSystem
 
             // Create a collision configuration and dispatcher
             var collisionConfig = new DefaultCollisionConfiguration();
-
+            collisionConfig.SetConvexConvexMultipointIterations();
+            collisionConfig.SetPlaneConvexMultipointIterations();
 
             dispatcher = new CollisionDispatcher(collisionConfig);
 
@@ -122,7 +125,7 @@ namespace RetroEngine.PhysicsSystem
             dynamicsWorld = new DiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfig);
             dynamicsWorld.Gravity = new Vector3(0, -9.81f, 0); // Set gravity
             dynamicsWorld.DispatchInfo.UseContinuous = true;
-            //dynamicsWorld.SolverInfo.NumIterations = 3;
+            dynamicsWorld.SolverInfo.NumIterations = 20;
             //dynamicsWorld.SolverInfo.SplitImpulse = 0;
 
 
@@ -199,12 +202,12 @@ namespace RetroEngine.PhysicsSystem
             //constraint.TranslationalLimitMotor.StopErp = Vector3.One * 100;
 
             //constraint.TranslationalLimitMotor.MaxMotorForce = Vector3.One* 10000000f;
-            constraint.TranslationalLimitMotor.Damping = 0;
-            constraint.TranslationalLimitMotor.LimitSoftness = 0;
+
             // Set angular limits (rotation). The first vector is the lower limit, and the second is the upper limit.
             // Values are in radians. Use Vector3.Zero for no rotation in a particular axis.
             constraint.AngularLowerLimit = (new Vector3(-3.14f / 15, -3.14f / 15, -3.14f / 4)); // Example limits
             constraint.AngularUpperLimit = (new Vector3(3.14f / 15, 3.14f / 15, 3.14f / 4));     // Example limits
+
 
 
             lock (dynamicsWorld)
@@ -270,6 +273,8 @@ namespace RetroEngine.PhysicsSystem
 
         public static long SimulationTicks = 0;
 
+        static Stopwatch physTime = new Stopwatch();
+
         public static void Simulate()
         {
             lock (staticWorld)
@@ -281,9 +286,15 @@ namespace RetroEngine.PhysicsSystem
             }
             lock (dynamicsWorld)
             {
+
+                float time = (float)physTime.Elapsed.TotalSeconds;
+                time = Math.Min(time, 1 / 10f);
+                physTime.Restart();
                 if (GameMain.Instance.paused == false)
                 {
-                    SimulationTicks+=dynamicsWorld.StepSimulation(Time.DeltaTime, 5, 1f/50f);
+
+                    SimulationTicks +=dynamicsWorld.StepSimulation(time, 5, 1/50f);
+                    
                 }
             }
         }
@@ -604,6 +615,7 @@ namespace RetroEngine.PhysicsSystem
             lock(dynamicsWorld)
             dynamicsWorld.AddRigidBody(RigidBody);
 
+
             RigidBody.Friction = 1f;
             RigidBody.SetDamping(0.1f, 0.1f);
             RigidBody.Restitution = 0.1f;
@@ -656,6 +668,8 @@ namespace RetroEngine.PhysicsSystem
             RigidBody.Friction = 1f;
             RigidBody.SetDamping(0.1f, 0.1f);
             RigidBody.Restitution = 0.1f;
+
+            RigidBody.Restitution = 0;
 
             collisionObjects.Add(RigidBody);
 
