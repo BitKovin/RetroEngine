@@ -39,12 +39,15 @@ namespace SkeletalMeshEditor
 
             skeletalMesh.UpdateHitboxes();
 
+            skeletalMesh.UpdateDynamicRagdoll();
+
             skeletalMesh.ApplyRagdollToMesh();
 
         }
 
         public void CreateRagdoll()
         {
+            skeletalMesh.CreateHingeConstraints = true;
             skeletalMesh.StartRagdoll();
         }
 

@@ -127,6 +127,9 @@ namespace SkeletalMeshEditor
             ImGui.Text("rest_pose->reset->ragdoll before saving!");
 
             ImGui.Spacing();
+
+            ImGui.SliderFloat("hinge limit", ref SkeletalMeshPreview.instance.skeletalMesh.RagdollHingeForce, 0, 1);
+
             ImGui.Spacing();
 
             if (ImGui.Button("Ragdoll"))

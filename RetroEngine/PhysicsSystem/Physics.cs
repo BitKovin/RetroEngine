@@ -223,7 +223,6 @@ namespace RetroEngine.PhysicsSystem
 
             var constraint = new HingeConstraint(body1, body2, transform1 == null ? Matrix4x4.Identity : transform1.Value, transform2 == null ? Matrix4x4.Identity : transform2.Value, true);
 
-            constraint.SetLimit(0, 1);
 
 
             lock (dynamicsWorld)

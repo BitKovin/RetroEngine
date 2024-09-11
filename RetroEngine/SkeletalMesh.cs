@@ -1068,7 +1068,7 @@ namespace RetroEngine
                 body.Gravity = Vector3.Zero.ToPhysics();
 
 
-                body.Friction = 1;
+                body.Friction = 0.6f;
 
                 body.SetMassProps(mass, body.CollisionShape.CalculateLocalInertia(mass));
 
@@ -1217,6 +1217,8 @@ namespace RetroEngine
             }
         }
 
+        public bool CreateHingeConstraints = false;
+
         public void CreateConstrains()
         {
             foreach(HitboxInfo hitbox in hitboxes)
@@ -1239,6 +1241,36 @@ namespace RetroEngine
 
                 hitbox.Constraint.AngularLowerLimit = (hitbox.AngularLowerLimit / 180 * (float)Math.PI);
                 hitbox.Constraint.AngularUpperLimit = (hitbox.AngularUpperLimit / 180 * (float)Math.PI);
+
+                if(CreateHingeConstraints && hitbox.Parrent!="")
+                {
+
+                    var boneTrans = GetBoneMatrix(hitbox.Bone).DecomposeMatrix();
+                    var boneTransP = GetBoneMatrix(hitbox.Parrent).DecomposeMatrix();
+                    //hitbox.RagdollRigidBodyRef.SetTransform(boneTrans.Position, boneTrans.Rotation);
+
+
+                    var boneT = Matrix.CreateRotationX(boneTrans.Rotation.X / 180 * (float)Math.PI) *
+                    Matrix.CreateRotationY(boneTrans.Rotation.Y / 180 * (float)Math.PI) *
+                    Matrix.CreateRotationZ(boneTrans.Rotation.Z / 180 * (float)Math.PI);
+                    boneT.Translation = boneTrans.Position;
+
+                    var bonePT = Matrix.CreateRotationX(boneTransP.Rotation.X / 180 * (float)Math.PI) *
+                    Matrix.CreateRotationY(boneTransP.Rotation.Y / 180 * (float)Math.PI) *
+                    Matrix.CreateRotationZ(boneTransP.Rotation.Z / 180 * (float)Math.PI);
+                    bonePT.Translation = boneTransP.Position;
+
+                    var frame = boneT * Matrix.Invert(hitbox.RagdollParrentRigidBody.WorldTransform);
+
+                    HingeConstraint animfollowConstraint = Physics.CreateHingeConstraint(hitbox.RagdollRigidBodyRef, hitbox.RagdollParrentRigidBody, Matrix.Identity.ToPhysics(), frame.ToPhysics());
+                    hitbox.Constraint2 = animfollowConstraint;
+
+                    //animfollowConstraint.SetFrames(Matrix.Identity.ToPhysics(), hitbox.ConstrainLocal2.ToPhysics());
+
+                    animfollowConstraint.SetLimit(-MathF.PI, MathF.PI);
+                }
+
+                
 
                 //hitbox.Constraint.OverrideNumSolverIterations = 1;
 
@@ -1279,6 +1311,22 @@ namespace RetroEngine
                     hitbox.RagdollRigidBodyRef.WorldTransform = hitbox.savedRigidBodyMatrix.ToPhysics();
                 }
 
+            }
+        }
+
+        public float RagdollHingeForce = 0;
+
+        public void UpdateDynamicRagdoll()
+        {
+            foreach(var hitbox in hitboxes)
+            {
+
+                if (hitbox.Constraint2 == null) continue;
+
+                var animfollowConstraint = hitbox.Constraint2 as HingeConstraint;
+
+
+                animfollowConstraint.SetLimit(-MathF.PI * (1f- RagdollHingeForce), MathF.PI * (1f - RagdollHingeForce));
             }
         }
 
