@@ -480,6 +480,7 @@ namespace DotRecast.Detour
             Span<float> edged = stackalloc float[m_nav.GetMaxVertsPerPoly()];
             Span<float> edget = stackalloc float[m_nav.GetMaxVertsPerPoly()];
             int nv = poly.vertCount;
+            lock(tile) lock(poly)
             for (int i = 0; i < nv; ++i)
             {
                 RcSpans.Copy(tile.data.verts, poly.verts[i] * 3, verts, i * 3, 3);

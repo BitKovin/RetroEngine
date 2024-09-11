@@ -163,11 +163,11 @@ namespace RetroEngine
 
             if (Recast.dtNavMesh != null && GameMain.Instance.paused == false)
             {
-
-
+                lock(Recast.TileCache)
                     Recast.TileCache?.Update();
 
                     if(DrawNavigation)
+                    lock(Recast.dtNavMesh)
                         RecastDebugDraw.DebugDrawNavMeshPolys(Recast.dtNavMesh);
                 
 

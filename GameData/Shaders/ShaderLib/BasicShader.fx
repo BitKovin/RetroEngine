@@ -794,7 +794,7 @@ if(DirectionalLightShadowQuality<1)
 	if (dist > 160)
 		return 0;
 
-	float b = 0.0003;
+	float b = 0.0001;
 
 
 

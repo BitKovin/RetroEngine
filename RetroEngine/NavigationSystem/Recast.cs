@@ -100,7 +100,7 @@ namespace RetroEngine.NavigationSystem
 
             DtStatus result;
 
-            lock (NavigationSystem.Recast.TileCache.GetNavMesh())
+            lock (NavigationSystem.Recast.dtNavMesh) lock(TileCache)
                 result = rcTestNavMeshTool.FindFollowPath(NavigationSystem.Recast.dtNavMesh, navMeshQuery, startRef, endRef, start.ToRc(), end.ToRc(), filter, true, ref longs, 0, ref path);
 
             if (result.Succeeded())
@@ -163,18 +163,23 @@ namespace RetroEngine.NavigationSystem
 
         public static long AddObstacleCapsule(Vector3 pos, float radius, float height)
         {
-            long obst = TileCache.AddObstacle(pos.ToRc(), radius, height);
-            lock (allObstacles)
-            {
-                allObstacles.Add(obst);
-            }
-            return obst;
+            lock (TileCache)
+                {
+                    long obst = TileCache.AddObstacle(pos.ToRc(), radius, height);
+                    lock (allObstacles)
+                    {
+                        allObstacles.Add(obst);
+                    }
+                    return obst;
+                }
         }
 
         public static void RemoveObstacle(long id)
         {
-            TileCache.RemoveObstacle(id);
-            allObstacles.Remove(id);
+            lock (TileCache)
+                    TileCache.RemoveObstacle(id);
+            lock (allObstacles)
+                allObstacles.Remove(id);
         }
 
         public static void RemoveAllObstacles()
