@@ -1582,7 +1582,7 @@ half3 CalculateLight(PixelInput input, float3 normal, float roughness, float met
 	light *= (1.0f - shadow);
 
 
-	float3 globalLightColor = lerp(GlobalLightColor, SkyColor, shadow);
+	float3 globalLightColor = lerp(GlobalLightColor, SkyColor, shadowed);
 
 	// Global ambient light
 	float3 globalLight = GlobalBrightness * globalLightColor * lerp(1.0f, 0.1f, (dot(normal, float3(0, -1, 0)) + 1) / 2);
