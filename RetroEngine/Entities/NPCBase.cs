@@ -235,7 +235,7 @@ namespace RetroEngine.Entities
 
 
             if (updateDelay.Wait()) return;
-            RequestNewTargetLocation();
+            //RequestNewTargetLocation();
             updateDelay.AddDelay(Math.Min(Vector3.Distance(Position, targetLocation) / 50, 0.2f) + Random.Shared.NextSingle() / 3f);
 
 

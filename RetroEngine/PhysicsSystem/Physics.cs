@@ -292,7 +292,7 @@ namespace RetroEngine.PhysicsSystem
                 if (GameMain.Instance.paused == false)
                 {
 
-                    SimulationTicks +=dynamicsWorld.StepSimulation(time, 5, 1/50f);
+                    SimulationTicks +=dynamicsWorld.StepSimulation(time*Time.TimeScale, 5, 1/50f * Time.TimeScale);
                     
                 }
             }

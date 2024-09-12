@@ -1121,8 +1121,8 @@ namespace RetroEngine
 
             SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
 
-            BlurEffect.Parameters["screenWidth"].SetValue(target.Width);
-            BlurEffect.Parameters["screenHeight"].SetValue(target.Height);
+            BlurEffect.Parameters["screenWidth"].SetValue(source.Width);
+            BlurEffect.Parameters["screenHeight"].SetValue(source.Height);
 
             spriteBatch.Begin(blendState: BlendState.AlphaBlend, effect: blur? BlurEffect : null);
 
