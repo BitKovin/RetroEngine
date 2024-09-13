@@ -89,7 +89,9 @@ namespace RetroEngine.Game.Entities.Player
 
         FmodEventInstance underWaterSound;
 
-        Vector3 CameraRotation = new Vector3(); 
+        Vector3 CameraRotation = new Vector3();
+
+        bool useThirdPersonAnimations = true;
 
         //particle_system_meleeTrail meleeTrail;
         public PlayerCharacter() : base()
@@ -339,40 +341,45 @@ namespace RetroEngine.Game.Entities.Player
             Matrix showR = new Matrix();
             Matrix showL = new Matrix();
 
-            if (currentWeapon == null)
-            {
-                showR = showL = show.ToMatrix();
-            }else
-            {
-                if(currentWeapon.ShowHandR)
-                {
-                    showR = show.ToMatrix();
-                }
-                else
-                {
-                    showR = hide.ToMatrix();
-                }
+            
 
-                if (currentWeapon.ShowHandL)
-                {
-                    showL = show.ToMatrix();
-                }
-                else
-                {
-                    showL = hide.ToMatrix();
-                }
-
-            }
-
-            bodyMesh.SetBoneMeshTransformModification("upperarm_r",showR);
-            bodyMesh.SetBoneMeshTransformModification("upperarm_l", showL);
-            bodyMesh.SetBoneMeshTransformModification("head", hide.ToMatrix());
-
-            if(thirdPerson)
+            if(thirdPerson || useThirdPersonAnimations)
             {
                 bodyMesh.SetBoneMeshTransformModification("upperarm_r", show.ToMatrix());
                 bodyMesh.SetBoneMeshTransformModification("upperarm_l", show.ToMatrix());
                 bodyMesh.SetBoneMeshTransformModification("head", show.ToMatrix());
+            }
+            else
+            {
+                if (currentWeapon == null)
+                {
+                    showR = showL = show.ToMatrix();
+                }
+                else
+                {
+                    if (currentWeapon.ShowHandR)
+                    {
+                        showR = show.ToMatrix();
+                    }
+                    else
+                    {
+                        showR = hide.ToMatrix();
+                    }
+
+                    if (currentWeapon.ShowHandL)
+                    {
+                        showL = show.ToMatrix();
+                    }
+                    else
+                    {
+                        showL = hide.ToMatrix();
+                    }
+
+                }
+
+                bodyMesh.SetBoneMeshTransformModification("upperarm_r", showR);
+                bodyMesh.SetBoneMeshTransformModification("upperarm_l", showL);
+                bodyMesh.SetBoneMeshTransformModification("head", hide.ToMatrix());
             }
 
         }
@@ -383,15 +390,18 @@ namespace RetroEngine.Game.Entities.Player
 
             var pose = PlayerBodyAnimator.GetResultPose();
 
-            if (currentWeapon != null && thirdPerson)
+            AnimationPose resultPose = pose;
+
+            if (currentWeapon != null && (thirdPerson || useThirdPersonAnimations))
             {
-                pose = currentWeapon.ApplyWeaponAnimation(pose);
+                resultPose = currentWeapon.ApplyWeaponAnimation(pose);
 
             }
 
             //bodyMesh.SetWorldPositionOverride("clavicle_l", new MathHelper.Transform { Position = new Vector3(0,3,0)}.ToMatrix());
 
-            bodyMesh.PastePoseLocal(pose);
+
+            bodyMesh.PastePoseLocal(resultPose);
 
         }
 
@@ -761,8 +771,8 @@ namespace RetroEngine.Game.Entities.Player
         {
             MathHelper.Transform t = bodyMesh.GetBoneMatrix("head").DecomposeMatrix();
 
-            Camera.position = t.Position + Camera.rotation.GetForwardVector() * 0.1f;
-            Camera.position += Camera.rotation.GetUpVector() * 0.1f;
+            Camera.position = t.Position + Camera.Forward * 0.15f;
+            Camera.position += Camera.rotation.GetUpVector() * 0.0f;
         }
 
         void ThirdPersonCameraUpdate()
@@ -796,20 +806,31 @@ namespace RetroEngine.Game.Entities.Player
             UpdatePlayerInput();
 
             Camera.rotation = CameraRotation;
-
-            bodyMesh.Position = interpolatedPosition - Camera.rotation.GetForwardVector().XZ().Normalized() * 0.35f - new Vector3(0, 0.93f, 0);
+            if(useThirdPersonAnimations)
+            {
+                bodyMesh.Position = interpolatedPosition - Camera.rotation.GetForwardVector().XZ().Normalized() * 0.1f - new Vector3(0, 0.93f, 0);
+            }
+            else
+            {
+                bodyMesh.Position = interpolatedPosition - Camera.rotation.GetForwardVector().XZ().Normalized() * 0.35f - new Vector3(0, 0.93f, 0);
+            }
             bodyMesh.Rotation = new Vector3(0, Camera.rotation.Y, 0);
 
 
             if(thirdPerson)
             {
                 ThirdPersonCameraUpdate();
-                //FirstPersonFullBodyCameraUpdate();
+                //
             }
             else
             {
-                FirstPersonCameraUpdate();
                 
+                
+                if(useThirdPersonAnimations)
+                    FirstPersonFullBodyCameraUpdate();
+                else
+                    FirstPersonCameraUpdate();
+
             }
 
             //meleeTrail.SetTrailTransform(bodyMesh.GetBoneMatrix("hand_r").Translation, bodyMesh.GetBoneMatrix("clavicle_r").Translation);
@@ -1048,7 +1069,7 @@ namespace RetroEngine.Game.Entities.Player
 
         public bool isFirstPerson()
         {
-            return thirdPerson == false;
+            return (thirdPerson || useThirdPersonAnimations) == false;
         }
 
         public SkeletalMesh GetSkeletalMesh()

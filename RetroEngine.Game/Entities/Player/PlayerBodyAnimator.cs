@@ -27,6 +27,8 @@ namespace RetroEngine.Game.Entities.Player
 
         public Vector2 MovementDirection = Vector2.Zero;
 
+        SkeletalMesh proxy = new SkeletalMesh();
+
         public void FireAction()
         {
             actionAnimation.Play();
@@ -43,11 +45,14 @@ namespace RetroEngine.Game.Entities.Player
             runRAnimation = AddAnimation("Animations/human/run_r.fbx", interpolation: true);
             runLAnimation = AddAnimation("Animations/human/run_l.fbx", interpolation: true);
 
+            proxy.LoadFromFile("Animations/human/rest.fbx");
+
             pistolIdle = AddAnimation("models/weapons/pistol2.fbx", interpolation: false, loop: false);
 
             actionAnimation = AddActionAnimation("models/weapons/pistol2.fbx", interpolation: true, BlendIn: 0);
 
         }
+
 
         protected override AnimationPose ProcessResultPose()
         {
@@ -70,8 +75,12 @@ namespace RetroEngine.Game.Entities.Player
 
             //locomotionPose = Animation.LerpPose(locomotionPose, actionAnimation.GetPoseLocal(), actionAnimation.GetBlendFactor());
 
+            proxy.SetBoneMeshTransformModification("spine_03", Matrix.Identity);
+            proxy.PastePoseLocal(locomotionPose);
 
-            var savedLocomotionPose = locomotionPose;
+            proxy.SetBoneMeshTransformModification("spine_03", GetSpineTransforms());
+
+            proxy.UpdateAnimationPose();
 
             //locomotionPose.LayeredBlend(idleAnimation.GetBoneByName("spine_01"), idlePose, 0.2f);
             //locomotionPose.LayeredBlend(idleAnimation.GetBoneByName("spine_02"), idlePose, 1f);
@@ -80,7 +89,29 @@ namespace RetroEngine.Game.Entities.Player
 
             //locomotionPose.LayeredBlend(idleAnimation.GetBoneByName("spine_03"), weaponPose, 1);
 
-            return locomotionPose;
+
+
+            return proxy.GetPoseLocal();
+
+        }
+
+        public static Matrix GetSpineTransforms()
+        {
+            MathHelper.Transform transform = new MathHelper.Transform();
+
+            transform.Rotation.X = Camera.rotation.X;
+
+            if (Camera.rotation.X > 0)
+            {
+                transform.Position.Y = Camera.rotation.X / 3;
+                transform.Position.Z = Camera.rotation.X / -15;
+            }
+            else
+            {
+                transform.Position.Y = MathF.Abs(Camera.rotation.X) / 10;
+                transform.Position.Z = MathF.Abs(Camera.rotation.X) / 6;
+            }
+            return transform.ToMatrix();
 
         }
 

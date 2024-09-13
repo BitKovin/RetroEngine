@@ -85,10 +85,10 @@ namespace RetroEngine.Game.Entities.Weapons
                 MathHelper.Transform transformSmall = new MathHelper.Transform();
                 transformSmall.Rotation.X = MathHelper.Lerp(0, targetRot, 0.4f);
 
-                pistolAnimationAim.SetBoneMeshTransformModification("spine_03", transformSmall.ToMatrix());
-                pistolAnimationAim.SetBoneMeshTransformModification("upperarm_l", transformBig.ToMatrix());
+                //pistolAnimationAim.SetBoneMeshTransformModification("spine_03", transformSmall.ToMatrix());
+                //pistolAnimationAim.SetBoneMeshTransformModification("upperarm_l", transformBig.ToMatrix());
                 //pistolAnimation.SetBoneMeshTransformModification("head", transformSmall.ToMatrix());
-                pistolAnimationAim.SetBoneMeshTransformModification("upperarm_r", transformBig.ToMatrix());
+                //pistolAnimationAim.SetBoneMeshTransformModification("upperarm_r", transformBig.ToMatrix());
 
                 pistolAnimationAim.Update(Time.DeltaTime);
             }
@@ -294,8 +294,10 @@ namespace RetroEngine.Game.Entities.Weapons
 
             pose.LayeredBlend(pistolAnimationAim.GetBoneByName("spine_02"), weaponPose,1, MathHelper.Saturate(aimAnimation));
 
+            meshTp.SetBoneMeshTransformModification("spine_03", PlayerBodyAnimator.GetSpineTransforms()*Matrix.CreateRotationX(MathHelper.ToRadians(6)));
+
             meshTp.PastePoseLocal(pose);
-            return pose;
+            return meshTp.GetPoseLocal();
         }
         void LoadVisual()
         {

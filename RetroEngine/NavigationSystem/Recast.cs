@@ -91,16 +91,16 @@ namespace RetroEngine.NavigationSystem
 
             RcVec3f m_polyPickExt = new RcVec3f(2, 4, 2);
 
-            lock (NavigationSystem.Recast.TileCache.GetNavMesh())
+            lock (dtNavMesh)
                 navMeshQuery.FindNearestPoly(start.ToRc(), m_polyPickExt, filter, out startRef, out var _, out var _);
 
-            lock (NavigationSystem.Recast.TileCache.GetNavMesh())
+            lock (dtNavMesh)
                 navMeshQuery.FindNearestPoly(end.ToRc(), m_polyPickExt, filter, out endRef, out var _, out var _);
 
 
             DtStatus result;
 
-            lock (NavigationSystem.Recast.dtNavMesh) lock(TileCache)
+            lock (dtNavMesh)
                 result = rcTestNavMeshTool.FindFollowPath(NavigationSystem.Recast.dtNavMesh, navMeshQuery, startRef, endRef, start.ToRc(), end.ToRc(), filter, true, ref longs, 0, ref path);
 
             if (result.Succeeded())

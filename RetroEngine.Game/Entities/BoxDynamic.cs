@@ -140,7 +140,7 @@ namespace RetroEngine.Game.Entities
 
             body = Physics.CreateBox(this, scale.ToNumerics());
             body.SetPosition(Position.ToNumerics());
-            body.SetMassProps(scale.Length(), body.CollisionShape.CalculateLocalInertia(scale.Length()*10));
+            body.SetMassProps(scale.Length() * 10, body.CollisionShape.CalculateLocalInertia(scale.Length()));
             //body.UserIndex = (int)BodyType.HitTest;
             mesh.Scale = scale;
 

@@ -299,6 +299,11 @@ namespace RetroEngine
 
         }
 
+        public void UpdateAnimationPose()
+        {
+            RiggedModel.UpdatePose();
+        }
+
         public RiggedModelNode GetBoneByName(string name)
         {
             if (RiggedModel != null)
@@ -518,7 +523,7 @@ namespace RetroEngine
                 bias = 0.013f;
 
             if (veryClose)
-                bias = 0.006f;
+                bias = 0.004f;
 
             if (viewmodel)
                 bias = 0.001f;
@@ -1569,6 +1574,28 @@ namespace RetroEngine
                 Pose[n.name] = MathHelper.Transform.Lerp(a, b, progress).ToMatrix();
 
             }
+        }
+
+        public AnimationPose Copy()
+        {
+            AnimationPose pose = new AnimationPose();
+
+            pose.Pose = new Dictionary<string, Matrix>(Pose.Count);
+
+            foreach(var p  in Pose)
+            {
+                pose.Pose.Add(p.Key, p.Value);
+            }
+
+            pose.BoneOverrides = new Dictionary<string, BonePoseBlend>(BoneOverrides.Count);
+
+            foreach (var b in BoneOverrides)
+            {
+                pose.BoneOverrides.Add(b.Key, b.Value);
+            }
+
+            return pose;
+
         }
 
 

@@ -253,6 +253,7 @@ namespace RetroEngine.Skeletal
         public void UpdatePose()
         {
             IterateUpdate(rootNodeOfTree);
+            animationPose = new AnimationPose();
         }
 
         /// <summary>

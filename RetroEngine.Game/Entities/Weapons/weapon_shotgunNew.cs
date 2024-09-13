@@ -74,10 +74,10 @@ namespace RetroEngine.Game.Entities.Weapons
             MathHelper.Transform transformSmall = new MathHelper.Transform();
             transformSmall.Rotation.X = MathHelper.Lerp(0, targetRot, 0.4f);
 
-            TpFire.SetBoneMeshTransformModification("spine_03", transformSmall.ToMatrix());
-            TpFire.SetBoneMeshTransformModification("upperarm_l", transformBig.ToMatrix());
+            //TpFire.SetBoneMeshTransformModification("spine_03", transformSmall.ToMatrix());
+            //TpFire.SetBoneMeshTransformModification("upperarm_l", transformBig.ToMatrix());
             //pistolAnimation.SetBoneMeshTransformModification("head", transformSmall.ToMatrix());
-            TpFire.SetBoneMeshTransformModification("upperarm_r", transformBig.ToMatrix());
+            //TpFire.SetBoneMeshTransformModification("upperarm_r", transformBig.ToMatrix());
 
             arms.Visible = ((ICharacter)player).isFirstPerson();
             mesh.Viewmodel = ((ICharacter)player).isFirstPerson();
@@ -202,14 +202,17 @@ namespace RetroEngine.Game.Entities.Weapons
 
         public override AnimationPose ApplyWeaponAnimation(AnimationPose inPose)
         {
-
-            AnimationPose pose = inPose;
+            AnimationPose pose = inPose.Copy();
 
             pose.LayeredBlend(TpFire.GetBoneByName("spine_03"), TpFire.GetPoseLocal());
 
             meshTp.PastePoseLocal(pose);
 
-            return pose;
+            meshTp.SetBoneMeshTransformModification("spine_03", PlayerBodyAnimator.GetSpineTransforms());
+
+            meshTp.PastePoseLocal(meshTp.GetPoseLocal());
+
+            return meshTp.GetPoseLocal();
         }
 
         void LoadVisual()

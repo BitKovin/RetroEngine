@@ -163,7 +163,7 @@ namespace RetroEngine
 
             if (Recast.dtNavMesh != null && GameMain.Instance.paused == false)
             {
-                lock(Recast.TileCache)
+                lock(Recast.TileCache) lock(Recast.dtNavMesh)
                     Recast.TileCache?.Update();
 
                     if(DrawNavigation)
