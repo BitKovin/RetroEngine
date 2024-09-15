@@ -38,12 +38,17 @@ namespace RetroEngine.Game.Entities
 
             mesh.Update(Time.DeltaTime);
 
-            Vector3 rootMotion = mesh.PullRootMotion();
+            var rootMotion = mesh.PullRootMotion();
 
             mesh.AlwaysUpdateVisual = true;
 
-            Position += rootMotion;
+            Position += rootMotion.Position;
+            //Rotation += rootMotion.Rotation;
             mesh.Position = Position;
+            mesh.Rotation = Rotation;
+
+            DrawDebug.Sphere(0.3f, Position, Vector3.Zero, 0.01f);
+            DrawDebug.Line(Position + Vector3.UnitY, Position + Vector3.UnitY + Rotation.GetForwardVector(), Vector3.UnitY, 0.01f);
 
             mesh.UpdateHitboxes();
 

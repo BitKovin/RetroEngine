@@ -108,6 +108,9 @@ namespace RetroEngine.Skeletal
         public Matrix World = Matrix.Identity;
 
         public Vector3 TotalRootMotion = new Vector3();
+        public Vector3 TotalRootMotionRot = new Vector3();
+
+        public MathHelper.Transform StartRootTransform = new MathHelper.Transform();
 
         #region methods
 
@@ -207,10 +210,19 @@ namespace RetroEngine.Skeletal
 
             var transform = root.LocalFinalTransformMg.DecomposeMatrix();
 
+
             Vector3 motionPos = transform.Position - OldRootTransform.Position;
+
+
+            motionPos = Vector3.Transform(motionPos, MathHelper.GetRotationMatrix(RootMotionOffsetRot));
+
             Vector3 motionRot = transform.Rotation - OldRootTransform.Rotation;
 
             TotalRootMotion += motionPos/100;
+
+            if (currentFrame != 0)
+                TotalRootMotionRot += motionRot;
+
 
             OldRootTransform = transform;
 
@@ -218,10 +230,10 @@ namespace RetroEngine.Skeletal
         }
 
         public Vector3 RootMotionOffset = new Vector3();
+        public Vector3 RootMotionOffsetRot = new Vector3();
 
         void RootMotionFinishAnimation()
         {
-
             if (rootNodeOfTree == null)
             {
                 return;
@@ -243,9 +255,13 @@ namespace RetroEngine.Skeletal
             var transform = root.LocalFinalTransformMg.DecomposeMatrix();
 
             Vector3 motionPos = transform.Position;
-            Vector3 motionRot = OldRootTransform.Rotation;
+            Vector3 motionRot = transform.Rotation;
+
+            //motionPos = Vector3.Transform(motionPos, MathHelper.GetRotationMatrix(RootMotionOffsetRot));
 
             RootMotionOffset += motionPos / 100;
+            RootMotionOffsetRot += motionRot - StartRootTransform.Rotation;
+            
             //Console.WriteLine(motionPos);
             //TotalRootMotion += motionPos / 100;
         }
@@ -319,6 +335,19 @@ namespace RetroEngine.Skeletal
                     RootMotionFinishAnimation();
 
                 }
+
+                int nodeCount = originalAnimations[currentAnimation].animatedNodes.Count;
+                for (int nodeLooped = 0; nodeLooped < nodeCount; nodeLooped++)
+                {
+                    var animNodeframe = originalAnimations[currentAnimation].animatedNodes[nodeLooped];
+                    var node = animNodeframe.nodeRef;
+
+                    if(node.RootMotionBone)
+                    {
+                        StartRootTransform = animNodeframe.frameOrientations[0].DecomposeMatrix();
+                    }
+                }
+
                 if (UpdateVisual == false) return;
                 // use the precalculated frame time lookups.
                 if (UseStaticGeneratedFrames)
@@ -326,7 +355,6 @@ namespace RetroEngine.Skeletal
                     // set the local node transforms from the frame.
                     if (currentFrame < numbOfFrames)
                     {
-                        int nodeCount = originalAnimations[currentAnimation].animatedNodes.Count;
                         for (int nodeLooped = 0; nodeLooped < nodeCount; nodeLooped++)
                         {
                             var animNodeframe = originalAnimations[currentAnimation].animatedNodes[nodeLooped];
@@ -343,7 +371,6 @@ namespace RetroEngine.Skeletal
                 // use the calculated interpolated frames directly
                 if (UseStaticGeneratedFrames == false)
                 {
-                    int nodeCount = originalAnimations[currentAnimation].animatedNodes.Count;
                     for (int nodeLooped = 0; nodeLooped < nodeCount; nodeLooped++)
                     {
                         var animNodeframe = originalAnimations[currentAnimation].animatedNodes[nodeLooped];

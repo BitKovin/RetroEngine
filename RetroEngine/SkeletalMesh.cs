@@ -48,8 +48,10 @@ namespace RetroEngine
         AnimationPose oldAnimPose;
 
         Vector3 OldRootMotion = new Vector3();
+        Vector3 OldRootMotionRot = new Vector3();
 
         Vector3 RootMotionPositionOffset = new Vector3();
+        Vector3 RootMotionRotationOffset = new Vector3();
 
         public bool isRagdoll { get; protected set; }
 
@@ -103,24 +105,35 @@ namespace RetroEngine
             RiggedModel.overrideAnimationFrameTime = -1;
         }
 
-        public Vector3 PullRootMotion()
+        public MathHelper.Transform PullRootMotion()
         {
 
-            if (RiggedModel == null) return Vector3.Zero;
+            if (RiggedModel == null) return new MathHelper.Transform();
 
             Vector3 rootMotion = RiggedModel.TotalRootMotion - OldRootMotion + RiggedModel.RootMotionOffset;
-            RiggedModel.RootMotionOffset = Vector3.Zero;
 
+            Vector3 rootMotionRot = RiggedModel.TotalRootMotionRot - OldRootMotionRot + RiggedModel.RootMotionOffsetRot;
+
+            RiggedModel.RootMotionOffset = Vector3.Zero;
+            RiggedModel.RootMotionOffsetRot = Vector3.Zero;
 
 
             if (rootMotion.Z < 0)
                 Console.WriteLine(OldRootMotion + "  " + RiggedModel.TotalRootMotion);
 
             OldRootMotion = RiggedModel.TotalRootMotion;
+            OldRootMotionRot = RiggedModel.TotalRootMotionRot;
 
             RootMotionPositionOffset = -RiggedModel.TotalRootMotion;
 
-            return rootMotion;
+            RootMotionRotationOffset = -RiggedModel.TotalRootMotionRot;
+
+            MathHelper.Transform transform = new MathHelper.Transform();
+
+            transform.Position = rootMotion;
+            transform.Rotation = rootMotionRot;
+
+            return transform;
 
         }
 
@@ -489,6 +502,11 @@ namespace RetroEngine
         protected override Matrix GetLocalOffset()
         {
             return Matrix.CreateTranslation(RootMotionPositionOffset);
+        }
+
+        protected override Matrix GetLocalRotationOffset()
+        {
+            return Matrix.Identity;// MathHelper.GetRotationMatrix(RootMotionRotationOffset);
         }
 
         public override Matrix GetWorldMatrix()
