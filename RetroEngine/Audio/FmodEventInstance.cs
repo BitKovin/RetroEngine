@@ -21,6 +21,8 @@ namespace RetroEngine.Audio
 
         private FMOD.Studio.EVENT_CALLBACK ProgrammerSoundCallbackDelegate;
 
+        static List<object> delegates = new List<object>();
+
         public Sound DefaultProgrammerSound;
 
         public string SoundTableKey = string.Empty;
@@ -32,6 +34,7 @@ namespace RetroEngine.Audio
 
             ProgrammerSoundCallbackDelegate = new FMOD.Studio.EVENT_CALLBACK(ProgrammerSoundCallback);
 
+            delegates.Add(ProgrammerSoundCallbackDelegate);
 
             EventInstance.SetCallback(ProgrammerSoundCallbackDelegate, FMOD.Studio.EVENT_CALLBACK_TYPE.CREATE_PROGRAMMER_SOUND | FMOD.Studio.EVENT_CALLBACK_TYPE.DESTROY_PROGRAMMER_SOUND);
         }
@@ -41,10 +44,11 @@ namespace RetroEngine.Audio
             base.Play(fromStart);
 
             Update();
-            if (EventInstance.PlaybackState == FMOD.Studio.PLAYBACK_STATE.PLAYING && fromStart == false)
+
+            if (EventInstance.PlaybackState == FMOD.Studio.PLAYBACK_STATE.PLAYING && fromStart)
             {
-                EventInstance.Paused = false;
-                return;
+                EventInstance.Stop();
+                EventInstance.TimelinePosition = 0;
             }
 
             EventInstance.Volume = 0;

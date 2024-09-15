@@ -51,7 +51,7 @@ namespace RetroEngine
 
         Vector3 RootMotionPositionOffset = new Vector3();
 
-        public bool isRagdoll {  get; protected set; }
+        public bool isRagdoll { get; protected set; }
 
         public SkeletalMesh() : base()
         {
@@ -121,6 +121,13 @@ namespace RetroEngine
             RootMotionPositionOffset = -RiggedModel.TotalRootMotion;
 
             return rootMotion;
+
+        }
+
+        public int GetCurrentAnimationFrame()
+        {
+
+            return RiggedModel.currentFrame;
 
         }
 
@@ -585,8 +592,8 @@ namespace RetroEngine
 
                     if (meshPartData != null)
                     {
-                        if (finalizedMeshHide.Contains(meshPartData.Name))
-                            continue;
+                       // if (finalizedMeshHide.Contains(meshPartData.Name))
+                            //continue;
                     }
 
                     // Set the vertex buffer and index buffer for this mesh part
@@ -691,6 +698,7 @@ namespace RetroEngine
 
                         if (meshPartData != null)
                         {
+                            if(pointLightDraw == false)
                             if (finalizedMeshHide.Contains(meshPartData.Name))
                                 continue;
                         }
@@ -1134,30 +1142,36 @@ namespace RetroEngine
 
         }
 
-        public void StartRagdoll()
+        public void StartRagdollForBone(string bone)
         {
-
-
-            CalculateRagdollRestPose();
-
-            CreateConstrains();
-
-            ApplyPoseIntoRagdoll();
-
-            foreach (HitboxInfo hitbox in hitboxes)
+            foreach(HitboxInfo hitbox in hitboxes)
             {
-                if(hitbox.RagdollRigidBodyRef == null) continue;
+                if(hitbox.Bone != bone) continue;
+
+
+
+            }
+        }
+
+        void StartRagdollForHitbox(HitboxInfo hitbox)
+        {
+            
+                CalculateRagdollRestPoseForHitbox(hitbox);
+                CreateConstrainsForBone(hitbox);
+                ApplyPoseIntoRagdollForHitbox(hitbox);
+
+                if (hitbox.RagdollRigidBodyRef == null) return;
 
                 var body = hitbox.RagdollRigidBodyRef;
 
 
                 body.ActivationState = ActivationState.WantsDeactivation;
 
-                
+
 
                 body.Flags = RigidBodyFlags.None;
 
-                body.Gravity = new System.Numerics.Vector3(0,-9,0);
+                body.Gravity = new System.Numerics.Vector3(0, -9, 0);
 
                 body.CollisionFlags = CollisionFlags.None;
 
@@ -1171,9 +1185,54 @@ namespace RetroEngine
 
                 body.Activate(true);
 
+            
+        }
+
+        public void StartRagdoll()
+        {
+
+            foreach (HitboxInfo hitbox in hitboxes)
+            {
+                StartRagdollForHitbox(hitbox);
             }
 
-            isRagdoll = true;
+                /*
+                CalculateRagdollRestPose();
+
+                CreateConstrains();
+
+                ApplyPoseIntoRagdoll();
+
+                foreach (HitboxInfo hitbox in hitboxes)
+                {
+                    if(hitbox.RagdollRigidBodyRef == null) continue;
+
+                    var body = hitbox.RagdollRigidBodyRef;
+
+
+                    body.ActivationState = ActivationState.WantsDeactivation;
+
+
+
+                    body.Flags = RigidBodyFlags.None;
+
+                    body.Gravity = new System.Numerics.Vector3(0,-9,0);
+
+                    body.CollisionFlags = CollisionFlags.None;
+
+                    body.CcdMotionThreshold = 0.00001f;
+                    body.CcdSweptSphereRadius = 0.1f;
+
+                    body.ActivationState = ActivationState.WantsDeactivation;
+
+
+                    body.SetCollisionMask(BodyType.World);
+
+                    body.Activate(true);
+
+                }
+                */
+                isRagdoll = true;
 
 
         }
@@ -1224,61 +1283,96 @@ namespace RetroEngine
 
         public bool CreateHingeConstraints = false;
 
+        void CreateConstrainsForBone(HitboxInfo hitbox)
+        {
+            if (hitbox.RagdollParrentRigidBody == null) return;
+
+
+            Physics.Remove(hitbox.Constraint);
+            Physics.Remove(hitbox.Constraint2);
+
+            if (hitbox.ConstrainLocal2 == Matrix.Identity)
+            {
+                hitbox.ConstrainLocal2 = hitbox.BoneMatrix * Matrix.Invert(hitbox.RagdollParrentRigidBody.WorldTransform);//calculate relative transformation
+                                                                                                                          //hitbox.ConstrainLocal2 = Matrix.Invert(hitbox.ConstrainLocal2);
+            }
+
+
+            hitbox.Constraint = Physics.CreateGenericConstraint(hitbox.RagdollRigidBodyRef, hitbox.RagdollParrentRigidBody, Matrix.Identity.ToPhysics(), hitbox.ConstrainLocal2.ToPhysics());
+
+            hitbox.Constraint.AngularLowerLimit = (hitbox.AngularLowerLimit / 180 * (float)Math.PI);
+            hitbox.Constraint.AngularUpperLimit = (hitbox.AngularUpperLimit / 180 * (float)Math.PI);
+
+            if (CreateHingeConstraints && hitbox.Parrent != "")
+            {
+
+                var boneTrans = GetBoneMatrix(hitbox.Bone).DecomposeMatrix();
+                var boneTransP = GetBoneMatrix(hitbox.Parrent).DecomposeMatrix();
+                //hitbox.RagdollRigidBodyRef.SetTransform(boneTrans.Position, boneTrans.Rotation);
+
+
+                var boneT = Matrix.CreateRotationX(boneTrans.Rotation.X / 180 * (float)Math.PI) *
+                Matrix.CreateRotationY(boneTrans.Rotation.Y / 180 * (float)Math.PI) *
+                Matrix.CreateRotationZ(boneTrans.Rotation.Z / 180 * (float)Math.PI);
+                boneT.Translation = boneTrans.Position;
+
+                var bonePT = Matrix.CreateRotationX(boneTransP.Rotation.X / 180 * (float)Math.PI) *
+                Matrix.CreateRotationY(boneTransP.Rotation.Y / 180 * (float)Math.PI) *
+                Matrix.CreateRotationZ(boneTransP.Rotation.Z / 180 * (float)Math.PI);
+                bonePT.Translation = boneTransP.Position;
+
+                var frame = boneT * Matrix.Invert(hitbox.RagdollParrentRigidBody.WorldTransform);
+
+                HingeConstraint animfollowConstraint = Physics.CreateHingeConstraint(hitbox.RagdollRigidBodyRef, hitbox.RagdollParrentRigidBody, Matrix.Identity.ToPhysics(), frame.ToPhysics());
+                hitbox.Constraint2 = animfollowConstraint;
+
+                //animfollowConstraint.SetFrames(Matrix.Identity.ToPhysics(), hitbox.ConstrainLocal2.ToPhysics());
+
+                animfollowConstraint.SetLimit(-MathF.PI, MathF.PI);
+            }
+        }
+
         public void CreateConstrains()
         {
             foreach(HitboxInfo hitbox in hitboxes)
             {
 
-                if(hitbox.RagdollParrentRigidBody == null) continue;
 
-
-                Physics.Remove(hitbox.Constraint);
-                Physics.Remove(hitbox.Constraint2);
-
-                if (hitbox.ConstrainLocal2 == Matrix.Identity)
-                {
-                    hitbox.ConstrainLocal2 = hitbox.BoneMatrix * Matrix.Invert(hitbox.RagdollParrentRigidBody.WorldTransform);//calculate relative transformation
-                    //hitbox.ConstrainLocal2 = Matrix.Invert(hitbox.ConstrainLocal2);
-                }
-
-
-                hitbox.Constraint = Physics.CreateGenericConstraint(hitbox.RagdollRigidBodyRef, hitbox.RagdollParrentRigidBody, Matrix.Identity.ToPhysics(), hitbox.ConstrainLocal2.ToPhysics());
-
-                hitbox.Constraint.AngularLowerLimit = (hitbox.AngularLowerLimit / 180 * (float)Math.PI);
-                hitbox.Constraint.AngularUpperLimit = (hitbox.AngularUpperLimit / 180 * (float)Math.PI);
-
-                if(CreateHingeConstraints && hitbox.Parrent!="")
-                {
-
-                    var boneTrans = GetBoneMatrix(hitbox.Bone).DecomposeMatrix();
-                    var boneTransP = GetBoneMatrix(hitbox.Parrent).DecomposeMatrix();
-                    //hitbox.RagdollRigidBodyRef.SetTransform(boneTrans.Position, boneTrans.Rotation);
-
-
-                    var boneT = Matrix.CreateRotationX(boneTrans.Rotation.X / 180 * (float)Math.PI) *
-                    Matrix.CreateRotationY(boneTrans.Rotation.Y / 180 * (float)Math.PI) *
-                    Matrix.CreateRotationZ(boneTrans.Rotation.Z / 180 * (float)Math.PI);
-                    boneT.Translation = boneTrans.Position;
-
-                    var bonePT = Matrix.CreateRotationX(boneTransP.Rotation.X / 180 * (float)Math.PI) *
-                    Matrix.CreateRotationY(boneTransP.Rotation.Y / 180 * (float)Math.PI) *
-                    Matrix.CreateRotationZ(boneTransP.Rotation.Z / 180 * (float)Math.PI);
-                    bonePT.Translation = boneTransP.Position;
-
-                    var frame = boneT * Matrix.Invert(hitbox.RagdollParrentRigidBody.WorldTransform);
-
-                    HingeConstraint animfollowConstraint = Physics.CreateHingeConstraint(hitbox.RagdollRigidBodyRef, hitbox.RagdollParrentRigidBody, Matrix.Identity.ToPhysics(), frame.ToPhysics());
-                    hitbox.Constraint2 = animfollowConstraint;
-
-                    //animfollowConstraint.SetFrames(Matrix.Identity.ToPhysics(), hitbox.ConstrainLocal2.ToPhysics());
-
-                    animfollowConstraint.SetLimit(-MathF.PI, MathF.PI);
-                }
-
-                
+                CreateConstrainsForBone(hitbox);
 
                 //hitbox.Constraint.OverrideNumSolverIterations = 1;
 
+            }
+        }
+
+        void CalculateRagdollRestPoseForHitbox(HitboxInfo hitbox)
+        {
+            hitbox.StartBoneMatrix = hitbox.RagdollRigidBodyRef.WorldTransform;
+
+            if (hitbox.RigidBodyMatrix == Matrix.Identity)
+            {
+
+                var matrix = GetBoneMatrix(hitbox.Bone);
+
+
+
+                var boneTrans = matrix.DecomposeMatrix();
+                hitbox.RagdollRigidBodyRef.SetTransform(boneTrans.Position, boneTrans.Rotation);
+
+
+                hitbox.BoneMatrix = Matrix.CreateRotationX(boneTrans.Rotation.X / 180 * (float)Math.PI) *
+                Matrix.CreateRotationY(boneTrans.Rotation.Y / 180 * (float)Math.PI) *
+                Matrix.CreateRotationZ(boneTrans.Rotation.Z / 180 * (float)Math.PI);
+                hitbox.BoneMatrix.Translation = boneTrans.Position;
+
+                hitbox.RigidBodyMatrix = hitbox.RagdollRigidBodyRef.WorldTransform;
+
+                hitbox.savedRigidBodyMatrix = hitbox.RigidBodyMatrix;
+
+            }
+            else
+            {
+                hitbox.RagdollRigidBodyRef.WorldTransform = hitbox.savedRigidBodyMatrix.ToPhysics();
             }
         }
 
@@ -1288,33 +1382,7 @@ namespace RetroEngine
             {
                 if (hitbox.RagdollRigidBodyRef == null) continue;
 
-                hitbox.StartBoneMatrix = hitbox.RagdollRigidBodyRef.WorldTransform;
-
-                if (hitbox.RigidBodyMatrix == Matrix.Identity)
-                {
-
-                    var matrix = GetBoneMatrix(hitbox.Bone);
-
-
-
-                    var boneTrans = matrix.DecomposeMatrix();
-                    hitbox.RagdollRigidBodyRef.SetTransform(boneTrans.Position, boneTrans.Rotation);
-
-
-                    hitbox.BoneMatrix = Matrix.CreateRotationX(boneTrans.Rotation.X / 180 * (float)Math.PI) *
-                    Matrix.CreateRotationY(boneTrans.Rotation.Y / 180 * (float)Math.PI) *
-                    Matrix.CreateRotationZ(boneTrans.Rotation.Z / 180 * (float)Math.PI);
-                    hitbox.BoneMatrix.Translation = boneTrans.Position;
-
-                    hitbox.RigidBodyMatrix = hitbox.RagdollRigidBodyRef.WorldTransform;
-
-                    hitbox.savedRigidBodyMatrix = hitbox.RigidBodyMatrix;
-
-                }
-                else
-                {
-                    hitbox.RagdollRigidBodyRef.WorldTransform = hitbox.savedRigidBodyMatrix.ToPhysics();
-                }
+                CalculateRagdollRestPoseForHitbox(hitbox);
 
             }
         }
@@ -1335,12 +1403,18 @@ namespace RetroEngine
             }
         }
 
+        void ApplyPoseIntoRagdollForHitbox(HitboxInfo hitbox)
+        {
+            hitbox.RagdollRigidBodyRef.WorldTransform = hitbox.StartBoneMatrix.ToPhysics();
+        }
+
         public void ApplyPoseIntoRagdoll()
         {
 
             foreach (HitboxInfo hitbox in hitboxes)
             {
-                hitbox.RagdollRigidBodyRef.WorldTransform = hitbox.StartBoneMatrix.ToPhysics();
+
+                ApplyPoseIntoRagdollForHitbox(hitbox);
 
             }
         }
@@ -1580,19 +1654,9 @@ namespace RetroEngine
         {
             AnimationPose pose = new AnimationPose();
 
-            pose.Pose = new Dictionary<string, Matrix>(Pose.Count);
+            pose.Pose = new Dictionary<string, Matrix>(Pose);
 
-            foreach(var p  in Pose)
-            {
-                pose.Pose.Add(p.Key, p.Value);
-            }
-
-            pose.BoneOverrides = new Dictionary<string, BonePoseBlend>(BoneOverrides.Count);
-
-            foreach (var b in BoneOverrides)
-            {
-                pose.BoneOverrides.Add(b.Key, b.Value);
-            }
+            pose.BoneOverrides = new Dictionary<string, BonePoseBlend>(BoneOverrides);
 
             return pose;
 

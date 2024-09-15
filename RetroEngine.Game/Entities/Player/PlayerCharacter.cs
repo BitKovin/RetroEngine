@@ -32,7 +32,7 @@ namespace RetroEngine.Game.Entities.Player
 
         public RigidBody body;
 
-        float maxSpeed = 8;
+        float maxSpeed = 6;
         float maxSpeedAir = 2;
         float acceleration = 90;
         float airAcceleration = 20;
@@ -65,7 +65,7 @@ namespace RetroEngine.Game.Entities.Player
 
         public bool flashlightEnabled = false;
 
-        float bobSpeed = 8;
+        float bobSpeed = 6;
 
         PlayerUI PlayerUI;
 
@@ -91,7 +91,7 @@ namespace RetroEngine.Game.Entities.Player
 
         Vector3 CameraRotation = new Vector3();
 
-        bool useThirdPersonAnimations = true;
+        bool useThirdPersonAnimations = false;
 
         //particle_system_meleeTrail meleeTrail;
         public PlayerCharacter() : base()
@@ -197,7 +197,7 @@ namespace RetroEngine.Game.Entities.Player
             stepSoundPlayer = Level.GetCurrent().AddEntity(new SoundPlayer()) as SoundPlayer;
             stepSound = FmodEventInstance.Create("event:/Character/Player Footsteps");
             stepSoundPlayer.SetSound(stepSound);
-            stepSoundPlayer.Volume = 0.1f;
+            stepSoundPlayer.Volume = 0.5f;
 
             stepSound.SetParameter("Surface", 1);
 
@@ -341,9 +341,12 @@ namespace RetroEngine.Game.Entities.Player
             Matrix showR = new Matrix();
             Matrix showL = new Matrix();
 
-            
+            bodyMesh.MeshHideList.Remove("head");
 
-            if(thirdPerson || useThirdPersonAnimations)
+            if(thirdPerson == false)
+                bodyMesh.MeshHideList.Add("head");
+
+            if (thirdPerson || useThirdPersonAnimations)
             {
                 bodyMesh.SetBoneMeshTransformModification("upperarm_r", show.ToMatrix());
                 bodyMesh.SetBoneMeshTransformModification("upperarm_l", show.ToMatrix());
@@ -394,7 +397,7 @@ namespace RetroEngine.Game.Entities.Player
 
             if (currentWeapon != null && (thirdPerson || useThirdPersonAnimations))
             {
-                resultPose = currentWeapon.ApplyWeaponAnimation(pose);
+                resultPose = currentWeapon.ApplyWeaponAnimation(pose.Copy());
 
             }
 
@@ -440,6 +443,8 @@ namespace RetroEngine.Game.Entities.Player
             //bob += Camera.rotation.GetUpVector() * (float)(Math.Abs(Math.Sin(bobProgress * bobSpeed * 1))) * 0.2f;
         }
 
+        Delay stepSoundCooldown = new Delay();
+
         void UpdateMovement()
         {
 
@@ -457,6 +462,7 @@ namespace RetroEngine.Game.Entities.Player
             if (Input.GetAction("moveLeft").Holding())
                 input -= new Vector2(1, 0);
 
+            //maxSpeed = Input.GetAction("run").Holding() ? 7 : 4;
 
             Vector3 motion = new Vector3();
 
@@ -483,7 +489,7 @@ namespace RetroEngine.Game.Entities.Player
                     
                     if (Math.Sin(bobProgress * bobSpeed * 2) <= 0 && Math.Sin((bobProgress + Time.DeltaTime) * bobSpeed * 2) > 0)
                     {
-                        stepSoundPlayer.Play(true);
+                        //stepSoundPlayer.Play(true);
                     }
 
                     bobProgress += Time.DeltaTime;
@@ -497,6 +503,18 @@ namespace RetroEngine.Game.Entities.Player
 
                     TryStep(MathHelper.RotateVector(motion.Normalized() * 1f / 1.6f, Vector3.UnitY, 35));
                     TryStep(MathHelper.RotateVector(motion.Normalized() * 1f / 1.6f, Vector3.UnitY, -35));
+
+                    if(stepSoundCooldown.Wait() == false)
+                    {
+                        if(PlayerBodyAnimator.CanPlayStepSound())
+                        {
+
+                            stepSoundCooldown.AddDelay(0.05f);
+
+                            stepSoundPlayer.Play(true);
+
+                        }
+                    }
 
                 }
                 else
@@ -771,7 +789,7 @@ namespace RetroEngine.Game.Entities.Player
         {
             MathHelper.Transform t = bodyMesh.GetBoneMatrix("head").DecomposeMatrix();
 
-            Camera.position = t.Position + Camera.Forward * 0.15f;
+            Camera.position = t.Position + Camera.Forward * 0.003f;
             Camera.position += Camera.rotation.GetUpVector() * 0.0f;
         }
 

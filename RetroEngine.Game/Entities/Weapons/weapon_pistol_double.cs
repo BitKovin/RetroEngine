@@ -222,7 +222,7 @@ namespace RetroEngine.Game.Entities.Weapons
                 fireSoundPlayer2.Play(true);
             }
 
-            pistolAnimationAim.PlayAnimation(0, false);
+            pistolAnimationAim.PlayAnimation(0, false,0);
 
             Bullet bullet = new Bullet();
             bullet.ignore.Add(player);
@@ -245,7 +245,7 @@ namespace RetroEngine.Game.Entities.Weapons
                 
             }
 
-            Vector3 endPos = Camera.position + Camera.rotation.GetForwardVector() * 50;
+            Vector3 endPos = Camera.position + Camera.rotation.GetForwardVector() * 30;
 
             bulletRotation = MathHelper.FindLookAtRotation(startPos, endPos);
 
@@ -288,7 +288,7 @@ namespace RetroEngine.Game.Entities.Weapons
         public override AnimationPose ApplyWeaponAnimation(AnimationPose inPose)
         {
 
-            AnimationPose pose = inPose;
+            AnimationPose pose = inPose.Copy();
 
             AnimationPose weaponPose = Animation.LerpPose(pistolAnimationIdle.GetPoseLocal(), pistolAnimationAim.GetPoseLocal(), MathHelper.Saturate(aimAnimation));
 

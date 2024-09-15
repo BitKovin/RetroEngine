@@ -116,6 +116,8 @@ namespace RetroEngine.Game
             Input.AddAction("moveLeft").AddKeyboardKey(Keys.A).AddButton(Buttons.LeftThumbstickLeft);
             Input.AddAction("moveRight").AddKeyboardKey(Keys.D).AddButton(Buttons.LeftThumbstickRight);
 
+            Input.AddAction("run").AddKeyboardKey(Keys.LeftShift).AddButton(Buttons.B);
+
             Input.AddAction("slot0").AddKeyboardKey(Keys.LeftAlt);
             Input.AddAction("slot1").AddKeyboardKey(Keys.D1);
             Input.AddAction("slot2").AddKeyboardKey(Keys.D2);

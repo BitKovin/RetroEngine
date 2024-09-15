@@ -45,6 +45,8 @@ namespace RetroEngine.Game.Entities.Player
             runRAnimation = AddAnimation("Animations/human/run_r.fbx", interpolation: true);
             runLAnimation = AddAnimation("Animations/human/run_l.fbx", interpolation: true);
 
+            
+
             proxy.LoadFromFile("Animations/human/rest.fbx");
 
             pistolIdle = AddAnimation("models/weapons/pistol2.fbx", interpolation: false, loop: false);
@@ -57,16 +59,21 @@ namespace RetroEngine.Game.Entities.Player
         protected override AnimationPose ProcessResultPose()
         {
 
-            if(MovementDirection.Y<-0.3)
+            float speedFactor = MovementSpeed/5.5f;
+
+            speedFactor = MathF.Min(speedFactor, 1.2f);
+
+            if (MovementDirection.Y<-0.3)
             {
-                Speed = -1;
+                Speed = -speedFactor;
                 MovementDirection *= -1;
             }else
             {
-                Speed = 1;
+                Speed = speedFactor;
             }
 
-            float blendFactor = MovementSpeed / 5;
+
+            float blendFactor = MovementSpeed / 3;
             blendFactor = Math.Clamp(blendFactor, 0, 1);
 
             var idlePose = idleAnimation.GetPoseLocal();
@@ -95,8 +102,24 @@ namespace RetroEngine.Game.Entities.Player
 
         }
 
+        public bool CanPlayStepSound()
+        {
+
+            int frame = runFAnimation.GetCurrentAnimationFrame();
+
+            bool can = (frame == 6) || (frame == 17);
+
+            if (can)
+                Console.WriteLine(frame);
+
+            return can;
+        }
+
         public static Matrix GetSpineTransforms()
         {
+
+            return Matrix.Identity;
+
             MathHelper.Transform transform = new MathHelper.Transform();
 
             transform.Rotation.X = Camera.rotation.X;
