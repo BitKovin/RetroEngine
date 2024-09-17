@@ -27,7 +27,7 @@ namespace RetroEngine
         public static Matrix finalizedProjectionViewmodel;
 
         public static Vector3 finalizedPosition;
-        public static Vector3 finalizedForward;
+        public static Vector3 finalizedRotation;
 
         public static BoundingFrustum frustum = new BoundingFrustum(new Matrix());
         public static BoundingFrustum frustumOcclusion = new BoundingFrustum(new Matrix());

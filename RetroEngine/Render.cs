@@ -120,6 +120,9 @@ namespace RetroEngine
 
         public static bool UsesOpenGL = false;
 
+        internal static bool DrawOnlyOpaque = true;
+        internal static bool DrawOnlyTransparent = true;
+
         public static bool AsyncPresent = true;
         public Render()
         {
@@ -180,7 +183,9 @@ namespace RetroEngine
 
         public void UpdateDataForShader(Shader effect)
         {
-            //effect.Parameters["viewDir"]?.SetValue(Camera.finalizedForward);
+            effect.Parameters["viewDirForward"]?.SetValue(Camera.finalizedRotation.GetForwardVector());
+            effect.Parameters["viewDirUp"]?.SetValue(Camera.finalizedRotation.GetUpVector());
+            effect.Parameters["viewDirRight"]?.SetValue(Camera.finalizedRotation.GetRightVector());
             effect.Parameters["viewPos"]?.SetValue(Camera.finalizedPosition);
 
 
@@ -313,10 +318,12 @@ namespace RetroEngine
             GameMain.Instance.WaitForFramePresent();
 
             //if (outputPath!=null)
-            DownsampleToTexture(ForwardOutput, oldFrame);
+            //DownsampleToTexture(ForwardOutput, oldFrame);
 
             List<StaticMesh> renderList = level.GetMeshesToRender();
 
+            DrawOnlyOpaque = false;
+            DrawOnlyTransparent = false;
             RenderPrepass(renderList);
             
 
@@ -348,8 +355,19 @@ namespace RetroEngine
 
 
             PointLight.DrawDirtyPointLights();
+
+
+            DrawOnlyOpaque = true;
+            DrawOnlyTransparent = false;
             RenderForwardPath(renderList);
-            
+
+            DownsampleToTexture(ForwardOutput, oldFrame);
+
+            DrawOnlyOpaque = false;
+            DrawOnlyTransparent = true;
+            RenderForwardPath(renderList, true);
+            DrawOnlyOpaque = false;
+            DrawOnlyTransparent = false;
 
 
             graphics.GraphicsDevice.BlendState = BlendState.Opaque;
@@ -401,50 +419,53 @@ namespace RetroEngine
         {
 
             Stats.RenderedMehses = 0;
-            
+
             UpdateShaderFrameData();
-            
+
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, (int)GetScreenResolution().X, (int)GetScreenResolution().Y);
 
 
             graphics.GraphicsDevice.SetRenderTargets(ForwardOutput, normalPath, ReflectivenessOutput, positionPath);
-            
 
 
-            graphics.GraphicsDevice.DepthStencilState = new DepthStencilState()
+            if (onlyTransperent == false)
             {
-                DepthBufferWriteEnable = true,
-                DepthBufferEnable = true,
-                DepthBufferFunction = CompareFunction.LessEqual,
-                StencilEnable = false,
-            };
-
-
-
-            if (GameMain.Instance.DefaultShader.ToLower() == "overdraw")
-                graphics.GraphicsDevice.Clear(Color.Black);
-            else
-                graphics.GraphicsDevice.Clear(ClearOptions.DepthBuffer, Color.Black, 1.0f, 0);
-
-            DepthApplyEffect.Parameters["OldFrame"].SetValue(GameMain.Instance.DefaultShader.ToLower() == "overdraw" ? black : oldFrame);
-            DrawFullScreenQuad(DepthPrepathBufferOutput, DepthApplyEffect);
-
-
-            RenderLevelGeometryForward(renderList);
-
-
-
-
-            if (Graphics.GeometricalShadowsEnabled)
-            {
-                graphics.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
-                GeometryShadowEffect.Parameters["ViewProjection"].SetValue(Camera.finalizedView * Camera.finalizedProjection);
-                GeometryShadowEffect.Parameters["ScreenHeight"].SetValue(ForwardOutput.Height);
-                GeometryShadowEffect.Parameters["ScreenWidth"].SetValue(ForwardOutput.Width);
-
-                foreach (var mesh in renderList)
+                graphics.GraphicsDevice.DepthStencilState = new DepthStencilState()
                 {
-                    mesh?.DrawGeometryShadow();
+                    DepthBufferWriteEnable = true,
+                    DepthBufferEnable = true,
+                    DepthBufferFunction = CompareFunction.LessEqual,
+                    StencilEnable = false,
+                };
+
+
+
+                if (GameMain.Instance.DefaultShader.ToLower() == "overdraw")
+                    graphics.GraphicsDevice.Clear(Color.Black);
+                else
+                    graphics.GraphicsDevice.Clear(ClearOptions.DepthBuffer, Color.Black, 1.0f, 0);
+
+                DepthApplyEffect.Parameters["OldFrame"].SetValue(GameMain.Instance.DefaultShader.ToLower() == "overdraw" ? black : oldFrame);
+                DrawFullScreenQuad(DepthPrepathBufferOutput, DepthApplyEffect);
+            }
+
+            RenderLevelGeometryForward(renderList, onlyTransperent);
+
+
+
+            if (onlyTransperent == false)
+            {
+                if (Graphics.GeometricalShadowsEnabled)
+                {
+                    graphics.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
+                    GeometryShadowEffect.Parameters["ViewProjection"].SetValue(Camera.finalizedView * Camera.finalizedProjection);
+                    GeometryShadowEffect.Parameters["ScreenHeight"].SetValue(ForwardOutput.Height);
+                    GeometryShadowEffect.Parameters["ScreenWidth"].SetValue(ForwardOutput.Width);
+
+                    foreach (var mesh in renderList)
+                    {
+                        mesh?.DrawGeometryShadow();
+                    }
                 }
             }
             //ParticleEmitter.RenderEmitter.DrawParticles(particlesToDraw);
@@ -465,7 +486,7 @@ namespace RetroEngine
                 if (skipTransparent && mesh.Transperent) continue;
 
                 if (mesh == null) continue;
-                if (mesh.Transperent || onlyTransperent == false)
+                if (mesh.Transperent || onlyTransperent == false || mesh.Viewmodel)
                 {
                     
                     if(mesh.Static || OnlyStatic==false)

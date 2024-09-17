@@ -351,6 +351,9 @@ namespace RetroEngine.Game.Entities.Weapons
             arms.Viewmodel = true;
             arms.UseAlternativeRotationCalculation = true;
 
+            arms.Name = "arms";
+            arms2.Name = "arms";
+
             arms2.LoadFromFile("models/weapons/arms_n.fbx");
             arms2.textureSearchPaths.Add("textures/weapons/arms/");
             //arms2.CastShadows = false;

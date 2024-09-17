@@ -137,6 +137,8 @@ namespace RetroEngine
 
         public float NormalBiasScale = 1;
 
+        internal bool partialTransparency = false;
+
         public List<string> MeshHideList = new List<string>();
         protected string[] finalizedMeshHide = new string[0];
 
@@ -631,6 +633,9 @@ namespace RetroEngine
         public virtual void DrawUnified()
         {
             if ((frameStaticMeshData.IsRendered == false) && frameStaticMeshData.Viewmodel == false || occluded) return;
+
+            if (Transperent && Render.DrawOnlyOpaque) return;
+            if(Transperent == false && Render.DrawOnlyTransparent) return;
 
             GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
             // Load the custom effect

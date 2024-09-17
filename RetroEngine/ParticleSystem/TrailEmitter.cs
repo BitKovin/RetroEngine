@@ -155,6 +155,9 @@ namespace RetroEngine.Particles
             if (destroyed) return;
 
             //if (Camera.frustum.Contains(new BoundingSphere(Position, BoundingRadius)) != ContainmentType.Disjoint)
+
+            if (Render.DrawOnlyOpaque) return;
+
             DrawRibbon();
         }
 

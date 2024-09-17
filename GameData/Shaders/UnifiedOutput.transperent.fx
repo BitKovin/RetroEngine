@@ -1,5 +1,7 @@
 ﻿#define SIMPLE_SHADOWS
+#define MAX_POINT_LIGHTS_SHADOWS 5
 #include "ShaderLib/BasicShader.fx"
+#include "ShaderLib/Transparency.fx"
 
 texture Texture;
 sampler TextureSampler = sampler_state
@@ -32,13 +34,23 @@ sampler ORMTextureSampler = sampler_state
     AddressV = Wrap;
 };
 
-
 bool earlyZ;
 
 PixelInput VertexShaderFunction(VertexInput input)
 {
     //return (PixelInput)0;
     return DefaultVertexShaderFunction(input);
+}
+
+
+float2 NormalToScreenSpace(float3 Normal)
+{
+    float2 output;
+    output.x = dot(Normal, viewDirRight);
+    output.y = dot(Normal, viewDirUp);
+
+
+    return output;
 }
 
 PixelOutput PixelShaderFunction(PixelInput input)
@@ -54,7 +66,6 @@ PixelOutput PixelShaderFunction(PixelInput input)
 
     if(earlyZ)
     {
-    
         DepthDiscard(depthIn,input);
     }
 
@@ -135,7 +146,10 @@ PixelOutput PixelShaderFunction(PixelInput input)
 
     textureColor = ApplyReflectionCubemapOnSurface(textureColor,albedo, reflectiveness, metalic, roughness, screenCoords, reflection, input.MyPosition);
 
-    output.Color = float4(textureColor, textureAlpha);
+    float camDist = distance(input.MyPosition, viewPos);
+
+    //output.Color = float4(textureColor, textureAlpha);
+    output.Color = ApplyRefraction(float4(textureColor, textureAlpha), FrameTextureSampler, screenCoords, mul(float4(pixelNormal,1), mul(View, Projection)).xy/50 * float2(1,-1)/camDist);
 
     return output;
 }

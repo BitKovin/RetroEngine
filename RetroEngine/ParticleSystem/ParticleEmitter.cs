@@ -350,6 +350,9 @@ namespace RetroEngine.Particles
                 particleModel = GetModelFromPath("models/particle.obj");
             }
 
+            if (Render.DrawOnlyOpaque) return;
+
+
             if (Camera.frustum.Contains(new BoundingSphere(Position, BoundingRadius)) != ContainmentType.Disjoint)
                 DrawParticles();
 

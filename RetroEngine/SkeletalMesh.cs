@@ -55,6 +55,8 @@ namespace RetroEngine
 
         public bool isRagdoll { get; protected set; }
 
+        public string Name = "";
+
         public SkeletalMesh() : base()
         {
 
@@ -808,12 +810,16 @@ namespace RetroEngine
         {
             if (frameStaticMeshData.IsRendered == false) { return; }
 
+
+
+            if (Viewmodel && Render.DrawOnlyOpaque) return;
+
             GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
             // Load the custom effect
-            
+
             if (RiggedModel != null)
             {
-
+                if(Render.DrawOnlyOpaque == false)
                 if (DepthTestEqual)
                 {
                     if (Viewmodel == false)
@@ -897,6 +903,17 @@ namespace RetroEngine
                         transperent = meshPartData.textureName.Contains("_t.");
 
                     Effect effect = Shader.GetAndApply(transperent ? SurfaceShaderInstance.ShaderSurfaceType.Transperent : SurfaceShaderInstance.ShaderSurfaceType.Default);
+
+                    if (Viewmodel == false)
+                    {
+                        if (transperent && Render.DrawOnlyOpaque) continue;
+                        if (transperent == false && Render.DrawOnlyTransparent) continue;
+                    }
+                    else
+                        partialTransparency = true;
+
+                    if (Transperent == false && transperent && partialTransparency == false)
+                        partialTransparency = true;
 
                     if (lastEffect != effect)
                         ApplyPointLights(effect);

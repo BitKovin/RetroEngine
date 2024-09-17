@@ -91,7 +91,9 @@ float3 ReflectionCubemapPosition;
 float DitherDisolve;
 
 float FarPlane;
-float3 viewDir;
+float3 viewDirForward;
+float3 viewDirRight;
+float3 viewDirUp;
 float3 viewPos;
 
 matrix InverseViewProjection;

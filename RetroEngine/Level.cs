@@ -386,7 +386,7 @@ namespace RetroEngine
             Camera.finalizedProjectionViewmodel = Camera.projectionViewmodel;
 
             Camera.finalizedPosition = Camera.position;
-            Camera.finalizedForward = Camera.rotation.GetForwardVector();
+            Camera.finalizedRotation = Camera.rotation;
 
             GameMain.Instance.render.EndOcclusionTest(Render.testedMeshes);
 
