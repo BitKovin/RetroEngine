@@ -17,7 +17,7 @@ namespace RetroEngine.Skeletal
             if (RiggedModel == null) return 0;
 
             float duration = RiggedModel.AnimationDuration;
-            float currentTime = RiggedModel.AnimationTime - RiggedModel.timeStart;
+            float currentTime = RiggedModel.AnimationTime;
 
             if (RiggedModel.animationRunning == false)
                 return 0;

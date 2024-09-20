@@ -224,9 +224,19 @@ namespace RetroEngine.Game.Entities.Player
 
             interpolatedPosition = Position;
 
+            PlayerBodyAnimator.OnAnimationEvent += PlayerBodyAnimator_OnAnimationEvent;
+
             if (Level.GetCurrent().FindEntityByName("PlayerGlobal") == null)
                 Level.GetCurrent().AddEntity(new Entities.Player.PlayerGlobal());
 
+        }
+
+        private void PlayerBodyAnimator_OnAnimationEvent(AnimationEvent animationEvent)
+        {
+            if(animationEvent.Name == "step")
+            {
+                PlayStepSound();
+            }
         }
 
         bool oldInWater = false;
@@ -504,18 +514,6 @@ namespace RetroEngine.Game.Entities.Player
                     TryStep(MathHelper.RotateVector(motion.Normalized() * 1f / 1.6f, Vector3.UnitY, 35));
                     TryStep(MathHelper.RotateVector(motion.Normalized() * 1f / 1.6f, Vector3.UnitY, -35));
 
-                    if(stepSoundCooldown.Wait() == false)
-                    {
-                        if(PlayerBodyAnimator.CanPlayStepSound())
-                        {
-
-                            stepSoundCooldown.AddDelay(0.05f);
-
-                            stepSoundPlayer.Play(true);
-
-                        }
-                    }
-
                 }
                 else
                 {
@@ -564,6 +562,15 @@ namespace RetroEngine.Game.Entities.Player
 
         }
 
+        void PlayStepSound()
+        {
+            if (stepSoundCooldown.Wait()) return;
+            stepSoundCooldown.AddDelay(0.05f);
+
+            if(onGround)
+            stepSoundPlayer.Play(true);
+
+        }
         void UpdateMovementWater()
         {
 

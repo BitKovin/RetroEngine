@@ -18,6 +18,8 @@ using RetroEngine.Graphic;
 
 namespace RetroEngine
 {
+
+    public delegate void AnimationEventPlayed(AnimationEvent animationEvent);
     public class SkeletalMesh : StaticMesh
     {
         protected RiggedModel RiggedModel;
@@ -55,6 +57,8 @@ namespace RetroEngine
 
         Vector3 RootMotionPositionOffset = new Vector3();
         Vector3 RootMotionRotationOffset = new Vector3();
+
+        public event AnimationEventPlayed OnAnimationEvent;
 
         public bool isRagdoll { get; protected set; }
 
@@ -172,7 +176,7 @@ namespace RetroEngine
 
         public void SetCurrentAnimationFrame(int frame)
         {
-
+            if(frame< 0) frame = 0;
             if (RiggedModel == null) return;
 
             RiggedModel.SetFrame(frame);
@@ -387,6 +391,68 @@ namespace RetroEngine
             return null;
         }
 
+        private int OldFrame = -1;
+        void UpdateAnimationEvents(bool negativeDelta)
+        {
+
+
+            int newFrame = GetCurrentAnimationFrame();
+
+            if (CurrentAnimationInfo.AnimationEvents.Length == 0)
+            {
+                OldFrame = newFrame;
+                return;
+            }
+
+            if (newFrame == OldFrame) return;
+
+            int animFrameDuration = GetCurrentAnimationFrameDuration();
+
+            if (newFrame >= animFrameDuration)
+                return;
+
+            
+
+            int currentFrame = OldFrame;
+
+            List<AnimationEvent> events = new List<AnimationEvent>();
+
+            while(currentFrame != newFrame)
+            {
+
+                if (negativeDelta)
+                {
+                    currentFrame--;
+                }
+                else
+                {
+                    currentFrame++;
+                }
+
+
+                if(currentFrame >= animFrameDuration)
+                    currentFrame = 0;
+
+                if (currentFrame < 0)
+                    currentFrame = animFrameDuration - 1;
+
+
+                foreach (var e in CurrentAnimationInfo.AnimationEvents)
+                {
+                    if(e.AnimationFrame == currentFrame)
+                        events.Add(e);
+                }
+
+
+            }
+
+            OldFrame = newFrame;
+
+            foreach (var e in events)
+                OnAnimationEvent?.Invoke(e);
+
+        }
+
         public virtual void Update(float deltaTime)
         {
             if (RiggedModel is null) return;
@@ -405,6 +471,9 @@ namespace RetroEngine
             {
                 PastePoseLocal(GetPoseLocal());
             }
+
+            if (deltaTime != 0)
+                UpdateAnimationEvents(deltaTime<0);
 
         }
 
@@ -479,10 +548,16 @@ namespace RetroEngine
 
                     CurrentAnimationInfo = anim;
 
-                    break;
+                    return;
                 }
             }
 
+            var newAnim = new AnimationInfo { AnimationIndex = id };
+
+            CurrentAnimationInfo = newAnim;
+
+            animationInfos.Add(newAnim);
+            OldFrame = -1;
         }
 
         public void SetAnimation(int id = 0)
@@ -1803,7 +1878,7 @@ namespace RetroEngine
     {
 
         [JsonInclude]
-        public int AnimationIndex = 0;
+        public int AnimationIndex = -1;
 
         [JsonInclude]
         public AnimationEvent[] AnimationEvents = new AnimationEvent[0];

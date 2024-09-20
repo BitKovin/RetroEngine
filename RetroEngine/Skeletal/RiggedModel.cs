@@ -78,7 +78,7 @@ namespace RetroEngine.Skeletal
         public int currentFrame = 0;
         public bool animationRunning = false;
         public bool loopAnimation = false;
-        public float timeStart = 0f;
+        //public float timeStart = 0f;
         public float currentAnimationFrameTime = 0;
 
         public float AnimationTime = 0;
@@ -298,10 +298,10 @@ namespace RetroEngine.Skeletal
 
                 AnimationDuration = animationTotalDuration;
 
-                while (AnimationTime < timeStart)
+                while (AnimationTime < 0)
                     AnimationTime = AnimationTime + animationTotalDuration;
 
-                currentAnimationFrameTime = (float)AnimationTime - timeStart;
+                currentAnimationFrameTime = (float)AnimationTime;
 
                 // just for seeing a single frame lets us override the current frame.
                 if (overrideAnimationFrameTime >= 0f)
@@ -325,7 +325,7 @@ namespace RetroEngine.Skeletal
                     if (loopAnimation)
                     {
                         currentAnimationFrameTime = currentAnimationFrameTime - animationTotalDuration;
-                        timeStart = AnimationTime; // + currentRunning;
+                        AnimationTime = 0;
                     }
                     else // animation completed
                     {
@@ -597,28 +597,28 @@ namespace RetroEngine.Skeletal
 
         public void StartCurrentAnimation()
         {
-            timeStart = AnimationTime;
+            AnimationTime = 0;
             animationRunning = true;
         }
 
 
         public void BeginAnimation(int animationIndex)
         {
-            timeStart = AnimationTime;
+            AnimationTime = 0;
             currentAnimation = animationIndex;
             animationRunning = true;
         }
 
         public void SetAnimation(int animationIndex)
         {
-            timeStart = AnimationTime;
+            AnimationTime = 0;
             currentAnimation = animationIndex;
             animationRunning = false;
         }
 
         public void SetAnimation(string name)
         {
-            timeStart = AnimationTime;
+            AnimationTime = 0;
 
             int index = 0;
 

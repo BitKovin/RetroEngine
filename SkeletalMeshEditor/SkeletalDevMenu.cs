@@ -276,7 +276,6 @@ namespace SkeletalMeshEditor
                 ImGui.Text("Event Data: ");
 
 
-
                 ImGui.InputText("event name", ref ev.Name, 30);
 
                 ImGui.InputInt("animation frame", ref ev.AnimationFrame);

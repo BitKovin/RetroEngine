@@ -20,6 +20,8 @@ namespace RetroEngine.Skeletal
 
         public bool UpdateVisual = true;
 
+        public event AnimationEventPlayed OnAnimationEvent;
+
         public void Update()
         {
 
@@ -74,6 +76,8 @@ namespace RetroEngine.Skeletal
             animation.UpdateFinalPose = false;
             animation.SetInterpolationEnabled(interpolation);
 
+            animation.OnAnimationEvent += Animation_OnAnimationEvent;
+
             return animation;
         }
 
@@ -98,7 +102,14 @@ namespace RetroEngine.Skeletal
                 AnimationsToUpdate.Add(animation);
             }
 
+            animation.OnAnimationEvent += Animation_OnAnimationEvent;
+
             return animation;
+        }
+
+        private void Animation_OnAnimationEvent(AnimationEvent animationEvent)
+        {
+            OnAnimationEvent?.Invoke(animationEvent);
         }
 
         public void LoadAssets()

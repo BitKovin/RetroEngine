@@ -95,6 +95,9 @@ namespace RetroEngine.Skeletal
             additionalMeshOffsets = RiggedModel.additionalMeshOffsets;
 
             RiggedModel.overrideAnimationFrameTime = -1;
+
+            LoadMeshMetaFromFile(path);
+
         }
 
         public override AnimationPose GetPoseLocal()
