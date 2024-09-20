@@ -76,6 +76,8 @@ namespace RetroEngine.Entities.Light
 
         LightVisibilityCheckMesh lightVisibilityCheckMesh = new LightVisibilityCheckMesh();
 
+        public static bool DisableShadows = false;
+
         public override void FromData(EntityData data)
         {
             base.FromData(data);
@@ -113,8 +115,11 @@ namespace RetroEngine.Entities.Light
             SkipUp = data.GetPropertyBool("dynamicSkipUp", false);
             SkipDown = data.GetPropertyBool("dynamicSkipDown", false);
 
+            if(DisableShadows)
+                CastShadows = false;
+
             if (CastShadows == false)
-                resolution = 5;
+                resolution = 2;
 
             lightData.Resolution = resolution;
 

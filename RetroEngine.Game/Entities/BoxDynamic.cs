@@ -55,7 +55,7 @@ namespace RetroEngine.Game.Entities
 
             soundPlayer.Position = Position;
 
-            videoPlayer = new VideoPlayer(GameMain.Instance.GraphicsDevice);
+            //videoPlayer = new VideoPlayer(GameMain.Instance.GraphicsDevice);
 
 
         }
@@ -76,7 +76,7 @@ namespace RetroEngine.Game.Entities
 
             //mesh.CastGeometricShadow = true;
 
-            video = AssetRegistry.LoadVideoFromFile("test.mp4");
+            //video = AssetRegistry.LoadVideoFromFile("test.mp4");
 
             
 
@@ -91,6 +91,7 @@ namespace RetroEngine.Game.Entities
         {
             base.FinalizeFrame();
 
+            return;
             if(Thread.CurrentThread == GameMain.RenderThread)
             {
 
@@ -128,8 +129,8 @@ namespace RetroEngine.Game.Entities
 
             base.Destroy();
 
-            videoPlayer.Dispose();
-            video.Dispose();
+            videoPlayer?.Dispose();
+            video?.Dispose();
 
         }
 

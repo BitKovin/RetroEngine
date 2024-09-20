@@ -34,11 +34,14 @@ namespace RetroEngine
 
         protected AnimationPose animationPose = new AnimationPose();
 
+        public AnimationInfo CurrentAnimationInfo = new AnimationInfo();
+
         public SkeletalMesh ParrentBounds;
 
         public bool UpdatePose = true;
 
         public List<HitboxInfo> hitboxes = new List<HitboxInfo>();
+        public List<AnimationInfo> animationInfos = new List<AnimationInfo>();
 
         public bool AlwaysUpdateVisual = false;
 
@@ -141,9 +144,55 @@ namespace RetroEngine
 
         public int GetCurrentAnimationFrame()
         {
+            if (RiggedModel == null) return 0;
 
             return RiggedModel.currentFrame;
 
+        }
+
+        public int GetCurrentAnimationIndex()
+        {
+
+            if (RiggedModel == null) return 0;
+
+            return RiggedModel.currentAnimation;
+
+        }
+
+        public int GetCurrentAnimationFrameDuration()
+        {
+            if (RiggedModel == null) return 0;
+
+            if (RiggedModel.currentAnimation >= 0 && RiggedModel.currentAnimation < RiggedModel.originalAnimations.Count)
+                return RiggedModel.originalAnimations[RiggedModel.currentAnimation].TotalFrames;
+
+            return 0;
+
+        }
+
+        public void SetCurrentAnimationFrame(int frame)
+        {
+
+            if (RiggedModel == null) return;
+
+            RiggedModel.SetFrame(frame);
+            RiggedModel.Update(0, true);
+        }
+
+        public bool IsPlayingAnimation()
+        {
+
+            if(RiggedModel == null) return false;
+
+            return RiggedModel.animationRunning;
+        }
+
+        public void SetIsPlayingAnimation(bool playing)
+        {
+
+            if (RiggedModel == null) return;
+
+            RiggedModel.animationRunning = playing;
         }
 
         public void CalculateBoundingSphere()
@@ -388,6 +437,8 @@ namespace RetroEngine
                 RiggedModel.Update(0);
                 newAnimInterpolationProgress = 1;
             }
+
+            SetCurrentAnimationInfo();
         }
 
         public void PlayAnimation(string name, bool looped = true, float interpolationTime = 0.2f)
@@ -407,8 +458,31 @@ namespace RetroEngine
             RiggedModel.BeginAnimation(RiggedModel.CurrentPlayingAnimationIndex);
             RiggedModel.loopAnimation = looped;
 
-            if(firstAnim)
+            if (firstAnim)
+            {
                 RiggedModel.Update(0);
+                newAnimInterpolationProgress = 1;
+            }
+
+            SetCurrentAnimationInfo();
+        }
+
+        void SetCurrentAnimationInfo()
+        {
+
+            int id = RiggedModel.currentAnimation;
+
+            foreach(var anim in animationInfos)
+            {
+                if(anim.AnimationIndex == id)
+                {
+
+                    CurrentAnimationInfo = anim;
+
+                    break;
+                }
+            }
+
         }
 
         public void SetAnimation(int id = 0)
@@ -498,6 +572,9 @@ namespace RetroEngine
 
         public bool IsAnimationPlaying()
         {
+
+            if(RiggedModel == null) return false;
+
             return RiggedModel.animationRunning;
         }
 
@@ -1527,8 +1604,12 @@ namespace RetroEngine
 
             }
 
-            hitboxes = meta.hitboxes.ToList();
 
+            if (meta.hitboxes != null)
+                hitboxes = meta.hitboxes.ToList();
+
+            if (meta.animationInfos != null)
+                animationInfos = meta.animationInfos.ToList();
 
         }
 
@@ -1537,6 +1618,7 @@ namespace RetroEngine
             SkeletalMeshMeta meta = new SkeletalMeshMeta();
 
             meta.hitboxes = hitboxes.ToArray();
+            meta.animationInfos = animationInfos.ToArray();
 
             JsonSerializerOptions options = new JsonSerializerOptions();
 
@@ -1557,7 +1639,8 @@ namespace RetroEngine
             [JsonInclude]
             public HitboxInfo[] hitboxes;
 
-
+            [JsonInclude]
+            public AnimationInfo[] animationInfos;
 
         }
 
@@ -1697,6 +1780,66 @@ namespace RetroEngine
 
         }
 
+
+    }
+
+    public class AnimationEvent
+    {
+
+        [JsonInclude]
+        public int AnimationFrame = 0;
+
+        [JsonInclude]
+        public string Name = "event";
+
+        public override string ToString()
+        {
+            return $"name: {Name}    Frame: {AnimationFrame}";
+        }
+
+    }
+
+    public class AnimationInfo
+    {
+
+        [JsonInclude]
+        public int AnimationIndex = 0;
+
+        [JsonInclude]
+        public AnimationEvent[] AnimationEvents = new AnimationEvent[0];
+
+        public AnimationEvent AddEvent(int frame, string name)
+        {
+            var list = AnimationEvents.ToList();
+
+            var e = new AnimationEvent { AnimationFrame = frame, Name = name };
+
+            list.Add(e);
+
+            AnimationEvents = list.ToArray();
+
+            return e;
+
+        }
+
+        public void RemoveEvent(AnimationEvent animationEvent)
+        {
+            var list = AnimationEvents.ToList();
+
+            list.Remove(animationEvent);
+            AnimationEvents = list.ToArray();
+
+        }
+
+        public AnimationEvent GetFromIndex(int index)
+        {
+            if(index< AnimationEvents.Length)
+            {
+                return AnimationEvents[index];
+            }
+
+            return null;
+        }
 
     }
 

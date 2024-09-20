@@ -336,13 +336,15 @@ namespace RetroEngine
             {
                 ShadowMapEffect.Parameters["LightDirection"]?.SetValue(Graphics.LightDirection);
                 ShadowMapMaskedEffect.Parameters["LightDirection"]?.SetValue(Graphics.LightDirection);
-                
 
 
-                RenderShadowMap(renderList);
-                RenderShadowMapClose(renderList);
-                RenderShadowMapVeryClose(renderList);
-                RenderShadowMapViewmodel(renderList);
+                if (Graphics.ShadowResolutionScale > 0.001f)
+                {
+                    RenderShadowMap(renderList);
+                    RenderShadowMapClose(renderList);
+                    RenderShadowMapVeryClose(renderList);
+                    RenderShadowMapViewmodel(renderList);
+                }
             }
             graphics.GraphicsDevice.RasterizerState = Graphics.DisableBackFaceCulling? RasterizerState.CullCounterClockwise : RasterizerState.CullNone;
                 

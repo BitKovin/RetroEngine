@@ -27,7 +27,7 @@ namespace RetroEngine.Game.Effects.Particles
             TexturePath = "particles/trail.png";
 
 
-            InitialSpawnCount = 2;
+            InitialSpawnCount = 3;
             SpawnRate = 30;
             //BoundingRadius = 30000;
             Emitting = true;

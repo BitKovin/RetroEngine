@@ -46,11 +46,11 @@ namespace SkeletalMeshEditor
                     SkeletalMeshPreview.instance.skeletalMesh.hitboxes = new List<HitboxInfo>();
                 }
 
-                if (ImGui.Button("Open"))
-                {
-                    SkeletalMeshPreview.instance.skeletalMesh.LoadMeshMetaFromFile(path);
-                    SkeletalMeshPreview.instance.skeletalMesh.ReloadHitboxes(SkeletalMeshPreview.instance);
-                }
+                //if (ImGui.Button("Open"))
+                //{
+                //    SkeletalMeshPreview.instance.skeletalMesh.LoadMeshMetaFromFile(path);
+                //    SkeletalMeshPreview.instance.skeletalMesh.ReloadHitboxes(SkeletalMeshPreview.instance);
+                //}
 
                 if (ImGui.Button("Save"))
                     SkeletalMeshPreview.instance.skeletalMesh.SaveMeshMetaToFile(path);
@@ -111,7 +111,6 @@ namespace SkeletalMeshEditor
 
             if (ImGui.Button("Load Animaion"))
             {
-                SkeletalMeshPreview.Animation = new RetroEngine.Skeletal.Animation();
                 SkeletalMeshPreview.Animation.LoadFromFile(animationPath);
                 SkeletalMeshPreview.Animation.PlayAnimation(animId);
             }
@@ -195,7 +194,7 @@ namespace SkeletalMeshEditor
             ImGui.End();
 
 
-
+            AnimationEventEditor();
 
             HitboxEditor();
         }
@@ -203,6 +202,88 @@ namespace SkeletalMeshEditor
         static Vector3 oldSize;
         static Vector3 oldPos;
         static Vector3 oldRot;
+
+
+        int selectedEvent = 0;
+
+        int animationFrame = 0;
+
+        int animationIndex = 0;
+
+        bool playingAnimation = false;
+
+        void AnimationEventEditor()
+        {
+
+
+
+            ImGui.Begin("animaiton event editor");
+
+            ImGui.InputInt("current animation", ref animationIndex);
+
+            ImGui.SameLine();
+
+
+            if (SkeletalMeshPreview.instance.skeletalMesh.GetCurrentAnimationIndex() != animationIndex)
+            {
+                SkeletalMeshPreview.instance.skeletalMesh.PlayAnimation(animationIndex);
+                SkeletalMeshPreview.Animation = null;
+            }
+
+            SkeletalMeshPreview.instance.skeletalMesh.SetIsPlayingAnimation(playingAnimation);
+
+            var names = GetEventsNames();
+            ImGui.Text("selected: " + selectedEvent.ToString());
+            ImGui.ListBox("  ", ref selectedEvent, names, names.Length, 3);
+            ImGui.SameLine();
+            ImGui.BeginGroup();
+            if(ImGui.Button("add"))
+            {
+                SkeletalMeshPreview.instance.skeletalMesh.CurrentAnimationInfo.AddEvent(animationFrame, "event_"+ animationFrame.ToString());
+            }
+
+            if (ImGui.Button("remove"))
+            {
+
+                var e = SkeletalMeshPreview.instance.skeletalMesh.CurrentAnimationInfo.GetFromIndex(selectedEvent);
+
+                SkeletalMeshPreview.instance.skeletalMesh.CurrentAnimationInfo.RemoveEvent(e);
+            }
+
+            ImGui.EndGroup();
+
+            if(SkeletalMeshPreview.instance.skeletalMesh.IsAnimationPlaying())
+                animationFrame = SkeletalMeshPreview.instance.skeletalMesh.GetCurrentAnimationFrame();
+            else
+                SkeletalMeshPreview.instance.skeletalMesh.SetCurrentAnimationFrame(animationFrame);
+
+            ImGui.SliderInt("CurrentFrame", ref animationFrame, 0, SkeletalMeshPreview.instance.skeletalMesh.GetCurrentAnimationFrameDuration()-1);
+            if (ImGui.Button(">"))
+            {
+                playingAnimation = true;
+            }
+            ImGui.SameLine();
+            if (ImGui.Button("||"))
+            {
+                playingAnimation = false;
+            }
+
+            var ev = SkeletalMeshPreview.instance.skeletalMesh.CurrentAnimationInfo.GetFromIndex(selectedEvent);
+
+            if (ev != null)
+            {
+                ImGui.Spacing();
+                ImGui.Text("Event Data: ");
+
+
+
+                ImGui.InputText("event name", ref ev.Name, 30);
+
+                ImGui.InputInt("animation frame", ref ev.AnimationFrame);
+            }
+            ImGui.End();
+
+        }
 
         void HitboxEditor()
         {
@@ -385,6 +466,20 @@ namespace SkeletalMeshEditor
             }
 
             return names.ToArray();
+        }
+
+        string[] GetEventsNames()
+        {
+
+            List <string> names = new List<string>();
+
+            foreach(var anim in SkeletalMeshPreview.instance.skeletalMesh.CurrentAnimationInfo.AnimationEvents)
+            {
+                names.Add(anim.ToString());
+            }
+
+            return names.ToArray();
+
         }
 
     }

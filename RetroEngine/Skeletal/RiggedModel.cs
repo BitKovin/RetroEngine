@@ -169,16 +169,16 @@ namespace RetroEngine.Skeletal
         /// <summary>
         /// Update
         /// </summary>
-        public void Update(float time)
+        public void Update(float time, bool force = false)
         {
 
-            if (animationRunning)
+            if (animationRunning || force)
                 UpdateModelAnimations(time);
 
             if(time > 0)
             UpdateRootMotion();
 
-            if (UpdateVisual == false) return;
+            if (UpdateVisual == false && force == false) return;
             IterateUpdate(rootNodeOfTree);
             UpdateMeshTransforms();
 
@@ -270,6 +270,13 @@ namespace RetroEngine.Skeletal
         {
             IterateUpdate(rootNodeOfTree);
             animationPose = new AnimationPose();
+        }
+
+        public void SetFrame(int frame)
+        {
+            if(currentAnimation >= 0 && currentAnimation < originalAnimations.Count)
+
+            AnimationTime = (float)((double)frame * originalAnimations[currentAnimation].SecondsPerFrame);
         }
 
         /// <summary>

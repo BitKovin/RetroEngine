@@ -11,6 +11,7 @@ using RetroEngine.Entities.Navigaion;
 using RetroEngine.Graphic;
 using RetroEngine.Game.Effects;
 using RetroEngine.Audio;
+using RetroEngine.Entities.Light;
 
 namespace RetroEngine.Game
 {
@@ -43,8 +44,8 @@ namespace RetroEngine.Game
             GameSpeedEvent.Play();
 
 
-            //DefaultShader = "SimpleEffect";
 
+            SetStylingGraphics();
 
             Level.LoadFromFile("test");
 
@@ -137,6 +138,20 @@ namespace RetroEngine.Game
             Input.AddAction("fullscreen").AddKeyboardKey(Keys.F10);
 
             Input.AddAction("dev").AddKeyboardKey(Keys.OemTilde);
+
+        }
+
+        void SetStylingGraphics()
+        {
+            Graphics.EnableSSR = false;
+            Graphics.EnableSSAO = false;
+            Graphics.PointLightShadowQuality = 0;
+            Graphics.DirectionalLightShadowQuality = 0;
+            Graphics.ShadowResolutionScale = 0.1f;
+
+            PointLight.DisableShadows = true;
+
+            DefaultShader = "SimpleEffect";
 
         }
 
