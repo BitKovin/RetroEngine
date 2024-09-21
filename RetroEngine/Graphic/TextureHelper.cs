@@ -14,6 +14,9 @@ namespace RetroEngine.Graphic
 
         public static IntPtr GetImGuiPointer(this Texture2D texture)
         {
+
+            if (texture == null) return IntPtr.Zero;
+
             if(registeredPointers.ContainsKey(texture))
                 return registeredPointers[texture];
 

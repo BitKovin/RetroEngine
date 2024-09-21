@@ -1,340 +1,40 @@
 {
-  "levelName": "test2.map",
+  "levelName": "test.map",
   "entities": [
-    {
-      "Name": "player",
-      "className": "info_player_start",
-      "id": "info_player_start-player-0",
-      "saveData": "{\u0022velocity\u0022:{\u0022X\u0022:0,\u0022Y\u0022:4.3213367E-06,\u0022Z\u0022:-0},\u0022weapons\u0022:[{\u0022weaponType\u0022:\u0022RetroEngine.Game.Entities.Weapons.weapon_hammer, RetroEngine.Game, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0022,\u0022ammo\u0022:1},{\u0022weaponType\u0022:\u0022RetroEngine.Game.Entities.Weapons.weapon_shotgunNew, RetroEngine.Game, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0022,\u0022ammo\u0022:0}],\u0022currentSlot\u0022:1,\u0022lastSlot\u0022:-1,\u0022thirdPerson\u0022:false,\u0022Position\u0022:{\u0022X\u0022:5.7026396,\u0022Y\u0022:1.4399997,\u0022Z\u0022:-11.258318},\u0022Rotation\u0022:{\u0022X\u0022:32.89998,\u0022Y\u0022:-27.633163,\u0022Z\u0022:0},\u0022name\u0022:\u0022player\u0022,\u0022Tags\u0022:[\u0022player\u0022]}"
-    },
-    {
-      "Name": "plank_2",
-      "className": "destructible",
-      "id": "destructible--0",
-      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022plank_2\u0022,\u0022Tags\u0022:[]}"
-    },
-    {
-      "Name": "plank_1",
-      "className": "destructible",
-      "id": "destructible--1",
-      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022plank_1\u0022,\u0022Tags\u0022:[]}"
-    },
     {
       "Name": "",
       "className": "ent_cat_point",
       "id": "ent_cat_point--0",
-      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:1.5000753,\u0022Y\u0022:1.0511099,\u0022Z\u0022:-5.289816},\u0022Rotation\u0022:{\u0022X\u0022:-18.596306,\u0022Y\u0022:0.43323874,\u0022Z\u0022:-88.71022},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:5.3648996,\u0022Y\u0022:1.0399823,\u0022Z\u0022:-4.3655367},\u0022Rotation\u0022:{\u0022X\u0022:89.995895,\u0022Y\u0022:-11.140508,\u0022Z\u0022:-0.0109998295},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "player",
+      "className": "info_player_start",
+      "id": "info_player_start-player-0",
+      "saveData": "{\u0022velocity\u0022:{\u0022X\u0022:0,\u0022Y\u0022:2.3841858E-07,\u0022Z\u0022:0},\u0022weapons\u0022:[{\u0022weaponType\u0022:\u0022RetroEngine.Game.Entities.Weapons.weapon_hammer, RetroEngine.Game, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0022,\u0022ammo\u0022:1},{\u0022weaponType\u0022:\u0022RetroEngine.Game.Entities.Weapons.weapon_pistol_double, RetroEngine.Game, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0022,\u0022ammo\u0022:0},{\u0022weaponType\u0022:\u0022RetroEngine.Game.Entities.Weapons.weapon_shotgunNew, RetroEngine.Game, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0022,\u0022ammo\u0022:0}],\u0022currentSlot\u0022:2,\u0022lastSlot\u0022:1,\u0022thirdPerson\u0022:false,\u0022Position\u0022:{\u0022X\u0022:-4.509336,\u0022Y\u0022:0.9399292,\u0022Z\u0022:2.1996808},\u0022Rotation\u0022:{\u0022X\u0022:8.13333,\u0022Y\u0022:-17.000006,\u0022Z\u0022:0},\u0022name\u0022:\u0022player\u0022,\u0022Tags\u0022:[\u0022player\u0022]}"
     },
     {
       "Name": "",
-      "className": "weaponPickup",
-      "id": "weaponPickup--0",
-      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:1.625,\u0022Y\u0022:1.625,\u0022Z\u0022:-8.625},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+      "className": "ent_cat_point",
+      "id": "ent_cat_point--1",
+      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:-9.996954,\u0022Y\u0022:0.53984773,\u0022Z\u0022:10.522458},\u0022Rotation\u0022:{\u0022X\u0022:-0.004061852,\u0022Y\u0022:-0.04889449,\u0022Z\u0022:0.02065902},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
     },
     {
       "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--0",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.4218431,\u0022Y\u0022:0,\u0022Z\u0022:0.8543207},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.2979349,\u0022Y\u0022:0,\u0022Z\u0022:0.9545229},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:4.406764,\u0022Y\u0022:1.4399925,\u0022Z\u0022:2.4489963},\u0022Position\u0022:{\u0022X\u0022:2.0793605,\u0022Y\u0022:0.53763413,\u0022Z\u0022:-4.5321813},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+      "className": "ent_cat_point",
+      "id": "ent_cat_point--2",
+      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:-14.465368,\u0022Y\u0022:0.5396669,\u0022Z\u0022:2.4983141},\u0022Rotation\u0022:{\u0022X\u0022:-0.017625967,\u0022Y\u0022:-0.49703097,\u0022Z\u0022:0.14957947},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
     },
     {
       "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--1",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.08848643,\u0022Y\u0022:0,\u0022Z\u0022:0.9689054},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.0839554,\u0022Y\u0022:0,\u0022Z\u0022:0.99573004},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:6.3000817,\u0022Y\u0022:1.4399999,\u0022Z\u0022:10.671135},\u0022Position\u0022:{\u0022X\u0022:8.746411,\u0022Y\u0022:0.53989995,\u0022Z\u0022:20.194592},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
-    },
-    {
-      "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--2",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.78043264,\u0022Y\u0022:0,\u0022Z\u0022:0.28570944},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.99776196,\u0022Y\u0022:0,\u0022Z\u0022:-0.04018986},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:10.886597,\u0022Y\u0022:1.4400029,\u0022Z\u0022:2.2974942},\u0022Position\u0022:{\u0022X\u0022:15.090725,\u0022Y\u0022:0.53600013,\u0022Z\u0022:8.847771},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
-    },
-    {
-      "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--3",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.23868339,\u0022Y\u0022:0,\u0022Z\u0022:0.92447793},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.5546342,\u0022Y\u0022:0,\u0022Z\u0022:0.83044297},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:7.5754156,\u0022Y\u0022:1.440001,\u0022Z\u0022:7.2155137},\u0022Position\u0022:{\u0022X\u0022:8.870473,\u0022Y\u0022:0.53976357,\u0022Z\u0022:20.953955},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
-    },
-    {
-      "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--4",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.5376131,\u0022Y\u0022:0,\u0022Z\u0022:-0.81715447},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.718704,\u0022Y\u0022:0,\u0022Z\u0022:-0.6943534},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:-1.9966557,\u0022Y\u0022:1.4399941,\u0022Z\u0022:-13.835822},\u0022Position\u0022:{\u0022X\u0022:-9.8718815,\u0022Y\u0022:0.53998256,\u0022Z\u0022:-14.169483},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
-    },
-    {
-      "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--5",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.100664884,\u0022Y\u0022:0,\u0022Z\u0022:0.9725188},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.095245205,\u0022Y\u0022:0,\u0022Z\u0022:0.9951704},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:6.3000817,\u0022Y\u0022:1.4399999,\u0022Z\u0022:10.671135},\u0022Position\u0022:{\u0022X\u0022:6.5923753,\u0022Y\u0022:0.53992915,\u0022Z\u0022:20.747051},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
-    },
-    {
-      "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--6",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.53564495,\u0022Y\u0022:0,\u0022Z\u0022:-0.82186},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.705904,\u0022Y\u0022:0,\u0022Z\u0022:-0.7060822},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:-1.9966557,\u0022Y\u0022:1.4399941,\u0022Z\u0022:-13.835822},\u0022Position\u0022:{\u0022X\u0022:-9.836548,\u0022Y\u0022:0.53953207,\u0022Z\u0022:-15.623373},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
-    },
-    {
-      "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--7",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.13898186,\u0022Y\u0022:0,\u0022Z\u0022:0.9630059},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.018296892,\u0022Y\u0022:0,\u0022Z\u0022:0.99892145},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:6.3000817,\u0022Y\u0022:1.4399999,\u0022Z\u0022:10.671135},\u0022Position\u0022:{\u0022X\u0022:7.824394,\u0022Y\u0022:0.5399527,\u0022Z\u0022:20.343073},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
-    },
-    {
-      "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--8",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.0055316947,\u0022Y\u0022:0,\u0022Z\u0022:0.99020743},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.112097204,\u0022Y\u0022:0,\u0022Z\u0022:0.9930039},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:6.468821,\u0022Y\u0022:1.4400014,\u0022Z\u0022:10.530044},\u0022Position\u0022:{\u0022X\u0022:6.647863,\u0022Y\u0022:0.53980917,\u0022Z\u0022:21.196547},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
-    },
-    {
-      "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--9",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.3280969,\u0022Y\u0022:0,\u0022Z\u0022:0.8824656},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.48779204,\u0022Y\u0022:0,\u0022Z\u0022:0.8728439},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:4.2812405,\u0022Y\u0022:1.439989,\u0022Z\u0022:2.4570358},\u0022Position\u0022:{\u0022X\u0022:-3.523808,\u0022Y\u0022:0.5399895,\u0022Z\u0022:20.43249},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
-    },
-    {
-      "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--10",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.17404689,\u0022Y\u0022:0,\u0022Z\u0022:0.9371614},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.2153578,\u0022Y\u0022:0,\u0022Z\u0022:0.97555},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:7.6279554,\u0022Y\u0022:1.4399992,\u0022Z\u0022:7.1056967},\u0022Position\u0022:{\u0022X\u0022:12.029903,\u0022Y\u0022:0.5357748,\u0022Z\u0022:21.075058},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
-    },
-    {
-      "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--11",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.7927314,\u0022Y\u0022:0,\u0022Z\u0022:-0.59480166},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.7696764,\u0022Y\u0022:0,\u0022Z\u0022:-0.6361078},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:-2.9274418,\u0022Y\u0022:1.4399897,\u0022Z\u0022:-14.609741},\u0022Position\u0022:{\u0022X\u0022:-9.334676,\u0022Y\u0022:0.5399934,\u0022Z\u0022:-15.759676},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
-    },
-    {
-      "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--12",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.106872976,\u0022Y\u0022:0,\u0022Z\u0022:-0.9800624},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.12836802,\u0022Y\u0022:0,\u0022Z\u0022:-0.990661},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:7.377489,\u0022Y\u0022:1.440003,\u0022Z\u0022:-9.153068},\u0022Position\u0022:{\u0022X\u0022:6.772563,\u0022Y\u0022:0.5386181,\u0022Z\u0022:-16.11394},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
-    },
-    {
-      "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--13",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.6526288,\u0022Y\u0022:0,\u0022Z\u0022:0.71535087},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.50808716,\u0022Y\u0022:0,\u0022Z\u0022:0.8596104},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:12.661082,\u0022Y\u0022:1.4400052,\u0022Z\u0022:-3.178429},\u0022Position\u0022:{\u0022X\u0022:11.895087,\u0022Y\u0022:0.5399807,\u0022Z\u0022:2.7777843},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
-    },
-    {
-      "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--14",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.27368128,\u0022Y\u0022:0,\u0022Z\u0022:0.9011481},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.36915654,\u0022Y\u0022:0,\u0022Z\u0022:0.92887586},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:4.2812405,\u0022Y\u0022:1.439989,\u0022Z\u0022:2.4570358},\u0022Position\u0022:{\u0022X\u0022:-3.2408874,\u0022Y\u0022:0.5399928,\u0022Z\u0022:20.30515},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
-    },
-    {
-      "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--15",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.8411108,\u0022Y\u0022:0,\u0022Z\u0022:-0.52810454},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.8377183,\u0022Y\u0022:0,\u0022Z\u0022:-0.54538965},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:-2.8414085,\u0022Y\u0022:1.4399905,\u0022Z\u0022:-14.625538},\u0022Position\u0022:{\u0022X\u0022:-9.931675,\u0022Y\u0022:0.53999627,\u0022Z\u0022:-16.050447},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
-    },
-    {
-      "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--16",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.15424176,\u0022Y\u0022:0,\u0022Z\u0022:0.96936846},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.037771437,\u0022Y\u0022:0,\u0022Z\u0022:0.99925756},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:6.385661,\u0022Y\u0022:1.439998,\u0022Z\u0022:10.600228},\u0022Position\u0022:{\u0022X\u0022:7.5030155,\u0022Y\u0022:0.5399126,\u0022Z\u0022:20.518057},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
-    },
-    {
-      "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--17",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.0029348042,\u0022Y\u0022:0,\u0022Z\u0022:-0.9668836},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.057852283,\u0022Y\u0022:0,\u0022Z\u0022:-0.9978667},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:7.4930024,\u0022Y\u0022:1.4399986,\u0022Z\u0022:-9.031661},\u0022Position\u0022:{\u0022X\u0022:12.896241,\u0022Y\u0022:0.53950715,\u0022Z\u0022:-16.069252},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
-    },
-    {
-      "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--18",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.31106362,\u0022Y\u0022:0,\u0022Z\u0022:0.90784377},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.41825372,\u0022Y\u0022:0,\u0022Z\u0022:0.9077003},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:4.406764,\u0022Y\u0022:1.4399925,\u0022Z\u0022:2.4489963},\u0022Position\u0022:{\u0022X\u0022:-0.11505034,\u0022Y\u0022:0.5373876,\u0022Z\u0022:21.105549},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
-    },
-    {
-      "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--19",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.6407798,\u0022Y\u0022:0,\u0022Z\u0022:-0.7479418},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.790843,\u0022Y\u0022:0,\u0022Z\u0022:-0.60931796},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:-2.0939846,\u0022Y\u0022:1.439994,\u0022Z\u0022:-13.838545},\u0022Position\u0022:{\u0022X\u0022:-9.129409,\u0022Y\u0022:0.53764725,\u0022Z\u0022:-13.410897},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
-    },
-    {
-      "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--20",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.818326,\u0022Y\u0022:0,\u0022Z\u0022:-0.5624228},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.7576104,\u0022Y\u0022:0,\u0022Z\u0022:-0.65028256},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:-2.8414085,\u0022Y\u0022:1.4399905,\u0022Z\u0022:-14.625538},\u0022Position\u0022:{\u0022X\u0022:-9.417313,\u0022Y\u0022:0.5399647,\u0022Z\u0022:-16.28342},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
-    },
-    {
-      "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--21",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.29157868,\u0022Y\u0022:0,\u0022Z\u0022:0.9259646},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.2866055,\u0022Y\u0022:0,\u0022Z\u0022:0.95663756},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:4.53209,\u0022Y\u0022:1.4399911,\u0022Z\u0022:2.44097},\u0022Position\u0022:{\u0022X\u0022:-3.6306367,\u0022Y\u0022:0.537618,\u0022Z\u0022:21.077602},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
-    },
-    {
-      "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--22",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.8374749,\u0022Y\u0022:0,\u0022Z\u0022:-0.53523886},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.86668783,\u0022Y\u0022:0,\u0022Z\u0022:-0.4988073},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:-2.8414085,\u0022Y\u0022:1.4399905,\u0022Z\u0022:-14.625538},\u0022Position\u0022:{\u0022X\u0022:-9.170168,\u0022Y\u0022:0.53999287,\u0022Z\u0022:-15.957104},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
-    },
-    {
-      "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--23",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.2379973,\u0022Y\u0022:0,\u0022Z\u0022:0.92387885},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.28024986,\u0022Y\u0022:0,\u0022Z\u0022:0.95825344},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:7.5236826,\u0022Y\u0022:1.4399986,\u0022Z\u0022:7.3218083},\u0022Position\u0022:{\u0022X\u0022:5.380481,\u0022Y\u0022:0.5399995,\u0022Z\u0022:21.156101},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
-    },
-    {
-      "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--24",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.79655945,\u0022Y\u0022:0,\u0022Z\u0022:-0.38078472},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.9975045,\u0022Y\u0022:0,\u0022Z\u0022:-0.050256394},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:11.587493,\u0022Y\u0022:1.4400004,\u0022Z\u0022:-11.44613},\u0022Position\u0022:{\u0022X\u0022:14.958636,\u0022Y\u0022:0.53975177,\u0022Z\u0022:-16.375437},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
-    },
-    {
-      "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--25",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.59701455,\u0022Y\u0022:0,\u0022Z\u0022:-0.7827336},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.7724175,\u0022Y\u0022:0,\u0022Z\u0022:-0.63257724},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:-1.9966557,\u0022Y\u0022:1.4399941,\u0022Z\u0022:-13.835822},\u0022Position\u0022:{\u0022X\u0022:-9.883381,\u0022Y\u0022:0.5397692,\u0022Z\u0022:-15.00086},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
-    },
-    {
-      "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--26",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.3007788,\u0022Y\u0022:0,\u0022Z\u0022:-0.89210665},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.04551335,\u0022Y\u0022:0,\u0022Z\u0022:-0.9972369},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:4.7239656,\u0022Y\u0022:1.4400115,\u0022Z\u0022:-15.930767},\u0022Position\u0022:{\u0022X\u0022:0.09789107,\u0022Y\u0022:0.5399631,\u0022Z\u0022:-15.323982},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
-    },
-    {
-      "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--27",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.31051618,\u0022Y\u0022:0,\u0022Z\u0022:0.8212105},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.47637618,\u0022Y\u0022:0,\u0022Z\u0022:0.8774675},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:7.5754156,\u0022Y\u0022:1.440001,\u0022Z\u0022:7.2155137},\u0022Position\u0022:{\u0022X\u0022:4.795883,\u0022Y\u0022:0.5399964,\u0022Z\u0022:20.943409},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
-    },
-    {
-      "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--28",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.030485725,\u0022Y\u0022:0,\u0022Z\u0022:-0.97708696},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.058189187,\u0022Y\u0022:0,\u0022Z\u0022:-0.9967284},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:7.4298224,\u0022Y\u0022:1.440004,\u0022Z\u0022:-9.098932},\u0022Position\u0022:{\u0022X\u0022:8.577549,\u0022Y\u0022:0.53999233,\u0022Z\u0022:-15.63313},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
-    },
-    {
-      "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--29",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.8670648,\u0022Y\u0022:0,\u0022Z\u0022:-0.2553381},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.9999344,\u0022Y\u0022:0,\u0022Z\u0022:-0.007359626},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:11.6467705,\u0022Y\u0022:1.440005,\u0022Z\u0022:-11.363276},\u0022Position\u0022:{\u0022X\u0022:15.702107,\u0022Y\u0022:0.5393112,\u0022Z\u0022:-16.23711},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
-    },
-    {
-      "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--30",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.3983965,\u0022Y\u0022:0,\u0022Z\u0022:-0.87582636},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.23619217,\u0022Y\u0022:0,\u0022Z\u0022:-0.9700035},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:4.6154137,\u0022Y\u0022:1.4399985,\u0022Z\u0022:-15.948575},\u0022Position\u0022:{\u0022X\u0022:-5.3142586,\u0022Y\u0022:0.5370371,\u0022Z\u0022:-16.117538},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
-    },
-    {
-      "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--31",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.60040295,\u0022Y\u0022:0,\u0022Z\u0022:-0.77603084},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.7335042,\u0022Y\u0022:0,\u0022Z\u0022:-0.6788754},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:-1.8813125,\u0022Y\u0022:1.439992,\u0022Z\u0022:-13.831732},\u0022Position\u0022:{\u0022X\u0022:-9.589105,\u0022Y\u0022:0.53999597,\u0022Z\u0022:-15.129224},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
-    },
-    {
-      "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--32",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.72903967,\u0022Y\u0022:0,\u0022Z\u0022:0.6324589},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.4544746,\u0022Y\u0022:0,\u0022Z\u0022:0.88896066},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:12.685042,\u0022Y\u0022:1.4399973,\u0022Z\u0022:-3.2654064},\u0022Position\u0022:{\u0022X\u0022:13.1757965,\u0022Y\u0022:0.53841245,\u0022Z\u0022:3.4569352},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
-    },
-    {
-      "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--33",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.20714362,\u0022Y\u0022:0,\u0022Z\u0022:0.9395035},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.4068049,\u0022Y\u0022:0,\u0022Z\u0022:0.9127529},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:7.5236826,\u0022Y\u0022:1.4399986,\u0022Z\u0022:7.3218083},\u0022Position\u0022:{\u0022X\u0022:5.245068,\u0022Y\u0022:0.53992236,\u0022Z\u0022:20.790262},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
-    },
-    {
-      "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--34",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.23682156,\u0022Y\u0022:0,\u0022Z\u0022:-0.92764676},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.00040792112,\u0022Y\u0022:0,\u0022Z\u0022:-0.9997732},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:4.7239656,\u0022Y\u0022:1.4400115,\u0022Z\u0022:-15.930767},\u0022Position\u0022:{\u0022X\u0022:-6.5242977,\u0022Y\u0022:0.539762,\u0022Z\u0022:-15.990311},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
-    },
-    {
-      "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--35",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.19185233,\u0022Y\u0022:0,\u0022Z\u0022:-0.95696896},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.20043084,\u0022Y\u0022:0,\u0022Z\u0022:-0.97962785},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:7.4930024,\u0022Y\u0022:1.4399986,\u0022Z\u0022:-9.031661},\u0022Position\u0022:{\u0022X\u0022:9.750533,\u0022Y\u0022:0.53999823,\u0022Z\u0022:-16.201822},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
-    },
-    {
-      "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--36",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.14401184,\u0022Y\u0022:0,\u0022Z\u0022:0.9516435},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.5475958,\u0022Y\u0022:0,\u0022Z\u0022:0.8365483},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:7.5754156,\u0022Y\u0022:1.440001,\u0022Z\u0022:7.2155137},\u0022Position\u0022:{\u0022X\u0022:-9.904774,\u0022Y\u0022:0.5399925,\u0022Z\u0022:20.407824},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
-    },
-    {
-      "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--37",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.06346861,\u0022Y\u0022:0,\u0022Z\u0022:0.98276365},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.031533517,\u0022Y\u0022:0,\u0022Z\u0022:0.9982116},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:6.385661,\u0022Y\u0022:1.439998,\u0022Z\u0022:10.600228},\u0022Position\u0022:{\u0022X\u0022:5.0279555,\u0022Y\u0022:0.5399987,\u0022Z\u0022:21.101868},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
-    },
-    {
-      "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--38",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.11614121,\u0022Y\u0022:0,\u0022Z\u0022:-0.9652331},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.15322286,\u0022Y\u0022:0,\u0022Z\u0022:-0.986815},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:7.4930024,\u0022Y\u0022:1.4399986,\u0022Z\u0022:-9.031661},\u0022Position\u0022:{\u0022X\u0022:6.4581614,\u0022Y\u0022:0.5380307,\u0022Z\u0022:-16.221123},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
-    },
-    {
-      "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--39",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.91291016,\u0022Y\u0022:0,\u0022Z\u0022:-0.08092489},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.9564682,\u0022Y\u0022:0,\u0022Z\u0022:0.29179275},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:11.6467705,\u0022Y\u0022:1.440005,\u0022Z\u0022:-11.363276},\u0022Position\u0022:{\u0022X\u0022:15.554932,\u0022Y\u0022:0.5399617,\u0022Z\u0022:-16.389902},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
-    },
-    {
-      "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--40",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.83922154,\u0022Y\u0022:0,\u0022Z\u0022:-0.5294446},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.86131287,\u0022Y\u0022:0,\u0022Z\u0022:-0.5049897},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:-2.9274418,\u0022Y\u0022:1.4399897,\u0022Z\u0022:-14.609741},\u0022Position\u0022:{\u0022X\u0022:-9.435848,\u0022Y\u0022:0.539917,\u0022Z\u0022:-16.388176},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
-    },
-    {
-      "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--41",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.1550801,\u0022Y\u0022:0,\u0022Z\u0022:-0.9706158},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.1780114,\u0022Y\u0022:0,\u0022Z\u0022:-0.9837034},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:7.377489,\u0022Y\u0022:1.440003,\u0022Z\u0022:-9.153068},\u0022Position\u0022:{\u0022X\u0022:8.550749,\u0022Y\u0022:0.5399466,\u0022Z\u0022:-16.197899},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
-    },
-    {
-      "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--42",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.2602945,\u0022Y\u0022:0,\u0022Z\u0022:-0.91325533},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.02847563,\u0022Y\u0022:0,\u0022Z\u0022:-0.99845356},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:4.6154137,\u0022Y\u0022:1.4399985,\u0022Z\u0022:-15.948575},\u0022Position\u0022:{\u0022X\u0022:-6.831108,\u0022Y\u0022:0.5399283,\u0022Z\u0022:-13.282251},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
-    },
-    {
-      "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--43",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.113451526,\u0022Y\u0022:0,\u0022Z\u0022:0.98230225},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.025852278,\u0022Y\u0022:0,\u0022Z\u0022:0.99939495},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:6.468821,\u0022Y\u0022:1.4400014,\u0022Z\u0022:10.530044},\u0022Position\u0022:{\u0022X\u0022:9.845523,\u0022Y\u0022:0.5399927,\u0022Z\u0022:20.309872},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
-    },
-    {
-      "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--44",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.58801574,\u0022Y\u0022:0,\u0022Z\u0022:-0.7954201},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.65348333,\u0022Y\u0022:0,\u0022Z\u0022:-0.7559753},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:-2.1971369,\u0022Y\u0022:1.4399999,\u0022Z\u0022:-13.840818},\u0022Position\u0022:{\u0022X\u0022:-6.963809,\u0022Y\u0022:0.5392328,\u0022Z\u0022:-15.7759285},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
-    },
-    {
-      "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--45",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.110048704,\u0022Y\u0022:0,\u0022Z\u0022:-0.97353286},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.12917322,\u0022Y\u0022:0,\u0022Z\u0022:-0.9900389},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:7.4298224,\u0022Y\u0022:1.440004,\u0022Z\u0022:-9.098932},\u0022Position\u0022:{\u0022X\u0022:6.8649116,\u0022Y\u0022:0.5386177,\u0022Z\u0022:-16.10808},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
-    },
-    {
-      "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--46",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.58804613,\u0022Y\u0022:0,\u0022Z\u0022:-0.7947247},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.66112846,\u0022Y\u0022:0,\u0022Z\u0022:-0.7483433},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:-2.0939846,\u0022Y\u0022:1.439994,\u0022Z\u0022:-13.838545},\u0022Position\u0022:{\u0022X\u0022:-9.694749,\u0022Y\u0022:0.53999525,\u0022Z\u0022:-14.177834},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
-    },
-    {
-      "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--47",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.6086567,\u0022Y\u0022:0,\u0022Z\u0022:-0.7795527},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.6919459,\u0022Y\u0022:0,\u0022Z\u0022:-0.7196432},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:-2.0939846,\u0022Y\u0022:1.439994,\u0022Z\u0022:-13.838545},\u0022Position\u0022:{\u0022X\u0022:-9.783434,\u0022Y\u0022:0.5360942,\u0022Z\u0022:-12.942635},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
-    },
-    {
-      "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--48",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.9045911,\u0022Y\u0022:0,\u0022Z\u0022:-0.022025783},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.9643901,\u0022Y\u0022:0,\u0022Z\u0022:0.25843444},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:11.6467705,\u0022Y\u0022:1.440005,\u0022Z\u0022:-11.363276},\u0022Position\u0022:{\u0022X\u0022:15.252472,\u0022Y\u0022:0.53813535,\u0022Z\u0022:-15.3334675},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
-    },
-    {
-      "Name": "",
-      "className": "npc_base",
-      "id": "npc_base--49",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.5237472,\u0022Y\u0022:0,\u0022Z\u0022:-0.8366978},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.6178497,\u0022Y\u0022:0,\u0022Z\u0022:-0.7842337},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:-2.0939846,\u0022Y\u0022:1.439994,\u0022Z\u0022:-13.838545},\u0022Position\u0022:{\u0022X\u0022:-9.835454,\u0022Y\u0022:0.5399998,\u0022Z\u0022:-14.986002},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+      "className": "ent_cat_point",
+      "id": "ent_cat_point--3",
+      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:-9.491362,\u0022Y\u0022:0.5398381,\u0022Z\u0022:-0.51494116},\u0022Rotation\u0022:{\u0022X\u0022:-0.020320108,\u0022Y\u0022:0.65258485,\u0022Z\u0022:-0.024411364},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
     }
   ],
-  "entityId": 677,
+  "entityId": 28,
   "deletedIDs": [
-    "weaponPickup--1"
+    "weaponPickup--0"
   ],
   "deletedNames": []
 }

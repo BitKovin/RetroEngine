@@ -37,6 +37,8 @@ namespace RetroEngine
 
             NormalBiasScale = 1;
 
+            LargeObject = true;
+
 
         }
 

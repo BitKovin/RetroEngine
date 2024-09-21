@@ -137,6 +137,8 @@ namespace RetroEngine
 
         public float NormalBiasScale = 1;
 
+        public bool LargeObject = false;
+
         internal bool partialTransparency = false;
 
         public List<string> MeshHideList = new List<string>();
@@ -421,6 +423,8 @@ namespace RetroEngine
             effect.Parameters["depthTestEqual"]?.SetValue(DepthTestEqual);
 
             effect.Parameters["DitherDisolve"]?.SetValue(DitherDisolve);
+
+            effect.Parameters["LargeObject"]?.SetValue(LargeObject);
 
             effect.Parameters["earlyZ"]?.SetValue(Graphics.EarlyDepthDiscardShader && (SimpleTransperent == false || Transperent == false));
 

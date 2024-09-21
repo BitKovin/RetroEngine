@@ -93,6 +93,8 @@ namespace RetroEngine.Game.Entities.Player
 
         bool useThirdPersonAnimations = false;
 
+        public static string armsModelPath = "models/weapons/arms_lq.fbx";
+
         //particle_system_meleeTrail meleeTrail;
         public PlayerCharacter() : base()
         {

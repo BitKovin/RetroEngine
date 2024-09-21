@@ -123,7 +123,11 @@ namespace RetroEngine
         internal static bool DrawOnlyOpaque = true;
         internal static bool DrawOnlyTransparent = true;
 
+        public static bool DisableMultiPass = false;
+
         public static bool AsyncPresent = true;
+
+
         public Render()
         {
             graphics = GameMain.Instance._graphics;
@@ -293,14 +297,31 @@ namespace RetroEngine
 
             InitRenderTargetVectorIfNeed(ref ForwardOutput, true);
 
-            InitRenderTargetIfNeed(ref ReflectivenessOutput);
+
+            
 
             InitRenderTargetVectorIfNeed(ref oldFrame, true);
 
-            InitRenderTargetVectorSpaceIfNeed(ref positionPath);
+            if (DisableMultiPass == false)
+            {
+                InitRenderTargetVectorSpaceIfNeed(ref positionPath);
 
-            InitRenderTargetIfNeed(ref normalPath);
+                InitRenderTargetIfNeed(ref normalPath);
 
+                InitRenderTargetIfNeed(ref ReflectivenessOutput);
+
+            }else
+            {
+                positionPath?.Dispose();
+                positionPath = null;
+                normalPath?.Dispose();
+                normalPath = null;
+                ReflectivenessOutput?.Dispose();
+                ReflectivenessOutput = null;
+
+                reflection?.Dispose();
+                reflection = null;
+            }
             InitRenderTargetIfNeed(ref ComposedOutput);
 
             InitRenderTargetIfNeed(ref FxaaOutput);
@@ -426,9 +447,14 @@ namespace RetroEngine
 
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, (int)GetScreenResolution().X, (int)GetScreenResolution().Y);
 
-
-            graphics.GraphicsDevice.SetRenderTargets(ForwardOutput, normalPath, ReflectivenessOutput, positionPath);
-
+            if (DisableMultiPass)
+            {
+                graphics.GraphicsDevice.SetRenderTarget(ForwardOutput);
+            }
+            else
+            {
+                graphics.GraphicsDevice.SetRenderTargets(ForwardOutput, normalPath, ReflectivenessOutput, positionPath);
+            }
 
             if (onlyTransperent == false)
             {
@@ -471,12 +497,13 @@ namespace RetroEngine
                 }
             }
             //ParticleEmitter.RenderEmitter.DrawParticles(particlesToDraw);
+            if (DrawOnlyOpaque)
+            {
+                if (Graphics.DrawPhysics)
+                    Physics.DebugDraw();
 
-            if (Graphics.DrawPhysics)
-                Physics.DebugDraw();
-
-            DrawDebug.Draw();
-
+                DrawDebug.Draw();
+            }
         }
 
         public void RenderLevelGeometryForward(List<StaticMesh> renderList, bool onlyTransperent = false, bool OnlyStatic = false, bool skipTransparent = false)
@@ -850,6 +877,9 @@ namespace RetroEngine
         RenderTarget2D reflection;
         void PerformReflection()
         {
+
+            if (normalPath == null) return;
+
             InitSizedRenderTargetIfNeed(ref reflection, (int)(GetScreenResolution().Y*Graphics.SSRResolutionScale), surfaceFormat: SurfaceFormat.Color);
 
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, reflection.Width, reflection.Height);
@@ -1157,6 +1187,9 @@ namespace RetroEngine
 
         internal static void DrawFullScreenQuad(SpriteBatch spriteBatch, Texture2D inputTexture)
         {
+
+            if(inputTexture == null) return;
+
             // Create a rectangle covering the entire screen
             Rectangle screenRectangle = new Rectangle(0, 0, GameMain.Instance.GraphicsDevice.Viewport.Width, GameMain.Instance.GraphicsDevice.Viewport.Height);
 

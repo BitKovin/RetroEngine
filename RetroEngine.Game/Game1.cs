@@ -151,7 +151,11 @@ namespace RetroEngine.Game
 
             PointLight.DisableShadows = true;
 
-            DefaultShader = "SimpleEffect";
+            Graphics.Exposure = 0.23f;
+
+            //Render.DisableMultiPass = true;
+
+            DefaultShader = "VertexLighting";
 
         }
 

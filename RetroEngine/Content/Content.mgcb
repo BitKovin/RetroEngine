@@ -264,3 +264,10 @@
 /processorParam:DebugMode=Auto
 /processorParam:Defines=
 /build:../../GameData/Shaders/PointLightComplexity.fx;Shaders/PointLightComplexity.fx
+
+#begin ../../GameData/Shaders/VertexLighting.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/processorParam:Defines=
+/build:../../GameData/Shaders/VertexLighting.fx;Shaders/VertexLighting.fx

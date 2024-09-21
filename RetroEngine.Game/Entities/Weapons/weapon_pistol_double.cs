@@ -344,7 +344,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             meshTp.DisableOcclusionCulling = true;
 
-            arms.LoadFromFile("models/weapons/arms_n.fbx");
+            arms.LoadFromFile(PlayerCharacter.armsModelPath);
             arms.textureSearchPaths.Add("textures/weapons/arms/");
             //arms.CastShadows = false;
             arms.PreloadTextures();
@@ -354,7 +354,7 @@ namespace RetroEngine.Game.Entities.Weapons
             arms.Name = "arms";
             arms2.Name = "arms";
 
-            arms2.LoadFromFile("models/weapons/arms_n.fbx");
+            arms2.LoadFromFile(PlayerCharacter.armsModelPath);
             arms2.textureSearchPaths.Add("textures/weapons/arms/");
             //arms2.CastShadows = false;
             arms2.PreloadTextures();

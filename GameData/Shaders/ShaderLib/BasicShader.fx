@@ -227,6 +227,8 @@ float SSRWidth;
 
 bool ViewmodelShadowsEnabled;
 
+bool LargeObject;
+
 bool Masked;
 
 struct VertexInput
@@ -260,6 +262,7 @@ struct PixelInput //only color and texcoords or opengl might freak out
 	half4 lightPosVeryClose : TEXCOORD6;
 	half3 BiTangent : TEXCOORD7;
 	half4 Color : COLOR0;
+	half4 Light : COLOR1;
 };
 
 struct PBRData
@@ -1432,6 +1435,11 @@ half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half rough
 
 		float pixelSize = ((1.0f/LightResolutions[i]) * distanceToLight) / distance(viewPos, pixelInput.MyPosition);
 
+		#if OPENGL
+
+		notShadow = GetPointLightDepth(i, lightDir,distanceToLight*distFactor + bias);
+		#else
+
 		if(PointLightShadowQuality == 0)
 		{
 			notShadow = 1;
@@ -1455,7 +1463,7 @@ half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half rough
             notShadow = SamplePointLightPCF(i, tangent, bitangent, lightDir, distanceToLight*distFactor, bias, true);
 		}
 		
-		
+		#endif
 
 	}
 
