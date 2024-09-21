@@ -79,7 +79,7 @@ half3 CalculateSimplePointLight(int i, PixelInput pixelInput, half3 normal)
 	}
 
 
-	float dist = ( LightRadiuses[i] - distanceToLight)/LightRadiuses[i];
+	float dist = saturate((LightRadiuses[i] - distanceToLight)/LightRadiuses[i]);
 	half intense = dist; //(1.0 - dist * dist);
 	half distIntence = intense;
 	half3 dirToSurface = normalize(lightVector);
@@ -107,13 +107,14 @@ half3 CalculateVertexLight(PixelInput input)
 
     half3 light = CalculateDirectionalVertexLight(tangentNormal);
 
-    if(LargeObject == false)
-    {
-        for (int i = 0; i < MAX_POINT_LIGHTS; i++)
+#if OPENGL
+#else
+if(LargeObject == false)
+    for (int i = 0; i < MAX_POINT_LIGHTS; i++)
 	{
-		light += CalculateSimplePointLight(i, input, tangentNormal);
+		light += CalculateSimplePointLight(i, input, input.Normal);
 	}
-    }
+#endif
 
     return light;
 
@@ -194,7 +195,11 @@ PixelOutput PixelShaderFunction(PixelInput input)
     
     half3 light = input.Light;
 
+#if OPENGL
+
+#else
     if(LargeObject)
+#endif
     for (int i = 0; i < MAX_POINT_LIGHTS; i++)
 	{
 		light += CalculateSimplePointLight(i, input, input.Normal);

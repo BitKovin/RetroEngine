@@ -5,7 +5,7 @@
 /intermediateDir:obj/$(Platform)
 /platform:DesktopGL
 /config:
-/profile:HiDef
+/profile:Reach
 /compress:False
 
 #-------------------------------- References --------------------------------#
@@ -146,6 +146,13 @@
 /processorParam:Defines=
 /build:../../GameData/Shaders/Overdraw.fx;Shaders/Overdraw.fx
 
+#begin ../../GameData/Shaders/PointLightComplexity.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/processorParam:Defines=
+/build:../../GameData/Shaders/PointLightComplexity.fx;Shaders/PointLightComplexity.fx
+
 #begin ../../GameData/Shaders/PostProcessing.fx
 /importer:EffectImporter
 /processor:EffectProcessor
@@ -216,6 +223,13 @@
 /processorParam:Defines=
 /build:../../GameData/Shaders/Tonemap.fx;Shaders/Tonemap.fx
 
+#begin ../../GameData/Shaders/TrailUnlit.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/processorParam:Defines=
+/build:../../GameData/Shaders/TrailUnlit.fx;Shaders/TrailUnlit.fx
+
 #begin ../../GameData/Shaders/UnderWater.fx
 /importer:EffectImporter
 /processor:EffectProcessor
@@ -250,20 +264,6 @@
 /processorParam:DebugMode=Auto
 /processorParam:Defines=
 /build:../../GameData/Shaders/Unlit.fx;Shaders/Unlit.fx
-
-#begin ../../GameData/Shaders/TrailUnlit.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/processorParam:Defines=
-/build:../../GameData/Shaders/TrailUnlit.fx;Shaders/TrailUnlit.fx
-
-#begin ../../GameData/Shaders/PointLightComplexity.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/processorParam:Defines=
-/build:../../GameData/Shaders/PointLightComplexity.fx;Shaders/PointLightComplexity.fx
 
 #begin ../../GameData/Shaders/VertexLighting.fx
 /importer:EffectImporter

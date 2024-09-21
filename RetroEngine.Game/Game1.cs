@@ -46,7 +46,7 @@ namespace RetroEngine.Game
 
 
             SetStylingGraphics();
-
+                
             Level.LoadFromFile("test");
 
             base.GameInitialized();
@@ -147,11 +147,13 @@ namespace RetroEngine.Game
             Graphics.EnableSSAO = false;
             Graphics.PointLightShadowQuality = 0;
             Graphics.DirectionalLightShadowQuality = 0;
-            Graphics.ShadowResolutionScale = 0.1f;
+            Graphics.ShadowResolutionScale = 0.0f;
 
             PointLight.DisableShadows = true;
 
             Graphics.Exposure = 0.23f;
+
+            Graphics.EnableBloom = false;
 
             //Render.DisableMultiPass = true;
 

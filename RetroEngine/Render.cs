@@ -621,6 +621,9 @@ namespace RetroEngine
 
         internal void RenderShadowMap(List<StaticMesh> renderList)
         {
+
+            if (Graphics.ShadowResolutionScale == 0) return;
+
             InitShadowMap(ref shadowMap);
 
             if (renderShadow() == false && StableDirectShadows == false) return;
@@ -662,6 +665,10 @@ namespace RetroEngine
 
         internal void RenderShadowMapClose(List<StaticMesh> renderList)
         {
+
+
+            if (Graphics.ShadowResolutionScale == 0) return;
+
             InitShadowMapClose(ref shadowMapClose);
 
             
@@ -702,6 +709,10 @@ namespace RetroEngine
 
         internal void RenderShadowMapVeryClose(List<StaticMesh> renderList)
         {
+
+
+            if (Graphics.ShadowResolutionScale == 0) return;
+
             InitShadowMapVeryClose(ref shadowMapClose);
 
 
@@ -739,6 +750,8 @@ namespace RetroEngine
         internal void RenderShadowMapViewmodel(List<StaticMesh> renderList)
         {
 
+
+            if (Graphics.ShadowResolutionScale == 0) return;
 
             if (Graphics.ViewmodelShadows == false) return;
 

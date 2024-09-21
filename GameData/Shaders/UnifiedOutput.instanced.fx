@@ -89,12 +89,13 @@ PixelInput VertexShaderFunction(VertexInput input, float4 row1: BLENDINDICES1, f
 
 
 
-    output.lightPos = mul(worldPos, ShadowMapViewProjection);
-    output.lightPosClose = mul(worldPos, ShadowMapViewProjectionClose);
-    output.lightPosVeryClose = mul(worldPos, ShadowMapViewProjectionVeryClose);
+    //output.lightPos = mul(worldPos, ShadowMapViewProjection);
+    //output.lightPosClose = mul(worldPos, ShadowMapViewProjectionClose);
+    //output.lightPosVeryClose = mul(worldPos, ShadowMapViewProjectionVeryClose);
 
     output.TexCoord = input.TexCoord;
     output.Color = InstanceColor;
+    output.Light = float4(0, 0, 0, 0);
 
     return output;
 }

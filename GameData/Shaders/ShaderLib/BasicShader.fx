@@ -254,12 +254,9 @@ struct PixelInput //only color and texcoords or opengl might freak out
 	float4 Position : SV_POSITION;
 	half2 TexCoord : TEXCOORD0;
 	half3 Normal : TEXCOORD8;
-	half4 lightPos : TEXCOORD1;
-	half4 lightPosClose : TEXCOORD2;
 	float3 MyPosition : TEXCOORD3;
 	half4 MyPixelPosition : TEXCOORD4;
 	half3 Tangent : TEXCOORD5;
-	half4 lightPosVeryClose : TEXCOORD6;
 	half3 BiTangent : TEXCOORD7;
 	half4 Color : COLOR0;
 	half4 Light : COLOR1;
@@ -389,10 +386,11 @@ PixelInput DefaultVertexShaderFunction(VertexInput input)
 	output.BiTangent = mul(input.BiTangent, (float3x3)BonesWorld);
 	output.BiTangent = normalize(output.BiTangent);
 
+	output.Light = float4(0,0,0,0);
 
-	output.lightPos = mul(worldPos, ShadowMapViewProjection);
-	output.lightPosClose = mul(worldPos, ShadowMapViewProjectionClose);
-	output.lightPosVeryClose = mul(worldPos, ShadowMapViewProjectionVeryClose);
+	//output.lightPos = mul(worldPos, ShadowMapViewProjection);
+	//output.lightPosClose = mul(worldPos, ShadowMapViewProjectionClose);
+	//output.lightPosVeryClose = mul(worldPos, ShadowMapViewProjectionVeryClose);
 
 	output.TexCoord = input.TexCoord;
 	output.Color = input.Color;
@@ -1518,15 +1516,20 @@ float3 CalculateSsrSpecular(PixelInput input, float3 normal, float roughness, fl
 
 half3 CalculateLight(PixelInput input, float3 normal, float roughness, float metallic, float ao, float3 albedo, float3 TangentNormal)
 {
-	float3 lightCoords = input.lightPos.xyz / input.lightPos.w;
+
+	float4 lightPos = mul(float4(input.MyPosition,1), ShadowMapViewProjection);
+	float4 lightClosePos = mul(float4(input.MyPosition,1), ShadowMapViewProjectionClose);
+	float4 lightVeryClosePos = mul(float4(input.MyPosition,1), ShadowMapViewProjectionVeryClose);
+
+	float3 lightCoords = lightPos.xyz / lightPos.w;
 	lightCoords = (lightCoords + 1.0f) / 2.0f;
 	lightCoords.y = 1.0f - lightCoords.y;
 
-	float3 lightCoordsClose = input.lightPosClose.xyz / input.lightPosClose.w;
+	float3 lightCoordsClose = lightClosePos.xyz / lightClosePos.w;
 	lightCoordsClose = (lightCoordsClose + 1.0f) / 2.0f;
 	lightCoordsClose.y = 1.0f - lightCoordsClose.y;
 
-	float3 lightCoordsVeryClose = input.lightPosVeryClose.xyz / input.lightPosVeryClose.w;
+	float3 lightCoordsVeryClose = lightVeryClosePos.xyz / lightVeryClosePos.w;
 	lightCoordsVeryClose = (lightCoordsVeryClose + 1.0f) / 2.0f;
 	lightCoordsVeryClose.y = 1.0f - lightCoordsVeryClose.y;
 
