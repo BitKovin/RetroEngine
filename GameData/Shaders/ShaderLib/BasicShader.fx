@@ -560,7 +560,7 @@ half CalculateSpecular(float3 worldPos, half3 normal, half3 lightDir, half rough
     specular *= energyFactor;
 
     // Cap the specular contribution to prevent brightness overload
-    return specular * 0.1;
+    return specular * 0.006;
 }
 
 
@@ -1112,6 +1112,31 @@ half SamplePointShadowMapLinear(sampler2D shadowMap, float2 coords, float compar
 	return lerp(mixA, mixB, fracPart.x);
 }
 
+half SamplePointShadowMap(sampler2D shadowMap, float2 coords, float compare, float2 texelSize)
+{
+
+    texelSize = 0.5/texelSize;
+    texelSize.y/=1.5;
+
+    int slice = floor(coords.y*3);
+	if(coords.x>0.5)
+		slice += 3;
+
+
+	float2 pixelPos = coords / texelSize;
+	float2 fracPart = frac(pixelPos);
+	float2 startTexel = (pixelPos - fracPart) * texelSize;
+
+    float2 blCoord =  startTexel;
+
+	blCoord = SnapToSlice(blCoord, slice,texelSize.x);
+
+
+	half blTexel = SamplePointLightCubemap(shadowMap, blCoord, compare);
+
+	return blTexel;
+}
+
 float GetPointLightDepthLinear(int i, float3 lightDir, float d)
 {
 	if (i >= MAX_POINT_LIGHTS_SHADOWS)
@@ -1339,8 +1364,11 @@ float SamplePointLightPCF(int i, float3 tangent, float3 bitangent, float3 lightD
 }
 
 
-half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half roughness, half metalic, half3 albedo)
+half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half roughness, half metalic, half3 albedo, out float3 SpecularOut)
 {
+
+	SpecularOut = 0;
+
 	float3 lightVector = LightPositions[i].xyz - pixelInput.MyPosition;
 	float distanceToLight = length(lightVector);
 
@@ -1435,7 +1463,8 @@ half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half rough
 
 		#if OPENGL
 
-		notShadow = GetPointLightDepth(i, lightDir,distanceToLight*distFactor + bias);
+		notShadow = 1;// SamplePointLightPCF(i, tangent, bitangent, lightDir, distanceToLight*distFactor, bias, false);
+		
 		#else
 
 		if(PointLightShadowQuality == 0)
@@ -1445,7 +1474,7 @@ half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half rough
         if(pixelSize < 0.0006 || PointLightShadowQuality == 1)
         {
 
-            notShadow = GetPointLightDepth(i, lightDir,distanceToLight*distFactor + bias);
+            notShadow = GetPointLightDepthLinear(i, lightDir,distanceToLight*distFactor + bias);
 
         }else
 		if(pixelSize < 0.002 || simpleShadows || PointLightShadowQuality == 2)
@@ -1486,7 +1515,9 @@ half3 CalculatePointLight(int i, PixelInput pixelInput, half3 normal, half rough
 	if (dot(l, half3(1, 1, 1)) < 0)
 		specular = 0;
 
-	return (l + distIntence * specular * notShadow) * dirFactor;
+	SpecularOut = distIntence * specular * notShadow * dirFactor;
+
+	return l * dirFactor;
 }
 
 float3 CalculateSsrSpecular(PixelInput input, float3 normal, float roughness, float metalic, float3 albedo)
@@ -1514,7 +1545,7 @@ float3 CalculateSsrSpecular(PixelInput input, float3 normal, float roughness, fl
 	return saturate(color * intens * dot(lightDir, -normal));
 }
 
-half3 CalculateLight(PixelInput input, float3 normal, float roughness, float metallic, float ao, float3 albedo, float3 TangentNormal)
+half3 CalculateLight(PixelInput input, float3 normal, float roughness, float metallic, float ao, float3 albedo, float3 TangentNormal, out float3 Specular)
 {
 
 	float4 lightPos = mul(float4(input.MyPosition,1), ShadowMapViewProjection);
@@ -1541,7 +1572,7 @@ half3 CalculateLight(PixelInput input, float3 normal, float roughness, float met
 		normal = -LightDirection;
 
 
-	if (dot(normal, LightDirection) > 0.01)
+	if (dot(normal, LightDirection) >= 0)
 	{
 		shadow += 1;
 	}
@@ -1610,19 +1641,27 @@ half3 CalculateLight(PixelInput input, float3 normal, float roughness, float met
 
 	globalLight *= ao;
 
-	light += specular;
+	//light += specular;
 	light = max(light, 0.0f);
 	light += globalLight;
 
 	// Accumulate point light contributions
 	for (int i = 0; i < MAX_POINT_LIGHTS; i++)
 	{
-		light += CalculatePointLight(i, input, normal, roughness, metallic, albedo);
+
+		float3 spec = 0;
+		
+		light += CalculatePointLight(i, input, normal, roughness, metallic, albedo, spec);
+
+		specular += spec;
+
 	}
 
 	// Combine contributions
 
 	//light += CalculateSsrSpecular(input, normal, roughness, metallic, albedo);
+
+	Specular = specular;
 
 	return light;
 }

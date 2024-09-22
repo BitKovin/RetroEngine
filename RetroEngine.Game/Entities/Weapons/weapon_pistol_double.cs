@@ -245,6 +245,8 @@ namespace RetroEngine.Game.Entities.Weapons
                 
             }
 
+            startPos = Vector3.Lerp(startPos, Camera.position, 0.6f);
+
             Vector3 endPos = Camera.position + Camera.rotation.GetForwardVector() * 30;
 
             bulletRotation = MathHelper.FindLookAtRotation(startPos, endPos);

@@ -537,7 +537,6 @@ namespace RetroEngine.Entities.Light
             // Draw the full-screen quad using SpriteBatch
             spriteBatch.Draw(GameMain.Instance.render.black, screenRectangle, Microsoft.Xna.Framework.Color.White);
             spriteBatch.End();
-            
 
             RenderFace(CubeMapFace.PositiveX, pointLightData,0);
             RenderFace(CubeMapFace.NegativeX, pointLightData,1);

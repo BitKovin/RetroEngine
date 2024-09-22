@@ -65,7 +65,7 @@ namespace RetroEngine.Game.Entities.Player
 
         public bool flashlightEnabled = false;
 
-        float bobSpeed = 6;
+        float bobSpeed = 8;
 
         PlayerUI PlayerUI;
 

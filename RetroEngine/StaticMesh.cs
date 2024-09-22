@@ -786,10 +786,10 @@ namespace RetroEngine
             float bias = 0.09f;
 
             if (closeShadow)
-                bias = 0.035f;
+                bias = 0.045f;
 
             if (veryClose)
-                bias = 0.015f;
+                bias = 0.02f;
 
             bias *= NormalBiasScale;
 
