@@ -7,8 +7,8 @@ sampler TextureSampler = sampler_state
 {
     texture = <Texture>;
 
-    MinFilter = Point;
-    MagFilter = Point;
+    MinFilter = Anisotropic;
+    MagFilter = Anisotropic;
 
     MipLODBias = -0.5;
 
@@ -20,8 +20,8 @@ sampler EmissiveTextureSampler = sampler_state
 {
     texture = <EmissiveTexture>;
 
-    MinFilter = Point;
-    MagFilter = Point;
+    MinFilter = Anisotropic;
+    MagFilter = Anisotropic;
 
     
 
@@ -112,7 +112,7 @@ half3 CalculateVertexLight(PixelInput input)
 if(LargeObject == false)
     for (int i = 0; i < MAX_POINT_LIGHTS; i++)
 	{
-		light += CalculateSimplePointLight(i, input, input.Normal);
+		light += CalculateSimplePointLight(i, input, tangentNormal);
 	}
 #endif
 
