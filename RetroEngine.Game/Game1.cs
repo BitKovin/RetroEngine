@@ -45,7 +45,7 @@ namespace RetroEngine.Game
 
 
 
-            //SetStylingGraphics();
+            SetStylingGraphics();
                 
             Level.LoadFromFile("test");
 
@@ -151,7 +151,8 @@ namespace RetroEngine.Game
 
             PointLight.DisableShadows = true;
 
-            Graphics.Exposure = 0.23f;
+            Graphics.Exposure = 0.25f;
+            Graphics.Gamma = 1.1f;
 
             Graphics.EnableBloom = false;
 
