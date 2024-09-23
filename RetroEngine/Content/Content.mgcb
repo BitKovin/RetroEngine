@@ -271,3 +271,10 @@
 /processorParam:DebugMode=Auto
 /processorParam:Defines=
 /build:../../GameData/Shaders/VertexLighting.fx;Shaders/VertexLighting.fx
+
+#begin ../../GameData/Shaders/VertexLighting.instanced.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/processorParam:Defines=
+/build:../../GameData/Shaders/VertexLighting.instanced.fx;Shaders/VertexLighting.instanced.fx
