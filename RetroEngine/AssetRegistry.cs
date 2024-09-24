@@ -54,12 +54,12 @@ namespace RetroEngine
         public static Texture2D LoadTextureFromFile(string path, bool ignoreErrors = false, bool generateMipMaps = true)
         {
 
+            if (nullAssets.Contains(path))
+                return null;
+
             lock (textures)
                 if (textures.ContainsKey(path))
                     return (Texture2D)textures[path];
-
-            if (nullAssets.Contains(path))
-                return null;
 
             if (Thread.CurrentThread == LoaderThread)
                 Thread.Sleep(1);
@@ -80,8 +80,6 @@ namespace RetroEngine
 
             try
             {
-
-
 
                 using (Stream stream = GetFileStreamFromPath(filePath))
                 {

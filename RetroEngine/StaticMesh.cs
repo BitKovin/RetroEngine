@@ -1370,6 +1370,8 @@ namespace RetroEngine
 
         }
 
+        List<string> nullTextures = new List<string>();
+
         protected Texture2D FindTextureWithSufix(string name, string sufix = "_em", Texture2D def = null)
         {
 
@@ -1394,18 +1396,25 @@ namespace RetroEngine
             {
 
                 Texture2D output;
-
-                foreach (string item in textureSearchPaths)
+                if (nullTextures.Contains(name) == false)
                 {
-                    output = AssetRegistry.LoadTextureFromFile(item + name, true);
-                    if (output != null)
+                    foreach (string item in textureSearchPaths)
                     {
-                        textures.TryAdd(name, output);
-                        return output;
+                        output = AssetRegistry.LoadTextureFromFile(item + name, true);
+                        if (output != null)
+                        {
+                            textures.TryAdd(name, output);
+                            return output;
+                        }
                     }
-                }
 
+                    nullTextures.Add(name);
+
+                }
             }
+
+
+
             if (def == null)
             {
                 return GameMain.Instance.render.black;

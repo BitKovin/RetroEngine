@@ -124,6 +124,8 @@ namespace RetroEngine.Game.Entities.Weapons
         {
             if (GameMain.Instance.paused) return;
 
+            return;
+
             Sway -= new Vector3(Input.MouseDelta.X,-Input.MouseDelta.Y,0)/3000;
             Sway = Vector3.Lerp(Sway,Vector3.Zero, Time.DeltaTime*12);
 

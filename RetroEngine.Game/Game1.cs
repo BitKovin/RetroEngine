@@ -154,7 +154,7 @@ namespace RetroEngine.Game
             Graphics.Exposure = 0.25f;
             Graphics.Gamma = 1.1f;
 
-            Graphics.EnableBloom = false;
+            Graphics.EnableBloom = true;
 
             //Render.DisableMultiPass = true;
 

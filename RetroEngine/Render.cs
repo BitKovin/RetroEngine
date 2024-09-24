@@ -1090,13 +1090,13 @@ namespace RetroEngine
             ComposeEffect.Parameters["ssaoResolution"].SetValue(new Vector2(ssaoOutput.Width, ssaoOutput.Height));
 
             ComposeEffect.Parameters["ColorTexture"].SetValue(TonemapResult);
-            ComposeEffect.Parameters["SSAOTexture"]?.SetValue(ssaoOutput);
-            ComposeEffect.Parameters["BloomTexture"]?.SetValue(bloomSample);
-            ComposeEffect.Parameters["Bloom2Texture"]?.SetValue(bloomSample2);
-            ComposeEffect.Parameters["Bloom3Texture"]?.SetValue(bloomSample3);
-            ComposeEffect.Parameters["Bloom3Texture"]?.SetValue(bloomSample4);
-            ComposeEffect.Parameters["LutTexture"]?.SetValue(LUT);
-            ComposeEffect.Parameters["lutSize"]?.SetValue(lutSize);
+            ComposeEffect.Parameters["SSAOTexture"].SetValue(ssaoOutput);
+            ComposeEffect.Parameters["BloomTexture"].SetValue(bloomSample);
+            ComposeEffect.Parameters["Bloom2Texture"].SetValue(bloomSample2);
+            ComposeEffect.Parameters["Bloom3Texture"].SetValue(bloomSample3);
+            ComposeEffect.Parameters["Bloom3Texture"].SetValue(bloomSample4);
+            ComposeEffect.Parameters["LutTexture"].SetValue(LUT);
+            ComposeEffect.Parameters["lutSize"].SetValue(lutSize);
 
             SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
 
@@ -1111,10 +1111,22 @@ namespace RetroEngine
         void CalculateBloom()
         {
 
-            if (Graphics.EnableBloom == false) return;
 
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, bloomSample.Width, bloomSample.Height);
             graphics.GraphicsDevice.SetRenderTarget(bloomSample);
+
+            if (Graphics.EnableBloom == false)
+            {
+                graphics.GraphicsDevice.Clear(Color.Black);
+
+                DownsampleToTexture(bloomSample, bloomSample2, false);
+                DownsampleToTexture(bloomSample2, bloomSample3, false);
+                DownsampleToTexture(bloomSample3, bloomSample4, false);
+
+                return;
+            }
+
+            
 
             BloomEffect.Parameters["screenWidth"].SetValue(bloomSample.Width);
             BloomEffect.Parameters["screenHeight"].SetValue(bloomSample.Height);
@@ -1129,9 +1141,7 @@ namespace RetroEngine
 
             spriteBatch.End();
 
-            DownsampleToTexture(bloomSample, bloomSample2, true);
-            DownsampleToTexture(bloomSample2, bloomSample3, true);
-            DownsampleToTexture(bloomSample3, bloomSample4, true);
+
 
         }
         public static bool performingOcclusionTest = false;

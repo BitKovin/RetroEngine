@@ -26,6 +26,8 @@ namespace RetroEngine.Game.Entities.Weapons
         SoundPlayer fireSoundPlayer;
         SoundPlayer fireSoundPlayer2;
 
+        SoundPlayer hitSoundPlayer;
+
 
         float aim = 0;
 
@@ -41,14 +43,16 @@ namespace RetroEngine.Game.Entities.Weapons
             base.Start();
 
             fireSoundPlayer = Level.GetCurrent().AddEntity(new SoundPlayer()) as SoundPlayer;
-            fireSoundPlayer.SetSound(FmodEventInstance.Create("event:/Weapons/pistol/pistol_fire"));
-            fireSoundPlayer.SetEventProperty("pistol_right_hand", 1);
+            fireSoundPlayer.SetSound(FmodEventInstance.Create("event:/Weapons/knife/knife_attack"));
 
             fireSoundPlayer2 = Level.GetCurrent().AddEntity(new SoundPlayer()) as SoundPlayer;
-            fireSoundPlayer2.SetSound(FmodEventInstance.Create("event:/Weapons/pistol/pistol_fire"));
-            fireSoundPlayer2.SetEventProperty("pistol_right_hand", 1);
+            fireSoundPlayer2.SetSound(FmodEventInstance.Create("event:/Weapons/knife/knife_attack"));
 
-            ShowHandL = false;
+            hitSoundPlayer = Level.GetCurrent().AddEntity(new SoundPlayer()) as SoundPlayer;
+            hitSoundPlayer.SetSound(FmodEventInstance.Create("event:/Weapons/knife/knife_hit"));
+
+
+            ShowHandL = true;
 
 
             LateUpdate();
@@ -242,6 +246,10 @@ namespace RetroEngine.Game.Entities.Weapons
                 }
 
                 CreateHitParticle(hit.HitPointWorld + hit.HitNormalWorld * 0.1f);
+
+                hitSoundPlayer.Position = hit.HitPointWorld;
+                hitSoundPlayer.Update();
+                hitSoundPlayer.Play(true);
 
             }
 

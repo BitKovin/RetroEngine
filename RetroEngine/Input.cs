@@ -28,8 +28,17 @@ namespace RetroEngine
 
         public static MouseMoveCalculator MouseMoveCalculatorObject;
 
+        internal static MouseState mouseState;
+        internal static KeyboardState keyboardState;
+        internal static GamePadState gamePadState;
+
         public static void Update()
         {
+
+            mouseState = Mouse.GetState();
+            keyboardState = Keyboard.GetState();
+            gamePadState = GamePad.GetState(PlayerIndex.One);
+
             UpdateActions();
 
             if (PendingCenterCursor)
@@ -44,20 +53,21 @@ namespace RetroEngine
         public static void UpdateMouse()
         {
 
-            Vector2 mousePos = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
-
-
-
+            Vector2 mousePos = new Vector2(mouseState.X, mouseState.Y);
 
             if (MouseMoveCalculatorObject != null)
             {
+
+                MousePos = mousePos;
+
+                
 
                 MouseDelta = MouseMoveCalculatorObject.GetMouseDelta();
 
                 AddMouseInput(MouseDelta);
                 MouseDelta *= sensitivity;
 
-                MousePos = mousePos;
+                
 
                 return;
             }
@@ -74,13 +84,13 @@ namespace RetroEngine
                 {
 
                     Mouse.SetPosition((int)windowCenter.X, (int)windowCenter.Y);
-                    MousePos = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
+                    MousePos = new Vector2(mouseState.X, mouseState.Y);
                 }
                 else
                 {
-                    MousePos = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
+                    MousePos = new Vector2(mouseState.X, mouseState.Y);
                 }
-            else { MousePos = new Vector2(Mouse.GetState().X, Mouse.GetState().Y); }
+            else { MousePos = new Vector2(mouseState.X, mouseState.Y); }
             
         }
 
@@ -208,9 +218,9 @@ namespace RetroEngine
 
         public void Update()
         {
-            bool newLmb = Mouse.GetState().LeftButton == ButtonState.Pressed;
-            bool newRmb = Mouse.GetState().RightButton == ButtonState.Pressed;
-            bool newMmb = Mouse.GetState().MiddleButton == ButtonState.Pressed;
+            bool newLmb = Input.mouseState.LeftButton == ButtonState.Pressed;
+            bool newRmb = Input.mouseState.RightButton == ButtonState.Pressed;
+            bool newMmb = Input.mouseState.MiddleButton == ButtonState.Pressed;
 
             bool oldPressing = pressing;
 
@@ -234,7 +244,7 @@ namespace RetroEngine
             }
             //keyboard
 
-            Keys[] keysNow = Keyboard.GetState().GetPressedKeys();
+            Keys[] keysNow = Input.keyboardState.GetPressedKeys();
 
             foreach(Keys key in keysNow)
             {
@@ -248,7 +258,7 @@ namespace RetroEngine
 
             foreach(Buttons button in buttons)
             {
-                bool buttonDown = GamePad.GetState(0).IsButtonDown(button);
+                bool buttonDown = Input.gamePadState.IsButtonDown(button);
 
                 if(buttonDown&& !pressing)
                 {

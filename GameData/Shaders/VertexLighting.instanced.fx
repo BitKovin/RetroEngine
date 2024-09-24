@@ -215,8 +215,8 @@ PixelOutput PixelShaderFunction(PixelInput input)
     float ao = orm.r;
     
     
-    float3 textureColor = ColorRGBTA.xyz;
-	float textureAlpha = tex2D(TextureSampler, input.TexCoord).w;
+    float3 textureColor = ColorRGBTA.xyz * input.Color.rgb;
+	float textureAlpha = ColorRGBTA.w * input.Color.a;
     
     if (textureAlpha < 0.01)
         discard;
