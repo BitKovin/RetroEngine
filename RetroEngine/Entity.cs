@@ -215,6 +215,12 @@ namespace RetroEngine
             OnDamaged(damage, causer, weapon);
         }
 
+        public virtual void OnLevelEvent(Level level, string name, string payload)
+        {
+
+        }
+
+
         public virtual void Destroy()
         {
 

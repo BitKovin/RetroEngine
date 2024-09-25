@@ -48,6 +48,10 @@ namespace RetroEngine
 
         public string Name = "";
 
+        public delegate void LevelEvent(Level level, string name, string payload);
+
+        public event LevelEvent OnLevelEvent;
+
         public Level()
         {
 
@@ -66,6 +70,11 @@ namespace RetroEngine
         public static Level GetCurrent()
         {
             return GameMain.Instance.curentLevel;
+        }
+
+        public void TriggerLevelEvent(string name, string payload)
+        {
+            OnLevelEvent?.Invoke(this, name, payload);
         }
 
         internal static bool LoadPendingLevel()
@@ -553,6 +562,9 @@ namespace RetroEngine
             entities.Add(ent);
             ent.Id = GetIdForNewEntity(ent) ;
             entityID += 1;
+
+            OnLevelEvent += (Level level, string name, string payload)=> { ent.OnLevelEvent(level, name, payload); };
+
             return ent;
         }
 
