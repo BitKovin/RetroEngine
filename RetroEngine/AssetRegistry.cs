@@ -53,13 +53,12 @@ namespace RetroEngine
 
         public static Texture2D LoadTextureFromFile(string path, bool ignoreErrors = false, bool generateMipMaps = true)
         {
-
+            
             if (nullAssets.Contains(path))
                 return null;
 
-            lock (textures)
-                if (textures.ContainsKey(path))
-                    return (Texture2D)textures[path];
+            if (textures.ContainsKey(path))
+                return (Texture2D)textures[path];
 
             if (Thread.CurrentThread == LoaderThread)
                 Thread.Sleep(1);
@@ -83,6 +82,14 @@ namespace RetroEngine
 
                 using (Stream stream = GetFileStreamFromPath(filePath))
                 {
+
+                    if(stream == null)
+                    {
+                        lock (nullAssets)
+                            nullAssets.Add(filePath);
+                        return null;
+                    }
+
                     if (generateMipMaps && AllowGeneratingMipMaps)
                     {
                         Texture2D tex = Texture2D.FromStream(GameMain.Instance.GraphicsDevice, stream);
@@ -113,7 +120,9 @@ namespace RetroEngine
             {
                 if (!ignoreErrors)
                     Logger.Log("Failed to load texture: " + ex.Message);
-                nullAssets.Add(path);
+
+                lock (nullAssets)
+                    nullAssets.Add(path);
                 return null;
             }
 
@@ -186,6 +195,10 @@ namespace RetroEngine
         public static FileStream GetFileStreamFromPath(string path)
         {
             Logger.Log("reading file:" + path);
+
+            if (File.Exists(path) == false)
+                return null;
+
             return File.OpenRead(path);
         }
 

@@ -34,7 +34,7 @@ namespace RetroEngine.Game.Entities.Weapons
         {
             base.LoadAssets();
 
-            LoadVisual();
+            //LoadVisual();
 
             
 
