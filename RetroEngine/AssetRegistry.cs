@@ -60,8 +60,8 @@ namespace RetroEngine
             if (textures.ContainsKey(path))
                 return (Texture2D)textures[path];
 
-            if (Thread.CurrentThread == LoaderThread)
-                Thread.Sleep(1);
+            //if (Thread.CurrentThread == LoaderThread)
+                //Thread.Sleep(1);
 
             if (GameMain.CanLoadAssetsOnThisThread() == false)
             {
@@ -80,8 +80,10 @@ namespace RetroEngine
             try
             {
 
-                using (Stream stream = GetFileStreamFromPath(filePath))
+                using (var asset = AssetRegistry.GetFileStreamFromPath(filePath))
                 {
+
+                    FileStream stream = asset.FileStream;
 
                     if(stream == null)
                     {
@@ -192,14 +194,20 @@ namespace RetroEngine
                 loadedVideos.Clear();
             }
         }
-        public static FileStream GetFileStreamFromPath(string path)
+
+        static bool SaveAssetLoadHistory = false;
+        static List<string> AssetLoadHistory = new List<string>();
+
+        public static AssetFileStreamReference GetFileStreamFromPath(string path)
         {
             Logger.Log("reading file:" + path);
 
             if (File.Exists(path) == false)
                 return null;
 
-            return File.OpenRead(path);
+            AssetLoadHistory.Add(path);
+
+            return new AssetFileStreamReference(path, File.OpenRead(path));
         }
 
         public static TextureCube LoadCubeTextureFromFile(string path, bool ignoreErrors = false, bool generateMipMaps = true)
@@ -274,13 +282,18 @@ namespace RetroEngine
 
         public static void ClearAllTextures()
         {
-            foreach (Texture tex in textures.Values)
-            {
-                tex?.Dispose();
-            }
 
-            textures.Clear();
-            texturesHistory.Clear();
+            var texturesCopy = new Dictionary<string, Texture>(textures);
+
+            foreach(string key in texturesCopy.Keys)
+            {
+                if (ShouldUnloadAsset(key) == false) continue;
+
+                textures[key]?.Dispose();
+
+                textures.Remove(key);
+                texturesHistory.Remove(key);
+            }
 
         }
 
@@ -408,10 +421,10 @@ namespace RetroEngine
 
             try
             {
-                using (Stream stream = GetFileStreamFromPath(filePath))
+                using (var asset = GetFileStreamFromPath(filePath))
                 {
 
-                    SoundEffect soundEffect = SoundEffect.FromStream(stream);
+                    SoundEffect soundEffect = SoundEffect.FromStream(asset.FileStream);
 
                     sounds.Add(path, soundEffect);
 
@@ -447,7 +460,11 @@ namespace RetroEngine
             else
             {
                 string filePath = FindPathForFile(path);
-                sound = CoreSystem.LoadSoundFromStream(AssetRegistry.GetFileStreamFromPath(filePath));
+
+                using (var asset = AssetRegistry.GetFileStreamFromPath(filePath))
+                {
+                    sound = CoreSystem.LoadSoundFromStream(asset.FileStream);
+                }
                 soundsFmod.TryAdd(path, sound);
             }
             sound.Volume = 0;
@@ -477,9 +494,11 @@ namespace RetroEngine
                 return fmodBanks[path];
 
             string filePath = FindPathForFile(path);
-
-
-            Bank bank = StudioSystem.LoadBankFromStream(GetFileStreamFromPath(filePath), FMOD.Studio.LOAD_BANK_FLAGS.NORMAL);
+            Bank bank;
+            using (var asset = AssetRegistry.GetFileStreamFromPath(filePath))
+            {
+                bank = StudioSystem.LoadBankFromStream(asset.FileStream, FMOD.Studio.LOAD_BANK_FLAGS.NORMAL);
+            }
 
             lock(fmodBanks)
             fmodBanks.Add(path, bank);
@@ -498,6 +517,8 @@ namespace RetroEngine
                 foreach (string name in fmodBanks.Keys)
                 {
                     if (name.ToLower().Contains("master")) continue;
+
+                    if (ShouldUnloadAsset(name) == false) continue;
 
                     fmodBanks[name].Unload();
                     unloaded.Add(name);
@@ -603,6 +624,120 @@ namespace RetroEngine
                     loadingAssets = false;
                 else
                     loadingAssets = true;
+            }
+
+        }
+
+        static string[] levelReferencedAssets = new string[0];
+
+        public static bool ShouldUnloadAsset(string assetPath)
+        {
+
+            if (SaveAssetLoadHistory)
+                return true;
+
+            foreach (string path in levelReferencedAssets) {
+                if (path.Contains(assetPath) || assetPath.Contains(path))
+                {
+
+                    Console.WriteLine("not unloading " + assetPath);
+
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        [ConsoleCommand("AssetRegistry.StartRecord")]
+        public static void StartRecordAssetReferences()
+        {
+            SaveAssetLoadHistory = true;
+            AssetLoadHistory.Clear();
+        }
+
+        [ConsoleCommand("AssetRegistry.StopRecord")]
+        public static void StopRecordAssetReferences()
+        {
+            SaveAssetLoadHistory = false;
+
+            string referenceFilePath = ROOT_PATH + "GameData/" + "maps/" + Level.LoadingLevel + ".references";
+
+            File.Create(referenceFilePath).Close();
+
+            TextWriter writer = new StreamWriter(referenceFilePath);
+
+            foreach(string assetPath in AssetLoadHistory)
+            {
+                writer.WriteLine(assetPath);
+            }
+
+            writer.Close();
+
+        }
+
+        public static bool LoadLevelReferences()
+        {
+
+            if (SaveAssetLoadHistory)
+                return false;
+
+            string referenceFilePath = ROOT_PATH + "GameData/" + "maps/" + Level.LoadingLevel + ".references";
+
+            if (File.Exists(referenceFilePath) == false)
+                return false;
+
+            TextReader reader = new StreamReader(referenceFilePath);
+
+            List<string> references = new List<string>();
+
+            
+            while (true)
+            {
+                string s = reader.ReadLine();
+
+                if (s == null)
+                    break;
+
+                references.Add(s);
+
+            }
+
+            levelReferencedAssets = references.ToArray();
+
+            return true;
+
+
+        }
+
+        public class AssetFileStreamReference : IDisposable
+        {
+            public string path;
+
+            public FileStream FileStream;
+
+            public bool disposed = false;
+
+            public void Dispose()
+            {
+                FileStream?.Close();
+                FileStream?.Dispose();
+
+                disposed = true;
+
+            }
+
+            public AssetFileStreamReference(string path, FileStream fileStream)
+            {
+                this.path = path;
+                this.FileStream = fileStream;
+            }
+
+            ~AssetFileStreamReference()
+            {
+                FileStream?.Close();
+                FileStream?.Dispose();
+                disposed = true;
             }
 
         }

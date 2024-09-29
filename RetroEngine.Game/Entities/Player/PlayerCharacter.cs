@@ -441,8 +441,6 @@ namespace RetroEngine.Game.Entities.Player
         void UpdateCamera()
         {
 
-            if (Input.GetAction("test2").Holding())
-                Input.MouseDelta = new Vector2(3,0);
 
             if (GameMain.SkipFrames == 0)
                 CameraRotation += new Vector3(Input.MouseDelta.Y, -Input.MouseDelta.X, 0) / 2f;

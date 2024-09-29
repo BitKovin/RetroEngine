@@ -38,6 +38,8 @@ namespace RetroEngine
 
         static string pendingLevelChange = null;
 
+        public static string LoadingLevel = "";
+
         public static bool ChangingLevel = true;
 
         public bool OcclusionCullingEnabled = false;
@@ -117,6 +119,8 @@ namespace RetroEngine
                 return;
             }
 
+            LoadingLevel = name;
+
             string path = AssetRegistry.FindPathForFile(name);
 
             if (File.Exists(path) == false)
@@ -131,7 +135,9 @@ namespace RetroEngine
 
             bool rebuild = false;
 
-#if RELEASE
+            AssetRegistry.LoadLevelReferences();
+
+
             if (name != GetCurrent().Name) 
             {
                 AssetRegistry.ConstantCache.Clear();
@@ -142,7 +148,7 @@ namespace RetroEngine
 
                 rebuild = true;
             }
-
+#if RELEASE
 #else
             rebuild = true;
 #endif

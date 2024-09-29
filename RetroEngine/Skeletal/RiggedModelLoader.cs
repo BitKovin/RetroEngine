@@ -128,42 +128,45 @@ namespace RetroEngine.Skeletal
             //
             // load the file at path to the scene
             //
-            
-
-                scene = new Scene();
-                var importer = new AssimpContext();
 
 
-                try
+            scene = new Scene();
+            var importer = new AssimpContext();
+
+
+            try
+            {
+                //Console.WriteLine("(not sure this works) Model scale: " + importer.Scale);
+                //importer.Scale = 1f / importer.Scale;
+                //Console.WriteLine("(not sure this works) Model scale: " + importer.Scale);
+
+                using (var asset = AssetRegistry.GetFileStreamFromPath(filepathorname))
                 {
-                    //Console.WriteLine("(not sure this works) Model scale: " + importer.Scale);
-                    //importer.Scale = 1f / importer.Scale;
-                    //Console.WriteLine("(not sure this works) Model scale: " + importer.Scale);
-
                     scene = importer.ImportFileFromStream
                                            (
-                                            AssetRegistry.GetFileStreamFromPath(filepathorname),
+                                            asset.FileStream,
                                               PostProcessSteps.CalculateTangentSpace
                                             | PostProcessSteps.Triangulate
-                                            | PostProcessSteps.ImproveCacheLocality
                                             | PostProcessSteps.FlipUVs
                                             | PostProcessSteps.GenerateSmoothNormals
-                                            | PostProcessSteps.OptimizeMeshes
-                                            
+
+
                                             //| PostProcessSteps.GlobalScale
                                             //| PostProcessSteps.RemoveRedundantMaterials // sketchy
                                             //| PostProcessSteps.PreTransformVertices
                                             // PostProcessSteps.ValidateDataStructure
                                             );
                 }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.Message);
-                    Debug.Assert(false, filePathorFileName + "\n\n" + "A problem loading the model occured: \n " + filePathorFileName + " \n" + e.Message);
-                    scene = null;
-                }
-            
-            if(scene == null)return null;
+            }
+
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                Debug.Assert(false, filePathorFileName + "\n\n" + "A problem loading the model occured: \n " + filePathorFileName + " \n" + e.Message);
+                scene = null;
+            }
+
+            if (scene == null) return null;
 
             return CreateModel(filepathorname);
         }

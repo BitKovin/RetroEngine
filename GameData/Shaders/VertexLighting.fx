@@ -143,11 +143,11 @@ PixelOutput PixelShaderFunction(PixelInput input)
     screenCoords.y = 1.0f - screenCoords.y;
     
     
-        //float depthIn = SampleMaxDepth(screenCoords);
+        float depthIn = SampleDepth(screenCoords);
 
     if(earlyZ)
     {
-        //DepthDiscard(depthIn,input);
+        DepthDiscard(depthIn + 1,input);
     }
     
     PixelOutput output = (PixelOutput)0;

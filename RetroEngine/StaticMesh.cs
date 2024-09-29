@@ -1567,8 +1567,10 @@ namespace RetroEngine
                 string hint = "";
                 if (filePath.EndsWith(".obj"))
                     hint = "obj";
-
-                scene = importer.ImportFileFromStream(AssetRegistry.GetFileStreamFromPath(filePath), Assimp.PostProcessSteps.MakeLeftHanded | Assimp.PostProcessSteps.FlipUVs | Assimp.PostProcessSteps.CalculateTangentSpace | Assimp.PostProcessSteps.Triangulate | Assimp.PostProcessSteps.FindDegenerates, formatHint: hint);
+                using (var asset = AssetRegistry.GetFileStreamFromPath(filePath))
+                {
+                    scene = importer.ImportFileFromStream(asset.FileStream, Assimp.PostProcessSteps.MakeLeftHanded | Assimp.PostProcessSteps.FlipUVs | Assimp.PostProcessSteps.CalculateTangentSpace | Assimp.PostProcessSteps.Triangulate | Assimp.PostProcessSteps.FindDegenerates, formatHint: hint);
+                }
                 //loadedScenes.Add(filePath, scene);
             }
 
@@ -1673,6 +1675,8 @@ namespace RetroEngine
             modelMesh.Add(new ModelMesh(graphicsDevice, meshParts) { BoundingSphere = boundingSphere });
 
             Model model = new Model(graphicsDevice, new List<ModelBone>(), modelMesh);
+
+            model.Tag = filePath;
 
             loadedModels.TryAdd(filePath, model);
 

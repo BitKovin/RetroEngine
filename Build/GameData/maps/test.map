@@ -18415,3 +18415,10 @@
 "origin" "176 128 32"
 "angles" "0 90 0"
 }
+// entity 12
+{
+"classname" "light_point"
+"origin" "95 31 129"
+"radius" "5"
+"intensity" "-3"
+}

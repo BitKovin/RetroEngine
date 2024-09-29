@@ -1661,21 +1661,25 @@ namespace RetroEngine
 
                 if (File.Exists(path + ".skeletaldata") == false) return;
 
-                var stream = AssetRegistry.GetFileStreamFromPath(path + ".skeletaldata");
+                using (var asset = AssetRegistry.GetFileStreamFromPath(path + ".skeletaldata"))
+                {
 
-                var reader = new StreamReader(stream);
 
-                string text = reader.ReadToEnd();
 
-                JsonSerializerOptions options = new JsonSerializerOptions();
+                    var stream = asset.FileStream;
 
-                foreach (var conv in Helpers.JsonConverters.GetAll())
-                    options.Converters.Add(conv);
+                    var reader = new StreamReader(stream);
 
-                meta = JsonSerializer.Deserialize<SkeletalMeshMeta>(text, options);
-                loadedMeta.Add(path, meta);
+                    string text = reader.ReadToEnd();
 
-                stream.Close();
+                    JsonSerializerOptions options = new JsonSerializerOptions();
+
+                    foreach (var conv in Helpers.JsonConverters.GetAll())
+                        options.Converters.Add(conv);
+
+                    meta = JsonSerializer.Deserialize<SkeletalMeshMeta>(text, options);
+                    loadedMeta.Add(path, meta);
+                }
 
             }
 

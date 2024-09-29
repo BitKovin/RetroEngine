@@ -279,7 +279,7 @@ namespace RetroEngine.Game.Entities.Weapons
         void LoadVisual()
         {
 
-            const string pistolPath = "models/weapons/pistol_revolver.fbx";
+            const string pistolPath = "models/weapons/pistol2.fbx";
 
             mesh.Scale = new Vector3(1f);
             mesh.LoadFromFile(pistolPath);

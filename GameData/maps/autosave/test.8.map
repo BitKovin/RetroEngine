@@ -18430,6 +18430,6 @@
 // entity 14
 {
 "classname" "infodecal"
-"origin" "-40 -248 120"
-"texture" "cat.png"
+"origin" "-24 -248 120"
+"texture" "../textures/brushes/cat.png"
 }

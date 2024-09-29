@@ -63,7 +63,10 @@ namespace RetroEngine
                 scene = loadedScenes[filePath];
             else
             {
-                scene = importer.ImportFileFromStream(AssetRegistry.GetFileStreamFromPath(filePath), PostProcessSteps) ;
+                using (var asset = AssetRegistry.GetFileStreamFromPath(filePath))
+                {
+                    scene = importer.ImportFileFromStream(asset.FileStream, PostProcessSteps);
+                }
                 loadedScenes.Add(filePath, scene);
             }
 
@@ -224,7 +227,10 @@ namespace RetroEngine
                 scene = loadedScenes[filePath];
             else
             {
-                scene = importer.ImportFileFromStream(AssetRegistry.GetFileStreamFromPath(filePath), PostProcessSteps, "obj");
+                using (var asset = AssetRegistry.GetFileStreamFromPath(filePath))
+                {
+                    scene = importer.ImportFileFromStream(asset.FileStream, PostProcessSteps, "obj");
+                }
                 loadedScenes.Add(filePath, scene);
             }
 
@@ -566,8 +572,11 @@ namespace RetroEngine
 
 
             var importer = new Assimp.AssimpContext();
-            var scene = importer.ImportFileFromStream(AssetRegistry.GetFileStreamFromPath(filePath), Assimp.PostProcessSteps.MakeLeftHanded | Assimp.PostProcessSteps.FlipUVs | Assimp.PostProcessSteps.Triangulate);
-
+            Assimp.Scene scene;
+            using (var asset = AssetRegistry.GetFileStreamFromPath(filePath))
+            {
+                scene = importer.ImportFileFromStream(asset.FileStream, Assimp.PostProcessSteps.MakeLeftHanded | Assimp.PostProcessSteps.FlipUVs | Assimp.PostProcessSteps.Triangulate);
+            }
             if (scene == null)
             {
                 // Error handling for failed file import
