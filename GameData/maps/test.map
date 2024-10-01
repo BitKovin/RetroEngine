@@ -18424,11 +18424,6 @@
 }
 // entity 13
 {
-"classname" "info_player_start"
-"origin" "-240 -64 24"
-}
-// entity 14
-{
 "classname" "infodecal"
 "origin" "-40 -248 120"
 "texture" "cat.png"

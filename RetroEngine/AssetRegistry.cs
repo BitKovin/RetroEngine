@@ -379,8 +379,9 @@ namespace RetroEngine
                 return null;
             }
 
-            effects.Add(path, new Shader(effect));
-            //effect.Dispose();
+            lock(effects)
+                effects.Add(path, new Shader(effect));
+            
 
             return effects[path];
 
@@ -395,7 +396,9 @@ namespace RetroEngine
 
             var effect = GameMain.content.Load<Effect>("Shaders/" + path);
 
-            effectsPP.Add(path, new Shader(effect));
+            lock(effectsPP)
+                effectsPP.Add(path, new Shader(effect));
+
             effect.Dispose();
 
             return effectsPP[path];

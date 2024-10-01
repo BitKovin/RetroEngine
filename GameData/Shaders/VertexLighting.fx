@@ -96,7 +96,21 @@ half3 CalculateSimplePointLight(int i, PixelInput pixelInput, half3 normal)
     intense *= colorInstens;
 	half3 l = LightColors[i] * intense;
 
-	return (l + distIntence * specular) * dirFactor;
+    half3 result = (l + distIntence * specular) * dirFactor;
+
+    const float steps = 64;
+
+    half3 v = normalize(result);
+    half len = length(result);
+
+    len*= steps;
+    len = floor(len);
+
+    len/=steps;
+
+    result = v*len;
+
+	return result;
 }
 
 half3 CalculateVertexLight(PixelInput input)
