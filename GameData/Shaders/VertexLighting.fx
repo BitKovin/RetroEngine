@@ -49,6 +49,7 @@ half3 CalculateDirectionalVertexLight(half3 tangentNormal)
 half3 CalculateSimplePointLight(int i, PixelInput pixelInput, half3 normal)
 {
 	float3 lightVector = LightPositions[i].xyz - pixelInput.MyPosition;
+    float3 lightDir = normalize(lightVector);
 	float distanceToLight = length(lightVector);
 
 	if (distanceToLight > LightRadiuses[i])
@@ -56,10 +57,10 @@ half3 CalculateSimplePointLight(int i, PixelInput pixelInput, half3 normal)
 
 
 	if (isParticle)
-		normal = normalize(lightVector);
+		normal = lightDir;
 
 	// Calculate the dot product between the normalized light vector and light direction
-	half lightDot = dot(normalize(-lightVector), normalize(LightDirections[i].xyz));
+	half lightDot = dot(-lightDir, normalize(LightDirections[i].xyz));
 
 	// Define the inner and outer angles of the spotlight in radians
 	half innerConeAngle = LightPositions[i].w;
@@ -73,30 +74,25 @@ half3 CalculateSimplePointLight(int i, PixelInput pixelInput, half3 normal)
 		return 0;
 
 
-	if (dot(normal, normalize(lightVector)) < 0)
+	if (dot(normal, lightDir) < 0)
 	{
 		return float3(0, 0, 0);
 	}
 
 
-	float dist = saturate((LightRadiuses[i] - distanceToLight)/LightRadiuses[i]);
+	float dist = max((LightRadiuses[i] - distanceToLight)/LightRadiuses[i],0);
 	half intense = dist; //(1.0 - dist * dist);
 	half distIntence = intense;
-	half3 dirToSurface = normalize(lightVector);
 
-	intense *= saturate(dot(normal, dirToSurface));
+	intense *= dot(normal, lightDir);
 	half3 specular = 0;
-
-
-	half colorInstens = abs(max(LightColors[i].x, (max(LightColors[i].y, LightColors[i].z))));
 
 	intense = max(intense, 0);
 
-
-    intense *= colorInstens;
+    intense *= 1;
 	half3 l = LightColors[i] * intense;
 
-	return (l + distIntence * specular) * dirFactor;
+	return l * dirFactor;
 }
 
 half3 CalculateVertexLight(PixelInput input)
@@ -110,7 +106,7 @@ half3 CalculateVertexLight(PixelInput input)
 #if OPENGL
 #else
 if(LargeObject == false)
-    for (int i = 0; i < MAX_POINT_LIGHTS; i++)
+    for (int i = 0; i < min(MAX_POINT_LIGHTS, PointLightsNumber); i++)
 	{
 		light += CalculateSimplePointLight(i, input, tangentNormal);
 	}
@@ -147,7 +143,7 @@ PixelOutput PixelShaderFunction(PixelInput input)
 
     if(earlyZ)
     {
-        DepthDiscard(depthIn + 1,input);
+        DepthDiscard(depthIn + 0.2,input);
     }
     
     PixelOutput output = (PixelOutput)0;
@@ -159,17 +155,11 @@ PixelOutput PixelShaderFunction(PixelInput input)
     if (ColorRGBTA.a < 0.001)
         discard;
 
-    //float3 textureNormal = tex2D(NormalTextureSampler, input.TexCoord).rgb;
-    
-    float3 orm = float3(1,1,0);
-    
-    float roughness =orm.g;
-    float metalic = orm.b;
-    float ao = orm.r;
+
     
     
     float3 textureColor = ColorRGBTA.xyz;
-	float textureAlpha = tex2D(TextureSampler, input.TexCoord).w;
+	float textureAlpha = ColorRGBTA.w;
     
     if (textureAlpha < 0.01)
         discard;
@@ -224,8 +214,8 @@ PixelOutput PixelShaderFunction(PixelInput input)
     float3 reflection = reflect(vDir, pixelNormal);
     
     
-    output.Normal = float4((normalize(lerp(pixelNormal, TangentNormal, 0.0)) + 1) / 2, pbs);
-    output.Position = float4(input.MyPosition - viewPos, pbs);
+    //output.Normal = float4((normalize(lerp(pixelNormal, TangentNormal, 0.0)) + 1) / 2, pbs);
+    //output.Position = float4(input.MyPosition - viewPos, pbs);
     
     
     
@@ -233,7 +223,7 @@ PixelOutput PixelShaderFunction(PixelInput input)
     
     //reflectiveness = saturate(reflectiveness);
     
-    output.Reflectiveness = float4(0, 0, 0, pbs);
+    //output.Reflectiveness = float4(0, 0, 0, pbs);
     
     //textureColor = ApplyReflectionOnSurface(textureColor,albedo, screenCoords, 0);
     output.Color = float4(textureColor, textureAlpha);

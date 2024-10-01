@@ -110,7 +110,7 @@ half3 CalculateVertexLight(PixelInput input)
 #if OPENGL
 #else
 if(LargeObject == false)
-    for (int i = 0; i < MAX_POINT_LIGHTS; i++)
+    for (int i = 0; i < min(MAX_POINT_LIGHTS, PointLightsNumber); i++)
 	{
 		light += CalculateSimplePointLight(i, input, tangentNormal);
 	}

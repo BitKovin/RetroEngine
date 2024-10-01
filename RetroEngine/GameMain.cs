@@ -334,9 +334,18 @@ namespace RetroEngine
             base.Update(gameTime);
         }
 
+
+        static Stopwatch sw = new Stopwatch();
+
         void UpdateTime(GameTime gameTime)
         {
-            float newDeltaTime = (float)Math.Min(gameTime.ElapsedGameTime.TotalSeconds, 0.05d);
+
+
+            float time = (float)sw.Elapsed.TotalSeconds;
+            time = Math.Min(time, 1 / 10f);
+            sw.Restart();
+
+            float newDeltaTime = (float)Math.Min(time, 0.05d);
 
             //Time.DeltaTime = newDeltaTime;
 

@@ -386,7 +386,8 @@ namespace RetroEngine.Entities.Light
             if ((IsBoundingSphereInFrustum(lightSphere) && visible) || Level.ChangingLevel)
                 lightData.visible = true;
 
-            LightManager.AddPointLight(lightData);
+            if(lightData.visible)
+                LightManager.AddPointLight(lightData);
 
         }
 

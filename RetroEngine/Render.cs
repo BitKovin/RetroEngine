@@ -127,6 +127,7 @@ namespace RetroEngine
 
         public static bool AsyncPresent = true;
 
+        public static bool SimpleRender = false;
 
         public Render()
         {
@@ -273,6 +274,8 @@ namespace RetroEngine
                 effect.Parameters["SSRWidth"]?.SetValue(reflection.Height);
             }
 
+            effect.Parameters["earlyZ"]?.SetValue(Graphics.EarlyDepthDiscardShader);
+
             effect.Parameters["ViewmodelShadowsEnabled"]?.SetValue(Graphics.ViewmodelShadows);
 
             effect.Parameters["PointLightShadowQuality"]?.SetValue(Graphics.PointLightShadowQuality);
@@ -295,12 +298,14 @@ namespace RetroEngine
             InitRenderTargetDepth(ref DepthPrepathOutput);
             InitRenderTargetDepth(ref DepthPrepathBufferOutput);
 
+            if(SimpleRender == false)
             InitRenderTargetVectorIfNeed(ref ForwardOutput, true);
-
+            else
+                InitRenderTargetIfNeed(ref ForwardOutput, DepthFormat.Depth24);
 
             
 
-            InitRenderTargetVectorIfNeed(ref oldFrame, true);
+            InitRenderTargetIfNeed(ref oldFrame, DepthFormat.Depth24);
 
             if (DisableMultiPass == false)
             {
@@ -345,6 +350,7 @@ namespace RetroEngine
 
             DrawOnlyOpaque = false;
             DrawOnlyTransparent = false;
+
             RenderPrepass(renderList);
             
 
@@ -379,29 +385,33 @@ namespace RetroEngine
 
             PointLight.DrawDirtyPointLights();
 
+            if (SimpleRender)
+            {
+                RenderForwardPath(renderList);
+            }
+            else
+            {
 
-            DrawOnlyOpaque = true;
-            DrawOnlyTransparent = false;
-            RenderForwardPath(renderList);
+                DrawOnlyOpaque = true;
+                DrawOnlyTransparent = false;
+                RenderForwardPath(renderList);
 
-            DownsampleToTexture(ForwardOutput, oldFrame);
+                DownsampleToTexture(ForwardOutput, oldFrame);
 
-            DrawOnlyOpaque = false;
-            DrawOnlyTransparent = true;
-            RenderForwardPath(renderList, true);
-            DrawOnlyOpaque = false;
-            DrawOnlyTransparent = false;
-
-
-            graphics.GraphicsDevice.BlendState = BlendState.Opaque;
-
-            
-            PerformPostProcessing();
-            graphics.GraphicsDevice.SetRenderTarget(null);
-
-
-            if (Input.GetAction("test").Holding())
-                return DepthPrepathOutput;
+                DrawOnlyOpaque = false;
+                DrawOnlyTransparent = true;
+                RenderForwardPath(renderList, true);
+                DrawOnlyOpaque = false;
+                DrawOnlyTransparent = false;
+            }
+            if (SimpleRender)
+            {
+                PerformSimplePostProcessing();
+            }
+            else
+            {
+                PerformPostProcessing();
+            }
 
             return outputPath;
 
@@ -795,11 +805,30 @@ namespace RetroEngine
 
         RenderTarget2D stepsResult;
 
+        void PerformSimplePostProcessing()
+        {
+            lock (PostProcessStep.StepsBefore)
+            {
+                PerformPostProcessingShaders(ForwardOutput);
+            }
+
+            PerformTonemapping();
+
+            lock (PostProcessStep.StepsAfter)
+            {
+                PerformPostProcessingShaders(TonemapResult, true);
+            }
+
+            PerformFXAA();
+
+        }
+
         void PerformPostProcessing()
         {
-
-            PerformReflection();
-            ApplyReflection();
+            
+                PerformReflection();
+                ApplyReflection();
+            
 
             lock (PostProcessStep.StepsBefore)
             {
@@ -967,7 +996,7 @@ namespace RetroEngine
         void PerformTonemapping()
         {
 
-            InitRenderTargetVectorIfNeed(ref TonemapResult);
+            InitRenderTargetIfNeed(ref TonemapResult);
 
             
 
@@ -998,6 +1027,11 @@ namespace RetroEngine
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, ssaoOutput.Width, ssaoOutput.Height);
 
             graphics.GraphicsDevice.SetRenderTarget(ssaoOutput);
+
+            if(Graphics.EnableSSAO == false)
+            {
+                graphics.GraphicsDevice.Clear(Color.White);
+            }
 
             SSAOEffect.Parameters["NormalTexture"]?.SetValue(normalPath);
             SSAOEffect.Parameters["DepthTexture"]?.SetValue(DepthPrepathOutput);
@@ -1391,7 +1425,7 @@ namespace RetroEngine
                 480,
                 false, // No mipmaps
                 SurfaceFormat.HalfSingle, // Color format
-                depthFormat, 0, RenderTargetUsage.DiscardContents); // Depth format
+                depthFormat, 0, RenderTargetUsage.PreserveContents); // Depth format
         }
 
         void InitCloseShadowMap(ref RenderTarget2D target)
@@ -1425,8 +1459,8 @@ namespace RetroEngine
                     (int)GetScreenResolution().X,
                     (int)GetScreenResolution().Y,
                     false, // No mipmaps
-                    UsesOpenGL ? SurfaceFormat.Color : SurfaceFormat.SRgb8A8Etc2, // Color format
-                    depthFormat, 0, RenderTargetUsage.DiscardContents); // Depth format
+                    SurfaceFormat.Color, // Color format
+                    depthFormat, 0, RenderTargetUsage.PreserveContents); // Depth format
             }
         }
 
@@ -1447,7 +1481,7 @@ namespace RetroEngine
                     (int)GetScreenResolution().Y,
                     false, // No mipmaps
                     SurfaceFormat.Single, // Color format
-                    depthFormat,0, RenderTargetUsage.DiscardContents); // Depth format
+                    depthFormat,0, RenderTargetUsage.PreserveContents); // Depth format
                 }
         }
 
@@ -1473,7 +1507,7 @@ namespace RetroEngine
                         (int)height,
                         false, // No mipmaps
                         surfaceFormat, // Color format
-                        depthFormat, 0, RenderTargetUsage.DiscardContents); // Depth format
+                        depthFormat, 0, RenderTargetUsage.PreserveContents); // Depth format
                 }
         }
 
@@ -1499,7 +1533,7 @@ namespace RetroEngine
                 }
         }
 
-        void InitRenderTargetVectorIfNeed(ref RenderTarget2D target, bool preserve = false)
+        void InitRenderTargetVectorIfNeed(ref RenderTarget2D target, bool preserve = true)
         {
             if (GetScreenResolution().X > 0 && GetScreenResolution().Y > 0)
                 if (target is null || target.Width != (int)GetScreenResolution().X || target.Height != (int)GetScreenResolution().Y)
@@ -1519,7 +1553,7 @@ namespace RetroEngine
                         (int)GetScreenResolution().Y,
                         false, // No mipmaps
                         SurfaceFormat.HalfVector4, // Color format
-                        depthFormat, 0, preserve? RenderTargetUsage.PreserveContents : RenderTargetUsage.DiscardContents); // Depth format
+                        depthFormat, 0, RenderTargetUsage.PreserveContents); // Depth format
 
 
 
@@ -1550,7 +1584,7 @@ namespace RetroEngine
                         (int)GetScreenResolution().Y,
                         false, // No mipmaps
                         SurfaceFormat.HalfVector4, // Color format
-                        depthFormat, 0, RenderTargetUsage.DiscardContents); // Depth format
+                        depthFormat, 0, RenderTargetUsage.PreserveContents); // Depth format
 
 
 

@@ -20,6 +20,12 @@ namespace RetroEngine.Game
 
         static FmodEventInstance GameSpeedEvent;
 
+        public Game() 
+        {
+
+
+        }
+
         protected override void LoadContent()
         {
             base.LoadContent();
@@ -149,14 +155,16 @@ namespace RetroEngine.Game
             Graphics.DirectionalLightShadowQuality = 0;
             Graphics.ShadowResolutionScale = 0.0f;
 
+            Render.SimpleRender = true;
+
             PointLight.DisableShadows = true;
 
             Graphics.Exposure = 0.25f;
             Graphics.Gamma = 1.1f;
 
-            Graphics.EnableBloom = true;
+            Graphics.EnableBloom = false;
 
-            //Render.DisableMultiPass = true;
+            Render.DisableMultiPass = true;
 
             DefaultShader = "VertexLighting";
 

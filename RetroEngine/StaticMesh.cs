@@ -547,6 +547,8 @@ namespace RetroEngine
                 effect.Parameters["LightResolutions"]?.SetValue(LightRes);
                 effect.Parameters["LightDirections"]?.SetValue(LightDir);
 
+                effect.Parameters["PointLightsNumber"]?.SetValue(objectLights.Count);
+
                 effect.Parameters["PointLightCubemap1"]?.SetValue(LightMaps[0]);
                 effect.Parameters["PointLightCubemap2"]?.SetValue(LightMaps[1]);
                 effect.Parameters["PointLightCubemap3"]?.SetValue(LightMaps[2]);
@@ -1932,7 +1934,6 @@ namespace RetroEngine
                 {
                     part.VertexBuffer?.Dispose();
                     part.IndexBuffer?.Dispose();
-                    part.Effect?.Dispose();
                     part.Tag = null;
                 }
         }

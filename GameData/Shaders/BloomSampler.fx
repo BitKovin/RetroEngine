@@ -45,7 +45,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR
     color += saturate(tex2D(SpriteTextureSampler, input.TextureCoordinates).rgb - offset);
 	
 	
-    float sampleRadius = 3;
+    float sampleRadius = 2;
 	
 	
     float wSum = 0;
@@ -71,7 +71,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR
     //color = length(color)*lerp(normalize(color), length(color), lerp(length(color),1,0.5));
 
 
-    return float4(color/10,1);
+    return float4(color/7,1);
 }
 
 technique SpriteDrawing

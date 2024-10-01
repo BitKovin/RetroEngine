@@ -139,6 +139,7 @@ bool skeletalMesh;
 #define MAX_POINT_LIGHTS 6
 #endif
 
+int PointLightsNumber;
 float4 LightPositions[MAX_POINT_LIGHTS];
 float3 LightColors[MAX_POINT_LIGHTS];
 float LightRadiuses[MAX_POINT_LIGHTS];
