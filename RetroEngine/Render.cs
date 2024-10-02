@@ -878,15 +878,22 @@ namespace RetroEngine
             InitRenderTargetVectorIfNeed(ref targetA);
             InitRenderTargetVectorIfNeed(ref targetB);
 
-            
+
 
             if (after == false)
                 if (PostProcessStep.StepsBefore.Count == 0)
+                {
                     stepsResult = input;
+                    return;
+                }
 
             if (after == true)
                 if (PostProcessStep.StepsAfter.Count == 0)
+                {
                     stepsResult = input;
+                    return;
+                }
+
 
             DownsampleToTexture(input, targetA);
             DownsampleToTexture(input, targetB);
@@ -1234,7 +1241,8 @@ namespace RetroEngine
             BlurEffect.Parameters["screenWidth"].SetValue(source.Width);
             BlurEffect.Parameters["screenHeight"].SetValue(source.Height);
 
-            spriteBatch.Begin(blendState: BlendState.AlphaBlend, effect: blur? BlurEffect : null);
+
+            spriteBatch.Begin(blendState: BlendState.Opaque, effect: blur? BlurEffect : null);
 
             DrawFullScreenQuad(spriteBatch, source);
 

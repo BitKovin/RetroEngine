@@ -159,7 +159,7 @@ namespace RetroEngine.Game
 
             PointLight.DisableShadows = true;
 
-            Graphics.Exposure = 0.25f;
+            Graphics.Exposure = 1;
             Graphics.Gamma = 1.1f;
 
             Graphics.EnableBloom = false;

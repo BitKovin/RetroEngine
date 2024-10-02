@@ -46,9 +46,9 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 	
     float depth = tex2D(DepthTextureSampler, input.TextureCoordinates).r;
 	
-    float3 pos = tex2D(PositionTextureSampler, input.TextureCoordinates).rgb + viewPos;
+    //float3 pos = tex2D(PositionTextureSampler, input.TextureCoordinates).rgb + viewPos;
 	
-    float factor = distance(pos, viewPos) / 40;
+    float factor = depth / 40;
 	
 	factor = saturate(factor);
 
