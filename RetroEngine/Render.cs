@@ -1242,6 +1242,8 @@ namespace RetroEngine
             BlurEffect.Parameters["screenHeight"].SetValue(source.Height);
 
 
+            //DrawFullScreenQuad(source);
+
             spriteBatch.Begin(blendState: BlendState.Opaque, effect: blur? BlurEffect : null);
 
             DrawFullScreenQuad(spriteBatch, source);
@@ -1286,6 +1288,9 @@ namespace RetroEngine
                 indexBuffer.SetData(indices);
             }
         }
+
+        static BasicEffect basicEffect;
+
         internal static void DrawFullScreenQuad(Texture2D inputTexture, Effect effect = null)
         {
 
@@ -1310,7 +1315,8 @@ namespace RetroEngine
             }
             else
             {
-                BasicEffect basicEffect = new BasicEffect(graphicsDevice)
+                if(basicEffect == null)
+                basicEffect = new BasicEffect(graphicsDevice)
                 {
                     TextureEnabled = true,
                     Texture = inputTexture,
