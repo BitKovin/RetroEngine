@@ -295,8 +295,8 @@ namespace RetroEngine
 
             InitRenderTargetDepth(ref DepthOutput);
 
-            InitRenderTargetDepth(ref DepthPrepathOutput);
-            InitRenderTargetDepth(ref DepthPrepathBufferOutput);
+            InitSizedRenderTargetIfNeed(ref DepthPrepathOutput, 512, DepthFormat.Depth24, SurfaceFormat.Single);
+            InitSizedRenderTargetIfNeed(ref DepthPrepathBufferOutput, 512, DepthFormat.Depth24, SurfaceFormat.Single);
 
             if(SimpleRender == false)
             InitRenderTargetVectorIfNeed(ref ForwardOutput, true);
@@ -344,14 +344,13 @@ namespace RetroEngine
             GameMain.Instance.WaitForFramePresent();
 
             //if (outputPath!=null)
-            //DownsampleToTexture(ForwardOutput, oldFrame);
 
             List<StaticMesh> renderList = level.GetMeshesToRender();
 
             DrawOnlyOpaque = false;
             DrawOnlyTransparent = false;
 
-            RenderPrepass(renderList);
+            //RenderPrepass(renderList);
             
 
             
@@ -388,6 +387,8 @@ namespace RetroEngine
             if (SimpleRender)
             {
                 RenderForwardPath(renderList);
+                return ForwardOutput;
+                DownsampleToTexture(ForwardOutput, oldFrame);
             }
             else
             {
@@ -404,6 +405,8 @@ namespace RetroEngine
                 DrawOnlyOpaque = false;
                 DrawOnlyTransparent = false;
             }
+
+
             if (SimpleRender)
             {
                 PerformSimplePostProcessing();
@@ -483,8 +486,10 @@ namespace RetroEngine
                 else
                     graphics.GraphicsDevice.Clear(ClearOptions.DepthBuffer, Color.Black, 1.0f, 0);
 
+                
                 DepthApplyEffect.Parameters["OldFrame"].SetValue(GameMain.Instance.DefaultShader.ToLower() == "overdraw" ? black : oldFrame);
-                DrawFullScreenQuad(DepthPrepathBufferOutput, DepthApplyEffect);
+                if (SimpleRender == false)
+                    DrawFullScreenQuad(DepthPrepathBufferOutput, DepthApplyEffect);
             }
 
             RenderLevelGeometryForward(renderList, onlyTransperent);
@@ -875,9 +880,18 @@ namespace RetroEngine
         RenderTarget2D targetB;
         void PerformPostProcessingShaders(RenderTarget2D input, bool after = false)
         {
-            InitRenderTargetVectorIfNeed(ref targetA);
-            InitRenderTargetVectorIfNeed(ref targetB);
 
+            if (SimpleRender)
+            {
+                InitRenderTargetIfNeed(ref targetA);
+                InitRenderTargetIfNeed(ref targetB);
+            }
+            else
+            {
+
+                InitRenderTargetVectorIfNeed(ref targetA);
+                InitRenderTargetVectorIfNeed(ref targetB);
+            }
 
 
             if (after == false)
@@ -1236,20 +1250,21 @@ namespace RetroEngine
 
             graphics.GraphicsDevice.Clear(Color.Black);
 
-            SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
-
-            BlurEffect.Parameters["screenWidth"].SetValue(source.Width);
-            BlurEffect.Parameters["screenHeight"].SetValue(source.Height);
 
 
-            //DrawFullScreenQuad(source);
 
-            spriteBatch.Begin(blendState: BlendState.Opaque, effect: blur? BlurEffect : null);
 
-            DrawFullScreenQuad(spriteBatch, source);
+                SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
 
-            spriteBatch.End();
+                BlurEffect.Parameters["screenWidth"].SetValue(source.Width);
+                BlurEffect.Parameters["screenHeight"].SetValue(source.Height);
 
+                spriteBatch.Begin(blendState: BlendState.Opaque, effect: blur ? BlurEffect : null);
+
+                DrawFullScreenQuad(spriteBatch, source);
+
+                spriteBatch.End();
+            
         }
 
         internal static void DrawFullScreenQuad(SpriteBatch spriteBatch, Texture2D inputTexture)
@@ -1499,7 +1514,7 @@ namespace RetroEngine
                 }
         }
 
-        void InitSizedRenderTargetIfNeed(ref RenderTarget2D target, int height, DepthFormat depthFormat = DepthFormat.None, SurfaceFormat surfaceFormat = SurfaceFormat.Rgba64)
+        void InitSizedRenderTargetIfNeed(ref RenderTarget2D target, int height, DepthFormat depthFormat = DepthFormat.None, SurfaceFormat surfaceFormat = SurfaceFormat.ColorSRgb)
         {
 
             float ratio = ((float)GetScreenResolution().X) / ((float)GetScreenResolution().Y);

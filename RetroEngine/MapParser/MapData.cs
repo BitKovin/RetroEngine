@@ -61,9 +61,12 @@ namespace RetroEngine.Map
                     entity.Position = position;
                 }
 
-                pointLights.AddUnique(entity.Position);
+                //pointLights.AddUnique(entity.Position);
 
             }
+
+            if (pointLights.Count == 0)
+                pointLights.Add(Vector3.Zero);
 
             level.entityID = 0;
 
