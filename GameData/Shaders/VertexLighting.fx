@@ -131,28 +131,19 @@ PixelInput VertexShaderFunction(VertexInput input)
 
 PixelOutput PixelShaderFunction(PixelInput input)
 {
-    
-    float2 screenCoords = input.MyPixelPosition.xyz / input.MyPixelPosition.w;
-    
-    screenCoords = (screenCoords + 1.0f) / 2.0f;
-
-    screenCoords.y = 1.0f - screenCoords.y;
-    
- 
     PixelOutput output = (PixelOutput)0;
     
     float Depth = input.MyPixelPosition.z;
     
-    float4 ColorRGBTA = tex2D(TextureSampler, input.TexCoord) * input.Color;
+    float4 ColorRGBA = tex2D(TextureSampler, input.TexCoord) * input.Color;
+    float4 EmRGBT = tex2D(EmissiveTextureSampler, input.TexCoord);
     
-    if (ColorRGBTA.a < 0.001)
+    if (ColorRGBA.a < 0.001)
         discard;
 
-
     
-    
-    float3 textureColor = ColorRGBTA.xyz;
-	float textureAlpha = ColorRGBTA.w;
+    float3 textureColor = ColorRGBA.xyz;
+	float textureAlpha = ColorRGBA.w;
     
     if (textureAlpha < 0.01)
         discard;
@@ -183,42 +174,17 @@ PixelOutput PixelShaderFunction(PixelInput input)
 #else
     if(LargeObject)
 #endif
-    for (int i = 0; i < MAX_POINT_LIGHTS; i++)
+    for (int i = 0; i < min(MAX_POINT_LIGHTS, PointLightsNumber); i++)
 	{
 		light += CalculateSimplePointLight(i, input, input.Normal);
 	}
 
     textureColor *= light;
 
-    textureColor += tex2D(EmissiveTextureSampler, input.TexCoord).rgb * EmissionPower * tex2D(EmissiveTextureSampler, input.TexCoord).a;
+    textureColor += EmRGBT * EmissionPower * EmRGBT.a;
     
     textureAlpha *= Transparency;
     
-
-    //textureColor = lerp(textureColor, oldFrame, 0.5);
-    
-    float3 vDir = normalize(input.MyPosition - viewPos);
-    
-    float pbs = 1;
-    
-    if (textureAlpha<0.95)
-        pbs = 0;
-    
-    float3 reflection = reflect(vDir, pixelNormal);
-    
-    
-    //output.Normal = float4((normalize(lerp(pixelNormal, TangentNormal, 0.0)) + 1) / 2, pbs);
-    //output.Position = float4(input.MyPosition - viewPos, pbs);
-    
-    
-    
-    //float reflectiveness = CalculateReflectiveness(roughness, metalic, vDir / 3, pixelNormal);
-    
-    //reflectiveness = saturate(reflectiveness);
-    
-    //output.Reflectiveness = float4(0, 0, 0, pbs);
-    
-    //textureColor = ApplyReflectionOnSurface(textureColor,albedo, screenCoords, 0);
     output.Color = float4(textureColor, textureAlpha);
 
     return output;
