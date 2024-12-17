@@ -295,8 +295,8 @@ namespace RetroEngine
 
             InitRenderTargetDepth(ref DepthOutput);
 
-            InitSizedRenderTargetIfNeed(ref DepthPrepathOutput, 512, DepthFormat.Depth24, SurfaceFormat.Single);
-            InitSizedRenderTargetIfNeed(ref DepthPrepathBufferOutput, 512, DepthFormat.Depth24, SurfaceFormat.Single);
+            InitSizedRenderTargetIfNeed(ref DepthPrepathOutput, (int)GetScreenResolution().Y, DepthFormat.Depth24, SurfaceFormat.Single);
+            InitSizedRenderTargetIfNeed(ref DepthPrepathBufferOutput, (int)GetScreenResolution().Y, DepthFormat.Depth24, SurfaceFormat.Single);
 
             if(SimpleRender == false)
             InitRenderTargetVectorIfNeed(ref ForwardOutput, true);
@@ -332,7 +332,7 @@ namespace RetroEngine
             InitRenderTargetIfNeed(ref FxaaOutput);
 
 
-            InitSizedRenderTargetIfNeed(ref ssaoOutput,(int)(GetScreenResolution().Y/3));
+            InitSizedRenderTargetIfNeed(ref ssaoOutput,(int)(GetScreenResolution().Y/2));
 
             InitSizedRenderTargetIfNeed(ref bloomSample, 256, surfaceFormat: SurfaceFormat.HalfVector4);
             InitSizedRenderTargetIfNeed(ref bloomSample2, 128, surfaceFormat: SurfaceFormat.HalfVector4);
@@ -350,7 +350,7 @@ namespace RetroEngine
             DrawOnlyOpaque = false;
             DrawOnlyTransparent = false;
 
-            //RenderPrepass(renderList);
+            RenderPrepass(renderList);
             
 
             
@@ -387,7 +387,7 @@ namespace RetroEngine
             if (SimpleRender)
             {
                 RenderForwardPath(renderList);
-                return ForwardOutput;
+                //return ForwardOutput;
                 DownsampleToTexture(ForwardOutput, oldFrame);
             }
             else
