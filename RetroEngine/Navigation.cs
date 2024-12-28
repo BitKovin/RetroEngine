@@ -63,7 +63,7 @@ namespace RetroEngine
         {
 
 
-            Thread.CurrentThread.IsBackground = true;
+            //Thread.CurrentThread.IsBackground = true;
 
             while (true)
             {
@@ -113,7 +113,7 @@ namespace RetroEngine
                     }
                 }
                 removeList.Clear();
-                Thread.Sleep(1);
+                //Thread.Sleep(1);
 
                 ProcessingPathfinding = false;
 
@@ -186,7 +186,7 @@ namespace RetroEngine
 
             int it = 0;
 
-            NavPoint startPoint = GetStartNavPoint(start);
+            NavPoint startPoint = FindClosestPoint(start);
 
             if (startPoint is null)
                 return new List<Vector3>();
@@ -221,7 +221,7 @@ namespace RetroEngine
             return Position;
         }
 
-        public static NavPoint GetStartNavPoint(Vector3 start)
+        public static NavPoint FindClosestPoint(Vector3 start)
         {
             navPoints = navPoints.OrderBy(point => Vector3.Distance(start, point.Position)).ToList();
 

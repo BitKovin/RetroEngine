@@ -23,7 +23,7 @@ namespace RetroEngine.Game
         public Game() 
         {
 
-            //SetStylingGraphics();
+            SetStylingGraphics();
 
         }
 
@@ -101,7 +101,7 @@ namespace RetroEngine.Game
 
             //Render.LUT = AssetRegistry.LoadTextureFromFile("engine/textures/Sin Shitty.png_out.png", generateMipMaps: false);   
 
-            for (int i = 1; i <= 0; i++)
+            for (int i = 1; i <= 5; i++)
             {
                 Entity npc = new NPCBase();
                 npc.Position = new Vector3(0, i*2.2f + 2, 0);
@@ -160,8 +160,8 @@ namespace RetroEngine.Game
 
             PointLight.DisableShadows = true;
 
-            Graphics.Exposure = 1;
-            Graphics.Gamma = 1.1f;
+            //Graphics.Exposure = 1;
+            //Graphics.Gamma = 1.1f;
 
             Graphics.EnableBloom = false;
 

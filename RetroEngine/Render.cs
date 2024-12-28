@@ -298,10 +298,7 @@ namespace RetroEngine
             InitSizedRenderTargetIfNeed(ref DepthPrepathOutput, (int)GetScreenResolution().Y, DepthFormat.Depth24, SurfaceFormat.Single);
             InitSizedRenderTargetIfNeed(ref DepthPrepathBufferOutput, (int)GetScreenResolution().Y, DepthFormat.Depth24, SurfaceFormat.Single);
 
-            if(SimpleRender == false)
             InitRenderTargetVectorIfNeed(ref ForwardOutput, true);
-            else
-                InitRenderTargetIfNeed(ref ForwardOutput, DepthFormat.Depth24);
 
             
 
@@ -512,7 +509,7 @@ namespace RetroEngine
                 }
             }
             //ParticleEmitter.RenderEmitter.DrawParticles(particlesToDraw);
-            if (DrawOnlyOpaque)
+            if (DrawOnlyOpaque || SimpleRender)
             {
                 if (Graphics.DrawPhysics)
                     Physics.DebugDraw();

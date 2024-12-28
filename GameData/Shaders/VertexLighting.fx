@@ -36,11 +36,36 @@ bool earlyZ;
 
 half3 CalculateDirectionalVertexLight(half3 tangentNormal)
 {
-    half brightness = (dot(-tangentNormal, LightDirection) + 1) / 2;
 
-    half3 light = brightness * GlobalLightColor * DirectBrightness;
+    float shadow = 0;
 
-    light += lerp(0.3,1,((dot(-tangentNormal, float3(0,-1,0)) + 1) / 2)) * lerp(SkyColor, GlobalLightColor, brightness) * GlobalBrightness;
+    float shadowed = shadow;
+
+	shadow = lerp(shadow, 1, 1 - max(0, dot(tangentNormal, normalize(-LightDirection))));
+
+
+	//shadow = saturate(shadow);
+
+	float3 lightDir = normalize(-LightDirection);
+
+	// Calculate specular reflection
+
+
+	//float3 globalSpecularDir = normalize(-normal + float3(0, -5, 0) + LightDirection);
+	//specular += CalculateSpecular(input.MyPosition, normal, globalSpecularDir, roughness, metallic, albedo) * 0.02;
+
+	// Direct light contribution
+	float3 light = DirectBrightness * GlobalLightColor;
+	light *= (1.0f - shadow);
+
+
+	float3 globalLightColor = lerp(GlobalLightColor, SkyColor, shadowed);
+
+	// Global ambient light
+	float3 globalLight = GlobalBrightness * globalLightColor * lerp(1.0f, 0.1f, (dot(tangentNormal, float3(0, -1, 0)) + 1) / 2);
+
+	light = max(light, 0.0f);
+	light += globalLight;
 
     return light;
 
@@ -99,7 +124,7 @@ half3 CalculateVertexLight(PixelInput input)
 {
 
 
-    half3 tangentNormal = GetTangentNormal(input.Normal, input.Tangent, input.BiTangent);
+    half3 tangentNormal = normalize(GetTangentNormal(input.Normal, input.Tangent, input.BiTangent));
 
     half3 light = CalculateDirectionalVertexLight(tangentNormal);
 

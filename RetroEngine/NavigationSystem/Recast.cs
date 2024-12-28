@@ -100,7 +100,7 @@ namespace RetroEngine.NavigationSystem
 
             DtStatus result;
 
-            lock (dtNavMesh)
+            //lock (dtNavMesh)
                 result = rcTestNavMeshTool.FindFollowPath(NavigationSystem.Recast.dtNavMesh, navMeshQuery, startRef, endRef, start.ToRc(), end.ToRc(), filter, true, ref longs, 0, ref path);
 
             if (result.Succeeded())

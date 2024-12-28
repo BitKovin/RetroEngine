@@ -1,40 +1,74 @@
 {
-  "levelName": "test.map",
+  "levelName": "test2.map",
   "entities": [
-    {
-      "Name": "",
-      "className": "ent_cat_point",
-      "id": "ent_cat_point--0",
-      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:5.0967665,\u0022Y\u0022:1.0399998,\u0022Z\u0022:-4.0594053},\u0022Rotation\u0022:{\u0022X\u0022:89.99998,\u0022Y\u0022:-29.12404,\u0022Z\u0022:-9.773407E-07},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
-    },
     {
       "Name": "player",
       "className": "info_player_start",
       "id": "info_player_start-player-0",
-      "saveData": "{\u0022velocity\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0.018613338,\u0022Z\u0022:0},\u0022weapons\u0022:[{\u0022weaponType\u0022:\u0022RetroEngine.Game.Entities.Weapons.weapon_knife, RetroEngine.Game, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0022,\u0022ammo\u0022:1},{\u0022weaponType\u0022:\u0022RetroEngine.Game.Entities.Weapons.weapon_pistol_double, RetroEngine.Game, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0022,\u0022ammo\u0022:0}],\u0022currentSlot\u0022:1,\u0022lastSlot\u0022:-1,\u0022thirdPerson\u0022:false,\u0022Position\u0022:{\u0022X\u0022:-1.1197441,\u0022Y\u0022:1.9384402,\u0022Z\u0022:-0.5875787},\u0022Rotation\u0022:{\u0022X\u0022:-12.800003,\u0022Y\u0022:51.900246,\u0022Z\u0022:0},\u0022name\u0022:\u0022player\u0022,\u0022Tags\u0022:[\u0022player\u0022]}"
+      "saveData": "{\u0022velocity\u0022:{\u0022X\u0022:-0.61201465,\u0022Y\u0022:-0.40160698,\u0022Z\u0022:-5.0455985},\u0022weapons\u0022:[{\u0022weaponType\u0022:\u0022RetroEngine.Game.Entities.Weapons.weapon_knife, RetroEngine.Game, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0022,\u0022ammo\u0022:1}],\u0022currentSlot\u0022:0,\u0022lastSlot\u0022:-1,\u0022thirdPerson\u0022:false,\u0022Position\u0022:{\u0022X\u0022:-19.994507,\u0022Y\u0022:3.0433195,\u0022Z\u0022:7.577603},\u0022Rotation\u0022:{\u0022X\u0022:21.96672,\u0022Y\u0022:-187.76753,\u0022Z\u0022:0},\u0022name\u0022:\u0022player\u0022,\u0022Tags\u0022:[\u0022player\u0022]}"
+    },
+    {
+      "Name": "plank_2",
+      "className": "destructible",
+      "id": "destructible--0",
+      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022plank_2\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "plank_1",
+      "className": "destructible",
+      "id": "destructible--1",
+      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022plank_1\u0022,\u0022Tags\u0022:[]}"
     },
     {
       "Name": "",
       "className": "ent_cat_point",
-      "id": "ent_cat_point--1",
-      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:-10.0003805,\u0022Y\u0022:0.54,\u0022Z\u0022:10.498632},\u0022Rotation\u0022:{\u0022X\u0022:-7.794727E-06,\u0022Y\u0022:-0.013417129,\u0022Z\u0022:-1.2018133E-05},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+      "id": "ent_cat_point--0",
+      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:7.318269,\u0022Y\u0022:1.04,\u0022Z\u0022:-4.6665235},\u0022Rotation\u0022:{\u0022X\u0022:7.7092714E-05,\u0022Y\u0022:44.959328,\u0022Z\u0022:1.1070314E-05},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
     },
     {
       "Name": "",
-      "className": "ent_cat_point",
-      "id": "ent_cat_point--2",
-      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:-14.496936,\u0022Y\u0022:0.54,\u0022Z\u0022:2.5020406},\u0022Rotation\u0022:{\u0022X\u0022:1.4833038E-06,\u0022Y\u0022:-0.0025179833,\u0022Z\u0022:-2.3684058E-06},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+      "className": "weaponPickup",
+      "id": "weaponPickup--0",
+      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:1.625,\u0022Y\u0022:1.625,\u0022Z\u0022:-8.625},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
     },
     {
       "Name": "",
-      "className": "ent_cat_point",
-      "id": "ent_cat_point--3",
-      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:-9.498841,\u0022Y\u0022:0.54,\u0022Z\u0022:-0.4989509},\u0022Rotation\u0022:{\u0022X\u0022:6.045649E-06,\u0022Y\u0022:0.00819771,\u0022Z\u0022:6.569561E-07},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+      "className": "weaponPickup",
+      "id": "weaponPickup--1",
+      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:5.125,\u0022Y\u0022:1.125,\u0022Z\u0022:-5.625},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_base",
+      "id": "npc_base--0",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.042140212,\u0022Y\u0022:0,\u0022Z\u0022:-0.9985702},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.05137749,\u0022Y\u0022:0,\u0022Z\u0022:-0.9983807},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:-19.994507,\u0022Y\u0022:3.0433195,\u0022Z\u0022:7.577603},\u0022Position\u0022:{\u0022X\u0022:-18.801886,\u0022Y\u0022:1.4399259,\u0022Z\u0022:30.071127},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_base",
+      "id": "npc_base--1",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.021886958,\u0022Y\u0022:0,\u0022Z\u0022:-0.99826586},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.025217619,\u0022Y\u0022:0,\u0022Z\u0022:-0.99821883},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:-19.994507,\u0022Y\u0022:3.0433195,\u0022Z\u0022:7.577603},\u0022Position\u0022:{\u0022X\u0022:-19.233446,\u0022Y\u0022:1.4399194,\u0022Z\u0022:28.686197},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_base",
+      "id": "npc_base--2",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.054139618,\u0022Y\u0022:0,\u0022Z\u0022:-0.9973355},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.06277122,\u0022Y\u0022:0,\u0022Z\u0022:-0.99696827},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:-19.994507,\u0022Y\u0022:3.0433195,\u0022Z\u0022:7.577603},\u0022Position\u0022:{\u0022X\u0022:-18.60003,\u0022Y\u0022:1.4399194,\u0022Z\u0022:29.174843},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_base",
+      "id": "npc_base--3",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.05844244,\u0022Y\u0022:0,\u0022Z\u0022:-0.99670416},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.06846758,\u0022Y\u0022:0,\u0022Z\u0022:-0.9961015},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:-19.994507,\u0022Y\u0022:3.0433195,\u0022Z\u0022:7.577603},\u0022Position\u0022:{\u0022X\u0022:-18.530233,\u0022Y\u0022:1.43992,\u0022Z\u0022:28.30476},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_base",
+      "id": "npc_base--4",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.016792908,\u0022Y\u0022:0,\u0022Z\u0022:-0.9988126},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.029440371,\u0022Y\u0022:0,\u0022Z\u0022:-0.9986969},\u0022speed\u0022:5,\u0022targetLocation\u0022:{\u0022X\u0022:-19.994507,\u0022Y\u0022:3.0433195,\u0022Z\u0022:7.577603},\u0022Position\u0022:{\u0022X\u0022:-19.339922,\u0022Y\u0022:1.4399166,\u0022Z\u0022:29.47908},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
     }
   ],
-  "entityId": 28,
-  "deletedIDs": [
-    "weaponPickup--0"
-  ],
+  "entityId": 121,
+  "deletedIDs": [],
   "deletedNames": []
 }

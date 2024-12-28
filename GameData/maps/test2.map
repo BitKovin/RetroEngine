@@ -4,8 +4,8 @@
 {
 "classname" "worldspawn"
 "_tb_textures" "textures/brushes"
-"globalLightBrightness" "0.77"
-"directLightBrightness" "1"
+"globalLightBrightness" "1.5"
+"directLightBrightness" "3"
 "dynamicSunShadowsEnabled" "true"
 "geometricalShadowsEnabled" "false"
 "_tb_soft_map_bounds" "none"

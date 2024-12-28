@@ -1608,10 +1608,10 @@ half3 CalculateLight(PixelInput input, float3 normal, float roughness, float met
 
 	float shadowed = shadow;
 
-	shadow = lerp(shadow, 1, 1 - max(0, dot(normal, normalize(-LightDirection) * 1)));
+	shadow = lerp(shadow, 1, 1 - max(0, dot(normal, normalize(-LightDirection))));
 
 
-	shadow = saturate(shadow);
+	//shadow = saturate(shadow);
 
 	float3 vDir = normalize(viewPos - input.MyPosition);
 	float3 lightDir = normalize(-LightDirection);
