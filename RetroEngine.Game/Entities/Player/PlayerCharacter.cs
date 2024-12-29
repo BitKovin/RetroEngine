@@ -311,13 +311,13 @@ namespace RetroEngine.Game.Entities.Player
 
         void EnteredWater()
         {
-            PostProcessStep.StepsBefore.Add(waterPP);
+            PostProcessStep.StepsAfter.Add(waterPP);
             underWaterSound.StartEvent();
         }
 
         void ExitedWater()
         {
-            PostProcessStep.StepsBefore.Remove(waterPP);
+            PostProcessStep.StepsAfter.Remove(waterPP);
             underWaterSound.Stop();
         }
 
