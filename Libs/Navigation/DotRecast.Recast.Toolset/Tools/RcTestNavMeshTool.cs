@@ -21,7 +21,7 @@ namespace DotRecast.Recast.Toolset.Tools
         }
 
         public DtStatus FindFollowPath(DtNavMesh navMesh, DtNavMeshQuery navQuery, long startRef, long endRef, RcVec3f startPt, RcVec3f endPt, IDtQueryFilter filter, bool enableRaycast,
-            ref List<long> pathIterPolys, int pathIterPolyCount, ref List<RcVec3f> smoothPath)
+            ref List<long> pathIterPolys, int pathIterPolyCount, ref List<RcVec3f> smoothPath, int maxPathItterations = 2000)
         {
             if (startRef == 0 || endRef == 0)
             {
@@ -40,7 +40,10 @@ namespace DotRecast.Recast.Toolset.Tools
             smoothPath.Clear();
 
             var opt = new DtFindPathOption(enableRaycast ? DtFindPathOptions.DT_FINDPATH_ANY_ANGLE : 0, float.MaxValue);
-            navQuery.FindPath(startRef, endRef, startPt, endPt, filter, ref pathIterPolys, opt);
+
+            navQuery.FindPath(startRef, endRef, startPt, endPt, filter, ref pathIterPolys, opt, maxPathItterations);
+
+
             if (0 >= pathIterPolys.Count)
                 return DtStatus.DT_FAILURE;
 

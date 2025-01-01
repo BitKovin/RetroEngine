@@ -308,7 +308,8 @@ namespace RetroEngine.Game.Entities.Weapons
             mesh.PlayAnimation("draw", false,0);
 
             mesh.Position = Camera.position;
-            
+
+            ParticleSystem.Preload("hitSmoke");
 
             Console.WriteLine("loaded pistol double");
 

@@ -827,10 +827,11 @@ namespace DotRecast.Detour
         ///  							[(polyRef) * @p pathCount]
         ///  @param[out]	pathCount	The number of polygons returned in the @p path array.
         ///  @param[in]		maxPath		The maximum number of polygons the @p path array can hold. [Limit: >= 1]
-        public DtStatus FindPath(long startRef, long endRef, RcVec3f startPos, RcVec3f endPos, IDtQueryFilter filter, ref List<long> path, DtFindPathOption fpo)
+        public DtStatus FindPath(long startRef, long endRef, RcVec3f startPos, RcVec3f endPos, IDtQueryFilter filter, ref List<long> path, DtFindPathOption fpo, int maxPath = 9000)
         {
             if (null == path)
                 return DtStatus.DT_FAILURE | DtStatus.DT_INVALID_PARAM;
+
 
             path.Clear();
 
@@ -877,12 +878,21 @@ namespace DotRecast.Detour
             DtNode lastBestNode = startNode;
             float lastBestNodeCost = startNode.total;
 
+
+            int itt = 0;
+
             DtRaycastHit rayHit = new DtRaycastHit();
             rayHit.path = new List<long>();
             while (!m_openList.IsEmpty())
             {
                 // Remove node from open list and put it in closed list.
                 DtNode bestNode = m_openList.Pop();
+
+                itt++;
+
+                if(itt > maxPath)
+                    return DtStatus.DT_OUT_OF_NODES;
+
                 bestNode.flags &= ~DtNodeFlags.DT_NODE_OPEN;
                 bestNode.flags |= DtNodeFlags.DT_NODE_CLOSED;
 
@@ -1063,6 +1073,7 @@ namespace DotRecast.Detour
             {
                 status |= DtStatus.DT_PARTIAL_RESULT;
             }
+
 
             return status;
         }

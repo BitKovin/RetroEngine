@@ -113,7 +113,7 @@ namespace RetroEngine
                     }
                 }
                 removeList.Clear();
-                //Thread.Sleep(1);
+                
 
                 ProcessingPathfinding = false;
 
@@ -343,7 +343,6 @@ namespace RetroEngine
             {
                 Task task = Task.Run(() => Process(startLocation, endLocation), cts.Token);
                 task.Wait(cts.Token); // Wait for the task to complete or be cancelled
-                Thread.Sleep(5);
             }
             catch (OperationCanceledException)
             {
@@ -366,9 +365,9 @@ namespace RetroEngine
 
             List<Vector3> result = new List<Vector3>(points);
 
-            for (int i = points.Count - 1; i >= 0; i--)
+            for (int i = Math.Min(points.Count - 1, 3); i >= 0; i--)
             {
-                var hit = Physics.SphereTrace(start.ToNumerics(), points[i].ToNumerics() + Vector3.UnitY, bodyType: PhysicsSystem.BodyType.World);
+                var hit = Physics.SphereTrace(start.ToNumerics(), points[i].ToNumerics() + Vector3.UnitY, bodyType: PhysicsSystem.BodyType.World, radius: 0.5f);
 
                 if (hit.HasHit == false)
                 {
