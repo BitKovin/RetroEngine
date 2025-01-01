@@ -703,6 +703,7 @@ namespace RetroEngine
 
                     };
 
+
                     graphicsDevice.DepthStencilState = customDepthStencilState;
 
 

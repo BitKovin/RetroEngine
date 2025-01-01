@@ -12,6 +12,7 @@ using System.Runtime.ExceptionServices;
 using System.Security;
 using System.Diagnostics;
 using System.Timers;
+using BulletSharp.SoftBody;
 
 
 namespace RetroEngine.PhysicsSystem
@@ -52,6 +53,8 @@ namespace RetroEngine.PhysicsSystem
 
         internal static DiscreteDynamicsWorld dynamicsWorld;
 
+        internal static DiscreteDynamicsWorld hitboxWorld;
+
         private static DiscreteDynamicsWorld staticWorld;
         private static List<StaticRigidBody> staticBodies = new List<StaticRigidBody>();
 
@@ -79,6 +82,10 @@ namespace RetroEngine.PhysicsSystem
             {
                 dynamicsWorld.DebugDrawWorld();
             }
+            lock(hitboxWorld)
+            {
+                hitboxWorld.DebugDrawWorld();
+            }
         }
 
         public static void Start()
@@ -102,6 +109,12 @@ namespace RetroEngine.PhysicsSystem
             {
                 staticWorld.Dispose();
                 staticWorld = null;
+            }
+
+            if (hitboxWorld != null)
+            {
+                hitboxWorld.Dispose();
+                hitboxWorld = null;
             }
 
             // Create a collision configuration and dispatcher
@@ -136,7 +149,10 @@ namespace RetroEngine.PhysicsSystem
             staticWorld = new DiscreteDynamicsWorld(new CollisionDispatcher(new DefaultCollisionConfiguration()), new DbvtBroadphase(), new SequentialImpulseConstraintSolver(), new DefaultCollisionConfiguration());
             staticBodies.Clear();
 
+            hitboxWorld = new DiscreteDynamicsWorld(new CollisionDispatcher(new DefaultCollisionConfiguration()), new DbvtBroadphase(), new SequentialImpulseConstraintSolver(), new DefaultCollisionConfiguration());
+
             dynamicsWorld.DebugDrawer = DrawDebug.instance;
+            hitboxWorld.DebugDrawer = DrawDebug.instance;
         }
 
         public static void ResetWorld()
@@ -276,6 +292,14 @@ namespace RetroEngine.PhysicsSystem
 
         public static void Simulate()
         {
+
+
+            Task task = Task.Run(() =>
+            {
+                lock (hitboxWorld)
+                    hitboxWorld.StepSimulation(Time.DeltaTime, 1, 0.01f);
+            });
+
             lock (staticWorld)
             {
                 foreach (StaticRigidBody staticRigidBody in staticBodies)
@@ -289,13 +313,19 @@ namespace RetroEngine.PhysicsSystem
                 float time = (float)physTime.Elapsed.TotalSeconds;
                 time = Math.Min(time, 1 / 10f);
                 physTime.Restart();
+
+
+
                 if (GameMain.Instance.paused == false)
                 {
 
                     SimulationTicks +=dynamicsWorld.StepSimulation(time*Time.TimeScale, 5, 1/50f * Time.TimeScale);
-                    
+
                 }
             }
+
+            task.Wait();
+
         }
 
         public static void Remove(CollisionObject collisionObject)
@@ -311,6 +341,36 @@ namespace RetroEngine.PhysicsSystem
 
         }
 
+        public static void AddToHitboxWorld(RigidBody body)
+        {
+            lock (hitboxWorld)
+            {
+                hitboxWorld.AddRigidBody(body);
+            }
+        }
+
+        public static void AddToDynamicWorld(RigidBody body)
+        {
+
+            lock (dynamicsWorld)
+            {
+                dynamicsWorld.AddRigidBody(body);
+            }
+
+            lock(collisionObjects)
+                collisionObjects.Add(body);
+        }
+
+        public static void RemoveFromHitboxWorld(RigidBody body)
+        {
+            lock (hitboxWorld)
+            {
+                hitboxWorld.RemoveRigidBody(body);
+                lock (hitboxWorld.CollisionObjectArray)
+                    hitboxWorld.CollisionObjectArray.Remove(body);
+            }
+        }
+
         public static void Remove(RigidBody body)
         {
             if (body is null) return;
@@ -321,6 +381,7 @@ namespace RetroEngine.PhysicsSystem
                 lock(dynamicsWorld.CollisionObjectArray)
                     dynamicsWorld.CollisionObjectArray.Remove(body);
             }
+
         }
 
 
@@ -625,7 +686,7 @@ namespace RetroEngine.PhysicsSystem
         }
 
 
-        public static RigidBody CreateFromShape(Entity entity, Vector3 size, CollisionShape shape, float mass = 10, CollisionFlags collisionFlags = CollisionFlags.None, BodyType bodyType = BodyType.MainBody)
+        public static RigidBody CreateFromShape(Entity entity, Vector3 size, CollisionShape shape, float mass = 10, CollisionFlags collisionFlags = CollisionFlags.None, BodyType bodyType = BodyType.MainBody, bool addToWorld = true)
         {
             RigidBody RigidBody;
 
@@ -643,8 +704,15 @@ namespace RetroEngine.PhysicsSystem
 
             RigidBody.UserObject = new RigidbodyData(entity);
 
-            lock(dynamicsWorld)
-            dynamicsWorld.AddRigidBody(RigidBody);
+            if (addToWorld)
+            {
+
+                lock (dynamicsWorld)
+                    dynamicsWorld.AddRigidBody(RigidBody);
+
+                collisionObjects.Add(RigidBody);
+
+            }
 
             if (collisionFlags == CollisionFlags.StaticObject && entity.Static)
             {
@@ -670,13 +738,13 @@ namespace RetroEngine.PhysicsSystem
 
             RigidBody.Restitution = 0;
 
-            collisionObjects.Add(RigidBody);
+
 
             return RigidBody;
         }
 
 
-        public static RigidBody CreateCharacterCapsule(Entity entity, float Height, float radius, float mass = 80, CollisionFlags collisionFlags = CollisionFlags.None)
+        public static RigidBody CreateCharacterCapsule(Entity entity, float Height, float radius, float mass = 80, CollisionFlags collisionFlags = CollisionFlags.CharacterObject)
         {
             RigidBody RigidBody;
 
@@ -764,6 +832,31 @@ namespace RetroEngine.PhysicsSystem
 
                 // Perform the ray cast
                 world.RayTest(start, end, rayCallback);
+
+
+                if (bodyType.HasFlag(BodyType.HitBox))
+                {
+
+                    MyClosestRayResultCallback rayCallback2 = new MyClosestRayResultCallback(ref start, ref end);
+                    rayCallback2.BodyTypeMask = bodyType;
+                    if (ignoreList is not null)
+                        rayCallback2.ignoreList = ignoreList;
+
+                    lock (hitboxWorld)
+                        hitboxWorld.RayTest(start, end, rayCallback2);
+
+                    float distHitbox = Vector3.Distance(start, rayCallback2.HitPointWorld);
+                    float distWorld = Vector3.Distance(start, rayCallback.HitPointWorld);
+
+                    if (rayCallback2.HasHit)
+                        if (distHitbox < distWorld)
+                        {
+                            return rayCallback2;
+                        }
+
+                }
+                
+
                 return rayCallback;
             }
         }
@@ -786,6 +879,24 @@ namespace RetroEngine.PhysicsSystem
 
                 // Perform the ray cast
                 world.RayTest(start, end, rayCallback);
+
+                if (bodyType.HasFlag(BodyType.HitBox))
+                {
+
+                    MyAllRayResultCallback rayCallback2 = new MyAllRayResultCallback(start, end);
+                    rayCallback2.BodyTypeMask = bodyType;
+                    if (ignoreList is not null)
+                        rayCallback2.ignoreList = ignoreList;
+
+
+                    // Perform the ray cast
+                    lock(hitboxWorld)
+                        hitboxWorld.RayTest(start, end, rayCallback2);
+
+                    rayCallback.Hits.AddRange(rayCallback2.Hits);
+
+
+                }
 
                 rayCallback.Hits = rayCallback.Hits.OrderBy(h => h.ClosestHitFraction).ToList();
 
@@ -848,6 +959,32 @@ namespace RetroEngine.PhysicsSystem
 
                 // Perform the sphere sweep
                 world.ConvexSweepTest(sphereShape, start, end, convResultCallback);
+
+                if (bodyType.HasFlag(BodyType.HitBox))
+                {
+
+                    MyClosestConvexResultCallback convResultCallback2 = new MyClosestConvexResultCallback(ref rStart, ref rEnd);
+                    convResultCallback2.BodyTypeMask = bodyType;
+
+                    if (ignoreList is not null)
+                        convResultCallback2.ignoreList = ignoreList;
+
+
+                    // Perform the sphere sweep
+                    lock(hitboxWorld)
+                    hitboxWorld.ConvexSweepTest(sphereShape, start, end, convResultCallback2);
+
+                    float distHitbox = Vector3.Distance(rayStart.ToPhysics(), convResultCallback2.HitPointWorld);
+                    float distWorld = Vector3.Distance(rayStart.ToPhysics(), convResultCallback.HitPointWorld);
+
+                    if (convResultCallback2.HasHit)
+                        if (distHitbox < distWorld)
+                        {
+                            return convResultCallback2;
+                        }
+
+                }
+
                 return convResultCallback;
             }
 

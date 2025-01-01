@@ -88,9 +88,9 @@ namespace RetroEngine.Entities
         }
         bool updated = false;
 
-        public override void AsyncUpdate()
+        public override void VisualUpdate() //hope it won't break anything
         {
-            base.AsyncUpdate();
+            base.VisualUpdate();
 
 
             List<ParticleEmitter> list = new List<ParticleEmitter>(emitters);

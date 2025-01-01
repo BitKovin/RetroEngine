@@ -62,6 +62,12 @@ namespace RetroEngine
 
         }
 
+        public static void SetTransform(this RigidBody body, Vector3 Position, Quaternion Rotation)
+        {
+            body.WorldTransform = (Matrix.CreateFromQuaternion(Rotation) * Matrix.CreateTranslation(Position)).ToPhysics();
+
+        }
+
         public static System.Numerics.Vector3 ToPhysics(this Microsoft.Xna.Framework.Vector3 vector)
         {
             return new System.Numerics.Vector3(vector.X, vector.Y, vector.Z);

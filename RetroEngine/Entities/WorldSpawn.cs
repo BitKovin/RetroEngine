@@ -11,6 +11,7 @@ namespace RetroEngine.Entities
     [LevelObject("worldspawn")]
     public class WorldSpawn : Entity
     {
+
         public WorldSpawn() 
         {
             Static = true;
@@ -36,7 +37,7 @@ namespace RetroEngine.Entities
 
             Graphics.DynamicSunShadowsEnabled = data.GetPropertyBool("dynamicSunShadowsEnabled", true);
 
-            Graphics.GeometricalShadowsEnabled = data.GetPropertyBool("geometricalShadowsEnabled", false);
+            //Graphics.GeometricalShadowsEnabled = data.GetPropertyBool("geometricalShadowsEnabled", false);
 
             Vector3 skyColor = data.GetPropertyVector("skyColor", new Vector3(0.72f, 0.72f, 1));
 

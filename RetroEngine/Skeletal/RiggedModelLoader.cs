@@ -371,7 +371,7 @@ namespace RetroEngine.Skeletal
             modelnode.OffsetMatrixMg = Matrix.Identity;
             modelnode.LocalTransformMg = Matrix.Identity;
             modelnode.CombinedTransformMg = Matrix.Identity;
-            modelnode.boneShaderFinalTransformIndex = model.flatListToBoneNodes.Count;
+            modelnode.boneID = model.flatListToBoneNodes.Count;
             model.flatListToBoneNodes.Add(modelnode);
             model.numberOfBonesInUse++;
         }
@@ -416,7 +416,7 @@ namespace RetroEngine.Skeletal
                 // this maybe a bit redundant but i really don't care once i load it i can convert it to a more streamlined format later on.
                 MarkParentsNessecary(modelnode);
                 // we are about to add this now to the flat bone nodes list so also denote the index to the final shader transform.
-                modelnode.boneShaderFinalTransformIndex = model.flatListToBoneNodes.Count;
+                modelnode.boneID = model.flatListToBoneNodes.Count;
                 // necessary to keep things in order for the offsets as a way to just iterate thru bones and link to them thru a list.
                 model.flatListToBoneNodes.Add(modelnode);
                 // increment the number of bones.

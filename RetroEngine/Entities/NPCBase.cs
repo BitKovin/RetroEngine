@@ -57,7 +57,7 @@ namespace RetroEngine.Entities
         protected float ShadowDistance = 40;
         protected bool AnimationAlwaysUpdateTime = true;
 
-        Entity player;
+        Entity target;
 
 
         public NPCBase()
@@ -75,7 +75,7 @@ namespace RetroEngine.Entities
 
             bodies.Add(body);
 
-            player = Level.GetCurrent().FindEntityByName("player");
+            target = Level.GetCurrent().FindEntityByName("player");
 
 
             //npcList.Add(this);
@@ -142,7 +142,8 @@ namespace RetroEngine.Entities
         public override void Update()
         {
             //UpdateNPCList();
-            
+
+
 
         }
 
@@ -179,10 +180,11 @@ namespace RetroEngine.Entities
                 return;
             }
 
+            
 
-            if(player != null)
+            if (target != null)
 
-            targetLocation = player.Position;
+            targetLocation = target.Position;
 
             //MoveDirection = crowdAgent.vel.FromRc().XZ().FastNormalize();
 
@@ -220,7 +222,7 @@ namespace RetroEngine.Entities
 
             body.Activate();
 
-            TryStep(MoveDirection/1.5f);
+
 
             body.LinearVelocity = new System.Numerics.Vector3(MoveDirection.X * speed, body.LinearVelocity.Y, MoveDirection.Z * speed);
 
@@ -233,11 +235,11 @@ namespace RetroEngine.Entities
 
             //crowdAgent.SetAgentTargetPosition(targetLocation);
 
-
+            //return;
             if (updateDelay.Wait()) return;
             RequestNewTargetLocation();
             updateDelay.AddDelay(Math.Min(Vector3.Distance(Position, targetLocation) / 50, 0.2f) + Random.Shared.NextSingle() / 3f);
-
+            TryStep(MoveDirection / 1.5f);
 
 
         }
@@ -383,7 +385,7 @@ namespace RetroEngine.Entities
             if (hit.HasHit == false)
                 return;
 
-            DrawDebug.Line(hit.HitPointWorld, hit.HitPointWorld + hit.HitNormalWorld, Vector3.UnitX);
+            //DrawDebug.Line(hit.HitPointWorld, hit.HitPointWorld + hit.HitNormalWorld, Vector3.UnitX);
             if (hit.HitNormalWorld.Y < 0.95)
                 return;
 

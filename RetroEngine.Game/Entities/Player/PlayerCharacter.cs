@@ -203,7 +203,7 @@ namespace RetroEngine.Game.Entities.Player
 
             stepSound.SetParameter("Surface", 1);
 
-            weapons.Add(new WeaponData { weaponType = typeof(weapon_knife), ammo = 1 });
+            weapons.Add(new WeaponData { weaponType = typeof(weapon_sword), ammo = 1 });
             //weapons.Add(new WeaponData { weaponType = typeof(weapon_shotgunNew), ammo = 50 });
             //weapons.Add(new WeaponData { weaponType = typeof(weapon_pistol_double), ammo = 50 });
             SwitchToSlot(0, true);
@@ -429,7 +429,7 @@ namespace RetroEngine.Game.Entities.Player
             Vector3 previousPosition = interpolatedPosition; // This should be updated each physics tick
             Vector3 currentPosition = Position; // This is updated during the physics update
 
-            float fixedDeltaTime = Math.Max(1 / 30f, Time.DeltaTime);
+            float fixedDeltaTime = Math.Max(1 / 20f, Time.DeltaTime);
 
             // Interpolate the position based on the elapsed time in the current frame
             float interpolationFactor = Time.DeltaTime / fixedDeltaTime;

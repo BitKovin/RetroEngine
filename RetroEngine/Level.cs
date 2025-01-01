@@ -323,7 +323,7 @@ namespace RetroEngine
         {
 
             ParallelOptions options = new ParallelOptions();
-            options.MaxDegreeOfParallelism = Environment.ProcessorCount / 2;
+            options.MaxDegreeOfParallelism = Environment.ProcessorCount / 3;
 
             lock (entities)
             {
@@ -363,7 +363,7 @@ namespace RetroEngine
             Stats.StartRecord("VisualUpdate");
 
             ParallelOptions options = new ParallelOptions();
-            options.MaxDegreeOfParallelism = Environment.ProcessorCount / 2;
+            options.MaxDegreeOfParallelism = Environment.ProcessorCount / 3;
             Entity[] list;
 
             lock (entities)

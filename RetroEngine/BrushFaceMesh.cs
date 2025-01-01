@@ -18,6 +18,7 @@ namespace RetroEngine
 
         BoundingBox BoundingBox;
 
+        public static bool ShadowsEnabled = true;
 
         static Assimp.PostProcessSteps PostProcessSteps = Assimp.PostProcessSteps.Triangulate | 
             Assimp.PostProcessSteps.FixInFacingNormals | 
@@ -31,7 +32,7 @@ namespace RetroEngine
             useAvgVertexPosition = true;
 
             Static = true;
-            CastShadows = true;
+            CastShadows = ShadowsEnabled;
 
             SimpleTransperent = true;
 

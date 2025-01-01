@@ -27,7 +27,7 @@ namespace RetroEngine
         public static float ShadowResolutionScale = 1f;
 
 
-        public static bool GeometricalShadowsEnabled = true;
+        public static bool GeometricalShadowsEnabled = false;
 
         public static bool DynamicSunShadowsEnabled = true;
 

@@ -163,7 +163,7 @@ namespace RetroEngine.Skeletal
         public void SetGlobalShaderBoneNode(RiggedModelNode n)
         {
             if (n.isThisARealBone)
-                globalShaderMatrixs[n.boneShaderFinalTransformIndex] = n.CombinedTransformMg;
+                globalShaderMatrixs[n.boneID] = n.CombinedTransformMg;
         }
 
         /// <summary>
@@ -179,7 +179,11 @@ namespace RetroEngine.Skeletal
             UpdateRootMotion();
 
             if (UpdateVisual == false && force == false) return;
-            IterateUpdate(rootNodeOfTree);
+            try
+            {
+                IterateUpdate(rootNodeOfTree);
+            }
+            catch (Exception ex) { }
             UpdateMeshTransforms();
 
             
@@ -268,7 +272,11 @@ namespace RetroEngine.Skeletal
 
         public void UpdatePose()
         {
-            IterateUpdate(rootNodeOfTree);
+            try
+            {
+                IterateUpdate(rootNodeOfTree);
+            }
+            catch (Exception e) { }
             animationPose = new AnimationPose();
         }
 
@@ -397,7 +405,7 @@ namespace RetroEngine.Skeletal
         /// </summary>
         private void IterateUpdate(RiggedModelNode node)
         {
-
+            lock(finalOverrides)
             if(finalOverrides.ContainsKey(node.name))
             {
                 Matrix trans = Matrix.CreateScale(0.01f) * finalOverrides[node.name] * Matrix.Invert(World);
@@ -406,7 +414,7 @@ namespace RetroEngine.Skeletal
 
                 if (node.isThisARealBone && UpdateTransforms)
                 {
-                    globalShaderMatrixs[node.boneShaderFinalTransformIndex] = node.OffsetMatrixMg * node.CombinedTransformMg;
+                    globalShaderMatrixs[node.boneID] = node.OffsetMatrixMg * node.CombinedTransformMg;
                 }
 
                 // Call children
@@ -476,7 +484,7 @@ namespace RetroEngine.Skeletal
 
             if (node.isThisARealBone && UpdateTransforms)
             {
-                globalShaderMatrixs[node.boneShaderFinalTransformIndex] = node.OffsetMatrixMg * node.CombinedTransformMg;
+                globalShaderMatrixs[node.boneID] = node.OffsetMatrixMg * node.CombinedTransformMg;
             }
 
             // Call children
@@ -508,7 +516,7 @@ namespace RetroEngine.Skeletal
             // Update the global shader matrix if needed
             if (node.isThisARealBone)
             {
-                globalShaderMatrixs[node.boneShaderFinalTransformIndex] = node.OffsetMatrixMg * node.CombinedTransformMg;
+                globalShaderMatrixs[node.boneID] = node.OffsetMatrixMg * node.CombinedTransformMg;
             }
 
             // Call recursively for children
@@ -789,7 +797,7 @@ namespace RetroEngine.Skeletal
         public class RiggedModelNode
         {
             public string name = "";
-            public int boneShaderFinalTransformIndex = -1;
+            public int boneID = -1;
             public RiggedModelNode parent;
             public List<RiggedModelNode> children = new List<RiggedModelNode>();
 
@@ -844,7 +852,7 @@ namespace RetroEngine.Skeletal
             {
 
                 copy.name = name;
-                copy.boneShaderFinalTransformIndex=boneShaderFinalTransformIndex;
+                copy.boneID=boneID;
 
                 if(parent is not null)
                 copy.parent = keyValuePairs[parent];
