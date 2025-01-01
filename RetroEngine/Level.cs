@@ -441,8 +441,7 @@ namespace RetroEngine
 
             allMeshes.Clear();
 
-            lock(entities)
-            foreach (Entity ent in entities)
+            foreach (Entity ent in entities.ToArray())
             {
                 if (renderLayers.Contains(ent.Layer) == false && Level.ChangingLevel == false && GameMain.SkipFrames == 0) continue;
                 if (ent.loadedAssets == false || ent.Visible == false) continue;

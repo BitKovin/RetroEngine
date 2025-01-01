@@ -298,15 +298,18 @@ namespace RetroEngine.PhysicsSystem
             {
                 lock (hitboxWorld)
                     hitboxWorld.StepSimulation(Time.DeltaTime, 1, 0.01f);
+
+                lock (staticWorld)
+                {
+                    foreach (StaticRigidBody staticRigidBody in staticBodies)
+                    {
+                        staticRigidBody.UpdateFromParrent();
+                    }
+                }
+
             });
 
-            lock (staticWorld)
-            {
-                foreach (StaticRigidBody staticRigidBody in staticBodies)
-                {
-                    staticRigidBody.UpdateFromParrent();
-                }
-            }
+
             lock (dynamicsWorld)
             {
 
@@ -319,7 +322,7 @@ namespace RetroEngine.PhysicsSystem
                 if (GameMain.Instance.paused == false)
                 {
 
-                    SimulationTicks +=dynamicsWorld.StepSimulation(time*Time.TimeScale, 5, 1/50f * Time.TimeScale);
+                    SimulationTicks +=dynamicsWorld.StepSimulation(time*Time.TimeScale, 3, 1/50f * Time.TimeScale);
 
                 }
             }
