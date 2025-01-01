@@ -64,6 +64,8 @@ namespace RetroEngine
 
         public string Name = "";
 
+        
+
         public SkeletalMesh() : base()
         {
 
@@ -1256,6 +1258,7 @@ namespace RetroEngine
             foreach (HitboxInfo hitbox in hitboxes)
             {
                 Physics.RemoveFromHitboxWorld(hitbox.RagdollRigidBodyRef);
+                Physics.Remove(hitbox.RagdollRigidBodyRef);
 
                 hitbox.RagdollRigidBodyRef = null;
 
@@ -1266,6 +1269,7 @@ namespace RetroEngine
         public void CreateRagdollBodies(Entity owner)
         {
 
+            Owner = owner;
 
             ClearRagdollBodies();
 
@@ -1463,24 +1467,56 @@ namespace RetroEngine
         public void StopRagdoll()
         {
 
+            isRagdoll = false;
+
             RiggedModel?.finalOverrides?.Clear();
 
+            CreateRagdollBodies(Owner);
+
+
+            return;
             foreach (HitboxInfo hitbox in hitboxes)
             {
                 if (hitbox.RagdollRigidBodyRef == null) continue;
 
                 var body = hitbox.RagdollRigidBodyRef;
 
+
                 body.Gravity = new System.Numerics.Vector3(0, 0, 0);
 
-                //body.CollisionFlags = CollisionFlags.NoContactResponse | CollisionFlags.CharacterObject | CollisionFlags.KinematicObject | CollisionFlags.DisableSpuCollisionProcessing;
+                body.CollisionFlags = CollisionFlags.NoContactResponse | CollisionFlags.CustomMaterialCallback;
+                body.Flags = RigidBodyFlags.DisableWorldGravity;
+                body.LinearVelocity = Vector3.Zero.ToPhysics();
+                body.AngularVelocity = Vector3.Zero.ToPhysics();
+
+                body.Gravity = Vector3.Zero.ToPhysics();
+
+
+                body.Friction = 0.6f;
+
+
+                body.SetDamping(0.0f, 0f);
+
+                body.CcdMotionThreshold = 0.00001f;
+                body.CcdSweptSphereRadius = 0.1f;
+
+                body.CollisionFlags = CollisionFlags.NoContactResponse | CollisionFlags.CustomMaterialCallback;
+                body.Flags = RigidBodyFlags.DisableWorldGravity;
+
+                body.ActivationState = ActivationState.WantsDeactivation;
+
+                body.SetBodyType(BodyType.HitBox);
+                body.SetCollisionMask(BodyType.None);
+
+                body.SetCollisionMask(BodyType.HitBox);
+
 
                 body.SetCollisionMask(BodyType.HitBox);
 
 
             }
 
-            isRagdoll = false;
+
         }
 
         public void UpdateRagdollBodies()
