@@ -428,8 +428,8 @@ namespace RetroEngine.Skeletal
             }
 
             // Cache frequently accessed values
-            Matrix additionalMesh;
-            Matrix additionalLocal;
+            Matrix additionalMesh = Matrix.Identity;
+            Matrix additionalLocal = Matrix.Identity;
 
             lock (additionalLocalOffsets)
                 additionalLocal = additionalLocalOffsets.TryGetValue(node.name, out var localOffset) ? localOffset : Matrix.Identity;

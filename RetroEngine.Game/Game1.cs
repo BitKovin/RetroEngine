@@ -12,6 +12,7 @@ using RetroEngine.Graphic;
 using RetroEngine.Game.Effects;
 using RetroEngine.Audio;
 using RetroEngine.Entities.Light;
+using RetroEngine.Game.Entities.Enemies;
 
 namespace RetroEngine.Game
 {
@@ -101,10 +102,10 @@ namespace RetroEngine.Game
 
             //Render.LUT = AssetRegistry.LoadTextureFromFile("engine/textures/Sin Shitty.png_out.png", generateMipMaps: false);   
 
-            for (int i = 1; i <= 50; i++)
+            for (int i = 1; i <= 200; i++)
             {
-                Entity npc = new NPCBase();
-                npc.Position = new Vector3(0, i*3f + 4, 0);
+                Entity npc = new npc_dog();
+                npc.Position = new Vector3(i*2, i*3f + 4, i);
                 npc.Start();
                 Level.GetCurrent().AddEntity(npc);
             }
@@ -159,6 +160,8 @@ namespace RetroEngine.Game
             Render.SimpleRender = true;
 
             PointLight.DisableShadows = true;
+
+            //Graphics.GeometricalShadowsEnabled = true;
 
             //Graphics.Exposure = 1;
             //Graphics.Gamma = 1.1f;

@@ -321,9 +321,10 @@ namespace RetroEngine.PhysicsSystem
 
                 if (GameMain.Instance.paused == false)
                 {
-
-                    SimulationTicks +=dynamicsWorld.StepSimulation(time*Time.TimeScale, 3, 1/50f * Time.TimeScale);
-
+                    lock (dynamicsWorld.CollisionObjectArray)
+                    {
+                        SimulationTicks += dynamicsWorld.StepSimulation(time * Time.TimeScale, 3, 1 / 50f * Time.TimeScale);
+                    }
                 }
             }
 
@@ -378,12 +379,12 @@ namespace RetroEngine.PhysicsSystem
         {
             if (body is null) return;
 
-            lock (dynamicsWorld)
-            {
-                dynamicsWorld.RemoveRigidBody(body);
-                lock(dynamicsWorld.CollisionObjectArray)
-                    dynamicsWorld.CollisionObjectArray.Remove(body);
-            }
+            lock (dynamicsWorld) lock (dynamicsWorld.CollisionObjectArray)
+                {
+                    dynamicsWorld.RemoveRigidBody(body);
+
+                    //dynamicsWorld.RemoveCollisionObject(body);
+                }
 
         }
 

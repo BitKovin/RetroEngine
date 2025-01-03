@@ -117,6 +117,10 @@ namespace RetroEngine.Game.Entities
         {
             base.OnDamaged(damage, causer, weapon);
 
+            Destroy();
+
+            return;
+
             pendingPlay = true;
 
             soundPlayer.Position = Position;

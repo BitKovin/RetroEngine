@@ -20,6 +20,8 @@ namespace RetroEngine.Windows
         {
             AllowAsyncAssetLoading = true;
 
+            AsyncGameThread = false;
+
         }
 
 

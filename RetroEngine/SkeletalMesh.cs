@@ -60,6 +60,7 @@ namespace RetroEngine
 
         public event AnimationEventPlayed OnAnimationEvent;
 
+        Vector3 boundingSphereOffset = new Vector3();
         public bool isRagdoll { get; protected set; }
 
         public string Name = "";
@@ -101,7 +102,6 @@ namespace RetroEngine
 
             RiggedModel.Update(0);
 
-            CalculateBoundingSphere();
 
             GetBoneMatrix("");
 
@@ -111,7 +111,7 @@ namespace RetroEngine
 
             LoadMeshMetaFromFile(path);
 
-
+            CalculateBoundingSphere();
 
             RiggedModel.overrideAnimationFrameTime = -1;
         }
@@ -222,8 +222,11 @@ namespace RetroEngine
             if (points.Count > 0)
             {
                 boundingSphere = BoundingSphere.CreateFromPoints(points).Transform(base.GetWorldMatrix());
-                boundingSphere.Radius *= 1.1f;
+                boundingSphere.Radius *= 1.5f;
                 boundingSphere.Radius += 0.3f;
+
+                boundingSphereOffset = boundingSphere.Center - Position;
+
             }
         }
 
@@ -642,6 +645,8 @@ namespace RetroEngine
         public Matrix GetBoneMatrix(int id, Matrix worldMatrix)
         {
             if (RiggedModel == null) return Matrix.Identity;
+
+            if(id<0) return Matrix.Identity;
 
             var foundBone = idToBone[id];
 
@@ -1178,9 +1183,9 @@ namespace RetroEngine
 
             inFrustrum = false;
 
-            WorldMatrix = GetWorldMatrix();
+            boundingSphere.Center = Position + boundingSphereOffset;
 
-            CalculateBoundingSphere();
+            WorldMatrix = GetWorldMatrix();
 
             if (Camera.frustum.Contains(boundingSphere) != ContainmentType.Disjoint)
             {
@@ -1238,6 +1243,8 @@ namespace RetroEngine
                 var boneTrans = matrix.Decompose(out _, out var rotation, out var pos);
                 hitbox.RagdollRigidBodyRef.SetTransform(pos, rotation);
 
+
+
             }
 
         }
@@ -1257,8 +1264,14 @@ namespace RetroEngine
 
             foreach (HitboxInfo hitbox in hitboxes)
             {
-                Physics.RemoveFromHitboxWorld(hitbox.RagdollRigidBodyRef);
+
+
                 Physics.Remove(hitbox.RagdollRigidBodyRef);
+
+
+                Physics.RemoveFromHitboxWorld(hitbox.RagdollRigidBodyRef);
+
+
 
                 hitbox.RagdollRigidBodyRef = null;
 
@@ -1338,6 +1351,8 @@ namespace RetroEngine
             {
 
                 if (keyValuePairs.ContainsKey(hitbox.Parrent) == false) continue;
+
+                if (GetBoneByName(hitbox.Parrent) == null) continue;
 
                 if (GetBoneByName(hitbox.Parrent).parent == null) continue;
 
@@ -1423,43 +1438,7 @@ namespace RetroEngine
                 StartRagdollForHitbox(hitbox);
             }
 
-                /*
-                CalculateRagdollRestPose();
-
-                CreateConstrains();
-
-                ApplyPoseIntoRagdoll();
-
-                foreach (HitboxInfo hitbox in hitboxes)
-                {
-                    if(hitbox.RagdollRigidBodyRef == null) continue;
-
-                    var body = hitbox.RagdollRigidBodyRef;
-
-
-                    body.ActivationState = ActivationState.WantsDeactivation;
-
-
-
-                    body.Flags = RigidBodyFlags.None;
-
-                    body.Gravity = new System.Numerics.Vector3(0,-9,0);
-
-                    body.CollisionFlags = CollisionFlags.None;
-
-                    body.CcdMotionThreshold = 0.00001f;
-                    body.CcdSweptSphereRadius = 0.1f;
-
-                    body.ActivationState = ActivationState.WantsDeactivation;
-
-
-                    body.SetCollisionMask(BodyType.World);
-
-                    body.Activate(true);
-
-                }
-                */
-                isRagdoll = true;
+            isRagdoll = true;
 
 
         }
@@ -1473,6 +1452,7 @@ namespace RetroEngine
 
             CreateRagdollBodies(Owner);
 
+            //ClearRagdollBodies();
 
             return;
             foreach (HitboxInfo hitbox in hitboxes)
@@ -1705,6 +1685,10 @@ namespace RetroEngine
 
                 positions[i] = finalMatrix.Translation;
 
+                var trans = ((Matrix)(finalMatrix)).DecomposeMatrix();
+
+                DrawDebug.Text(worldTransform.Translation, trans.Scale.ToString(), 0.01f);
+
                 SetWorldPositionOverride(hitbox.Bone, finalMatrix);
 
                 //if (hitbox.Constraint != null)
@@ -1713,6 +1697,24 @@ namespace RetroEngine
 
             }
 
+
+        }
+
+        public void DisplayBoneScales()
+        {
+            if(RiggedModel == null) return;
+
+            foreach (var bone in RiggedModel.flatListToAllNodes)
+            {
+
+                var trans = GetBoneMatrix(bone.name).DecomposeMatrix();
+
+                DrawDebug.Text(trans.Position, trans.Scale.ToString(), 0.01f);
+
+                Console.WriteLine(bone.name);
+                Console.WriteLine(trans.Scale);
+
+            }
 
         }
 

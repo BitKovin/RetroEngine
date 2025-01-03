@@ -101,7 +101,7 @@ namespace RetroEngine.NavigationSystem
 
             DtStatus result;
 
-            int maxItt = (int)(Vector3.Distance(start, end)*10);
+            int maxItt = (int)(Vector3.Distance(start, end)*3)+50;
 
 
             result = rcTestNavMeshTool.FindFollowPath(NavigationSystem.Recast.dtNavMesh, navMeshQuery, startRef, endRef, start.ToRc(), end.ToRc(), filter, false, ref longs, 0, ref path, 1000);
