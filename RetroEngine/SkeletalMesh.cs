@@ -1836,6 +1836,35 @@ namespace RetroEngine
             }
         }
 
+        public AnimationState GetAnimationState()
+        {
+            return new AnimationState { CurrentFrame = GetCurrentAnimationFrame(), CurrrentAnimation = GetCurrentAnimationIndex(), Loop = RiggedModel.loopAnimation };
+        }
+
+        public void SetAnimationState(AnimationState animationState)
+        {
+            PlayAnimation(animationState.CurrrentAnimation, animationState.Loop,0);
+            SetCurrentAnimationFrame(animationState.CurrentFrame);
+
+        }
+
+        public struct AnimationState
+        {
+
+            [JsonInclude]
+            public int CurrrentAnimation = 0;
+
+            [JsonInclude]
+            public int CurrentFrame = 0;
+
+            [JsonInclude]
+            public bool Loop = false;
+
+            public AnimationState()
+            {
+            }
+        }
+
 
     }
 
@@ -1938,8 +1967,11 @@ namespace RetroEngine
         }
 
 
+
+
     }
 
+    
     public class AnimationEvent
     {
 

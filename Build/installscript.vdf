@@ -2,21 +2,33 @@
 {
 	"Run Process"
 	{
-		"Net8Dectopt"
+		"Net9Desktopt"
 		{
-			"process 1"		"%INSTALLDIR%\\redist\\dotnet-runtime-8.0.8-win-x64.exe"
-			"command 1"		"/install /quiet /norestart"
+			"Process 1"		"%INSTALLDIR%\\redist\\windowsdesktop-runtime-9.0.0-win-x64.exe"
+			"Command 1"		"/install /quiet /norestart"
 			"NoCleanUp"		"0"
 		}
-		"Net8"
+		"Net9"
 		{
-			"process 1"		"%INSTALLDIR%\\redist\\windowsdesktop-runtime-8.0.8-win-x64.exe"
-			"command 1"		"/install /quiet /norestart"
+			"Process 1"		"%INSTALLDIR%\\redist\\dotnet-runtime-9.0.0-win-x64.exe"
+			"Command 1"		"/install /quiet /norestart"
+			"NoCleanUp"		"0"
+		}
+		"Net6"
+		{
+			"Process 1"		"%INSTALLDIR%\\redist\\dotnet-runtime-6.0.36-win-x64.exe"
+			"Command 1"		"/install /quiet /norestart"
+			"NoCleanUp"		"0"
+		}
+		"Net6Desktop"
+		{
+			"Process 1"		"%INSTALLDIR%\\redist\\windowsdesktop-runtime-6.0.36-win-x64.exe"
+			"Command 1"		"/install /quiet /norestart"
 			"NoCleanUp"		"0"
 		}
 	}
 }
 "kvsignatures"
 {
-	"InstallScript"		"88f969b6ce6b13e658b310f3ba9adbc66518ff7aa1fb14733b3e9c5be266cfb02fa3426aa3b992724df694b39ed93c4bd3a1c5681dab434b487ea65bf7848df05c7eca862bdfd92f6087ff0072eda30a92bf8d3e42bd431781af2b058826db926fd0f09f48e7da9b13fe70234ffef3c030460f46485b10cd9dad5f0d52ba1949"
+	"InstallScript"		"26337e33726595d4f52e05376a2bf7aaf886d411e407050c7993e294ff61b9175b13b3fa46fb67f773c21b18d6c8dff4b46b0dc072f9a33aefa9e6d8685bd8bcde9531ab9522838f723088ad373af95b28c79b4897ae8ed26616a88e512110bf6b51480a12831ce7019907b0755121b86db1d4482399351193adc96968924444"
 }

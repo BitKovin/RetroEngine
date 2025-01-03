@@ -288,11 +288,10 @@ namespace RetroEngine.Game.Entities.Enemies
 
             MoveDirection = Vector3.Lerp(MoveDirection, DesiredMoveDirection, Time.DeltaTime * 2);
 
-            //MoveDirection.Normalize();
 
             mesh.Position = Position - new Vector3(0, 1f, 0);
 
-            mesh.Rotation = new Vector3(0, MathHelper.FindLookAtRotation(Vector3.Zero, Vector3.Lerp(MoveDirection, DesiredMoveDirection, 0.5f)).Y, 0);
+            mesh.Rotation = new Vector3(0, MathHelper.FindLookAtRotation(Vector3.Zero, MoveDirection).Y, 0);
 
             mesh.UpdateHitboxes();
 
@@ -476,15 +475,15 @@ namespace RetroEngine.Game.Entities.Enemies
 
         }
 
-
+        [JsonInclude]
+        public SkeletalMesh.AnimationState animationState;
 
         protected override EntitySaveData SaveData(EntitySaveData baseData)
         {
 
+            animationState = mesh.GetAnimationState();
 
             return base.SaveData(baseData);
-
-
 
         }
 
@@ -494,12 +493,12 @@ namespace RetroEngine.Game.Entities.Enemies
 
             body.SetPosition(Position);
 
-            if (dead)
-            {
-                mesh.PlayAnimation("death", false, 0);
-                mesh.Update(2);
-                Physics.Remove(body);
-            }
+            mesh.Position = Position;
+
+            if(dead)
+                Death();
+
+            mesh.SetAnimationState(animationState);
 
         }
 

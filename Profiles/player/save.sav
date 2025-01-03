@@ -1,1 +1,385 @@
-{"levelName":"lvl1.map","entities":[{"Name":"player","className":"info_player_start","id":"info_player_start-player-0","saveData":"{\u0022velocity\u0022:{\u0022X\u0022:0,\u0022Y\u0022:5.9604645E-07,\u0022Z\u0022:0},\u0022weapons\u0022:[{\u0022weaponType\u0022:\u0022RetroEngine.Game.Entities.Weapons.weapon_sword, RetroEngine.Game, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0022,\u0022ammo\u0022:1},{\u0022weaponType\u0022:\u0022RetroEngine.Game.Entities.Weapons.weapon_pistol, RetroEngine.Game, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0022,\u0022ammo\u0022:0}],\u0022currentSlot\u0022:1,\u0022lastSlot\u0022:0,\u0022thirdPerson\u0022:false,\u0022Position\u0022:{\u0022X\u0022:144.44188,\u0022Y\u0022:1.6899289,\u0022Z\u0022:222.96657},\u0022Rotation\u0022:{\u0022X\u0022:0.5,\u0022Y\u0022:243.56732,\u0022Z\u0022:0},\u0022name\u0022:\u0022player\u0022,\u0022Tags\u0022:[\u0022player\u0022]}"},{"Name":"","className":"spawner","id":"spawner-spg_1-0","saveData":"{\u0022Position\u0022:{\u0022X\u0022:16.5,\u0022Y\u0022:1.5,\u0022Z\u0022:192},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[]}"},{"Name":"","className":"spawner","id":"spawner-spg_1-1","saveData":"{\u0022Position\u0022:{\u0022X\u0022:14,\u0022Y\u0022:2,\u0022Z\u0022:195},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[]}"},{"Name":"","className":"spawner","id":"spawner-spg_1-2","saveData":"{\u0022Position\u0022:{\u0022X\u0022:13.5,\u0022Y\u0022:2,\u0022Z\u0022:197.5},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[]}"},{"Name":"","className":"spawner","id":"spawner-spg_1-3","saveData":"{\u0022Position\u0022:{\u0022X\u0022:12,\u0022Y\u0022:2,\u0022Z\u0022:200.5},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[]}"},{"Name":"","className":"spawner","id":"spawner-spg_1-4","saveData":"{\u0022Position\u0022:{\u0022X\u0022:11.5,\u0022Y\u0022:2,\u0022Z\u0022:206},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[]}"},{"Name":"","className":"spawner","id":"spawner-spg_1-5","saveData":"{\u0022Position\u0022:{\u0022X\u0022:11,\u0022Y\u0022:2,\u0022Z\u0022:209},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[]}"},{"Name":"","className":"spawner","id":"spawner-spg_1-6","saveData":"{\u0022Position\u0022:{\u0022X\u0022:11,\u0022Y\u0022:2,\u0022Z\u0022:211.5},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[]}"},{"Name":"","className":"spawner","id":"spawner-spg_1-7","saveData":"{\u0022Position\u0022:{\u0022X\u0022:11.5,\u0022Y\u0022:2,\u0022Z\u0022:217.5},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[]}"},{"Name":"","className":"spawner","id":"spawner-spg_1-8","saveData":"{\u0022Position\u0022:{\u0022X\u0022:12,\u0022Y\u0022:2,\u0022Z\u0022:220.5},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[]}"},{"Name":"","className":"spawner","id":"spawner-spg_1-9","saveData":"{\u0022Position\u0022:{\u0022X\u0022:13,\u0022Y\u0022:2,\u0022Z\u0022:226},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[]}"},{"Name":"","className":"spawner","id":"spawner-spg_1-10","saveData":"{\u0022Position\u0022:{\u0022X\u0022:11.5,\u0022Y\u0022:2,\u0022Z\u0022:214},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[]}"},{"Name":"","className":"spawner","id":"spawner-spg_1-11","saveData":"{\u0022Position\u0022:{\u0022X\u0022:29,\u0022Y\u0022:2,\u0022Z\u0022:194},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[]}"},{"Name":"","className":"spawner","id":"spawner-spg_1-12","saveData":"{\u0022Position\u0022:{\u0022X\u0022:27,\u0022Y\u0022:2,\u0022Z\u0022:198.5},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[]}"},{"Name":"","className":"spawner","id":"spawner-spg_1-13","saveData":"{\u0022Position\u0022:{\u0022X\u0022:26.5,\u0022Y\u0022:2,\u0022Z\u0022:200.5},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[]}"},{"Name":"","className":"spawner","id":"spawner-spg_1-14","saveData":"{\u0022Position\u0022:{\u0022X\u0022:25.5,\u0022Y\u0022:2,\u0022Z\u0022:203.5},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[]}"},{"Name":"","className":"spawner","id":"spawner-spg_1-15","saveData":"{\u0022Position\u0022:{\u0022X\u0022:25.5,\u0022Y\u0022:2,\u0022Z\u0022:206},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[]}"},{"Name":"","className":"spawner","id":"spawner-spg_1-16","saveData":"{\u0022Position\u0022:{\u0022X\u0022:25,\u0022Y\u0022:2,\u0022Z\u0022:208.5},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[]}"},{"Name":"","className":"spawner","id":"spawner-spg_1-17","saveData":"{\u0022Position\u0022:{\u0022X\u0022:25,\u0022Y\u0022:2,\u0022Z\u0022:211},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[]}"},{"Name":"","className":"spawner","id":"spawner-spg_1-18","saveData":"{\u0022Position\u0022:{\u0022X\u0022:25.5,\u0022Y\u0022:2,\u0022Z\u0022:214.5},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[]}"},{"Name":"","className":"spawner","id":"spawner-spg_1-19","saveData":"{\u0022Position\u0022:{\u0022X\u0022:26.5,\u0022Y\u0022:2,\u0022Z\u0022:218},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[]}"},{"Name":"","className":"spawner","id":"spawner-spg_1-20","saveData":"{\u0022Position\u0022:{\u0022X\u0022:28,\u0022Y\u0022:1.5281625,\u0022Z\u0022:221.5},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[]}"},{"Name":"","className":"spawner","id":"spawner-spg_1-21","saveData":"{\u0022Position\u0022:{\u0022X\u0022:29,\u0022Y\u0022:1.5262656,\u0022Z\u0022:227},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[]}"},{"Name":"","className":"spawner","id":"spawner-spg_1-22","saveData":"{\u0022Position\u0022:{\u0022X\u0022:51.5,\u0022Y\u0022:1.5312093,\u0022Z\u0022:204},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[]}"},{"Name":"","className":"spawner","id":"spawner-spg_1-23","saveData":"{\u0022Position\u0022:{\u0022X\u0022:47.5,\u0022Y\u0022:1.5279156,\u0022Z\u0022:214.5},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[]}"},{"Name":"","className":"spawner","id":"spawner-spg_1-24","saveData":"{\u0022Position\u0022:{\u0022X\u0022:43.5,\u0022Y\u0022:1.5301594,\u0022Z\u0022:209},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[]}"}],"entityId":79,"deletedIDs":["","","","","","","","","","","","","","","","","","","","","","","","",""],"deletedNames":["pistols_start_pickup"]}
+{
+  "levelName": "lvl1.map",
+  "entities": [
+    {
+      "Name": "player",
+      "className": "info_player_start",
+      "id": "info_player_start-player-0",
+      "saveData": "{\u0022velocity\u0022:{\u0022X\u0022:-1.4263015,\u0022Y\u0022:-0.0010933876,\u0022Z\u0022:3.2833214},\u0022weapons\u0022:[{\u0022weaponType\u0022:\u0022RetroEngine.Game.Entities.Weapons.weapon_sword, RetroEngine.Game, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0022,\u0022ammo\u0022:1},{\u0022weaponType\u0022:\u0022RetroEngine.Game.Entities.Weapons.weapon_pistol, RetroEngine.Game, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0022,\u0022ammo\u0022:0}],\u0022currentSlot\u0022:1,\u0022lastSlot\u0022:1,\u0022thirdPerson\u0022:false,\u0022Position\u0022:{\u0022X\u0022:57.723732,\u0022Y\u0022:1.4631144,\u0022Z\u0022:222.6639},\u0022Rotation\u0022:{\u0022X\u0022:5.466652,\u0022Y\u0022:255.09972,\u0022Z\u0022:0},\u0022name\u0022:\u0022player\u0022,\u0022Tags\u0022:[\u0022player\u0022]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_dog",
+      "id": "npc_dog--0",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.62816083,\u0022Y\u0022:0,\u0022Z\u0022:0.77025837},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.58690584,\u0022Y\u0022:0,\u0022Z\u0022:0.80770004},\u0022speed\u0022:6,\u0022targetLocation\u0022:{\u0022X\u0022:57.723732,\u0022Y\u0022:1.4631144,\u0022Z\u0022:222.6639},\u0022dead\u0022:false,\u0022reachedFloor\u0022:false,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:9,\u0022Loop\u0022:true},\u0022Position\u0022:{\u0022X\u0022:49.381905,\u0022Y\u0022:1.5688276,\u0022Z\u0022:209.2705},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_dog",
+      "id": "npc_dog--1",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.68861544,\u0022Y\u0022:0,\u0022Z\u0022:0.7179842},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.65880805,\u0022Y\u0022:0,\u0022Z\u0022:0.7517597},\u0022speed\u0022:6,\u0022targetLocation\u0022:{\u0022X\u0022:57.723732,\u0022Y\u0022:1.4631144,\u0022Z\u0022:222.6639},\u0022dead\u0022:false,\u0022reachedFloor\u0022:false,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:8,\u0022Loop\u0022:true},\u0022Position\u0022:{\u0022X\u0022:47.96079,\u0022Y\u0022:1.5691221,\u0022Z\u0022:209.45773},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_dog",
+      "id": "npc_dog--2",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.68222743,\u0022Y\u0022:0,\u0022Z\u0022:0.7179184},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.45508465,\u0022Y\u0022:0,\u0022Z\u0022:0.8886972},\u0022speed\u0022:6,\u0022targetLocation\u0022:{\u0022X\u0022:57.723732,\u0022Y\u0022:1.4631144,\u0022Z\u0022:222.6639},\u0022dead\u0022:false,\u0022reachedFloor\u0022:false,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:8,\u0022Loop\u0022:true},\u0022Position\u0022:{\u0022X\u0022:48.227463,\u0022Y\u0022:1.5684258,\u0022Z\u0022:210.83209},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_dog",
+      "id": "npc_dog--3",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.75859296,\u0022Y\u0022:0,\u0022Z\u0022:0.64219034},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.70152545,\u0022Y\u0022:0,\u0022Z\u0022:0.71128273},\u0022speed\u0022:6,\u0022targetLocation\u0022:{\u0022X\u0022:57.723732,\u0022Y\u0022:1.4631144,\u0022Z\u0022:222.6639},\u0022dead\u0022:false,\u0022reachedFloor\u0022:false,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:8,\u0022Loop\u0022:true},\u0022Position\u0022:{\u0022X\u0022:47.108643,\u0022Y\u0022:1.5681963,\u0022Z\u0022:211.67368},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_dog",
+      "id": "npc_dog--4",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.7754499,\u0022Y\u0022:0,\u0022Z\u0022:0.6171606},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.6801934,\u0022Y\u0022:0,\u0022Z\u0022:0.73086643},\u0022speed\u0022:6,\u0022targetLocation\u0022:{\u0022X\u0022:57.723732,\u0022Y\u0022:1.4631144,\u0022Z\u0022:222.6639},\u0022dead\u0022:false,\u0022reachedFloor\u0022:false,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:8,\u0022Loop\u0022:true},\u0022Position\u0022:{\u0022X\u0022:48.087032,\u0022Y\u0022:1.5676913,\u0022Z\u0022:212.67505},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_dog",
+      "id": "npc_dog--5",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.8266189,\u0022Y\u0022:0,\u0022Z\u0022:0.54649013},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.7655727,\u0022Y\u0022:0,\u0022Z\u0022:0.64099},\u0022speed\u0022:6,\u0022targetLocation\u0022:{\u0022X\u0022:57.723732,\u0022Y\u0022:1.4631144,\u0022Z\u0022:222.6639},\u0022dead\u0022:false,\u0022reachedFloor\u0022:false,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:8,\u0022Loop\u0022:true},\u0022Position\u0022:{\u0022X\u0022:47.159306,\u0022Y\u0022:1.5627275,\u0022Z\u0022:213.72351},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_dog",
+      "id": "npc_dog--6",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.8678144,\u0022Y\u0022:0,\u0022Z\u0022:0.4832977},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.8423147,\u0022Y\u0022:0,\u0022Z\u0022:0.5365688},\u0022speed\u0022:6,\u0022targetLocation\u0022:{\u0022X\u0022:57.723732,\u0022Y\u0022:1.4631144,\u0022Z\u0022:222.6639},\u0022dead\u0022:false,\u0022reachedFloor\u0022:false,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:8,\u0022Loop\u0022:true},\u0022Position\u0022:{\u0022X\u0022:47.335003,\u0022Y\u0022:1.5645962,\u0022Z\u0022:215.11246},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_dog",
+      "id": "npc_dog--7",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.90789306,\u0022Y\u0022:0,\u0022Z\u0022:0.40147686},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.8854984,\u0022Y\u0022:0,\u0022Z\u0022:0.46193418},\u0022speed\u0022:6,\u0022targetLocation\u0022:{\u0022X\u0022:57.723732,\u0022Y\u0022:1.4631144,\u0022Z\u0022:222.6639},\u0022dead\u0022:false,\u0022reachedFloor\u0022:false,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:8,\u0022Loop\u0022:true},\u0022Position\u0022:{\u0022X\u0022:47.799625,\u0022Y\u0022:1.5665014,\u0022Z\u0022:216.59166},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_dog",
+      "id": "npc_dog--8",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.93132067,\u0022Y\u0022:0,\u0022Z\u0022:0.34291068},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.9127359,\u0022Y\u0022:0,\u0022Z\u0022:0.40533322},\u0022speed\u0022:6,\u0022targetLocation\u0022:{\u0022X\u0022:57.723732,\u0022Y\u0022:1.4631144,\u0022Z\u0022:222.6639},\u0022dead\u0022:false,\u0022reachedFloor\u0022:false,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:8,\u0022Loop\u0022:true},\u0022Position\u0022:{\u0022X\u0022:48.729015,\u0022Y\u0022:1.566297,\u0022Z\u0022:217.63866},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_dog",
+      "id": "npc_dog--9",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.97389114,\u0022Y\u0022:0,\u0022Z\u0022:0.18684359},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.9480796,\u0022Y\u0022:0,\u0022Z\u0022:0.3151223},\u0022speed\u0022:6,\u0022targetLocation\u0022:{\u0022X\u0022:57.8874,\u0022Y\u0022:1.4632496,\u0022Z\u0022:222.2343},\u0022dead\u0022:true,\u0022reachedFloor\u0022:true,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:0,\u0022CurrentFrame\u0022:2,\u0022Loop\u0022:false},\u0022Position\u0022:{\u0022X\u0022:48.677593,\u0022Y\u0022:0.59601694,\u0022Z\u0022:219.18953},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_dog",
+      "id": "npc_dog--10",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.85893935,\u0022Y\u0022:0,\u0022Z\u0022:0.49333915},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.8143766,\u0022Y\u0022:0,\u0022Z\u0022:0.57855093},\u0022speed\u0022:6,\u0022targetLocation\u0022:{\u0022X\u0022:57.723732,\u0022Y\u0022:1.4631144,\u0022Z\u0022:222.6639},\u0022dead\u0022:false,\u0022reachedFloor\u0022:false,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:7,\u0022Loop\u0022:true},\u0022Position\u0022:{\u0022X\u0022:48.6795,\u0022Y\u0022:1.5668215,\u0022Z\u0022:215.5027},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_dog",
+      "id": "npc_dog--11",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.13700853,\u0022Y\u0022:0,\u0022Z\u0022:0.9631677},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.087685205,\u0022Y\u0022:0,\u0022Z\u0022:0.99498826},\u0022speed\u0022:6,\u0022targetLocation\u0022:{\u0022X\u0022:57.723732,\u0022Y\u0022:1.4631144,\u0022Z\u0022:222.6639},\u0022dead\u0022:false,\u0022reachedFloor\u0022:false,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:7,\u0022Loop\u0022:true},\u0022Position\u0022:{\u0022X\u0022:58.20065,\u0022Y\u0022:1.5660359,\u0022Z\u0022:214.6314},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_dog",
+      "id": "npc_dog--12",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.29051074,\u0022Y\u0022:0,\u0022Z\u0022:0.93299323},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.16139573,\u0022Y\u0022:0,\u0022Z\u0022:0.986626},\u0022speed\u0022:6,\u0022targetLocation\u0022:{\u0022X\u0022:57.723732,\u0022Y\u0022:1.4631144,\u0022Z\u0022:222.6639},\u0022dead\u0022:false,\u0022reachedFloor\u0022:false,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:7,\u0022Loop\u0022:true},\u0022Position\u0022:{\u0022X\u0022:56.81663,\u0022Y\u0022:1.5662053,\u0022Z\u0022:214.84253},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_dog",
+      "id": "npc_dog--13",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.02511332,\u0022Y\u0022:0,\u0022Z\u0022:0.9521466},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.2250365,\u0022Y\u0022:0,\u0022Z\u0022:0.9737348},\u0022speed\u0022:6,\u0022targetLocation\u0022:{\u0022X\u0022:57.723732,\u0022Y\u0022:1.4631144,\u0022Z\u0022:222.6639},\u0022dead\u0022:false,\u0022reachedFloor\u0022:false,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:7,\u0022Loop\u0022:true},\u0022Position\u0022:{\u0022X\u0022:59.415962,\u0022Y\u0022:1.5656308,\u0022Z\u0022:215.32635},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_dog",
+      "id": "npc_dog--14",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.21448721,\u0022Y\u0022:0,\u0022Z\u0022:0.93947166},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.073282346,\u0022Y\u0022:0,\u0022Z\u0022:0.9968474},\u0022speed\u0022:6,\u0022targetLocation\u0022:{\u0022X\u0022:57.723732,\u0022Y\u0022:1.4631144,\u0022Z\u0022:222.6639},\u0022dead\u0022:false,\u0022reachedFloor\u0022:false,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:7,\u0022Loop\u0022:true},\u0022Position\u0022:{\u0022X\u0022:57.521896,\u0022Y\u0022:1.5630126,\u0022Z\u0022:216.0519},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_dog",
+      "id": "npc_dog--15",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.05967269,\u0022Y\u0022:0,\u0022Z\u0022:0.94608873},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.15877995,\u0022Y\u0022:0,\u0022Z\u0022:0.98643184},\u0022speed\u0022:6,\u0022targetLocation\u0022:{\u0022X\u0022:57.723732,\u0022Y\u0022:1.4631144,\u0022Z\u0022:222.6639},\u0022dead\u0022:false,\u0022reachedFloor\u0022:false,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:7,\u0022Loop\u0022:true},\u0022Position\u0022:{\u0022X\u0022:58.81413,\u0022Y\u0022:1.5655956,\u0022Z\u0022:216.59024},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_dog",
+      "id": "npc_dog--16",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.2824925,\u0022Y\u0022:0,\u0022Z\u0022:0.9122476},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.017055782,\u0022Y\u0022:0,\u0022Z\u0022:0.99952954},\u0022speed\u0022:6,\u0022targetLocation\u0022:{\u0022X\u0022:57.723732,\u0022Y\u0022:1.4631144,\u0022Z\u0022:222.6639},\u0022dead\u0022:false,\u0022reachedFloor\u0022:false,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:7,\u0022Loop\u0022:true},\u0022Position\u0022:{\u0022X\u0022:57.70617,\u0022Y\u0022:1.565037,\u0022Z\u0022:217.44601},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_dog",
+      "id": "npc_dog--17",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.21721971,\u0022Y\u0022:0,\u0022Z\u0022:0.9250923},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.02456733,\u0022Y\u0022:0,\u0022Z\u0022:0.99864703},\u0022speed\u0022:6,\u0022targetLocation\u0022:{\u0022X\u0022:57.723732,\u0022Y\u0022:1.4631144,\u0022Z\u0022:222.6639},\u0022dead\u0022:false,\u0022reachedFloor\u0022:false,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:7,\u0022Loop\u0022:true},\u0022Position\u0022:{\u0022X\u0022:57.887646,\u0022Y\u0022:1.5645019,\u0022Z\u0022:218.83424},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_dog",
+      "id": "npc_dog--18",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.014361582,\u0022Y\u0022:0,\u0022Z\u0022:0.9250068},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.25261602,\u0022Y\u0022:0,\u0022Z\u0022:0.9672617},\u0022speed\u0022:6,\u0022targetLocation\u0022:{\u0022X\u0022:57.723732,\u0022Y\u0022:1.4631144,\u0022Z\u0022:222.6639},\u0022dead\u0022:false,\u0022reachedFloor\u0022:false,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:7,\u0022Loop\u0022:true},\u0022Position\u0022:{\u0022X\u0022:58.996338,\u0022Y\u0022:1.5648406,\u0022Z\u0022:217.9768},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_dog",
+      "id": "npc_dog--19",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.17446584,\u0022Y\u0022:0,\u0022Z\u0022:0.91273123},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.029567003,\u0022Y\u0022:0,\u0022Z\u0022:0.99853134},\u0022speed\u0022:1.9875349,\u0022targetLocation\u0022:{\u0022X\u0022:57.723732,\u0022Y\u0022:1.4631144,\u0022Z\u0022:222.6639},\u0022dead\u0022:false,\u0022reachedFloor\u0022:false,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:7,\u0022Loop\u0022:true},\u0022Position\u0022:{\u0022X\u0022:58.06092,\u0022Y\u0022:1.5640333,\u0022Z\u0022:220.22316},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_dog",
+      "id": "npc_dog--20",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.12317941,\u0022Y\u0022:0,\u0022Z\u0022:0.88340855},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.3987534,\u0022Y\u0022:0,\u0022Z\u0022:0.9166113},\u0022speed\u0022:6,\u0022targetLocation\u0022:{\u0022X\u0022:57.723732,\u0022Y\u0022:1.4631144,\u0022Z\u0022:222.6639},\u0022dead\u0022:false,\u0022reachedFloor\u0022:false,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:7,\u0022Loop\u0022:true},\u0022Position\u0022:{\u0022X\u0022:59.165405,\u0022Y\u0022:1.5641395,\u0022Z\u0022:219.36198},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_dog",
+      "id": "npc_dog--21",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.03685305,\u0022Y\u0022:0,\u0022Z\u0022:0.870554},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.44858027,\u0022Y\u0022:0,\u0022Z\u0022:0.89185226},\u0022speed\u0022:0,\u0022targetLocation\u0022:{\u0022X\u0022:57.723732,\u0022Y\u0022:1.4631144,\u0022Z\u0022:222.6639},\u0022dead\u0022:false,\u0022reachedFloor\u0022:false,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:7,\u0022Loop\u0022:true},\u0022Position\u0022:{\u0022X\u0022:58.25796,\u0022Y\u0022:1.5632058,\u0022Z\u0022:221.60942},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_dog",
+      "id": "npc_dog--22",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.68406487,\u0022Y\u0022:0,\u0022Z\u0022:0.669854},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.83894134,\u0022Y\u0022:0,\u0022Z\u0022:0.5427067},\u0022speed\u0022:6,\u0022targetLocation\u0022:{\u0022X\u0022:57.723732,\u0022Y\u0022:1.4631144,\u0022Z\u0022:222.6639},\u0022dead\u0022:false,\u0022reachedFloor\u0022:false,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:7,\u0022Loop\u0022:true},\u0022Position\u0022:{\u0022X\u0022:62.99285,\u0022Y\u0022:1.564307,\u0022Z\u0022:219.14174},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_dog",
+      "id": "npc_dog--23",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.94338316,\u0022Y\u0022:0,\u0022Z\u0022:-0.23873684},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.9823602,\u0022Y\u0022:0,\u0022Z\u0022:-0.18383516},\u0022speed\u0022:6,\u0022targetLocation\u0022:{\u0022X\u0022:59.710926,\u0022Y\u0022:1.466771,\u0022Z\u0022:211.78688},\u0022dead\u0022:true,\u0022reachedFloor\u0022:true,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:0,\u0022CurrentFrame\u0022:16,\u0022Loop\u0022:false},\u0022Position\u0022:{\u0022X\u0022:55.29372,\u0022Y\u0022:0.58058786,\u0022Z\u0022:212.57451},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_dog",
+      "id": "npc_dog--24",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.7731816,\u0022Y\u0022:0,\u0022Z\u0022:0.50732845},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.95119,\u0022Y\u0022:0,\u0022Z\u0022:0.3064374},\u0022speed\u0022:6,\u0022targetLocation\u0022:{\u0022X\u0022:57.723732,\u0022Y\u0022:1.4631144,\u0022Z\u0022:222.6639},\u0022dead\u0022:false,\u0022reachedFloor\u0022:false,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:6,\u0022Loop\u0022:true},\u0022Position\u0022:{\u0022X\u0022:63.157803,\u0022Y\u0022:1.5634543,\u0022Z\u0022:220.53198},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_dog",
+      "id": "npc_dog--25",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.4589959,\u0022Y\u0022:0,\u0022Z\u0022:0.87510407},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.3878374,\u0022Y\u0022:0,\u0022Z\u0022:0.92111665},\u0022speed\u0022:6,\u0022targetLocation\u0022:{\u0022X\u0022:57.723732,\u0022Y\u0022:1.4631144,\u0022Z\u0022:222.6639},\u0022dead\u0022:false,\u0022reachedFloor\u0022:false,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:6,\u0022Loop\u0022:true},\u0022Position\u0022:{\u0022X\u0022:54.16262,\u0022Y\u0022:1.5673026,\u0022Z\u0022:212.29446},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_dog",
+      "id": "npc_dog--26",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.4140476,\u0022Y\u0022:0,\u0022Z\u0022:0.8912709},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.3113939,\u0022Y\u0022:0,\u0022Z\u0022:0.9495975},\u0022speed\u0022:6,\u0022targetLocation\u0022:{\u0022X\u0022:57.723732,\u0022Y\u0022:1.4631144,\u0022Z\u0022:222.6639},\u0022dead\u0022:false,\u0022reachedFloor\u0022:false,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:6,\u0022Loop\u0022:true},\u0022Position\u0022:{\u0022X\u0022:55.274334,\u0022Y\u0022:1.5671481,\u0022Z\u0022:213.14539},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_dog",
+      "id": "npc_dog--27",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.5289999,\u0022Y\u0022:0,\u0022Z\u0022:0.8321512},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.47154197,\u0022Y\u0022:0,\u0022Z\u0022:0.8804666},\u0022speed\u0022:6,\u0022targetLocation\u0022:{\u0022X\u0022:57.723732,\u0022Y\u0022:1.4631144,\u0022Z\u0022:222.6639},\u0022dead\u0022:false,\u0022reachedFloor\u0022:false,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:6,\u0022Loop\u0022:true},\u0022Position\u0022:{\u0022X\u0022:54.277237,\u0022Y\u0022:1.566516,\u0022Z\u0022:214.12816},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_dog",
+      "id": "npc_dog--28",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.45115715,\u0022Y\u0022:0,\u0022Z\u0022:0.86793464},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.36469135,\u0022Y\u0022:0,\u0022Z\u0022:0.93045133},\u0022speed\u0022:6,\u0022targetLocation\u0022:{\u0022X\u0022:57.723732,\u0022Y\u0022:1.4631144,\u0022Z\u0022:222.6639},\u0022dead\u0022:false,\u0022reachedFloor\u0022:false,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:6,\u0022Loop\u0022:true},\u0022Position\u0022:{\u0022X\u0022:55.419678,\u0022Y\u0022:1.5661658,\u0022Z\u0022:214.93271},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_dog",
+      "id": "npc_dog--29",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.60274607,\u0022Y\u0022:0,\u0022Z\u0022:0.77895135},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.5709398,\u0022Y\u0022:0,\u0022Z\u0022:0.81998986},\u0022speed\u0022:6,\u0022targetLocation\u0022:{\u0022X\u0022:57.723732,\u0022Y\u0022:1.4631144,\u0022Z\u0022:222.6639},\u0022dead\u0022:false,\u0022reachedFloor\u0022:false,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:6,\u0022Loop\u0022:true},\u0022Position\u0022:{\u0022X\u0022:54.162884,\u0022Y\u0022:1.5665338,\u0022Z\u0022:215.54977},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_dog",
+      "id": "npc_dog--30",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.60689956,\u0022Y\u0022:0,\u0022Z\u0022:0.76977646},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.5443196,\u0022Y\u0022:0,\u0022Z\u0022:0.83853924},\u0022speed\u0022:6,\u0022targetLocation\u0022:{\u0022X\u0022:57.723732,\u0022Y\u0022:1.4631144,\u0022Z\u0022:222.6639},\u0022dead\u0022:false,\u0022reachedFloor\u0022:false,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:6,\u0022Loop\u0022:true},\u0022Position\u0022:{\u0022X\u0022:55.04102,\u0022Y\u0022:1.56572,\u0022Z\u0022:216.6402},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_dog",
+      "id": "npc_dog--31",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.6679925,\u0022Y\u0022:0,\u0022Z\u0022:0.7145987},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.5187713,\u0022Y\u0022:0,\u0022Z\u0022:0.8542048},\u0022speed\u0022:6,\u0022targetLocation\u0022:{\u0022X\u0022:57.723732,\u0022Y\u0022:1.4631144,\u0022Z\u0022:222.6639},\u0022dead\u0022:false,\u0022reachedFloor\u0022:false,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:6,\u0022Loop\u0022:true},\u0022Position\u0022:{\u0022X\u0022:55.223564,\u0022Y\u0022:1.5652653,\u0022Z\u0022:218.02826},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_dog",
+      "id": "npc_dog--32",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.523209,\u0022Y\u0022:0,\u0022Z\u0022:0.7987798},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.4203368,\u0022Y\u0022:0,\u0022Z\u0022:0.90695035},\u0022speed\u0022:6,\u0022targetLocation\u0022:{\u0022X\u0022:57.723732,\u0022Y\u0022:1.4631144,\u0022Z\u0022:222.6639},\u0022dead\u0022:false,\u0022reachedFloor\u0022:false,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:6,\u0022Loop\u0022:true},\u0022Position\u0022:{\u0022X\u0022:56.5969,\u0022Y\u0022:1.5648028,\u0022Z\u0022:218.30072},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_dog",
+      "id": "npc_dog--33",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.6028229,\u0022Y\u0022:0,\u0022Z\u0022:0.7291565},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.40234882,\u0022Y\u0022:0,\u0022Z\u0022:0.91510713},\u0022speed\u0022:6,\u0022targetLocation\u0022:{\u0022X\u0022:57.723732,\u0022Y\u0022:1.4631144,\u0022Z\u0022:222.6639},\u0022dead\u0022:false,\u0022reachedFloor\u0022:false,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:6,\u0022Loop\u0022:true},\u0022Position\u0022:{\u0022X\u0022:56.765827,\u0022Y\u0022:1.5641131,\u0022Z\u0022:219.69073},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_dog",
+      "id": "npc_dog--34",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.46268857,\u0022Y\u0022:0,\u0022Z\u0022:0.84459424},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.33389142,\u0022Y\u0022:0,\u0022Z\u0022:0.9414095},\u0022speed\u0022:6,\u0022targetLocation\u0022:{\u0022X\u0022:57.723732,\u0022Y\u0022:1.4631144,\u0022Z\u0022:222.6639},\u0022dead\u0022:false,\u0022reachedFloor\u0022:false,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:6,\u0022Loop\u0022:true},\u0022Position\u0022:{\u0022X\u0022:56.41572,\u0022Y\u0022:1.5657881,\u0022Z\u0022:216.90463},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_dog",
+      "id": "npc_dog--35",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.19182888,\u0022Y\u0022:0,\u0022Z\u0022:0.9497745},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.4118392,\u0022Y\u0022:0,\u0022Z\u0022:0.9109109},\u0022speed\u0022:6,\u0022targetLocation\u0022:{\u0022X\u0022:57.723732,\u0022Y\u0022:1.4631144,\u0022Z\u0022:222.6639},\u0022dead\u0022:false,\u0022reachedFloor\u0022:false,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:5,\u0022Loop\u0022:true},\u0022Position\u0022:{\u0022X\u0022:60.11773,\u0022Y\u0022:1.5597869,\u0022Z\u0022:217.10182},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_dog",
+      "id": "npc_dog--36",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.2738613,\u0022Y\u0022:0,\u0022Z\u0022:0.8935233},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.5461009,\u0022Y\u0022:0,\u0022Z\u0022:0.8369272},\u0022speed\u0022:6,\u0022targetLocation\u0022:{\u0022X\u0022:57.723732,\u0022Y\u0022:1.4631144,\u0022Z\u0022:222.6639},\u0022dead\u0022:false,\u0022reachedFloor\u0022:false,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:5,\u0022Loop\u0022:true},\u0022Position\u0022:{\u0022X\u0022:60.298885,\u0022Y\u0022:1.5643964,\u0022Z\u0022:218.49},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_dog",
+      "id": "npc_dog--37",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.373501,\u0022Y\u0022:0,\u0022Z\u0022:0.87855995},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.59461087,\u0022Y\u0022:0,\u0022Z\u0022:0.80332494},\u0022speed\u0022:6,\u0022targetLocation\u0022:{\u0022X\u0022:57.723732,\u0022Y\u0022:1.4631144,\u0022Z\u0022:222.6639},\u0022dead\u0022:false,\u0022reachedFloor\u0022:false,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:5,\u0022Loop\u0022:true},\u0022Position\u0022:{\u0022X\u0022:61.419136,\u0022Y\u0022:1.5645697,\u0022Z\u0022:217.61826},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_dog",
+      "id": "npc_dog--38",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.46449667,\u0022Y\u0022:0,\u0022Z\u0022:0.79706323},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.73937875,\u0022Y\u0022:0,\u0022Z\u0022:0.67220074},\u0022speed\u0022:6,\u0022targetLocation\u0022:{\u0022X\u0022:57.723732,\u0022Y\u0022:1.4631144,\u0022Z\u0022:222.6639},\u0022dead\u0022:false,\u0022reachedFloor\u0022:false,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:5,\u0022Loop\u0022:true},\u0022Position\u0022:{\u0022X\u0022:60.464344,\u0022Y\u0022:1.5638859,\u0022Z\u0022:219.8808},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_dog",
+      "id": "npc_dog--39",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.5335334,\u0022Y\u0022:0,\u0022Z\u0022:0.785111},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.7774309,\u0022Y\u0022:0,\u0022Z\u0022:0.6273926},\u0022speed\u0022:6,\u0022targetLocation\u0022:{\u0022X\u0022:57.723732,\u0022Y\u0022:1.4631144,\u0022Z\u0022:222.6639},\u0022dead\u0022:false,\u0022reachedFloor\u0022:false,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:5,\u0022Loop\u0022:true},\u0022Position\u0022:{\u0022X\u0022:61.599552,\u0022Y\u0022:1.5640787,\u0022Z\u0022:219.00664},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_dog",
+      "id": "npc_dog--40",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.3877355,\u0022Y\u0022:0,\u0022Z\u0022:0.8042565},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.6780897,\u0022Y\u0022:0,\u0022Z\u0022:0.73402005},\u0022speed\u0022:0.99291754,\u0022targetLocation\u0022:{\u0022X\u0022:57.723732,\u0022Y\u0022:1.4631144,\u0022Z\u0022:222.6639},\u0022dead\u0022:false,\u0022reachedFloor\u0022:false,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:5,\u0022Loop\u0022:true},\u0022Position\u0022:{\u0022X\u0022:59.364765,\u0022Y\u0022:1.5638702,\u0022Z\u0022:220.74736},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_dog",
+      "id": "npc_dog--41",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.64344394,\u0022Y\u0022:0,\u0022Z\u0022:0.6387323},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.88987416,\u0022Y\u0022:0,\u0022Z\u0022:0.45560783},\u0022speed\u0022:6,\u0022targetLocation\u0022:{\u0022X\u0022:57.723732,\u0022Y\u0022:1.4631144,\u0022Z\u0022:222.6639},\u0022dead\u0022:false,\u0022reachedFloor\u0022:false,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:5,\u0022Loop\u0022:true},\u0022Position\u0022:{\u0022X\u0022:61.764324,\u0022Y\u0022:1.5635661,\u0022Z\u0022:220.39691},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_dog",
+      "id": "npc_dog--42",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.619634,\u0022Y\u0022:0,\u0022Z\u0022:0.5941029},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.9328716,\u0022Y\u0022:0,\u0022Z\u0022:0.35917872},\u0022speed\u0022:6,\u0022targetLocation\u0022:{\u0022X\u0022:57.723732,\u0022Y\u0022:1.4631144,\u0022Z\u0022:222.6639},\u0022dead\u0022:false,\u0022reachedFloor\u0022:false,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:5,\u0022Loop\u0022:true},\u0022Position\u0022:{\u0022X\u0022:60.663937,\u0022Y\u0022:1.5634191,\u0022Z\u0022:221.2668},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_dog",
+      "id": "npc_dog--43",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.75644225,\u0022Y\u0022:0,\u0022Z\u0022:0.44326067},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.98144096,\u0022Y\u0022:0,\u0022Z\u0022:0.18868147},\u0022speed\u0022:6,\u0022targetLocation\u0022:{\u0022X\u0022:57.723732,\u0022Y\u0022:1.4631144,\u0022Z\u0022:222.6639},\u0022dead\u0022:false,\u0022reachedFloor\u0022:false,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:5,\u0022Loop\u0022:true},\u0022Position\u0022:{\u0022X\u0022:61.96559,\u0022Y\u0022:1.5630533,\u0022Z\u0022:221.78235},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_dog",
+      "id": "npc_dog--44",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.8119302,\u0022Y\u0022:0,\u0022Z\u0022:0.29098555},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.9981261,\u0022Y\u0022:0,\u0022Z\u0022:-0.05130143},\u0022speed\u0022:6,\u0022targetLocation\u0022:{\u0022X\u0022:57.723732,\u0022Y\u0022:1.4631144,\u0022Z\u0022:222.6639},\u0022dead\u0022:false,\u0022reachedFloor\u0022:false,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:5,\u0022Loop\u0022:true},\u0022Position\u0022:{\u0022X\u0022:60.8613,\u0022Y\u0022:1.5626698,\u0022Z\u0022:222.65285},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    },
+    {
+      "Name": "",
+      "className": "npc_dog",
+      "id": "npc_dog--45",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.67092854,\u0022Y\u0022:0,\u0022Z\u0022:0.46512404},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.973562,\u0022Y\u0022:0,\u0022Z\u0022:0.22699961},\u0022speed\u0022:0,\u0022targetLocation\u0022:{\u0022X\u0022:57.723732,\u0022Y\u0022:1.4631144,\u0022Z\u0022:222.6639},\u0022dead\u0022:false,\u0022reachedFloor\u0022:false,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:5,\u0022Loop\u0022:true},\u0022Position\u0022:{\u0022X\u0022:59.562145,\u0022Y\u0022:1.5576305,\u0022Z\u0022:222.13152},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+    }
+  ],
+  "entityId": 314,
+  "deletedIDs": [
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "spawner-spg_1-0",
+    "spawner-spg_1-1",
+    "spawner-spg_1-2",
+    "spawner-spg_1-3",
+    "spawner-spg_1-4",
+    "spawner-spg_1-5",
+    "spawner-spg_1-6",
+    "spawner-spg_1-7",
+    "spawner-spg_1-8",
+    "spawner-spg_1-9",
+    "spawner-spg_1-10",
+    "spawner-spg_1-11",
+    "spawner-spg_1-12",
+    "spawner-spg_1-13",
+    "spawner-spg_1-14",
+    "spawner-spg_1-15",
+    "spawner-spg_1-16",
+    "spawner-spg_1-17",
+    "spawner-spg_1-18",
+    "spawner-spg_1-19",
+    "spawner-spg_1-20",
+    "spawner-spg_1-21",
+    "spawner-spg_1-22",
+    "spawner-spg_1-23",
+    "spawner-spg_1-24",
+    "spawner-spg_1-25",
+    "spawner-spg_1-26",
+    "spawner-spg_1-27",
+    "spawner-spg_1-28",
+    "spawner-spg_1-29",
+    "spawner-spg_1-30",
+    "spawner-spg_1-31",
+    "spawner-spg_1-32",
+    "spawner-spg_1-33",
+    "spawner-spg_1-34",
+    "spawner-spg_1-35",
+    "spawner-spg_1-36",
+    "spawner-spg_1-37",
+    "spawner-spg_1-38",
+    "spawner-spg_1-39",
+    "spawner-spg_1-40",
+    "spawner-spg_1-41",
+    "spawner-spg_1-42",
+    "spawner-spg_1-43",
+    "spawner-spg_1-44",
+    "spawner-spg_1-45"
+  ],
+  "deletedNames": [
+    "pistols_start_pickup"
+  ]
+}

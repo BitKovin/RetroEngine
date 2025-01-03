@@ -2,164 +2,23 @@
 {
 	"Software"
 	{
-		"Valve"
+		"valve"
 		{
 			"steam"
 			{
-				"SurveyDate"		"2024-08-13"
+				"SurveyDate"		"2017-08-21"
 				"SurveyDateVersion"		"-3290761849578970196"
 				"StartMenuShortcutCheck"		"1"
 				"DesktopShortcutCheck"		"1"
-				"friendsui"
-				{
-					"FriendsUIJSON"		"{\"bNotifications_ShowIngame\":true,\"bNotifications_ShowOnline\":false,\"bNotifications_ShowMessage\":true,\"bNotifications_EventsAndAnnouncements\":true,\"bSounds_PlayIngame\":false,\"bSounds_PlayOnline\":false,\"bSounds_PlayMessage\":true,\"bSounds_EventsAndAnnouncements\":false,\"bAlwaysNewChatWindow\":false,\"bForceAlphabeticFriendSorting\":false,\"nChatFlashMode\":0,\"bRememberOpenChats\":true,\"bCompactQuickAccess\":false,\"bCompactFriendsList\":false,\"bNotifications_ShowChatRoomNotification\":true,\"bSounds_PlayChatRoomNotification\":true,\"bHideOfflineFriendsInTagGroups\":false,\"bHideCategorizedFriends\":false,\"bCategorizeInGameFriendsByGame\":true,\"nChatFontSize\":2,\"b24HourClock\":false,\"bDoNotDisturbMode\":true,\"bDisableEmbedInlining\":false,\"bSignIntoFriends\":true,\"bDisableSpellcheck\":false,\"bDisableRoomEffects\":false,\"bAnimatedAvatars\":true,\"featuresEnabled\":{\"DoNotDisturb\":1,\"LoaderWindowSynchronization\":1,\"NonFriendMessageHandling\":1,\"NewVoiceHotKeyState\":1,\"PersonaNotifications\":1,\"ServerVirtualizedMemberLists\":1,\"SteamworksChatAPI\":1,\"FriendsFilter\":1}}"
-				}
-				"apps"
-				{
-					"1091500"
-					{
-						"tags"
-						{
-							"0"		"favorite"
-						}
-					}
-					"601150"
-					{
-						"tags"
-						{
-							"0"		"favorite"
-						}
-					}
-					"631510"
-					{
-						"tags"
-						{
-							"0"		"favorite"
-						}
-					}
-					"1245620"
-					{
-						"tags"
-						{
-							"0"		"favorite"
-						}
-					}
-					"552520"
-					{
-					}
-					"236870"
-					{
-						"tags"
-						{
-							"0"		"HITMAN"
-						}
-					}
-					"863550"
-					{
-						"tags"
-						{
-							"0"		"HITMAN"
-						}
-					}
-					"1659040"
-					{
-						"tags"
-						{
-							"0"		"HITMAN"
-						}
-					}
-					"440"
-					{
-						"tags"
-						{
-							"0"		"favorite"
-						}
-					}
-					"359550"
-					{
-					}
-					"1229490"
-					{
-						"tags"
-						{
-							"0"		"favorite"
-						}
-					}
-					"13140"
-					{
-						"hidden"		"1"
-					}
-					"113400"
-					{
-						"hidden"		"1"
-					}
-					"203290"
-					{
-						"hidden"		"1"
-					}
-					"207230"
-					{
-						"hidden"		"1"
-					}
-					"212240"
-					{
-						"hidden"		"1"
-					}
-					"212370"
-					{
-						"hidden"		"1"
-					}
-					"238110"
-					{
-						"hidden"		"1"
-					}
-					"268420"
-					{
-						"hidden"		"1"
-					}
-					"293500"
-					{
-						"hidden"		"1"
-					}
-					"304930"
-					{
-						"hidden"		"1"
-					}
-					"489520"
-					{
-						"hidden"		"1"
-					}
-					"1172620"
-					{
-						"tags"
-						{
-							"0"		"favorite"
-						}
-					}
-					"365670"
-					{
-						"tags"
-						{
-							"0"		"favorite"
-						}
-					}
-					"548430"
-					{
-						"tags"
-						{
-							"0"		"favorite"
-						}
-					}
-				}
 			}
 		}
 	}
 	"JSClientStorage"
 	{
-		"spotlight.review.1091500"
+		"timeline_intro"
 		{
-			"rgPromptDismissals"		"3"
-			"bWasAskedToRevise"		"0"
+			"rtSeen"		"1731023232"
+			"rtLinkDismissed"		"0"
 		}
 	}
 }
