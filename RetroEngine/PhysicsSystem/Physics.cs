@@ -779,6 +779,9 @@ namespace RetroEngine.PhysicsSystem
             RigidBody.Restitution = 0f;
             RigidBody.CollisionShape = Shape;
 
+            RigidBody.ActivationState = ActivationState.DisableDeactivation;
+
+
             collisionObjects.Add(RigidBody);
 
             return RigidBody;

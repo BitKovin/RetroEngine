@@ -75,6 +75,47 @@ namespace RetroEngine
             return Math.Clamp(a, 0f, 1f);
         }
 
+        public static bool HasNan(this Matrix matrix)
+        {
+            if (float.IsNaN(matrix.M11))
+                return true;
+            if (float.IsNaN(matrix.M12))
+                return true;
+            if (float.IsNaN(matrix.M13))
+                return true;
+            if (float.IsNaN(matrix.M14))
+                return true;
+
+            if (float.IsNaN(matrix.M21))
+                return true;
+            if (float.IsNaN(matrix.M22))
+                return true;
+            if (float.IsNaN(matrix.M23))
+                return true;
+            if (float.IsNaN(matrix.M24))
+                return true;
+
+            if (float.IsNaN(matrix.M31))
+                return true;
+            if (float.IsNaN(matrix.M32))
+                return true;
+            if (float.IsNaN(matrix.M33))
+                return true;
+            if (float.IsNaN(matrix.M34))
+                return true;
+
+            if (float.IsNaN(matrix.M41))
+                return true;
+            if (float.IsNaN(matrix.M42))
+                return true;
+            if (float.IsNaN(matrix.M43))
+                return true;
+            if (float.IsNaN(matrix.M44))
+                return true;
+
+            return false;
+
+        }
         public static Vector3 RotateVector(this Vector3 vector, Vector3 axis, float angleInDegrees)
         {
             float angleInRadians = MathHelper.ToRadians(angleInDegrees);

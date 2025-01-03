@@ -1,0 +1,22 @@
+// Game: GenericEngine
+// Format: Standard
+// entity 0
+{
+"classname" "worldspawn"
+"globalLightBrightness" "0.4"
+"directLightBrightness" "0.6"
+// brush 0
+{
+( -128 -128 -80 ) ( -128 -127 -80 ) ( -128 -128 -79 ) brushes/bricks 0 0 0 0.5 0.5
+( -128 -128 -80 ) ( -128 -128 -79 ) ( -127 -128 -80 ) brushes/bricks 0 0 0 0.5 0.5
+( -128 -128 -80 ) ( -127 -128 -80 ) ( -128 -127 -80 ) brushes/bricks 0 0 0 0.5 0.5
+( 128 128 -64 ) ( 128 129 -64 ) ( 129 128 -64 ) brushes/bricks 0 0 0 0.5 0.5
+( 128 128 -64 ) ( 129 128 -64 ) ( 128 128 -63 ) brushes/bricks 0 0 0 0.5 0.5
+( 128 128 -64 ) ( 128 128 -63 ) ( 128 129 -64 ) brushes/bricks 0 0 0 0.5 0.5
+}
+}
+// entity 1
+{
+"classname" "cubeMap"
+"origin" "0 0 64"
+}

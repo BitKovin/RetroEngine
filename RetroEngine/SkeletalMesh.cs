@@ -14,6 +14,7 @@ using System.Linq;
 using RetroEngine.PhysicsSystem;
 using System.Threading.Tasks;
 using RetroEngine.Graphic;
+using SharpFont;
 
 
 namespace RetroEngine
@@ -1234,11 +1235,14 @@ namespace RetroEngine
 
             Matrix world = GetWorldMatrix();
 
+
             foreach (HitboxInfo hitbox in hitboxes)
             {
                 if (hitbox.RagdollRigidBodyRef == null) continue;
 
                 var matrix = GetBoneMatrix(hitbox.BoneId, world);
+
+                
 
                 var boneTrans = matrix.Decompose(out _, out var rotation, out var pos);
                 hitbox.RagdollRigidBodyRef.SetTransform(pos, rotation);

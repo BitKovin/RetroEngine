@@ -1522,6 +1522,10 @@ namespace RetroEngine
                             Matrix.CreateRotationY(Rotation.Y / 180 * (float)Math.PI) *
                             GetLocalRotationOffset() *
                             Matrix.CreateTranslation(Position);
+
+                if (float.IsNaN(worldMatrix.M11))
+                    return Matrix.Identity;
+
                 return worldMatrix * GetLocalOffset();
             }
             else
@@ -1533,6 +1537,11 @@ namespace RetroEngine
                                 Matrix.CreateRotationZ(Rotation.Z / 180 * (float)Math.PI) *
                                 GetLocalRotationOffset() *
                                 Matrix.CreateTranslation(Position) * ParrentTransform;
+
+
+                if (float.IsNaN(worldMatrix.M11))
+                    return Matrix.Identity;
+
                 return worldMatrix * GetLocalOffset();
             }
         }

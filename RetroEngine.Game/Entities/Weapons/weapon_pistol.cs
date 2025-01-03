@@ -217,6 +217,8 @@ namespace RetroEngine.Game.Entities.Weapons
 
             Vector3 startPos = Camera.position + Camera.rotation.GetForwardVector() * 0.5f + Camera.rotation.GetRightVector() / 7f * 1 - Camera.rotation.GetUpVector() / 5;
 
+            startPos = Vector3.Lerp(startPos, Camera.position, 0.6f);
+
             ICharacter character = ((ICharacter)player);
             if (character.isFirstPerson() == false)
             {         

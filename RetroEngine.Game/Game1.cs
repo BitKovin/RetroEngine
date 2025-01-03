@@ -55,7 +55,7 @@ namespace RetroEngine.Game
 
 
                 
-            Level.LoadFromFile("test2");
+            Level.LoadFromFile("lvl1");
 
             base.GameInitialized();
 
@@ -78,8 +78,6 @@ namespace RetroEngine.Game
             base.Update(gameTime);
 
             
-
-
             
 
 
@@ -102,10 +100,10 @@ namespace RetroEngine.Game
 
             //Render.LUT = AssetRegistry.LoadTextureFromFile("engine/textures/Sin Shitty.png_out.png", generateMipMaps: false);   
 
-            for (int i = 1; i <= 200; i++)
+            for (int i = 1; i <= 0; i++)
             {
                 Entity npc = new npc_dog();
-                npc.Position = new Vector3(0, i*3f + 4, i);
+                npc.Position = new Vector3(i, i*2f + 4, 0);
                 npc.Start();
                 Level.GetCurrent().AddEntity(npc);
             }

@@ -20,5 +20,10 @@ namespace RetroEngine
             waitUntilTime = Time.gameTime + delay;
         }
 
+        public float GetRemainTime()
+        {
+            return (float)(waitUntilTime - Time.gameTime);
+        }
+
     }
 }
