@@ -3,6 +3,7 @@ using BulletSharp.SoftBody;
 using DotRecast.Detour.Crowd;
 using Microsoft.Xna.Framework;
 using RetroEngine.Entities;
+using RetroEngine.Map;
 using RetroEngine.NavigationSystem;
 using RetroEngine.PhysicsSystem;
 using RetroEngine.SaveSystem;
@@ -64,20 +65,38 @@ namespace RetroEngine.Game.Entities.Enemies
 
         Delay DeathSimulationEndDelay = new Delay();
 
-        bool onGround = true;  
+        bool onGround = true;
 
+        [JsonInclude]
+        public bool attacking = false;
 
         public npc_dog()
         {
             SaveGame = true;
 
+            mesh.OnAnimationEvent += Mesh_OnAnimationEvent;
+
+
+        }
+
+        private void Mesh_OnAnimationEvent(AnimationEvent animationEvent)
+        {
+            if(animationEvent.Name == "attackStart")
+            {
+            }else if(animationEvent.Name == "attackEnd")
+            {
+                attacking = false;
+                mesh.PlayAnimation("run");
+            }
+                
+            
         }
 
         public override void Start()
         {
             base.Start();
 
-            body = Physics.CreateCharacterCapsule(this, 2f, 0.7f);
+            body = Physics.CreateCharacterCapsule(this, 2f, 0.7f, 10);
             body.Gravity = new Vector3(0, -35, 0).ToNumerics();
             body.SetPosition(Position.ToPhysics());
 
@@ -88,6 +107,7 @@ namespace RetroEngine.Game.Entities.Enemies
 
             target = Level.GetCurrent().FindEntityByName("player");
 
+            
 
             //npcList.Add(this);
 
@@ -156,11 +176,11 @@ namespace RetroEngine.Game.Entities.Enemies
 
         }
 
-        public override void Update()
+        public override void FromData(EntityData data)
         {
-            //UpdateNPCList();
+            base.FromData(data);
 
-
+            mesh.Rotation = Rotation;
 
         }
 
@@ -217,6 +237,8 @@ namespace RetroEngine.Game.Entities.Enemies
 
             //body.Friction = 0.5f;
 
+            mesh.ClearRagdollBodies();
+
             deathSoundPlayer.Position = Position;
             deathSoundPlayer.Play();
             deathSoundPlayer.Destroy(2);
@@ -225,11 +247,9 @@ namespace RetroEngine.Game.Entities.Enemies
         [JsonInclude]
         public bool reachedFloor = false;
 
+
         public override void AsyncUpdate()
         {
-
-
-            mesh.Update(Time.DeltaTime);
 
             if (dead)
             {
@@ -263,12 +283,13 @@ namespace RetroEngine.Game.Entities.Enemies
 
             //crowdAgent.npos = (Position + Vector3.UnitY * heightDif).ToRc();
 
+            if (loadedAssets == false) return;
 
 
             float distance = Vector3.Distance(Position, targetLocation);
 
 
-            if (distance > 3)
+            if (distance > 1)
             {
                 speed += Time.DeltaTime * 10;
 
@@ -278,16 +299,45 @@ namespace RetroEngine.Game.Entities.Enemies
                 speed -= Time.DeltaTime * 15;
             }
 
+            Vector3 toTarget = (target.Position - Position).XZ().Normalized();
+
+            float attackAngle = MathHelper.Lerp(0.92f, 0.95f, distance / 5f);
+
+            if(distance < 5 && attacking == false && Vector3.Dot(mesh.Rotation.GetForwardVector(), toTarget) > 0.92f)
+            {
+                attacking = true;
+                mesh.PlayAnimation("attack", false);
+
+                DesiredMoveDirection = DesiredMoveDirection.Normalized();
+
+            }
+
             speed = Math.Clamp(speed, 0, maxSpeed);
 
 
             //CheckGround();
 
-            if(onGround)
+            mesh.AlwaysUpdateVisual = attacking;
+
+            if (onGround && attacking == false)
+            {
+
                 body.LinearVelocity = new System.Numerics.Vector3(MoveDirection.X * speed, body.LinearVelocity.Y, MoveDirection.Z * speed);
 
-            MoveDirection = Vector3.Lerp(MoveDirection, DesiredMoveDirection, Time.DeltaTime * 2);
+                MoveDirection = Vector3.Lerp(MoveDirection, DesiredMoveDirection, Time.DeltaTime * 5);
 
+            }
+
+            if(attacking)
+            {
+                Position += MoveDirection * Time.DeltaTime * 13;
+                body.SetPosition(Position);
+
+            }
+            else
+            {
+                
+            }
 
             mesh.Position = Position - new Vector3(0, 1f, 0);
 
@@ -311,12 +361,13 @@ namespace RetroEngine.Game.Entities.Enemies
         {
             base.VisualUpdate();
 
+            mesh.Update(Time.DeltaTime);
+
             if (dead) return;
 
             float cameraDistance = Vector3.Distance(Position, Camera.position);
 
 
-            mesh.Update(Time.DeltaTime);
 
         }
 

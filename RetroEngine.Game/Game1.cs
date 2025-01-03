@@ -55,7 +55,7 @@ namespace RetroEngine.Game
 
 
                 
-            Level.LoadFromFile("lvl1");
+            Level.LoadFromFile("test");
 
             base.GameInitialized();
 
@@ -93,14 +93,11 @@ namespace RetroEngine.Game
             AssetRegistry.LoadFmodBankIntoMemory("Sounds/banks/Master.strings.bank");
 
 
-            
-
-
             //PostProcessStep.StepsAfter.Add(new TestPP());
 
             //Render.LUT = AssetRegistry.LoadTextureFromFile("engine/textures/Sin Shitty.png_out.png", generateMipMaps: false);   
 
-            for (int i = 1; i <= 0; i++)
+            for (int i = 1; i <= 3; i++)
             {
                 Entity npc = new npc_dog();
                 npc.Position = new Vector3(i, i*2f + 4, 0);

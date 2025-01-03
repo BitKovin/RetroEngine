@@ -18,12 +18,14 @@ namespace RetroEngine.Game.Entities
         {
             base.LoadAssets();
 
-            mesh.LoadFromFile("Animations/human/run_f_root.fbx");
-            mesh.PlayAnimation(0);
+            //mesh.LoadFromFile("Animations/human/run_f_root.fbx");
+            
             mesh.texture = AssetRegistry.LoadTextureFromFile("cat.png");
 
-            mesh.LoadMeshMetaFromFile("models/skeletal_test.fbx");
+            mesh.LoadMeshMetaFromFile("models/enemies/dog.fbx");
             mesh.ReloadHitboxes(this);
+
+            mesh.PlayAnimation("attack");
 
             meshes.Add(mesh);
 

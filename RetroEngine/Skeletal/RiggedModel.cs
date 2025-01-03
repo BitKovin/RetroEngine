@@ -218,7 +218,7 @@ namespace RetroEngine.Skeletal
             Vector3 motionPos = transform.Position - OldRootTransform.Position;
 
 
-            motionPos = Vector3.Transform(motionPos, MathHelper.GetRotationMatrix(RootMotionOffsetRot));
+            //motionPos = Vector3.Transform(motionPos, MathHelper.GetRotationMatrix(RootMotionOffsetRot));
 
             Vector3 motionRot = transform.Rotation - OldRootTransform.Rotation;
 

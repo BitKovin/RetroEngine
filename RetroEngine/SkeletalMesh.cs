@@ -130,8 +130,6 @@ namespace RetroEngine
             RiggedModel.RootMotionOffsetRot = Vector3.Zero;
 
 
-            if (rootMotion.Z < 0)
-                Console.WriteLine(OldRootMotion + "  " + RiggedModel.TotalRootMotion);
 
             OldRootMotion = RiggedModel.TotalRootMotion;
             OldRootMotionRot = RiggedModel.TotalRootMotionRot;
