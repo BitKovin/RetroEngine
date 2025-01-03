@@ -105,7 +105,7 @@ namespace RetroEngine.Game
             for (int i = 1; i <= 200; i++)
             {
                 Entity npc = new npc_dog();
-                npc.Position = new Vector3(i*2, i*3f + 4, i);
+                npc.Position = new Vector3(0, i*3f + 4, i);
                 npc.Start();
                 Level.GetCurrent().AddEntity(npc);
             }

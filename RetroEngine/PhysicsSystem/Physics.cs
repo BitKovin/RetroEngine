@@ -824,15 +824,14 @@ namespace RetroEngine.PhysicsSystem
             Vector3 start = rayStart.ToPhysics();
             Vector3 end = rayEnd.ToPhysics();
 
+            MyClosestRayResultCallback rayCallback = new MyClosestRayResultCallback(ref start, ref end);
+            rayCallback.BodyTypeMask = bodyType;
+            if (ignoreList is not null)
+                rayCallback.ignoreList = ignoreList;
+
             lock (dynamicsWorld)
             {
                 CollisionWorld world = dynamicsWorld;
-
-                MyClosestRayResultCallback rayCallback = new MyClosestRayResultCallback(ref start, ref end);
-                rayCallback.BodyTypeMask = bodyType;
-                if (ignoreList is not null)
-                    rayCallback.ignoreList = ignoreList;
-
 
                 // Perform the ray cast
                 world.RayTest(start, end, rayCallback);

@@ -57,8 +57,12 @@ namespace RetroEngine.Game.Entities.Enemies
         protected float ShadowDistance = 40;
         protected bool AnimationAlwaysUpdateTime = true;
 
+        [JsonInclude]
+        public bool dead = false;
+
         Entity target;
 
+        bool onGround = true;  
 
         public npc_dog()
         {
@@ -86,6 +90,7 @@ namespace RetroEngine.Game.Entities.Enemies
 
             pathfindingQuery.OnPathFound += PathfindingQuery_OnPathFound;
 
+            mesh.DisableOcclusionCulling = true;
 
             InitDirectionsLUT();
         }
@@ -151,6 +156,35 @@ namespace RetroEngine.Game.Entities.Enemies
         {
             //UpdateNPCList();
 
+
+
+        }
+
+
+        void CheckGround()
+        {
+
+            onGround = false;
+
+            var hit = Physics.LineTrace(Position, Position - Vector3.UnitY * 1.3f, new List<CollisionObject>{body}, BodyType.GroupCollisionTest);
+
+            if(hit.HasHit)
+            {
+                RigidBody hitBody = hit.CollisionObject as RigidBody;
+
+                if (hitBody == null) return;
+
+                if (hitBody.GetBodyType() == BodyType.CharacterCapsule)
+                {
+
+                    body.LinearVelocity = hit.HitNormalWorld*8;
+                    return;
+
+                }
+
+                onGround = true;
+
+            }
 
 
         }
@@ -241,9 +275,10 @@ namespace RetroEngine.Game.Entities.Enemies
 
             body.Activate();
 
+            //CheckGround();
 
-
-            body.LinearVelocity = new System.Numerics.Vector3(MoveDirection.X * speed, body.LinearVelocity.Y, MoveDirection.Z * speed);
+            if(onGround)
+                body.LinearVelocity = new System.Numerics.Vector3(MoveDirection.X * speed, body.LinearVelocity.Y, MoveDirection.Z * speed);
 
             MoveDirection = Vector3.Lerp(MoveDirection, DesiredMoveDirection, Time.DeltaTime * 3);
 
@@ -265,8 +300,6 @@ namespace RetroEngine.Game.Entities.Enemies
 
         }
 
-        [JsonInclude]
-        public bool dead = false;
 
         public override void VisualUpdate()
         {
