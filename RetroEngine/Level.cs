@@ -324,13 +324,13 @@ namespace RetroEngine
 
             ParallelOptions options = new ParallelOptions();
             options.MaxDegreeOfParallelism = Environment.ProcessorCount / 3;
-
+            Entity[] list;
             lock (entities)
             {
-                Entity[] list = entities.ToArray();
+                list = entities.ToArray();
             }
 
-            Parallel.ForEach(entities, options, entity =>
+            Parallel.ForEach(list, options, entity =>
             {
                 if (entity.UpdateWhilePaused && GameMain.Instance.paused || GameMain.Instance.paused == false)
                     entity.AsyncUpdate();

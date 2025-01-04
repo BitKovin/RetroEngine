@@ -323,7 +323,7 @@ namespace RetroEngine
             if (AsyncGameThread && changedLevel == false)
             {
                 Stats.StartRecord("starting game task");
-                gameTask = Task.Factory.StartNew(() => { GameLogic(); });
+                gameTask = Task.Factory.StartNew(GameLogic);
                 Stats.StopRecord("starting game task");
             }
             else

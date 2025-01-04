@@ -19,6 +19,7 @@ namespace RetroEngine.Windows
         public GameWindows() 
         {
             AllowAsyncAssetLoading = true;
+
         }
 
         protected override void Update(GameTime gameTime)
@@ -275,7 +276,7 @@ namespace RetroEngine.Windows
 
 #endif
 
-            AsyncGameThread = true;
+            AsyncGameThread = false;
 
         }
 

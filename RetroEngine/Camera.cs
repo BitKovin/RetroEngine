@@ -99,7 +99,7 @@ namespace RetroEngine
 
         public static Matrix CalculateView()
         {
-            return Matrix.CreateLookAt(position, position + rotation.GetForwardVector(), lastWorkingRotation.GetUpVector().RotateVector(rotation.GetForwardVector(), roll));
+            return Matrix.CreateLookAt(position, position + rotation.GetForwardVector(), rotation.GetUpVector().RotateVector(rotation.GetForwardVector(), roll));
         }
 
         public static void ViewportUpdate()

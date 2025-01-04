@@ -505,6 +505,8 @@ namespace RetroEngine
 
             bool firstAnim = RiggedModel.currentAnimation == -1;
 
+            OldFrame = 0;
+
             RiggedModel.SetAnimation(id);
             RiggedModel.BeginAnimation(RiggedModel.CurrentPlayingAnimationIndex);
             RiggedModel.loopAnimation = looped;
@@ -530,6 +532,8 @@ namespace RetroEngine
             newAnimInterpolationProgress = 0;
 
             bool firstAnim = RiggedModel.currentAnimation == -1;
+
+            OldFrame = 0;
 
             RiggedModel.SetAnimation(name);
             RiggedModel.BeginAnimation(RiggedModel.CurrentPlayingAnimationIndex);

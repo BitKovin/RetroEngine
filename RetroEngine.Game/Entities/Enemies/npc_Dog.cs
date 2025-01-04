@@ -31,7 +31,7 @@ namespace RetroEngine.Game.Entities.Enemies
         [JsonInclude]
         public float speed = 5f;
 
-        float maxSpeed = 6;
+        float maxSpeed = 7;
 
         Delay updateDelay = new Delay();
 
@@ -70,12 +70,16 @@ namespace RetroEngine.Game.Entities.Enemies
         [JsonInclude]
         public bool attacking = false;
 
+        [JsonInclude]
+        public Delay attackCooldown = new Delay();
+
         public npc_dog()
         {
             SaveGame = true;
 
             mesh.OnAnimationEvent += Mesh_OnAnimationEvent;
 
+            attackCooldown.AddDelay(1);
 
         }
 
@@ -83,10 +87,13 @@ namespace RetroEngine.Game.Entities.Enemies
         {
             if(animationEvent.Name == "attackStart")
             {
-            }else if(animationEvent.Name == "attackEnd")
+
+            }
+            else if(animationEvent.Name == "attackEnd")
             {
                 attacking = false;
                 mesh.PlayAnimation("run");
+
             }
                 
             
@@ -107,7 +114,6 @@ namespace RetroEngine.Game.Entities.Enemies
 
             target = Level.GetCurrent().FindEntityByName("player");
 
-            
 
             //npcList.Add(this);
 
@@ -303,12 +309,19 @@ namespace RetroEngine.Game.Entities.Enemies
 
             float attackAngle = MathHelper.Lerp(0.92f, 0.95f, distance / 5f);
 
-            if(distance < 5 && attacking == false && Vector3.Dot(mesh.Rotation.GetForwardVector(), toTarget) > 0.92f)
+
+            bool canAttack = attackCooldown.Wait() == false;
+
+            if(distance < 4.5f && attacking == false && Vector3.Dot(mesh.Rotation.GetForwardVector(), toTarget) > 0.92f)
             {
                 attacking = true;
                 mesh.PlayAnimation("attack", false);
 
-                DesiredMoveDirection = DesiredMoveDirection.Normalized();
+
+                MoveDirection = MoveDirection.XZ().Normalized();
+
+                attackCooldown.AddDelay(3);
+
 
             }
 
@@ -330,13 +343,8 @@ namespace RetroEngine.Game.Entities.Enemies
 
             if(attacking)
             {
-                Position += MoveDirection * Time.DeltaTime * 13;
-                body.SetPosition(Position);
+                body.Translate(MoveDirection.ToPhysics() * Time.DeltaTime * 8);
 
-            }
-            else
-            {
-                
             }
 
             mesh.Position = Position - new Vector3(0, 1f, 0);
@@ -351,6 +359,8 @@ namespace RetroEngine.Game.Entities.Enemies
             if (updateDelay.Wait()) return;
             RequestNewTargetLocation();
             updateDelay.AddDelay(Math.Min(Vector3.Distance(Position, targetLocation) / 30, 0.1f) + Random.Shared.NextSingle() / 10f);
+
+            if(attacking == false)
             TryStep(MoveDirection / 1.5f);
 
 

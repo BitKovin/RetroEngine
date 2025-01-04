@@ -136,11 +136,12 @@ namespace RetroEngine.Game.Entities.Weapons
 
             if (attackDelay.Wait()) return;
 
-            attackDelay.AddDelay(1.0f);
+            attackDelay.AddDelay(1.1f);
 
             fireSoundPlayer.Play(true);
 
-            mesh.PlayAnimation(0,false,0);
+            mesh.PlayAnimation(0,false,0.1f);
+
             TpFire.PlayAnimation(0,false);
 
             for (float y = -4; y <= 4; y += 2f)
