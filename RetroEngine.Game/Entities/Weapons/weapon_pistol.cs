@@ -208,6 +208,7 @@ namespace RetroEngine.Game.Entities.Weapons
             pistolAnimationAim.PlayAnimation(0, false,0.05f);
 
             Bullet bullet = new Bullet();
+            bullet.weapon = this;
             bullet.ignore.Add(player);
 
             Vector3 bulletRotation;

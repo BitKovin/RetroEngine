@@ -69,6 +69,8 @@ namespace RetroEngine
                 //Logger.Log("Wrong camera up vector detected! Trying to fix");
             }
 
+            StupidCameraFix();
+
             view = CalculateView();
 
             projection = Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.ToRadians(FOV),HtW, 0.05f, FarPlane);
@@ -83,6 +85,9 @@ namespace RetroEngine
 
         public static Matrix GetRotationMatrix()
         {
+
+            StupidCameraFix();
+
             return Matrix.CreateRotationX(rotation.X / 180 * (float)Math.PI) *
                                 Matrix.CreateRotationY(rotation.Y / 180 * (float)Math.PI) *
                                 Matrix.CreateRotationZ(rotation.Z / 180 * (float)Math.PI);
@@ -90,11 +95,26 @@ namespace RetroEngine
 
         public static Matrix GetMatrix()
         {
+
+            StupidCameraFix();
+
             return Matrix.CreateScale(1) *
                                 Matrix.CreateRotationX(rotation.X / 180 * (float)Math.PI) *
                                 Matrix.CreateRotationY(rotation.Y / 180 * (float)Math.PI) *
                                 Matrix.CreateRotationZ(rotation.Z / 180 * (float)Math.PI) *
                                 Matrix.CreateTranslation(position);
+        }
+
+        static void StupidCameraFix() // I FUCKING HATE IT, but it's only way I could fix wrong results after using matrix as result of GetMatrix(). It errored when rotation.Y was close to 90 or -90. 
+        {
+            if(rotation.X == 0)
+                rotation.X = float.Epsilon;
+
+            if (MathF.Abs(rotation.Y) % 90 < 0.0001f)
+                rotation.Y += 0.0001f * ((rotation.Y>0) ? 1 : -1);
+
+            if (rotation.Z == 0)
+                rotation.Z = float.Epsilon;
         }
 
         public static Matrix CalculateView()

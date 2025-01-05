@@ -237,10 +237,14 @@ namespace RetroEngine.NavigationSystem
             RcNavMeshBuildSettings rcNavMeshBuildSettings = new RcNavMeshBuildSettings();
 
             rcNavMeshBuildSettings.cellSize = 0.3f;
-            rcNavMeshBuildSettings.agentRadius = 0.4f;
+            rcNavMeshBuildSettings.agentRadius = 0.5f;
             rcNavMeshBuildSettings.tileSize = 32;
 
-            var buildResult = Build(geomProvider, rcNavMeshBuildSettings, RcByteOrder.LITTLE_ENDIAN, true);//tileNavMeshBuilder.Build(geomProvider, rcNavMeshBuildSettings);
+
+            NavMeshBuildResult buildResult;
+            
+            buildResult = Build(geomProvider, rcNavMeshBuildSettings, RcByteOrder.LITTLE_ENDIAN, true);//tileNavMeshBuilder.Build(geomProvider, rcNavMeshBuildSettings);
+
 
             if (buildResult.Success)
             {

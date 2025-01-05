@@ -82,6 +82,7 @@ namespace RetroEngine.Game.Entities.Weapons
                 for (float x = -5; x <= 5; x += 2.5f)
                 {
                     Bullet bullet = new Bullet();
+                    bullet.weapon = this;
 
                     bullet.ignore.Add(player);
 

@@ -136,8 +136,26 @@ namespace RetroEngine
 
             DrawConsole();
 
+            CameraWindow();
+
         }
 
+        public static Vector3 cameraRotation;
+
+        protected void CameraWindow()
+        {
+
+            //cameraRotation = Camera.rotation.ToNumerics();
+
+            ImGui.Begin("Camera");
+
+            ImGui.DragFloat3("Rotation", ref cameraRotation);
+
+            ImGui.End();
+
+            //Camera.rotation = cameraRotation;
+
+        }
         protected void DrawConsole()
         {
             ImGui.Begin("Console");

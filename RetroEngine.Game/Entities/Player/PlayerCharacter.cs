@@ -32,7 +32,7 @@ namespace RetroEngine.Game.Entities.Player
 
         public RigidBody body;
 
-        float maxSpeed = 6;
+        float maxSpeed = 7;
         float maxSpeedAir = 2;
         float acceleration = 90;
         float airAcceleration = 20;
@@ -111,7 +111,7 @@ namespace RetroEngine.Game.Entities.Player
 
             PlayerUI = new PlayerUI(this);
 
-            
+            LateUpdateWhilePaused = true;
 
             SaveGame = true;
 
@@ -711,6 +711,20 @@ namespace RetroEngine.Game.Entities.Player
             if(hit.HasHit == false)
                 return false;
 
+            RigidBody hitBody = hit.CollisionObject as RigidBody;
+
+            if (hitBody == null) return false;
+
+            if (hitBody.GetBodyType() == BodyType.CharacterCapsule)
+            {
+
+                //body.LinearVelocity = hit.HitNormalWorld * 8;
+                //body.LinearVelocity *= new System.Numerics.Vector3(1,-2,1);
+                //velocity = body.LinearVelocity;
+                return false;
+
+            }
+
             return hit.HitNormalWorld.Y>0.7;
         }
 
@@ -744,7 +758,7 @@ namespace RetroEngine.Game.Entities.Player
 
 
 
-            if (hitPoint.Y > Position.Y - 1 + 1)
+            if (hitPoint.Y > Position.Y - 1 + 0.8f)
                 return;
 
             if (Physics.SphereTrace(hitPoint + Vector3.UnitY*0.33f, hitPoint + Vector3.UnitY, 0.3f, null, bodyType: BodyType.World).HasHit)
@@ -765,9 +779,11 @@ namespace RetroEngine.Game.Entities.Player
             }
 
 
-            hitPoint.Y += 1.5f;
 
-            DrawDebug.Sphere(0.5f, hitPoint, Vector3.UnitY);
+
+            DrawDebug.Sphere(0.1f, hitPoint, Vector3.UnitY);
+
+            hitPoint.Y += 1.5f;
 
             Vector3 lerpPose = Vector3.Lerp(Position, hitPoint, 0.4f);
 
@@ -828,10 +844,8 @@ namespace RetroEngine.Game.Entities.Player
         public override void LateUpdate()
         {
 
-            if (FreeCamera.active)
-                return;
-
-            UpdatePlayerInput();
+            if(GameMain.Instance.paused == false)
+                UpdatePlayerInput();
 
             Camera.rotation = CameraRotation;
             if(useThirdPersonAnimations)
@@ -866,7 +880,7 @@ namespace RetroEngine.Game.Entities.Player
             if (currentWeapon is not null)
             {
                 currentWeapon.Position = Camera.position + bob * 0.05f * currentWeapon.BobScale + CameraRotation.GetForwardVector() * Camera.rotation.X / 2000f;
-                currentWeapon.Rotation = CameraRotation + new Vector3(0, 0, (float)Math.Sin(bobProgress * -1 * bobSpeed) * -1.5f) * currentWeapon.BobScale;
+                currentWeapon.Rotation = CameraRotation - new Vector3(0, 0, (float)Math.Sin(bobProgress * -1 * bobSpeed) * -1.5f) * currentWeapon.BobScale;
             }
 
             UpdatePlayerLight();

@@ -114,13 +114,15 @@ namespace RetroEngine.Game.Entities.Weapons
                 //mesh.PastePose(character.GetSkeletalMesh().GetPose());
             }
 
-            if (GameMain.Instance.paused) return;
+
 
             if (loadedAssets == false) return;
 
             if (Time.gameTime - SpawnTime > 0.02f && character.isFirstPerson())
             {
-                var trans = mesh.GetBoneMatrix("camera", Matrix.CreateScale(0.01f)* Camera.GetMatrix()).DecomposeMatrix();
+
+
+                var trans = mesh.GetBoneMatrix("camera", Matrix.CreateScale(0.01f) * Camera.GetMatrix()).DecomposeMatrix();
 
                 Camera.rotation = trans.Rotation;
                 Camera.position = trans.Position;
@@ -156,6 +158,7 @@ namespace RetroEngine.Game.Entities.Weapons
                         continue;
 
                     Bullet bullet = new Bullet();
+                    bullet.weapon = this;
 
                     bullet.ignore.Add(player);
 
@@ -229,9 +232,11 @@ namespace RetroEngine.Game.Entities.Weapons
             //mesh.Transparency = 0.5f;
             mesh.Transperent = true;
 
-            mesh.textureSearchPaths.Add("textures/weapons/arms/");
-            mesh.textureSearchPaths.Add("textures/weapons/shotgun_new/");
+            mesh.TwoSided = true;
+
             mesh.textureSearchPaths.Add("textures/weapons/general/");
+            mesh.textureSearchPaths.Add("textures/weapons/shotgun_new/");
+
 
             TpFire.LoadFromFile("models/weapons/shotgun.fbx");
 

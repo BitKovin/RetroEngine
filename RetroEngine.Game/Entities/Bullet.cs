@@ -35,6 +35,8 @@ namespace RetroEngine.Game.Entities
 
         bool hited = false;
 
+        public Entity weapon;
+
         public Bullet() 
         {
             mesh.EmissionPower = 1;
@@ -144,13 +146,11 @@ namespace RetroEngine.Game.Entities
             if (hit.HasHit)
             {
 
-
-
                 Entity ent = ((RigidbodyData)hit.CollisionObject.UserObject).Entity;
 
                 if (ent == null) return;
 
-                ent.OnPointDamage(Damage, hit.HitPointWorld, Rotation.GetForwardVector(), this, this);
+                ent.OnPointDamage(Damage, hit.HitPointWorld, Rotation.GetForwardVector(), this, weapon);
 
                 hit.CollisionObject?.Activate();
 

@@ -31,7 +31,7 @@ namespace RetroEngine.Game.Entities.Enemies
         [JsonInclude]
         public float speed = 5f;
 
-        float maxSpeed = 7;
+        float maxSpeed = 6.5f;
 
         Delay updateDelay = new Delay();
 
@@ -73,11 +73,18 @@ namespace RetroEngine.Game.Entities.Enemies
         [JsonInclude]
         public Delay attackCooldown = new Delay();
 
+        [JsonInclude]
+        public bool stunned = false;
+
+        [JsonInclude]
+        public float rootMotionScale = 1;
+
         public npc_dog()
         {
             SaveGame = true;
 
             mesh.OnAnimationEvent += Mesh_OnAnimationEvent;
+
 
             attackCooldown.AddDelay(1);
 
@@ -94,6 +101,12 @@ namespace RetroEngine.Game.Entities.Enemies
                 attacking = false;
                 mesh.PlayAnimation("run");
 
+            }else if(animationEvent.Name == "stunEnd")
+            {
+                stunned = false;
+                mesh.PlayAnimation("run");
+                attacking = false;
+                speed = 5;
             }
                 
             
@@ -107,8 +120,8 @@ namespace RetroEngine.Game.Entities.Enemies
             body.Gravity = new Vector3(0, -35, 0).ToNumerics();
             body.SetPosition(Position.ToPhysics());
 
-            body.CcdMotionThreshold = 0.2f;
-            body.CcdSweptSphereRadius = 0.4f;
+            body.CcdMotionThreshold = 0.01f;
+            body.CcdSweptSphereRadius = 0.7f;
 
             bodies.Add(body);
 
@@ -175,6 +188,7 @@ namespace RetroEngine.Game.Entities.Enemies
 
             sm.Scale = new Vector3(0.7f);
 
+
             deathSoundPlayer = (SoundPlayer)Level.GetCurrent().AddEntity(new SoundPlayer());
             deathSoundPlayer.SetSound(AssetRegistry.LoadSoundFmodFromFile("sounds/mew2.wav"));
             deathSoundPlayer.Volume = 1f;
@@ -186,7 +200,12 @@ namespace RetroEngine.Game.Entities.Enemies
         {
             base.FromData(data);
 
+            new Vector3(0, data.GetPropertyFloat("angle") + 90, 0);
+
             mesh.Rotation = Rotation;
+
+
+            MoveDirection = Rotation.GetForwardVector();
 
         }
 
@@ -223,13 +242,27 @@ namespace RetroEngine.Game.Entities.Enemies
         {
             base.OnDamaged(damage, causer, weapon);
 
- 
+            Stun((weapon.Position - Position).Normalized());
+
+            return;
+
             if (dead) return;
 
             dead = true;
 
             Death();
 
+        }
+
+        void Stun(Vector3 attackDirection)
+        {
+
+            if(stunned) return;
+
+            stunned = true;
+            mesh.PlayAnimation("stun", false, 0.2f, true);
+            mesh.Rotation = MathHelper.FindLookAtRotation(Vector3.Zero, attackDirection.XZ());
+            MoveDirection = attackDirection.XZ();
         }
 
         void Death()
@@ -281,7 +314,6 @@ namespace RetroEngine.Game.Entities.Enemies
 
 
             if (target != null)
-
                 targetLocation = target.Position;
 
             //MoveDirection = crowdAgent.vel.FromRc().XZ().FastNormalize();
@@ -295,33 +327,26 @@ namespace RetroEngine.Game.Entities.Enemies
             float distance = Vector3.Distance(Position, targetLocation);
 
 
-            if (distance > 1)
-            {
-                speed += Time.DeltaTime * 10;
+            speed += Time.DeltaTime * (attackCooldown.Wait() ? 5: 7);
 
-            }
-            else
-            {
-                speed -= Time.DeltaTime * 15;
-            }
 
             Vector3 toTarget = (target.Position - Position).XZ().Normalized();
 
-            float attackAngle = MathHelper.Lerp(0.92f, 0.95f, distance / 5f);
+            float attackAngle = MathHelper.Lerp(0.96f, 0.98f, distance / 5f);
 
 
-            bool canAttack = attackCooldown.Wait() == false;
+            if(attackCooldown.Wait() == false)
+                attacking = false;
 
-            if(distance < 4.5f && attacking == false && Vector3.Dot(mesh.Rotation.GetForwardVector(), toTarget) > 0.92f)
+
+            if(distance < 6f && attacking == false && Vector3.Dot(mesh.Rotation.GetForwardVector(), toTarget) > 0.95f && attackCooldown.Wait() == false && stunned==false)
             {
-                attacking = true;
-                mesh.PlayAnimation("attack", false);
 
+                rootMotionScale = Lerp(0.2f, 1, Saturate(distance / 5f));
 
-                MoveDirection = MoveDirection.XZ().Normalized();
+                Console.WriteLine(rootMotionScale);
 
-                attackCooldown.AddDelay(3);
-
+                PerformAttack(toTarget);
 
             }
 
@@ -330,25 +355,37 @@ namespace RetroEngine.Game.Entities.Enemies
 
             //CheckGround();
 
-            mesh.AlwaysUpdateVisual = attacking;
 
-            if (onGround && attacking == false)
+            if (onGround && attacking == false && stunned == false)
             {
 
                 body.LinearVelocity = new System.Numerics.Vector3(MoveDirection.X * speed, body.LinearVelocity.Y, MoveDirection.Z * speed);
 
-                MoveDirection = Vector3.Lerp(MoveDirection, DesiredMoveDirection, Time.DeltaTime * 5);
+                MoveDirection = Vector3.Lerp(MoveDirection, DesiredMoveDirection, Time.DeltaTime  * MathHelper.Lerp(1f,6, MathF.Pow(Vector3.Dot(MoveDirection, DesiredMoveDirection)/2 + 0.5f,1.5f)));
 
             }
 
-            if(attacking)
+            Vector3 motion = mesh.PullRootMotion().Position * rootMotionScale;
+
+            motion = Vector3.Transform(motion, mesh.Rotation.GetRotationMatrix());
+
+            if (attacking || stunned)
             {
-                body.Translate(MoveDirection.ToPhysics() * Time.DeltaTime * 8);
+                //body.Translate(MoveDirection.ToPhysics() * Time.DeltaTime * 8);
+
+
+                body.LinearVelocity = new System.Numerics.Vector3(0, body.LinearVelocity.Y, 0);
+
+                body.Translate(motion.ToPhysics());
+                Position += motion/2f;
+
+                speed = 2;
 
             }
 
             mesh.Position = Position - new Vector3(0, 1f, 0);
 
+            if(stunned == false)
             mesh.Rotation = new Vector3(0, MathHelper.FindLookAtRotation(Vector3.Zero, MoveDirection).Y, 0);
 
             mesh.UpdateHitboxes();
@@ -358,14 +395,39 @@ namespace RetroEngine.Game.Entities.Enemies
             //return;
             if (updateDelay.Wait()) return;
             RequestNewTargetLocation();
-            updateDelay.AddDelay(Math.Min(Vector3.Distance(Position, targetLocation) / 30, 0.1f) + Random.Shared.NextSingle() / 10f);
+            updateDelay.AddDelay(Math.Min(Vector3.Distance(Position, targetLocation) / 30, 0.1f) + Random.Shared.NextSingle() / 8f);
 
-            if(attacking == false)
-            TryStep(MoveDirection / 1.5f);
+            //if(attacking == false)
+            //TryStep(MoveDirection / 1.5f);
 
 
         }
 
+        void PerformAttack(Vector3 toTarget)
+        {
+
+            List<CollisionObject> ignore = new List<CollisionObject>();
+
+            ignore.Add(body);
+            ignore.AddRange(target.bodies);
+
+            var hit = Physics.SphereTrace(Position, targetLocation, 0.1f, ignore, BodyType.GroupCollisionTest);
+
+            if (hit.HasHit)
+            {
+                attackCooldown.AddDelay(0.5f);
+
+            }
+
+            attacking = true;
+            mesh.PlayAnimation("attack", false, rootMotion: true);
+
+            MoveDirection = Vector3.Lerp(toTarget, MoveDirection, 0.4f).XZ().Normalized();
+
+            attackCooldown.AddDelay(2);
+
+
+        }
 
         public override void VisualUpdate()
         {

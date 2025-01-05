@@ -175,21 +175,49 @@ namespace RetroEngine.Skeletal
             if (animationRunning || force)
                 UpdateModelAnimations(time);
 
-            if(time > 0)
-            UpdateRootMotion();
+            
 
             if (UpdateVisual == false && force == false) return;
             try
             {
                 IterateUpdate(rootNodeOfTree);
             }
+
             catch (Exception ex) { }
+
             UpdateMeshTransforms();
 
-            
+            UpdateRootMotion();
+
 
         }
 
+        public void ResetRootMotion()
+        {
+            if (rootNodeOfTree == null)
+            {
+                return;
+            }
+
+            var roots = rootNodeOfTree.children.Where(c => c.name.ToLower() == "root").ToArray();
+
+
+            RiggedModelNode root;
+            if (roots.Length > 0)
+            {
+                root = roots[0];
+            }
+            else
+            {
+                return;
+            }
+
+            var transform = root.LocalFinalTransformMg.DecomposeMatrix();
+
+            TotalRootMotion = Vector3.Zero;
+
+            OldRootTransform = transform;
+        }
 
         MathHelper.Transform OldRootTransform = new MathHelper.Transform();
 
@@ -217,9 +245,6 @@ namespace RetroEngine.Skeletal
 
             Vector3 motionPos = transform.Position - OldRootTransform.Position;
 
-
-            //motionPos = Vector3.Transform(motionPos, MathHelper.GetRotationMatrix(RootMotionOffsetRot));
-
             Vector3 motionRot = transform.Rotation - OldRootTransform.Rotation;
 
             TotalRootMotion += motionPos/100;
@@ -236,7 +261,7 @@ namespace RetroEngine.Skeletal
         public Vector3 RootMotionOffset = new Vector3();
         public Vector3 RootMotionOffsetRot = new Vector3();
 
-        void RootMotionFinishAnimation()
+        public void RootMotionFinishAnimation()
         {
             if (rootNodeOfTree == null)
             {
@@ -622,6 +647,9 @@ namespace RetroEngine.Skeletal
             AnimationTime = 0;
             currentAnimation = animationIndex;
             animationRunning = false;
+
+            ResetRootMotion();
+
         }
 
         public void SetAnimation(string name)
@@ -642,6 +670,9 @@ namespace RetroEngine.Skeletal
             currentAnimation = index;
             CurrentPlayingAnimationIndex = index;
             animationRunning = false;
+
+            ResetRootMotion();
+
         }
 
         public void StopAnimation()

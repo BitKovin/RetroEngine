@@ -770,7 +770,6 @@ namespace RetroEngine.PhysicsSystem
             RigidBody.SetCollisionMask(BodyType.GroupCollisionTest);
             RigidBody.SetBodyType(BodyType.CharacterCapsule);
 
-
             lock (dynamicsWorld)
             dynamicsWorld.AddRigidBody(RigidBody);
 

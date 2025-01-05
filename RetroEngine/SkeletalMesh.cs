@@ -29,7 +29,7 @@ namespace RetroEngine
 
         public BoundingSphere boundingSphere = new BoundingSphere();
 
-        protected static Dictionary<string, RiggedModel> LoadedRigModels = new Dictionary<string, RiggedModel>();
+        public static Dictionary<string, RiggedModel> LoadedRigModels = new Dictionary<string, RiggedModel>();
 
 
         protected Dictionary<string, Matrix> additionalLocalOffsets = new Dictionary<string, Matrix>();
@@ -66,7 +66,6 @@ namespace RetroEngine
 
         public string Name = "";
 
-        
 
         public SkeletalMesh() : base()
         {
@@ -353,7 +352,7 @@ namespace RetroEngine
 
         }
 
-        public void PastePoseLocal(AnimationPose animPose)
+        public void PastePoseLocal(AnimationPose animPose, bool ignoreRoot = false)
         {
             if (RiggedModel == null) return;
 
@@ -366,6 +365,12 @@ namespace RetroEngine
             foreach (string key in pose.Keys)
             {
                 if (namesToBones.ContainsKey(key) == false) continue;
+
+                if(ignoreRoot)
+                {
+                    if (key == "root")
+                        continue;
+                }
 
                 var node = namesToBones[key];
 
@@ -470,18 +475,20 @@ namespace RetroEngine
             RiggedModel.additionalMeshOffsets = additionalMeshOffsets;
             RiggedModel.additionalLocalOffsets = additionalLocalOffsets;
 
-            RiggedModel.UpdateVisual = (isRendered && UpdatePose) || AlwaysUpdateVisual;
+            RiggedModel.UpdateVisual = (isRendered && UpdatePose) || AlwaysUpdateVisual || playingRootMotion;
             RiggedModel.Update(deltaTime);
 
             newAnimInterpolationProgress += deltaTime * newAnimInterpolationSpeed;
 
             if(RiggedModel.UpdateVisual && newAnimInterpolationProgress>0 && newAnimInterpolationProgress<1)
             {
-                PastePoseLocal(GetPoseLocal());
+                PastePoseLocal(GetPoseLocal(), true);
             }
+
 
             if (deltaTime != 0)
                 UpdateAnimationEvents(deltaTime<0);
+
 
         }
 
@@ -517,10 +524,17 @@ namespace RetroEngine
                 newAnimInterpolationProgress = 1;
             }
 
+            RiggedModel.Update(0f);
+            RiggedModel.ResetRootMotion();
+            RootMotionPositionOffset = Vector3.Zero;
+            OldRootMotion = Vector3.Zero;
+
             SetCurrentAnimationInfo();
         }
 
-        public void PlayAnimation(string name, bool looped = true, float interpolationTime = 0.2f)
+        bool playingRootMotion = false;
+
+        public void PlayAnimation(string name, bool looped = true, float interpolationTime = 0.2f, bool rootMotion = false)
         {
 
             if (RiggedModel is null) return;
@@ -535,6 +549,8 @@ namespace RetroEngine
 
             OldFrame = 0;
 
+            playingRootMotion = rootMotion;
+
             RiggedModel.SetAnimation(name);
             RiggedModel.BeginAnimation(RiggedModel.CurrentPlayingAnimationIndex);
             RiggedModel.loopAnimation = looped;
@@ -544,6 +560,12 @@ namespace RetroEngine
                 RiggedModel.Update(0);
                 newAnimInterpolationProgress = 1;
             }
+
+            RiggedModel.Update(0f);
+
+            RiggedModel.ResetRootMotion();
+            RootMotionPositionOffset = Vector3.Zero;
+            OldRootMotion = Vector3.Zero;
 
             SetCurrentAnimationInfo();
         }
@@ -1715,7 +1737,7 @@ namespace RetroEngine
 
                 var trans = GetBoneMatrix(bone.name).DecomposeMatrix();
 
-                DrawDebug.Text(trans.Position, trans.Scale.ToString(), 0.01f);
+                DrawDebug.Text(trans.Position, bone.name + " " + trans.Scale.ToString(), 0.01f);
 
                 Console.WriteLine(bone.name);
                 Console.WriteLine(trans.Scale);
@@ -1840,13 +1862,16 @@ namespace RetroEngine
 
         public AnimationState GetAnimationState()
         {
-            return new AnimationState { CurrentFrame = GetCurrentAnimationFrame(), CurrrentAnimation = GetCurrentAnimationIndex(), Loop = RiggedModel.loopAnimation };
+            return new AnimationState { CurrentFrame = GetCurrentAnimationFrame(), CurrrentAnimation = GetCurrentAnimationIndex(), Loop = RiggedModel.loopAnimation, PlayingRootMotion = playingRootMotion };
         }
 
         public void SetAnimationState(AnimationState animationState)
         {
+
+            playingRootMotion = animationState.PlayingRootMotion;
             PlayAnimation(animationState.CurrrentAnimation, animationState.Loop,0);
             SetCurrentAnimationFrame(animationState.CurrentFrame);
+            PullRootMotion();
 
         }
 
@@ -1861,6 +1886,9 @@ namespace RetroEngine
 
             [JsonInclude]
             public bool Loop = false;
+
+            [JsonInclude]
+            public bool PlayingRootMotion = false;
 
             public AnimationState()
             {

@@ -100,7 +100,8 @@ namespace RetroEngine.Game.Entities.Weapons
             
 
             Bullet bullet = new Bullet();
-            
+            bullet.weapon = this;
+
             bullet.Rotation = Camera.rotation;
             Level.GetCurrent().AddEntity(bullet);
             

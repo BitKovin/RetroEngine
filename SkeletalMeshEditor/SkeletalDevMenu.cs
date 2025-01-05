@@ -67,6 +67,8 @@ namespace SkeletalMeshEditor
 
                 SkeletalMeshPreview.instance?.Destroy();
 
+                SkeletalMesh.LoadedRigModels.Clear();
+
                 Level.GetCurrent().AddEntity(new SkeletalMeshPreview());
 
                 SkeletalMeshPreview.instance.skeletalMesh.LoadFromFile(path);

@@ -14,6 +14,7 @@ namespace RetroEngine.Entities
 
         public WorldSpawn() 
         {
+
             Static = true;
 
             ConvexBrush = true;

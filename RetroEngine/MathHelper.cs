@@ -164,7 +164,7 @@ namespace RetroEngine
             return angle;
         }
 
-        public static Matrix GetRotationMatrix(Vector3 rotation)
+        public static Matrix GetRotationMatrix(this Vector3 rotation)
         {
             return Matrix.CreateRotationX(rotation.X / 180 * (float)Math.PI) *
                                 Matrix.CreateRotationY(rotation.Y / 180 * (float)Math.PI) *
@@ -219,6 +219,7 @@ namespace RetroEngine
 
             return localTransform;
         }
+
         public struct Transform
         {
             public Vector3 Position;
@@ -362,7 +363,7 @@ namespace RetroEngine
             Vector3 position, scale, rotationDegrees;
             Quaternion rotation;
 
-            if(matrix.M41 is float.NaN)
+            if(float.IsNaN(matrix.M41))
                 return new Transform();
 
             matrix.Decompose(out scale, out rotation, out position);

@@ -122,14 +122,15 @@ namespace DotRecast.Recast
             newSpan.next = null;
 
             int columnIndex = x + z * heightfield.width;
-
-            // Empty cell, add the first span.
-            if (heightfield.spans[columnIndex] == null)
+            lock (heightfield)
             {
-                heightfield.spans[columnIndex] = newSpan;
-                return;
+                // Empty cell, add the first span.
+                if (heightfield.spans[columnIndex] == null)
+                {
+                    heightfield.spans[columnIndex] = newSpan;
+                    return;
+                }
             }
-
             RcSpan previousSpan = null;
             RcSpan currentSpan = heightfield.spans[columnIndex];
 

@@ -1526,7 +1526,7 @@ namespace RetroEngine
                 if (float.IsNaN(worldMatrix.M11))
                     return Matrix.Identity;
 
-                return worldMatrix * GetLocalOffset();
+                return GetLocalOffset() * worldMatrix;
             }
             else
             {
@@ -1542,7 +1542,7 @@ namespace RetroEngine
                 if (float.IsNaN(worldMatrix.M11))
                     return Matrix.Identity;
 
-                return worldMatrix * GetLocalOffset();
+                return GetLocalOffset() * worldMatrix;
             }
         }
 

@@ -331,6 +331,7 @@ namespace RetroEngine
                 GameLogic();
             }
             curentLevel.StartVisualUpdate();
+
             base.Update(gameTime);
         }
 

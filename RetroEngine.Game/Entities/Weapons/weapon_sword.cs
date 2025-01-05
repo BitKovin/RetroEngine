@@ -316,8 +316,6 @@ namespace RetroEngine.Game.Entities.Weapons
             meshes.Add(mesh);
             meshes.Add(arms);
 
-            new Bullet().LoadAssetsIfNeeded();
-
         }
     }
 }
