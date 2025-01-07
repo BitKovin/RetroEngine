@@ -101,12 +101,17 @@ namespace RetroEngine.Game.Entities.Enemies
                 attacking = false;
                 mesh.PlayAnimation("run");
 
-            }else if(animationEvent.Name == "stunEnd")
+            }
+            else if(animationEvent.Name == "stunEnd")
             {
                 stunned = false;
                 mesh.PlayAnimation("run");
                 attacking = false;
                 speed = 5;
+            }
+            else if(animationEvent.Name == "lookAtTarget")
+            {
+                mesh.Rotation = new Vector3(0, MathHelper.FindLookAtRotation(Position, targetLocation).Y, 0);
             }
                 
             

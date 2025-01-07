@@ -12,7 +12,7 @@ namespace RetroEngine
     public static class PhysicsUtils
     {
 
-        public static void TranslateSweep(this RigidBody body, Vector3 translation, float radius = -1)
+        public static MyClosestConvexResultCallback TranslateSweep(this RigidBody body, Vector3 translation, float radius = -1)
         {
 
             Vector3 start = body.WorldTransform.Translation;
@@ -21,7 +21,7 @@ namespace RetroEngine
             if (radius < 0)
                 radius = body.CcdSweptSphereRadius;
 
-            var hit = Physics.SphereTrace(start, end, radius, new List<CollisionObject> { body }, body.GetCollisionMask());
+            MyClosestConvexResultCallback hit = Physics.SphereTrace(start, end, radius, new List<CollisionObject> { body }, body.GetCollisionMask());
 
             if (hit.HasHit)
             {
@@ -33,6 +33,9 @@ namespace RetroEngine
             {
                 body.SetPosition(end);
             }
+
+            return hit;
+
         }
         public static void SetPosition(this CollisionObject body, Vector3 newPosition)
         {
