@@ -5,13 +5,13 @@
       "Name": "player",
       "className": "info_player_start",
       "id": "info_player_start-player-0",
-      "saveData": "{\u0022velocity\u0022:{\u0022X\u0022:0,\u0022Y\u0022:2.9802322E-06,\u0022Z\u0022:0},\u0022weapons\u0022:[{\u0022weaponType\u0022:\u0022RetroEngine.Game.Entities.Weapons.weapon_sword, RetroEngine.Game, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0022,\u0022ammo\u0022:1},{\u0022weaponType\u0022:\u0022RetroEngine.Game.Entities.Weapons.weapon_pistol_double, RetroEngine.Game, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0022,\u0022ammo\u0022:0}],\u0022currentSlot\u0022:1,\u0022lastSlot\u0022:2,\u0022thirdPerson\u0022:false,\u0022Position\u0022:{\u0022X\u0022:3.9999998,\u0022Y\u0022:1.4399288,\u0022Z\u0022:-13.5},\u0022Rotation\u0022:{\u0022X\u0022:2.0666661,\u0022Y\u0022:6.633323,\u0022Z\u0022:0},\u0022name\u0022:\u0022player\u0022,\u0022Tags\u0022:[\u0022player\u0022]}"
+      "saveData": "{\u0022velocity\u0022:{\u0022X\u0022:0,\u0022Y\u0022:2.9802322E-06,\u0022Z\u0022:0},\u0022weapons\u0022:[{\u0022weaponType\u0022:\u0022RetroEngine.Game.Entities.Weapons.weapon_sword, RetroEngine.Game, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0022,\u0022ammo\u0022:1},{\u0022weaponType\u0022:\u0022RetroEngine.Game.Entities.Weapons.weapon_pistol_double, RetroEngine.Game, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0022,\u0022ammo\u0022:0}],\u0022currentSlot\u0022:1,\u0022lastSlot\u0022:0,\u0022thirdPerson\u0022:false,\u0022Position\u0022:{\u0022X\u0022:3.9999998,\u0022Y\u0022:1.4399288,\u0022Z\u0022:-13.5},\u0022Rotation\u0022:{\u0022X\u0022:3.6666644,\u0022Y\u0022:-14.833338,\u0022Z\u0022:0},\u0022name\u0022:\u0022player\u0022,\u0022Tags\u0022:[\u0022player\u0022]}"
     },
     {
       "Name": "",
       "className": "ent_cat_point",
       "id": "ent_cat_point--0",
-      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:2.000197,\u0022Y\u0022:1.0399997,\u0022Z\u0022:-3.0024476},\u0022Rotation\u0022:{\u0022X\u0022:5.0537365E-06,\u0022Y\u0022:-0.01587393,\u0022Z\u0022:-7.2786634E-06},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
+      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:2.0001953,\u0022Y\u0022:1.039998,\u0022Z\u0022:-3.002448},\u0022Rotation\u0022:{\u0022X\u0022:1.49580965E-05,\u0022Y\u0022:-0.015873263,\u0022Z\u0022:0.00020590126},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[]}"
     },
     {
       "Name": "",

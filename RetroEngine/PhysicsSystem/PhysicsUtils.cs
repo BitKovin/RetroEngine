@@ -12,6 +12,28 @@ namespace RetroEngine
     public static class PhysicsUtils
     {
 
+        public static void TranslateSweep(this RigidBody body, Vector3 translation, float radius = -1)
+        {
+
+            Vector3 start = body.WorldTransform.Translation;
+            Vector3 end = start + translation;
+
+            if (radius < 0)
+                radius = body.CcdSweptSphereRadius;
+
+            var hit = Physics.SphereTrace(start, end, radius, new List<CollisionObject> { body }, body.GetCollisionMask());
+
+            if (hit.HasHit)
+            {
+
+                body.SetPosition(hit.HitShapeLocation);
+
+            }
+            else
+            {
+                body.SetPosition(end);
+            }
+        }
         public static void SetPosition(this CollisionObject body, Vector3 newPosition)
         {
             

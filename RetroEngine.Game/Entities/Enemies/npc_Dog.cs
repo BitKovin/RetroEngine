@@ -283,12 +283,34 @@ namespace RetroEngine.Game.Entities.Enemies
             deathSoundPlayer.Destroy(2);
         }
 
+
+        public override void Update()
+        {
+            base.Update();
+
+
+            float distance = Vector3.Distance(Position, targetLocation);
+
+            Vector3 toTarget = (target.Position - Position).XZ().Normalized();
+
+            if (distance < 6f && attacking == false && Vector3.Dot(mesh.Rotation.GetForwardVector(), toTarget) > 0.95f && attackCooldown.Wait() == false && stunned == false)
+            {
+
+                rootMotionScale = Lerp(0.2f, 1, Saturate(distance - 1 / 4f));
+
+                PerformAttack(toTarget);
+
+            }
+
+        }
+
+
         [JsonInclude]
         public bool reachedFloor = false;
-
-
         public override void AsyncUpdate()
         {
+
+            mesh.Update(Time.DeltaTime);
 
             if (dead)
             {
@@ -324,31 +346,16 @@ namespace RetroEngine.Game.Entities.Enemies
             if (loadedAssets == false) return;
 
 
-            float distance = Vector3.Distance(Position, targetLocation);
 
 
             speed += Time.DeltaTime * (attackCooldown.Wait() ? 5: 7);
 
 
-            Vector3 toTarget = (target.Position - Position).XZ().Normalized();
-
-            float attackAngle = MathHelper.Lerp(0.96f, 0.98f, distance / 5f);
+            
 
 
             if(attackCooldown.Wait() == false)
                 attacking = false;
-
-
-            if(distance < 6f && attacking == false && Vector3.Dot(mesh.Rotation.GetForwardVector(), toTarget) > 0.95f && attackCooldown.Wait() == false && stunned==false)
-            {
-
-                rootMotionScale = Lerp(0.2f, 1, Saturate(distance / 5f));
-
-                Console.WriteLine(rootMotionScale);
-
-                PerformAttack(toTarget);
-
-            }
 
             speed = Math.Clamp(speed, 0, maxSpeed);
 
@@ -365,7 +372,9 @@ namespace RetroEngine.Game.Entities.Enemies
 
             }
 
-            Vector3 motion = mesh.PullRootMotion().Position * rootMotionScale;
+            var rootTrans = mesh.PullRootMotion();
+
+            Vector3 motion = rootTrans.Position * rootMotionScale;
 
             motion = Vector3.Transform(motion, mesh.Rotation.GetRotationMatrix());
 
@@ -376,8 +385,15 @@ namespace RetroEngine.Game.Entities.Enemies
 
                 body.LinearVelocity = new System.Numerics.Vector3(0, body.LinearVelocity.Y, 0);
 
-                body.Translate(motion.ToPhysics());
+                body.TranslateSweep(motion.ToPhysics(), 0.3f);
                 Position += motion/2f;
+
+
+                mesh.Rotation += rootTrans.Rotation;
+
+                MoveDirection = mesh.Rotation.GetForwardVector();
+
+                //Console.WriteLine(rootTrans.Rotation);
 
                 speed = 2;
 
@@ -385,8 +401,8 @@ namespace RetroEngine.Game.Entities.Enemies
 
             mesh.Position = Position - new Vector3(0, 1f, 0);
 
-            if(stunned == false)
-            mesh.Rotation = new Vector3(0, MathHelper.FindLookAtRotation(Vector3.Zero, MoveDirection).Y, 0);
+            if(stunned == false && attacking == false)
+                mesh.Rotation = new Vector3(0, MathHelper.FindLookAtRotation(Vector3.Zero, MoveDirection).Y, 0);
 
             mesh.UpdateHitboxes();
 
@@ -400,7 +416,7 @@ namespace RetroEngine.Game.Entities.Enemies
             //if(attacking == false)
             //TryStep(MoveDirection / 1.5f);
 
-
+                
         }
 
         void PerformAttack(Vector3 toTarget)
@@ -422,7 +438,7 @@ namespace RetroEngine.Game.Entities.Enemies
             attacking = true;
             mesh.PlayAnimation("attack", false, rootMotion: true);
 
-            MoveDirection = Vector3.Lerp(toTarget, MoveDirection, 0.4f).XZ().Normalized();
+            MoveDirection = toTarget.XZ().Normalized();
 
             attackCooldown.AddDelay(2);
 
@@ -432,8 +448,6 @@ namespace RetroEngine.Game.Entities.Enemies
         public override void VisualUpdate()
         {
             base.VisualUpdate();
-
-            mesh.Update(Time.DeltaTime);
 
             if (dead) return;
 

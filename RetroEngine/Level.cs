@@ -418,7 +418,7 @@ namespace RetroEngine
 
                         entity.FinalizeFrame();
 
-                        foreach (StaticMesh mesh in entity.meshes)
+                        foreach (StaticMesh mesh in entity.meshes.ToArray())
                             if (entity is not null)
                             {
                                 if(entity.loadedAssets)

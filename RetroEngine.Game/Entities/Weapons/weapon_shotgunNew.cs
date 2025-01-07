@@ -230,9 +230,9 @@ namespace RetroEngine.Game.Entities.Weapons
 
             //mesh.DepthTestEqual = false;
             //mesh.Transparency = 0.5f;
-            mesh.Transperent = true;
+            //mesh.Transperent = true;
 
-            mesh.TwoSided = true;
+            //mesh.TwoSided = true;
 
             mesh.textureSearchPaths.Add("textures/weapons/general/");
             mesh.textureSearchPaths.Add("textures/weapons/shotgun_new/");

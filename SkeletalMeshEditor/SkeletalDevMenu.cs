@@ -216,12 +216,13 @@ namespace SkeletalMeshEditor
 
         void AnimationEventEditor()
         {
-
-
-
             ImGui.Begin("animaiton event editor");
 
+
+            ImGui.Text(SkeletalMeshPreview.instance.skeletalMesh.GetCurrentAnimationName());
             ImGui.InputInt("current animation", ref animationIndex);
+
+            animationIndex = int.Clamp(animationIndex, 0, int.Max(SkeletalMeshPreview.instance.skeletalMesh.GetNumOfAnimations() - 1,0));
 
             ImGui.SameLine();
 

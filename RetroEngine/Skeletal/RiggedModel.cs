@@ -138,6 +138,12 @@ namespace RetroEngine.Skeletal
             originalAnimations = null;
         }
 
+        public string GetCurrentAnimationName()
+        {
+            if (originalAnimations.Count() <= currentAnimation || currentAnimation < 0) return "";
+            return originalAnimations[currentAnimation].animationName;
+        }
+
         public void CreateBuffers()
         {
             foreach(RiggedModelMesh mesh in meshes)
@@ -215,6 +221,7 @@ namespace RetroEngine.Skeletal
             var transform = root.LocalFinalTransformMg.DecomposeMatrix();
 
             TotalRootMotion = Vector3.Zero;
+            TotalRootMotionRot = Vector3.Zero;
 
             OldRootTransform = transform;
         }
@@ -245,9 +252,13 @@ namespace RetroEngine.Skeletal
 
             Vector3 motionPos = transform.Position - OldRootTransform.Position;
 
-            Vector3 motionRot = transform.Rotation - OldRootTransform.Rotation;
+            Vector3 motionRot = (transform.RotationQuaternion *  Quaternion.Inverse(OldRootTransform.RotationQuaternion)).ToEulerAnglesDegrees();
+
+
+            //motionPos = Vector3.Transform(motionPos, (-TotalRootMotionRot).GetRotationMatrix());
 
             TotalRootMotion += motionPos/100;
+
 
             if (currentFrame != 0)
                 TotalRootMotionRot += motionRot;
@@ -288,8 +299,10 @@ namespace RetroEngine.Skeletal
 
             //motionPos = Vector3.Transform(motionPos, MathHelper.GetRotationMatrix(RootMotionOffsetRot));
 
+            motionPos = Vector3.Transform(motionPos, (-TotalRootMotionRot).GetRotationMatrix());
+
             RootMotionOffset += motionPos / 100;
-            RootMotionOffsetRot += motionRot - StartRootTransform.Rotation;
+            RootMotionOffsetRot += motionRot;
             
             //Console.WriteLine(motionPos);
             //TotalRootMotion += motionPos / 100;
@@ -976,7 +989,7 @@ namespace RetroEngine.Skeletal
                 //Console.WriteLine("________________________________________________________");
                 //Console.WriteLine("Animation name: " + animationName + "  DurationInSeconds: " + DurationInSeconds + "  DurationInSecondsLooping: " + DurationInSecondsLooping);
                 fps = animationFramesPerSecond;
-                TotalFrames = (int)(DurationInSeconds * animationFramesPerSecond);
+                TotalFrames = (int)(DurationInSeconds * animationFramesPerSecond) + 1;
                 TicksPerFramePerSecond = TicksPerSecond / animationFramesPerSecond;
                 SecondsPerFrame = 1d / animationFramesPerSecond;
                 CalculateNewInterpolatedAnimationFrames(model, loopAnimation);

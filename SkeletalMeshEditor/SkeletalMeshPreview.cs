@@ -43,8 +43,6 @@ namespace SkeletalMeshEditor
 
             skeletalMesh.ApplyRagdollToMesh();
 
-            skeletalMesh.DisplayBoneScales();
-
         }
 
         public void CreateRagdoll()

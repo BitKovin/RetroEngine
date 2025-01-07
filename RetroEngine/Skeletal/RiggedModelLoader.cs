@@ -677,6 +677,8 @@ namespace RetroEngine.Skeletal
                 //________________________________________________
                 // Initial copy over.
                 var modelAnim = new RiggedModel.RiggedAnimation();
+
+
                 modelAnim.animationName = assimpAnim.Name;
                 modelAnim.TicksPerSecond = assimpAnim.TicksPerSecond;
                 modelAnim.DurationInTicks = assimpAnim.DurationInTicks;

@@ -116,6 +116,23 @@ namespace RetroEngine
             RiggedModel.overrideAnimationFrameTime = -1;
         }
 
+        public string GetCurrentAnimationName()
+        {
+
+            if (RiggedModel == null)
+                return "";
+
+            return RiggedModel.GetCurrentAnimationName(); 
+        }
+        
+        public int GetNumOfAnimations()
+        {
+            if(RiggedModel == null) return 0;
+
+            return RiggedModel.originalAnimations.Count;
+
+        }
+
         public MathHelper.Transform PullRootMotion()
         {
 
@@ -139,7 +156,7 @@ namespace RetroEngine
 
             MathHelper.Transform transform = new MathHelper.Transform();
 
-            transform.Position = rootMotion;
+            transform.Position = Vector3.Transform(rootMotion, (-RiggedModel.TotalRootMotionRot).GetRotationMatrix());
             transform.Rotation = rootMotionRot;
 
             return transform;
@@ -422,9 +439,9 @@ namespace RetroEngine
             int animFrameDuration = GetCurrentAnimationFrameDuration();
 
             if (newFrame >= animFrameDuration)
-                return;
+                newFrame = animFrameDuration - 1;
 
-            
+            if (newFrame == OldFrame) return;
 
             int currentFrame = OldFrame;
 
@@ -442,7 +459,6 @@ namespace RetroEngine
                     currentFrame++;
                 }
 
-
                 if(currentFrame >= animFrameDuration)
                     currentFrame = 0;
 
@@ -459,7 +475,7 @@ namespace RetroEngine
 
             }
 
-            OldFrame = newFrame;
+            OldFrame = currentFrame;
 
             foreach (var e in events)
                 OnAnimationEvent?.Invoke(e);
@@ -529,6 +545,8 @@ namespace RetroEngine
             RootMotionPositionOffset = Vector3.Zero;
             OldRootMotion = Vector3.Zero;
 
+           
+
             SetCurrentAnimationInfo();
         }
 
@@ -567,6 +585,8 @@ namespace RetroEngine
             RootMotionPositionOffset = Vector3.Zero;
             OldRootMotion = Vector3.Zero;
 
+            PullRootMotion();
+
             SetCurrentAnimationInfo();
         }
 
@@ -575,7 +595,20 @@ namespace RetroEngine
 
             int id = RiggedModel.currentAnimation;
 
-            foreach(var anim in animationInfos)
+            string name = RiggedModel.GetCurrentAnimationName();
+
+            foreach (var anim in animationInfos)
+            {
+                if (anim.AnimationName == name)
+                {
+
+                    CurrentAnimationInfo = anim;
+
+                    return;
+                }
+            }
+
+            foreach (var anim in animationInfos)
             {
                 if(anim.AnimationIndex == id)
                 {
@@ -723,7 +756,7 @@ namespace RetroEngine
 
         protected override Matrix GetLocalRotationOffset()
         {
-            return Matrix.Identity;// MathHelper.GetRotationMatrix(RootMotionRotationOffset);
+            return MathHelper.GetRotationMatrix(RootMotionRotationOffset);
         }
 
         public override Matrix GetWorldMatrix()
@@ -2023,6 +2056,8 @@ namespace RetroEngine
 
         [JsonInclude]
         public int AnimationIndex = -1;
+
+        public string AnimationName = "";
 
         [JsonInclude]
         public AnimationEvent[] AnimationEvents = new AnimationEvent[0];

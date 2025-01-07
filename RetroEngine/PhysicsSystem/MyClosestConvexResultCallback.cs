@@ -13,14 +13,29 @@ namespace RetroEngine
     {
         public MyClosestConvexResultCallback(ref Vector3 rayFromWorld, ref Vector3 rayToWorld) : base(ref rayFromWorld, ref rayToWorld)
         {
+            Start = rayFromWorld;
+            End = rayToWorld;
         }
 
         public CollisionFlags FlagToRespond = CollisionFlags.None;
 
         public List<CollisionObject> ignoreList = new List<CollisionObject>();
 
+        public Vector3 HitShapeLocation = Vector3.Zero;
+
+        public Vector3 Start;
+        public Vector3 End;
 
         public PhysicsSystem.BodyType BodyTypeMask = PhysicsSystem.BodyType.GroupAll;
+
+        public override float AddSingleResult(ref LocalConvexResult convexResult, bool normalInWorldSpace)
+        {
+
+            HitShapeLocation = Vector3.Lerp(Start, End, convexResult.HitFraction);
+
+
+            return base.AddSingleResult(ref convexResult, normalInWorldSpace);
+        }
 
         public override bool NeedsCollision(BroadphaseProxy proxy0)
         {
