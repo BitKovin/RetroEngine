@@ -29,7 +29,7 @@ namespace RetroEngine.Game.Entities
 
         Vector3 OldPos = new Vector3();
 
-        ParticleSystem trail;
+        ParticleSystemEnt trail;
 
         public float ImpactForce = 10;
 
@@ -54,7 +54,7 @@ namespace RetroEngine.Game.Entities
             base.LoadAssets();
 
             mesh.LoadFromFile("models/weapons/bullet/bullet.obj");
-            ParticleSystem.Preload("bulletTrail");
+            ParticleSystemEnt.Preload("bulletTrail");
             mesh.texture = AssetRegistry.LoadTextureFromFile("models/weapons/bullet/bullet.png");
             mesh.emisssiveTexture = AssetRegistry.LoadTextureFromFile("models/weapons/bullet/bullet_em.png");
 
@@ -88,7 +88,7 @@ namespace RetroEngine.Game.Entities
 
             OldPos = Position;
 
-            trail = ParticleSystem.Create("bulletTrail");
+            trail = ParticleSystemEnt.Create("bulletTrail");
             trail.Position = Position;
             trail.Start();
 

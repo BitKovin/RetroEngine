@@ -10,8 +10,8 @@ using System.Threading.Tasks;
 namespace RetroEngine.Game.Effects.Particles
 {
 
-    [ParticleSystem("hitSmoke")]
-    public class particle_system_hitSmoke : ParticleSystem
+    [ParticleSys("hitSmoke")]
+    public class particle_system_hitSmoke : ParticleSystemEnt
     {
 
         public particle_system_hitSmoke()

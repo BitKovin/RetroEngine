@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 namespace RetroEngine
 {
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
-    public class ParticleSystemAttribute : Attribute
+    public class ParticleSysAttribute : Attribute
     {
         public string TechnicalName { get; }
 
-        public ParticleSystemAttribute(string technicalName)
+        public ParticleSysAttribute(string technicalName)
         {
             TechnicalName = technicalName;
         }
@@ -23,11 +23,11 @@ namespace RetroEngine
     {
         private static Dictionary<string, Type> TypeCache = new Dictionary<string, Type>();
 
-        public static ParticleSystem CreateByTechnicalName(string technicalName)
+        public static ParticleSystemEnt CreateByTechnicalName(string technicalName)
         {
             if (TypeCache.TryGetValue(technicalName, out var objectType))
             {
-                return Activator.CreateInstance(objectType) as ParticleSystem;
+                return Activator.CreateInstance(objectType) as ParticleSystemEnt;
             }
             if(Level.ChangingLevel == false)
             Logger.Log($"System '{technicalName}' not found. Searching...");
@@ -36,7 +36,7 @@ namespace RetroEngine
             if (objectType != null)
             {
                 TypeCache[technicalName] = objectType; // Cache the result
-                return Activator.CreateInstance(objectType) as ParticleSystem;
+                return Activator.CreateInstance(objectType) as ParticleSystemEnt;
             }
             else
             {
@@ -54,7 +54,7 @@ namespace RetroEngine
 
                     foreach (Type type in assembly.GetTypes())
                     {
-                        var attribute = type.GetCustomAttribute<ParticleSystemAttribute>();
+                        var attribute = type.GetCustomAttribute<ParticleSysAttribute>();
                         if (attribute != null && attribute.TechnicalName == technicalName)
                         {
                             return type;
@@ -76,7 +76,7 @@ namespace RetroEngine
 
                 foreach (Type type in assembly.GetTypes())
                 {
-                    var attribute = type.GetCustomAttribute<ParticleSystemAttribute>();
+                    var attribute = type.GetCustomAttribute<ParticleSysAttribute>();
                     if (attribute != null)
                     {
                         TypeCache[attribute.TechnicalName] = type;

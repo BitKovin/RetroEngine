@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using RetroEngine.Entities;
 using RetroEngine.Map;
 using RetroEngine.NavigationSystem;
+using RetroEngine.ParticleSystem;
 using RetroEngine.PhysicsSystem;
 using RetroEngine.SaveSystem;
 using RetroEngine.Skeletal;
@@ -31,7 +32,7 @@ namespace RetroEngine.Game.Entities.Enemies
         [JsonInclude]
         public float speed = 5f;
 
-        float maxSpeed = 6.5f;
+        float maxSpeed = 7.5f;
 
         Delay updateDelay = new Delay();
 
@@ -85,6 +86,7 @@ namespace RetroEngine.Game.Entities.Enemies
 
             mesh.OnAnimationEvent += Mesh_OnAnimationEvent;
 
+            Health = 50;
 
             attackCooldown.AddDelay(1);
 
@@ -170,6 +172,8 @@ namespace RetroEngine.Game.Entities.Enemies
             mesh.LoadFromFile("models/enemies/dog.FBX");
             mesh.LoadMeshMetaFromFile("models/enemies/dog.fbx");
 
+            ParticleSystemEnt.Preload("hitBlood");
+
             if(dead == false)
                 mesh.PlayAnimation("run");
 
@@ -243,20 +247,27 @@ namespace RetroEngine.Game.Entities.Enemies
 
         }
 
+        public override void OnPointDamage(float damage, Vector3 point, Vector3 direction, Entity causer = null, Entity weapon = null)
+        {
+            base.OnPointDamage(damage, point, direction, causer, weapon);
+
+            damage = MathF.Max(15, damage);
+
+            GlobalParticleSystem.EmitAt("hitBlood", point, MathHelper.FindLookAtRotation(Vector3.Zero, -direction), new Vector3(0, 0, damage / 15f));
+
+        }
+
         public override void OnDamaged(float damage, Entity causer = null, Entity weapon = null)
         {
             base.OnDamaged(damage, causer, weapon);
 
             Stun((weapon.Position - Position).Normalized());
 
-            return;
 
-            if (dead) return;
-
-            dead = true;
-
-            Death();
-
+            if (Health <= 0)
+            {
+                Death();
+            }
         }
 
         void Stun(Vector3 attackDirection)
@@ -283,9 +294,16 @@ namespace RetroEngine.Game.Entities.Enemies
 
             mesh.ClearRagdollBodies();
 
+            if(dead) return;
+
+            GetOwner()?.OnAction("despawned");
+
             deathSoundPlayer.Position = Position;
             deathSoundPlayer.Play();
             deathSoundPlayer.Destroy(2);
+
+            dead = true;
+
         }
 
 

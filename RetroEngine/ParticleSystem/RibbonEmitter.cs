@@ -167,7 +167,7 @@ namespace RetroEngine.Particles
         public override void Update()
         {
 
-            var p = particles.LastOrDefault();
+            var p = Particles.LastOrDefault();
 
             //if (p != null)
                 //p.position = Position;

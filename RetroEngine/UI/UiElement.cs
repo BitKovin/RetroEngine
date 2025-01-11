@@ -92,11 +92,19 @@ namespace RetroEngine.UI
 
         public bool DrawBorder = false;
 
+        public static bool DrawAllBorder = false;
+
         public Vector2 TopLeft {  get; private set; }   
         public Vector2 BottomRight { get; private set; }
 
         public UiElement()
         {
+        }
+
+        [ConsoleCommand("ui.border")]
+        public static void SetDrawDebugBorder(bool value)
+        {
+            DrawAllBorder = value;
         }
 
         public virtual void Update()
@@ -179,6 +187,7 @@ namespace RetroEngine.UI
         {
             lock(childs)
             {
+                child.parrent = this;
                 childs.Add(child);
             }
         }
@@ -247,12 +256,12 @@ namespace RetroEngine.UI
         public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
 
-            
             foreach (UiElement element in childs)
                 if(element.Visible)
                     element.Draw(gameTime, spriteBatch);
 
-            if (DrawBorder)
+
+            if (DrawBorder || DrawAllBorder)
             {
                 Rectangle mainRectangle = new Rectangle();
                 mainRectangle.Location = new Point((int)position.X + (int)offset.X, (int)position.Y + (int)offset.Y);

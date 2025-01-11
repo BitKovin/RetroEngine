@@ -14,7 +14,7 @@ namespace RetroEngine.Particles
 
     public class ParticleEmitter : StaticMesh
     {
-        protected List<Particle> particles = new List<Particle>();
+        protected List<Particle> Particles = new List<Particle>();
 
         static Model particleModel = null;
 
@@ -143,11 +143,24 @@ namespace RetroEngine.Particles
 
         public void Start()
         {
-            for (int i = 0; i < InitialSpawnCount; i++)
+            SpawnParticles(InitialSpawnCount);
+        }
+
+        public void SpawnParticles(int num)
+        {
+            for (int i = 0; i < num; i++)
             {
                 Particle particle = GetNewParticle();
 
-                particles.Add(particle);
+                AddParticle(particle);
+            }
+        }
+
+        public void AddParticle(Particle particle)
+        {
+            lock(Particles)
+            {
+                Particles.Add(particle);
             }
         }
 
@@ -162,13 +175,13 @@ namespace RetroEngine.Particles
                 Emitting = false;
 
             float spawnInterval = 1f / SpawnRate;
-            lock (particles)
+            lock (Particles)
             {
                 if (SpawnRate > 0 && Emitting)
                     while (elapsedTime >= spawnInterval)
                     {
                         Particle particle = GetNewParticle();
-                        particles.Add(particle);
+                        Particles.Add(particle);
                         elapsedTime -= spawnInterval;
                     }
 
@@ -176,31 +189,31 @@ namespace RetroEngine.Particles
 
                 List<Particle> removeList = new List<Particle>();
 
-                int n = particles.Count;
+                int n = Particles.Count;
                 for (int i = 0; i < n; i++)
                 {
 
-                    Particle particle = particles[i];
+                    Particle particle = Particles[i];
 
                     particle.lifeTime += Time.DeltaTime;
 
                     if (particle.lifeTime >= particle.deathTime)
                     {
                         removeList.Add(particle);
-                        particles[i] = particle;
+                        Particles[i] = particle;
                     }
                 }
                 foreach(Particle particle in removeList)
-                    particles.Remove(particle);
+                    Particles.Remove(particle);
 
-                for (int i = 0; i < particles.Count; i++)
+                for (int i = 0; i < Particles.Count; i++)
                 {
-                    particles[i] = UpdateParticle(particles[i]);
+                    Particles[i] = UpdateParticle(Particles[i]);
                 }
 
-                finalizedParticles = new List<Particle>(particles);
+                finalizedParticles = new List<Particle>(Particles);
 
-                if (Emitting == false && particles.Count == 0)
+                if (Emitting == false && Particles.Count == 0)
                 {
                     destroyed = true;
                 }
@@ -210,6 +223,10 @@ namespace RetroEngine.Particles
         public override void UpdateCulling()
         {
             inFrustrum = true;
+
+            frameStaticMeshData.IsRendered = true;
+            isRendered = true;
+
         }
         public virtual Particle UpdateParticle(Particle particle)
         {
@@ -247,6 +264,10 @@ namespace RetroEngine.Particles
 
         public override void RenderPreparation()
         {
+
+            inFrustrum = true;
+
+
             base.RenderPreparation();
 
             CreateInitialBuffers();
@@ -308,6 +329,8 @@ namespace RetroEngine.Particles
                     0, 0, 0, 1
                 );
 
+                
+
                 // Scale matrix
                 Matrix scaleMatrix = Matrix.CreateScale(particle.Scale);
 
@@ -315,7 +338,7 @@ namespace RetroEngine.Particles
                 Matrix translationMatrix = Matrix.CreateTranslation(particle.position);
 
                 // Combine scale, rotation, and translation matrices
-                Matrix worldMatrix = scaleMatrix * rotationMatrix * translationMatrix;
+                Matrix worldMatrix = Matrix.CreateBillboard(particle.position, Camera.finalizedPosition, Camera.Up, Camera.Forward);
 
                 return worldMatrix;
 
@@ -323,11 +346,7 @@ namespace RetroEngine.Particles
 
             if (particle.useGlobalRotation == false)
             {
-                Matrix worldMatrix = Matrix.CreateScale(particle.Scale) *
-                                                Matrix.CreateRotationZ(particle.Rotation) *
-                                                Matrix.CreateRotationX(Camera.rotation.X / 180 * (float)Math.PI) *
-                                                Matrix.CreateRotationY(Camera.rotation.Y / 180 * (float)Math.PI) *
-                                                Matrix.CreateTranslation(particle.position);
+                Matrix worldMatrix = Matrix.CreateBillboard(particle.position, Camera.finalizedPosition, Camera.Up, Camera.Forward);
 
                 return worldMatrix;
             }

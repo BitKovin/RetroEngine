@@ -147,7 +147,7 @@ namespace RetroEngine
 
         public static Matrix GetLightView()
         {
-            return Matrix.CreateLookAt(GetCameraPositionByPixelGrid(LightDistance), GetCameraPositionByPixelGrid(LightDistance) + LightDirection, Vector3.UnitZ);
+            return Matrix.CreateLookAt(GetCameraPositionByPixelGrid(LightDistance, shadowMapResolution), GetCameraPositionByPixelGrid(LightDistance, shadowMapResolution) + LightDirection, Vector3.UnitZ);
         }
 
         public static Matrix GetLightViewViewmodel()
@@ -170,14 +170,14 @@ namespace RetroEngine
 
         public static Matrix GetLightViewClose()
         {
-            return Matrix.CreateLookAt(GetCameraPositionByPixelGrid(CloseLightDistance), GetCameraPositionByPixelGrid(CloseLightDistance) + LightDirection, Vector3.UnitZ);
+            return Matrix.CreateLookAt(GetCameraPositionByPixelGrid(CloseLightDistance, closeShadowMapResolution), GetCameraPositionByPixelGrid(CloseLightDistance, closeShadowMapResolution) + LightDirection, Vector3.UnitZ);
         }
         public static Matrix GetLightViewVeryClose()
         {
 
             if(DynamicSunShadowsEnabled)
             {
-                return Matrix.CreateLookAt(GetCameraPositionByPixelGrid(VeryCloseLightDistance), GetCameraPositionByPixelGrid(VeryCloseLightDistance) + LightDirection, Vector3.UnitZ);
+                return Matrix.CreateLookAt(GetCameraPositionByPixelGrid(VeryCloseLightDistance, veryCloseShadowMapResolution), GetCameraPositionByPixelGrid(VeryCloseLightDistance, veryCloseShadowMapResolution) + LightDirection, Vector3.UnitZ);
             }else
             {
                 return new Matrix(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
@@ -204,24 +204,24 @@ namespace RetroEngine
             DirectionalLightShadowQuality = value;
         }
 
-        static Vector3 GetCameraPositionByPixelGrid(float lightDistance)
+        static Vector3 GetCameraPositionByPixelGrid(float lightDistance, float resolution)
         {
 
             float hFactor = 1f - Math.Abs(Camera.rotation.GetForwardVector().Y);
 
-            Vector3 pos = Camera.position + Camera.rotation.GetForwardVector().XZ().Normalized() * lightDistance / 3f * hFactor * Graphics.LightDistanceMultiplier;
+            Vector3 pos = Camera.position;// + Camera.rotation.GetForwardVector().XZ().Normalized() * lightDistance / 3f * hFactor * Graphics.LightDistanceMultiplier;
 
             //return pos;
 
             //ector3 pos = Camera.position - new Vector3(0, 1, 0);
 
             // Calculate step based on shadow map resolution and light distance
-            float step = 0.1f;
+            float step = lightDistance / resolution;
 
             // Adjust the position using the calculated step
-            pos /= step;
-            pos.Floor();
-            pos *= step;
+            pos = pos.SnapToGrid(step);
+
+            DrawDebug.Line(pos - LightDirection * 100, pos + LightDirection*100,null, 0.01f);
 
             return pos;
         }

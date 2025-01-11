@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 
 namespace RetroEngine.Entities
 {
-    public class ParticleSystem : Entity
+    public class ParticleSystemEnt : Entity
     {
 
         public List <ParticleEmitter> emitters = new List <ParticleEmitter>();
 
         public float ParticleSizeMultiplier = 1;
 
-        public ParticleSystem() { }
+        public ParticleSystemEnt() { }
 
         public override void Start()
         {
@@ -88,10 +88,9 @@ namespace RetroEngine.Entities
         }
         bool updated = false;
 
-        public override void VisualUpdate() //hope it won't break anything
+        public override void AsyncUpdate()
         {
-            base.VisualUpdate();
-
+            base.AsyncUpdate();
 
             List<ParticleEmitter> list = new List<ParticleEmitter>(emitters);
 
@@ -133,9 +132,9 @@ namespace RetroEngine.Entities
 
         }
 
-        public static ParticleSystem Create(string name)
+        public static ParticleSystemEnt Create(string name)
         {
-            ParticleSystem system = ParticleSystemFactory.CreateByTechnicalName(name);
+            ParticleSystemEnt system = ParticleSystemFactory.CreateByTechnicalName(name);
             Level.GetCurrent().AddEntity(system);
             return system;
         }

@@ -260,7 +260,7 @@ namespace RetroEngine.Game.Entities.Weapons
         void CreateHitParticle(Vector3 pos)
         {
 
-            ParticleSystem system = ParticleSystem.Create("hitSmoke");
+            ParticleSystemEnt system = ParticleSystemEnt.Create("hitSmoke");
             system.Position = pos;
             system.Start();
 

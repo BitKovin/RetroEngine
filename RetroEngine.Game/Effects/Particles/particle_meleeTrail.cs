@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 
 namespace RetroEngine.Game.Effects.Particles
 {
-    [ParticleSystem("meleeTrail")]
-    public class particle_system_meleeTrail : ParticleSystem
+    [ParticleSys("meleeTrail")]
+    public class particle_system_meleeTrail : ParticleSystemEnt
     {
 
         public Vector3 Position2;

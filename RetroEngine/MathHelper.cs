@@ -55,6 +55,24 @@ namespace RetroEngine
             return vector.FastNormalize();
         }
 
+        /// <summary>
+        /// Snaps a Vector3 to the nearest grid position.
+        /// </summary>
+        /// <param name="position">The position to snap.</param>
+        /// <param name="gridSize">The size of the grid cells.</param>
+        /// <returns>The snapped Vector3 position.</returns>
+        public static Vector3 SnapToGrid(this Vector3 position, float gridSize)
+        {
+            if (gridSize <= 0)
+                throw new ArgumentException("Grid size must be greater than zero.", nameof(gridSize));
+
+            float snappedX = (float)Math.Round(position.X / gridSize) * gridSize;
+            float snappedY = (float)Math.Round(position.Y / gridSize) * gridSize;
+            float snappedZ = (float)Math.Round(position.Z / gridSize) * gridSize;
+
+            return new Vector3(snappedX, snappedY, snappedZ);
+        }
+
         public static Vector3 Clamp(this Vector3 vector, float min, float max)
         {
             return new Vector3(Math.Clamp(vector.X, min, max), Math.Clamp(vector.Y, min, max), Math.Clamp(vector.Z, min, max));

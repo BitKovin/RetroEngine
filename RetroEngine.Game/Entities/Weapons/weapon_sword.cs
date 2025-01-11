@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using RetroEngine.Audio;
 using RetroEngine.Entities;
 using RetroEngine.Game.Entities.Player;
+using RetroEngine.ParticleSystem;
 using RetroEngine.PhysicsSystem;
 using RetroEngine.Skeletal;
 using System;
@@ -190,7 +191,6 @@ namespace RetroEngine.Game.Entities.Weapons
             if(attack == 2 && hadHit == false)
                 attack = 0;
 
-            Console.WriteLine(attack);
 
             if (attack == 0)
             {
@@ -216,7 +216,8 @@ namespace RetroEngine.Game.Entities.Weapons
             else
                 fireSoundPlayer2.Play(true);
 
-
+            attackDelay.AddDelay(0.01f);
+            pendingAttackDelay.AddDelay(0);
 
             pendingAttack = true;
 
@@ -267,9 +268,7 @@ namespace RetroEngine.Game.Entities.Weapons
         void CreateHitParticle(Vector3 pos)
         {
 
-            ParticleSystem system = ParticleSystem.Create("hitSmoke");
-            system.Position = pos;
-            system.Start();
+            GlobalParticleSystem.EmitAt("hitBlood", pos, Vector3.Zero, Vector3.One);
 
         }
         void LoadVisual()
@@ -309,7 +308,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             mesh.Position = Camera.position;
 
-            ParticleSystem.Preload("hitSmoke");
+            ParticleSystemEnt.Preload("hitSmoke");
 
             Console.WriteLine("loaded pistol double");
 

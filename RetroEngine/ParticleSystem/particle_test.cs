@@ -10,8 +10,8 @@ using System.Threading.Tasks;
 namespace RetroEngine.Particles
 {
 
-    [ParticleSystem("testSystem")]
-    public class particle_system_test : ParticleSystem
+    [ParticleSys("testSystem")]
+    public class particle_system_test : ParticleSystemEnt
     {
 
         public particle_system_test()

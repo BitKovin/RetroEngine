@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace RetroEngine.Entities
@@ -12,6 +13,16 @@ namespace RetroEngine.Entities
     {
 
         string className = "npc_base";
+
+        string target = "";
+        string onSpawnEventName = "";
+        string onDespawnEventName = "";
+
+        [JsonInclude]
+        public bool isEntAlive = false;
+
+        [JsonInclude]
+        public bool active = true;
 
         public Spawner() 
         {
@@ -23,6 +34,11 @@ namespace RetroEngine.Entities
             base.FromData(data);
 
             className = data.GetPropertyString("className", className);
+
+            target = data.GetPropertyString("target", target);
+
+            onSpawnEventName = data.GetPropertyString("onSpawned", onSpawnEventName);
+            onDespawnEventName = data.GetPropertyString("onDespawned", onSpawnEventName);
 
         }
 
@@ -42,15 +58,37 @@ namespace RetroEngine.Entities
         {
             base.OnAction(action);
 
+            if(action == "despawned")
+            {
+
+                if (target == "") return;
+
+
+                isEntAlive = false;
+
+                CallActionOnEntsWithName(target, onDespawnEventName);
+
+                return;
+            }
+
+            if (active == false) return;
+
             var ent = Level.GetCurrent().AddEntity(LevelObjectFactory.CreateByTechnicalName(className));
 
             if(ent!=null)
             {
                 ent.Position = Position;
+                ent.Rotation = Rotation;
+                ent.SetOwner(this);
+
                 ent.Start();
+                
             }
 
-            Destroy();
+            CallActionOnEntsWithName(target, onSpawnEventName);
+
+            //active = false;
+            isEntAlive = true;
 
 
         }

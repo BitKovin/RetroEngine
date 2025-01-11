@@ -1690,141 +1690,368 @@
 // entity 15
 {
 "classname" "spawner"
+"origin" "528 -6144 48"
+"className" "npc_dog"
+"targetname" "spg_1"
+}
+// entity 16
+{
+"classname" "spawner"
+"origin" "448 -6240 64"
+"className" "npc_dog"
+"targetname" "spg_1"
+"target" "test_sp"
+}
+// entity 17
+{
+"classname" "spawner"
+"origin" "432 -6320 64"
+"className" "npc_dog"
+"targetname" "spg_1"
+"target" "test_sp"
+}
+// entity 18
+{
+"classname" "spawner"
+"origin" "384 -6416 64"
+"className" "npc_dog"
+"targetname" "spg_1"
+"target" "test_sp"
+}
+// entity 19
+{
+"classname" "spawner"
+"origin" "368 -6592 64"
+"className" "npc_dog"
+"targetname" "spg_1"
+"target" "test_sp"
+}
+// entity 20
+{
+"classname" "spawner"
+"origin" "352 -6688 64"
+"className" "npc_dog"
+"targetname" "spg_1"
+"target" "test_sp"
+}
+// entity 21
+{
+"classname" "spawner"
+"origin" "352 -6768 64"
+"className" "npc_dog"
+"targetname" "spg_1"
+"target" "test_sp"
+}
+// entity 22
+{
+"classname" "spawner"
+"origin" "368 -6960 64"
+"className" "npc_dog"
+"targetname" "spg_1"
+"target" "test_sp"
+}
+// entity 23
+{
+"classname" "spawner"
+"origin" "384 -7056 64"
+"className" "npc_dog"
+"targetname" "spg_1"
+"target" "test_sp"
+}
+// entity 24
+{
+"classname" "spawner"
+"origin" "416 -7232 64"
+"className" "npc_dog"
+"targetname" "spg_1"
+"target" "test_sp"
+}
+// entity 25
+{
+"classname" "spawner"
+"origin" "368 -6848 64"
+"className" "npc_dog"
+"targetname" "spg_1"
+"target" "test_sp"
+}
+// entity 26
+{
+"classname" "spawner"
+"origin" "928 -6208 64"
+"className" "npc_dog"
+"targetname" "spg_1"
+"target" "test_sp"
+}
+// entity 27
+{
+"classname" "spawner"
+"origin" "864 -6352 64"
+"className" "npc_dog"
+"targetname" "spg_1"
+"target" "test_sp"
+}
+// entity 28
+{
+"classname" "spawner"
+"origin" "848 -6416 64"
+"className" "npc_dog"
+"targetname" "spg_1"
+"target" "test_sp"
+}
+// entity 29
+{
+"classname" "spawner"
+"origin" "816 -6512 64"
+"className" "npc_dog"
+"targetname" "spg_1"
+"target" "test_sp"
+}
+// entity 30
+{
+"classname" "spawner"
+"origin" "816 -6592 64"
+"className" "npc_dog"
+"targetname" "spg_1"
+"target" "test_sp"
+}
+// entity 31
+{
+"classname" "spawner"
+"origin" "800 -6672 64"
+"className" "npc_dog"
+"targetname" "spg_1"
+"target" "test_sp"
+}
+// entity 32
+{
+"classname" "spawner"
+"origin" "800 -6752 64"
+"className" "npc_dog"
+"targetname" "spg_1"
+"target" "test_sp"
+}
+// entity 33
+{
+"classname" "spawner"
+"origin" "816 -6864 64"
+"className" "npc_dog"
+"targetname" "spg_1"
+"target" "test_sp"
+}
+// entity 34
+{
+"classname" "spawner"
+"origin" "848 -6976 64"
+"className" "npc_dog"
+"targetname" "spg_1"
+"target" "test_sp"
+}
+// entity 35
+{
+"classname" "spawner"
+"origin" "896 -7088 48.9012"
+"className" "npc_dog"
+"targetname" "spg_1"
+"target" "test_sp"
+}
+// entity 36
+{
+"classname" "spawner"
+"origin" "928 -7264 48.8405"
+"className" "npc_dog"
+"targetname" "spg_1"
+"target" "test_sp"
+}
+// entity 37
+{
+"classname" "spawner"
 "origin" "1648 -6528 48.9987"
 "className" "npc_dog"
 "targetname" "spg_1"
-"onSpawned" "add"
-"onDespawned" "sub"
 }
-// entity 16
+// entity 38
 {
 "classname" "spawner"
 "origin" "1520 -6864 48.8933"
 "className" "npc_dog"
 "targetname" "spg_1"
-"onSpawned" "add"
-"onDespawned" "sub"
 }
-// entity 17
+// entity 39
 {
 "classname" "spawner"
 "origin" "1392 -6688 48.9651"
 "className" "npc_dog"
 "targetname" "spg_1"
-"onSpawned" "add"
-"onDespawned" "sub"
 }
-// entity 18
+// entity 40
+{
+"classname" "spawner"
+"origin" "752 -6192 64"
+"className" "npc_dog"
+"targetname" "spg_1"
+"target" "test_sp"
+}
+// entity 41
+{
+"classname" "spawner"
+"origin" "736 -6272 64"
+"className" "npc_dog"
+"targetname" "spg_1"
+"target" "test_sp"
+}
+// entity 42
+{
+"classname" "spawner"
+"origin" "688 -6368 64"
+"className" "npc_dog"
+"targetname" "spg_1"
+"target" "test_sp"
+}
+// entity 43
+{
+"classname" "spawner"
+"origin" "672 -6544 64"
+"className" "npc_dog"
+"targetname" "spg_1"
+"target" "test_sp"
+}
+// entity 44
+{
+"classname" "spawner"
+"origin" "656 -6640 64"
+"className" "npc_dog"
+"targetname" "spg_1"
+"target" "test_sp"
+}
+// entity 45
+{
+"classname" "spawner"
+"origin" "656 -6720 64"
+"className" "npc_dog"
+"targetname" "spg_1"
+"target" "test_sp"
+}
+// entity 46
+{
+"classname" "spawner"
+"origin" "672 -6912 64"
+"className" "npc_dog"
+"targetname" "spg_1"
+"target" "test_sp"
+}
+// entity 47
+{
+"classname" "spawner"
+"origin" "688 -7008 64"
+"className" "npc_dog"
+"targetname" "spg_1"
+"target" "test_sp"
+}
+// entity 48
+{
+"classname" "spawner"
+"origin" "720 -7184 64"
+"className" "npc_dog"
+"targetname" "spg_1"
+"target" "test_sp"
+}
+// entity 49
+{
+"classname" "spawner"
+"origin" "672 -6800 64"
+"className" "npc_dog"
+"targetname" "spg_1"
+"target" "test_sp"
+}
+// entity 50
 {
 "classname" "spawner"
 "origin" "1232 -6160 64"
 "className" "npc_dog"
 "targetname" "spg_1"
 "target" "test_sp"
-"onSpawned" "add"
-"onDespawned" "sub"
 }
-// entity 19
+// entity 51
 {
 "classname" "spawner"
 "origin" "1168 -6304 64"
 "className" "npc_dog"
 "targetname" "spg_1"
 "target" "test_sp"
-"onSpawned" "add"
-"onDespawned" "sub"
 }
-// entity 20
+// entity 52
 {
 "classname" "spawner"
 "origin" "1152 -6368 64"
 "className" "npc_dog"
 "targetname" "spg_1"
 "target" "test_sp"
-"onSpawned" "add"
-"onDespawned" "sub"
 }
-// entity 21
+// entity 53
 {
 "classname" "spawner"
 "origin" "1120 -6464 64"
 "className" "npc_dog"
 "targetname" "spg_1"
 "target" "test_sp"
-"onSpawned" "add"
-"onDespawned" "sub"
 }
-// entity 22
+// entity 54
 {
 "classname" "spawner"
 "origin" "1120 -6544 64"
 "className" "npc_dog"
 "targetname" "spg_1"
 "target" "test_sp"
-"onSpawned" "add"
-"onDespawned" "sub"
 }
-// entity 23
+// entity 55
 {
 "classname" "spawner"
 "origin" "1104 -6624 64"
 "className" "npc_dog"
 "targetname" "spg_1"
 "target" "test_sp"
-"onSpawned" "add"
-"onDespawned" "sub"
 }
-// entity 24
+// entity 56
 {
 "classname" "spawner"
 "origin" "1104 -6704 64"
 "className" "npc_dog"
 "targetname" "spg_1"
 "target" "test_sp"
-"onSpawned" "add"
-"onDespawned" "sub"
 }
-// entity 25
+// entity 57
 {
 "classname" "spawner"
 "origin" "1120 -6816 64"
 "className" "npc_dog"
 "targetname" "spg_1"
 "target" "test_sp"
-"onSpawned" "add"
-"onDespawned" "sub"
 }
-// entity 26
+// entity 58
 {
 "classname" "spawner"
 "origin" "1152 -6928 64"
 "className" "npc_dog"
 "targetname" "spg_1"
 "target" "test_sp"
-"onSpawned" "add"
-"onDespawned" "sub"
 }
-// entity 27
+// entity 59
 {
 "classname" "spawner"
 "origin" "1200 -7040 48.9012"
 "className" "npc_dog"
 "targetname" "spg_1"
 "target" "test_sp"
-"onSpawned" "add"
-"onDespawned" "sub"
 }
-// entity 28
+// entity 60
 {
 "classname" "spawner"
 "origin" "1232 -7216 48.8405"
 "className" "npc_dog"
 "targetname" "spg_1"
 "target" "test_sp"
-"onSpawned" "add"
-"onDespawned" "sub"
 }
-// entity 29
+// entity 61
 {
 "classname" "groupBrush"
 // brush 0
@@ -1859,7 +2086,7 @@
 ( 3804.0392103260033 -6775.5390465748715 176 ) ( 3804.0392103260033 -6775.536942218382 172 ) ( 3804.0392103260033 -6792 155.9797768281499 ) brushes/Metal/metal1 0 -40 0 0.5 0.5
 }
 }
-// entity 30
+// entity 62
 {
 "classname" "groupBrush"
 // brush 0
@@ -1894,7 +2121,7 @@
 ( 3780.0392103260033 -6775.5390465748715 176 ) ( 3780.0392103260033 -6775.536942218382 172 ) ( 3780.0392103260033 -6792 155.9797768281496 ) brushes/Metal/metal1 0 -40 0 0.5 0.5
 }
 }
-// entity 31
+// entity 63
 {
 "classname" "groupBrush"
 // brush 0
@@ -1929,7 +2156,7 @@
 ( 3756.0392103260033 -6775.5390465748715 176 ) ( 3756.0392103260033 -6775.536942218382 172 ) ( 3756.0392103260033 -6792 155.97977682814928 ) brushes/Metal/metal1 0 -40 0 0.5 0.5
 }
 }
-// entity 32
+// entity 64
 {
 "classname" "groupBrush"
 // brush 0
@@ -1964,7 +2191,7 @@
 ( 3732 -6775.5390465748715 176 ) ( 3732 -6775.536942218382 172 ) ( 3732 -6792 155.9797768281499 ) brushes/Metal/metal1 0 -40 0 0.5 0.5
 }
 }
-// entity 33
+// entity 65
 {
 "classname" "groupBrush"
 // brush 0
@@ -1999,7 +2226,7 @@
 ( 3708.0392103260033 -6775.5390465748715 176 ) ( 3708.0392103260033 -6775.536942218382 172 ) ( 3708.0392103260033 -6792 155.9797768281496 ) brushes/Metal/metal1 0 -40 0 0.5 0.5
 }
 }
-// entity 34
+// entity 66
 {
 "classname" "groupBrush"
 // brush 0
@@ -2034,7 +2261,7 @@
 ( 3684.0392103260033 -6775.5390465748715 176 ) ( 3684.0392103260033 -6775.536942218382 172 ) ( 3684.0392103260033 -6792 155.97977682814928 ) brushes/Metal/metal1 0 -40 0 0.5 0.5
 }
 }
-// entity 35
+// entity 67
 {
 "classname" "groupBrush"
 // brush 0
@@ -2069,7 +2296,7 @@
 ( 3660.0392103260033 -6775.5390465748715 176 ) ( 3660.0392103260033 -6775.536942218382 172 ) ( 3660.0392103260033 -6792 155.97977682814897 ) brushes/Metal/metal1 0 -40 0 0.5 0.5
 }
 }
-// entity 36
+// entity 68
 {
 "classname" "groupBrush"
 // brush 0
@@ -2104,7 +2331,7 @@
 ( 3636 -6775.5390465748715 176 ) ( 3636 -6775.536942218382 172 ) ( 3636 -6792 155.9797768281499 ) brushes/Metal/metal1 0 -40 0 0.5 0.5
 }
 }
-// entity 37
+// entity 69
 {
 "classname" "groupBrush"
 // brush 0
@@ -2139,7 +2366,7 @@
 ( 3612.0392103260033 -6775.5390465748715 176 ) ( 3612.0392103260033 -6775.536942218382 172 ) ( 3612.0392103260033 -6792 155.9797768281496 ) brushes/Metal/metal1 0 -40 0 0.5 0.5
 }
 }
-// entity 38
+// entity 70
 {
 "classname" "groupBrush"
 // brush 0
@@ -2174,7 +2401,7 @@
 ( 3588.0392103260033 -6775.5390465748715 176 ) ( 3588.0392103260033 -6775.536942218382 172 ) ( 3588.0392103260033 -6792 155.97977682814928 ) brushes/Metal/metal1 0 -40 0 0.5 0.5
 }
 }
-// entity 39
+// entity 71
 {
 "classname" "groupBrush"
 // brush 0
@@ -2209,7 +2436,7 @@
 ( 3456.0392103260033 -6775.5390465748715 176 ) ( 3456.0392103260033 -6775.536942218382 172 ) ( 3456.0392103260033 -6792 155.97977682814866 ) brushes/Metal/metal1 0 -40 0 0.5 0.5
 }
 }
-// entity 40
+// entity 72
 {
 "classname" "groupBrush"
 // brush 0
@@ -2244,7 +2471,7 @@
 ( 3528 -6775.5390465748715 176 ) ( 3528 -6775.536942218382 172 ) ( 3528 -6792 155.9797768281496 ) brushes/Metal/metal1 0 -40 0 0.5 0.5
 }
 }
-// entity 41
+// entity 73
 {
 "classname" "groupBrush"
 // brush 0
@@ -2279,7 +2506,7 @@
 ( 3504.0392103260033 -6775.5390465748715 176 ) ( 3504.0392103260033 -6775.536942218382 172 ) ( 3504.0392103260033 -6792 155.97977682814928 ) brushes/Metal/metal1 0 -40 0 0.5 0.5
 }
 }
-// entity 42
+// entity 74
 {
 "classname" "groupBrush"
 // brush 0
@@ -2314,7 +2541,7 @@
 ( 3552.0392103260033 -6775.5390465748715 176 ) ( 3552.0392103260033 -6775.536942218382 172 ) ( 3552.0392103260033 -6792 155.97977682814897 ) brushes/Metal/metal1 0 -40 0 0.5 0.5
 }
 }
-// entity 43
+// entity 75
 {
 "classname" "groupBrush"
 // brush 0
@@ -2349,7 +2576,7 @@
 ( 3480.0392103260033 -6775.5390465748715 176 ) ( 3480.0392103260033 -6775.536942218382 172 ) ( 3480.0392103260033 -6792 155.97977682814897 ) brushes/Metal/metal1 0 -40 0 0.5 0.5
 }
 }
-// entity 44
+// entity 76
 {
 "classname" "groupBrush"
 // brush 0
@@ -2384,7 +2611,7 @@
 ( 3408 -6664.039042065828 176.0315652668059 ) ( 3408 -6664.036937713964 172.03156526677685 ) ( 3407.960789673995 -6775.53691659884 172 ) brushes/Metal/metal1 -86 -223.75977 270 0.5 0.5
 }
 }
-// entity 45
+// entity 77
 {
 "classname" "groupBrush"
 // brush 0
@@ -2419,7 +2646,7 @@
 ( 3360.0392103260033 -6664.039042065828 176.03156526680527 ) ( 3360.0392103260033 -6664.036937713964 172.03156526677623 ) ( 3360 -6775.53691659884 172 ) brushes/Metal/metal1 -86 -223.75977 270 0.5 0.5
 }
 }
-// entity 46
+// entity 78
 {
 "classname" "groupBrush"
 // brush 0
@@ -2454,7 +2681,7 @@
 ( 3432.0392103260033 -6775.5390465748715 176 ) ( 3432.0392103260033 -6775.536942218382 172 ) ( 3432.0392103260033 -6792 155.97977682814866 ) brushes/Metal/metal1 0 -40 0 0.5 0.5
 }
 }
-// entity 47
+// entity 79
 {
 "classname" "groupBrush"
 // brush 0
@@ -2489,7 +2716,7 @@
 ( 3384.0392103260033 -6664.039042065828 176.0315652668056 ) ( 3384.0392103260033 -6664.036937713964 172.03156526677654 ) ( 3384 -6775.53691659884 172 ) brushes/Metal/metal1 -86 -223.75977 270 0.5 0.5
 }
 }
-// entity 48
+// entity 80
 {
 "classname" "groupBrush"
 // brush 0
@@ -2524,7 +2751,7 @@
 ( 3336.0392103260033 -6664.039042065828 176.03156526680496 ) ( 3336.0392103260033 -6664.036937713964 172.0315652667759 ) ( 3336 -6775.53691659884 172 ) brushes/Metal/metal1 -86 -223.75977 270 0.5 0.5
 }
 }
-// entity 49
+// entity 81
 {
 "classname" "groupBrush"
 // brush 0
@@ -2559,7 +2786,7 @@
 ( 3572.0392103260033 -6775.5390465748715 176 ) ( 3572.0392103260033 -6775.536942218382 172 ) ( 3572.0392103260033 -6792 155.97977682814897 ) brushes/Metal/metal1 0 -40 0 0.5 0.5
 }
 }
-// entity 50
+// entity 82
 {
 "classname" "groupBrush"
 // brush 0
@@ -2594,7 +2821,7 @@
 ( 3264.0392103260033 -6664.039042065828 176.03156526680527 ) ( 3264.0392103260033 -6664.036937713964 172.03156526677623 ) ( 3264 -6775.53691659884 172 ) brushes/Metal/metal1 -86 -223.75977 270 0.5 0.5
 }
 }
-// entity 51
+// entity 83
 {
 "classname" "groupBrush"
 // brush 0
@@ -2629,7 +2856,7 @@
 ( 3312.0392103260033 -6664.039042065828 176.03156526680496 ) ( 3312.0392103260033 -6664.036937713964 172.0315652667759 ) ( 3312 -6775.53691659884 172 ) brushes/Metal/metal1 -86 -223.75977 270 0.5 0.5
 }
 }
-// entity 52
+// entity 84
 {
 "classname" "groupBrush"
 // brush 0
@@ -2664,7 +2891,7 @@
 ( 3288 -6664.039042065828 176.0315652668056 ) ( 3288 -6664.036937713964 172.03156526677654 ) ( 3287.960789673995 -6775.53691659884 172 ) brushes/Metal/metal1 -86 -223.75977 270 0.5 0.5
 }
 }
-// entity 53
+// entity 85
 {
 "classname" "groupBrush"
 // brush 0
@@ -2699,7 +2926,7 @@
 ( 3240.0392103260033 -6664.039042065828 176.03156526680496 ) ( 3240.0392103260033 -6664.036937713964 172.0315652667759 ) ( 3240 -6775.53691659884 172 ) brushes/Metal/metal1 -86 -223.75977 270 0.5 0.5
 }
 }
-// entity 54
+// entity 86
 {
 "classname" "groupBrush"
 // brush 0
@@ -2734,7 +2961,7 @@
 ( 3216.0392103260033 -6664.039042065828 176.03156526680465 ) ( 3216.0392103260033 -6664.036937713964 172.0315652667756 ) ( 3216 -6775.53691659884 172 ) brushes/Metal/metal1 -86 -223.75977 270 0.5 0.5
 }
 }
-// entity 55
+// entity 87
 {
 "classname" "groupBrush"
 // brush 0
@@ -2769,7 +2996,7 @@
 ( 3192.0392103260033 -6664.039042065828 176.03156526680496 ) ( 3192.0392103260033 -6664.036937713964 172.0315652667759 ) ( 3192 -6775.53691659884 172 ) brushes/Metal/metal1 -86 -223.75977 270 0.5 0.5
 }
 }
-// entity 56
+// entity 88
 {
 "classname" "groupBrush"
 // brush 0
@@ -2804,7 +3031,7 @@
 ( 3144.0392103260033 -6664.039042065828 176.03156526680434 ) ( 3144.0392103260033 -6664.036937713964 172.0315652667753 ) ( 3144 -6775.53691659884 172 ) brushes/Metal/metal1 -86 -223.75977 270 0.5 0.5
 }
 }
-// entity 57
+// entity 89
 {
 "classname" "groupBrush"
 // brush 0
@@ -2839,7 +3066,7 @@
 ( 3168.0392103260033 -6664.039042065828 176.03156526680465 ) ( 3168.0392103260033 -6664.036937713964 172.0315652667756 ) ( 3168 -6775.53691659884 172 ) brushes/Metal/metal1 -86 -223.75977 270 0.5 0.5
 }
 }
-// entity 58
+// entity 90
 {
 "classname" "groupBrush"
 // brush 0
@@ -2874,7 +3101,7 @@
 ( 3120.0392103260033 -6664.039042065828 176.03156526680402 ) ( 3120.0392103260033 -6664.036937713964 172.03156526677498 ) ( 3120 -6775.53691659884 172 ) brushes/Metal/metal1 -86 -223.75977 270 0.5 0.5
 }
 }
-// entity 59
+// entity 91
 {
 "classname" "groupBrush"
 // brush 0
@@ -2909,7 +3136,7 @@
 ( 3092.0392103260033 -6775.5390465748715 176 ) ( 3092.0392103260033 -6775.536942218382 172 ) ( 3092.0392103260033 -6792 155.9797768281496 ) brushes/Metal/metal1 0 -40 0 0.5 0.5
 }
 }
-// entity 60
+// entity 92
 {
 "classname" "groupBrush"
 // brush 0
@@ -2944,7 +3171,7 @@
 ( 3068.0392103260033 -6775.5390465748715 176 ) ( 3068.0392103260033 -6775.536942218382 172 ) ( 3068.0392103260033 -6792 155.97977682814928 ) brushes/Metal/metal1 0 -40 0 0.5 0.5
 }
 }
-// entity 61
+// entity 93
 {
 "classname" "groupBrush"
 // brush 0
@@ -2979,7 +3206,7 @@
 ( 2672.0392103260033 -6664.039042065828 176.03156526680527 ) ( 2672.0392103260033 -6664.036937713964 172.03156526677623 ) ( 2672 -6775.53691659884 172 ) brushes/Metal/metal1 -86 -223.75977 270 0.5 0.5
 }
 }
-// entity 62
+// entity 94
 {
 "classname" "groupBrush"
 // brush 0
@@ -3014,7 +3241,7 @@
 ( 2408.0392103260033 -6664.039042065828 176.0315652668037 ) ( 2408.0392103260033 -6664.036937713964 172.03156526677466 ) ( 2408 -6775.53691659884 172 ) brushes/Metal/metal1 -86 -223.75977 270 0.5 0.5
 }
 }
-// entity 63
+// entity 95
 {
 "classname" "groupBrush"
 // brush 0
@@ -3049,7 +3276,7 @@
 ( 2432.0392103260033 -6664.039042065828 176.03156526680402 ) ( 2432.0392103260033 -6664.036937713964 172.03156526677498 ) ( 2432 -6775.53691659884 172 ) brushes/Metal/metal1 -86 -223.75977 270 0.5 0.5
 }
 }
-// entity 64
+// entity 96
 {
 "classname" "groupBrush"
 // brush 0
@@ -3084,7 +3311,7 @@
 ( 2924 -6775.5390465748715 176 ) ( 2924 -6775.536942218382 172 ) ( 2924 -6792 155.9797768281496 ) brushes/Metal/metal1 0 -40 0 0.5 0.5
 }
 }
-// entity 65
+// entity 97
 {
 "classname" "groupBrush"
 // brush 0
@@ -3119,7 +3346,7 @@
 ( 2876.0392103260033 -6775.5390465748715 176 ) ( 2876.0392103260033 -6775.536942218382 172 ) ( 2876.0392103260033 -6792 155.97977682814897 ) brushes/Metal/metal1 0 -40 0 0.5 0.5
 }
 }
-// entity 66
+// entity 98
 {
 "classname" "groupBrush"
 // brush 0
@@ -3154,7 +3381,7 @@
 ( 2948.0392103260033 -6775.5390465748715 176 ) ( 2948.0392103260033 -6775.536942218382 172 ) ( 2948.0392103260033 -6792 155.97977682814866 ) brushes/Metal/metal1 0 -40 0 0.5 0.5
 }
 }
-// entity 67
+// entity 99
 {
 "classname" "groupBrush"
 // brush 0
@@ -3189,7 +3416,7 @@
 ( 2900.0392103260033 -6775.5390465748715 176 ) ( 2900.0392103260033 -6775.536942218382 172 ) ( 2900.0392103260033 -6792 155.97977682814928 ) brushes/Metal/metal1 0 -40 0 0.5 0.5
 }
 }
-// entity 68
+// entity 100
 {
 "classname" "groupBrush"
 // brush 0
@@ -3224,7 +3451,7 @@
 ( 3020 -6775.5390465748715 176 ) ( 3020 -6775.536942218382 172 ) ( 3020 -6792 155.9797768281496 ) brushes/Metal/metal1 0 -40 0 0.5 0.5
 }
 }
-// entity 69
+// entity 101
 {
 "classname" "groupBrush"
 // brush 0
@@ -3259,7 +3486,7 @@
 ( 2996.0392103260033 -6775.5390465748715 176 ) ( 2996.0392103260033 -6775.536942218382 172 ) ( 2996.0392103260033 -6792 155.97977682814928 ) brushes/Metal/metal1 0 -40 0 0.5 0.5
 }
 }
-// entity 70
+// entity 102
 {
 "classname" "groupBrush"
 // brush 0
@@ -3294,7 +3521,7 @@
 ( 3044.0392103260033 -6775.5390465748715 176 ) ( 3044.0392103260033 -6775.536942218382 172 ) ( 3044.0392103260033 -6792 155.97977682814897 ) brushes/Metal/metal1 0 -40 0 0.5 0.5
 }
 }
-// entity 71
+// entity 103
 {
 "classname" "groupBrush"
 // brush 0
@@ -3329,7 +3556,7 @@
 ( 2972.0392103260033 -6775.5390465748715 176 ) ( 2972.0392103260033 -6775.536942218382 172 ) ( 2972.0392103260033 -6792 155.97977682814897 ) brushes/Metal/metal1 0 -40 0 0.5 0.5
 }
 }
-// entity 72
+// entity 104
 {
 "classname" "groupBrush"
 // brush 0
@@ -3364,7 +3591,7 @@
 ( 2816 -6775.5390465748715 176 ) ( 2816 -6775.536942218382 172 ) ( 2816 -6792 155.97977682814928 ) brushes/Metal/metal1 0 -40 0 0.5 0.5
 }
 }
-// entity 73
+// entity 105
 {
 "classname" "groupBrush"
 // brush 0
@@ -3399,7 +3626,7 @@
 ( 2600.0392103260033 -6664.039042065828 176.03156526680465 ) ( 2600.0392103260033 -6664.036937713964 172.0315652667756 ) ( 2600 -6775.53691659884 172 ) brushes/Metal/metal1 -86 -223.75977 270 0.5 0.5
 }
 }
-// entity 74
+// entity 106
 {
 "classname" "groupBrush"
 // brush 0
@@ -3434,7 +3661,7 @@
 ( 2576 -6664.039042065828 176.03156526680527 ) ( 2576 -6664.036937713964 172.03156526677623 ) ( 2575.960789673995 -6775.53691659884 172 ) brushes/Metal/metal1 -86 -223.75977 270 0.5 0.5
 }
 }
-// entity 75
+// entity 107
 {
 "classname" "groupBrush"
 // brush 0
@@ -3469,7 +3696,7 @@
 ( 2552.0392103260033 -6664.039042065828 176.03156526680496 ) ( 2552.0392103260033 -6664.036937713964 172.0315652667759 ) ( 2552 -6775.53691659884 172 ) brushes/Metal/metal1 -86 -223.75977 270 0.5 0.5
 }
 }
-// entity 76
+// entity 108
 {
 "classname" "groupBrush"
 // brush 0
@@ -3504,7 +3731,7 @@
 ( 2860.0392103260033 -6775.5390465748715 176 ) ( 2860.0392103260033 -6775.536942218382 172 ) ( 2860.0392103260033 -6792 155.97977682814866 ) brushes/Metal/metal1 0 -40 0 0.5 0.5
 }
 }
-// entity 77
+// entity 109
 {
 "classname" "groupBrush"
 // brush 0
@@ -3539,7 +3766,7 @@
 ( 2768.0392103260033 -6775.5390465748715 176 ) ( 2768.0392103260033 -6775.536942218382 172 ) ( 2768.0392103260033 -6792 155.97977682814866 ) brushes/Metal/metal1 0 -40 0 0.5 0.5
 }
 }
-// entity 78
+// entity 110
 {
 "classname" "groupBrush"
 // brush 0
@@ -3574,7 +3801,7 @@
 ( 2720.0392103260033 -6775.5390465748715 176 ) ( 2720.0392103260033 -6775.536942218382 172 ) ( 2720.0392103260033 -6792 155.97977682814835 ) brushes/Metal/metal1 0 -40 0 0.5 0.5
 }
 }
-// entity 79
+// entity 111
 {
 "classname" "groupBrush"
 // brush 0
@@ -3609,7 +3836,7 @@
 ( 2840.0392103260033 -6775.5390465748715 176 ) ( 2840.0392103260033 -6775.536942218382 172 ) ( 2840.0392103260033 -6792 155.97977682814866 ) brushes/Metal/metal1 0 -40 0 0.5 0.5
 }
 }
-// entity 80
+// entity 112
 {
 "classname" "groupBrush"
 // brush 0
@@ -3644,7 +3871,7 @@
 ( 2504.0392103260033 -6664.039042065828 176.03156526680434 ) ( 2504.0392103260033 -6664.036937713964 172.0315652667753 ) ( 2504 -6775.53691659884 172 ) brushes/Metal/metal1 -86 -223.75977 270 0.5 0.5
 }
 }
-// entity 81
+// entity 113
 {
 "classname" "groupBrush"
 // brush 0
@@ -3679,7 +3906,7 @@
 ( 2480.0392103260033 -6664.039042065828 176.03156526680465 ) ( 2480.0392103260033 -6664.036937713964 172.0315652667756 ) ( 2480 -6775.53691659884 172 ) brushes/Metal/metal1 -86 -223.75977 270 0.5 0.5
 }
 }
-// entity 82
+// entity 114
 {
 "classname" "groupBrush"
 // brush 0
@@ -3714,7 +3941,7 @@
 ( 2456.0392103260033 -6664.039042065828 176.03156526680434 ) ( 2456.0392103260033 -6664.036937713964 172.0315652667753 ) ( 2456 -6775.53691659884 172 ) brushes/Metal/metal1 -86 -223.75977 270 0.5 0.5
 }
 }
-// entity 83
+// entity 115
 {
 "classname" "groupBrush"
 // brush 0
@@ -3749,7 +3976,7 @@
 ( 2696 -6664.039042065828 176.0315652668056 ) ( 2696 -6664.036937713964 172.03156526677654 ) ( 2695.960789673995 -6775.53691659884 172 ) brushes/Metal/metal1 -86 -223.75977 270 0.5 0.5
 }
 }
-// entity 84
+// entity 116
 {
 "classname" "groupBrush"
 // brush 0
@@ -3784,7 +4011,7 @@
 ( 2648.0392103260033 -6664.039042065828 176.03156526680496 ) ( 2648.0392103260033 -6664.036937713964 172.0315652667759 ) ( 2648 -6775.53691659884 172 ) brushes/Metal/metal1 -86 -223.75977 270 0.5 0.5
 }
 }
-// entity 85
+// entity 117
 {
 "classname" "groupBrush"
 // brush 0
@@ -3819,7 +4046,7 @@
 ( 2624.0392103260033 -6664.039042065828 176.03156526680465 ) ( 2624.0392103260033 -6664.036937713964 172.0315652667756 ) ( 2624 -6775.53691659884 172 ) brushes/Metal/metal1 -86 -223.75977 270 0.5 0.5
 }
 }
-// entity 86
+// entity 118
 {
 "classname" "groupBrush"
 // brush 0
@@ -3854,7 +4081,7 @@
 ( 2792.0392103260033 -6775.5390465748715 176 ) ( 2792.0392103260033 -6775.536942218382 172 ) ( 2792.0392103260033 -6792 155.97977682814897 ) brushes/Metal/metal1 0 -40 0 0.5 0.5
 }
 }
-// entity 87
+// entity 119
 {
 "classname" "groupBrush"
 // brush 0
@@ -3889,7 +4116,7 @@
 ( 2528.0392103260033 -6664.039042065828 176.03156526680465 ) ( 2528.0392103260033 -6664.036937713964 172.0315652667756 ) ( 2528 -6775.53691659884 172 ) brushes/Metal/metal1 -86 -223.75977 270 0.5 0.5
 }
 }
-// entity 88
+// entity 120
 {
 "classname" "groupBrush"
 // brush 0
@@ -3924,7 +4151,7 @@
 ( 2744.0392103260033 -6775.5390465748715 176 ) ( 2744.0392103260033 -6775.536942218382 172 ) ( 2744.0392103260033 -6792 155.97977682814835 ) brushes/Metal/metal1 0 -40 0 0.5 0.5
 }
 }
-// entity 89
+// entity 121
 {
 "classname" "groupBrush"
 // brush 0
@@ -3959,7 +4186,7 @@
 ( 2384.0392103260033 -6664.039042065828 176.0315652668034 ) ( 2384.0392103260033 -6664.036937713964 172.03156526677435 ) ( 2384 -6775.53691659884 172 ) brushes/Metal/metal1 -86 -223.75977 270 0.5 0.5
 }
 }
-// entity 90
+// entity 122
 {
 "classname" "groupBrush"
 // brush 0
@@ -3990,7 +4217,7 @@
 ( 2360.039210325998 -6791.9684347332 20.47982797370313 ) ( 2360.039210325998 -6795.9684347332 20.47772362184495 ) ( 2360.078420652011 -6796 156.47770250671496 ) brushes/Metal/metal1 7.9375 8.274124 0 0.5 0.5
 }
 }
-// entity 91
+// entity 123
 {
 "classname" "groupBrush"
 // brush 0
@@ -4021,7 +4248,7 @@
 ( 2360.039210325998 -6643.9684347332 20.47982797370313 ) ( 2360.039210325998 -6647.9684347332 20.47772362184495 ) ( 2360.078420652011 -6648 156.47770250671496 ) brushes/Metal/metal1 -288.0625 8.274124 0 0.5 0.5
 }
 }
-// entity 92
+// entity 124
 {
 "classname" "groupBrush"
 // brush 0
@@ -4056,7 +4283,7 @@
 ( 2312.078420652001 -6664.039042065828 176.03156526680348 ) ( 2312.078420652001 -6664.036937713964 172.03156526677444 ) ( 2312.039210325998 -6775.53691659884 172 ) brushes/Metal/metal1 -86 -223.75977 270 0.5 0.5
 }
 }
-// entity 93
+// entity 125
 {
 "classname" "groupBrush"
 // brush 0
@@ -4091,7 +4318,7 @@
 ( 2360.078420652001 -6775.5390465748715 176 ) ( 2360.078420652001 -6775.536942218382 172 ) ( 2360.078420652001 -6792 155.9797768281475 ) brushes/Metal/metal1 0 -40 0 0.5 0.5
 }
 }
-// entity 94
+// entity 126
 {
 "classname" "groupBrush"
 // brush 0
@@ -4126,7 +4353,7 @@
 ( 2336.078420652001 -6664.039042065828 176.0315652668038 ) ( 2336.078420652001 -6664.036937713964 172.03156526677475 ) ( 2336.039210325998 -6775.53691659884 172 ) brushes/Metal/metal1 -86 -223.75977 270 0.5 0.5
 }
 }
-// entity 95
+// entity 127
 {
 "classname" "groupBrush"
 // brush 0
@@ -4161,7 +4388,7 @@
 ( 2240.078420652001 -6664.039042065828 176.03156526680343 ) ( 2240.078420652001 -6664.036937713964 172.03156526677438 ) ( 2240.039210325998 -6775.53691659884 172 ) brushes/Metal/metal1 -86 -223.75977 270 0.5 0.5
 }
 }
-// entity 96
+// entity 128
 {
 "classname" "groupBrush"
 // brush 0
@@ -4196,7 +4423,7 @@
 ( 2288.078420652001 -6775.5390465748715 176 ) ( 2288.078420652001 -6775.536942218382 172 ) ( 2288.078420652001 -6792 155.97977682814744 ) brushes/Metal/metal1 0 -40 0 0.5 0.5
 }
 }
-// entity 97
+// entity 129
 {
 "classname" "groupBrush"
 // brush 0
@@ -4227,7 +4454,7 @@
 ( 2288.039210325998 -6791.9684347332 20.479827973703067 ) ( 2288.039210325998 -6795.9684347332 20.477723621844888 ) ( 2288.078420652011 -6796 156.4777025067149 ) brushes/Metal/metal1 7.9375 8.274124 0 0.5 0.5
 }
 }
-// entity 98
+// entity 130
 {
 "classname" "groupBrush"
 // brush 0
@@ -4258,7 +4485,7 @@
 ( 2288.039210325998 -6643.9684347332 20.479827973703067 ) ( 2288.039210325998 -6647.9684347332 20.477723621844888 ) ( 2288.078420652011 -6648 156.4777025067149 ) brushes/Metal/metal1 -288.0625 8.274124 0 0.5 0.5
 }
 }
-// entity 99
+// entity 131
 {
 "classname" "groupBrush"
 // brush 0
@@ -4293,7 +4520,7 @@
 ( 2264.078420652001 -6664.039042065828 176.03156526680374 ) ( 2264.078420652001 -6664.036937713964 172.0315652667747 ) ( 2264.039210325998 -6775.53691659884 172 ) brushes/Metal/metal1 -86 -223.75977 270 0.5 0.5
 }
 }
-// entity 100
+// entity 132
 {
 "classname" "triggerOnce"
 "target" "spg_1"
@@ -4308,15 +4535,14 @@
 ( 2192.010381835601 -6656.049003214084 160.91910567050053 ) ( 2192 -6784 16.87555596749024 ) ( 2192.010381835601 -6784.049003214084 160.87554725534588 ) brushes/trigger_t 0 0 0 0.5 0.5
 }
 }
-// entity 101
+// entity 133
 {
-"classname" "counter"
-"origin" "656 -6752 529.09"
+"classname" "spawner"
+"origin" "1104 -6800 529.09"
+"className" "ent_cat_point"
 "targetname" "test_sp"
-"target" "a1_d1"
-"onReached" "open"
 }
-// entity 102
+// entity 134
 {
 "classname" "movebleBrush"
 "targetLocation" "0 -5 0"
@@ -4332,7 +4558,7 @@
 ( -176.24340818064286 -6783.9246705823925 143.24227229247657 ) ( -176 -6656 15.167196327683616 ) ( -176 -6784 15.242525894538606 ) brushes/bricks 0 0 0 0.5 0.5
 }
 }
-// entity 103
+// entity 135
 {
 "classname" "func_group"
 "_tb_type" "_tb_layer"
@@ -4341,7 +4567,7 @@
 "_tb_layer_sort_index" "0"
 "_tb_layer_hidden" "1"
 }
-// entity 104
+// entity 136
 {
 "classname" "cubeMap"
 "origin" "367 -4545 128.312"

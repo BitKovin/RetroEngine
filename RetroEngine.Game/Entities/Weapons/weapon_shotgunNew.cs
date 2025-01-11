@@ -146,9 +146,13 @@ namespace RetroEngine.Game.Entities.Weapons
 
             TpFire.PlayAnimation(0,false);
 
+            int i = 0;
+
             for (float y = -4; y <= 4; y += 2f)
                 for (float x = -4; x <= 4; x += 2f)
                 {
+
+
 
                     Vector2 v = new Vector2(x, y);
 
@@ -157,6 +161,8 @@ namespace RetroEngine.Game.Entities.Weapons
                     if (v.Length() > 4.4)
                         continue;
 
+                    i++;
+
                     Bullet bullet = new Bullet();
                     bullet.weapon = this;
 
@@ -164,8 +170,11 @@ namespace RetroEngine.Game.Entities.Weapons
 
                     Vector3 bulletRotation;
 
-                    Vector3 startPos = Camera.position;
-                    Vector3 endPos = Camera.position - new Vector3(0, -1, 0) + Camera.rotation.GetForwardVector() * 60 + Camera.rotation.GetRightVector() * x + Camera.rotation.GetUpVector() * y;
+                    Vector3 startPos = (Camera.position.ToPhysics() + Camera.rotation.GetForwardVector().ToPhysics() * 0.2f + Camera.rotation.GetRightVector().ToPhysics() / 10f - Camera.rotation.GetUpVector().ToPhysics() / 4f);
+
+                    startPos = Vector3.Lerp(startPos, Camera.position, 0.5f);
+
+                    Vector3 endPos = Camera.position - new Vector3(0, -1, 0) + Camera.rotation.GetForwardVector() * 50 + Camera.rotation.GetRightVector() * x + Camera.rotation.GetUpVector() * y;
 
                     bulletRotation = MathHelper.FindLookAtRotation(startPos, endPos);
 
@@ -176,17 +185,17 @@ namespace RetroEngine.Game.Entities.Weapons
                     Level.GetCurrent().AddEntity(bullet);
 
 
-                    bullet.Position = (Camera.position.ToPhysics() + Camera.rotation.GetForwardVector().ToPhysics() * 0.2f + Camera.rotation.GetRightVector().ToPhysics() / 10f - Camera.rotation.GetUpVector().ToPhysics() / 4f);
+                    bullet.Position = startPos;
 
                     bullet.Start();
                     bullet.Speed = 100;
-                    bullet.Damage = 8;
+                    bullet.Damage = 3;
 
                     bullet.ignore.Add(player);
 
                 }
 
-
+            Console.WriteLine(i);
 
             return;
 
@@ -230,7 +239,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             //mesh.DepthTestEqual = false;
             //mesh.Transparency = 0.5f;
-            //mesh.Transperent = true;
+            mesh.Transperent = true;
 
             //mesh.TwoSided = true;
 

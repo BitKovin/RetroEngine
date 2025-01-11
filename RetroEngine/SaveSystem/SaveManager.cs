@@ -142,6 +142,8 @@ namespace RetroEngine.SaveSystem
 
             }
 
+            List <(Entity ent, EntitySaveData data)> pendingLoad = new List<(Entity ent, EntitySaveData data)> ();
+
             foreach (var entity in levelSaveData.entities)
             {
                 Entity targetEntity = Level.GetCurrent().FindEntityByName(entity.Name);
@@ -164,9 +166,15 @@ namespace RetroEngine.SaveSystem
                     continue;
                 }
 
-                targetEntity.LoadData(entity);
+                pendingLoad.Add((targetEntity, entity));
 
             }
+
+            foreach (var entity in pendingLoad)
+            {
+                entity.ent.LoadData(entity.data);
+            }
+
         }
 
         public static void LoadGameFromFile(string name)

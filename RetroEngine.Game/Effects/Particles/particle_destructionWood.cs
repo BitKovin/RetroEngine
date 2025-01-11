@@ -10,8 +10,8 @@ using System.Threading.Tasks;
 namespace RetroEngine.Game.Effects.Particles
 {
 
-    [ParticleSystem("destructionWood")]
-    public class particle_system_destructionWood : ParticleSystem
+    [ParticleSys("destructionWood")]
+    public class particle_system_destructionWood : ParticleSystemEnt
     {
 
         public particle_system_destructionWood()

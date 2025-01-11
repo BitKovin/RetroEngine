@@ -72,6 +72,11 @@ namespace RetroEngine
         public bool Destroyed = false;
 
         public bool Visible = true;
+
+        [JsonInclude]
+        public string OwnerId = "";
+        Entity owner;
+
         public Entity()
         {
             System.Reflection.MemberInfo info = this.GetType();
@@ -87,6 +92,15 @@ namespace RetroEngine
             }
         }
 
+        public Entity GetOwner()
+        {
+            return owner;
+        }
+        public void SetOwner(Entity owner)
+        {
+            this.owner = owner;
+            OwnerId = owner.Id;
+        }
 
         public virtual void Start()
         {
@@ -193,15 +207,8 @@ namespace RetroEngine
                 }
             }
 
-            /*
-            foreach (var property in type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
-            {
-                if (property.GetCustomAttribute<JsonIncludeAttribute>() != null && property.CanWrite)
-                {
-                    var value = property.GetValue(ent);
-                    property.SetValue(this, value);
-                }
-            }*/
+
+            owner = Level.GetCurrent().FindEntityById(OwnerId);
 
         }
 
@@ -294,6 +301,16 @@ namespace RetroEngine
         protected virtual void LoadAssets()
         {
 
+        }
+
+        public static void CallActionOnEntsWithName(string name, string eventName)
+        {
+            var ents = Level.GetCurrent().FindAllEntitiesWithName(name);
+
+            foreach (var ent in ents)
+            {
+                ent.OnAction(eventName);
+            }
         }
 
         public override string ToString()

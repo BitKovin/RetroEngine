@@ -10,8 +10,8 @@ using System.Threading.Tasks;
 namespace RetroEngine.Game.Effects.Particles
 {
 
-    [ParticleSystem("bulletTrail")]
-    public class particle_system_bulletTrail : ParticleSystem
+    [ParticleSys("bulletTrail")]
+    public class particle_system_bulletTrail : ParticleSystemEnt
     {
 
         public particle_system_bulletTrail()

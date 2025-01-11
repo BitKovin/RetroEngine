@@ -135,7 +135,7 @@ namespace RetroEngine.Game.Entities.Weapons
         void CreateHitParticle(Vector3 pos)
         {
 
-            ParticleSystem system = ParticleSystem.Create("hitSmoke");
+            ParticleSystemEnt system = ParticleSystemEnt.Create("hitSmoke");
             system.Position = pos;
             system.Start();
 
@@ -161,7 +161,7 @@ namespace RetroEngine.Game.Entities.Weapons
             mesh.isLoaded = true;
             mesh.AddFrameVertexData();
 
-            ParticleSystem.Preload("hitSmoke");
+            ParticleSystemEnt.Preload("hitSmoke");
 
             meshes.Add(mesh);
         }

@@ -36,7 +36,7 @@ namespace RetroEngine.Entities.Brushes
 
             systemName = data.GetPropertyString("paricleSystem", "testSystem");
 
-            ParticleSystem.Preload(systemName);
+            ParticleSystemEnt.Preload(systemName);
 
             foreach(StaticMesh mesh in meshes)
             {
@@ -56,7 +56,7 @@ namespace RetroEngine.Entities.Brushes
             {
                 foreach (Vector3 location in particleLocations)
                 {
-                    ParticleSystem system = ParticleSystem.Create(systemName);
+                    ParticleSystemEnt system = ParticleSystemEnt.Create(systemName);
                     system.Position = location;
                     system.Start();
 
@@ -133,7 +133,7 @@ namespace RetroEngine.Entities.Brushes
         {
             base.LoadAssets();
 
-            ParticleSystem.Preload(systemName);
+            ParticleSystemEnt.Preload(systemName);
 
         }
 
