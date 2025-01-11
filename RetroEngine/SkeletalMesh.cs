@@ -1779,7 +1779,7 @@ namespace RetroEngine
 
         }
 
-        Dictionary<string, SkeletalMeshMeta> loadedMeta = new Dictionary<string, SkeletalMeshMeta>();
+        static Dictionary<string, string> loadedMeta = new Dictionary<string, string>();
 
         public void LoadMeshMetaFromFile(string path)
         {
@@ -1787,9 +1787,12 @@ namespace RetroEngine
 
             SkeletalMeshMeta meta;
 
+            string text;
+
+
             if (loadedMeta.ContainsKey(path))
             {
-                meta = loadedMeta[path];
+                text = loadedMeta[path];
             }
             else
             {
@@ -1805,18 +1808,21 @@ namespace RetroEngine
 
                     var reader = new StreamReader(stream);
 
-                    string text = reader.ReadToEnd();
+                    text = reader.ReadToEnd();
 
-                    JsonSerializerOptions options = new JsonSerializerOptions();
+                    lock(loadedMeta)
+                    loadedMeta.TryAdd(path, text);
 
-                    foreach (var conv in Helpers.JsonConverters.GetAll())
-                        options.Converters.Add(conv);
-
-                    meta = JsonSerializer.Deserialize<SkeletalMeshMeta>(text, options);
-                    loadedMeta.Add(path, meta);
                 }
 
             }
+
+            JsonSerializerOptions options = new JsonSerializerOptions();
+
+            foreach (var conv in Helpers.JsonConverters.GetAll())
+                options.Converters.Add(conv);
+
+            meta = JsonSerializer.Deserialize<SkeletalMeshMeta>(text, options);
 
 
             if (meta.hitboxes != null)

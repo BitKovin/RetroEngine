@@ -172,9 +172,9 @@ namespace RetroEngine.Game.Entities.Weapons
 
                     Vector3 startPos = (Camera.position.ToPhysics() + Camera.rotation.GetForwardVector().ToPhysics() * 0.2f + Camera.rotation.GetRightVector().ToPhysics() / 10f - Camera.rotation.GetUpVector().ToPhysics() / 4f);
 
-                    startPos = Vector3.Lerp(startPos, Camera.position, 0.5f);
+                    startPos = Vector3.Lerp(startPos, Camera.position, 0.6f);
 
-                    Vector3 endPos = Camera.position - new Vector3(0, -1, 0) + Camera.rotation.GetForwardVector() * 50 + Camera.rotation.GetRightVector() * x + Camera.rotation.GetUpVector() * y;
+                    Vector3 endPos = Camera.position - new Vector3(0, -1, 0) + Camera.rotation.GetForwardVector() * 70 + Camera.rotation.GetRightVector() * x + Camera.rotation.GetUpVector() * y;
 
                     bulletRotation = MathHelper.FindLookAtRotation(startPos, endPos);
 
@@ -189,7 +189,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
                     bullet.Start();
                     bullet.Speed = 100;
-                    bullet.Damage = 3;
+                    bullet.Damage = 5;
 
                     bullet.ignore.Add(player);
 

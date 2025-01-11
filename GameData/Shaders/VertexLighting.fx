@@ -23,8 +23,6 @@ sampler EmissiveTextureSampler = sampler_state
     MinFilter = Anisotropic;
     MagFilter = Anisotropic;
 
-    
-
     AddressU = Wrap;
     AddressV = Wrap;
 };
