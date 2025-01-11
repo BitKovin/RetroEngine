@@ -59,6 +59,8 @@ namespace RetroEngine.Game.Entities.Weapons
 
             character.AddWeapon(weaponData);
 
+            GetOwner()?.OnAction("despawned");
+
             Destroy();
 
         }
