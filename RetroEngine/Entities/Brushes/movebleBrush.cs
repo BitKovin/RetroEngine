@@ -84,7 +84,7 @@ namespace RetroEngine.Entities.Brushes
         public override void OnDamaged(float damage, Entity causer = null, Entity weapon = null)
         {
             base.OnDamaged(damage, causer, weapon);
-            open = !open;
+            //open = !open;
         }
 
         public override void OnAction(string action)
@@ -92,10 +92,17 @@ namespace RetroEngine.Entities.Brushes
             base.OnAction(action);
 
             if (action == "open")
+            {
                 open = true;
-
-            if(action == "close")
+                return;
+            }
+            if (action == "close")
+            {
                 open = false;
+                return;
+            }
+
+            open = !open;
 
         }
 
@@ -123,16 +130,17 @@ namespace RetroEngine.Entities.Brushes
 
             Position -= offsetPosition;
 
+            DrawDebug.Line(offsetPosition, offsetPosition + Rotation.GetForwardVector(), Vector3.UnitX, 0.01f);
+            DrawDebug.Line(offsetPosition, offsetPosition + offsetRotation.GetForwardVector(), Vector3.UnitZ, 0.01f);
+
+            Console.WriteLine(offsetRotation);
+
             // Apply rotation transformation
-            Matrix rotationMatrix = Matrix.CreateRotationX(offsetRotation.X / 180 * (float)Math.PI) *
-                                    Matrix.CreateRotationY(offsetRotation.Y / 180 * (float)Math.PI) *
-                                    Matrix.CreateRotationZ(offsetRotation.Z / 180 * (float)Math.PI);
+            Matrix rotationMatrix = offsetRotation.GetRotationMatrix();
 
-            Rotation = Quaternion.Lerp(Quaternion.Identity, Quaternion.CreateFromRotationMatrix(rotationMatrix), progress).ToEulerAnglesDegrees();
+            Rotation = Quaternion.Slerp(Quaternion.Identity, Quaternion.CreateFromRotationMatrix(rotationMatrix), progress).ToEulerAnglesDegrees();
 
-            rotationMatrix = Matrix.CreateRotationX(Rotation.X / 180 * (float)Math.PI) *
-                                    Matrix.CreateRotationY(Rotation.Y / 180 * (float)Math.PI) *
-                                    Matrix.CreateRotationZ(Rotation.Z / 180 * (float)Math.PI);
+            rotationMatrix = Rotation.GetRotationMatrix();
 
             Position = Vector3.Transform(Position, Quaternion.CreateFromRotationMatrix(rotationMatrix));
 

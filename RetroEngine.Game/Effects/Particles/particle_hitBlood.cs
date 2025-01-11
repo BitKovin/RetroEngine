@@ -57,11 +57,11 @@ namespace RetroEngine.Game.Effects.Particles
 
             particle = base.UpdateParticle(particle);
 
-            particle.Scale += Time.DeltaTime * 2;
+            particle.Scale += Time.DeltaTime * 1.5f;
 
             particle.velocity -= new Vector3(0, 6, 0) * (Time.DeltaTime / 2f);
 
-            particle.transparency = Math.Max(particle.transparency -= Time.DeltaTime/4f, 0);
+            particle.transparency = Math.Max(particle.transparency -= Time.DeltaTime/10f, 0);
 
             //particle.SetRotationFromVelocity();
 
@@ -80,7 +80,7 @@ namespace RetroEngine.Game.Effects.Particles
             particle.position += randPos;
             particle.velocity = randPos.Normalized() / 3f + Vector3.UnitY*2 + Rotation.GetForwardVector()*1;
             particle.transparency = 1.2f;
-            particle.deathTime = 2;
+            particle.deathTime = 5;
 
             particle.Rotation = random.NextSingle()*500f;
 

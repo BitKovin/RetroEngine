@@ -19,7 +19,7 @@ namespace RetroEngine.Entities
 
             Vector3 importRot = data.GetPropertyVector("angles", Vector3.Zero);
 
-            Rotation = EntityData.ConvertRotation(importRot);
+            Rotation = EntityData.ConvertRotation(importRot, true);
 
         }
     }

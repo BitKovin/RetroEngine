@@ -18,7 +18,7 @@ namespace RetroEngine
         }
     }
 
-    class ConsoleCommands
+    public class ConsoleCommands
     {
         // Add more commands as needed
 

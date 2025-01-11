@@ -86,7 +86,7 @@ namespace RetroEngine.Game.Entities.Enemies
 
             mesh.OnAnimationEvent += Mesh_OnAnimationEvent;
 
-            Health = 50;
+            Health = 40;
 
             attackCooldown.AddDelay(1);
 
@@ -333,8 +333,6 @@ namespace RetroEngine.Game.Entities.Enemies
         public override void AsyncUpdate()
         {
 
-            mesh.Update(Time.DeltaTime);
-
             if (dead)
             {
 
@@ -471,6 +469,8 @@ namespace RetroEngine.Game.Entities.Enemies
         public override void VisualUpdate()
         {
             base.VisualUpdate();
+
+            mesh.Update(Time.DeltaTime);
 
             if (dead) return;
 

@@ -21,6 +21,8 @@ namespace RetroEngine.NavigationSystem
         {
             if(destroyed) return;
 
+            if (Level.ChangingLevel) return;
+
             if (Meshes == null)
                 return;
 

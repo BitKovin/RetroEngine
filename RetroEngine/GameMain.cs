@@ -266,6 +266,8 @@ namespace RetroEngine
 
             physicsTask = Task.Factory.StartNew((Action)(() => { Physics.Simulate(); }));
 
+            render.EndOcclusionTest(Render.testedMeshes);
+
             curentLevel.WaitForVisualUpdate();
             if (AsyncGameThread)
             {

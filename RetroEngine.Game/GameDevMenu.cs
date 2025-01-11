@@ -16,6 +16,29 @@ namespace RetroEngine.Game
         {
             base.Update();
 
+            WeaponMenu();
+
+        }
+
+        void WeaponMenu()
+        {
+            ImGui.Begin("weapon");
+
+            if (ImGui.Button("weapon_pistol"))
+            {
+                ConsoleCommands.ProcessCommand("weapon.give weapon_pistol");
+            }
+            if (ImGui.Button("weapon_pistol_double"))
+            {
+                ConsoleCommands.ProcessCommand("weapon.give weapon_pistol_double");
+            }
+            if (ImGui.Button("weapon_shotgunNew"))
+            {
+                ConsoleCommands.ProcessCommand("weapon.give weapon_shotgunNew");
+            }
+
+
+            ImGui.End();
         }
 
     }

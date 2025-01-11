@@ -41,7 +41,7 @@ namespace RetroEngine
             ImGui.PopStyleColor(2);
 
 
-            ImGui.Image(GameMain.Instance.render.positionPath.GetImGuiPointer(), new Vector2(100, 100));
+            //ImGui.Image(GameMain.Instance.render.positionPath.GetImGuiPointer(), new Vector2(100, 100));
 
             DrawStats();
 

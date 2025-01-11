@@ -95,6 +95,7 @@ namespace RetroEngine.Game.Entities.Player
 
         public static string armsModelPath = "models/weapons/arms_lq.fbx";
 
+
         //particle_system_meleeTrail meleeTrail;
         public PlayerCharacter() : base()
         {
@@ -117,10 +118,6 @@ namespace RetroEngine.Game.Entities.Player
 
         }
 
-        private void ButtonRotate_onClicked()
-        {
-
-        }
 
         protected override void LoadAssets()
         {
@@ -276,6 +273,8 @@ namespace RetroEngine.Game.Entities.Player
 
             oldInWater = inWater;
 
+            if (FreeCamera.active) return;
+
             UpdateMovement();
 
             UpdateCamera();
@@ -332,7 +331,7 @@ namespace RetroEngine.Game.Entities.Player
 
             Camera.velocity = body.LinearVelocity;
 
-            PlayerBodyAnimator.Update();
+
 
             PlayerBodyAnimator.MovementSpeed = ((Vector3)body.LinearVelocity).XZ().Length();
 
@@ -402,6 +401,8 @@ namespace RetroEngine.Game.Entities.Player
         public override void VisualUpdate()
         {
             base.VisualUpdate();
+
+            PlayerBodyAnimator.Update();
 
             var pose = PlayerBodyAnimator.GetResultPose();
 
@@ -847,6 +848,7 @@ namespace RetroEngine.Game.Entities.Player
             if(GameMain.Instance.paused == false)
                 UpdatePlayerInput();
 
+            if (FreeCamera.active) return;
             Camera.rotation = CameraRotation;
             if(useThirdPersonAnimations)
             {

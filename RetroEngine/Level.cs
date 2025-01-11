@@ -403,8 +403,6 @@ namespace RetroEngine
             Camera.finalizedPosition = Camera.position;
             Camera.finalizedRotation = Camera.rotation;
 
-            GameMain.Instance.render.EndOcclusionTest(Render.testedMeshes);
-
             ParallelOptions options = new ParallelOptions();
             options.MaxDegreeOfParallelism = Environment.ProcessorCount;
 

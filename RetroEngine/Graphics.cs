@@ -221,7 +221,7 @@ namespace RetroEngine
             // Adjust the position using the calculated step
             pos = pos.SnapToGrid(step);
 
-            DrawDebug.Line(pos - LightDirection * 100, pos + LightDirection*100,null, 0.01f);
+            //DrawDebug.Line(pos - LightDirection * 100, pos + LightDirection*100,null, 0.01f);
 
             return pos;
         }

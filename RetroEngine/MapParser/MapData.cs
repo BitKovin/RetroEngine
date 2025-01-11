@@ -325,10 +325,13 @@ namespace RetroEngine.Map
             return defaultValue;
         }
 
-        public static Vector3 ConvertRotation(Vector3 importRot)
+        public static Vector3 ConvertRotation(Vector3 importRot, bool notForModel = false)
         {
 
-            importRot = (importRot + new Vector3(0, 180, 0)).NormalizeAngles().NonZeroAngles() / 180 * (float)Math.PI;
+            if(notForModel == false)
+                importRot += new Vector3(0, 180, 0);
+
+            importRot = importRot.NormalizeAngles().NonZeroAngles() / 180 * (float)Math.PI;
 
             Matrix rotM = Matrix.CreateRotationX(-importRot.Z) *
                             Matrix.CreateRotationZ(importRot.X) *
