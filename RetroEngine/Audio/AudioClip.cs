@@ -57,6 +57,20 @@ namespace RetroEngine.Audio
 
         public virtual void Stop() { }
 
+        public virtual float GetPlaybackPosition()
+        {
+            return 0;
+        }
+
+        public virtual void SetPlaybackPosition(float position)
+        {
+
+        }
+
+        public virtual bool isPlaying()
+        {
+            return false;
+        }
 
         public virtual void Apply3D()
         {

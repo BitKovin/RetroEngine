@@ -55,8 +55,6 @@ namespace RetroEngine.Audio
 
             EventInstance.Start();
 
-            
-
         }
 
         public void StartEvent()
@@ -125,7 +123,24 @@ namespace RetroEngine.Audio
             return null;
         }
 
-        
+        public override float GetPlaybackPosition()
+        {
+            return EventInstance.TimelinePosition;
+        }
+
+        public override void SetPlaybackPosition(float position)
+        {
+            base.SetPlaybackPosition(position);
+
+            EventInstance.TimelinePosition = (int)position;
+
+        }
+
+        public override bool isPlaying()
+        {
+            return EventInstance.PlaybackState == FMOD.Studio.PLAYBACK_STATE.PLAYING; 
+        }
+
         private FMOD.RESULT ProgrammerSoundCallback(FMOD.Studio.EVENT_CALLBACK_TYPE type, IntPtr instance, IntPtr parameters)
         {
             if (type == FMOD.Studio.EVENT_CALLBACK_TYPE.CREATE_PROGRAMMER_SOUND)

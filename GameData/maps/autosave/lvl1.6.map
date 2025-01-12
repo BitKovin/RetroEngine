@@ -5,7 +5,7 @@
 "classname" "worldspawn"
 "_tb_textures" "textures\brushes;textures\brushes\Ground;textures\brushes\Metal;textures\brushes\Water;textures\brushes\Wood"
 "globalLightBrightness" "0.6"
-"directLightBrightness" "0.05"
+"directLightBrightness" "0.001"
 "skyColor" "0.72 0.72 1"
 "globalLightDirection" "-0.6 -1 0.356"
 "dynamicSunShadowsEnabled" "false"
@@ -4248,20 +4248,6 @@
 }
 // entity 32
 {
-"classname" "setActionState"
-"origin" "2114 -6697.98 133"
-"newState" "true"
-"targetname" "spg_1"
-}
-// entity 33
-{
-"classname" "setActionState"
-"origin" "-136 -6824 112"
-"newState" "false"
-"targetname" "a1_d1"
-}
-// entity 34
-{
 "classname" "func_group"
 "_tb_type" "_tb_layer"
 "_tb_name" "cubemaps"
@@ -4269,7 +4255,7 @@
 "_tb_layer_sort_index" "0"
 "_tb_layer_hidden" "1"
 }
-// entity 35
+// entity 33
 {
 "classname" "cubeMap"
 "origin" "367 -4545 128.312"

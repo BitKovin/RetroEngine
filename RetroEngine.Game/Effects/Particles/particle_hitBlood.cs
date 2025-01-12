@@ -53,13 +53,13 @@ namespace RetroEngine.Game.Effects.Particles
         public override Particle UpdateParticle(Particle particle)
         {
 
-            particle.velocity -= new Vector3(0, 9, 0) * (Time.DeltaTime / 2f);
+            particle.velocity -= new Vector3(0, 10, 0) * (Time.DeltaTime / 2f);
 
             particle = base.UpdateParticle(particle);
 
-            particle.Scale += Time.DeltaTime * 1.5f;
+            particle.Scale += Time.DeltaTime * 1f;
 
-            particle.velocity -= new Vector3(0, 6, 0) * (Time.DeltaTime / 2f);
+            particle.velocity -= new Vector3(0, 10, 0) * (Time.DeltaTime / 2f);
 
             particle.transparency = Math.Max(particle.transparency -= Time.DeltaTime/10f, 0);
 
@@ -72,7 +72,7 @@ namespace RetroEngine.Game.Effects.Particles
         {
             Particle particle = base.GetNewParticle();
 
-            particle.Scale = 0.2f;
+            particle.Scale = 0.6f;
 
             Vector3 randPos = RandomPosition(0.6f);
             //particle.HasCollision = true;
@@ -82,7 +82,10 @@ namespace RetroEngine.Game.Effects.Particles
             particle.transparency = 1.2f;
             particle.deathTime = 5;
 
+
             particle.Rotation = random.NextSingle()*500f;
+
+            Console.WriteLine(particle.Rotation);
 
             particle.color = new Vector4(0.8f, 0.8f, 0.8f, 1);
 

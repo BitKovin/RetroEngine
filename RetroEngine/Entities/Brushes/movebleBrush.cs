@@ -75,7 +75,7 @@ namespace RetroEngine.Entities.Brushes
             if (offsetPoint == null) return;
 
             offsetPosition = offsetPoint.Position;
-            offsetRotation = offsetPoint.Rotation;
+            offsetRotation = offsetPoint.Rotation - new Vector3(0,90,0);
 
             DynamicObstacleHelper.Update();
 
@@ -133,7 +133,6 @@ namespace RetroEngine.Entities.Brushes
             DrawDebug.Line(offsetPosition, offsetPosition + Rotation.GetForwardVector(), Vector3.UnitX, 0.01f);
             DrawDebug.Line(offsetPosition, offsetPosition + offsetRotation.GetForwardVector(), Vector3.UnitZ, 0.01f);
 
-            Console.WriteLine(offsetRotation);
 
             // Apply rotation transformation
             Matrix rotationMatrix = offsetRotation.GetRotationMatrix();

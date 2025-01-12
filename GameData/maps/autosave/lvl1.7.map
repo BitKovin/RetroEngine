@@ -4248,19 +4248,10 @@
 }
 // entity 32
 {
-"classname" "setActionState"
+"classname" "point_rotation"
 "origin" "2114 -6697.98 133"
-"newState" "true"
-"targetname" "spg_1"
 }
 // entity 33
-{
-"classname" "setActionState"
-"origin" "-136 -6824 112"
-"newState" "false"
-"targetname" "a1_d1"
-}
-// entity 34
 {
 "classname" "func_group"
 "_tb_type" "_tb_layer"
@@ -4269,7 +4260,7 @@
 "_tb_layer_sort_index" "0"
 "_tb_layer_hidden" "1"
 }
-// entity 35
+// entity 34
 {
 "classname" "cubeMap"
 "origin" "367 -4545 128.312"

@@ -5,9 +5,6 @@ using RetroEngine.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static RetroEngine.Particles.ParticleEmitter;
 
 namespace RetroEngine.Particles
 {
@@ -338,7 +335,7 @@ namespace RetroEngine.Particles
                 Matrix translationMatrix = Matrix.CreateTranslation(particle.position);
 
                 // Combine scale, rotation, and translation matrices
-                Matrix worldMatrix = Matrix.CreateBillboard(particle.position, Camera.finalizedPosition, Camera.Up, Camera.Forward);
+                Matrix worldMatrix = scaleMatrix * rotationMatrix * translationMatrix;
 
                 return worldMatrix;
 
@@ -346,7 +343,7 @@ namespace RetroEngine.Particles
 
             if (particle.useGlobalRotation == false)
             {
-                Matrix worldMatrix = Matrix.CreateBillboard(particle.position, Camera.finalizedPosition, Camera.Up, Camera.Forward);
+                Matrix worldMatrix = Matrix.CreateScale(particle.Scale) * Matrix.CreateBillboard(particle.position, Camera.finalizedPosition, Camera.Up.RotateVector(Camera.Forward, particle.Rotation), Camera.Forward);
 
                 return worldMatrix;
             }

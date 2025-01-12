@@ -164,3 +164,8 @@
 	scale(float): "Scale" : "1"
 	angles(Vector3): "Angles" : "0 0 0"
 ]
+
+@PointClass base(Entity) size(-16 -16 -16, 16 16 16) color(251 16 197) = setActionState : "ActionState" 
+[
+	newState(bool) : "newState" : "false"
+]

@@ -331,6 +331,7 @@ namespace RetroEngine.Map
             if(notForModel == false)
                 importRot += new Vector3(0, 180, 0);
 
+
             importRot = importRot.NormalizeAngles().NonZeroAngles() / 180 * (float)Math.PI;
 
             Matrix rotM = Matrix.CreateRotationX(-importRot.Z) *
@@ -338,6 +339,9 @@ namespace RetroEngine.Map
                             Matrix.CreateRotationY(importRot.Y);
 
             Vector3 rotation = rotM.DecomposeMatrix().Rotation;
+
+            if (notForModel)
+                rotation += new Vector3(0,90,0);
 
             return rotation;
         }
