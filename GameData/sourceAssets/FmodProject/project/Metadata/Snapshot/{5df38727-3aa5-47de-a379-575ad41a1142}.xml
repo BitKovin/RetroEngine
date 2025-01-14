@@ -53,7 +53,7 @@
 			<value>lowGain</value>
 		</property>
 		<property name="value">
-			<value>5.5</value>
+			<value>1.5</value>
 		</property>
 		<relationship name="automatableObject">
 			<destination>{26e99567-f608-4807-875f-c273cfd17225}</destination>
@@ -64,7 +64,7 @@
 			<value>frequencyA</value>
 		</property>
 		<property name="value">
-			<value>1314.21655</value>
+			<value>1756.47424</value>
 		</property>
 		<relationship name="automatableObject">
 			<destination>{5b412495-6e4e-4ef9-8b55-3c0619d0ae3d}</destination>
@@ -75,7 +75,7 @@
 			<value>qualityA</value>
 		</property>
 		<property name="value">
-			<value>0.309310347</value>
+			<value>0.413965493</value>
 		</property>
 		<relationship name="automatableObject">
 			<destination>{5b412495-6e4e-4ef9-8b55-3c0619d0ae3d}</destination>

@@ -143,6 +143,11 @@ namespace RetroEngine.Game.Entities.Enemies
             body.ActivationState = ActivationState.DisableDeactivation;
 
             InitDirectionsLUT();
+
+            mesh.Rotation = Rotation;
+
+            MoveDirection = Rotation.GetForwardVector();
+
         }
 
         void InitDirectionsLUT()
@@ -212,7 +217,6 @@ namespace RetroEngine.Game.Entities.Enemies
             new Vector3(0, data.GetPropertyFloat("angle") + 90, 0);
 
             mesh.Rotation = Rotation;
-
 
             MoveDirection = Rotation.GetForwardVector();
 

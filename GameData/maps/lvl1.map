@@ -195,7 +195,7 @@
 // entity 1
 {
 "classname" "info_player_start"
-"origin" "2270.14 -6702.93 56"
+"origin" "4622.14 -7118.93 56"
 "angle" "150"
 }
 // entity 2
@@ -300,12 +300,12 @@
 "classname" "music_player"
 "origin" "4591 -6001 343.18"
 "targetname" "m1"
-"eventName" "event:/Music/testchoir"
+"eventName" "event:/Music/music2"
 }
 // entity 6
 {
 "classname" "weaponPickup"
-"origin" "2268 -6700 36"
+"origin" "4620 -7116 36"
 "type" "weapon_pistol"
 "unique" "true"
 "targetname" "pistols_start_pickup"
@@ -318,6 +318,7 @@
 "targetname" "spg_1"
 "onSpawned" "add"
 "onDespawned" "sub"
+"target" "test_sp"
 }
 // entity 8
 {
@@ -327,6 +328,7 @@
 "targetname" "spg_1"
 "onSpawned" "add"
 "onDespawned" "sub"
+"target" "test_sp"
 }
 // entity 9
 {
@@ -336,6 +338,7 @@
 "targetname" "spg_1"
 "onSpawned" "add"
 "onDespawned" "sub"
+"target" "test_sp"
 }
 // entity 10
 {

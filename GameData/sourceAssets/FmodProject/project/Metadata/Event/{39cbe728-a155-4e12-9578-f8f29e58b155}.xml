@@ -348,7 +348,7 @@
 	</object>
 	<object class="EventMixerGroup" id="{a1f20b22-dc09-4228-9a16-66a8e2cf3dbf}">
 		<property name="volume">
-			<value>-6.5</value>
+			<value>-4</value>
 		</property>
 		<property name="name">
 			<value>Audio 1</value>
@@ -535,7 +535,7 @@
 	</object>
 	<object class="EventMixerGroup" id="{2ebadd9f-3922-4868-898d-66598e91673a}">
 		<property name="volume">
-			<value>-5</value>
+			<value>-8.5</value>
 		</property>
 		<property name="name">
 			<value>Audio 2</value>
@@ -1370,21 +1370,17 @@
 	</object>
 	<object class="MultibandEqEffect" id="{fcbdb592-e349-41f6-a505-a04ae5e33411}">
 		<property name="frequencyA">
-			<value>1900</value>
+			<value>8482.13477</value>
 		</property>
 		<property name="qualityA">
-			<value>0.309310347</value>
+			<value>0.518620729</value>
 		</property>
 	</object>
 	<object class="MixerBusFader" id="{3081075d-6703-4d79-85fb-5e2e44739146}" />
-	<object class="ThreeEQEffect" id="{1d74755f-ec03-4293-b957-152d3add4026}">
-		<property name="lowGain">
-			<value>3.5</value>
-		</property>
-	</object>
+	<object class="ThreeEQEffect" id="{1d74755f-ec03-4293-b957-152d3add4026}" />
 	<object class="PitchShifterEffect" id="{975e27a0-17c3-430d-8600-5aea3a78cbe0}">
 		<property name="pitch">
-			<value>0.949999988</value>
+			<value>1</value>
 		</property>
 		<property name="fftSize">
 			<value>4096</value>

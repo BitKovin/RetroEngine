@@ -1,4 +1,5 @@
-﻿using RetroEngine.Map;
+﻿using Microsoft.Xna.Framework;
+using RetroEngine.Map;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,6 +41,10 @@ namespace RetroEngine.Entities
             onSpawnEventName = data.GetPropertyString("onSpawned", onSpawnEventName);
             onDespawnEventName = data.GetPropertyString("onDespawned", onSpawnEventName);
 
+            Vector3 importRot = data.GetPropertyVector("angles", Vector3.Zero);
+
+            Rotation = EntityData.ConvertRotation(importRot, true);
+
         }
 
         protected override void LoadAssets()
@@ -73,7 +78,10 @@ namespace RetroEngine.Entities
 
             if (active == false) return;
 
-            var ent = Level.GetCurrent().AddEntity(LevelObjectFactory.CreateByTechnicalName(className));
+
+
+
+            var ent = LevelObjectFactory.CreateByTechnicalName(className); 
 
             if(ent!=null)
             {
@@ -82,7 +90,9 @@ namespace RetroEngine.Entities
                 ent.SetOwner(this);
 
                 ent.Start();
-                
+
+                Level.GetCurrent().AddEntity(ent);
+
             }
 
             CallActionOnEntsWithName(target, onSpawnEventName);
