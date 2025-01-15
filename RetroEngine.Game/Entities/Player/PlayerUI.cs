@@ -70,7 +70,7 @@ namespace RetroEngine.Game.Entities.Player
 
             if (loaded == false) return;
 
-            health.text = ((Vector3)((ICharacter)player).GetPhysicsBody().LinearVelocity).XZ().Length().ToString();
+            health.text = Math.Ceiling(player.Health).ToString();// ((Vector3)((ICharacter)player).GetPhysicsBody().LinearVelocity).XZ().Length().ToString();
 
             fps.text = ((int)(1f / (Time.DeltaTime/Time.TimeScale))).ToString();
 

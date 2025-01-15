@@ -231,7 +231,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
         void PerformAttack()
         {
-            var hit = Physics.SphereTrace(Camera.position, Camera.position + Camera.Forward*1.3f, 0.15f, new List<CollisionObject> { player.bodies[0] }, BodyType.GroupHitTest);
+            var hit = Physics.SphereTrace(Camera.position, Camera.position + Camera.Forward*1.3f, 0.15f, player.bodies, BodyType.GroupHitTest);
 
             if (hit.HasHit)
             {

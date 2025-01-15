@@ -32,7 +32,7 @@ namespace RetroEngine.Game.Entities.Enemies
         [JsonInclude]
         public float speed = 5f;
 
-        float maxSpeed = 7.5f;
+        float maxSpeed = 8.5f;
 
         Delay updateDelay = new Delay();
 
@@ -257,7 +257,7 @@ namespace RetroEngine.Game.Entities.Enemies
 
             damage = MathF.Max(15, damage);
 
-            GlobalParticleSystem.EmitAt("hitBlood", point, MathHelper.FindLookAtRotation(Vector3.Zero, -direction), new Vector3(0, 0, damage / 15f));
+            GlobalParticleSystem.EmitAt("hitBlood", point, MathHelper.FindLookAtRotation(Vector3.Zero, -direction), new Vector3(0, 0, damage / 10f));
 
         }
 
@@ -331,6 +331,7 @@ namespace RetroEngine.Game.Entities.Enemies
 
         }
 
+        List<Entity> hitedEntities = new List<Entity>();
 
         [JsonInclude]
         public bool reachedFloor = false;
@@ -420,6 +421,11 @@ namespace RetroEngine.Game.Entities.Enemies
 
                 //Console.WriteLine(rootTrans.Rotation);
 
+                if(attacking && target != null)
+                {
+                    ProcessEnemyHit();
+                }
+
                 speed = 2;
 
             }
@@ -444,10 +450,36 @@ namespace RetroEngine.Game.Entities.Enemies
                 
         }
 
+        void ProcessEnemyHit()
+        {
+
+            if(hitedEntities.Contains(target)) return;
+
+            Vector3 attackDir = targetLocation - Position;
+            attackDir = attackDir.Normalized();
+
+            if(Vector3.Dot(new Vector3(attackDir.X, attackDir.Y/4f, attackDir.Z).Normalized(), mesh.Rotation.GetForwardVector())<0.6f)
+            {
+                return;
+            }
+
+            var hit = Physics.SphereTrace(Position, Position + attackDir * 0.6f * new Vector3(1,3,1), 0.1f, bodies, BodyType.CharacterCapsule);
+
+            if(hit.HasHit&& hit.entity == target)
+            {
+                target.OnPointDamage(10, hit.HitShapeLocation, attackDir, this, this);
+
+                hitedEntities.Add(target);
+
+            }
+
+        }
+
+
         void PerformAttack(Vector3 toTarget)
         {
 
-            List<CollisionObject> ignore = new List<CollisionObject>();
+            List<RigidBody> ignore = new List<RigidBody>();
 
             ignore.Add(body);
             ignore.AddRange(target.bodies);
@@ -466,7 +498,7 @@ namespace RetroEngine.Game.Entities.Enemies
             MoveDirection = toTarget.XZ().Normalized();
 
             attackCooldown.AddDelay(2);
-
+            hitedEntities.Clear();
 
         }
 

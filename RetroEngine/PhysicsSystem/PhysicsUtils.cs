@@ -21,7 +21,7 @@ namespace RetroEngine
             if (radius < 0)
                 radius = body.CcdSweptSphereRadius;
 
-            MyClosestConvexResultCallback hit = Physics.SphereTrace(start, end, radius, new List<CollisionObject> { body }, body.GetCollisionMask());
+            MyClosestConvexResultCallback hit = Physics.SphereTrace(start, end, radius, new List<RigidBody> { body }, body.GetCollisionMask());
 
             if (hit.HasHit)
             {

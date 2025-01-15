@@ -167,5 +167,5 @@
 
 @PointClass base(Entity) size(-16 -16 -16, 16 16 16) color(251 16 197) = setActionState : "ActionState" 
 [
-	newState(bool) : "newState" : "false"
+	newState(bool) : "newState" : "0"
 ]

@@ -52,6 +52,7 @@ namespace RetroEngine
 
         public string Id = "";
 
+        [JsonInclude]
         public float Health = 0;
 
         public bool loadedAssets = false;
@@ -107,6 +108,11 @@ namespace RetroEngine
             SpawnTime = Time.gameTime;
         }
 
+        public bool HasTag(string tag)
+        {
+            lock(Tags)
+                return Tags.Contains(tag);
+        }
         public virtual void Update()
         {
             if(pendingDestroy)

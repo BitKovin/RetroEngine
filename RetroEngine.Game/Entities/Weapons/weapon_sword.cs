@@ -216,8 +216,8 @@ namespace RetroEngine.Game.Entities.Weapons
             else
                 fireSoundPlayer2.Play(true);
 
-            attackDelay.AddDelay(0.01f);
-            pendingAttackDelay.AddDelay(0);
+            //attackDelay.AddDelay(0.01f);
+            //pendingAttackDelay.AddDelay(0);
 
             pendingAttack = true;
 
@@ -236,7 +236,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
         void PerformAttack()
         {
-            var hit = Physics.SphereTrace(Camera.position, Camera.position + Camera.Forward*2f, 0.25f, new List<CollisionObject> { player.bodies[0] }, BodyType.GroupHitTest);
+            var hit = Physics.SphereTrace(Camera.position, Camera.position + Camera.Forward*2f, 0.25f, bodies, BodyType.GroupHitTest);
 
             hadHit = false;
 
@@ -282,7 +282,7 @@ namespace RetroEngine.Game.Entities.Weapons
             mesh.textureSearchPaths.Add("textures/weapons/knife/");
             mesh.textureSearchPaths.Add("textures/weapons/general/");
 
-            mesh.texture = AssetRegistry.LoadTextureFromFile("cat.png");
+            mesh.texture = AssetRegistry.LoadTextureFromFile("textures/weapons/sword/sword.png");
 
             //mesh.CastShadows = false;
             mesh.PreloadTextures();

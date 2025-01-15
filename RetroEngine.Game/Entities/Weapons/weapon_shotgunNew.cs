@@ -58,7 +58,7 @@ namespace RetroEngine.Game.Entities.Weapons
             base.Update();
 
             mesh.Visible = true;
-            mesh.Update(Time.DeltaTime);
+            mesh.Update(Time.DeltaTime * 1.1f);
             TpFire.Update(Time.DeltaTime);
             
 
@@ -137,7 +137,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             if (attackDelay.Wait()) return;
 
-            attackDelay.AddDelay(1.1f);
+            attackDelay.AddDelay(1);
 
             fireSoundPlayer.Play(true);
 

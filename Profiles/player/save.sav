@@ -5,208 +5,130 @@
       "Name": "player",
       "className": "info_player_start",
       "id": "info_player_start-player-0",
-      "saveData": "{\u0022velocity\u0022:{\u0022X\u0022:6.9759035,\u0022Y\u0022:0.009925485,\u0022Z\u0022:-0.7064784},\u0022weapons\u0022:[{\u0022weaponType\u0022:\u0022RetroEngine.Game.Entities.Weapons.weapon_sword, RetroEngine.Game, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0022,\u0022ammo\u0022:1},{\u0022weaponType\u0022:\u0022RetroEngine.Game.Entities.Weapons.weapon_pistol, RetroEngine.Game, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0022,\u0022ammo\u0022:0},{\u0022weaponType\u0022:\u0022RetroEngine.Game.Entities.Weapons.weapon_pistol_double, RetroEngine.Game, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0022,\u0022ammo\u0022:0}],\u0022currentSlot\u0022:2,\u0022lastSlot\u0022:1,\u0022thirdPerson\u0022:false,\u0022Position\u0022:{\u0022X\u0022:48.7497,\u0022Y\u0022:1.4615533,\u0022Z\u0022:227.3542},\u0022Rotation\u0022:{\u0022X\u0022:11.96667,\u0022Y\u0022:276.03036,\u0022Z\u0022:0},\u0022name\u0022:\u0022player\u0022,\u0022Tags\u0022:[\u0022player\u0022],\u0022OwnerId\u0022:\u0022\u0022}"
+      "saveData": "{\u0022velocity\u0022:{\u0022X\u0022:0,\u0022Y\u0022:1.7881393E-06,\u0022Z\u0022:0},\u0022weapons\u0022:[{\u0022weaponType\u0022:\u0022RetroEngine.Game.Entities.Weapons.weapon_sword, RetroEngine.Game, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0022,\u0022ammo\u0022:1},{\u0022weaponType\u0022:\u0022RetroEngine.Game.Entities.Weapons.weapon_pistol, RetroEngine.Game, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0022,\u0022ammo\u0022:0},{\u0022weaponType\u0022:\u0022RetroEngine.Game.Entities.Weapons.weapon_pistol_double, RetroEngine.Game, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0022,\u0022ammo\u0022:0}],\u0022currentSlot\u0022:2,\u0022lastSlot\u0022:1,\u0022thirdPerson\u0022:false,\u0022Position\u0022:{\u0022X\u0022:136.89845,\u0022Y\u0022:1.4434549,\u0022Z\u0022:202.10478},\u0022Rotation\u0022:{\u0022X\u0022:21.900034,\u0022Y\u0022:483.99622,\u0022Z\u0022:0},\u0022name\u0022:\u0022player\u0022,\u0022Tags\u0022:[\u0022player\u0022],\u0022Health\u0022:20,\u0022OwnerId\u0022:\u0022\u0022}"
     },
     {
       "Name": "",
       "className": "spawner",
       "id": "spawner-spg_1-0",
-      "saveData": "{\u0022isEntAlive\u0022:true,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:51.5,\u0022Y\u0022:1.5312093,\u0022Z\u0022:204},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022OwnerId\u0022:\u0022\u0022}"
+      "saveData": "{\u0022isEntAlive\u0022:false,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:51.5,\u0022Y\u0022:1.5312093,\u0022Z\u0022:204},\u0022Rotation\u0022:{\u0022X\u0022:-9.999983E-05,\u0022Y\u0022:90.0001,\u0022Z\u0022:0.0001},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
     },
     {
       "Name": "",
       "className": "spawner",
       "id": "spawner-spg_1-1",
-      "saveData": "{\u0022isEntAlive\u0022:true,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:47.5,\u0022Y\u0022:1.5279156,\u0022Z\u0022:214.5},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022OwnerId\u0022:\u0022\u0022}"
+      "saveData": "{\u0022isEntAlive\u0022:false,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:47.5,\u0022Y\u0022:1.5279156,\u0022Z\u0022:214.5},\u0022Rotation\u0022:{\u0022X\u0022:-9.999983E-05,\u0022Y\u0022:90.0001,\u0022Z\u0022:0.0001},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
     },
     {
       "Name": "",
       "className": "spawner",
       "id": "spawner-spg_1-2",
-      "saveData": "{\u0022isEntAlive\u0022:true,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:43.5,\u0022Y\u0022:1.5301594,\u0022Z\u0022:209},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022OwnerId\u0022:\u0022\u0022}"
+      "saveData": "{\u0022isEntAlive\u0022:false,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:43.5,\u0022Y\u0022:1.5301594,\u0022Z\u0022:209},\u0022Rotation\u0022:{\u0022X\u0022:-9.999983E-05,\u0022Y\u0022:90.0001,\u0022Z\u0022:0.0001},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
     },
     {
       "Name": "",
       "className": "spawner",
       "id": "spawner-spg_1-3",
-      "saveData": "{\u0022isEntAlive\u0022:false,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:38.5,\u0022Y\u0022:2,\u0022Z\u0022:192.5},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022OwnerId\u0022:\u0022\u0022}"
+      "saveData": "{\u0022isEntAlive\u0022:false,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:38.5,\u0022Y\u0022:2,\u0022Z\u0022:192.5},\u0022Rotation\u0022:{\u0022X\u0022:-9.999983E-05,\u0022Y\u0022:90.0001,\u0022Z\u0022:0.0001},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
     },
     {
       "Name": "",
       "className": "spawner",
       "id": "spawner-spg_1-4",
-      "saveData": "{\u0022isEntAlive\u0022:false,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:36.5,\u0022Y\u0022:2,\u0022Z\u0022:197},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022OwnerId\u0022:\u0022\u0022}"
+      "saveData": "{\u0022isEntAlive\u0022:false,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:36.5,\u0022Y\u0022:2,\u0022Z\u0022:197},\u0022Rotation\u0022:{\u0022X\u0022:-9.999983E-05,\u0022Y\u0022:90.0001,\u0022Z\u0022:0.0001},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
     },
     {
       "Name": "",
       "className": "spawner",
       "id": "spawner-spg_1-5",
-      "saveData": "{\u0022isEntAlive\u0022:false,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:36,\u0022Y\u0022:2,\u0022Z\u0022:199},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022OwnerId\u0022:\u0022\u0022}"
+      "saveData": "{\u0022isEntAlive\u0022:false,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:36,\u0022Y\u0022:2,\u0022Z\u0022:199},\u0022Rotation\u0022:{\u0022X\u0022:-9.999983E-05,\u0022Y\u0022:90.0001,\u0022Z\u0022:0.0001},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
     },
     {
       "Name": "",
       "className": "spawner",
       "id": "spawner-spg_1-6",
-      "saveData": "{\u0022isEntAlive\u0022:false,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:35,\u0022Y\u0022:2,\u0022Z\u0022:202},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022OwnerId\u0022:\u0022\u0022}"
+      "saveData": "{\u0022isEntAlive\u0022:false,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:35,\u0022Y\u0022:2,\u0022Z\u0022:202},\u0022Rotation\u0022:{\u0022X\u0022:-9.999983E-05,\u0022Y\u0022:90.0001,\u0022Z\u0022:0.0001},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
     },
     {
       "Name": "",
       "className": "spawner",
       "id": "spawner-spg_1-7",
-      "saveData": "{\u0022isEntAlive\u0022:false,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:35,\u0022Y\u0022:2,\u0022Z\u0022:204.5},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022OwnerId\u0022:\u0022\u0022}"
+      "saveData": "{\u0022isEntAlive\u0022:false,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:35,\u0022Y\u0022:2,\u0022Z\u0022:204.5},\u0022Rotation\u0022:{\u0022X\u0022:-9.999983E-05,\u0022Y\u0022:90.0001,\u0022Z\u0022:0.0001},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
     },
     {
       "Name": "",
       "className": "spawner",
       "id": "spawner-spg_1-8",
-      "saveData": "{\u0022isEntAlive\u0022:true,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:34.5,\u0022Y\u0022:2,\u0022Z\u0022:207},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022OwnerId\u0022:\u0022\u0022}"
+      "saveData": "{\u0022isEntAlive\u0022:false,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:34.5,\u0022Y\u0022:2,\u0022Z\u0022:207},\u0022Rotation\u0022:{\u0022X\u0022:-9.999983E-05,\u0022Y\u0022:90.0001,\u0022Z\u0022:0.0001},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
     },
     {
       "Name": "",
       "className": "spawner",
       "id": "spawner-spg_1-9",
-      "saveData": "{\u0022isEntAlive\u0022:false,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:34.5,\u0022Y\u0022:2,\u0022Z\u0022:209.5},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022OwnerId\u0022:\u0022\u0022}"
+      "saveData": "{\u0022isEntAlive\u0022:false,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:34.5,\u0022Y\u0022:2,\u0022Z\u0022:209.5},\u0022Rotation\u0022:{\u0022X\u0022:-9.999983E-05,\u0022Y\u0022:90.0001,\u0022Z\u0022:0.0001},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
     },
     {
       "Name": "",
       "className": "spawner",
       "id": "spawner-spg_1-10",
-      "saveData": "{\u0022isEntAlive\u0022:true,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:35,\u0022Y\u0022:2,\u0022Z\u0022:213},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022OwnerId\u0022:\u0022\u0022}"
+      "saveData": "{\u0022isEntAlive\u0022:false,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:35,\u0022Y\u0022:2,\u0022Z\u0022:213},\u0022Rotation\u0022:{\u0022X\u0022:-9.999983E-05,\u0022Y\u0022:90.0001,\u0022Z\u0022:0.0001},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
     },
     {
       "Name": "",
       "className": "spawner",
       "id": "spawner-spg_1-11",
-      "saveData": "{\u0022isEntAlive\u0022:true,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:36,\u0022Y\u0022:2,\u0022Z\u0022:216.5},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022OwnerId\u0022:\u0022\u0022}"
+      "saveData": "{\u0022isEntAlive\u0022:false,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:36,\u0022Y\u0022:2,\u0022Z\u0022:216.5},\u0022Rotation\u0022:{\u0022X\u0022:-9.999983E-05,\u0022Y\u0022:90.0001,\u0022Z\u0022:0.0001},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
     },
     {
       "Name": "",
       "className": "spawner",
       "id": "spawner-spg_1-12",
-      "saveData": "{\u0022isEntAlive\u0022:false,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:37.5,\u0022Y\u0022:1.5281625,\u0022Z\u0022:220},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022OwnerId\u0022:\u0022\u0022}"
+      "saveData": "{\u0022isEntAlive\u0022:false,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:37.5,\u0022Y\u0022:1.5281625,\u0022Z\u0022:220},\u0022Rotation\u0022:{\u0022X\u0022:-9.999983E-05,\u0022Y\u0022:90.0001,\u0022Z\u0022:0.0001},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
     },
     {
       "Name": "",
       "className": "spawner",
       "id": "spawner-spg_1-13",
-      "saveData": "{\u0022isEntAlive\u0022:true,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:38.5,\u0022Y\u0022:1.5262656,\u0022Z\u0022:225.5},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022OwnerId\u0022:\u0022\u0022}"
+      "saveData": "{\u0022isEntAlive\u0022:false,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:38.5,\u0022Y\u0022:1.5262656,\u0022Z\u0022:225.5},\u0022Rotation\u0022:{\u0022X\u0022:-9.999983E-05,\u0022Y\u0022:90.0001,\u0022Z\u0022:0.0001},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
     },
     {
       "Name": "spt_1",
       "className": "triggerOnce",
       "id": "triggerOnce--0",
-      "saveData": "{\u0022active\u0022:false,\u0022Position\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022spt_1\u0022,\u0022Tags\u0022:[],\u0022OwnerId\u0022:\u0022\u0022}"
+      "saveData": "{\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022spt_1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
     },
     {
       "Name": "test_sp",
       "className": "counter",
       "id": "counter-test_sp-0",
-      "saveData": "{\u0022num\u0022:4,\u0022Position\u0022:{\u0022X\u0022:20.5,\u0022Y\u0022:16.534063,\u0022Z\u0022:211},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022test_sp\u0022,\u0022Tags\u0022:[],\u0022OwnerId\u0022:\u0022\u0022}"
+      "saveData": "{\u0022num\u0022:0,\u0022Position\u0022:{\u0022X\u0022:20.5,\u0022Y\u0022:16.534063,\u0022Z\u0022:211},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022test_sp\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
     },
     {
       "Name": "",
       "className": "movebleBrush",
       "id": "movebleBrush--0",
-      "saveData": "{\u0022progress\u0022:0,\u0022open\u0022:false,\u0022Position\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022a1_d1\u0022,\u0022Tags\u0022:[],\u0022OwnerId\u0022:\u0022\u0022}"
+      "saveData": "{\u0022progress\u0022:0,\u0022open\u0022:false,\u0022Position\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022a1_d1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
     },
     {
       "Name": "",
       "className": "movebleBrush",
       "id": "movebleBrush--1",
-      "saveData": "{\u0022progress\u0022:1,\u0022open\u0022:true,\u0022Position\u0022:{\u0022X\u0022:118.00035,\u0022Y\u0022:-0.00063323975,\u0022Z\u0022:454.60928},\u0022Rotation\u0022:{\u0022X\u0022:179.99982,\u0022Y\u0022:29.999983,\u0022Z\u0022:179.99988},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022OwnerId\u0022:\u0022\u0022}"
+      "saveData": "{\u0022progress\u0022:0,\u0022open\u0022:false,\u0022Position\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
     },
     {
       "Name": "PlayerGlobal",
       "className": "",
       "id": "-PlayerGlobal-0",
-      "saveData": "{\u0022InAction\u0022:true,\u0022Position\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022PlayerGlobal\u0022,\u0022Tags\u0022:[],\u0022OwnerId\u0022:\u0022\u0022}"
+      "saveData": "{\u0022InAction\u0022:0,\u0022Position\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022PlayerGlobal\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
     },
     {
       "Name": "",
       "className": "npc_dog",
       "id": "npc_dog--0",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.7953422,\u0022Y\u0022:5.960468E-08,\u0022Z\u0022:0.60616064},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.6023463,\u0022Y\u0022:0,\u0022Z\u0022:0.79680765},\u0022speed\u0022:2,\u0022targetLocation\u0022:{\u0022X\u0022:28.789307,\u0022Y\u0022:1.4643085,\u0022Z\u0022:228.51146},\u0022dead\u0022:true,\u0022attacking\u0022:false,\u0022attackCooldown\u0022:{\u0022T\u0022:-7.7035036},\u0022stunned\u0022:true,\u0022rootMotionScale\u0022:1,\u0022reachedFloor\u0022:true,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:13,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false},\u0022Position\u0022:{\u0022X\u0022:33.991932,\u0022Y\u0022:0.61162525,\u0022Z\u0022:221.2796},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022OwnerId\u0022:\u0022spawner-spg_1-0\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "npc_dog",
-      "id": "npc_dog--1",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.9995921,\u0022Y\u0022:0,\u0022Z\u0022:0.028558373},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.9868977,\u0022Y\u0022:0,\u0022Z\u0022:0.15412132},\u0022speed\u0022:2,\u0022targetLocation\u0022:{\u0022X\u0022:26.804575,\u0022Y\u0022:1.46672,\u0022Z\u0022:221.64662},\u0022dead\u0022:true,\u0022attacking\u0022:false,\u0022attackCooldown\u0022:{\u0022T\u0022:-11.682105},\u0022stunned\u0022:true,\u0022rootMotionScale\u0022:1,\u0022reachedFloor\u0022:true,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:13,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false},\u0022Position\u0022:{\u0022X\u0022:34.70095,\u0022Y\u0022:0.5927175,\u0022Z\u0022:220.41338},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022OwnerId\u0022:\u0022spawner-spg_1-1\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "npc_dog",
-      "id": "npc_dog--2",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.68643236,\u0022Y\u0022:1.1920926E-07,\u0022Z\u0022:0.72719365},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.77859306,\u0022Y\u0022:0,\u0022Z\u0022:0.62569314},\u0022speed\u0022:2,\u0022targetLocation\u0022:{\u0022X\u0022:47.459866,\u0022Y\u0022:1.4622837,\u0022Z\u0022:226.22485},\u0022dead\u0022:true,\u0022attacking\u0022:false,\u0022attackCooldown\u0022:{\u0022T\u0022:-11.682105},\u0022stunned\u0022:true,\u0022rootMotionScale\u0022:1,\u0022reachedFloor\u0022:true,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:13,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false},\u0022Position\u0022:{\u0022X\u0022:58.01067,\u0022Y\u0022:0.6053256,\u0022Z\u0022:217.86586},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022OwnerId\u0022:\u0022spawner-spg_1-2\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "npc_dog",
-      "id": "npc_dog--3",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.9947021,\u0022Y\u0022:2.9802314E-07,\u0022Z\u0022:-0.10279846},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.9775151,\u0022Y\u0022:0,\u0022Z\u0022:-0.20555253},\u0022speed\u0022:2,\u0022targetLocation\u0022:{\u0022X\u0022:32.84381,\u0022Y\u0022:1.465337,\u0022Z\u0022:218.82295},\u0022dead\u0022:true,\u0022attacking\u0022:false,\u0022attackCooldown\u0022:{\u0022T\u0022:-11.682105},\u0022stunned\u0022:true,\u0022rootMotionScale\u0022:1,\u0022reachedFloor\u0022:true,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:13,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false},\u0022Position\u0022:{\u0022X\u0022:45.70557,\u0022Y\u0022:0.5929978,\u0022Z\u0022:221.56584},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022OwnerId\u0022:\u0022spawner-spg_1-3\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "npc_dog",
-      "id": "npc_dog--4",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.47328782,\u0022Y\u0022:0,\u0022Z\u0022:0.8691513},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.53184474,\u0022Y\u0022:0,\u0022Z\u0022:0.8458854},\u0022speed\u0022:2,\u0022targetLocation\u0022:{\u0022X\u0022:29.900482,\u0022Y\u0022:1.4640149,\u0022Z\u0022:228.36595},\u0022dead\u0022:true,\u0022attacking\u0022:true,\u0022attackCooldown\u0022:{\u0022T\u0022:-0.7394247},\u0022stunned\u0022:true,\u0022rootMotionScale\u0022:1,\u0022reachedFloor\u0022:true,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:13,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false},\u0022Position\u0022:{\u0022X\u0022:31.876947,\u0022Y\u0022:0.57717836,\u0022Z\u0022:224.2254},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022OwnerId\u0022:\u0022spawner-spg_1-4\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "npc_dog",
-      "id": "npc_dog--5",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.96132886,\u0022Y\u0022:0,\u0022Z\u0022:0.27540284},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.97528666,\u0022Y\u0022:0,\u0022Z\u0022:0.213567},\u0022speed\u0022:2,\u0022targetLocation\u0022:{\u0022X\u0022:40.772324,\u0022Y\u0022:1.4591603,\u0022Z\u0022:224.41241},\u0022dead\u0022:true,\u0022attacking\u0022:false,\u0022attackCooldown\u0022:{\u0022T\u0022:-11.682105},\u0022stunned\u0022:true,\u0022rootMotionScale\u0022:1,\u0022reachedFloor\u0022:true,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:13,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false},\u0022Position\u0022:{\u0022X\u0022:49.324886,\u0022Y\u0022:0.57362074,\u0022Z\u0022:223.19681},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022OwnerId\u0022:\u0022spawner-spg_1-5\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "npc_dog",
-      "id": "npc_dog--6",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.9851215,\u0022Y\u0022:0,\u0022Z\u0022:-0.15558225},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.98752326,\u0022Y\u0022:0,\u0022Z\u0022:-0.15301555},\u0022speed\u0022:7.5,\u0022targetLocation\u0022:{\u0022X\u0022:34.07046,\u0022Y\u0022:1.4649149,\u0022Z\u0022:219.13026},\u0022dead\u0022:true,\u0022attacking\u0022:false,\u0022attackCooldown\u0022:{\u0022T\u0022:-11.682105},\u0022stunned\u0022:true,\u0022rootMotionScale\u0022:1,\u0022reachedFloor\u0022:true,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:13,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false},\u0022Position\u0022:{\u0022X\u0022:47.17293,\u0022Y\u0022:0.5843745,\u0022Z\u0022:221.25179},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022OwnerId\u0022:\u0022spawner-spg_1-6\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "npc_dog",
-      "id": "npc_dog--7",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.7928982,\u0022Y\u0022:1.19209254E-07,\u0022Z\u0022:0.60935414},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.8561292,\u0022Y\u0022:0,\u0022Z\u0022:0.51340646},\u0022speed\u0022:2,\u0022targetLocation\u0022:{\u0022X\u0022:45.23172,\u0022Y\u0022:1.4623525,\u0022Z\u0022:226.00981},\u0022dead\u0022:true,\u0022attacking\u0022:false,\u0022attackCooldown\u0022:{\u0022T\u0022:-11.682105},\u0022stunned\u0022:true,\u0022rootMotionScale\u0022:1,\u0022reachedFloor\u0022:true,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:13,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false},\u0022Position\u0022:{\u0022X\u0022:52.24572,\u0022Y\u0022:0.5850509,\u0022Z\u0022:222.03183},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022OwnerId\u0022:\u0022spawner-spg_1-7\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "npc_dog",
-      "id": "npc_dog--8",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.99033415,\u0022Y\u0022:5.93263E-12,\u0022Z\u0022:-0.13215308},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.9909903,\u0022Y\u0022:0,\u0022Z\u0022:-0.12782148},\u0022speed\u0022:7.5,\u0022targetLocation\u0022:{\u0022X\u0022:48.7497,\u0022Y\u0022:1.4615533,\u0022Z\u0022:227.3542},\u0022dead\u0022:false,\u0022attacking\u0022:false,\u0022attackCooldown\u0022:{\u0022T\u0022:-0.6004059},\u0022stunned\u0022:false,\u0022rootMotionScale\u0022:1,\u0022reachedFloor\u0022:false,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:4,\u0022CurrentFrame\u0022:2,\u0022Loop\u0022:true,\u0022PlayingRootMotion\u0022:false},\u0022Position\u0022:{\u0022X\u0022:35.89558,\u0022Y\u0022:1.5605446,\u0022Z\u0022:228.99258},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022OwnerId\u0022:\u0022spawner-spg_1-8\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "npc_dog",
-      "id": "npc_dog--9",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.984595,\u0022Y\u0022:1.1920925E-07,\u0022Z\u0022:-0.17485058},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.9922043,\u0022Y\u0022:0,\u0022Z\u0022:-0.11511284},\u0022speed\u0022:2,\u0022targetLocation\u0022:{\u0022X\u0022:29.32885,\u0022Y\u0022:1.465138,\u0022Z\u0022:219.43457},\u0022dead\u0022:true,\u0022attacking\u0022:false,\u0022attackCooldown\u0022:{\u0022T\u0022:-11.682105},\u0022stunned\u0022:true,\u0022rootMotionScale\u0022:1,\u0022reachedFloor\u0022:true,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:13,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false},\u0022Position\u0022:{\u0022X\u0022:47.698837,\u0022Y\u0022:0.6079339,\u0022Z\u0022:221.14293},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022OwnerId\u0022:\u0022spawner-spg_1-9\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "npc_dog",
-      "id": "npc_dog--10",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.9879496,\u0022Y\u0022:0,\u0022Z\u0022:-0.1467531},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.98844486,\u0022Y\u0022:0,\u0022Z\u0022:-0.1427388},\u0022speed\u0022:7.5,\u0022targetLocation\u0022:{\u0022X\u0022:48.7497,\u0022Y\u0022:1.4615533,\u0022Z\u0022:227.3542},\u0022dead\u0022:false,\u0022attacking\u0022:false,\u0022attackCooldown\u0022:{\u0022T\u0022:-0.463764},\u0022stunned\u0022:false,\u0022rootMotionScale\u0022:1,\u0022reachedFloor\u0022:false,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:4,\u0022CurrentFrame\u0022:17,\u0022Loop\u0022:true,\u0022PlayingRootMotion\u0022:false},\u0022Position\u0022:{\u0022X\u0022:38.60327,\u0022Y\u0022:1.5631943,\u0022Z\u0022:228.83615},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022OwnerId\u0022:\u0022spawner-spg_1-10\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "npc_dog",
-      "id": "npc_dog--11",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.9883484,\u0022Y\u0022:-4.3386364E-11,\u0022Z\u0022:-0.14378035},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.98956925,\u0022Y\u0022:0,\u0022Z\u0022:-0.13546054},\u0022speed\u0022:7.5,\u0022targetLocation\u0022:{\u0022X\u0022:48.7497,\u0022Y\u0022:1.4615533,\u0022Z\u0022:227.3542},\u0022dead\u0022:false,\u0022attacking\u0022:false,\u0022attackCooldown\u0022:{\u0022T\u0022:-0.4793712},\u0022stunned\u0022:false,\u0022rootMotionScale\u0022:1,\u0022reachedFloor\u0022:false,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:4,\u0022CurrentFrame\u0022:18,\u0022Loop\u0022:true,\u0022PlayingRootMotion\u0022:false},\u0022Position\u0022:{\u0022X\u0022:37.2523,\u0022Y\u0022:1.5630425,\u0022Z\u0022:228.91293},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022OwnerId\u0022:\u0022spawner-spg_1-11\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "npc_dog",
-      "id": "npc_dog--12",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.99856067,\u0022Y\u0022:-1.19209254E-07,\u0022Z\u0022:-0.053632498},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.9982989,\u0022Y\u0022:0,\u0022Z\u0022:-0.034649376},\u0022speed\u0022:2,\u0022targetLocation\u0022:{\u0022X\u0022:47.91423,\u0022Y\u0022:1.4582326,\u0022Z\u0022:227.43758},\u0022dead\u0022:true,\u0022attacking\u0022:false,\u0022attackCooldown\u0022:{\u0022T\u0022:-0.2529406},\u0022stunned\u0022:true,\u0022rootMotionScale\u0022:1,\u0022reachedFloor\u0022:true,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:2,\u0022CurrentFrame\u0022:3,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false},\u0022Position\u0022:{\u0022X\u0022:41.154667,\u0022Y\u0022:0.56687766,\u0022Z\u0022:227.67932},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022OwnerId\u0022:\u0022spawner-spg_1-12\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "npc_dog",
-      "id": "npc_dog--13",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.9934823,\u0022Y\u0022:-1.19209254E-07,\u0022Z\u0022:-0.113986254},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.9930498,\u0022Y\u0022:0,\u0022Z\u0022:-0.10576651},\u0022speed\u0022:2,\u0022targetLocation\u0022:{\u0022X\u0022:48.7497,\u0022Y\u0022:1.4615533,\u0022Z\u0022:227.3542},\u0022dead\u0022:false,\u0022attacking\u0022:false,\u0022attackCooldown\u0022:{\u0022T\u0022:0.3098064},\u0022stunned\u0022:true,\u0022rootMotionScale\u0022:1,\u0022reachedFloor\u0022:false,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:5,\u0022CurrentFrame\u0022:8,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:true},\u0022Position\u0022:{\u0022X\u0022:39.52263,\u0022Y\u0022:1.5632023,\u0022Z\u0022:228.05429},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022OwnerId\u0022:\u0022spawner-spg_1-13\u0022}"
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.18522334,\u0022Y\u0022:-8.78348E-14,\u0022Z\u0022:0.11075403},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.85786253,\u0022Y\u0022:0,\u0022Z\u0022:-0.51321006},\u0022speed\u0022:8.5,\u0022targetLocation\u0022:{\u0022X\u0022:136.89845,\u0022Y\u0022:1.4434549,\u0022Z\u0022:202.10478},\u0022dead\u0022:false,\u0022attacking\u0022:false,\u0022attackCooldown\u0022:{\u0022T\u0022:-4.3784986},\u0022stunned\u0022:false,\u0022rootMotionScale\u0022:1,\u0022reachedFloor\u0022:false,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:4,\u0022CurrentFrame\u0022:2,\u0022Loop\u0022:true,\u0022PlayingRootMotion\u0022:false},\u0022Position\u0022:{\u0022X\u0022:148.83434,\u0022Y\u0022:0.9686847,\u0022Z\u0022:195.12953},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:40,\u0022OwnerId\u0022:\u0022\u0022}"
     }
   ],
-  "entityId": 276,
+  "entityId": 67,
   "deletedIDs": [
     "",
     "",

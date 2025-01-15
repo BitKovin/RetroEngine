@@ -934,7 +934,7 @@ namespace RetroEngine.PhysicsSystem
             return convResultCallback;
         }
 
-        public static MyClosestConvexResultCallback SphereTrace(Microsoft.Xna.Framework.Vector3 rayStart, Microsoft.Xna.Framework.Vector3 rayEnd, float radius = 0.5f, List<CollisionObject> ignoreList = null, BodyType bodyType = BodyType.GroupAll)
+        public static MyClosestConvexResultCallback SphereTrace(Microsoft.Xna.Framework.Vector3 rayStart, Microsoft.Xna.Framework.Vector3 rayEnd, float radius = 0.5f, List<RigidBody> ignoreList = null, BodyType bodyType = BodyType.GroupAll)
         {
 
             if (Thread.CurrentThread != GameMain.RenderThread && Thread.CurrentThread != GameMain.GameThread)

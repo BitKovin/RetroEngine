@@ -1,4 +1,5 @@
 ﻿using BulletSharp;
+using RetroEngine.PhysicsSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,32 @@ namespace RetroEngine
         public PhysicsSystem.BodyType BodyTypeMask = PhysicsSystem.BodyType.GroupAll;
 
         public List<CollisionObject> ignoreList = new List<CollisionObject>();
+
+        public Entity entity;
+
+        public override float AddSingleResult(ref LocalRayResult rayResult, bool normalInWorldSpace)
+        {
+
+
+            if (rayResult.CollisionObject != null)
+            {
+
+                var obj = rayResult.CollisionObject.UserObject;
+
+                if (obj != null)
+                {
+                    var data = (RigidbodyData)obj;
+
+                    Entity hitEnt = data.Entity;
+
+                    if (hitEnt != null)
+                        entity = hitEnt;
+                }
+            }
+
+
+            return base.AddSingleResult(ref rayResult, normalInWorldSpace);
+        }
 
         public override bool NeedsCollision(BroadphaseProxy proxy0)
         {

@@ -1,10 +1,12 @@
 ﻿using BulletSharp;
+using RetroEngine.PhysicsSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using static Assimp.Metadata;
 
 namespace RetroEngine
 {
@@ -50,6 +52,18 @@ namespace RetroEngine
             resultCallback.HitPointWorld = Vector3.Lerp(RayFromWorld, RayToWorld, rayResult.HitFraction);
 
             resultCallback.ClosestHitFraction = rayResult.HitFraction;
+
+            if (rayResult.CollisionObject != null)
+            {
+
+                var data = (RigidbodyData)rayResult.CollisionObject.UserObject;
+
+                Entity hitEnt = data.Entity;
+
+                if (hitEnt != null)
+                    resultCallback.entity = hitEnt;
+
+            }
 
             Hits.Add(resultCallback);
 

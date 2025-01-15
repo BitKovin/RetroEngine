@@ -237,7 +237,7 @@ namespace RetroEngine.NavigationSystem
             RcNavMeshBuildSettings rcNavMeshBuildSettings = new RcNavMeshBuildSettings();
 
             rcNavMeshBuildSettings.cellSize = 0.3f;
-            rcNavMeshBuildSettings.agentRadius = 0.5f;
+            rcNavMeshBuildSettings.agentRadius = 0.3f;
             rcNavMeshBuildSettings.tileSize = 32;
 
 

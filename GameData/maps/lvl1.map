@@ -4253,14 +4253,14 @@
 {
 "classname" "setActionState"
 "origin" "2114 -6697.98 133"
-"newState" "true"
+"newState" "1"
 "targetname" "spg_1"
 }
 // entity 33
 {
 "classname" "setActionState"
 "origin" "-136 -6824 112"
-"newState" "false"
+"newState" "0"
 "targetname" "a1_d1"
 }
 // entity 34

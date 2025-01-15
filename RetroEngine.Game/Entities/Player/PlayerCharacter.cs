@@ -19,6 +19,7 @@ using RetroEngine.Game.Effects.Particles;
 using RetroEngine.PhysicsSystem;
 using BulletSharp.SoftBody;
 using RetroEngine.Graphic;
+using RetroEngine.ParticleSystem;
 
 namespace RetroEngine.Game.Entities.Player
 {
@@ -115,6 +116,8 @@ namespace RetroEngine.Game.Entities.Player
             LateUpdateWhilePaused = true;
 
             SaveGame = true;
+
+            Health = 100;
 
         }
 
@@ -835,7 +838,7 @@ namespace RetroEngine.Game.Entities.Player
             targetCameraPos += Camera.rotation.GetUpVector() * 0.5f;
             targetCameraPos += Camera.rotation.GetRightVector() * 0.1f;
 
-            var hit = Physics.SphereTrace(startPos.ToPhysics(), targetCameraPos.ToPhysics(), radius: 0.3f, ignoreList: new List<CollisionObject> { body });
+            var hit = Physics.SphereTrace(startPos.ToPhysics(), targetCameraPos.ToPhysics(), radius: 0.3f, ignoreList: bodies);
             if (hit.HasHit)
                 Camera.position = hit.HitPointWorld + hit.HitNormalWorld * 0.3f;
             else
@@ -1067,6 +1070,14 @@ namespace RetroEngine.Game.Entities.Player
             var hit = Physics.LineTrace((waterCheckPos + Vector3.UnitY * 100).ToPhysics(), waterCheckPos.ToPhysics(), bodyType: BodyType.Liquid);
 
             underWater = hit.HasHit;
+
+        }
+
+        public override void OnPointDamage(float damage, Vector3 point, Vector3 direction, Entity causer = null, Entity weapon = null)
+        {
+            base.OnPointDamage(damage, point, direction, causer, weapon);
+
+            GlobalParticleSystem.EmitAt("hitBlood", Vector3.Lerp(point, Camera.position, 0.4f), MathHelper.FindLookAtRotation(Vector3.Zero, -direction), new Vector3(0, 0, damage / 2f));
 
         }
 

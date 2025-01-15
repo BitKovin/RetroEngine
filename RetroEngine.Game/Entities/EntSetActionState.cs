@@ -13,13 +13,13 @@ namespace RetroEngine.Game.Entities
     {
 
 
-        bool newState = false;
+        float newState = 0;
 
         public override void FromData(EntityData data)
         {
             base.FromData(data);
 
-            newState = data.GetPropertyBool("newState", newState);
+            newState = data.GetPropertyFloat("newState", newState);
 
         }
 

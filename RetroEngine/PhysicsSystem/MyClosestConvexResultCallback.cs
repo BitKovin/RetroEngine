@@ -1,10 +1,13 @@
 ﻿using BulletSharp;
+using RetroEngine.PhysicsSystem;
 using System;
 using System.Collections.Generic;
+using System.IO.Pipelines;
 using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using static Assimp.Metadata;
 
 namespace RetroEngine
 {
@@ -19,7 +22,7 @@ namespace RetroEngine
 
         public CollisionFlags FlagToRespond = CollisionFlags.None;
 
-        public List<CollisionObject> ignoreList = new List<CollisionObject>();
+        public List<RigidBody> ignoreList = new List<RigidBody>();
 
         public Vector3 HitShapeLocation = Vector3.Zero;
 
@@ -28,11 +31,24 @@ namespace RetroEngine
 
         public PhysicsSystem.BodyType BodyTypeMask = PhysicsSystem.BodyType.GroupAll;
 
+        public Entity entity;
+
         public override float AddSingleResult(ref LocalConvexResult convexResult, bool normalInWorldSpace)
         {
 
             HitShapeLocation = Vector3.Lerp(Start, End, convexResult.HitFraction);
 
+            if (convexResult.HitCollisionObject != null)
+            {
+
+                var data = (RigidbodyData)convexResult.HitCollisionObject.UserObject;
+
+                Entity hitEnt = data.Entity;
+
+                if (hitEnt != null)
+                    entity = hitEnt;
+
+            }
 
             return base.AddSingleResult(ref convexResult, normalInWorldSpace);
         }
