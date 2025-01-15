@@ -188,7 +188,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
                     bullet.Start();
                     bullet.Speed = 100;
-                    bullet.Damage = 5;
+                    bullet.Damage = 6;
 
                     bullet.ignore.Add(player);
 

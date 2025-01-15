@@ -2,6 +2,7 @@
 using BulletSharp.SoftBody;
 using DotRecast.Detour.Crowd;
 using Microsoft.Xna.Framework;
+using RetroEngine.Audio;
 using RetroEngine.Entities;
 using RetroEngine.Map;
 using RetroEngine.NavigationSystem;
@@ -80,6 +81,13 @@ namespace RetroEngine.Game.Entities.Enemies
         [JsonInclude]
         public float rootMotionScale = 1;
 
+        SoundPlayer SoundPlayer;
+
+        FmodEventInstance soundStun;
+        FmodEventInstance soundAttack;
+        FmodEventInstance soundAttackStart;
+        FmodEventInstance soundDeath;
+
         public npc_dog()
         {
             SaveGame = true;
@@ -148,6 +156,11 @@ namespace RetroEngine.Game.Entities.Enemies
 
             MoveDirection = Rotation.GetForwardVector();
 
+            SoundPlayer = Level.GetCurrent().AddEntity(new SoundPlayer()) as SoundPlayer;
+            SoundPlayer.Position = Position;
+
+            
+
         }
 
         void InitDirectionsLUT()
@@ -207,6 +220,10 @@ namespace RetroEngine.Game.Entities.Enemies
             deathSoundPlayer.SetSound(AssetRegistry.LoadSoundFmodFromFile("sounds/mew2.wav"));
             deathSoundPlayer.Volume = 1f;
 
+            soundStun = FmodEventInstance.Create("event:/NPC/Dog/DogStun");
+            soundAttack = FmodEventInstance.Create("event:/NPC/Dog/DogAttack");
+            soundAttackStart = FmodEventInstance.Create("event:/NPC/Dog/DogAttackStart");
+            soundDeath = FmodEventInstance.Create("event:/NPC/Dog/DogDeath");
 
         }
 
@@ -283,6 +300,10 @@ namespace RetroEngine.Game.Entities.Enemies
             mesh.PlayAnimation("stun", false, 0.2f, true);
             mesh.Rotation = MathHelper.FindLookAtRotation(Vector3.Zero, attackDirection.XZ());
             MoveDirection = attackDirection.XZ();
+
+            SoundPlayer.SetSound(soundStun);
+            SoundPlayer.Play(true);
+
         }
 
         void Death()
@@ -302,9 +323,8 @@ namespace RetroEngine.Game.Entities.Enemies
 
             GetOwner()?.OnAction("despawned");
 
-            deathSoundPlayer.Position = Position;
-            deathSoundPlayer.Play();
-            deathSoundPlayer.Destroy(2);
+            SoundPlayer.SetSound(soundDeath);
+            SoundPlayer.Play();
 
             dead = true;
 
@@ -337,6 +357,8 @@ namespace RetroEngine.Game.Entities.Enemies
         public bool reachedFloor = false;
         public override void AsyncUpdate()
         {
+
+            SoundPlayer.Position = Position;
 
             if (dead)
             {
@@ -469,6 +491,9 @@ namespace RetroEngine.Game.Entities.Enemies
             {
                 target.OnPointDamage(10, hit.HitShapeLocation, attackDir, this, this);
 
+                SoundPlayer.SetSound(soundAttack);
+                SoundPlayer.Play();
+
                 hitedEntities.Add(target);
 
             }
@@ -484,13 +509,7 @@ namespace RetroEngine.Game.Entities.Enemies
             ignore.Add(body);
             ignore.AddRange(target.bodies);
 
-            var hit = Physics.SphereTrace(Position, targetLocation, 0.1f, ignore, BodyType.GroupCollisionTest);
-
-            if (hit.HasHit)
-            {
-                attackCooldown.AddDelay(0.5f);
-
-            }
+            Physics.SphereTrace(Position, targetLocation, 0.1f, ignore, BodyType.GroupCollisionTest);
 
             attacking = true;
             mesh.PlayAnimation("attack", false, rootMotion: true);
@@ -499,6 +518,9 @@ namespace RetroEngine.Game.Entities.Enemies
 
             attackCooldown.AddDelay(2);
             hitedEntities.Clear();
+
+            SoundPlayer.SetSound(soundAttackStart);
+            SoundPlayer.Play();
 
         }
 

@@ -15,7 +15,6 @@ namespace RetroEngine.Audio
     public static class SoundManager
     {
 
-        static AudioEmitter emitter;
 
         internal static AudioListener listener;
 

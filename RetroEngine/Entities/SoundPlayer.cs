@@ -68,7 +68,8 @@ namespace RetroEngine.Entities
 
         public void SetSound(AudioClip clip)
         {
-            AudioClip?.Dispose();
+            //AudioClip?.Dispose();
+            AudioClip?.Stop();
             AudioClip = clip;
         }
 
@@ -113,7 +114,12 @@ namespace RetroEngine.Entities
 
         protected virtual float GetVolume()
         {
-            return Volume * fade * SoundManager.Volume;
+            return Volume * fade * GetGlobalVolume();
+        }
+
+        public static float GetGlobalVolume()
+        {
+            return SoundManager.Volume;
         }
 
         public virtual void SetEventProperty(string name, float value)
@@ -123,6 +129,17 @@ namespace RetroEngine.Entities
             if(fmodEventInstance == null) return;
 
             fmodEventInstance.SetParameter(name, value);
+
+        }
+
+        public static void PlaySound(AudioClip audioClip, float volume = 1)
+        {
+            audioClip.Volume = volume * GetGlobalVolume();
+            audioClip.Is3D = false;
+            audioClip.Loop = false;
+            audioClip.Position = Camera.position;
+            audioClip.Play();
+            audioClip.Update();
 
         }
 

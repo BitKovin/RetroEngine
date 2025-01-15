@@ -88,14 +88,17 @@ namespace RetroEngine.Game.Entities.Player
         Shader underWaterEffect;
         PostProcessStep waterPP = new PostProcessStep();
 
-        FmodEventInstance underWaterSound;
-
         Vector3 CameraRotation = new Vector3();
 
         bool useThirdPersonAnimations = false;
 
         public static string armsModelPath = "models/weapons/arms_lq.fbx";
 
+        FmodEventInstance underWaterSound;
+        FmodEventInstance underWaterAmbient;
+        SoundPlayer underwaterAmbientPlayer;
+
+        FmodEventInstance testSound;
 
         //particle_system_meleeTrail meleeTrail;
         public PlayerCharacter() : base()
@@ -129,6 +132,7 @@ namespace RetroEngine.Game.Entities.Player
             //meleeTrail = ParticleSystemFactory.CreateByTechnicalName("meleeTrail") as particle_system_meleeTrail;
 
             //Level.GetCurrent().AddEntity(meleeTrail);
+
 
             bodyMesh.LoadFromFile("models/player_model_full.FBX");
 
@@ -179,6 +183,8 @@ namespace RetroEngine.Game.Entities.Player
         {
             base.Start();
 
+            testSound = FmodEventInstance.Create("event:/NPC/Dog/DogAttack");
+
             body = Physics.CreateCharacterCapsule(this, 1.8f, 0.4f, 2);
             //body.UserIndex = (int)BodyType.HitTest;
             //body.UserIndex2 = (int)BodyType.CharacterCapsule;
@@ -201,7 +207,17 @@ namespace RetroEngine.Game.Entities.Player
             stepSoundPlayer.SetSound(stepSound);
             stepSoundPlayer.Volume = 0.5f;
 
+
+            underWaterAmbient = FmodEventInstance.Create("event:/Character/Player/UnderWater");
+            underwaterAmbientPlayer = Level.GetCurrent().AddEntity(new SoundPlayer()) as SoundPlayer;
+            underwaterAmbientPlayer.SetSound(underWaterAmbient);
+            underwaterAmbientPlayer.Is3DSound = false;
+            underwaterAmbientPlayer.IsUiSound = true;
+            underwaterAmbientPlayer.Play(true);
+            underwaterAmbientPlayer.Update();
+
             stepSound.SetParameter("Surface", 1);
+
 
             weapons.Add(new WeaponData { weaponType = typeof(weapon_sword), ammo = 1 });
             //weapons.Add(new WeaponData { weaponType = typeof(weapon_shotgunNew), ammo = 50 });
@@ -321,6 +337,9 @@ namespace RetroEngine.Game.Entities.Player
         {
             PostProcessStep.StepsAfter.Remove(waterPP);
             underWaterSound.Stop();
+
+            SoundPlayer.PlaySound(testSound);
+
         }
 
         public override void AsyncUpdate()
@@ -331,6 +350,7 @@ namespace RetroEngine.Game.Entities.Player
 
             InterpolatePos();
 
+            underwaterAmbientPlayer.Position = Position;
 
             Camera.velocity = body.LinearVelocity;
 
@@ -1070,6 +1090,8 @@ namespace RetroEngine.Game.Entities.Player
             var hit = Physics.LineTrace((waterCheckPos + Vector3.UnitY * 100).ToPhysics(), waterCheckPos.ToPhysics(), bodyType: BodyType.Liquid);
 
             underWater = hit.HasHit;
+
+            underWaterAmbient.SetParameter("underWater", underWater ? 1 : 0);
 
         }
 
