@@ -147,6 +147,22 @@ namespace RetroEngine.Particles
             }
         }
 
+        public void SetLastParticlePos()
+        {
+
+            if (Particles.Count < 1) return;
+
+            Particle particle;
+
+            lock (Particles)
+            {
+                particle = Particles.Last();
+            }
+
+            particle.position = Position;
+            
+        }
+
         private void FreeBuffers()
         {
             // Return buffers to the pool for reuse
@@ -167,10 +183,8 @@ namespace RetroEngine.Particles
         public override void Update()
         {
 
-            var p = Particles.LastOrDefault();
 
-            //if (p != null)
-                //p.position = Position;
+            SetLastParticlePos();
 
             base.Update();
         }
