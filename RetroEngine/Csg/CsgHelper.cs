@@ -62,7 +62,7 @@ namespace RetroEngine.Csg
         /// </summary>
         /// <param name="solid">The Csg.NET Solid to convert.</param>
         /// <returns>A tuple containing an array of VertexData and an array of indices.</returns>
-        public static (VertexData[] Vertices, int[] Indices) ConvertCsgToMonoGameMesh(Solid solid)
+        public static (VertexData[] Vertices, int[] Indices) ConvertCsgToMesh(Solid solid)
         {
             var vertices = new List<VertexData>();
             var indices = new List<int>();

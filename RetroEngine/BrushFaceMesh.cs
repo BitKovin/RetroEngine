@@ -94,7 +94,7 @@ namespace RetroEngine
 
 
 
-            var data = CsgHelper.ConvertCsgToMonoGameMesh(solid);
+            var data = CsgHelper.ConvertCsgToMesh(solid);
 
             var vertices = data.Vertices;
             int[] indices = data.Indices;
