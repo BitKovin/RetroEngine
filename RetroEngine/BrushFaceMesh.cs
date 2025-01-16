@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using RetroEngine.Map;
 using Assimp;
+using RetroEngine.Csg;
 
 namespace RetroEngine
 {
@@ -19,6 +20,8 @@ namespace RetroEngine
         BoundingBox BoundingBox;
 
         public static bool ShadowsEnabled = true;
+
+        (VertexData[] vertices, int[] indices) VertexIndexData;
 
         static Assimp.PostProcessSteps PostProcessSteps = Assimp.PostProcessSteps.Triangulate | 
             Assimp.PostProcessSteps.FixInFacingNormals | 
@@ -40,6 +43,91 @@ namespace RetroEngine
 
             LargeObject = true;
 
+
+        }
+
+        VertexBuffer modifiedVertexBuffer = null;
+        IndexBuffer modifiedIndexBuffer = null;
+
+        void DisposeModifiedBuffers()
+        {
+            if (modifiedIndexBuffer != null)
+            {
+                if (modifiedIndexBuffer.IsDisposed == false)
+                    modifiedIndexBuffer.Dispose();
+            }
+
+            if (modifiedVertexBuffer != null)
+            {
+                if (modifiedVertexBuffer.IsDisposed == false)
+                    modifiedVertexBuffer.Dispose();
+            }
+        }
+
+        public override void Destroyed()
+        {
+            base.Destroyed();
+
+            DisposeModifiedBuffers();
+
+        }
+
+        public Solid ToSolid()
+        {
+            if(model == null) return null;
+
+            if(model.Meshes.Count == 0) return null;
+            if (model.Meshes[0].MeshParts.Count() == 0) return null;
+            if (model.Meshes[0].MeshParts[0] == null) return null;
+
+            var meshPart = model.Meshes[0].MeshParts[0];
+
+            return meshPart.ToCsgSolid();
+        }
+
+        public void ApplySolid(Solid solid)
+        {
+
+            var graphicsDevice = GameMain.Instance.GraphicsDevice;
+
+
+
+            DisposeModifiedBuffers();
+
+            var data = CsgHelper.ConvertCsgToMonoGameMesh(solid);
+
+            var vertices = data.Vertices;
+            int[] indices = data.Indices;
+
+            if (indices.Length == 0) return;
+            if (vertices.Length == 0) return;
+
+            modifiedVertexBuffer = new VertexBuffer(graphicsDevice, typeof(VertexData), vertices.Length, BufferUsage.None);
+            modifiedVertexBuffer.SetData(vertices);
+            modifiedIndexBuffer = new IndexBuffer(graphicsDevice, IndexElementSize.ThirtyTwoBits, indices.Length, BufferUsage.None);
+            modifiedIndexBuffer.SetData(indices);
+
+            MeshPartData meshPartData = model.Meshes[0].MeshParts[0].Tag as MeshPartData;
+
+            var numVertices = indices.Length;
+            var primitiveCount = numVertices / 3;  // Each triangle has 3 vertices
+
+            var meshPart = new ModelMeshPart
+            {
+                VertexBuffer = modifiedVertexBuffer,
+                IndexBuffer = modifiedIndexBuffer,
+                StartIndex = 0,
+                NumVertices = numVertices,
+                PrimitiveCount = primitiveCount,
+                Tag = meshPartData
+            };
+
+            var modelMesh = new ModelMesh(graphicsDevice, new List<ModelMeshPart> { meshPart })
+            {
+                BoundingSphere = model.Meshes[0].BoundingSphere
+            };
+
+            model = new Model(graphicsDevice, new List<ModelBone>(), new List<ModelMesh> { modelMesh });
 
         }
 
