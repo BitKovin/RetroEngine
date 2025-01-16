@@ -18,6 +18,8 @@ namespace RetroEngine.Csg
 
 		CsgBoundingBox? cachedBoundingBox;
 
+		public bool isVisual = false;
+
 		public Solid ()
 		{
 			Polygons = new List<Polygon>();
@@ -86,12 +88,37 @@ namespace RetroEngine.Csg
 		public Solid Substract(params Solid[] csgs)
 		{
 			Solid result = this;
+
+			HashSet<Vector3D> originalPositions = new HashSet<Vector3D>();
+
+			foreach (var polygon in result.Polygons)
+				foreach(Vertex v in polygon.Vertices)
+				{
+					originalPositions.Add(v.Pos);
+				}
+
 			for (var i = 0; i < csgs.Length; i++)
 			{
 				var islast = (i == (csgs.Length - 1));
 				result = result.SubtractSub(csgs[i], islast, islast);
 			}
-			return result;
+
+            bool hasOriginal = false;
+            foreach (var polygon in result.Polygons)
+                if (hasOriginal == false)
+                    foreach (Vertex v in polygon.Vertices)
+                    {
+                        if (originalPositions.Contains(v.Pos))
+                        {
+                            hasOriginal = true;
+							break;
+                        }
+                    }
+
+			if(hasOriginal == false)
+				result.Polygons.Clear();
+
+            return result;
 		}
 
 		Solid SubtractSub(Solid csg, bool retesselate, bool canonicalize)

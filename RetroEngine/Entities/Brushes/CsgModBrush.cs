@@ -24,13 +24,14 @@ namespace RetroEngine.Entities.Brushes
             ConvexBrush = false;
         }
 
-        Solid[] solids;
+        List<Solid> solids;
 
         List<Solid> subtractSolids = new List<Solid>();
 
         bool dirty = false;
 
         Solid[] pendingApplySolids;
+        List<(Solid solid, BrushFaceMesh original)> pendingCreateSolid = new List<(Solid solid, BrushFaceMesh original)> ();
 
         bool pendingAppy = false;
 
@@ -64,7 +65,7 @@ namespace RetroEngine.Entities.Brushes
 
             pendingAppy = false;
 
-            pendingApplySolids = new Solid[solids.Length];
+            pendingApplySolids = new Solid[solids.Count()];
 
             foreach (var mesh in meshes)
             {
@@ -77,9 +78,23 @@ namespace RetroEngine.Entities.Brushes
 
                 if (solid == null) continue;
 
+                if (solid.isVisual == false)
+                {
+                    var result = CsgHelper.GetConnectedAndDisconnectedPartsWithUV(solid.Substract(subtractSolids.ToArray()), originalVertices.ToArray());
+
+                    pendingApplySolids[i] = result.MainSolid;
 
 
-                pendingApplySolids[i] = CsgHelper.GetConnectedPartWithUV(solid.Substract(subtractSolids.ToArray()), originalVertices.ToArray());
+
+                    foreach (var s in result.DisconnectedSolids)
+                    {
+                        pendingCreateSolid.Add((s, brushFaceMesh));
+                    }
+                }else
+                {
+                    pendingApplySolids[i] = solid.Substract(subtractSolids.ToArray());
+                }
+
 
             }
             pendingAppy = true;
@@ -105,19 +120,43 @@ namespace RetroEngine.Entities.Brushes
 
                 Solid solid = pendingApplySolids[i];
 
-                if(solid == null) continue;
+                if (solid == null) continue;
 
                 brushFaceMesh.ApplySolid(solid);
                 solids[i] = solid; //making new one as default one
+            }
+
+            lock (pendingCreateSolid)
+            {
+                foreach (var data in pendingCreateSolid.ToArray())
+                {
+
+                    Solid solid = data.solid;
+                    BrushFaceMesh originalMesh = data.original;
+
+                    BrushFaceMesh newMesh = new BrushFaceMesh(originalMesh.model, originalMesh.texture, originalMesh.textureName);
+
+                    newMesh.Transperent = originalMesh.Transperent;
+                    newMesh.Masked = originalMesh.Masked;
 
 
+                    solids.Add(solid);
+                    meshes.Add(newMesh);
+                    newMesh.ApplySolid(solid);
+
+                    newMesh.Transperent = true;
+                    newMesh.Transparency = 0.5f;
+
+                }
+
+                pendingCreateSolid.Clear();
             }
 
             RegenerateBodies();
 
             pendingAppy = false;
 
-    }
+        }
 
         void RegenerateBodies()
         {
@@ -151,7 +190,7 @@ namespace RetroEngine.Entities.Brushes
         {
             base.OnPointDamage(damage, point, direction, causer, weapon);
 
-            subtractSolids.Add(Solids.Sphere(0.2f, point.ToCsg()));
+            subtractSolids.Add(Solids.Sphere(0.5f, point.ToCsg()));
             dirty = true;
 
         }
@@ -163,7 +202,7 @@ namespace RetroEngine.Entities.Brushes
             base.Start();
             int i = -1;
 
-            solids = new Solid[meshes.Count];
+            solids = new List<Solid>(meshes.Count);
 
             Vector3 avgLocation = Vector3.Zero;
 
@@ -174,7 +213,7 @@ namespace RetroEngine.Entities.Brushes
                 BrushFaceMesh brushFaceMesh = mesh as BrushFaceMesh;
                 if (brushFaceMesh == null) continue;
 
-                solids[i] = brushFaceMesh.ToSolid();
+                solids.Add(brushFaceMesh.ToSolid());
 
                 avgLocation += brushFaceMesh.avgVertexPosition;
 

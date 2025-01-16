@@ -27,7 +27,7 @@ namespace RetroEngine
             Assimp.PostProcessSteps.FixInFacingNormals | 
             Assimp.PostProcessSteps.CalculateTangentSpace;
 
-        public BrushFaceMesh(Model model, Texture2D texture, string textureName = "")
+        public BrushFaceMesh(Model model, Texture texture, string textureName = "")
         {
             this.model = model;
             this.texture = texture;
@@ -92,25 +92,36 @@ namespace RetroEngine
 
 
 
-            DisposeModifiedBuffers();
+
 
             var data = CsgHelper.ConvertCsgToMonoGameMesh(solid);
 
             var vertices = data.Vertices;
             int[] indices = data.Indices;
 
-            if (indices.Length == 0) return;
-            if (vertices.Length == 0) return;
-
-            modifiedVertexBuffer = new VertexBuffer(graphicsDevice, typeof(VertexData), vertices.Length, BufferUsage.None);
-            modifiedVertexBuffer.SetData(vertices);
-            modifiedIndexBuffer = new IndexBuffer(graphicsDevice, IndexElementSize.ThirtyTwoBits, indices.Length, BufferUsage.None);
-            modifiedIndexBuffer.SetData(indices);
-
-            MeshPartData meshPartData = model.Meshes[0].MeshParts[0].Tag as MeshPartData;
-
             var numVertices = indices.Length;
             var primitiveCount = numVertices / 3;  // Each triangle has 3 vertices
+
+            DisposeModifiedBuffers();
+            if (indices.Length == 0 || vertices.Length == 0)
+            {
+                modifiedVertexBuffer = new VertexBuffer(graphicsDevice, typeof(VertexData), 3, BufferUsage.None);
+                modifiedVertexBuffer.SetData([new Vector3(0,0,0), new Vector3(0, 0, 0), new Vector3(0, 0, 0)]);
+                modifiedIndexBuffer = new IndexBuffer(graphicsDevice, IndexElementSize.ThirtyTwoBits, 3, BufferUsage.None);
+                modifiedIndexBuffer.SetData([0,0,0]);
+                numVertices = 0;
+                primitiveCount = 0;
+            }
+            else
+            {
+                modifiedVertexBuffer = new VertexBuffer(graphicsDevice, typeof(VertexData), vertices.Length, BufferUsage.None);
+                modifiedVertexBuffer.SetData(vertices);
+                modifiedIndexBuffer = new IndexBuffer(graphicsDevice, IndexElementSize.ThirtyTwoBits, indices.Length, BufferUsage.None);
+                modifiedIndexBuffer.SetData(indices);
+            }
+            MeshPartData meshPartData = model.Meshes[0].MeshParts[0].Tag as MeshPartData;
+
+            
 
             var meshPart = new ModelMeshPart
             {
