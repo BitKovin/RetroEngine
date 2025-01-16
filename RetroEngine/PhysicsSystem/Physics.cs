@@ -1152,5 +1152,38 @@ namespace RetroEngine.PhysicsSystem
             return meshShape;
         }
 
+        public static BvhTriangleMeshShape CreateBvhTriangleMeshShape(Csg.Solid solid, CollisionShapeData collisionShapeData)
+        {
+            var data = Csg.CsgHelper.ConvertCsgToMesh(solid);
+
+            // 1. Gather vertices in a contiguous array
+            VertexData[] vertices = data.Vertices;
+
+
+            // 3. Access indices for correct triangle construction
+            // Assuming indices are 32-bit integers
+            int[] indices = data.Indices;
+
+            // 4. Create the triangle mesh
+            TriangleMesh triangleMesh = new TriangleMesh();
+
+
+            for (int i = 0; i < indices.Length; i += 3)
+            {
+                var vertex0 = vertices[indices[i]].Position.ToPhysics();
+                var vertex1 = vertices[indices[i + 1]].Position.ToPhysics();
+                var vertex2 = vertices[indices[i + 2]].Position.ToPhysics();
+                triangleMesh.AddTriangle(vertex0, vertex1, vertex2, false);  // Assume triangles are not welded
+            }
+
+
+            // 6. Create the collision shape
+            BvhTriangleMeshShape meshShape = new BvhTriangleMeshShape(triangleMesh, true); // Use quantization for better performance
+
+            meshShape.UserObject = collisionShapeData;
+
+            return meshShape;
+        }
+
     }
 }

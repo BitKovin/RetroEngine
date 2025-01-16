@@ -35,6 +35,7 @@ namespace RetroEngine.Entities.Brushes
 
         bool pendingAppy = false;
 
+
         CancellationTokenSource tokenSource = new CancellationTokenSource();
         void ApplySolids()
         {
@@ -62,51 +63,71 @@ namespace RetroEngine.Entities.Brushes
         void StartGeneratingNewSolids()
         {
 
-
-            pendingAppy = false;
-
             pendingApplySolids = new Solid[solids.Count()];
-
-            for (int j = 0; j < pendingApplySolids.Count(); j++)
+            lock (pendingApplySolids)
             {
-                Solid solid = solids[j];
 
-                pendingApplySolids[j] = solid.Substract(subtractSolids.ToArray());
+                pendingAppy = false;
 
-            }
-            int i = -1;
-            foreach (var mesh in meshes)
-            {
-                i++;
+                List<Solid> solidsToRemove = subtractSolids.ToList();
 
-                BrushFaceMesh brushFaceMesh = mesh as BrushFaceMesh;
-                if (brushFaceMesh == null) continue;
 
-                Solid solid = pendingApplySolids[i];
 
-                if (solid == null) continue;
-
-                if (solid.isVisual == false)
+                for (int j = 0; j < pendingApplySolids.Count(); j++)
                 {
-                    var result = CsgHelper.GetConnectedAndDisconnectedPartsWithUV(solid, GetLocationsOfSolidsExcept(solid, originalSolids).ToArray());
+                    Solid solid = solids[j];
 
-                    pendingApplySolids[i] = result.MainSolid;
+                    pendingApplySolids[j] = solid.Substract(subtractSolids.ToArray());
 
+                }
+                int i = -1;
+                foreach (var mesh in meshes)
+                {
+                    i++;
 
+                    BrushFaceMesh brushFaceMesh = mesh as BrushFaceMesh;
+                    if (brushFaceMesh == null) continue;
 
-                    foreach (var s in result.DisconnectedSolids)
+                    Solid solid = pendingApplySolids[i];
+
+                    if (solid == null) continue;
+
+                    if (solid.isVisual == false)
                     {
-                        pendingCreateSolid.Add((s, brushFaceMesh));
+                        var result = CsgHelper.GetConnectedAndDisconnectedPartsWithUV(solid, GetLocationsOfSolidsExcept(solid, originalSolids).ToArray());
+
+                        pendingApplySolids[i] = result.MainSolid;
+
+
+
+                        foreach (var s in result.DisconnectedSolids)
+                        {
+                            pendingCreateSolid.Add((s, brushFaceMesh));
+                        }
                     }
-                }else
-                {
-                    //pendingApplySolids[i] = solid.Substract(subtractSolids.ToArray());
+                    else
+                    {
+                        //pendingApplySolids[i] = solid.Substract(subtractSolids.ToArray());
+                    }
+
+
                 }
 
+                lock (subtractSolids)
+                {
+                    foreach (var s in solidsToRemove)
+                    {
+                        subtractSolids.Remove(s);
+                    }
+
+                }
+
+                pendingAppy = true;
+
+                if (subtractSolids.Count != 0)
+                    dirty = true;
 
             }
-            pendingAppy = true;
-            subtractSolids.Clear(); //since new one is default one there is no need to store changes
 
         }
 
