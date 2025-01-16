@@ -138,11 +138,84 @@ namespace RetroEngine.Csg
             return ConvertMonoGameToCsg(vertices, indices);
         }
 
+        public static Solid GetConnectedPartWithUV(Solid solid, Vector3[] originalVertices)
+        {
+            // Convert the original vertices to a HashSet for quick lookup
+            var originalVertexSet = new HashSet<Vector3D>(originalVertices.Select(v => new Vector3D(v.X, v.Y, v.Z)));
+
+            // A set to store polygons that are part of the connected solid
+            var connectedPolygons = new HashSet<Polygon>();
+
+            // A dictionary to map vertices to the polygons they belong to
+            var vertexPolygonMap = new Dictionary<Vector3D, List<Polygon>>();
+
+            // Populate the vertex-to-polygon map
+            foreach (var polygon in solid.Polygons)
+            {
+                foreach (var vertex in polygon.Vertices)
+                {
+                    if (!vertexPolygonMap.TryGetValue(vertex.Pos, out var list))
+                    {
+                        list = new List<Polygon>();
+                        vertexPolygonMap[vertex.Pos] = list;
+                    }
+                    list.Add(polygon);
+                }
+            }
+
+            // A queue to process connected polygons
+            var polygonQueue = new Queue<Polygon>();
+
+            // A set to keep track of visited vertices
+            var visitedVertices = new HashSet<Vector3D>();
+
+            // Start with polygons that contain the original vertices
+            foreach (var vertex in originalVertexSet)
+            {
+                if (vertexPolygonMap.TryGetValue(vertex, out var polygons))
+                {
+                    foreach (var polygon in polygons)
+                    {
+                        if (connectedPolygons.Add(polygon)) // Add only if it's not already added
+                        {
+                            polygonQueue.Enqueue(polygon);
+                        }
+                    }
+                }
+            }
+
+            // Perform a flood-fill to find all connected polygons
+            while (polygonQueue.Count > 0)
+            {
+                var currentPolygon = polygonQueue.Dequeue();
+
+                foreach (var vertex in currentPolygon.Vertices)
+                {
+                    if (visitedVertices.Add(vertex.Pos)) // Process this vertex only once
+                    {
+                        if (vertexPolygonMap.TryGetValue(vertex.Pos, out var adjacentPolygons))
+                        {
+                            foreach (var adjacentPolygon in adjacentPolygons)
+                            {
+                                if (connectedPolygons.Add(adjacentPolygon)) // Add only if it's not already added
+                                {
+                                    polygonQueue.Enqueue(adjacentPolygon);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Create a new solid from the connected polygons
+            return Solid.FromPolygons(connectedPolygons.ToList());
+        }
 
         public static Vector3D ToCsg(this Vector3 vector)
         {
             return new Vector3D(vector.X, vector.Y, vector.Z);
         }
+
 
 
     }

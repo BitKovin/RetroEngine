@@ -205,8 +205,7 @@ namespace RetroEngine.NavigationSystem
         {
 
 
-            float[] verts = new float[0];
-            int[] faces = new int[0];
+
 
             List<StaticMesh.MeshData> meshDatas = new List<StaticMesh.MeshData>();  
 
@@ -225,7 +224,8 @@ namespace RetroEngine.NavigationSystem
 
             }
 
-            MergeMeshes(meshDatas, out verts, out faces);
+
+            MergeMeshes(meshDatas, out var verts, out var faces);
 
             if (verts.Length == 0)
                 return;
@@ -350,7 +350,7 @@ namespace RetroEngine.NavigationSystem
             return tc;
         }
 
-        static void MergeMeshes(List<StaticMesh.MeshData> meshDataList, out float[] verts, out int[] faces)
+        public static void MergeMeshes(List<StaticMesh.MeshData> meshDataList, out float[] verts, out int[] faces)
         {
             List<float> mergedVertices = new List<float>();
             List<int> mergedIndices = new List<int>();

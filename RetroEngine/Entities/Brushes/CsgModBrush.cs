@@ -1,4 +1,5 @@
-﻿using BulletSharp;
+﻿using Assimp;
+using BulletSharp;
 using Microsoft.Xna.Framework;
 using RetroEngine.Csg;
 using RetroEngine.PhysicsSystem;
@@ -6,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using static Assimp.Metadata;
 
@@ -28,14 +30,41 @@ namespace RetroEngine.Entities.Brushes
 
         bool dirty = false;
 
+        Solid[] pendingApplySolids;
+
+        bool pendingAppy = false;
+
+        CancellationTokenSource tokenSource = new CancellationTokenSource();
         void ApplySolids()
         {
 
             if (dirty == false) return;
+            dirty = false;
 
-            if (solids == null) return;
+            if(workingTask != null && workingTask.Status == TaskStatus.Running)
+            {
+                tokenSource.Cancel();
+            }
 
+            if(tokenSource.TryReset() == false)
+            {
+                tokenSource.Dispose();
+                tokenSource = new CancellationTokenSource();
+            }
+
+            CancellationToken ct = tokenSource.Token;
+
+            workingTask = Task.Run(StartGeneratingNewSolids, ct);
+
+        }
+
+        void StartGeneratingNewSolids()
+        {
             int i = -1;
+
+            pendingAppy = false;
+
+            pendingApplySolids = new Solid[solids.Length];
 
             foreach (var mesh in meshes)
             {
@@ -46,17 +75,49 @@ namespace RetroEngine.Entities.Brushes
 
                 Solid solid = solids[i];
 
+                if (solid == null) continue;
+
+
+
+                pendingApplySolids[i] = CsgHelper.GetConnectedPartWithUV(solid.Substract(subtractSolids.ToArray()), originalVertices.ToArray());
+
+            }
+            pendingAppy = true;
+            subtractSolids.Clear(); //since new one is default one there is no need to store changes
+
+        }
+
+        Task workingTask = null;
+
+        void ApplyPendingSolids()
+        {
+
+            if (pendingAppy == false) return;
+
+            int i = -1;
+
+            foreach (var mesh in meshes)
+            {
+                i++;
+
+                BrushFaceMesh brushFaceMesh = mesh as BrushFaceMesh;
+                if (brushFaceMesh == null) continue;
+
+                Solid solid = pendingApplySolids[i];
+
                 if(solid == null) continue;
 
-                brushFaceMesh.ApplySolid(solid.Substract(subtractSolids.ToArray()));
+                brushFaceMesh.ApplySolid(solid);
+                solids[i] = solid; //making new one as default one
 
-                //solids[i] = brushFaceMesh.ToSolid();
 
             }
 
             RegenerateBodies();
 
-        }
+            pendingAppy = false;
+
+    }
 
         void RegenerateBodies()
         {
@@ -82,8 +143,20 @@ namespace RetroEngine.Entities.Brushes
             base.FinalizeFrame();
 
             ApplySolids();
+            ApplyPendingSolids();
 
         }
+
+        public override void OnPointDamage(float damage, Vector3 point, Vector3 direction, Entity causer = null, Entity weapon = null)
+        {
+            base.OnPointDamage(damage, point, direction, causer, weapon);
+
+            subtractSolids.Add(Solids.Sphere(0.2f, point.ToCsg()));
+            dirty = true;
+
+        }
+
+        List<Vector3> originalVertices = new List<Vector3>();
 
         public override void Start()
         {
@@ -105,13 +178,15 @@ namespace RetroEngine.Entities.Brushes
 
                 avgLocation += brushFaceMesh.avgVertexPosition;
 
+                originalVertices.AddRange(brushFaceMesh.GetMeshVertices());
+
             }
 
             avgLocation /= (float)(i+1);
 
-            subtractSolids.Add(Solids.Sphere(2, avgLocation.ToCsg()));
+            //subtractSolids.Add(Solids.Sphere(2, avgLocation.ToCsg()));
 
-            dirty = true;
+            //dirty = true;
 
 
         }

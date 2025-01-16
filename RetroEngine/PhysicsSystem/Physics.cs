@@ -13,6 +13,7 @@ using System.Security;
 using System.Diagnostics;
 using System.Timers;
 using BulletSharp.SoftBody;
+using RetroEngine.NavigationSystem;
 
 
 namespace RetroEngine.PhysicsSystem
@@ -1053,6 +1054,54 @@ namespace RetroEngine.PhysicsSystem
             return compoundShape;
         }
 
+        /*
+        public static CollisionShape CreateCollisionShapeFromStaticMesh(StaticMesh staticMesh, float scale = 1.0f, CollisionShapeData shapeData = null, bool complex = false)
+        {
+
+            if (shapeData == null)
+                shapeData = new CollisionShapeData();
+
+            // Create a compound shape to hold multiple child collision shapes
+            CompoundShape compoundShape = new CompoundShape();
+            compoundShape.UserObject = shapeData;
+
+
+            // Create a convex hull shape for each mesh
+            IndexedMesh mesh = new IndexedMesh();
+
+
+            var meshes = staticMesh.GetMeshData();
+            Recast.MergeMeshes(meshes, out var verts, out var faces);
+
+            mesh.Allocate(faces.Length, verts.Length);
+            mesh.SetData(faces, verts);
+
+            TriangleMesh triangleMesh = new TriangleMesh();
+
+            triangleMesh.AddIndexedMesh(mesh);
+
+
+            // 6. Create the collision shape
+            BvhTriangleMeshShape Shape = new BvhTriangleMeshShape(triangleMesh, true); // Use quantization for better performance
+
+            
+
+            Shape.UserObject = shapeData;
+
+
+
+
+            // Calculate the mesh's transformation matrix (position and rotation)
+            Matrix4x4 transform = Matrix4x4.Identity;
+
+            // Add the convex shape to the compound shape with the calculated transformation
+            compoundShape.AddChildShape(transform, Shape);
+
+
+
+            return compoundShape;
+        }
+        */
         public static ConvexHullShape CreateConvexHullShape(ModelMesh mesh, float scale, int part = 0)
         {
             // Get the vertices from the model's mesh part
@@ -1086,12 +1135,14 @@ namespace RetroEngine.PhysicsSystem
 
             // 4. Create the triangle mesh
             TriangleMesh triangleMesh = new TriangleMesh();
+
+
             for (int i = 0; i < indices.Length; i += 3)
             {
                 var vertex0 = vertices[indices[i]].Position.ToPhysics();
                 var vertex1 = vertices[indices[i + 1]].Position.ToPhysics();
                 var vertex2 = vertices[indices[i + 2]].Position.ToPhysics();
-                triangleMesh.AddTriangle(vertex0, vertex1, vertex2, true);  // Assume triangles are not welded
+                triangleMesh.AddTriangle(vertex0, vertex1, vertex2, false);  // Assume triangles are not welded
             }
 
 
