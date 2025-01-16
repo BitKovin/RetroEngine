@@ -1,5 +1,8 @@
 newmtl __TB_empty
 
+newmtl brushes/__TB_empty
+map_Kd textures/brushes/__TB_empty.png
+
 newmtl brushes/bricks
 map_Kd textures/brushes/bricks.png
 

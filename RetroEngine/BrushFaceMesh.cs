@@ -91,7 +91,7 @@ namespace RetroEngine
             var graphicsDevice = GameMain.Instance.GraphicsDevice;
 
 
-
+            TwoSided = true;
 
 
             var data = CsgHelper.ConvertCsgToMesh(solid);

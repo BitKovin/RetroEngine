@@ -979,7 +979,7 @@ namespace RetroEngine
                             }
                             foreach (ModelMeshPart meshPart in mesh.MeshParts)
                             {
-
+                                if (meshPart.PrimitiveCount == 0) continue;
 
                                 MeshPartData meshPartData = meshPart.Tag as MeshPartData;
 
@@ -1006,7 +1006,6 @@ namespace RetroEngine
 
                                     effect.Techniques[0].Passes[0].Apply();
                                 }
-
 
 
                                 graphicsDevice.DrawIndexedPrimitives(
@@ -1048,7 +1047,7 @@ namespace RetroEngine
                 foreach (var meshPart in mesh.MeshParts)
                 {
 
-                    VertexData[] vertices = new VertexData[meshPart.NumVertices];
+                    VertexData[] vertices = new VertexData[meshPart.VertexBuffer.VertexCount];
 
                     meshPart.VertexBuffer.GetData(vertices);
 
@@ -1684,7 +1683,7 @@ namespace RetroEngine
                 boundingSphere = CalculateBoundingSphere(vertices.ToArray());
 
 
-                meshParts.Add(new ModelMeshPart { VertexBuffer = vertexBuffer, IndexBuffer = indexBuffer, StartIndex = 0, NumVertices = indices.Count, PrimitiveCount = primitiveCount, Tag = new MeshPartData { textureName = Path.GetFileName(scene.Materials[mesh.MaterialIndex].TextureDiffuse.FilePath), Points = points, Name = mesh.Name } });
+                meshParts.Add(new ModelMeshPart { VertexBuffer = vertexBuffer, IndexBuffer = indexBuffer, StartIndex = 0, NumVertices = vertices.Count, PrimitiveCount = primitiveCount, Tag = new MeshPartData { textureName = Path.GetFileName(scene.Materials[mesh.MaterialIndex].TextureDiffuse.FilePath), Points = points, Name = mesh.Name } });
             }
 
 

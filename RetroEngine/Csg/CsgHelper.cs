@@ -155,7 +155,7 @@ namespace RetroEngine.Csg
             var vertexStride = vertexDeclaration.VertexStride;
 
             var vertices = new VertexData[part.NumVertices];
-            vertexBuffer.GetData(part.VertexOffset * vertexStride, vertices, 0, part.NumVertices, vertexStride);
+            vertexBuffer.GetData(part.VertexOffset * vertexStride, vertices, 0, vertexBuffer.VertexCount, vertexStride);
 
             // Retrieve index data
             var indexBuffer = part.IndexBuffer;
@@ -191,16 +191,6 @@ namespace RetroEngine.Csg
             // Build vertex nodes with merging
             foreach (var polygon in solid.Polygons)
             {
-
-                bool hasInvalid = false;
-
-                foreach (var vertex in polygon.Vertices)
-                {
-                    if(vertex.Pos.X == 0 && vertex.Pos.Y == 0 && vertex.Pos.Z == 0)
-                        hasInvalid = true;
-                }
-
-                if (hasInvalid) continue;
 
                 foreach (var vertex in polygon.Vertices)
                 {

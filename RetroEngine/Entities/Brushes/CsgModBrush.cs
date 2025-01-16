@@ -20,7 +20,7 @@ namespace RetroEngine.Entities.Brushes
         public CsgModBrush() 
         {
             Static = false;
-            mergeBrushes = true;
+            mergeBrushes = false; //holes will happen otherwise
             ConvexBrush = false;
         }
 
@@ -61,12 +61,20 @@ namespace RetroEngine.Entities.Brushes
 
         void StartGeneratingNewSolids()
         {
-            int i = -1;
+
 
             pendingAppy = false;
 
             pendingApplySolids = new Solid[solids.Count()];
 
+            for (int j = 0; j < pendingApplySolids.Count(); j++)
+            {
+                Solid solid = solids[j];
+
+                pendingApplySolids[j] = solid.Substract(subtractSolids.ToArray());
+
+            }
+            int i = -1;
             foreach (var mesh in meshes)
             {
                 i++;
@@ -74,13 +82,13 @@ namespace RetroEngine.Entities.Brushes
                 BrushFaceMesh brushFaceMesh = mesh as BrushFaceMesh;
                 if (brushFaceMesh == null) continue;
 
-                Solid solid = solids[i];
+                Solid solid = pendingApplySolids[i];
 
                 if (solid == null) continue;
 
                 if (solid.isVisual == false)
                 {
-                    var result = CsgHelper.GetConnectedAndDisconnectedPartsWithUV(solid.Substract(subtractSolids.ToArray()), originalVertices.ToArray());
+                    var result = CsgHelper.GetConnectedAndDisconnectedPartsWithUV(solid, GetLocationsOfSolidsExcept(solid, originalSolids).ToArray());
 
                     pendingApplySolids[i] = result.MainSolid;
 
@@ -92,7 +100,7 @@ namespace RetroEngine.Entities.Brushes
                     }
                 }else
                 {
-                    pendingApplySolids[i] = solid.Substract(subtractSolids.ToArray());
+                    //pendingApplySolids[i] = solid.Substract(subtractSolids.ToArray());
                 }
 
 
@@ -190,12 +198,35 @@ namespace RetroEngine.Entities.Brushes
         {
             base.OnPointDamage(damage, point, direction, causer, weapon);
 
-            subtractSolids.Add(Solids.Sphere(0.5f, point.ToCsg()));
+            subtractSolids.Add(Solids.Sphere(1, point.ToCsg()));
             dirty = true;
 
         }
 
         List<Vector3> originalVertices = new List<Vector3>();
+
+        List<Vector3> GetLocationsOfSolidsExcept(Solid except, List<Solid> Solids)
+        {
+
+            List<Vector3> locations = new List<Vector3>();
+
+            foreach(Solid solid in Solids)
+            {
+                if(solid == except) continue;
+
+                foreach(var p in solid.Polygons)
+                    foreach(var v in p.Vertices)
+                    {
+                        locations.Add(new Vector3((float)v.Pos.X, (float)v.Pos.Y, (float)v.Pos.Z));
+                    }
+
+            }
+
+            return locations;
+
+        }
+
+        List<Solid> originalSolids;
 
         public override void Start()
         {
@@ -217,9 +248,9 @@ namespace RetroEngine.Entities.Brushes
 
                 avgLocation += brushFaceMesh.avgVertexPosition;
 
-                originalVertices.AddRange(brushFaceMesh.GetMeshVertices());
-
             }
+
+            originalSolids = new List<Solid>(solids);
 
             avgLocation /= (float)(i+1);
 
