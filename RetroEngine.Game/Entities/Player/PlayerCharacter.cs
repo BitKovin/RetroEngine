@@ -92,7 +92,7 @@ namespace RetroEngine.Game.Entities.Player
 
         bool useThirdPersonAnimations = false;
 
-        public static string armsModelPath = "models/weapons/arms_lq.fbx";
+        public static string armsModelPath = "models/weapons/arms.fbx";
 
         FmodEventInstance underWaterSound;
         FmodEventInstance underWaterAmbient;

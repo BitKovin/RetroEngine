@@ -12,9 +12,6 @@ namespace RetroEngine.Particles
     public class RibbonEmitter : ParticleEmitter
     {
 
-        VertexBuffer vertexBuffer;
-        IndexBuffer indexBuffer;
-
         int primitiveCount = 0;
 
         public RibbonEmitter() : base()
@@ -30,6 +27,9 @@ namespace RetroEngine.Particles
             OverrideBlendState = BlendState.NonPremultiplied;
         }
 
+        // Initialize vertex and index arrays
+        VertexData[] verticesFinal;
+        short[] indicesFinal;
 
         public void GenerateBuffers(List<Particle> particles)
         {
@@ -41,7 +41,6 @@ namespace RetroEngine.Particles
             {
                 if (particles == null || particles.Count < 2 || destroyed)
                 {
-                    FreeBuffers();
                     return;
                 }
 
@@ -54,30 +53,34 @@ namespace RetroEngine.Particles
                 // Calculate required vertex and index counts
                 int requiredVertexCount = particles.Count * 2;
                 int requiredIndexCount = (particles.Count - 1) * 6;
+                /*
+// Check if buffers need resizing (allocate with some slack, e.g., 25%)
+int vertexCapacityThreshold = vertexBuffer?.VertexCount ?? 0;
+int indexCapacityThreshold = indexBuffer?.IndexCount ?? 0;
 
-                // Check if buffers need resizing (allocate with some slack, e.g., 25%)
-                int vertexCapacityThreshold = vertexBuffer?.VertexCount ?? 0;
-                int indexCapacityThreshold = indexBuffer?.IndexCount ?? 0;
+if (vertexBuffer == null || requiredVertexCount > vertexCapacityThreshold)
+{
+    vertexCapacityThreshold = (int)(requiredVertexCount); // 25% extra space
+    if(vertexBuffer!=null)
+    freeVertexBuffers.Add(vertexBuffer);
+    vertexBuffer = ReuseOrCreateVertexBuffer(_graphicsDevice, vertexCapacityThreshold);
+}
 
-                if (vertexBuffer == null || requiredVertexCount > vertexCapacityThreshold)
-                {
-                    vertexCapacityThreshold = (int)(requiredVertexCount); // 25% extra space
-                    if(vertexBuffer!=null)
-                    freeVertexBuffers.Add(vertexBuffer);
-                    vertexBuffer = ReuseOrCreateVertexBuffer(_graphicsDevice, vertexCapacityThreshold);
-                }
+if (indexBuffer == null || requiredIndexCount > indexCapacityThreshold)
+{
+    indexCapacityThreshold = (int)(requiredIndexCount); // 25% extra space
+    if(indexBuffer!=null)
+    freeIndexBuffers.Add(indexBuffer);
+    indexBuffer = ReuseOrCreateIndexBuffer(_graphicsDevice, indexCapacityThreshold);
+}
+*/
 
-                if (indexBuffer == null || requiredIndexCount > indexCapacityThreshold)
-                {
-                    indexCapacityThreshold = (int)(requiredIndexCount); // 25% extra space
-                    if(indexBuffer!=null)
-                    freeIndexBuffers.Add(indexBuffer);
-                    indexBuffer = ReuseOrCreateIndexBuffer(_graphicsDevice, indexCapacityThreshold);
-                }
+                VertexData[] vertices;
+                short[] indices;
 
                 // Initialize vertex and index arrays
-                VertexData[] vertices = new VertexData[requiredVertexCount];
-                short[] indices = new short[requiredIndexCount];
+                vertices = new VertexData[requiredVertexCount];
+                indices = new short[requiredIndexCount];
 
 
                 // Generate vertices and indices
@@ -137,10 +140,11 @@ namespace RetroEngine.Particles
 
 
                 // Set buffer data
-                vertexBuffer.SetData(vertices, 0, requiredVertexCount);
-                indexBuffer.SetData(indices, 0, requiredIndexCount);
+                //vertexBuffer.SetData(vertices, 0, requiredVertexCount);
+                //indexBuffer.SetData(indices, 0, requiredIndexCount);
 
-
+                verticesFinal = vertices.ToArray();
+                indicesFinal = indices.ToArray();
 
                 // Calculate the number of primitives to draw
                 primitiveCount = requiredIndexCount / 3;
@@ -161,22 +165,6 @@ namespace RetroEngine.Particles
 
             particle.position = Position;
             
-        }
-
-        private void FreeBuffers()
-        {
-            // Return buffers to the pool for reuse
-            if (vertexBuffer != null)
-            {
-                freeVertexBuffers.Add(vertexBuffer);
-                //vertexBuffer = null;
-            }
-
-            if (indexBuffer != null)
-            {
-                freeIndexBuffers.Add(indexBuffer);
-                //indexBuffer = null;
-            }
         }
 
 
@@ -206,7 +194,6 @@ namespace RetroEngine.Particles
 
             destroyed = true;
 
-            FreeBuffers();
 
         }
 
@@ -218,9 +205,6 @@ namespace RetroEngine.Particles
 
             GenerateBuffers(finalizedParticles);
 
-            if (vertexBuffer == null || indexBuffer == null || vertexBuffer.IsDisposed || indexBuffer.IsDisposed)
-            { Console.WriteLine("empty vertex buffer"); return; }
-
 
             Effect effect = Shader.GetAndApply(Graphic.SurfaceShaderInstance.ShaderSurfaceType.Transperent);
 
@@ -230,27 +214,23 @@ namespace RetroEngine.Particles
             ApplyShaderParams(effect, null);
             effect.Parameters["isParticle"]?.SetValue(true);
 
-            _graphicsDevice.SetVertexBuffer(vertexBuffer);
-            _graphicsDevice.Indices = indexBuffer;
-
-            if (vertexBuffer == null) return;
-
             Stats.RenderedMehses++;
-            if (vertexBuffer == null) return;
 
-            lock (vertexBuffer)
+
+            if (indicesFinal == null) return;
+            if(verticesFinal == null) return;
+
+            if (destroyed == false)
             {
-                if (vertexBuffer == null || indexBuffer == null || vertexBuffer.IsDisposed || indexBuffer.IsDisposed)
-                { Console.WriteLine("empty vertex buffer"); return; }
-
-                if (destroyed == false)
+                effect.CurrentTechnique.Passes[0].Apply();
+                if (primitiveCount > 0)
                 {
-                    effect.CurrentTechnique.Passes[0].Apply();
-                    if(primitiveCount>0)
-                        _graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, primitiveCount);
+                    //_graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, primitiveCount);
+                    _graphicsDevice.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, verticesFinal, 0, verticesFinal.Length, indicesFinal, 0, primitiveCount);
                 }
-
             }
+
+
 
             effect.Parameters["isParticle"]?.SetValue(false);
 
