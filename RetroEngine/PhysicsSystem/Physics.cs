@@ -96,7 +96,10 @@ namespace RetroEngine.PhysicsSystem
                 {
                     int toAdd = max - convexResultCallbacks.Count;
 
-                    for (int i = 0; i < max; i++)
+                    toAdd = int.Clamp(toAdd, 0, step);
+
+
+                    for (int i = 0; i < toAdd; i++)
                     {
                         convexResultCallbacks.Push(new MyClosestConvexResultCallback(ref tempVector, ref tempVector));
                     }
@@ -109,7 +112,10 @@ namespace RetroEngine.PhysicsSystem
                 {
                     int toAdd = max - ClosestRayResultCallbacks.Count;
 
-                    for (int i = 0; i < max; i++)
+                    toAdd = int.Clamp(toAdd, 0, step);
+
+
+                    for (int i = 0; i < toAdd; i++)
                     {
                         ClosestRayResultCallbacks.Push(new MyClosestRayResultCallback(ref tempVector, ref tempVector));
                     }
@@ -350,6 +356,8 @@ namespace RetroEngine.PhysicsSystem
                     }
                 }
 
+                PopulateCallbackStacks(30, 150);
+
             });
 
 
@@ -453,7 +461,7 @@ namespace RetroEngine.PhysicsSystem
         public static void Update()
         {
 
-            PopulateCallbackStacks();
+
 
             lock (dynamicsWorld)
             {
@@ -869,6 +877,7 @@ namespace RetroEngine.PhysicsSystem
         static MyClosestRayResultCallback NewClosestRayResultCallback(ref Vector3 rayFromWorld, ref Vector3 rayToWorld)
         {
 
+
             lock (ClosestRayResultCallbacks)
             {
                 if(ClosestRayResultCallbacks.Count > 0)
@@ -894,6 +903,8 @@ namespace RetroEngine.PhysicsSystem
                     MyClosestConvexResultCallback callback = convexResultCallbacks.Pop();
                     callback.ConvexFromWorld = rayFromWorld;
                     callback.ConvexFromWorld = rayToWorld;
+                    callback.Start = rayFromWorld;
+                    callback.End = rayToWorld;
                     return callback;
 
                 }
