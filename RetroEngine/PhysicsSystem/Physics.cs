@@ -14,6 +14,7 @@ using System.Diagnostics;
 using System.Timers;
 using BulletSharp.SoftBody;
 using RetroEngine.NavigationSystem;
+using System.Collections;
 
 
 namespace RetroEngine.PhysicsSystem
@@ -72,9 +73,49 @@ namespace RetroEngine.PhysicsSystem
         static DbvtBroadphase broadphase;
         static CollisionDispatcher dispatcher;
 
+        static Stack<MyClosestConvexResultCallback> convexResultCallbacks = new Stack<MyClosestConvexResultCallback>();
+        static Stack<MyClosestRayResultCallback> ClosestRayResultCallbacks = new Stack<MyClosestRayResultCallback>();
+
         public class CollisionShapeData
         {
             public string surfaceType = "default";
+        }
+
+        static Vector3 tempVector = new Vector3(); 
+
+        /// <summary>
+        /// creating callbacks is expencive AF, so it's faster to just keep then in memory for future use
+        /// </summary>
+        /// <param name="step"></param>
+        /// <param name="max"></param>
+        public static void PopulateCallbackStacks(int step = 1, int max = 100)
+        {
+            lock (convexResultCallbacks)
+            {
+                if (convexResultCallbacks.Count < max)
+                {
+                    int toAdd = max - convexResultCallbacks.Count;
+
+                    for (int i = 0; i < max; i++)
+                    {
+                        convexResultCallbacks.Push(new MyClosestConvexResultCallback(ref tempVector, ref tempVector));
+                    }
+                }
+            }
+
+            lock (ClosestRayResultCallbacks)
+            {
+                if (ClosestRayResultCallbacks.Count < max)
+                {
+                    int toAdd = max - ClosestRayResultCallbacks.Count;
+
+                    for (int i = 0; i < max; i++)
+                    {
+                        ClosestRayResultCallbacks.Push(new MyClosestRayResultCallback(ref tempVector, ref tempVector));
+                    }
+                }
+            }
+
         }
 
         public static void DebugDraw()
@@ -145,7 +186,8 @@ namespace RetroEngine.PhysicsSystem
 
             broadphase.OverlappingPairCache.SetOverlapFilterCallback(collisionFilterCallback);
             //dynamicsWorld.ForceUpdateAllAabbs = false;
-            
+
+            CollisionFilterCallback.ResetCache();
 
             staticWorld = new DiscreteDynamicsWorld(new CollisionDispatcher(new DefaultCollisionConfiguration()), new DbvtBroadphase(), new SequentialImpulseConstraintSolver(), new DefaultCollisionConfiguration());
             staticBodies.Clear();
@@ -410,6 +452,9 @@ namespace RetroEngine.PhysicsSystem
 
         public static void Update()
         {
+
+            PopulateCallbackStacks();
+
             lock (dynamicsWorld)
             {
                 var collisionObjects = dynamicsWorld.CollisionObjectArray.ToArray();
@@ -821,13 +866,49 @@ namespace RetroEngine.PhysicsSystem
             return RigidBody;
         }
 
+        static MyClosestRayResultCallback NewClosestRayResultCallback(ref Vector3 rayFromWorld, ref Vector3 rayToWorld)
+        {
+
+            lock (ClosestRayResultCallbacks)
+            {
+                if(ClosestRayResultCallbacks.Count > 0)
+                {
+                    MyClosestRayResultCallback callback = ClosestRayResultCallbacks.Pop();
+                    callback.RayFromWorld = rayFromWorld;
+                    callback.RayToWorld = rayToWorld;
+                    return callback;
+
+                }
+            }
+
+            return new MyClosestRayResultCallback(ref rayFromWorld,ref rayToWorld);
+
+        }
+
+        static MyClosestConvexResultCallback NewClosestConvexResultCallback(ref Vector3 rayFromWorld, ref Vector3 rayToWorld)
+        {
+            lock (convexResultCallbacks)
+            {
+                if (convexResultCallbacks.Count > 0)
+                {
+                    MyClosestConvexResultCallback callback = convexResultCallbacks.Pop();
+                    callback.ConvexFromWorld = rayFromWorld;
+                    callback.ConvexFromWorld = rayToWorld;
+                    return callback;
+
+                }
+            }
+
+            return new MyClosestConvexResultCallback(ref rayFromWorld, ref rayToWorld);
+        }
+
         public static MyClosestRayResultCallback LineTrace(Microsoft.Xna.Framework.Vector3 rayStart, Microsoft.Xna.Framework.Vector3 rayEnd, List<CollisionObject> ignoreList = null, BodyType bodyType = BodyType.GroupAll)
         {
 
             Vector3 start = rayStart.ToPhysics();
             Vector3 end = rayEnd.ToPhysics();
 
-            MyClosestRayResultCallback rayCallback = new MyClosestRayResultCallback(ref start, ref end);
+            MyClosestRayResultCallback rayCallback = NewClosestRayResultCallback(ref start, ref end);
             rayCallback.BodyTypeMask = bodyType;
             if (ignoreList is not null)
                 rayCallback.ignoreList = ignoreList;
@@ -843,7 +924,7 @@ namespace RetroEngine.PhysicsSystem
                 if (bodyType.HasFlag(BodyType.HitBox))
                 {
 
-                    MyClosestRayResultCallback rayCallback2 = new MyClosestRayResultCallback(ref start, ref end);
+                    MyClosestRayResultCallback rayCallback2 = NewClosestRayResultCallback(ref start, ref end);
                     rayCallback2.BodyTypeMask = bodyType;
                     if (ignoreList is not null)
                         rayCallback2.ignoreList = ignoreList;
@@ -923,7 +1004,7 @@ namespace RetroEngine.PhysicsSystem
             Matrix4x4 end = Matrix4x4.CreateTranslation(rayEnd);
 
 
-            MyClosestConvexResultCallback convResultCallback = new MyClosestConvexResultCallback(ref rayStart, ref rayEnd);
+            MyClosestConvexResultCallback convResultCallback = NewClosestConvexResultCallback(ref rayStart, ref rayEnd);
 
             // Set the callback to respond only to static objects
             convResultCallback.FlagToRespond = CollisionFlags.StaticObject;
@@ -956,7 +1037,7 @@ namespace RetroEngine.PhysicsSystem
                 Matrix4x4 end = Matrix4x4.CreateTranslation(rayEnd.ToPhysics());
 
 
-                MyClosestConvexResultCallback convResultCallback = new MyClosestConvexResultCallback(ref rStart, ref rEnd);
+                MyClosestConvexResultCallback convResultCallback = NewClosestConvexResultCallback(ref rStart, ref rEnd);
                 convResultCallback.BodyTypeMask = bodyType;
 
                 if (ignoreList is not null)
@@ -969,7 +1050,7 @@ namespace RetroEngine.PhysicsSystem
                 if (bodyType.HasFlag(BodyType.HitBox))
                 {
 
-                    MyClosestConvexResultCallback convResultCallback2 = new MyClosestConvexResultCallback(ref rStart, ref rEnd);
+                    MyClosestConvexResultCallback convResultCallback2 = NewClosestConvexResultCallback(ref rStart, ref rEnd);
                     convResultCallback2.BodyTypeMask = bodyType;
 
                     if (ignoreList is not null)
@@ -1001,7 +1082,7 @@ namespace RetroEngine.PhysicsSystem
         {
             CollisionWorld world = staticWorld;
 
-            MyClosestRayResultCallback rayCallback = new MyClosestRayResultCallback(ref rayStart, ref rayEnd);
+            MyClosestRayResultCallback rayCallback = NewClosestRayResultCallback(ref rayStart, ref rayEnd);
 
             rayCallback.FlagToRespond = CollisionFlags.StaticObject;
 

@@ -14,7 +14,6 @@ namespace RetroEngine.PhysicsSystem
     {
 
         internal static Dictionary<BroadphaseProxy, CollisionObject> savedValues = new Dictionary<BroadphaseProxy, CollisionObject>();
-        internal static HashSet<BroadphaseProxy> savedProxies = new HashSet<BroadphaseProxy>();
 
         public override bool NeedBroadphaseCollision(BroadphaseProxy proxy0, BroadphaseProxy proxy1)
         {
@@ -46,13 +45,12 @@ namespace RetroEngine.PhysicsSystem
             return test1 && test2;
         }
 
-        CollisionObject GetCollisionObjectFromProxy(BroadphaseProxy proxy)
+        public static CollisionObject GetCollisionObjectFromProxy(BroadphaseProxy proxy)
         {
 
-            if(savedProxies.Contains(proxy)) return savedValues[proxy];
+            if(savedValues.ContainsKey(proxy)) return savedValues[proxy];
 
             savedValues.TryAdd(proxy, (CollisionObject)proxy.ClientObject);
-            savedProxies.Add(proxy);
             return savedValues[proxy];
 
         }
@@ -67,8 +65,6 @@ namespace RetroEngine.PhysicsSystem
         {
             savedValues.Clear();
             savedValues.EnsureCapacity(10000);
-            savedProxies.Clear();
-            savedProxies.EnsureCapacity(10000);
         }
 
     }

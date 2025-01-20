@@ -73,7 +73,9 @@ namespace RetroEngine
         public override bool NeedsCollision(BroadphaseProxy proxy0)
         {
 
-            if (proxy0.ClientObject is CollisionObject collisionObject)
+            CollisionObject collisionObject = CollisionFilterCallback.GetCollisionObjectFromProxy(proxy0);
+
+            if (collisionObject != null)
             {
                 if (ignoreList.Contains(proxy0.ClientObject)) return false;
 
