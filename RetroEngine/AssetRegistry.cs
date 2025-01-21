@@ -83,7 +83,7 @@ namespace RetroEngine
                 using (var asset = AssetRegistry.GetFileStreamFromPath(filePath))
                 {
 
-                    FileStream stream = asset.FileStream;
+                    Stream stream = asset.FileStream;
 
                     if(stream == null)
                     {
@@ -717,7 +717,9 @@ namespace RetroEngine
         {
             public string path;
 
-            public FileStream FileStream;
+            public Stream FileStream;
+
+            public StreamReader StreamReader;
 
             public bool disposed = false;
 
@@ -730,16 +732,18 @@ namespace RetroEngine
 
             }
 
-            public AssetFileStreamReference(string path, FileStream fileStream)
+            public AssetFileStreamReference(string path, Stream fileStream)
             {
                 this.path = path;
                 this.FileStream = fileStream;
+                this.StreamReader = new StreamReader(fileStream);
             }
 
             ~AssetFileStreamReference()
             {
                 FileStream?.Close();
                 FileStream?.Dispose();
+                StreamReader.Close();
                 disposed = true;
             }
 
