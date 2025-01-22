@@ -597,59 +597,59 @@ namespace RetroEngine
 
         public static Model MergeModels(List<Model> models)
         {
-
             GraphicsDevice graphicsDevice = GameMain.Instance.GraphicsDevice;
 
-            // Create lists to store combined vertex and index data
+            // A dictionary to ensure unique vertices and map them to indices
+            Dictionary<VertexData, int> vertexDictionary = new Dictionary<VertexData, int>();
             List<VertexData> vertices = new List<VertexData>();
             List<int> indices = new List<int>();
 
-            // Offset to keep track of the current vertex index
-            int vertexOffset = 0;
-
-            // Loop through each model
             foreach (var model in models)
             {
-                // Loop through each mesh in the model
                 foreach (var mesh in model.Meshes)
                 {
-                    // Combine mesh parts into one vertex buffer
                     foreach (var meshPart in mesh.MeshParts)
                     {
-                        // Get the vertex and index data
+                        // Get vertex and index data from the current mesh part
                         VertexData[] meshVertices = new VertexData[meshPart.VertexBuffer.VertexCount];
                         int[] meshIndices = new int[meshPart.PrimitiveCount * 3];
 
                         meshPart.VertexBuffer.GetData(meshVertices);
                         meshPart.IndexBuffer.GetData(meshIndices);
 
-                        // Add the vertices to the combined list
-                        vertices.AddRange(meshVertices);
-
-                        // Adjust indices to account for the combined vertex data
-                        for (int i = 0; i < meshIndices.Length; i++)
+                        // Iterate through indices to build merged vertex and index lists
+                        foreach (var index in meshIndices)
                         {
-                            meshIndices[i] += vertexOffset;
+                            var vertex = meshVertices[index];
+
+                            // Check if this vertex already exists in the dictionary
+                            if (!vertexDictionary.TryGetValue(vertex, out int existingIndex))
+                            {
+                                // Add new vertex and update the dictionary
+                                existingIndex = vertices.Count;
+                                vertexDictionary[vertex] = existingIndex;
+                                vertices.Add(vertex);
+                            }
+
+                            // Use the correct index (new or existing) for the combined index list
+                            indices.Add(existingIndex);
                         }
-
-                        // Add the indices to the combined list
-                        indices.AddRange(meshIndices);
                     }
-
-                    // Update the vertex offset for the next mesh
-                    vertexOffset = vertices.Count;
                 }
             }
 
-            // Create a new vertex buffer and index buffer for the merged model
+            // Debugging logs to validate vertex and index data
+            Console.WriteLine($"Total Unique Vertices: {vertices.Count}");
+            Console.WriteLine($"Total Indices: {indices.Count}");
+
+            // Create vertex buffer and index buffer for the merged model
             VertexBuffer mergedVertexBuffer = new VertexBuffer(graphicsDevice, typeof(VertexData), vertices.Count, BufferUsage.None);
             mergedVertexBuffer.SetData(vertices.ToArray());
 
             IndexBuffer mergedIndexBuffer = new IndexBuffer(graphicsDevice, IndexElementSize.ThirtyTwoBits, indices.Count, BufferUsage.None);
             mergedIndexBuffer.SetData(indices.ToArray());
 
-            
-
+            // Create a merged mesh part
             var mergedPart = new ModelMeshPart
             {
                 VertexBuffer = mergedVertexBuffer,
@@ -660,11 +660,14 @@ namespace RetroEngine
                 Tag = new MeshPartData { textureName = ((MeshPartData)models[0].Meshes[0].MeshParts[0].Tag).textureName }
             };
 
+            // Create the merged mesh
             var modelMesh = new ModelMesh(graphicsDevice, new List<ModelMeshPart> { mergedPart });
             modelMesh.BoundingSphere = CalculateBoundingSphere(vertices.ToArray());
 
+            // Return the merged model
             return new Model(graphicsDevice, new List<ModelBone>(), new List<ModelMesh> { modelMesh });
         }
+
 
         public static Model GetCollisionModel(string filePath, string objectName, float unitSize = 32)
         {

@@ -16,6 +16,7 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using RetroEngine.PhysicsSystem;
 using MonoGame.Extended.Text;
+using System.Globalization;
 
 namespace RetroEngine
 {
@@ -109,6 +110,8 @@ namespace RetroEngine
                 _graphics.GraphicsProfile = GraphicsProfile.HiDef;
             }
             RenderThread = Thread.CurrentThread;
+
+            CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
 
         }
 

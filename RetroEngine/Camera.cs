@@ -46,6 +46,8 @@ namespace RetroEngine
 
         public static Vector3 velocity = new Vector3(0,0,0);
 
+        public static List<CameraShake> CameraShakes = new List<CameraShake>();
+
         public static float GetHorizontalFOV()
         {
             return FOV*HtW;
@@ -54,8 +56,6 @@ namespace RetroEngine
         public static void Update()
         {
 
-            //rotation = new Vector3(Input.MousePos.Y, Input.MousePos.X, 0);
-            //position = new Vector3(0, 0, 0);
             world = Matrix.CreateTranslation(Vector3.Zero);
 
             if(rotation.GetUpVector().RotateVector(rotation.GetForwardVector(), roll).Y > 0)
@@ -71,6 +71,13 @@ namespace RetroEngine
 
             StupidCameraFix();
 
+            Camera.finalizedView = Camera.view;
+            Camera.finalizedProjection = Camera.projection;
+            Camera.finalizedProjectionViewmodel = Camera.projectionViewmodel;
+
+            Camera.finalizedPosition = Camera.position;
+            Camera.finalizedRotation = Camera.rotation;
+
             view = CalculateView();
 
             projection = Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.ToRadians(FOV),HtW, 0.05f, FarPlane);
@@ -81,6 +88,39 @@ namespace RetroEngine
 
             frustum.Matrix = view * projection;
 
+        }
+
+        public static void ApplyCameraShake()
+        {
+
+            rotation.Z = 0;
+
+            foreach(var shake in CameraShakes.ToArray())
+            {
+                shake.Update(Time.DeltaTime);
+
+                var result = shake.GetResult(position, rotation);
+
+                position = result.position;
+                rotation = result.rotation;
+
+                if(shake.IsFinished())
+                    CameraShakes.Remove(shake);
+
+            }
+
+            //roll += rotation.Z;
+
+            rotation.Z = 0;
+
+        }
+
+        public static void AddCameraShake(CameraShake cameraShake)
+        {
+            lock (CameraShakes)
+            {
+                CameraShakes.Add(cameraShake);
+            }
         }
 
         public static Matrix GetRotationMatrix()
@@ -119,7 +159,7 @@ namespace RetroEngine
 
         public static Matrix CalculateView()
         {
-            return Matrix.CreateLookAt(position, position + rotation.GetForwardVector(), rotation.GetUpVector().RotateVector(rotation.GetForwardVector(), roll));
+            return Matrix.CreateLookAt(finalizedPosition, finalizedPosition + finalizedRotation.GetForwardVector(), finalizedRotation.GetUpVector().RotateVector(finalizedRotation.GetForwardVector(), roll));
         }
 
         public static void ViewportUpdate()
@@ -137,4 +177,143 @@ namespace RetroEngine
             position = target.Position;
         }
     }
+
+    public class CameraShake
+    {
+        // Parameters
+        private float duration; // Total duration of the shake
+        private Vector3 positionAmplitude; // Max displacement for position on each axis (X, Y, Z)
+        private Vector3 positionFrequency; // Oscillation frequency for position on each axis (X, Y, Z)
+        private Vector3 rotationAmplitude; // Max displacement for rotation on each axis (Pitch, Yaw, Roll)
+        private Vector3 rotationFrequency; // Oscillation frequency for rotation on each axis (Pitch, Yaw, Roll)
+        private float falloff; // Intensity reduction over time
+        private float elapsedTime; // Tracks the elapsed time since the shake started
+
+        private float interpIn;
+
+        private Vector3 currentOffsetPosition; // Stores the current position offset
+        private Vector3 currentOffsetRotation; // Stores the current rotation offset
+
+        // Shake type
+        public enum ShakeType { SingleWave, PerlinNoise }
+        private ShakeType shakeType;
+
+        // Constructor with default values
+        public CameraShake(float interpIn = 0.2f,
+            float duration = 1f,
+            Vector3? positionAmplitude = null,
+            Vector3? positionFrequency = null,
+            Vector3? rotationAmplitude = null,
+            Vector3? rotationFrequency = null,
+            float falloff = 1f,
+            ShakeType shakeType = ShakeType.SingleWave)
+        {
+            this.interpIn = interpIn;
+            this.duration = duration;
+            this.positionAmplitude = positionAmplitude ?? new Vector3(1f, 1f, 1f);
+            this.positionFrequency = positionFrequency ?? new Vector3(10f, 10f, 10f);
+            this.rotationAmplitude = rotationAmplitude ?? new Vector3(1f, 1f, 1f);
+            this.rotationFrequency = rotationFrequency ?? new Vector3(10f, 10f, 10f);
+            this.falloff = falloff;
+            this.elapsedTime = 0f;
+            this.currentOffsetPosition = Vector3.Zero;
+            this.currentOffsetRotation = Vector3.Zero;
+            this.shakeType = shakeType;
+        }
+
+
+        float intensity;
+        // Update function
+        public void Update(float deltaTime)
+        {
+            // If the shake is over, do nothing
+            if (elapsedTime >= duration)
+            {
+                currentOffsetPosition = Vector3.Zero;
+                currentOffsetRotation = Vector3.Zero;
+                return;
+            }
+
+            // Calculate the normalized time (0 to 1)
+            float normalizedTime = elapsedTime / duration;
+
+
+            float interpTime = MathHelper.Saturate(elapsedTime / interpIn);
+
+            // Calculate the falloff multiplier
+            intensity = MathHelper.Lerp(1f, 0f, normalizedTime) * (1f - normalizedTime * falloff) * interpTime;
+
+
+
+            if (shakeType == ShakeType.SingleWave)
+            {
+                // Single wave offsets
+                currentOffsetPosition = new Vector3(
+                    intensity * positionAmplitude.X * (float)Math.Sin(elapsedTime * positionFrequency.X),
+                    intensity * positionAmplitude.Y * (float)Math.Sin(elapsedTime * positionFrequency.Y),
+                    intensity * positionAmplitude.Z * (float)Math.Sin(elapsedTime * positionFrequency.Z)
+                );
+
+                currentOffsetRotation = new Vector3(
+                    intensity * rotationAmplitude.X * (float)Math.Cos(elapsedTime * rotationFrequency.X),
+                    intensity * rotationAmplitude.Y * (float)Math.Cos(elapsedTime * rotationFrequency.Y),
+                    intensity * rotationAmplitude.Z * (float)Math.Cos(elapsedTime * rotationFrequency.Z)
+                );
+            }
+            else if (shakeType == ShakeType.PerlinNoise)
+            {
+                // Perlin noise offsets
+                currentOffsetPosition = new Vector3(
+                    intensity * positionAmplitude.X * PerlinNoise(elapsedTime * positionFrequency.X),
+                    intensity * positionAmplitude.Y * PerlinNoise(elapsedTime * positionFrequency.Y),
+                    intensity * positionAmplitude.Z * PerlinNoise(elapsedTime * positionFrequency.Z)
+                );
+
+                currentOffsetRotation = new Vector3(
+                    intensity * rotationAmplitude.X * PerlinNoise(elapsedTime * rotationFrequency.X),
+                    intensity * rotationAmplitude.Y * PerlinNoise(elapsedTime * rotationFrequency.Y),
+                    intensity * rotationAmplitude.Z * PerlinNoise(elapsedTime * rotationFrequency.Z)
+                );
+            }
+
+            // Increment elapsed time
+            elapsedTime += deltaTime;
+        }
+
+        // Get the result camera position and rotation
+        public (Vector3 position, Vector3 rotation) GetResult(Vector3 currentPosition, Vector3 currentRotation)
+        {
+            // Apply offsets to the position and rotation
+            Vector3 newPosition = currentPosition +
+                                  (currentOffsetPosition.X * currentRotation.GetRightVector() +
+                                   currentOffsetPosition.Y * currentRotation.GetUpVector() +
+                                   currentOffsetPosition.Z * currentRotation.GetForwardVector());
+
+            Vector3 newRotation = currentRotation + currentOffsetRotation;
+
+            return (newPosition, newRotation);
+        }
+
+        // Resets the shake timer
+        public void Reset()
+        {
+            elapsedTime = 0f;
+            currentOffsetPosition = Vector3.Zero;
+            currentOffsetRotation = Vector3.Zero;
+        }
+
+        // Checks if the shake is finished
+        public bool IsFinished()
+        {
+            return elapsedTime >= duration;
+        }
+
+        // Simple Perlin noise implementation (placeholder)
+        private float PerlinNoise(float input)
+        {
+            return (float)(Math.Sin(input) * 0.5 + 0.5); // Replace with actual Perlin noise logic if needed
+        }
+    }
+
+
 }

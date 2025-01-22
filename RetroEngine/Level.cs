@@ -396,13 +396,6 @@ namespace RetroEngine
 
             Graphics.UpdateDirectionalLight();
 
-            Camera.finalizedView = Camera.view;
-            Camera.finalizedProjection = Camera.projection;
-            Camera.finalizedProjectionViewmodel = Camera.projectionViewmodel;
-
-            Camera.finalizedPosition = Camera.position;
-            Camera.finalizedRotation = Camera.rotation;
-
             ParallelOptions options = new ParallelOptions();
             options.MaxDegreeOfParallelism = Environment.ProcessorCount;
 

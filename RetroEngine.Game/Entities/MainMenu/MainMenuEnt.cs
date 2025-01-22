@@ -55,16 +55,18 @@ namespace RetroEngine.Game.Entities.MainMenu
                 DrawBorder = true;
 
                 MenuButton button = new MenuButton();
-                button.size = new Vector2(300, 50);
+                button.size = new Vector2(500, 100);
                 button.position = new Vector2(0, 0);
                 button.Text = "Play";
-                button.onReleased += () => { Level.LoadLevelFromFile("test"); };
+                button.uiText.FontSize = 52;
+                button.onReleased += () => { Level.LoadLevelFromFile("lvl1"); };
                 AddChild(button);
 
                 MenuButton button2 = new MenuButton();
-                button2.size = new Vector2(300, 50);
-                button2.position = new Vector2(0, 100);
+                button2.size = new Vector2(500, 100);
+                button2.position = new Vector2(0, 150);
                 button2.Text = "Quit";
+                button2.uiText.FontSize = 52;
                 button2.onReleased += () => { System.Environment.Exit(0); };
                 AddChild(button2);
             }

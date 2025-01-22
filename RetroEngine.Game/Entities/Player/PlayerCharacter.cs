@@ -471,7 +471,6 @@ namespace RetroEngine.Game.Entities.Player
 
             CameraRotation = new Vector3(Math.Clamp(CameraRotation.X, -89, 89), CameraRotation.Y, 0);
 
-
             Camera.position = interpolatedPosition + new Vector3(0,0.7f,0) + CameraRotation.GetForwardVector().XZ().Normalized()*0.1f;
 
             bob = Vector3.Zero;
@@ -900,12 +899,14 @@ namespace RetroEngine.Game.Entities.Player
 
             }
 
+            Camera.ApplyCameraShake();
+
             //meleeTrail.SetTrailTransform(bodyMesh.GetBoneMatrix("hand_r").Translation, bodyMesh.GetBoneMatrix("clavicle_r").Translation);
 
             if (currentWeapon is not null)
             {
                 currentWeapon.Position = Camera.position + bob * 0.05f * currentWeapon.BobScale + CameraRotation.GetForwardVector() * Camera.rotation.X / 2000f;
-                currentWeapon.Rotation = CameraRotation - new Vector3(0, 0, (float)Math.Sin(bobProgress * -1 * bobSpeed) * -1.5f) * currentWeapon.BobScale;
+                currentWeapon.Rotation = Vector3.Lerp(Camera.rotation, CameraRotation, 0.2f) - new Vector3(0, 0, (float)Math.Sin(bobProgress * -1 * bobSpeed) * -1.5f) * currentWeapon.BobScale;
             }
 
             UpdatePlayerLight();
@@ -1100,6 +1101,16 @@ namespace RetroEngine.Game.Entities.Player
             base.OnPointDamage(damage, point, direction, causer, weapon);
 
             GlobalParticleSystem.EmitAt("hitBlood", Vector3.Lerp(point, Camera.position, 0.4f), MathHelper.FindLookAtRotation(Vector3.Zero, -direction), new Vector3(0, 0, damage / 2f));
+
+        }
+
+        public override void OnDamaged(float damage, Entity causer = null, Entity weapon = null)
+        {
+            base.OnDamaged(damage, causer, weapon);
+
+            Camera.AddCameraShake(new CameraShake(duration: 1, positionAmplitude: new Vector3(0,0,0), positionFrequency: new Vector3(0,0,0), rotationAmplitude: new Vector3(9,3,0), rotationFrequency: new Vector3(9,-6.4f, 0), falloff: 1, shakeType: CameraShake.ShakeType.SingleWave));
+
+            
 
         }
 

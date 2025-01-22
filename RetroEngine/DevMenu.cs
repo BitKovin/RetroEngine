@@ -7,7 +7,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using static RetroEngine.CameraShake;
 
 namespace RetroEngine
 {
@@ -120,13 +122,8 @@ namespace RetroEngine
             ImGui.SliderFloat("Saturation", ref Graphics.Saturation, -1, 2);
             ImGui.InputFloat("Saturation ", ref Graphics.Saturation);
 
-            
-
             ImGui.End();
 
-            
-
-            
 
             ImGui.Checkbox("dev menu", ref GameMain.Instance.DevMenuEnabled);
 
@@ -136,7 +133,7 @@ namespace RetroEngine
 
             DrawConsole();
 
-            CameraWindow();
+            TestCameraShake();
 
         }
 
@@ -213,6 +210,54 @@ namespace RetroEngine
             ImGui.EndChild();
 
             ImGui.End();
+        }
+
+        static float duration = 1f;
+        static Vector3 positionAmplitude;
+        static Vector3 positionFrequency;
+        static Vector3 rotationAmplitude;
+        static Vector3 rotationFrequency;
+        static float falloff = 1f;
+        static bool PerlinNoise = false;
+
+        protected virtual void TestCameraShake()
+        {
+
+            ImGui.Begin("camera shake");
+
+            ImGui.DragFloat("duration", ref duration, 0.02f);
+            ImGui.DragFloat3("positionAmplitude", ref positionAmplitude,0.2f);
+            ImGui.DragFloat3("positionFrequency", ref positionFrequency, 0.2f);
+            ImGui.DragFloat3("rotationAmplitude", ref rotationAmplitude, 0.2f);
+            ImGui.DragFloat3("rotationFrequency", ref rotationFrequency, 0.2f);
+            ImGui.DragFloat("falloff", ref falloff, 0.02f);
+            ImGui.Checkbox("PerlinNoise", ref PerlinNoise);
+
+            if(ImGui.Button("Test"))
+            {
+                Camera.AddCameraShake(new CameraShake(0.2f, duration, positionAmplitude, positionFrequency, rotationAmplitude, rotationFrequency, falloff, PerlinNoise ? ShakeType.PerlinNoise : ShakeType.SingleWave));
+            }
+
+            
+
+            if(ImGui.Button("Copy"))
+            {
+
+                Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
+
+                string shakeTypeName = PerlinNoise ? "CameraShake.ShakeType.PerlinNoise" : "CameraShake.ShakeType.SingleWave";
+
+                string copyContent = $"duration: {duration}f, positionAmplitude: new Vector3({positionAmplitude.X}f,{positionAmplitude.Y}f,{positionAmplitude.Z}f), positionFrequency: new Vector3({positionFrequency.X}f,{positionFrequency.Y}f,{positionFrequency.Z}f)," +
+                    $" rotationAmplitude: new Vector3({rotationAmplitude.X}f,{rotationAmplitude.Y}f,{rotationAmplitude.Z}f), rotationFrequency: new Vector3({rotationFrequency.X}f,{rotationFrequency.Y}f,{rotationFrequency.Z}f), falloff: {falloff}f," +
+                    $" shakeType: {shakeTypeName}";
+
+                ImGui.SetClipboardText(copyContent);
+
+          
+            }
+
+            ImGui.End();
+            
         }
 
         protected virtual void DrawStats()
