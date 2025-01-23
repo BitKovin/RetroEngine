@@ -212,6 +212,7 @@ namespace RetroEngine
             ImGui.End();
         }
 
+        static float interpIn = 1f;
         static float duration = 1f;
         static Vector3 positionAmplitude;
         static Vector3 positionFrequency;
@@ -226,6 +227,7 @@ namespace RetroEngine
             ImGui.Begin("camera shake");
 
             ImGui.DragFloat("duration", ref duration, 0.02f);
+            ImGui.DragFloat("interpIn", ref duration, 0.15f);
             ImGui.DragFloat3("positionAmplitude", ref positionAmplitude,0.2f);
             ImGui.DragFloat3("positionFrequency", ref positionFrequency, 0.2f);
             ImGui.DragFloat3("rotationAmplitude", ref rotationAmplitude, 0.2f);
@@ -235,7 +237,7 @@ namespace RetroEngine
 
             if(ImGui.Button("Test"))
             {
-                Camera.AddCameraShake(new CameraShake(0.2f, duration, positionAmplitude, positionFrequency, rotationAmplitude, rotationFrequency, falloff, PerlinNoise ? ShakeType.PerlinNoise : ShakeType.SingleWave));
+                Camera.AddCameraShake(new CameraShake(interpIn: interpIn, duration, positionAmplitude, positionFrequency, rotationAmplitude, rotationFrequency, falloff, PerlinNoise ? ShakeType.PerlinNoise : ShakeType.SingleWave));
             }
 
             
@@ -247,7 +249,7 @@ namespace RetroEngine
 
                 string shakeTypeName = PerlinNoise ? "CameraShake.ShakeType.PerlinNoise" : "CameraShake.ShakeType.SingleWave";
 
-                string copyContent = $"duration: {duration}f, positionAmplitude: new Vector3({positionAmplitude.X}f,{positionAmplitude.Y}f,{positionAmplitude.Z}f), positionFrequency: new Vector3({positionFrequency.X}f,{positionFrequency.Y}f,{positionFrequency.Z}f)," +
+                string copyContent = $"interpIn: {interpIn},duration: {duration}f, positionAmplitude: new Vector3({positionAmplitude.X}f,{positionAmplitude.Y}f,{positionAmplitude.Z}f), positionFrequency: new Vector3({positionFrequency.X}f,{positionFrequency.Y}f,{positionFrequency.Z}f)," +
                     $" rotationAmplitude: new Vector3({rotationAmplitude.X}f,{rotationAmplitude.Y}f,{rotationAmplitude.Z}f), rotationFrequency: new Vector3({rotationFrequency.X}f,{rotationFrequency.Y}f,{rotationFrequency.Z}f), falloff: {falloff}f," +
                     $" shakeType: {shakeTypeName}";
 

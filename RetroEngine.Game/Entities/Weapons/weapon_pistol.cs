@@ -193,7 +193,7 @@ namespace RetroEngine.Game.Entities.Weapons
             if (attackDelay.Wait()) return;
 
 
-            Camera.AddCameraShake(new CameraShake(interpIn: 0.1f,duration: 0.56f, positionAmplitude: new Vector3(0f, 0f, 0f), positionFrequency: new Vector3(0f, 0f, 0f), rotationAmplitude: new Vector3(-1.5f, 0f, 0f), rotationFrequency: new Vector3(-7.8f, 0f, 0f), falloff: 1f, shakeType: CameraShake.ShakeType.SingleWave));
+            Camera.AddCameraShake(new CameraShake(interpIn: 0.15f,duration: 0.68f, positionAmplitude: new Vector3(0f, 0f, 0f), positionFrequency: new Vector3(0f, 0f, 0f), rotationAmplitude: new Vector3(-1f, 0.15f, 0f), rotationFrequency: new Vector3(-7.8f, 28.8f, 0f), falloff: 1f, shakeType: CameraShake.ShakeType.SingleWave));
 
 
             attackDelay.AddDelay(0.4f);

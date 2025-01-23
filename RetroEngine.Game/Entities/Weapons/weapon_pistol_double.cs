@@ -210,7 +210,8 @@ namespace RetroEngine.Game.Entities.Weapons
 
             attackDelay.AddDelay(0.17f);
 
-            
+            Camera.AddCameraShake(new CameraShake(interpIn: 0.15f, duration: 0.68f, positionAmplitude: new Vector3(0f, 0f, 0f), positionFrequency: new Vector3(0f, 0f, 0f), rotationAmplitude: new Vector3(-1.5f, 0.15f, 0f), rotationFrequency: new Vector3(-6f, 28.8f, 0f), falloff: 1f, shakeType: CameraShake.ShakeType.SingleWave));
+
 
             if (r)
             {
