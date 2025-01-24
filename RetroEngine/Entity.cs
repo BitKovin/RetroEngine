@@ -309,6 +309,11 @@ namespace RetroEngine
 
         }
 
+        public virtual void DrawDevUi()
+        {
+
+        }
+
         public static void CallActionOnEntsWithName(string name, string eventName)
         {
             var ents = Level.GetCurrent().FindAllEntitiesWithName(name);

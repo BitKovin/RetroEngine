@@ -1,5 +1,6 @@
 ﻿using BulletSharp;
 using FmodForFoxes.Studio;
+using ImGuiNET;
 using Microsoft.Xna.Framework;
 using RetroEngine.Audio;
 using RetroEngine.Entities;
@@ -306,6 +307,28 @@ namespace RetroEngine.Game.Entities.Weapons
             meshTp.PastePoseLocal(pose);
             return meshTp.GetPoseLocal();
         }
+
+        System.Numerics.Vector3 rotationOffset;
+        System.Numerics.Vector3 positionOffset;
+
+        public override void DrawDevUi()
+        {
+
+            Matrix handTransform = new MathHelper.Transform { Rotation = rotationOffset, Position = positionOffset }.ToMatrix();
+
+            mesh.SetBoneMeshTransformModification("upperarm_r", handTransform);
+            mesh2.SetBoneMeshTransformModification("upperarm_r", handTransform);
+
+            ImGui.Begin("pistol");
+
+            ImGui.DragFloat3("rotation", ref rotationOffset);
+            ImGui.DragFloat3("position", ref positionOffset);
+
+            ImGui.End();
+
+            
+        }
+
         void LoadVisual()
         {
 

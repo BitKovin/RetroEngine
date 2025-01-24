@@ -36,14 +36,13 @@ namespace RetroEngine.Skeletal
                 if (b.ContainsKey(key) == false) continue;
 
 
-                //MathHelper.Transform transformA = MathHelper.DecomposeMatrix(a[key]);
-                //MathHelper.Transform transformB = MathHelper.DecomposeMatrix(b[key]);
+                MathHelper.Transform transformA = MathHelper.DecomposeMatrix(a[key]);
+                MathHelper.Transform transformB = MathHelper.DecomposeMatrix(b[key]);
 
 
-                //result.Pose[key] = MathHelper.Transform.Lerp(transformA,transformB, factor).ToMatrix();
+                result.Pose[key] = MathHelper.Transform.Lerp(transformA,transformB, factor).ToMatrix();
 
-
-                result.Pose[key] = Matrix.Lerp(a[key], b[key], factor);
+                //result.Pose[key] = Matrix.Lerp(a[key], b[key], factor);
 
             }
 

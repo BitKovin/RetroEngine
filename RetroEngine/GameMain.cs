@@ -505,6 +505,15 @@ namespace RetroEngine
                 if (devMenu is not null)
                     devMenu.Update();
 
+                if (Level.ChangingLevel == false && SkipFrames < 1)
+                {
+                    foreach(Entity entity in Level.GetCurrent().entities.ToArray())
+                    {
+                        entity?.DrawDevUi();
+                    }
+
+                }
+
                 ImGuiRenderer.EndLayout();
             }
             //base.Draw(gameTime);

@@ -304,7 +304,7 @@ namespace RetroEngine
 
             Dictionary<string, Matrix> boneNamesToTransforms = new Dictionary<string, Matrix>();
 
-            RiggedModel.UpdatePose();
+            
 
             foreach (var bone in RiggedModel.flatListToAllNodes)
             {
@@ -369,7 +369,7 @@ namespace RetroEngine
 
         }
 
-        public void PastePoseLocal(AnimationPose animPose, bool ignoreRoot = false)
+        public void PastePoseLocal(AnimationPose animPose, bool ignoreRoot = false, bool applyTransformModifiers = true)
         {
             if (RiggedModel == null) return;
 
@@ -400,7 +400,34 @@ namespace RetroEngine
 
             RiggedModel.animationPose = animPose;
 
-            RiggedModel.UpdatePose();
+            if (applyTransformModifiers == false)
+            {
+
+                var savedLocal = RiggedModel.additionalLocalOffsets;
+                var savedMesh = RiggedModel.additionalMeshOffsets;
+
+                RiggedModel.animationPose.BoneOverrides.Clear();
+
+                RiggedModel.additionalLocalOffsets = new Dictionary<string, Matrix>();
+                RiggedModel.additionalMeshOffsets = new Dictionary<string, Matrix>();
+
+                RiggedModel.UpdatePose();
+
+                RiggedModel.additionalLocalOffsets = savedLocal;
+                RiggedModel.additionalMeshOffsets = savedMesh;
+
+            }
+            else
+            {
+                RiggedModel.UpdatePose();
+            }
+
+            
+
+            if(applyTransformModifiers == false)
+            {
+                
+            }
 
         }
 
@@ -498,7 +525,8 @@ namespace RetroEngine
 
             if(RiggedModel.UpdateVisual && newAnimInterpolationProgress>0 && newAnimInterpolationProgress<1)
             {
-                PastePoseLocal(GetPoseLocal(), true);
+                PastePoseLocal(GetPoseLocal(), true, false);
+
             }
 
 

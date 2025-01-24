@@ -55,7 +55,7 @@ namespace RetroEngine.Game
 
 
                 
-            Level.LoadFromFile("menu");
+            Level.LoadFromFile("test");
 
             base.GameInitialized();
 
