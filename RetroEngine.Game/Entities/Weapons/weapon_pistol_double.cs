@@ -165,6 +165,14 @@ namespace RetroEngine.Game.Entities.Weapons
 
         }
 
+        public override void AsyncUpdate()
+        {
+            base.AsyncUpdate();
+
+            SetArmTransform();
+
+        }
+
         public override void LateUpdate()
         {
             base.LateUpdate();
@@ -308,8 +316,16 @@ namespace RetroEngine.Game.Entities.Weapons
             return meshTp.GetPoseLocal();
         }
 
-        System.Numerics.Vector3 rotationOffset;
-        System.Numerics.Vector3 positionOffset;
+        void SetArmTransform()
+        {
+            Matrix handTransform = new MathHelper.Transform { Rotation = rotationOffset, Position = positionOffset }.ToMatrix();
+
+            mesh.SetBoneMeshTransformModification("upperarm_r", handTransform);
+            mesh2.SetBoneMeshTransformModification("upperarm_r", handTransform);
+        }
+
+        System.Numerics.Vector3 rotationOffset = new System.Numerics.Vector3(0,0,-18);
+        System.Numerics.Vector3 positionOffset = new System.Numerics.Vector3(1,1,0);
 
         public override void DrawDevUi()
         {
@@ -419,5 +435,11 @@ namespace RetroEngine.Game.Entities.Weapons
             new Bullet().LoadAssetsIfNeeded();
 
         }
+
+        public override WeaponData GetDefaultWeaponData()
+        {
+            return new WeaponData { Slot = 1, weaponType = typeof(weapon_pistol_double), ammo = 24 };
+        }
+
     }
 }

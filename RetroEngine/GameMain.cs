@@ -313,6 +313,7 @@ namespace RetroEngine
             Input.Update();
 
             UiElement.Viewport.Update();
+            UiElement.Viewport.FinalizeChilds();
 
             PerformReservedTimeTasks();
 

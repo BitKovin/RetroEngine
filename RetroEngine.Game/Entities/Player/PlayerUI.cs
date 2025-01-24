@@ -1,5 +1,6 @@
 ﻿using BulletSharp;
 using Microsoft.Xna.Framework;
+using RetroEngine.Game.Entities.Weapons;
 using RetroEngine.PhysicsSystem;
 using RetroEngine.UI;
 using System;
@@ -13,13 +14,14 @@ namespace RetroEngine.Game.Entities.Player
     internal class PlayerUI : UiCanvas
     {
 
-        Entity player;
+        PlayerCharacter player;
 
-        public PlayerUI(Entity plr) { player = plr; }
+        public PlayerUI(PlayerCharacter plr) { player = plr; }
 
         Image crosshair = new Image();
         UiText health = new UiText();
         UiText fps = new UiText();
+        WeaponSlots weaponSlots = new WeaponSlots();
 
         bool loaded = false;
 
@@ -54,6 +56,12 @@ namespace RetroEngine.Game.Entities.Player
             fps.AlignProgress = new Vector2(0.0f, 0.5f);
             AddChild(fps);
 
+            weaponSlots.player = player;
+            weaponSlots.Origin = new Vector2(0.5f, 1f);
+            weaponSlots.Pivot = new Vector2(0.5f, 1f);
+            weaponSlots.position = new Vector2(0, -20);
+            AddChild(weaponSlots);
+
             Viewport.AddChild(this);
 
             //LoadWorldCrosshair();
@@ -74,7 +82,7 @@ namespace RetroEngine.Game.Entities.Player
 
             fps.text = ((int)(1f / (Time.DeltaTime/Time.TimeScale))).ToString();
 
-            
+
             //UpdateWorldCrosshair();
 
             crosshairMesh.Visible = ShowCrosshair;
@@ -131,6 +139,39 @@ namespace RetroEngine.Game.Entities.Player
             if (instance == null) return;
 
             instance.Visible = value;
+        }
+
+        class WeaponSlots : ContentBox
+        {
+
+            public PlayerCharacter player;
+
+            public override void Update()
+            {
+
+
+                childs.Clear();
+
+                foreach(WeaponData weaponData in player.weapons)
+                {
+                    if(weaponData==null) continue;
+
+                    Image img = new Image();
+                    img.SetTexture(weaponData.iconPath);
+                    img.size = new Vector2(120,120);
+                    AddChild(img);
+                    img.position = new Vector2((childs.Count-1) * 125,0);
+
+                    if (weaponData.Slot == player.currentSlot)
+                        img.DrawBorder = true;
+
+
+                }
+
+                base.Update();
+
+            }
+
         }
 
 

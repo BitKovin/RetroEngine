@@ -341,5 +341,11 @@ namespace RetroEngine.Game.Entities.Weapons
             new Bullet().LoadAssetsIfNeeded();
 
         }
+
+        public override WeaponData GetDefaultWeaponData()
+        {
+            return new WeaponData {Slot = 1, weaponType = typeof(weapon_pistol), ammo = 12 };
+        }
+
     }
 }

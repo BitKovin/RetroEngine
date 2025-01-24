@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Input;
 using RetroEngine;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
+using System.Linq;
 
 namespace RetroEngine.UI
 {
@@ -65,6 +66,8 @@ namespace RetroEngine.UI
     {
         protected List<UiElement> childs = new List<UiElement>();
 
+        internal List<UiElement> finalizedChilds = new List<UiElement>();
+
         public static UiElement Viewport;
 
         public bool hovering;
@@ -107,20 +110,75 @@ namespace RetroEngine.UI
             DrawAllBorder = value;
         }
 
-        public virtual void Update()
+        public void UpdateOffsets()
         {
-            float ScaleY = GameMain.Instance.Window.ClientBounds.Height / UiViewport.GetViewportHeight();
-            //float HtV = ((float)GameMain.Instance.Window.ClientBounds.Width) / ((float)GameMain.Instance.Window.ClientBounds.Height);
-
-
-
-
-
-
             offset = GetOrigin() - GetSize() * Pivot;
 
             TopLeft = position + offset;
             BottomRight = position + offset + GetSize();
+        }
+
+        public void UpdateChildren()
+        {
+            lock (childs)
+            {
+                var list = childs.ToArray();
+
+                foreach (UiElement element in list)
+                {
+                    lock (element)
+                    {
+                        element.ParrentTopLeft = TopLeft;
+                        element.ParrentBottomRight = BottomRight;
+                        element.parrent = this;
+                        element.Update();
+                    }
+                }
+            }
+        }
+
+        public void UpdateChildrenOffsets()
+        {
+            lock (childs)
+            {
+                var list = childs.ToArray();
+
+                foreach (UiElement element in list)
+                {
+                    lock (element)
+                    {
+                        element.ParrentTopLeft = TopLeft;
+                        element.ParrentBottomRight = BottomRight;
+                        element.parrent = this;
+                        element.UpdateOffsets();
+                    }
+                }
+            }
+        }
+
+        internal void FinalizeChilds()
+        {
+            finalizedChilds = childs.ToList();
+            
+
+            foreach (UiElement element in finalizedChilds)
+                element.FinalizeChilds();
+
+        }
+
+        public virtual void Update()
+        {
+
+            UpdateChildrenOffsets();
+            UpdateOffsets();
+            UpdateChildrenOffsets();
+
+            float ScaleY = GameMain.Instance.Window.ClientBounds.Height / UiViewport.GetViewportHeight();
+            //float HtV = ((float)GameMain.Instance.Window.ClientBounds.Width) / ((float)GameMain.Instance.Window.ClientBounds.Height);
+
+            UpdateChildren();
+
+            UpdateOffsets();
 
             if (GameMain.platform == Platform.Desktop)
             {
@@ -150,22 +208,6 @@ namespace RetroEngine.UI
                     if (Collision2D.MakeCollionTest(col, mouseCol))
                         hovering = true;
 
-                }
-            }
-
-            lock (childs)
-            {
-                var list = childs.ToArray();
-
-                foreach (UiElement element in list)
-                {
-                    lock (element)
-                    {
-                        element.ParrentTopLeft = TopLeft;
-                        element.ParrentBottomRight = BottomRight;
-                        element.parrent = this;
-                        element.Update();
-                    }
                 }
             }
 
@@ -256,7 +298,7 @@ namespace RetroEngine.UI
         public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
 
-            foreach (UiElement element in childs)
+            foreach (UiElement element in finalizedChilds)
                 if(element.Visible)
                     element.Draw(gameTime, spriteBatch);
 

@@ -56,7 +56,7 @@ namespace RetroEngine.Game.Entities.Player
         bool onGround = false;
 
         [JsonInclude]
-        public List<WeaponData> weapons = new List<WeaponData>();
+        public WeaponData[] weapons = new WeaponData[10];
 
         public Weapon currentWeapon;
         [JsonInclude]
@@ -219,7 +219,7 @@ namespace RetroEngine.Game.Entities.Player
             stepSound.SetParameter("Surface", 1);
 
 
-            weapons.Add(new WeaponData { weaponType = typeof(weapon_sword), ammo = 1 });
+            AddWeapon(new WeaponData { weaponType = typeof(weapon_sword), ammo = 1, Slot = 0 });
             //weapons.Add(new WeaponData { weaponType = typeof(weapon_shotgunNew), ammo = 50 });
             //weapons.Add(new WeaponData { weaponType = typeof(weapon_pistol_double), ammo = 50 });
             SwitchToSlot(0, true);
@@ -304,8 +304,8 @@ namespace RetroEngine.Game.Entities.Player
             if (Input.GetAction("jump").Holding())
                 Jump();
 
-            if (Input.GetAction("slot0").Pressed())
-                SwitchToSlot(-1);
+            //if (Input.GetAction("slot0").Pressed())
+                //SwitchToSlot(-1);
 
             if (Input.GetAction("slot1").Pressed())
                 SwitchToSlot(0);
@@ -315,6 +315,9 @@ namespace RetroEngine.Game.Entities.Player
 
             if (Input.GetAction("slot3").Pressed())
                 SwitchToSlot(2);
+
+            if (Input.GetAction("slot4").Pressed())
+                SwitchToSlot(4);
 
             if (Input.GetAction("lastSlot").Pressed())
                 SwitchToSlot(lastSlot);
@@ -1021,7 +1024,7 @@ namespace RetroEngine.Game.Entities.Player
             if(forceChange == false)
                 if (slot == currentSlot) return;
 
-            if (weapons.Count > slot && slot >= 0)
+            if (weapons[slot] != null)
             {
 
                 lastSlot = currentSlot;
@@ -1029,11 +1032,13 @@ namespace RetroEngine.Game.Entities.Player
 
                 SwitchWeapon(weapons[slot]);
             }
+            /*
             else
             {
                 currentSlot = slot;
                 SwitchWeapon(null);
             }
+            */
         }
 
         void SwitchWeapon(WeaponData data)
@@ -1053,8 +1058,16 @@ namespace RetroEngine.Game.Entities.Player
 
         public void AddWeapon(WeaponData weaponData)
         {
-            weapons.Add(weaponData);
-                SwitchToSlot(weapons.Count - 1,true);
+
+            int slot = weaponData.Slot;
+
+            if (weapons[slot] == null)
+            {
+                weapons[slot] = weaponData;
+                SwitchToSlot(slot, false);
+            }
+            
+
         }
 
         bool isInWater()

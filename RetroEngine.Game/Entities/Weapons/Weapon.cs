@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RetroEngine.Game.Entities.Player;
+using SharpFont;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,10 @@ namespace RetroEngine.Game.Entities.Weapons
         [JsonInclude]
         public int ammo = 0;
 
+        public int Slot = 0;
+
+        public string iconPath = "cat.png";
+
         public WeaponData() 
         {
 
@@ -28,9 +33,10 @@ namespace RetroEngine.Game.Entities.Weapons
 
         public static WeaponData FromType(Type type)
         {
-            WeaponData data = new WeaponData();
-            data.weaponType = type;
-            return data;
+            Weapon weapon = Activator.CreateInstance(type) as Weapon;
+
+            return weapon.GetDefaultWeaponData();
+
         }
 
     }
@@ -151,6 +157,17 @@ namespace RetroEngine.Game.Entities.Weapons
         {
             base.LoadAssets();
 
+            WeaponData weaponData = GetDefaultWeaponData();
+
+            if(weaponData != null)
+                AssetRegistry.LoadTextureFromFile(weaponData.iconPath);
+
+
+        }
+
+        public virtual WeaponData GetDefaultWeaponData()
+        {
+            return null;
         }
 
         [ConsoleCommand("weapon.give")]

@@ -155,8 +155,6 @@ namespace RetroEngine.Game.Entities.Weapons
                 for (float x = -4; x <= 4; x += 2f)
                 {
 
-
-
                     Vector2 v = new Vector2(x, y);
 
                     x *= 1.2f;
@@ -289,5 +287,11 @@ namespace RetroEngine.Game.Entities.Weapons
             //new Bullet().LoadAssetsIfNeeded();
 
         }
+
+        public override WeaponData GetDefaultWeaponData()
+        {
+            return new WeaponData { Slot = 2, weaponType = typeof(weapon_shotgunNew), ammo = 6 };
+        }
+
     }
 }
