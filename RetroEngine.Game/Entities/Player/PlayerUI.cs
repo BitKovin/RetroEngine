@@ -141,7 +141,7 @@ namespace RetroEngine.Game.Entities.Player
             instance.Visible = value;
         }
 
-        class WeaponSlots : ContentBox
+        class WeaponSlots : HorizontalBox
         {
 
             public PlayerCharacter player;
@@ -160,7 +160,6 @@ namespace RetroEngine.Game.Entities.Player
                     img.SetTexture(weaponData.iconPath);
                     img.size = new Vector2(120,120);
                     AddChild(img);
-                    img.position = new Vector2((childs.Count-1) * 125,0);
 
                     if (weaponData.Slot == player.currentSlot)
                         img.DrawBorder = true;

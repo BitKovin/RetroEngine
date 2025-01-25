@@ -172,13 +172,20 @@ namespace RetroEngine.UI
             UpdateChildrenOffsets();
             UpdateOffsets();
             UpdateChildrenOffsets();
-
-            float ScaleY = GameMain.Instance.Window.ClientBounds.Height / UiViewport.GetViewportHeight();
-            //float HtV = ((float)GameMain.Instance.Window.ClientBounds.Width) / ((float)GameMain.Instance.Window.ClientBounds.Height);
+            UpdateOffsets();
+            UpdateChildrenOffsets();
+            UpdateOffsets();
+            UpdateChildrenOffsets();
+            UpdateOffsets();
 
             UpdateChildren();
 
+            UpdateChildrenOffsets();
             UpdateOffsets();
+
+
+            float ScaleY = GameMain.Instance.Window.ClientBounds.Height / UiViewport.GetViewportHeight();
+            //float HtV = ((float)GameMain.Instance.Window.ClientBounds.Width) / ((float)GameMain.Instance.Window.ClientBounds.Height);
 
             if (GameMain.platform == Platform.Desktop)
             {

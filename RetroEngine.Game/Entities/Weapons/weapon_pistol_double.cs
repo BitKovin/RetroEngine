@@ -325,7 +325,7 @@ namespace RetroEngine.Game.Entities.Weapons
         }
 
         System.Numerics.Vector3 rotationOffset = new System.Numerics.Vector3(0,0,-18);
-        System.Numerics.Vector3 positionOffset = new System.Numerics.Vector3(1,1,0);
+        System.Numerics.Vector3 positionOffset = new System.Numerics.Vector3(2,1,-1);
 
         public override void DrawDevUi()
         {
