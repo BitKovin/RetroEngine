@@ -97,6 +97,8 @@ namespace RetroEngine.Particles
 
             OverrideBlendState = BlendState.NonPremultiplied;
 
+            TwoSided = true;
+
             DisableOcclusionCulling = true;
 
         }
@@ -677,8 +679,6 @@ namespace RetroEngine.Particles
             public bool Collided = false;
 
             public bool destroyed = false;
-
-            public bool OrientToVelocity = false;
 
             public void SetRotationFromVelocity()
             {

@@ -394,8 +394,9 @@ namespace RetroEngine.Game.Entities.Enemies
             if (loadedAssets == false) return;
 
 
+            float desiredMaxSpeed = (Vector3.Distance(targetLocation, Position) < 2) ? 2 : maxSpeed;
 
-
+            if(speed < desiredMaxSpeed)
             speed += Time.DeltaTime * (attackCooldown.Wait() ? 5: 7);
 
 
@@ -405,7 +406,9 @@ namespace RetroEngine.Game.Entities.Enemies
             if(attackCooldown.Wait() == false)
                 attacking = false;
 
-            speed = Math.Clamp(speed, 0, maxSpeed);
+
+
+            speed = Math.Clamp(speed, 0, desiredMaxSpeed);
 
 
             //CheckGround();

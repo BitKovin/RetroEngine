@@ -148,8 +148,6 @@ namespace RetroEngine.Game.Entities.Player
 
             public override void Update()
             {
-
-
                 childs.Clear();
 
                 foreach(WeaponData weaponData in player.weapons)
@@ -163,8 +161,6 @@ namespace RetroEngine.Game.Entities.Player
 
                     if (weaponData.Slot == player.currentSlot)
                         img.DrawBorder = true;
-
-
                 }
 
                 base.Update();

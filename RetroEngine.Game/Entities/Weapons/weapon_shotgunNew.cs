@@ -114,6 +114,7 @@ namespace RetroEngine.Game.Entities.Weapons
                 //mesh.PastePose(character.GetSkeletalMesh().GetPose());
             }
 
+            if (FreeCamera.active) return;
 
 
             if (loadedAssets == false) return;
