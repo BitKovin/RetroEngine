@@ -212,7 +212,7 @@ namespace RetroEngine
             ImGui.End();
         }
 
-        static float interpIn = 1f;
+        static float interpIn = 0.1f;
         static float duration = 1f;
         static Vector3 positionAmplitude;
         static Vector3 positionFrequency;
@@ -227,7 +227,7 @@ namespace RetroEngine
             ImGui.Begin("camera shake");
 
             ImGui.DragFloat("duration", ref duration, 0.02f);
-            ImGui.DragFloat("interpIn", ref duration, 0.15f);
+            ImGui.DragFloat("interpIn", ref interpIn, 0.15f);
             ImGui.DragFloat3("positionAmplitude", ref positionAmplitude,0.2f);
             ImGui.DragFloat3("positionFrequency", ref positionFrequency, 0.2f);
             ImGui.DragFloat3("rotationAmplitude", ref rotationAmplitude, 0.2f);
