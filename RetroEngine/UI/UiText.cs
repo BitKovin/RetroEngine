@@ -20,8 +20,6 @@ namespace RetroEngine.UI
 
         public float FontSize = 24f;
 
-        public Vector2 AlignProgress = new Vector2();
-
         public Color baseColor = Color.White;
 
         public UiText() : base()

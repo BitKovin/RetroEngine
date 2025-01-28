@@ -47,13 +47,11 @@ namespace RetroEngine.Game.Entities.Player
             health.Origin = new Vector2(0, 1);
             health.position = new Vector2(30,-50);
             health.FontSize = 24;
-            health.AlignProgress = new Vector2(0.0f, 0.5f);
             AddChild(health);
 
             fps.Origin = new Vector2(0, 0);
             fps.position = new Vector2(30, 50);
             fps.FontSize = 24;
-            fps.AlignProgress = new Vector2(0.0f, 0.5f);
             AddChild(fps);
 
             weaponSlots.player = player;
@@ -157,6 +155,16 @@ namespace RetroEngine.Game.Entities.Player
                     Image img = new Image();
                     img.SetTexture(weaponData.iconPath);
                     img.size = new Vector2(120,120);
+
+                    UiText uiText = new UiText();
+                    uiText.Origin = new Vector2(0, 1);
+                    uiText.Pivot = new Vector2(0, 1);
+                    uiText.text = weaponData.Slot.ToString();
+                    uiText.FontSize = 20;
+                    uiText.position = new Vector2(5, -5);
+
+                    img.AddChild(uiText);
+
                     AddChild(img);
 
                     if (weaponData.Slot == player.currentSlot)
