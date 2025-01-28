@@ -95,6 +95,9 @@ namespace RetroEngine
 
         public GameMain()
         {
+
+            Logger.TryEnableTcpLogger();
+
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
@@ -315,6 +318,8 @@ namespace RetroEngine
             UiElement.Viewport.Update();
             UiElement.Viewport.FinalizeChilds();
 
+
+            Camera.Update();
             PerformReservedTimeTasks();
 
             LimitFrameRate();
@@ -398,8 +403,6 @@ namespace RetroEngine
             Stats.StartRecord("Level LateUpdate");
             curentLevel.LateUpdate();
             Stats.StopRecord("Level LateUpdate");
-
-            Camera.Update();
 
             Stats.StartRecord("Sound Update");
             SoundManager.Update();

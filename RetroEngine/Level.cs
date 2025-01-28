@@ -394,6 +394,10 @@ namespace RetroEngine
         public virtual void RenderPreparation()
         {
 
+            //Camera.finalizedPosition = Camera.position;
+            //Camera.finalizedRotation = Camera.rotation;
+            GameMain.Instance.render.EndOcclusionTest(Render.testedMeshes);
+
             Graphics.UpdateDirectionalLight();
 
             ParallelOptions options = new ParallelOptions();

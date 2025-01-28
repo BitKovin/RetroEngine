@@ -56,6 +56,9 @@ namespace RetroEngine
         public static void Update()
         {
 
+            Camera.finalizedPosition = Camera.position;
+            Camera.finalizedRotation = Camera.rotation;
+
             world = Matrix.CreateTranslation(Vector3.Zero);
 
             if(rotation.GetUpVector().RotateVector(rotation.GetForwardVector(), roll).Y > 0)
@@ -71,13 +74,6 @@ namespace RetroEngine
 
             StupidCameraFix();
 
-            Camera.finalizedView = Camera.view;
-            Camera.finalizedProjection = Camera.projection;
-            Camera.finalizedProjectionViewmodel = Camera.projectionViewmodel;
-
-            Camera.finalizedPosition = Camera.position;
-            Camera.finalizedRotation = Camera.rotation;
-
             view = CalculateView();
 
             projection = Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.ToRadians(FOV),HtW, 0.05f, FarPlane);
@@ -87,6 +83,12 @@ namespace RetroEngine
             projectionViewmodel = Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.ToRadians(ViewmodelFOV), HtW, 0.01f, 1f);
 
             frustum.Matrix = view * projection;
+
+            Camera.finalizedView = Camera.view;
+            Camera.finalizedProjection = Camera.projection;
+            Camera.finalizedProjectionViewmodel = Camera.projectionViewmodel;
+
+
 
         }
 

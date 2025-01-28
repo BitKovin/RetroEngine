@@ -152,7 +152,7 @@ namespace RetroEngine
 
         public static Matrix GetLightViewViewmodel()
         {
-            return Matrix.CreateLookAt(Camera.position + Camera.Forward*0.5f, Camera.position + Camera.Forward * 0.5f + LightDirection, GetLightUpVector());
+            return Matrix.CreateLookAt(Camera.finalizedPosition + Camera.finalizedRotation.GetForwardVector()*0.5f, Camera.finalizedPosition + Camera.finalizedRotation.GetForwardVector() * 0.5f + LightDirection, GetLightUpVector());
         }
 
         public static Matrix GetLightProjectionViewmodel()
@@ -165,7 +165,7 @@ namespace RetroEngine
 
         static Vector3 GetLightUpVector()
         {
-            return new Vector3(0, 0, 1).RotateVector(Vector3.UnitY, Camera.rotation.Y+45);
+            return new Vector3(0, 0, 1).RotateVector(Vector3.UnitY, Camera.finalizedRotation.Y+45);
         }
 
         public static Matrix GetLightViewClose()
@@ -207,9 +207,9 @@ namespace RetroEngine
         static Vector3 GetCameraPositionByPixelGrid(float lightDistance, float resolution)
         {
 
-            float hFactor = 1f - Math.Abs(Camera.rotation.GetForwardVector().Y);
+            float hFactor = 1f - Math.Abs(Camera.finalizedRotation.GetForwardVector().GetForwardVector().Y);
 
-            Vector3 pos = Camera.position;// + Camera.rotation.GetForwardVector().XZ().Normalized() * lightDistance / 3f * hFactor * Graphics.LightDistanceMultiplier;
+            Vector3 pos = Camera.finalizedPosition;// + Camera.rotation.GetForwardVector().XZ().Normalized() * lightDistance / 3f * hFactor * Graphics.LightDistanceMultiplier;
 
             //return pos;
 

@@ -1,4 +1,5 @@
 ﻿using RetroEngine;
+using RetroEngine.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,8 @@ namespace RetroEngine
 
         static TcpSender tcpSender = new TcpSender(2004);
 
+        public static bool TcpLoggerEnabled = false;
+
         public static void Log(object s)
         {
 
@@ -26,13 +29,22 @@ namespace RetroEngine
             tcpSender.AddMessage(s.ToString());
 
         }
+        [ConsoleCommand("log.tcp")]
+        public static void TryEnableTcpLogger()
+        {
+
+            tcpSender.client?.Close();
+            tcpSender.client = null;
+
+            TcpLoggerEnabled = tcpSender.SendMessage("connection.......");
+        }
 
         // Class to handle sending string messages over TCP
         public class TcpSender
         {
             private readonly int _port;
 
-            TcpClient client;
+            public TcpClient client;
 
             Queue<string> queue = new Queue<string>();
 
@@ -42,7 +54,10 @@ namespace RetroEngine
 
                 
 
-                new Thread(() => { SendLoop(); }).Start();
+                Thread thread = new Thread(() => { SendLoop(); });
+                thread.Priority = ThreadPriority.Lowest;
+                thread.Name = "Tcp Logger Thread";
+                thread.Start();
 
             }
 
@@ -50,6 +65,13 @@ namespace RetroEngine
             {
                 while (true)
                 {
+
+                    if(TcpLoggerEnabled == false)
+                    {
+                        Thread.Sleep(1000);
+                        continue;
+                    }
+
                     int count = 0;
                     lock (queue)
                         count = queue.Count;
@@ -63,7 +85,11 @@ namespace RetroEngine
                     string msg;
                     lock (queue)
                     msg = queue.Dequeue();
-                    SendMessage(msg);
+
+                    if(SendMessage(msg) == false)
+                    {
+                        Thread.Sleep(1000);
+                    }
 
                 }
             }
@@ -74,11 +100,11 @@ namespace RetroEngine
                     queue.Enqueue(message);
             }
 
-            void SendMessage(string message)
+            public bool SendMessage(string message)
             {
 
                 if(client == null)
-                    try { client = new TcpClient("localhost", _port); } catch { }
+                    try { client = new TcpClient("localhost", _port); } catch { return false; }
 
                 try
                 {
@@ -88,12 +114,19 @@ namespace RetroEngine
 
                     stream.Write(data, 0, data.Length);
 
+
+
                 }
                 catch (Exception ex)
                 {
                     client?.Close();
-                    client = new TcpClient("localhost", _port);
+                    try
+                    {
+                        client = new TcpClient("localhost", _port);
+                    }catch { return false; }
                 }
+
+                return true;
             }
         }
 
