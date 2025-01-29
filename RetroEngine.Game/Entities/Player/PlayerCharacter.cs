@@ -71,6 +71,7 @@ namespace RetroEngine.Game.Entities.Player
         PlayerUI PlayerUI;
 
         Vector3 interpolatedPosition = new Vector3();
+        float cameraHeightOffset = 0;
 
         SkeletalMesh bodyMesh = new SkeletalMesh();
         PlayerBodyAnimator PlayerBodyAnimator = new PlayerBodyAnimator();
@@ -359,16 +360,9 @@ namespace RetroEngine.Game.Entities.Player
 
 
 
-            PlayerBodyAnimator.MovementSpeed = ((Vector3)body.LinearVelocity).XZ().Length();
-
-            float Dx = Vector3.Dot(((Vector3)body.LinearVelocity).XZ().Normalized(), Camera.rotation.GetRightVector());
-            float Dy = Vector3.Dot(((Vector3)body.LinearVelocity).XZ().Normalized(), Camera.rotation.GetForwardVector().XZ().Normalized());
-
-            Vector2 dir = new Vector2(Dx, Dy);
-
             PlayerFlashLight.enabled = flashlightEnabled;
 
-            PlayerBodyAnimator.MovementDirection = dir;
+
             
 
             MathHelper.Transform hide = new MathHelper.Transform();
@@ -428,6 +422,13 @@ namespace RetroEngine.Game.Entities.Player
         {
             base.VisualUpdate();
 
+            PlayerBodyAnimator.MovementSpeed = ((Vector3)body.LinearVelocity).XZ().Length();
+
+            float Dx = Vector3.Dot(velocity.XZ().Normalized(), CameraRotation.GetRightVector());
+            float Dy = Vector3.Dot(velocity.XZ().Normalized(), CameraRotation.GetForwardVector().XZ().Normalized());
+            Vector2 dir = new Vector2(Dx, Dy);
+            PlayerBodyAnimator.MovementDirection = dir;
+
             PlayerBodyAnimator.Update();
 
             var pose = PlayerBodyAnimator.GetResultPose();
@@ -461,6 +462,8 @@ namespace RetroEngine.Game.Entities.Player
             // Interpolate the position based on the elapsed time in the current frame
             float interpolationFactor = Time.DeltaTime / fixedDeltaTime;
             interpolatedPosition = Vector3.Lerp(previousPosition, currentPosition, Math.Min(interpolationFactor,1));
+
+            cameraHeightOffset = MathHelper.Lerp(cameraHeightOffset, 0, interpolationFactor/5f);
 
 
         }
@@ -813,6 +816,11 @@ namespace RetroEngine.Game.Entities.Player
 
             Vector3 lerpPose = Vector3.Lerp(Position, hitPoint, 0.4f);
 
+            float newOffset = Position.Y - lerpPose.Y;
+
+            cameraHeightOffset += newOffset;
+            interpolatedPosition.Y -= newOffset;
+
             body.SetPosition(lerpPose);
 
             stepDelay.AddDelay(0.1f);
@@ -835,6 +843,7 @@ namespace RetroEngine.Game.Entities.Player
             MathHelper.Transform t = bodyMesh.GetBoneMatrix("head").DecomposeMatrix();
 
             Camera.position = t.Position + Camera.rotation.GetForwardVector().XZ().Normalized() * 0.35f + Vector3.Up*0.15f;
+            Camera.position.Y += cameraHeightOffset;
         }
 
         void FirstPersonFullBodyCameraUpdate()
@@ -943,7 +952,7 @@ namespace RetroEngine.Game.Entities.Player
             PlayerFlashLight.Position = t.Position
                 + Camera.rotation.GetForwardVector().XZ().Normalized() * 0.2f
                 + Camera.rotation.GetRightVector() * -0.1f
-                + Vector3.Up * 0.1f;
+                + Vector3.Up * 0.1f + Vector3.Up * cameraHeightOffset;
             PlayerFlashLight.Rotation = Camera.rotation;
         }
 

@@ -63,7 +63,7 @@ namespace RetroEngine.Game.Entities.Player
 
             speedFactor = MathF.Min(speedFactor, 1.2f);
 
-            if (MovementDirection.Y<-0.3)
+            if (MovementDirection.Y<-0.1)
             {
                 Speed = -speedFactor;
                 MovementDirection *= -1;
