@@ -342,7 +342,7 @@ namespace RetroEngine.Game.Entities.Player
             PostProcessStep.StepsAfter.Remove(waterPP);
             underWaterSound.Stop();
 
-            SoundPlayer.PlaySound(testSound);
+            //SoundPlayer.PlaySound(testSound);
 
         }
 
