@@ -93,7 +93,7 @@ namespace RetroEngine.Game.Entities.Player
 
         bool useThirdPersonAnimations = false;
 
-        public static string armsModelPath = "models/weapons/arms.fbx";
+        public static string armsModelPath = "models/weapons/arms_n.fbx";
 
         FmodEventInstance underWaterSound;
         FmodEventInstance underWaterAmbient;
@@ -149,7 +149,7 @@ namespace RetroEngine.Game.Entities.Player
 
             PlayerBodyAnimator.LoadAssets();
 
-            meshes.Add(bodyMesh);
+            //meshes.Add(bodyMesh);
 
             testCube.LoadFromFile("models/cube.obj");
             testCube.texture = AssetRegistry.LoadTextureFromFile("cat.png");
@@ -428,6 +428,8 @@ namespace RetroEngine.Game.Entities.Player
             float Dy = Vector3.Dot(velocity.XZ().Normalized(), CameraRotation.GetForwardVector().XZ().Normalized());
             Vector2 dir = new Vector2(Dx, Dy);
             PlayerBodyAnimator.MovementDirection = dir;
+
+            PlayerBodyAnimator.MovementDirection = new Vector2(0, 1);
 
             PlayerBodyAnimator.Update();
 
@@ -812,9 +814,10 @@ namespace RetroEngine.Game.Entities.Player
 
             DrawDebug.Sphere(0.1f, hitPoint, Vector3.UnitY);
 
-            hitPoint.Y += 1.5f;
 
             Vector3 lerpPose = Vector3.Lerp(Position, hitPoint, 0.4f);
+
+            lerpPose.Y = hitPoint.Y + 1;
 
             float newOffset = Position.Y - lerpPose.Y;
 

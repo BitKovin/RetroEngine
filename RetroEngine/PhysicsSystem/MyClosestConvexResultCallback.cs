@@ -41,7 +41,11 @@ namespace RetroEngine
             if (convexResult.HitCollisionObject != null)
             {
 
-                var data = (RigidbodyData)convexResult.HitCollisionObject.UserObject;
+                var userObject = convexResult.HitCollisionObject.UserObject;
+
+                if(userObject == null) return base.AddSingleResult(ref convexResult, normalInWorldSpace);
+
+                var data = (RigidbodyData)userObject;
 
                 Entity hitEnt = data.Entity;
 

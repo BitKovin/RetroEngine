@@ -43,7 +43,7 @@ namespace RetroEngine.Game.Entities
             mesh.EmissionPower = 1;
             mesh.CastShadows = false;
 
-            meshes.Add(mesh);
+            //meshes.Add(mesh);
 
         }
 

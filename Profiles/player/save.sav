@@ -1,119 +1,11 @@
 {
-  "levelName": "lvl1.map",
+  "levelName": "pallet.map",
   "entities": [
     {
       "Name": "player",
       "className": "info_player_start",
       "id": "info_player_start-player-0",
-      "saveData": "{\u0022velocity\u0022:{\u0022X\u0022:-10.502467,\u0022Y\u0022:-5.213341,\u0022Z\u0022:-1.0199784},\u0022weapons\u0022:[{\u0022weaponType\u0022:\u0022RetroEngine.Game.Entities.Weapons.weapon_sword, RetroEngine.Game, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0022,\u0022ammo\u0022:1},{\u0022weaponType\u0022:\u0022RetroEngine.Game.Entities.Weapons.weapon_pistol, RetroEngine.Game, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0022,\u0022ammo\u0022:0}],\u0022currentSlot\u0022:1,\u0022lastSlot\u0022:0,\u0022thirdPerson\u0022:false,\u0022Position\u0022:{\u0022X\u0022:85.76455,\u0022Y\u0022:2.4565609,\u0022Z\u0022:209.15593},\u0022Rotation\u0022:{\u0022X\u0022:5.766723,\u0022Y\u0022:273.00043,\u0022Z\u0022:0},\u0022name\u0022:\u0022player\u0022,\u0022Tags\u0022:[\u0022player\u0022],\u0022Health\u0022:100,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "spawner",
-      "id": "spawner-spg_1-0",
-      "saveData": "{\u0022isEntAlive\u0022:false,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:51.5,\u0022Y\u0022:1.5312093,\u0022Z\u0022:204},\u0022Rotation\u0022:{\u0022X\u0022:-9.999983E-05,\u0022Y\u0022:90.0001,\u0022Z\u0022:0.0001},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "spawner",
-      "id": "spawner-spg_1-1",
-      "saveData": "{\u0022isEntAlive\u0022:false,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:47.5,\u0022Y\u0022:1.5279156,\u0022Z\u0022:214.5},\u0022Rotation\u0022:{\u0022X\u0022:-9.999983E-05,\u0022Y\u0022:90.0001,\u0022Z\u0022:0.0001},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "spawner",
-      "id": "spawner-spg_1-2",
-      "saveData": "{\u0022isEntAlive\u0022:false,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:43.5,\u0022Y\u0022:1.5301594,\u0022Z\u0022:209},\u0022Rotation\u0022:{\u0022X\u0022:-9.999983E-05,\u0022Y\u0022:90.0001,\u0022Z\u0022:0.0001},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "spawner",
-      "id": "spawner-spg_1-3",
-      "saveData": "{\u0022isEntAlive\u0022:false,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:38.5,\u0022Y\u0022:2,\u0022Z\u0022:192.5},\u0022Rotation\u0022:{\u0022X\u0022:-9.999983E-05,\u0022Y\u0022:90.0001,\u0022Z\u0022:0.0001},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "spawner",
-      "id": "spawner-spg_1-4",
-      "saveData": "{\u0022isEntAlive\u0022:false,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:36.5,\u0022Y\u0022:2,\u0022Z\u0022:197},\u0022Rotation\u0022:{\u0022X\u0022:-9.999983E-05,\u0022Y\u0022:90.0001,\u0022Z\u0022:0.0001},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "spawner",
-      "id": "spawner-spg_1-5",
-      "saveData": "{\u0022isEntAlive\u0022:false,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:36,\u0022Y\u0022:2,\u0022Z\u0022:199},\u0022Rotation\u0022:{\u0022X\u0022:-9.999983E-05,\u0022Y\u0022:90.0001,\u0022Z\u0022:0.0001},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "spawner",
-      "id": "spawner-spg_1-6",
-      "saveData": "{\u0022isEntAlive\u0022:false,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:35,\u0022Y\u0022:2,\u0022Z\u0022:202},\u0022Rotation\u0022:{\u0022X\u0022:-9.999983E-05,\u0022Y\u0022:90.0001,\u0022Z\u0022:0.0001},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "spawner",
-      "id": "spawner-spg_1-7",
-      "saveData": "{\u0022isEntAlive\u0022:false,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:35,\u0022Y\u0022:2,\u0022Z\u0022:204.5},\u0022Rotation\u0022:{\u0022X\u0022:-9.999983E-05,\u0022Y\u0022:90.0001,\u0022Z\u0022:0.0001},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "spawner",
-      "id": "spawner-spg_1-8",
-      "saveData": "{\u0022isEntAlive\u0022:false,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:34.5,\u0022Y\u0022:2,\u0022Z\u0022:207},\u0022Rotation\u0022:{\u0022X\u0022:-9.999983E-05,\u0022Y\u0022:90.0001,\u0022Z\u0022:0.0001},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "spawner",
-      "id": "spawner-spg_1-9",
-      "saveData": "{\u0022isEntAlive\u0022:false,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:34.5,\u0022Y\u0022:2,\u0022Z\u0022:209.5},\u0022Rotation\u0022:{\u0022X\u0022:-9.999983E-05,\u0022Y\u0022:90.0001,\u0022Z\u0022:0.0001},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "spawner",
-      "id": "spawner-spg_1-10",
-      "saveData": "{\u0022isEntAlive\u0022:false,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:35,\u0022Y\u0022:2,\u0022Z\u0022:213},\u0022Rotation\u0022:{\u0022X\u0022:-9.999983E-05,\u0022Y\u0022:90.0001,\u0022Z\u0022:0.0001},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "spawner",
-      "id": "spawner-spg_1-11",
-      "saveData": "{\u0022isEntAlive\u0022:false,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:36,\u0022Y\u0022:2,\u0022Z\u0022:216.5},\u0022Rotation\u0022:{\u0022X\u0022:-9.999983E-05,\u0022Y\u0022:90.0001,\u0022Z\u0022:0.0001},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "spawner",
-      "id": "spawner-spg_1-12",
-      "saveData": "{\u0022isEntAlive\u0022:false,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:37.5,\u0022Y\u0022:1.5281625,\u0022Z\u0022:220},\u0022Rotation\u0022:{\u0022X\u0022:-9.999983E-05,\u0022Y\u0022:90.0001,\u0022Z\u0022:0.0001},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "spawner",
-      "id": "spawner-spg_1-13",
-      "saveData": "{\u0022isEntAlive\u0022:false,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:38.5,\u0022Y\u0022:1.5262656,\u0022Z\u0022:225.5},\u0022Rotation\u0022:{\u0022X\u0022:-9.999983E-05,\u0022Y\u0022:90.0001,\u0022Z\u0022:0.0001},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "spt_1",
-      "className": "triggerOnce",
-      "id": "triggerOnce--0",
-      "saveData": "{\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022spt_1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "test_sp",
-      "className": "counter",
-      "id": "counter-test_sp-0",
-      "saveData": "{\u0022num\u0022:0,\u0022Position\u0022:{\u0022X\u0022:20.5,\u0022Y\u0022:16.534063,\u0022Z\u0022:211},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022test_sp\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "movebleBrush",
-      "id": "movebleBrush--0",
-      "saveData": "{\u0022progress\u0022:0,\u0022open\u0022:false,\u0022Position\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022a1_d1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "movebleBrush",
-      "id": "movebleBrush--1",
-      "saveData": "{\u0022progress\u0022:0,\u0022open\u0022:false,\u0022Position\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
+      "saveData": "{\u0022velocity\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022weapons\u0022:[{\u0022weaponType\u0022:\u0022RetroEngine.Game.Entities.Weapons.weapon_sword, RetroEngine.Game, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0022,\u0022ammo\u0022:1},null,null,null,null,null,null,null,null,null],\u0022currentSlot\u0022:0,\u0022lastSlot\u0022:0,\u0022thirdPerson\u0022:false,\u0022Position\u0022:{\u0022X\u0022:-10.216327,\u0022Y\u0022:1.939929,\u0022Z\u0022:-10.122601},\u0022Rotation\u0022:{\u0022X\u0022:-0.2995406,\u0022Y\u0022:-269.33264,\u0022Z\u0022:0},\u0022name\u0022:\u0022player\u0022,\u0022Tags\u0022:[\u0022player\u0022],\u0022Health\u0022:100,\u0022OwnerId\u0022:\u0022\u0022}"
     },
     {
       "Name": "PlayerGlobal",
@@ -122,24 +14,7 @@
       "saveData": "{\u0022InAction\u0022:0,\u0022Position\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022PlayerGlobal\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
     }
   ],
-  "entityId": 62,
-  "deletedIDs": [
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    ""
-  ],
-  "deletedNames": [
-    "pistols_start_pickup"
-  ]
+  "entityId": 19,
+  "deletedIDs": [],
+  "deletedNames": []
 }

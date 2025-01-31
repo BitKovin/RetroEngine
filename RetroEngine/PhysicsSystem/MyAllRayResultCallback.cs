@@ -56,7 +56,12 @@ namespace RetroEngine
             if (rayResult.CollisionObject != null)
             {
 
-                var data = (RigidbodyData)rayResult.CollisionObject.UserObject;
+
+                var userObject = rayResult.CollisionObject.UserObject;
+
+                if (userObject == null) return base.ClosestHitFraction;
+
+                var data = (RigidbodyData)userObject;
 
                 Entity hitEnt = data.Entity;
 

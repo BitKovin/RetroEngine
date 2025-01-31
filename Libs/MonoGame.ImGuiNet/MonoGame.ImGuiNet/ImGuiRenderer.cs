@@ -289,7 +289,7 @@ public class ImGuiRenderer
     /// <summary>
     /// Gets the geometry as set up by ImGui and sends it to the graphics device
     /// </summary>
-    private void RenderDrawData(ImDrawDataPtr drawData)
+    public void RenderDrawData(ImDrawDataPtr drawData)
     {
         // Setup render state: alpha-blending enabled, no face culling, no depth testing, scissor enabled, vertex/texcoord/color pointers
         var lastViewport = _graphicsDevice.Viewport;

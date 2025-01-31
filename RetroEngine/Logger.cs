@@ -36,7 +36,10 @@ namespace RetroEngine
             tcpSender.client?.Close();
             tcpSender.client = null;
 
-            TcpLoggerEnabled = tcpSender.SendMessage("connection.......");
+            Task.Run(() =>
+            {
+                TcpLoggerEnabled = tcpSender.SendMessage("connection.......");
+            });
         }
 
         // Class to handle sending string messages over TCP
