@@ -197,8 +197,9 @@ namespace RetroEngine.Game.Entities.Player
 
             Input.MouseDelta = new Vector2();
 
+
             body.CcdMotionThreshold = 0.000001f;
-            body.CcdSweptSphereRadius = 0.3f;
+            body.CcdSweptSphereRadius = 0.4f;
             body.Friction = 1f;
 
             bodies.Add(body);

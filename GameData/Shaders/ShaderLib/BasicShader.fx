@@ -561,7 +561,7 @@ half CalculateSpecular(float3 worldPos, half3 normal, half3 lightDir, half rough
     specular *= energyFactor;
 
     // Cap the specular contribution to prevent brightness overload
-    return specular * 0.006;
+    return specular * 0.01;
 }
 
 

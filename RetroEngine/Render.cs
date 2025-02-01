@@ -1178,8 +1178,6 @@ namespace RetroEngine
                 return;
             }
 
-            
-
             BloomEffect.Parameters["screenWidth"].SetValue(bloomSample.Width);
             BloomEffect.Parameters["screenHeight"].SetValue(bloomSample.Height);
             BloomEffect.Parameters["offset"].SetValue(0.95f);
@@ -1193,7 +1191,9 @@ namespace RetroEngine
 
             spriteBatch.End();
 
-
+            DownsampleToTexture(bloomSample, bloomSample2, true);
+            DownsampleToTexture(bloomSample2, bloomSample3, true);
+            DownsampleToTexture(bloomSample3, bloomSample4, true);
 
         }
         public static bool performingOcclusionTest = false;

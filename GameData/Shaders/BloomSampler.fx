@@ -71,7 +71,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR
     //color = length(color)*lerp(normalize(color), length(color), lerp(length(color),1,0.5));
 
 
-    return float4(color/7,1);
+    return float4(color*2,1);
 }
 
 technique SpriteDrawing

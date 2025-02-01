@@ -151,8 +151,8 @@ PixelOutput PixelShaderFunction(PixelInput input)
 
     float camDist = distance(input.MyPosition, viewPos);
 
-    //output.Color = float4(textureColor, textureAlpha);
-    output.Color = ApplyRefraction(float4(textureColor, textureAlpha), FrameTextureSampler, screenCoords, mul(float4(pixelNormal,1), mul(View, Projection)).xy/50 * float2(1,-1)/camDist);
+    output.Color = float4(textureColor, textureAlpha);
+    output.Color = ApplyRefraction(output.Color, FrameTextureSampler, screenCoords, mul(float4(pixelNormal,1), mul(View, Projection)).xy/50 * float2(1,-1)/camDist);
 
     return output;
 }

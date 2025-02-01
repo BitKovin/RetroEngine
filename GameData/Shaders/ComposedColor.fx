@@ -143,7 +143,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 	
     bloomL = length(bloomColor);
 	
-    bloomColor *= lerp(bloomL + 1, 1, 0.1);
+    //bloomColor *= lerp(bloomL + 1, 1, 0.1);
 	
     float ssao = tex2D(SSAOTextureSampler, input.TextureCoordinates).r;
 	

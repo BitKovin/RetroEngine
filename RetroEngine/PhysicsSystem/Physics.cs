@@ -804,7 +804,7 @@ namespace RetroEngine.PhysicsSystem
         }
 
 
-        public static RigidBody CreateCharacterCapsule(Entity entity, float Height, float radius, float mass = 80, CollisionFlags collisionFlags = CollisionFlags.CharacterObject)
+        public static RigidBody CreateCharacterCapsule(Entity entity, float Height, float radius, float mass = 80, CollisionFlags collisionFlags = CollisionFlags.None)
         {
             RigidBody RigidBody;
 
