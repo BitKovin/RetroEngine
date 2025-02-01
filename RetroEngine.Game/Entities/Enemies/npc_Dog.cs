@@ -131,7 +131,7 @@ namespace RetroEngine.Game.Entities.Enemies
         {
             base.Start();
 
-            body = Physics.CreateCharacterCapsule(this, 2f, 0.7f, 10);
+            body = Physics.CreateCharacterCapsule(this, 2f, 0.7f, 10, CollisionFlags.CharacterObject);
             body.Gravity = new Vector3(0, -35, 0).ToNumerics();
             body.SetPosition(Position.ToPhysics());
 
