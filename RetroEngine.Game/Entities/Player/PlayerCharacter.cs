@@ -815,7 +815,7 @@ namespace RetroEngine.Game.Entities.Player
             DrawDebug.Sphere(0.1f, hitPoint, Vector3.UnitY);
 
 
-            Vector3 lerpPose = Vector3.Lerp(Position, hitPoint, 0.4f);
+            Vector3 lerpPose = Vector3.Lerp(Position, hitPoint, 0.0f);
 
             lerpPose.Y = hitPoint.Y + 1;
 

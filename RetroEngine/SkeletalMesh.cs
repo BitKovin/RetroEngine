@@ -1394,7 +1394,7 @@ namespace RetroEngine
                 // Add the box shape to the compound shape with the offset
                 compoundShape.AddChildShape(offsetTransform.ToPhysics(), boxShape);
 
-                compoundShape.UserObject = new Physics.CollisionShapeData { surfaceType = "flesh" };
+                compoundShape.UserObject = new Physics.CollisionSurfaceData { surfaceType = "flesh" };
 
                 RigidBody body = Physics.CreateFromShape(owner, Vector3.One.ToPhysics(), compoundShape, addToWorld: false);
 
@@ -1427,7 +1427,7 @@ namespace RetroEngine
                 RigidbodyData data = (RigidbodyData)body.UserObject;
 
                 data.HitboxName = hitbox.Bone;
-
+                data.Surface = "flesh";
                 body.UserObject = data;
 
                 hitbox.RagdollRigidBodyRef = body;

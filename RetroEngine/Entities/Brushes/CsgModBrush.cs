@@ -199,7 +199,7 @@ namespace RetroEngine.Entities.Brushes
 
                 if(face == null) continue;
 
-                var shape = Physics.CreateCollisionShapeFromModel(face.model, shapeData: new Physics.CollisionShapeData { surfaceType = face.textureName }, complex: this.ConvexBrush == false);
+                var shape = Physics.CreateCollisionShapeFromModel(face.model, shapeData: new Physics.CollisionSurfaceData { surfaceType = face.textureName }, complex: this.ConvexBrush == false);
                 RigidBody rigidBody = Physics.CreateFromShape(this, Vector3.One.ToPhysics(), shape, collisionFlags: BulletSharp.CollisionFlags.StaticObject, bodyType: PhysicsSystem.BodyType.World);
                 rigidBody.SetCollisionMask(BodyType.GroupAll);
                 bodies.Add(rigidBody);

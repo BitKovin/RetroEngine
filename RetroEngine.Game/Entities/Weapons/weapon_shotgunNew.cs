@@ -58,13 +58,13 @@ namespace RetroEngine.Game.Entities.Weapons
             base.Update();
 
             mesh.Visible = true;
-            mesh.Update(Time.DeltaTime * 1.1f);
             TpFire.Update(Time.DeltaTime);
             
 
             if (Input.GetAction("attack").Holding())
                 Shoot();
 
+            mesh.Update(Time.DeltaTime * 1.1f);
 
             float targetRot = Camera.rotation.X;
 

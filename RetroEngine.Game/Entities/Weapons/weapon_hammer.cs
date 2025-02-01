@@ -115,7 +115,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
                     Entity hitEnt = ((RigidbodyData)hit.CollisionObject.UserObject).Entity;
 
-                    Console.WriteLine((hit.CollisionObject.CollisionShape.UserObject as Physics.CollisionShapeData).surfaceType);
+                    Console.WriteLine((hit.CollisionObject.CollisionShape.UserObject as Physics.CollisionSurfaceData).surfaceType);
 
                     if (hitEnt != null)
                     {

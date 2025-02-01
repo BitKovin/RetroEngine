@@ -48,7 +48,7 @@ namespace RetroEngine
         public static Vector3 FastNormalize(this Vector3 value)
         {
             float num = InvSqrt(value.X * value.X + value.Y * value.Y + value.Z * value.Z);
-            return new Vector3(value.X * num, value.Y * num, value.Z * num);
+            return value * num;
         }
         public static Vector3 Normalized (this Vector3 vector)
         {

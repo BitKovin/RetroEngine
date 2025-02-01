@@ -1,6 +1,7 @@
 ﻿using BulletSharp;
 using Microsoft.Xna.Framework;
 using RetroEngine.Entities;
+using RetroEngine.ParticleSystem;
 using RetroEngine.PhysicsSystem;
 using System;
 using System.Collections.Generic;
@@ -169,7 +170,20 @@ namespace RetroEngine.Game.Entities
                 {
                     return;
                 }
-                RigidBody.Upcast(hit.CollisionObject)?.ApplyCentralImpulse(startRotation.GetForwardVector().ToNumerics() * Damage / 2f * ImpactForce);
+
+                RigidBody rigidBody = (RigidBody)hit.CollisionObject;
+
+                var data = rigidBody.GetData();
+
+                if (data != null)
+                {
+                    if(data.Value.Surface == "default")
+                    {
+                        GlobalParticleSystem.EmitAt("hitDust", hit.HitPointWorld, MathHelper.FindLookAtRotation(Vector3.Zero, hit.HitNormalWorld), new Vector3(0, 0, float.Max(Damage / 10f,1)));
+                    }
+                }
+
+                rigidBody?.ApplyCentralImpulse(startRotation.GetForwardVector().ToNumerics() * Damage / 2f * ImpactForce);
 
                 return;
 

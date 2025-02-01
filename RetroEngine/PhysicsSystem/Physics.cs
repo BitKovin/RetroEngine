@@ -43,6 +43,8 @@ namespace RetroEngine.PhysicsSystem
 
         public string HitboxName;
 
+        public string Surface = "default";
+
         public RigidbodyData(Entity entity)
         {
             Entity = entity;
@@ -50,7 +52,7 @@ namespace RetroEngine.PhysicsSystem
 
     }
 
-    public class Physics
+    public static class Physics
     {
 
         internal static DiscreteDynamicsWorld dynamicsWorld;
@@ -76,7 +78,7 @@ namespace RetroEngine.PhysicsSystem
         static Stack<MyClosestConvexResultCallback> convexResultCallbacks = new Stack<MyClosestConvexResultCallback>();
         static Stack<MyClosestRayResultCallback> ClosestRayResultCallbacks = new Stack<MyClosestRayResultCallback>();
 
-        public class CollisionShapeData
+        public class CollisionSurfaceData
         {
             public string surfaceType = "default";
         }
@@ -683,7 +685,7 @@ namespace RetroEngine.PhysicsSystem
 
             // Create a sphere shape
             var sphereShape = new SphereShape(radius);
-            sphereShape.UserObject = new CollisionShapeData();
+            sphereShape.UserObject = new CollisionSurfaceData();
             var motionState = new DefaultMotionState(Matrix4x4.CreateTranslation(0, 0, 0));
 
             Vector3 inertia = Vector3.Zero;
@@ -715,7 +717,7 @@ namespace RetroEngine.PhysicsSystem
 
             // Create a sphere shape
             var sphereShape = new BoxShape(size / 2);
-            sphereShape.UserObject = new CollisionShapeData();
+            sphereShape.UserObject = new CollisionSurfaceData();
             var motionState = new DefaultMotionState(Matrix4x4.CreateTranslation(0, 0, 0));
 
             //sphereShape.Margin = 0;
@@ -810,7 +812,7 @@ namespace RetroEngine.PhysicsSystem
             var Shape = new CapsuleShape(radius, Height - radius*2);
             Shape.Margin = 0;
 
-            Shape.UserObject = new CollisionShapeData();
+            Shape.UserObject = new CollisionSurfaceData();
             var motionState = new DefaultMotionState(Matrix4x4.CreateTranslation(0, 0, 0));
 
 
@@ -848,7 +850,7 @@ namespace RetroEngine.PhysicsSystem
             var Shape = new CapsuleShape(radius, Height - radius * 2);
             Shape.Margin = 0;
 
-            Shape.UserObject = new CollisionShapeData();
+            Shape.UserObject = new CollisionSurfaceData();
             var motionState = new DefaultMotionState(Matrix4x4.CreateTranslation(0, 0, 0));
 
 
@@ -1108,11 +1110,11 @@ namespace RetroEngine.PhysicsSystem
         }
 
 
-        public static CollisionShape CreateCollisionShapeFromModel(Model model, float scale = 1.0f, CollisionShapeData shapeData = null, bool complex = false)
+        public static CollisionShape CreateCollisionShapeFromModel(Model model, float scale = 1.0f, CollisionSurfaceData shapeData = null, bool complex = false)
         {
 
             if (shapeData == null)
-                shapeData = new CollisionShapeData();
+                shapeData = new CollisionSurfaceData();
 
             // Create a compound shape to hold multiple child collision shapes
             CompoundShape compoundShape = new CompoundShape();
@@ -1244,7 +1246,7 @@ namespace RetroEngine.PhysicsSystem
             return meshShape;
         }
 
-        public static BvhTriangleMeshShape CreateBvhTriangleMeshShape(Csg.Solid solid, CollisionShapeData collisionShapeData)
+        public static BvhTriangleMeshShape CreateBvhTriangleMeshShape(Csg.Solid solid, CollisionSurfaceData collisionShapeData)
         {
             var data = Csg.CsgHelper.ConvertCsgToMesh(solid);
 

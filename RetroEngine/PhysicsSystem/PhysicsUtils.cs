@@ -127,6 +127,16 @@ namespace RetroEngine
             return newM;
         }
 
+        public static RigidbodyData? GetData(this RigidBody rigidBody)
+        {
+
+            var obj = rigidBody.UserObject;
+
+            if (obj == null)
+                return null;
+
+            return (RigidbodyData)obj;
+        }
 
         public static void SetBodyType(this CollisionObject body, BodyType bodyType)
         {

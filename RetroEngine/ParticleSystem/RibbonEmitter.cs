@@ -31,123 +31,105 @@ namespace RetroEngine.Particles
         VertexData[] verticesFinal;
         short[] indicesFinal;
 
+        // Class-level cache variables
+        private VertexData[] _cachedVertices;
+        private short[] _cachedIndices;
+        private int _lastParticleCount = -1;
+
         public void GenerateBuffers(List<Particle> particles)
         {
-
             primitiveCount = 0;
-
 
             lock (this)
             {
                 if (particles == null || particles.Count < 2 || destroyed)
                 {
+                    verticesFinal = null;
+                    indicesFinal = null;
                     return;
                 }
 
-                GraphicsDevice _graphicsDevice = GameMain.Instance.GraphicsDevice;
+                int currentParticleCount = particles.Count;
+                int requiredVertexCount = currentParticleCount * 2;
+                int requiredIndexCount = (currentParticleCount - 1) * 6;
 
+                // Reuse or recreate buffers only when particle count changes
+                if (_lastParticleCount != currentParticleCount)
+                {
+                    // Reallocate vertex buffer if size changed
+                    if (_cachedVertices == null || _cachedVertices.Length != requiredVertexCount)
+                    {
+                        _cachedVertices = new VertexData[requiredVertexCount];
+                    }
 
-                //particles = new List<Particle>(particles);
-                //particles.Insert(0, particles[0]);
+                    // Reallocate and regenerate index buffer if size changed
+                    if (_cachedIndices == null || _cachedIndices.Length != requiredIndexCount)
+                    {
+                        _cachedIndices = new short[requiredIndexCount];
+                        GenerateIndices(_cachedIndices, currentParticleCount);
+                    }
 
-                // Calculate required vertex and index counts
-                int requiredVertexCount = particles.Count * 2;
-                int requiredIndexCount = (particles.Count - 1) * 6;
-                /*
-// Check if buffers need resizing (allocate with some slack, e.g., 25%)
-int vertexCapacityThreshold = vertexBuffer?.VertexCount ?? 0;
-int indexCapacityThreshold = indexBuffer?.IndexCount ?? 0;
+                    _lastParticleCount = currentParticleCount;
+                }
 
-if (vertexBuffer == null || requiredVertexCount > vertexCapacityThreshold)
-{
-    vertexCapacityThreshold = (int)(requiredVertexCount); // 25% extra space
-    if(vertexBuffer!=null)
-    freeVertexBuffers.Add(vertexBuffer);
-    vertexBuffer = ReuseOrCreateVertexBuffer(_graphicsDevice, vertexCapacityThreshold);
-}
+                Vector3 cameraPos = Camera.position; // Cache camera position once
 
-if (indexBuffer == null || requiredIndexCount > indexCapacityThreshold)
-{
-    indexCapacityThreshold = (int)(requiredIndexCount); // 25% extra space
-    if(indexBuffer!=null)
-    freeIndexBuffers.Add(indexBuffer);
-    indexBuffer = ReuseOrCreateIndexBuffer(_graphicsDevice, indexCapacityThreshold);
-}
-*/
-
-                VertexData[] vertices;
-                short[] indices;
-
-                // Initialize vertex and index arrays
-                vertices = new VertexData[requiredVertexCount];
-                indices = new short[requiredIndexCount];
-
-
-                // Generate vertices and indices
-                for (int i = 0; i < particles.Count; i++)
+                // Update vertex data
+                for (int i = 0; i < currentParticleCount; i++)
                 {
                     Particle particle = particles[i];
-                    Vector3 p1 = particle.position;
+                    Vector3 position = particle.position;
 
-                    Vector3 dir;
-                    if (i < particles.Count - 1)
+                    // Calculate direction vector
+                    Vector3 dir = i < currentParticleCount - 1
+                        ? MathHelper.FastNormalize(position - particles[i + 1].position)
+                        : MathHelper.FastNormalize(particles[i - 1].position - position);
+
+                    // Calculate orientation vectors
+                    Vector3 cameraForward = MathHelper.FastNormalize(position - cameraPos);
+                    Vector3 perp = MathHelper.FastNormalize(Vector3.Cross(dir, cameraForward));
+
+                    float halfScale = particle.Scale / 2;
+                    int vertexIndex = i * 2;
+
+                    // Calculate and store vertices
+                    _cachedVertices[vertexIndex] = new VertexData
                     {
-                        dir = MathHelper.FastNormalize(particles[i].position - particles[i + 1].position);
-                    }
-                    else
+                        Position = position + perp * halfScale,
+                        TextureCoordinate = new Vector2((float)i / (currentParticleCount - 1), 0f),
+                        Color = particle.color
+                    };
+
+                    _cachedVertices[vertexIndex + 1] = new VertexData
                     {
-                        dir = MathHelper.FastNormalize(particles[i - 1].position - particles[i].position);
-                    }
-
-                    Vector3 cameraForward = p1 - Camera.position;
-                    cameraForward = cameraForward.Normalized();
-                    Vector3 perp = Vector3.Cross(dir, cameraForward);
-                    perp = perp.Normalized();
-
-                    // Calculate vertices for the quad
-                    Vector3 topLeft = p1 + perp * (particle.Scale / 2);
-                    Vector3 topRight = p1 - perp * (particle.Scale / 2);
-
-                    // Calculate texture coordinates
-                    float texCoordX = ((float)i - (1 - (float)i / (float)particles.Count)) / (particles.Count - 1);
-                    texCoordX = MathHelper.Saturate(texCoordX);
-                    float texCoordYTop = 0f;
-                    float texCoordYBottom = 1f;
-
-                    //DrawDebug.Text(particle.position, texCoordX.ToString(), 0.01f);
-
-                    // Add vertices to the array
-                    vertices[i * 2] = new VertexData { Position = topLeft, TextureCoordinate = new Vector2(texCoordX, texCoordYTop), Color = particle.color };
-                    vertices[i * 2 + 1] = new VertexData { Position = topRight, TextureCoordinate = new Vector2(texCoordX, texCoordYBottom), Color = particle.color };
-
-                    // Add indices to form the quad
-                    if (i > 0)
-                    {
-                        int indexOffset = (i - 1) * 6;
-                        int vertexOffset = i * 2;
-
-                        indices[indexOffset] = (short)vertexOffset;
-                        indices[indexOffset + 1] = (short)(vertexOffset - 1);
-                        indices[indexOffset + 2] = (short)(vertexOffset - 2);
-
-                        indices[indexOffset + 3] = (short)vertexOffset;
-                        indices[indexOffset + 4] = (short)(vertexOffset + 1);
-                        indices[indexOffset + 5] = (short)(vertexOffset - 1);
-                    }
+                        Position = position - perp * halfScale,
+                        TextureCoordinate = new Vector2((float)i / (currentParticleCount - 1), 1f),
+                        Color = particle.color
+                    };
                 }
+
                 if (destroyed) return;
 
-
-
-                // Set buffer data
-                //vertexBuffer.SetData(vertices, 0, requiredVertexCount);
-                //indexBuffer.SetData(indices, 0, requiredIndexCount);
-
-                verticesFinal = vertices.ToArray();
-                indicesFinal = indices.ToArray();
-
-                // Calculate the number of primitives to draw
+                // Assign final buffers
+                verticesFinal = _cachedVertices;
+                indicesFinal = _cachedIndices;
                 primitiveCount = requiredIndexCount / 3;
+            }
+        }
+
+        private void GenerateIndices(short[] indices, int particleCount)
+        {
+            for (int i = 1; i < particleCount; i++)
+            {
+                int indexOffset = (i - 1) * 6;
+                int vertexOffset = i * 2;
+
+                indices[indexOffset] = (short)vertexOffset;
+                indices[indexOffset + 1] = (short)(vertexOffset - 1);
+                indices[indexOffset + 2] = (short)(vertexOffset - 2);
+                indices[indexOffset + 3] = (short)vertexOffset;
+                indices[indexOffset + 4] = (short)(vertexOffset + 1);
+                indices[indexOffset + 5] = (short)(vertexOffset - 1);
             }
         }
 

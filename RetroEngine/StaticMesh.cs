@@ -468,99 +468,162 @@ namespace RetroEngine
 
         }
 
+        // Class-level cached arrays
+        private readonly Vector4[] _lightPos = new Vector4[LightManager.MAX_POINT_LIGHTS];
+        private readonly Vector3[] _lightColor = new Vector3[LightManager.MAX_POINT_LIGHTS];
+        private readonly float[] _lightRadius = new float[LightManager.MAX_POINT_LIGHTS];
+        private readonly float[] _lightRes = new float[LightManager.MAX_POINT_LIGHTS];
+        private readonly Vector4[] _lightDir = new Vector4[LightManager.MAX_POINT_LIGHTS];
+        private readonly Texture[] _lightMaps = new Texture[LightManager.MAX_POINT_LIGHTS];
+
+        // Cached effect parameters
+        private EffectParameter _lightPosParam;
+        private EffectParameter _lightColorParam;
+        private EffectParameter _lightRadiusParam;
+        private EffectParameter _lightResParam;
+        private EffectParameter _lightDirParam;
+        private readonly EffectParameter[] _cubemapParams = new EffectParameter[LightManager.MAX_POINT_LIGHTS];
+
+        // Add feature cache structure
+        private struct ShaderFeatureSupport
+        {
+            public bool SupportsPointLights;
+            public bool SupportsShadows;
+            public bool SupportsDirectionalLights;
+        }
+
+        private ShaderFeatureSupport _cachedFeatures;
+        private bool _featuresInitialized;
+
         protected void ApplyPointLights(Effect effect)
         {
+            if (Graphics.GlobalPointLights) return;
 
-            if (Graphics.GlobalPointLights == false)
+            // Initialize feature support cache
+            if (!_featuresInitialized)
             {
-                Vector4[] LightPos = new Vector4[LightManager.MAX_POINT_LIGHTS];
-                Vector3[] LightColor = new Vector3[LightManager.MAX_POINT_LIGHTS];
-                float[] LightRadius = new float[LightManager.MAX_POINT_LIGHTS];
-                float[] LightRes = new float[LightManager.MAX_POINT_LIGHTS];
-                Vector4[] LightDir = new Vector4[LightManager.MAX_POINT_LIGHTS];
-                Texture[] LightMaps = new Texture[LightManager.MAX_POINT_LIGHTS];
-
-
-                LightManager.FinalPointLights = LightManager.FinalPointLights.OrderBy(l => Vector3.Distance(l.Position, useAvgVertexPosition ? avgVertexPosition : Position) / l.shadowData.Priority).ToList();
-
-                List<LightManager.PointLightData> objectLights = new List<LightManager.PointLightData>();
-
-                int filledLights = 0;
-
-                HashSet<int> filled = new HashSet<int>();
-
-                int shaderPointLightsShadowed = 7;
-
-                //shadows
-                for (int i = 0; i < LightManager.FinalPointLights.Count && filledLights < Math.Min(LightManager.MAX_POINT_LIGHTS, shaderPointLightsShadowed); i++)
+                _cachedFeatures = new ShaderFeatureSupport
                 {
-                    if (LightManager.FinalPointLights[i].visible == false) continue;
-                    if (LightManager.FinalPointLights[i].shadowData.CastShadows == false) continue;
-                    bool intersects = IntersectsBoundingSphere(new BoundingSphere { Radius = LightManager.FinalPointLights[i].Radius, Center = LightManager.FinalPointLights[i].Position });
+                    SupportsPointLights = effect.Parameters["LightPositions"] != null,
+                    SupportsShadows = effect.Parameters["PointLightCubemap1"] != null,
+                    SupportsDirectionalLights = effect.Parameters["LightDirections"] != null
+                };
+                _featuresInitialized = true;
+            }
 
-                    if (intersects == false) continue;
+            // Early exit if shader doesn't support point lights at all
+            if (!_cachedFeatures.SupportsPointLights) return;
 
-                    filled.Add(i);
+            // Initialize parameters only if they exist
+            if (_lightPosParam == null)
+            {
+                _lightPosParam = effect.Parameters["LightPositions"];
+                _lightColorParam = effect.Parameters["LightColors"];
+                _lightRadiusParam = effect.Parameters["LightRadiuses"];
+                _lightResParam = _cachedFeatures.SupportsShadows ? effect.Parameters["LightResolutions"] : null;
+                _lightDirParam = _cachedFeatures.SupportsDirectionalLights ? effect.Parameters["LightDirections"] : null;
 
-                    objectLights.Add(LightManager.FinalPointLights[i]);
-                    filledLights++;
-
-                }
-
-                //no shadows
-                for (int i = 0; i < LightManager.FinalPointLights.Count && filledLights < LightManager.MAX_POINT_LIGHTS; i++)
+                // Only cache cubemap parameters if shadows are supported
+                if (_cachedFeatures.SupportsShadows)
                 {
-                    //if (LightManager.FinalPointLights[i].shadowData.CastShadows == true) continue;
-
-                    if (LightManager.FinalPointLights[i].visible == false) continue;
-
-                    if (filled.Contains(i))
-                        continue;
-
-                    bool intersects = IntersectsBoundingSphere(new BoundingSphere { Radius = LightManager.FinalPointLights[i].Radius, Center = LightManager.FinalPointLights[i].Position });
-
-                    if (intersects == false) continue;
-
-                    objectLights.Add(LightManager.FinalPointLights[i]);
-                    filledLights++;
-
+                    for (int i = 0; i < LightManager.MAX_POINT_LIGHTS; i++)
+                    {
+                        _cubemapParams[i] = effect.Parameters[$"PointLightCubemap{i + 1}"];
+                    }
                 }
+            }
 
-                objectLights = objectLights.OrderByDescending(l => l.shadowData.CastShadows).ToList();
+            // Clear arrays
+            Array.Clear(_lightPos, 0, _lightPos.Length);
+            Array.Clear(_lightColor, 0, _lightColor.Length);
+            Array.Clear(_lightRadius, 0, _lightRadius.Length);
+            if (_cachedFeatures.SupportsShadows) Array.Clear(_lightRes, 0, _lightRes.Length);
+            if (_cachedFeatures.SupportsDirectionalLights) Array.Clear(_lightDir, 0, _lightDir.Length);
+            Array.Clear(_lightMaps, 0, _lightMaps.Length);
 
-                for (int i = 0; i < objectLights.Count; i++)
+            Vector3 referencePosition = useAvgVertexPosition ? avgVertexPosition : Position;
+            var processedLights = new HashSet<int>();
+            int lightCount = 0;
+
+            // Only process shadow casters if shadows are supported
+            if (_cachedFeatures.SupportsShadows)
+            {
+                var shadowCasters = LightManager.FinalPointLights
+                    .Select((l, i) => new { Light = l, Index = i })
+                    .Where(x => x.Light.visible && x.Light.shadowData.CastShadows)
+                    .OrderBy(x => Vector3.Distance(referencePosition, x.Light.Position) / x.Light.shadowData.Priority)
+                    .ToList();
+
+                foreach (var entry in shadowCasters)
                 {
-                    LightPos[i] = new Vector4(objectLights[i].Position, objectLights[i].InnerMinDot);
-                    LightColor[i] = objectLights[i].Color;
-                    LightRadius[i] = objectLights[i].Radius;
-                    LightRes[i] = objectLights[i].Resolution;
+                    if (lightCount >= LightManager.MAX_POINT_LIGHTS) break;
 
-                    if (objectLights[i].shadowData.CastShadows == false)
-                        LightRes[i] = 0;
-
-                    LightDir[i] = new Vector4(objectLights[i].Direction, objectLights[i].MinDot);
-
-                    LightMaps[i] = objectLights[i].shadowData.renderTarget;
+                    if (IntersectsBoundingSphere(new BoundingSphere(entry.Light.Position, entry.Light.Radius)))
+                    {
+                        StoreLightData(entry.Light, lightCount);
+                        processedLights.Add(entry.Index);
+                        lightCount++;
+                    }
                 }
+            }
 
-                effect.Parameters["LightPositions"]?.SetValue(LightPos);
-                effect.Parameters["LightColors"]?.SetValue(LightColor);
-                effect.Parameters["LightRadiuses"]?.SetValue(LightRadius);
-                effect.Parameters["LightResolutions"]?.SetValue(LightRes);
-                effect.Parameters["LightDirections"]?.SetValue(LightDir);
+            // Process non-shadow-casting lights
+            var nonShadowCasters = LightManager.FinalPointLights
+                .Select((l, i) => new { Light = l, Index = i })
+                .Where(x => x.Light.visible && !processedLights.Contains(x.Index))
+                .OrderBy(x => Vector3.Distance(referencePosition, x.Light.Position))
+                .ToList();
 
-                effect.Parameters["PointLightsNumber"]?.SetValue(objectLights.Count);
+            foreach (var entry in nonShadowCasters)
+            {
+                if (lightCount >= LightManager.MAX_POINT_LIGHTS) break;
 
-                effect.Parameters["PointLightCubemap1"]?.SetValue(LightMaps[0]);
-                effect.Parameters["PointLightCubemap2"]?.SetValue(LightMaps[1]);
-                effect.Parameters["PointLightCubemap3"]?.SetValue(LightMaps[2]);
-                effect.Parameters["PointLightCubemap4"]?.SetValue(LightMaps[3]);
-                effect.Parameters["PointLightCubemap5"]?.SetValue(LightMaps[4]);
-                effect.Parameters["PointLightCubemap6"]?.SetValue(LightMaps[5]);
-                effect.Parameters["PointLightCubemap7"]?.SetValue(LightMaps[6]);
-                effect.Parameters["PointLightCubemap8"]?.SetValue(LightMaps[7]);
-                effect.Parameters["PointLightCubemap9"]?.SetValue(LightMaps[8]);
-                effect.Parameters["PointLightCubemap10"]?.SetValue(LightMaps[9]);
+                if (IntersectsBoundingSphere(new BoundingSphere(entry.Light.Position, entry.Light.Radius)))
+                {
+                    StoreLightData(entry.Light, lightCount);
+                    lightCount++;
+                }
+            }
+
+            // Only set parameters that exist
+            _lightPosParam?.SetValue(_lightPos);
+            _lightColorParam?.SetValue(_lightColor);
+            _lightRadiusParam?.SetValue(_lightRadius);
+
+            if (_cachedFeatures.SupportsShadows)
+            {
+                _lightResParam?.SetValue(_lightRes);
+
+                // Set cubemap textures
+                for (int i = 0; i < LightManager.MAX_POINT_LIGHTS; i++)
+                {
+                    _cubemapParams[i]?.SetValue(i < lightCount ? _lightMaps[i] : null);
+                }
+            }
+
+            if (_cachedFeatures.SupportsDirectionalLights)
+            {
+                _lightDirParam?.SetValue(_lightDir);
+            }
+
+            effect.Parameters["PointLightsNumber"]?.SetValue(lightCount);
+        }
+
+        private void StoreLightData(LightManager.PointLightData light, int index)
+        {
+            _lightPos[index] = new Vector4(light.Position, light.InnerMinDot);
+            _lightColor[index] = light.Color;
+            _lightRadius[index] = light.Radius;
+
+            if (_cachedFeatures.SupportsShadows)
+            {
+                _lightRes[index] = light.shadowData.CastShadows ? light.Resolution : 0f;
+                _lightMaps[index] = light.shadowData.renderTarget;
+            }
+
+            if (_cachedFeatures.SupportsDirectionalLights)
+            {
+                _lightDir[index] = new Vector4(light.Direction, light.MinDot);
             }
         }
 
