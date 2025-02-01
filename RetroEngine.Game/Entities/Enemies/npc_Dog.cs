@@ -135,7 +135,7 @@ namespace RetroEngine.Game.Entities.Enemies
             body.Gravity = new Vector3(0, -35, 0).ToNumerics();
             body.SetPosition(Position.ToPhysics());
 
-            body.CcdMotionThreshold = 0.01f;
+            body.CcdMotionThreshold = 0.5f;
             body.CcdSweptSphereRadius = 0.7f;
 
             bodies.Add(body);
