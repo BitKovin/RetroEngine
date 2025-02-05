@@ -321,7 +321,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
         public override WeaponData GetDefaultWeaponData()
         {
-            return new WeaponData { Slot = 1, weaponType = typeof(weapon_sword), ammo = 0 };
+            return new WeaponData { Slot = 0, weaponType = typeof(weapon_sword), ammo = 0 };
         }
 
     }

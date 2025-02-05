@@ -100,8 +100,8 @@ namespace RetroEngine.Csg
                         Position = new Vector3((float)vertex.Pos.X, (float)vertex.Pos.Y, (float)vertex.Pos.Z),
                         Normal = normal,
                         TextureCoordinate = uv, // Assign existing or generated UV
-                        Tangent = Vector3.Zero, // Tangent can be calculated if needed
-                        BiTangent = Vector3.Zero, // BiTangent can be calculated if needed
+                        Tangent = normal, // Tangent can be calculated if needed
+                        BiTangent = normal, // BiTangent can be calculated if needed
                         BlendIndices = Vector4.Zero,
                         BlendWeights = Vector4.Zero,
                         SmoothNormal = normal,

@@ -368,7 +368,7 @@ namespace RetroEngine
 
             for (int i = Math.Min(points.Count - 1, 3); i >= 0; i--)
             {
-                var hit = Physics.SphereTrace(start.ToNumerics(), points[i].ToNumerics() + Vector3.UnitY, bodyType: PhysicsSystem.BodyType.World, radius: 0.5f);
+                var hit = Physics.SphereTrace(start.ToNumerics(), points[i].ToNumerics() + Vector3.UnitY, bodyType: PhysicsSystem.BodyType.World, radius: 0.2f);
 
                 if (hit.HasHit == false)
                 {
@@ -376,6 +376,8 @@ namespace RetroEngine
                 }
 
             }
+
+            result.Add(target);
 
             OnPathFound?.Invoke(result);
             active = false;

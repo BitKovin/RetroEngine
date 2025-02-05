@@ -616,6 +616,10 @@ namespace RetroEngine
             PullRootMotion();
 
             SetCurrentAnimationInfo();
+
+            if(interpolationTime > 0f)
+                Update(0.001f);
+
         }
 
         void SetCurrentAnimationInfo()

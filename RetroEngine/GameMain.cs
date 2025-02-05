@@ -93,6 +93,8 @@ namespace RetroEngine
 
         public new GraphicsDevice GraphicsDevice;
 
+
+        static Stopwatch sw = new Stopwatch();
         public GameMain()
         {
 
@@ -279,19 +281,16 @@ namespace RetroEngine
             {
                 if (gameTask is null)
                 {
-                    UpdateTime(gameTime);
                 }
                 else
                 {
                     Stats.StartRecord("waiting game task");
                     gameTask.Wait();
                     Stats.StopRecord("waiting game task");
-                    UpdateTime(gameTime);
                 }
             }
             else
             {
-                UpdateTime(gameTime);
             }
 
             
@@ -323,11 +322,7 @@ namespace RetroEngine
             PerformReservedTimeTasks();
 
             LimitFrameRate();
-
-
-
-
-
+            UpdateTime(gameTime);
 
             bool changedLevel = Level.LoadPendingLevel();
 
@@ -346,16 +341,13 @@ namespace RetroEngine
             base.Update(gameTime);
         }
 
-
-        static Stopwatch sw = new Stopwatch();
-
         void UpdateTime(GameTime gameTime)
         {
 
 
-            float time = (float)sw.Elapsed.TotalSeconds;
-            time = Math.Min(time, 1 / 10f);
+            double time = sw.Elapsed.TotalSeconds;
             sw.Restart();
+            time = Math.Min(time, 1 / 10f);
 
             float newDeltaTime = (float)Math.Min(time, 0.05d);
 

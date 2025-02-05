@@ -37,6 +37,7 @@ namespace RetroEngine.Entities.Light
             var defBlend = GameMain.Instance.GraphicsDevice.BlendState;
             GameMain.Instance.GraphicsDevice.DepthStencilState = Microsoft.Xna.Framework.Graphics.DepthStencilState.DepthRead;
             GameMain.Instance.GraphicsDevice.BlendState = Microsoft.Xna.Framework.Graphics.BlendState.Additive;
+            GameMain.Instance.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 
             DrawBlack();
 
@@ -52,6 +53,7 @@ namespace RetroEngine.Entities.Light
             GraphicsDevice graphicsDevice = GameMain.Instance._graphics.GraphicsDevice;
             // Load the custom effect
             Effect effect = GameMain.Instance.render.OcclusionStaticEffect;
+
 
 
             if (Transperent)

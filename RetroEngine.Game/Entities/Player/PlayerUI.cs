@@ -159,7 +159,7 @@ namespace RetroEngine.Game.Entities.Player
                     UiText uiText = new UiText();
                     uiText.Origin = new Vector2(0, 1);
                     uiText.Pivot = new Vector2(0, 1);
-                    uiText.text = weaponData.Slot.ToString();
+                    uiText.text = (weaponData.Slot + 1).ToString();
                     uiText.FontSize = 20;
                     uiText.position = new Vector2(5, -5);
 

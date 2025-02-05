@@ -135,7 +135,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 	
     float3 color = tex2D(ColorTextureSampler, input.TextureCoordinates).rgb;
 	
-    float3 bloomColor = tex2D(BloomTextureSampler, input.TextureCoordinates).rgb / 2 + tex2D(Bloom2TextureSampler, input.TextureCoordinates).rgb / 2 + tex2D(Bloom3TextureSampler, input.TextureCoordinates).rgb / 4 + tex2D(Bloom4TextureSampler, input.TextureCoordinates).rgb / 6;
+    float3 bloomColor = tex2D(BloomTextureSampler, input.TextureCoordinates).rgb / 2 + tex2D(Bloom2TextureSampler, input.TextureCoordinates).rgb / 2 + tex2D(Bloom3TextureSampler, input.TextureCoordinates).rgb / 2 + tex2D(Bloom4TextureSampler, input.TextureCoordinates).rgb / 3;
 	
     float bloomL = length(bloomColor);
 	

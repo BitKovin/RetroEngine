@@ -112,7 +112,16 @@ namespace RetroEngine.UI
 
         public void UpdateOffsets()
         {
-            offset = GetOrigin() - GetSize() * Pivot;
+
+            var origin = GetOrigin();
+            var size = GetSize();
+
+            offset = origin - size * Pivot;
+
+            if(float.IsInfinity(offset.X) || float.IsNaN(offset.X))
+            {
+                throw new Exception("ui is broken fix it");
+            }
 
             TopLeft = position + offset;
             BottomRight = position + offset + GetSize();

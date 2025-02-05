@@ -425,7 +425,7 @@ void MaskedDiscard(float alpha)
 float SampleMaxDepth(float2 screenCoords)
 {
 
-	float2 texelSize = 0.4 / float2(ScreenWidth, ScreenHeight);
+	float2 texelSize = 2 / float2(ScreenWidth, ScreenHeight);
 
 	float d = SampleDepth(screenCoords);
 	float d1 = SampleDepth(screenCoords + texelSize);

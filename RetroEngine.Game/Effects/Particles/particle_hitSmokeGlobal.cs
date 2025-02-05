@@ -12,7 +12,7 @@ namespace RetroEngine.Game.Effects.Particles
 {
 
 
-    [ParticleSys("hitDust")]
+    [ParticleSys("hit_default")]
     public class particle_system_hitSmokeGlobal : GlobalParticleSystem
     {
 
