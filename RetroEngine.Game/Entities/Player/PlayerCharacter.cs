@@ -1078,7 +1078,13 @@ namespace RetroEngine.Game.Entities.Player
             {
                 weapons[slot] = weaponData;
                 SwitchToSlot(slot, false);
+            }else if (weapons[slot].Priority < weaponData.Priority)
+            {
+                weapons[slot] = weaponData;
+                SwitchToSlot(slot, true);
             }
+
+
             
 
         }

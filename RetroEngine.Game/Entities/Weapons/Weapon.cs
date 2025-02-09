@@ -19,8 +19,11 @@ namespace RetroEngine.Game.Entities.Weapons
     {
         [JsonInclude]
         public Type weaponType;
+
         [JsonInclude]
         public int ammo = 0;
+
+        public int Priority = 0;
 
         public int Slot = 0;
 

@@ -438,7 +438,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
         public override WeaponData GetDefaultWeaponData()
         {
-            return new WeaponData { Slot = 1, weaponType = typeof(weapon_pistol_double), ammo = 24 };
+            return new WeaponData { Slot = 1, weaponType = typeof(weapon_pistol_double), ammo = 24, Priority = 1 };
         }
 
     }

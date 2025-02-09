@@ -73,8 +73,6 @@ namespace RetroEngine
 
         public bool DevMenuEnabled = false;
 
-        Stopwatch stopwatch = new Stopwatch();
-
         public static float MaxFPS = 0;
 
         ImFontPtr font;
@@ -94,7 +92,7 @@ namespace RetroEngine
         public new GraphicsDevice GraphicsDevice;
 
 
-        static Stopwatch sw = new Stopwatch();
+        static Stopwatch FrameTimeStopwatch = new Stopwatch();
         public GameMain()
         {
 
@@ -139,8 +137,6 @@ namespace RetroEngine
             Window.ClientSizeChanged += Window_ClientSizeChanged;
 
             Input.AddAction("click").LMB = true;
-
-            stopwatch.Start();
 
             this.Window.AllowUserResizing = true;
             if (platform == Platform.Desktop)
@@ -321,7 +317,6 @@ namespace RetroEngine
             Camera.Update();
             PerformReservedTimeTasks();
 
-            LimitFrameRate();
             UpdateTime(gameTime);
 
             bool changedLevel = Level.LoadPendingLevel();
@@ -345,8 +340,14 @@ namespace RetroEngine
         {
 
 
-            double time = sw.Elapsed.TotalSeconds;
-            sw.Restart();
+            double time = FrameTimeStopwatch.Elapsed.TotalSeconds;
+
+                while (MaxFPS > 0 && time < 1f / MaxFPS)
+                {
+                    time = FrameTimeStopwatch.Elapsed.TotalSeconds;
+                }
+
+            FrameTimeStopwatch.Restart();
             time = Math.Min(time, 1 / 10f);
 
             float newDeltaTime = (float)Math.Min(time, 0.05d);
@@ -765,20 +766,6 @@ namespace RetroEngine
 
             
 
-        }
-
-        private void LimitFrameRate()
-        {
-            if (MaxFPS<1) return;
-
-            double elapsedSeconds = stopwatch.Elapsed.TotalSeconds;
-
-            while (elapsedSeconds < 1f / MaxFPS)
-            {
-                elapsedSeconds = stopwatch.Elapsed.TotalSeconds;
-            }
-
-            stopwatch.Restart();
         }
 
 
