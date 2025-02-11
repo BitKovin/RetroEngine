@@ -10,7 +10,7 @@ namespace RetroEngine
     public class Camera
     {
 
-        public static float HtW;
+        public static float AspectRatio;
         public static Vector3 position = new Vector3(0,0,0);
         public static Vector3 rotation = new Vector3(45,0,0);
         public static Matrix Transform;
@@ -50,7 +50,7 @@ namespace RetroEngine
 
         public static float GetHorizontalFOV()
         {
-            return FOV*HtW;
+            return FOV*AspectRatio;
         }
 
         public static void Update()
@@ -76,11 +76,11 @@ namespace RetroEngine
 
             view = CalculateView();
 
-            projection = Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.ToRadians(FOV),HtW, 0.05f, FarPlane);
+            projection = Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.ToRadians(FOV),AspectRatio, 0.05f, FarPlane);
 
-            projectionOcclusion = Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.ToRadians(FOV*1.3f), HtW, 0.05f, FarPlane);
+            projectionOcclusion = Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.ToRadians(FOV*1.3f), AspectRatio, 0.05f, FarPlane);
 
-            projectionViewmodel = Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.ToRadians(ViewmodelFOV), HtW, 0.01f, 1f);
+            projectionViewmodel = Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.ToRadians(ViewmodelFOV), AspectRatio, 0.01f, 1f);
 
             frustum.Matrix = view * projection;
 
@@ -166,7 +166,16 @@ namespace RetroEngine
 
         public static void ViewportUpdate()
         {
-            HtW = (float)GameMain.Instance.Window.ClientBounds.Width / (float)GameMain.Instance.Window.ClientBounds.Height;
+
+            float newHtW = (float)GameMain.Instance.Window.ClientBounds.Width / (float)GameMain.Instance.Window.ClientBounds.Height;
+
+            if(float.IsNaN(newHtW) || float.IsInfinity(newHtW))
+            {
+                newHtW = 1.7777f;
+            }
+
+            AspectRatio = newHtW;
+
 
             float ScaleY = (float)GameMain.Instance.Window.ClientBounds.Height / UiViewport.GetViewportHeight();
 

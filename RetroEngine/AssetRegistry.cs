@@ -53,7 +53,10 @@ namespace RetroEngine
 
         public static Texture2D LoadTextureFromFile(string path, bool ignoreErrors = false, bool generateMipMaps = true)
         {
-            
+
+            //if (path.Contains("engine") == false && ignoreErrors == false && path.Contains("_t.png") == false && path.Contains("_transperent.png") == false)
+            //    path = "engine/textures/white.png";
+
             if (nullAssets.Contains(path))
                 return null;
 

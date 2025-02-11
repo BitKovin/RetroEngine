@@ -278,7 +278,7 @@ namespace RetroEngine.UI
                 projectedPosition.Y / projectedPosition.W);
 
             // Map to the screen coordinates
-            float halfScreenWidth = UiViewport.GetViewportHeight() * Camera.HtW / 2f;
+            float halfScreenWidth = UiViewport.GetViewportHeight() * Camera.AspectRatio / 2f;
             float halfScreenHeight = UiViewport.GetViewportHeight() / 2f;
 
             screenSpacePosition.X = halfScreenWidth + halfScreenWidth * screenSpacePosition.X;
@@ -299,7 +299,7 @@ namespace RetroEngine.UI
                 projectedPosition.Y / projectedPosition.W);
 
             // Map to the screen coordinates
-            float halfScreenWidth = UiViewport.GetViewportHeight() * Camera.HtW / 2f;
+            float halfScreenWidth = UiViewport.GetViewportHeight() * Camera.AspectRatio / 2f;
             float halfScreenHeight = UiViewport.GetViewportHeight() / 2f;
 
             screenSpacePosition.X = halfScreenWidth + halfScreenWidth * screenSpacePosition.X;

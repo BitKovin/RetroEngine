@@ -320,12 +320,16 @@ namespace RetroEngine.Entities.Light
         {
             base.FinalizeFrame();
 
+            float cameraDist = Vector3.Distance(Camera.finalizedPosition, lightData.Position);
+            lightVisibilityCheckMesh.Visible = cameraDist > lightData.Radius;
 
             if (finalizedFrame == true) return;
 
             //finalLights = new List<PointLight>(lights);
 
             finalizedFrame = true;
+
+
 
 
         }
@@ -370,8 +374,7 @@ namespace RetroEngine.Entities.Light
             if (enabled == false) return;
 
             float cameraDist = Vector3.Distance(Camera.finalizedPosition, lightData.Position);
-            bool visible = (lightVisibilityCheckMesh.IsVisible() == false && cameraDist > lightData.Radius * 1.2)==false;
-
+            bool visible = (lightVisibilityCheckMesh.IsVisible() == false && cameraDist > lightData.Radius * 1.25)==false;
 
             lightData.Position = Position;
             lightData.Radius = radius;

@@ -483,12 +483,10 @@ namespace RetroEngine
 
             List<Model> models = new List<Model>();
 
-            bool transperent;
-
             foreach(Texture2D texture in keyValuePairs.Keys)
             {
                 models.Clear();
-                transperent = false;
+                bool transperent = false;
 
                 bool masked = false;
 
@@ -501,29 +499,6 @@ namespace RetroEngine
                     if(mesh.Masked)
                         masked = true;
 
-                }
-
-                if(transperent && false)
-                {
-
-                    foreach(BrushFaceMesh mesh in keyValuePairs[texture])
-                    {
-                        BrushFaceMesh brush = new BrushFaceMesh(MergeModels(new List<Model> {mesh.model }), texture);
-
-                        brush.textureSearchPaths.Add("textures/brushes");
-                        brush.textureSearchPaths.Add("textures/");
-
-                        brush.avgVertexPosition = brush.CalculateAvgVertexLocation();
-
-                        brush.Transperent = true;
-
-
-                        merged.Add(brush);
-
-                    }
-
-
-                    continue;
                 }
 
                 BrushFaceMesh brushFaceMesh = new BrushFaceMesh(MergeModels(models), texture);

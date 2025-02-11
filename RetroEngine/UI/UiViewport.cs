@@ -26,7 +26,7 @@ namespace RetroEngine.UI
 
         public override Vector2 GetSize()
         {
-            return new Vector2(GetViewportHeight() * Camera.HtW, GetViewportHeight());
+            return new Vector2(GetViewportHeight() * Camera.AspectRatio, GetViewportHeight());
         }
 
         public static float GetViewportHeight()

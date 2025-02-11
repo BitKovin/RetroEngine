@@ -328,6 +328,26 @@ namespace RetroEngine
         {
             return $"[{GetType().Name}] {name} {Id}";
         }
+        [ConsoleCommand("ent.spawn")]
+        public static void Console_EntSpawn(string name)
+        {
+            var entity = LevelObjectFactory.CreateByTechnicalName(name);
+
+            var hit = Physics.SphereTrace(Camera.position, Camera.position + Camera.Forward * 10, 0.5f, bodyType: BodyType.World);
+
+            Vector3 spawnPos = hit.End;
+
+            if(hit.HasHit)
+            {
+                spawnPos = hit.HitShapeLocation;
+            }
+
+            entity.Position = spawnPos;
+            entity.Start();
+            Level.GetCurrent().AddEntity(entity);
+            
+
+        }
 
     }
 }

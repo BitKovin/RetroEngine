@@ -14,6 +14,7 @@ namespace RetroEngine.Entities.Light
         internal LightVisibilityCheckMesh() 
         {
             //Transperent = true;
+
         }
 
         public bool IsVisible()

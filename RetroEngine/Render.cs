@@ -262,10 +262,11 @@ namespace RetroEngine
                 effect.Parameters["ReflectionCubemapMax"]?.SetValue(Vector3.Zero);
                 effect.Parameters["ReflectionCubemapPosition"]?.SetValue(Vector3.Zero);
             }
-
-            effect.Parameters["ScreenHeight"]?.SetValue(ForwardOutput.Height);
-            effect.Parameters["ScreenWidth"]?.SetValue(ForwardOutput.Width);
-
+            if (ForwardOutput != null)
+            {
+                effect.Parameters["ScreenHeight"]?.SetValue(ForwardOutput.Height);
+                effect.Parameters["ScreenWidth"]?.SetValue(ForwardOutput.Width);
+            }
             effect.Parameters["LightDistanceMultiplier"]?.SetValue(Graphics.LightDistanceMultiplier) ;
 
             if (reflection != null)
@@ -288,12 +289,11 @@ namespace RetroEngine
 
         public RenderTarget2D StartRenderLevel(Level level)
         {
-            
-            
+           
 
             CreateBlackTexture();
 
-            InitRenderTargetDepth(ref DepthOutput);
+
 
             InitSizedRenderTargetIfNeed(ref DepthPrepathOutput, (int)GetScreenResolution().Y, DepthFormat.Depth24, SurfaceFormat.Single);
             InitSizedRenderTargetIfNeed(ref DepthPrepathBufferOutput, (int)GetScreenResolution().Y, DepthFormat.Depth24, SurfaceFormat.Single);

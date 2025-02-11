@@ -1423,7 +1423,7 @@ namespace RetroEngine
             {
                 foreach (string item in textureSearchPaths)
                 {
-                    output = AssetRegistry.LoadTextureFromFile(item + name, true);
+                    output = AssetRegistry.LoadTextureFromFile(item + name, false);
                     if (output != null)
                     {
                         textures.TryAdd(item + name, output);

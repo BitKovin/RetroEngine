@@ -476,3 +476,24 @@
 "classname" "info_player_start"
 "origin" "-288 304 56"
 }
+// entity 3
+{
+"classname" "light_point"
+"origin" "-225 303 207"
+"radius" "20"
+"intensity" "0.5"
+}
+// entity 4
+{
+"classname" "light_point"
+"origin" "159 751 239"
+"radius" "20"
+"intensity" "0.5"
+}
+// entity 5
+{
+"classname" "light_point"
+"origin" "129 305 239"
+"radius" "20"
+"intensity" "0.5"
+}

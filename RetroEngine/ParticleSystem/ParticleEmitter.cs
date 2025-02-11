@@ -39,27 +39,12 @@ namespace RetroEngine.Particles
 
         public float ParticleSizeMultiplier = 1;
 
-        protected static List<VertexBuffer> freeVertexBuffers = new List<VertexBuffer>();
         protected static List<VertexBuffer> freeIstanceBuffers = new List<VertexBuffer>();
-        protected static List<IndexBuffer> freeIndexBuffers = new List<IndexBuffer>();
-
-        protected VertexBuffer ReuseOrCreateVertexBuffer(GraphicsDevice graphicsDevice, int requiredVertexCount)
-        {
-            // Try to reuse a buffer if available
-            VertexBuffer buffer = freeVertexBuffers.FirstOrDefault(vb => vb.VertexCount >= requiredVertexCount);
-            if (buffer != null)
-            {
-                freeVertexBuffers.Remove(buffer);
-                return buffer;
-            }
-
-            Logger.Log("Creating new vertex buffer for emitter with size" + requiredVertexCount);
-
-            return new VertexBuffer(graphicsDevice, VertexData.VertexDeclaration, requiredVertexCount, BufferUsage.WriteOnly);
-        }
 
         protected VertexBuffer ReuseOrCreateInstanceBuffer(GraphicsDevice graphicsDevice, int requiredVertexCount)
         {
+            freeIstanceBuffers.Remove(null);
+
             // Try to reuse a buffer if available
             VertexBuffer buffer = freeIstanceBuffers.FirstOrDefault(vb => vb.VertexCount >= requiredVertexCount);
             if (buffer != null)
@@ -71,21 +56,6 @@ namespace RetroEngine.Particles
             Logger.Log("Creating new instance buffer for emitter with size " + requiredVertexCount);
 
             return new VertexBuffer(graphicsDevice, InstanceData.VertexDeclaration, requiredVertexCount, BufferUsage.WriteOnly);
-        }
-
-        protected IndexBuffer ReuseOrCreateIndexBuffer(GraphicsDevice graphicsDevice, int requiredIndexCount)
-        {
-            // Try to reuse a buffer if available
-            IndexBuffer buffer = freeIndexBuffers.FirstOrDefault(ib => ib.IndexCount >= requiredIndexCount);
-            if (buffer != null)
-            {
-                freeIndexBuffers.Remove(buffer);
-                return buffer;
-            }
-
-            Logger.Log("Creating new index buffer for emitter with size  " + requiredIndexCount);
-
-            return new IndexBuffer(graphicsDevice, IndexElementSize.SixteenBits, requiredIndexCount, BufferUsage.WriteOnly);
         }
 
         public ParticleEmitter()
@@ -109,26 +79,22 @@ namespace RetroEngine.Particles
 
             if (createdBuffers) return;
 
-            for (int j = 0; j < 4; j++)
-                for (int i = 1; i <= 300; i+=2)
+            for (int j = 0; j < 5; j++)
+                for (int i = 1; i <= 50; i+=1)
                 {
                     freeIstanceBuffers.Add(new VertexBuffer(GameMain.Instance.GraphicsDevice, InstanceData.VertexDeclaration, i, BufferUsage.WriteOnly));
-                    freeVertexBuffers.Add(new VertexBuffer(GameMain.Instance.GraphicsDevice, VertexData.VertexDeclaration, i, BufferUsage.WriteOnly));
-                    freeIndexBuffers.Add(new IndexBuffer(GameMain.Instance.GraphicsDevice, IndexElementSize.SixteenBits, i, BufferUsage.WriteOnly));
-                }
-
-            for (int j = 0; j < 3; j++)
-                for (int i = 300; i <= 1000; i+=4)
-                {
-                    freeVertexBuffers.Add(new VertexBuffer(GameMain.Instance.GraphicsDevice, VertexData.VertexDeclaration, i, BufferUsage.WriteOnly));
-                    freeIndexBuffers.Add(new IndexBuffer(GameMain.Instance.GraphicsDevice, IndexElementSize.SixteenBits, i, BufferUsage.WriteOnly));
                 }
 
             for (int j = 0; j < 2; j++)
-                for (int i = 1000; i <= 2000; i += 10)
+                for (int i = 1; i <= 100; i += 1)
                 {
-                    freeVertexBuffers.Add(new VertexBuffer(GameMain.Instance.GraphicsDevice, VertexData.VertexDeclaration, i, BufferUsage.WriteOnly));
-                    freeIndexBuffers.Add(new IndexBuffer(GameMain.Instance.GraphicsDevice, IndexElementSize.SixteenBits, i, BufferUsage.WriteOnly));
+                    freeIstanceBuffers.Add(new VertexBuffer(GameMain.Instance.GraphicsDevice, InstanceData.VertexDeclaration, i, BufferUsage.WriteOnly));
+                }
+
+            for (int j = 0; j < 1; j++)
+                for (int i = 1; i <= 500; i += 1)
+                {
+                    freeIstanceBuffers.Add(new VertexBuffer(GameMain.Instance.GraphicsDevice, InstanceData.VertexDeclaration, i, BufferUsage.WriteOnly));
                 }
 
             createdBuffers = true;
