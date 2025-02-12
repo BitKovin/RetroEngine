@@ -58,6 +58,9 @@ namespace RetroEngine.Game.Entities.Player
         [JsonInclude]
         public WeaponData[] weapons = new WeaponData[10];
 
+        [JsonInclude]
+        public WeaponData weaponMeele;
+
         public Weapon currentWeapon;
         [JsonInclude]
         public int currentSlot = -1;
@@ -221,7 +224,7 @@ namespace RetroEngine.Game.Entities.Player
             stepSound.SetParameter("Surface", 1);
 
 
-            AddWeapon(new WeaponData { weaponType = typeof(weapon_sword), ammo = 1, Slot = 0 });
+            weaponMeele = new weapon_sword().GetDefaultWeaponData();
             //weapons.Add(new WeaponData { weaponType = typeof(weapon_shotgunNew), ammo = 50 });
             //weapons.Add(new WeaponData { weaponType = typeof(weapon_pistol_double), ammo = 50 });
             SwitchToSlot(0, true);
@@ -251,6 +254,54 @@ namespace RetroEngine.Game.Entities.Player
 
         }
 
+        public override void Update()
+        {
+            base.Update();
+
+            if(currentWeapon != null)
+            {
+                if(currentWeapon.Data.Slot != currentSlot)
+                {
+                    SwitchToSlot(currentSlot);
+                }
+            }
+
+            if (Input.GetAction("slotMelee").Pressed())
+                SwitchToMeleeWeapon();
+
+            if (Input.GetAction("slot1").Pressed())
+                SwitchToSlot(0);
+
+            if (Input.GetAction("slot2").Pressed())
+                SwitchToSlot(1);
+
+            if (Input.GetAction("slot3").Pressed())
+                SwitchToSlot(2);
+
+            if (Input.GetAction("slot4").Pressed())
+                SwitchToSlot(4);
+
+            if (Input.GetAction("lastSlot").Pressed())
+                SwitchToSlot(lastSlot);
+
+            if (Input.GetAction("view").Pressed())
+                thirdPerson = !thirdPerson;
+
+            if (Input.GetAction("test2").Pressed())
+                flashlightEnabled = !flashlightEnabled;
+
+        }
+
+        bool canSwitchSlot(int slot)
+        {
+            if (currentWeapon == null) return true;
+
+            if(currentWeapon.IsMelee == false)
+                if (slot == currentSlot) return false;
+
+            return currentWeapon.CanChangeSlot();
+
+        }
         private void PlayerBodyAnimator_OnAnimationEvent(AnimationEvent animationEvent)
         {
             if(animationEvent.Name == "step")
@@ -307,28 +358,7 @@ namespace RetroEngine.Game.Entities.Player
                 Jump();
 
             //if (Input.GetAction("slot0").Pressed())
-                //SwitchToSlot(-1);
-
-            if (Input.GetAction("slot1").Pressed())
-                SwitchToSlot(0);
-
-            if (Input.GetAction("slot2").Pressed())
-                SwitchToSlot(1);
-
-            if (Input.GetAction("slot3").Pressed())
-                SwitchToSlot(2);
-
-            if (Input.GetAction("slot4").Pressed())
-                SwitchToSlot(4);
-
-            if (Input.GetAction("lastSlot").Pressed())
-                SwitchToSlot(lastSlot);
-
-            if (Input.GetAction("view").Pressed())
-                thirdPerson = ! thirdPerson;
-
-            if(Input.GetAction("test2").Pressed())
-                flashlightEnabled = ! flashlightEnabled;
+            //SwitchToSlot(-1);
 
         }
 
@@ -1032,11 +1062,44 @@ namespace RetroEngine.Game.Entities.Player
             return vel;
         }
 
+        void SwitchToMeleeWeapon(bool forceChange = false)
+        {
+            if (forceChange == false)
+            {
+                if(currentWeapon != null)
+                    if (currentWeapon.IsMelee) return;
+
+                if (canSwitchSlot(-1) == false) return;
+
+            }
+            if (weaponMeele != null)
+            {
+                SwitchWeapon(weaponMeele);
+            }
+        }
+
         void SwitchToSlot(int slot, bool forceChange = false)
         {
-            if(forceChange == false)
-                if (slot == currentSlot) return;
 
+            
+
+            if (forceChange == false)
+            {
+
+                if (canSwitchSlot(slot) == false)
+                {
+                    if (currentWeapon != null)
+                    {
+                        if (currentWeapon.IsMelee)
+                        {
+                            lastSlot = currentSlot;
+                            currentSlot = slot;
+                            return;
+                        }
+                    }
+                }
+
+            }
             if (weapons[slot] != null)
             {
 
@@ -1064,7 +1127,10 @@ namespace RetroEngine.Game.Entities.Player
 
             if (data is not null)
             {
-                currentWeapon = Level.GetCurrent().AddEntity(Weapon.CreateFromData(data, this)) as Weapon;
+
+                Weapon newWeapon = Weapon.CreateFromData(data, this);
+
+                currentWeapon = Level.GetCurrent().AddEntity(newWeapon) as Weapon;
             }
 
         }

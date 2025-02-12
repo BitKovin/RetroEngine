@@ -39,7 +39,11 @@ half3 CalculateDirectionalVertexLight(half3 tangentNormal)
 
     float shadowed = shadow;
 
+        if(isParticle)
+            tangentNormal = -LightDirection;
+
 	shadow = lerp(shadow, 1, 1 - max(0, dot(tangentNormal, normalize(-LightDirection))));
+
 
 
 	//shadow = saturate(shadow);
@@ -123,6 +127,8 @@ half3 CalculateVertexLight(PixelInput input)
 
 
     half3 tangentNormal = normalize(GetTangentNormal(input.Normal, input.Tangent, input.BiTangent));
+
+    
 
     half3 light = CalculateDirectionalVertexLight(tangentNormal);
 

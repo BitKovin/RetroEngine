@@ -47,7 +47,7 @@ namespace RetroEngine.Game.Entities.Weapons
     public class Weapon : Entity
     {
 
-        protected WeaponData data;
+        public WeaponData Data;
         protected Entity player;
 
         protected double DrawTime = 0.35f;
@@ -66,12 +66,17 @@ namespace RetroEngine.Game.Entities.Weapons
 
         public bool ShowHandL = true;
 
+        public bool IsMelee = false;
+
         public static Weapon CreateFromData(WeaponData data, Entity owner = null)
         {
             Weapon weapon = Activator.CreateInstance(data.weaponType) as Weapon;
 
-            weapon.data = data;
+            weapon.Data = data;
             weapon.player = owner;
+
+            weapon.LoadAssetsIfNeeded();
+
             weapon.Start();
             weapon.LateUpdate();
 
@@ -98,7 +103,7 @@ namespace RetroEngine.Game.Entities.Weapons
             foreach (Type type in types) 
             {
                 Weapon weapon = Activator.CreateInstance(type) as Weapon;
-                weapon.data = new WeaponData();
+                weapon.Data = new WeaponData();
                 weapon.LoadAssetsIfNeeded();
                 foreach(object model in weapon.meshes)
                 {
@@ -193,6 +198,10 @@ namespace RetroEngine.Game.Entities.Weapons
             }catch (Exception ex) { Logger.Log(ex.Message); }
         }
 
+        public virtual bool CanChangeSlot()
+        {
+            return true;
+        }
 
     }
 }

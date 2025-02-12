@@ -17,6 +17,8 @@ namespace RetroEngine.Entities
 
         public ParticleSystemEnt() { }
 
+        public Matrix RelativeTransform = Matrix.Identity;
+
         public override void Start()
         {
             base.Start();
@@ -66,6 +68,9 @@ namespace RetroEngine.Entities
         public override void LateUpdate()
         {
             base.LateUpdate();
+
+            foreach(var emitter in emitters)
+                emitter.RelativeMatrix = RelativeTransform;
 
         }
 
@@ -141,6 +146,12 @@ namespace RetroEngine.Entities
 
         public virtual void SetTrailTransform(Vector3 p1, Vector3 p2)
         {
+
+            Matrix inv = Matrix.Invert(RelativeTransform);
+
+            p1 = Vector3.Transform(p1, inv);
+            p2 = Vector3.Transform(p2, inv);
+
             Position = (p1 + p2)/2;
 
             Rotation = MathHelper.FindLookAtRotation(p1, p2);

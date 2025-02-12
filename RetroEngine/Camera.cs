@@ -143,7 +143,6 @@ namespace RetroEngine
             return Matrix.CreateScale(1) *
                                 Matrix.CreateRotationX(rotation.X / 180 * (float)Math.PI) *
                                 Matrix.CreateRotationY(rotation.Y / 180 * (float)Math.PI) *
-                                Matrix.CreateRotationZ(rotation.Z / 180 * (float)Math.PI) *
                                 Matrix.CreateTranslation(position);
         }
 

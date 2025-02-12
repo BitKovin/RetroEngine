@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using RetroEngine.Entities;
 using RetroEngine.Particles;
 using System;
@@ -44,10 +45,11 @@ namespace RetroEngine.Game.Effects.Particles
             TexturePath = "particles/trail.png";
 
             InitialSpawnCount = 2;
-            SpawnRate = 30;
+            SpawnRate = 60;
             //BoundingRadius = 30000;
             Emitting = true;
 
+            Viewmodel = true;
 
         }
 
@@ -82,8 +84,8 @@ namespace RetroEngine.Game.Effects.Particles
             particle.BouncePower = 0.1f;
 
             particle.transparency = 1f;
-            particle.color = new Vector4(1,0.2f,0.2f,0.2f);
-            particle.deathTime = 6;
+            particle.color = new Vector4(1,0.2f,0.2f,0.4f)/1.5f;
+            particle.deathTime = 0.5f;
 
             return particle;
         }

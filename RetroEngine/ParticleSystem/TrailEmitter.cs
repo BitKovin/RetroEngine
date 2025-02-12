@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using RetroEngine.Graphic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,9 +18,11 @@ namespace RetroEngine.Particles
 
         int primitiveCount = 0;
 
+
+
         public TrailEmitter() : base()
         {
-            Shader = new Graphic.SurfaceShaderInstance("TrailUnlit");
+            Shader = new SurfaceShaderInstance(GameMain.Instance.DefaultShader);
             isParticle = true;
 
             CastShadows = false;
@@ -57,6 +60,8 @@ namespace RetroEngine.Particles
                 Particle particle = particles[i];
 
                 Vector3 p = particle.position;
+
+                p = Vector3.Transform(p, RelativeMatrix);
 
                 Vector3 halfSize = particle.globalRotation.GetForwardVector() * particle.Scale / 2;
 
@@ -129,8 +134,15 @@ namespace RetroEngine.Particles
             destroyed = true;
         }
 
+        public override void DrawDepth(bool pointLight = false, bool renderTransperent = false)
+        {
+
+        }
+
         void DrawRibbon()
         {
+
+
             GraphicsDevice _graphicsDevice = GameMain.Instance.GraphicsDevice;
 
 
@@ -145,12 +157,19 @@ namespace RetroEngine.Particles
             ApplyPointLights(effect);
             ApplyShaderParams(effect, null);
             effect.Parameters["isParticle"]?.SetValue(true);
+            effect.Parameters["Projection"]?.SetValue(Viewmodel ? Camera.projectionViewmodel : Camera.projection);
+
+            
 
             Stats.RenderedMehses++;
 
 
-            if (indicesFinal == null) return;
-            if (verticesFinal == null) return;
+            if (indicesFinal == null || verticesFinal == null)
+            {
+                effect.Parameters["isParticle"]?.SetValue(false);
+                effect.Parameters["Projection"]?.SetValue(Camera.projection);
+                return;
+            }
 
             if (destroyed == false)
             {
@@ -164,8 +183,7 @@ namespace RetroEngine.Particles
 
 
 
-            effect.Parameters["isParticle"]?.SetValue(false);
-
+            
 
         }
 

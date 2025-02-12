@@ -3,11 +3,13 @@ using FmodForFoxes.Studio;
 using Microsoft.Xna.Framework;
 using RetroEngine.Audio;
 using RetroEngine.Entities;
+using RetroEngine.Game.Effects.Particles;
 using RetroEngine.Game.Entities.Player;
 using RetroEngine.ParticleSystem;
 using RetroEngine.PhysicsSystem;
 using RetroEngine.Skeletal;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,18 +31,24 @@ namespace RetroEngine.Game.Entities.Weapons
         SoundPlayer hitSoundPlayer;
 
 
-        float aim = 0;
-
-        float aimAnimation = 0;
-
         bool pendingAttack = false;
         Delay pendingAttackDelay = new Delay();
 
         Delay reAttack = new Delay();
 
-        int attack = 0;
+        int attack = -1;
 
         bool hadHit = false;
+
+        Delay startTrailDelay = new Delay();
+
+        particle_system_meleeTrail trail;
+
+        public weapon_sword() 
+        {
+            IsMelee = true;
+            startTrailDelay.AddDelay(100000000);
+        }
 
         public override void Start()
         {
@@ -58,9 +66,9 @@ namespace RetroEngine.Game.Entities.Weapons
 
             ShowHandL = true;
 
-
             LateUpdate();
 
+            Shoot();
         }
 
         protected override void LoadAssets()
@@ -70,6 +78,23 @@ namespace RetroEngine.Game.Entities.Weapons
             LoadVisual();
             AssetRegistry.LoadFmodBankIntoMemory("sounds/banks/weapons.bank");
 
+            
+
+        }
+
+        void StopTrail()
+        {
+            trail?.Destroy(2);
+            trail = null;
+        }
+
+        void StartNewTrail()
+        {
+
+            trail = new particle_system_meleeTrail();
+
+            Level.GetCurrent().AddEntity(trail);
+            trail.LoadAssetsIfNeeded();
         }
 
         public override void Update()
@@ -79,13 +104,9 @@ namespace RetroEngine.Game.Entities.Weapons
             mesh.Update(Time.DeltaTime);
 
 
-
             //pistolAnimation.SetBoneMeshTransformModification("spine_02", transform.ToMatrix());
 
-            aimAnimation -= Time.DeltaTime * 2;
-            aimAnimation = MathF.Max(0, aimAnimation);
-
-            if (Input.GetAction("attack").Holding())
+            if (Input.GetAction("slotMelee").Pressed())
                 Shoot();
 
             if(pendingAttack && pendingAttackDelay.Wait() == false)
@@ -94,44 +115,25 @@ namespace RetroEngine.Game.Entities.Weapons
             arms.Visible = mesh.Visible = ((ICharacter)player).isFirstPerson();
 
 
-            UpdateAim();
-
         }
 
-        void IncreaseAim()
+        void UpdateTrail()
         {
-            aim += Time.DeltaTime * 4;
-        }
 
-        void DecreaseAim()
-        {
-            aim -= Time.DeltaTime * 3;
-        }
-
-        void UpdateAim()
-        {
-            if (Input.GetAction("attack2").Holding())
+            if(startTrailDelay.Wait() == false)
             {
-                IncreaseAim();
-            }
-            else
-            {
-                DecreaseAim();
+                StartNewTrail();
+                startTrailDelay.AddDelay(1000000);
             }
 
-            if(Input.GetAction("attack2").Pressed())
-            {
-                BoxDynamic boxDynamic = new BoxDynamic();
-                boxDynamic.Position = Camera.position + Camera.rotation.GetForwardVector()*2;
-                boxDynamic.Start();
-                Level.GetCurrent().AddEntity(boxDynamic);
-            }
+            if (trail == null) return;
 
-            aim = Math.Clamp(aim, 0, 1);
+            //trail.RelativeTransform = Matrix.CreateTranslation(Camera.position);
 
-            Offset = Vector3.Lerp(Vector3.Zero, new Vector3(-0.052488543f, 0.07340118f, -0.12f), aim);
+            Vector3 trailStart = mesh.GetBoneMatrix("trail_start").DecomposeMatrix().Position;
+            Vector3 trailEnd = mesh.GetBoneMatrix("trail_end").DecomposeMatrix().Position;
 
-            BobScale = 1 - aim;
+            trail.SetTrailTransform(trailStart, trailEnd);
 
         }
 
@@ -141,6 +143,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             fireSoundPlayer.Destroy(2);
             fireSoundPlayer2.Destroy(2);
+            trail?.Destroy(1);
         }
 
         public override void FinalizeFrame()
@@ -164,24 +167,28 @@ namespace RetroEngine.Game.Entities.Weapons
             arms.PastePose(mesh.GetPose());
 
             ICharacter character = ((ICharacter)player);
+
+            UpdateTrail();
+
         }
 
         bool a = false;
 
         void Shoot()
         {
-            if (Drawing) return;
 
             if (attackDelay.Wait()) return;
 
-            if (reAttack.Wait())
-            {
-                attack++;
-            }
-            else
-            {
-                attack = 0;
-            }
+
+                if (reAttack.Wait())
+                {
+                    attack++;
+                }
+                else
+                {
+                if (attack >= 0)
+                    attack = 0;
+                }
 
 
 
@@ -195,23 +202,33 @@ namespace RetroEngine.Game.Entities.Weapons
             if (attack == 0)
             {
                 mesh.PlayAnimation("attack", false, 0.1f);
-                attackDelay.AddDelay(0.5f);
-                pendingAttackDelay.AddDelay(0.25f);
-                Camera.AddCameraShake(new CameraShake(interpIn: 1, duration: 1f, positionAmplitude: new Vector3(0f, 0f, 0f), positionFrequency: new Vector3(0f, 0f, 0f), rotationAmplitude: new Vector3(-5f, -5f, 0f), rotationFrequency: new Vector3(7f, 7f, 0f), falloff: 1f, shakeType: CameraShake.ShakeType.SingleWave));
+                attackDelay.AddDelay(0.3f);
+                pendingAttackDelay.AddDelay(0.15f);
+                Camera.AddCameraShake(new CameraShake(interpIn: 1, duration: 1f, positionAmplitude: new Vector3(0f, 0f, 0f), positionFrequency: new Vector3(0f, 0f, 0f), rotationAmplitude: new Vector3(-5f, -5f, 0f), rotationFrequency: new Vector3(7f, 7f, 0f), falloff: 1f, shakeType: CameraShake.ShakeType.SingleWave)); 
             }
             else if (attack == 1)
             {
                 mesh.PlayAnimation("attack2", false, 0.1f);
-                attackDelay.AddDelay(0.5f);
-                pendingAttackDelay.AddDelay(0.25f);
+                attackDelay.AddDelay(0.3f);
+                pendingAttackDelay.AddDelay(0.15f);
                 Camera.AddCameraShake(new CameraShake(interpIn: 1, duration: 1f, positionAmplitude: new Vector3(0f, 0f, 0f), positionFrequency: new Vector3(0f, 0f, 0f), rotationAmplitude: new Vector3(-5f, 5f, 0f), rotationFrequency: new Vector3(7f, 7f, 0f), falloff: 1f, shakeType: CameraShake.ShakeType.SingleWave));
             }
             else if (attack == 2)
             {
                 mesh.PlayAnimation("attack_finish", false, 0.1f);
-                attackDelay.AddDelay(0.7f);
-                pendingAttackDelay.AddDelay(0.3f);
+                attackDelay.AddDelay(0.4f);
+                pendingAttackDelay.AddDelay(0.15f);
             }
+            if (attack == -1)
+            {
+                mesh.PlayAnimation("attack_start", false, 0f);
+                attackDelay.AddDelay(0.3f);
+                pendingAttackDelay.AddDelay(0.1f);
+                Camera.AddCameraShake(new CameraShake(interpIn: 1, duration: 1f, positionAmplitude: new Vector3(0f, 0f, 0f), positionFrequency: new Vector3(0f, 0f, 0f), rotationAmplitude: new Vector3(-5f, -5f, 0f), rotationFrequency: new Vector3(7f, 7f, 0f), falloff: 1f, shakeType: CameraShake.ShakeType.SingleWave));
+            }
+
+            StopTrail();
+            startTrailDelay.AddDelay(0.12f);
 
             if (a)
                 fireSoundPlayer.Play(true);
@@ -224,11 +241,9 @@ namespace RetroEngine.Game.Entities.Weapons
             pendingAttack = true;
 
 
-            aimAnimation = 3;
-
             a = !a;
 
-            reAttack.AddDelay(0.8f);
+            reAttack.AddDelay(0.6f);
 
             return;
 
@@ -238,7 +253,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
         void PerformAttack()
         {
-            var hit = Physics.SphereTrace(Camera.position, Camera.position + Camera.Forward*2f, 0.25f, bodies, BodyType.GroupHitTest);
+            var hit = Physics.SphereTrace(Camera.position, Camera.position + Camera.Forward*2f, 0.35f, bodies, BodyType.GroupHitTest);
 
             hadHit = false;
 
@@ -319,9 +334,14 @@ namespace RetroEngine.Game.Entities.Weapons
 
         }
 
+        public override bool CanChangeSlot()
+        {
+            return reAttack.Wait() == false;
+        }
+
         public override WeaponData GetDefaultWeaponData()
         {
-            return new WeaponData { Slot = 0, weaponType = typeof(weapon_sword), ammo = 0 };
+            return new WeaponData { Slot = -1, weaponType = typeof(weapon_sword), ammo = 0 };
         }
 
     }

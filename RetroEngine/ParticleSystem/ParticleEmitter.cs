@@ -41,6 +41,8 @@ namespace RetroEngine.Particles
 
         protected static List<VertexBuffer> freeIstanceBuffers = new List<VertexBuffer>();
 
+        public Matrix RelativeMatrix = Matrix.Identity;
+
         protected VertexBuffer ReuseOrCreateInstanceBuffer(GraphicsDevice graphicsDevice, int requiredVertexCount)
         {
             freeIstanceBuffers.Remove(null);
