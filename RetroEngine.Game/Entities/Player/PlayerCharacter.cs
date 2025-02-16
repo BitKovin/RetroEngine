@@ -846,7 +846,7 @@ namespace RetroEngine.Game.Entities.Player
             DrawDebug.Sphere(0.1f, hitPoint, Vector3.UnitY);
 
 
-            Vector3 lerpPose = Vector3.Lerp(Position, hitPoint, 0.0f);
+            Vector3 lerpPose = Vector3.Lerp(Position, hitPoint, 0.3f);
 
             lerpPose.Y = hitPoint.Y + 1;
 
@@ -1081,7 +1081,7 @@ namespace RetroEngine.Game.Entities.Player
         void SwitchToSlot(int slot, bool forceChange = false)
         {
 
-            
+            if (slot < 0) return;
 
             if (forceChange == false)
             {
@@ -1094,8 +1094,11 @@ namespace RetroEngine.Game.Entities.Player
                         {
                             lastSlot = currentSlot;
                             currentSlot = slot;
-                            return;
+                            
                         }
+
+                        return;
+
                     }
                 }
 
@@ -1108,13 +1111,7 @@ namespace RetroEngine.Game.Entities.Player
 
                 SwitchWeapon(weapons[slot]);
             }
-            /*
-            else
-            {
-                currentSlot = slot;
-                SwitchWeapon(null);
-            }
-            */
+
         }
 
         void SwitchWeapon(WeaponData data)

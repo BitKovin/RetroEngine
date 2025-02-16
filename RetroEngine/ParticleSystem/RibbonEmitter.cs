@@ -181,6 +181,8 @@ namespace RetroEngine.Particles
 
         void DrawRibbon()
         {
+
+
             GraphicsDevice _graphicsDevice = GameMain.Instance.GraphicsDevice;
 
 
@@ -195,12 +197,19 @@ namespace RetroEngine.Particles
             ApplyPointLights(effect);
             ApplyShaderParams(effect, null);
             effect.Parameters["isParticle"]?.SetValue(true);
+            effect.Parameters["Projection"]?.SetValue(Viewmodel ? Camera.projectionViewmodel : Camera.projection);
+
+
 
             Stats.RenderedMehses++;
 
 
-            if (indicesFinal == null) return;
-            if(verticesFinal == null) return;
+            if (indicesFinal == null || verticesFinal == null)
+            {
+                effect.Parameters["isParticle"]?.SetValue(false);
+                effect.Parameters["Projection"]?.SetValue(Camera.projection);
+                return;
+            }
 
             if (destroyed == false)
             {
@@ -213,8 +222,8 @@ namespace RetroEngine.Particles
             }
 
 
-
             effect.Parameters["isParticle"]?.SetValue(false);
+            effect.Parameters["Projection"]?.SetValue(Camera.projection);
 
 
         }

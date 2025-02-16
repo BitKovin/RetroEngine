@@ -146,7 +146,7 @@ namespace RetroEngine.Entities.Brushes
             // Move position back to world space
             Position += offsetPosition;
 
-            if (Position == startPos && SpawnTime + 1 < Time.gameTime) return;
+            if (Position == startPos && SpawnTime + 1 < Time.GameTime) return;
 
             foreach (var body in bodies)
             {

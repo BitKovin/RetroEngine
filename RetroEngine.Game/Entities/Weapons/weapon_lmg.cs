@@ -81,7 +81,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             fireSoundPlayer.Play(true);
 
-            Console.WriteLine($"playing shot sound {Time.gameTime}");
+            Console.WriteLine($"playing shot sound {Time.GameTime}");
 
             mesh.Play();
 

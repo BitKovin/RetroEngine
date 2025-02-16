@@ -140,8 +140,7 @@ namespace RetroEngine
 
             StupidCameraFix();
 
-            return Matrix.CreateScale(1) *
-                                Matrix.CreateRotationX(rotation.X / 180 * (float)Math.PI) *
+            return Matrix.CreateRotationX(rotation.X / 180 * (float)Math.PI) *
                                 Matrix.CreateRotationY(rotation.Y / 180 * (float)Math.PI) *
                                 Matrix.CreateTranslation(position);
         }

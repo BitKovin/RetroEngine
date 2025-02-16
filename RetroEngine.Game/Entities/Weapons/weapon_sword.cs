@@ -32,7 +32,8 @@ namespace RetroEngine.Game.Entities.Weapons
 
 
         bool pendingAttack = false;
-        Delay pendingAttackDelay = new Delay();
+        Delay pendingAttackStartDelay = new Delay();
+        Delay pendingAttackEndDelay = new Delay();
 
         Delay reAttack = new Delay();
 
@@ -43,6 +44,8 @@ namespace RetroEngine.Game.Entities.Weapons
         Delay startTrailDelay = new Delay();
 
         particle_system_meleeTrail trail;
+
+        float Damage = 30;
 
         public weapon_sword() 
         {
@@ -109,7 +112,7 @@ namespace RetroEngine.Game.Entities.Weapons
             if (Input.GetAction("slotMelee").Pressed())
                 Shoot();
 
-            if(pendingAttack && pendingAttackDelay.Wait() == false)
+            if(pendingAttack && pendingAttackStartDelay.Wait() == false && pendingAttackEndDelay.Wait())
                 PerformAttack();
 
             arms.Visible = mesh.Visible = ((ICharacter)player).isFirstPerson();
@@ -126,9 +129,14 @@ namespace RetroEngine.Game.Entities.Weapons
                 startTrailDelay.AddDelay(1000000);
             }
 
+            if(pendingAttackEndDelay.Wait() == false)
+            {
+                trail?.StopAll();
+            }
+
             if (trail == null) return;
 
-            //trail.RelativeTransform = Matrix.CreateTranslation(Camera.position);
+            trail.RelativeTransform = Camera.GetMatrix();
 
             Vector3 trailStart = mesh.GetBoneMatrix("trail_start").DecomposeMatrix().Position;
             Vector3 trailEnd = mesh.GetBoneMatrix("trail_end").DecomposeMatrix().Position;
@@ -203,29 +211,31 @@ namespace RetroEngine.Game.Entities.Weapons
             {
                 mesh.PlayAnimation("attack", false, 0.1f);
                 attackDelay.AddDelay(0.3f);
-                pendingAttackDelay.AddDelay(0.15f);
+                pendingAttackStartDelay.AddDelay(0.15f);
                 Camera.AddCameraShake(new CameraShake(interpIn: 1, duration: 1f, positionAmplitude: new Vector3(0f, 0f, 0f), positionFrequency: new Vector3(0f, 0f, 0f), rotationAmplitude: new Vector3(-5f, -5f, 0f), rotationFrequency: new Vector3(7f, 7f, 0f), falloff: 1f, shakeType: CameraShake.ShakeType.SingleWave)); 
             }
             else if (attack == 1)
             {
                 mesh.PlayAnimation("attack2", false, 0.1f);
                 attackDelay.AddDelay(0.3f);
-                pendingAttackDelay.AddDelay(0.15f);
+                pendingAttackStartDelay.AddDelay(0.15f);
                 Camera.AddCameraShake(new CameraShake(interpIn: 1, duration: 1f, positionAmplitude: new Vector3(0f, 0f, 0f), positionFrequency: new Vector3(0f, 0f, 0f), rotationAmplitude: new Vector3(-5f, 5f, 0f), rotationFrequency: new Vector3(7f, 7f, 0f), falloff: 1f, shakeType: CameraShake.ShakeType.SingleWave));
             }
             else if (attack == 2)
             {
                 mesh.PlayAnimation("attack_finish", false, 0.1f);
                 attackDelay.AddDelay(0.4f);
-                pendingAttackDelay.AddDelay(0.15f);
+                pendingAttackStartDelay.AddDelay(0.15f);
             }
             if (attack == -1)
             {
                 mesh.PlayAnimation("attack_start", false, 0f);
                 attackDelay.AddDelay(0.3f);
-                pendingAttackDelay.AddDelay(0.1f);
+                pendingAttackStartDelay.AddDelay(0.0f);
                 Camera.AddCameraShake(new CameraShake(interpIn: 1, duration: 1f, positionAmplitude: new Vector3(0f, 0f, 0f), positionFrequency: new Vector3(0f, 0f, 0f), rotationAmplitude: new Vector3(-5f, -5f, 0f), rotationFrequency: new Vector3(7f, 7f, 0f), falloff: 1f, shakeType: CameraShake.ShakeType.SingleWave));
             }
+
+            pendingAttackEndDelay.AddDelay(0.35f);
 
             StopTrail();
             startTrailDelay.AddDelay(0.12f);
@@ -243,7 +253,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             a = !a;
 
-            reAttack.AddDelay(0.6f);
+            reAttack.AddDelay(0.55f);
 
             return;
 
@@ -251,34 +261,53 @@ namespace RetroEngine.Game.Entities.Weapons
 
         }
 
+        public override void Blocked()
+        {
+            base.Blocked();
+
+            mesh.SetCurrentAnimationFrame(5.5f);
+
+        }
+
         void PerformAttack()
         {
-            var hit = Physics.SphereTrace(Camera.position, Camera.position + Camera.Forward*2f, 0.35f, bodies, BodyType.GroupHitTest);
+            var hit = Physics.SphereTrace(Camera.position, Camera.position + Camera.Forward*1.3f, 0.3f, bodies, BodyType.GroupHitTest);
 
             hadHit = false;
+
+            DrawDebug.Line(hit.Start, hit.End);
 
             if (hit.HasHit)
             {
 
                 Entity hitEnt = ((RigidbodyData)hit.HitCollisionObject.UserObject).Entity;
 
-                Console.WriteLine((hit.HitCollisionObject.CollisionShape.UserObject as Physics.CollisionSurfaceData).surfaceType);
 
                 if (hitEnt != null)
                 {
-                    hitEnt.OnPointDamage(30, hit.HitPointWorld, Camera.rotation.GetForwardVector(), player, this);
+                    hitEnt.OnPointDamage(Damage, hit.HitPointWorld, Camera.rotation.GetForwardVector(), player, this);
                     hadHit = true;
                 }
 
-                CreateHitParticle(hit.HitPointWorld + hit.HitNormalWorld * 0.1f);
+                RigidBody rigidBody = (RigidBody)hit.HitCollisionObject;
 
+                var data = rigidBody.GetData();
+
+                if (data != null)
+                {
+                    if (data.Value.Surface == "default")
+                    {
+                        GlobalParticleSystem.EmitAt($"hit_{data.Value.Surface}", hit.HitPointWorld, MathHelper.FindLookAtRotation(Vector3.Zero, hit.HitNormalWorld), new Vector3(0, 0, float.Max(Damage / 10f, 1)));
+                    }
+                }
                 hitSoundPlayer.Position = hit.HitPointWorld;
                 hitSoundPlayer.Update();
                 hitSoundPlayer.Play(true);
 
+                pendingAttack = false;
+
             }
 
-            pendingAttack = false;
 
         }
 

@@ -360,7 +360,10 @@ namespace RetroEngine
             Time.AddFrameTime(newDeltaTime);
 
             if (!paused)
-                Time.gameTime += Time.DeltaTime;
+                Time.GameTime += Time.DeltaTime;
+
+            Time.GameTimeNoPause += newDeltaTime;
+
         }
         void GameLogic()
         {

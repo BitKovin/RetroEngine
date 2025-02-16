@@ -482,6 +482,8 @@ namespace RetroEngine.Entities.Light
             if (Destroyed)
                 return;
 
+            if (DisableShadows) return;
+
             InitRenderTargetIfNeeded();
 
             if (isDynamic() == false && dirty == false && Level.ChangingLevel==false)

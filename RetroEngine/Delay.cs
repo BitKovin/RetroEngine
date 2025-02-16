@@ -10,19 +10,48 @@ namespace RetroEngine
     {
         double waitUntilTime = 0;
 
+        bool ignorePause;
+
+        public Delay() { }
+        public Delay(bool ignorePause)
+        {
+            this.ignorePause = ignorePause;
+        }
+
         public bool Wait()
         {
-            return waitUntilTime >= Time.gameTime;
+
+            double time = Time.GameTime;
+            if (ignorePause)
+            {
+                time = Time.GameTimeNoPause;
+            }
+
+            return waitUntilTime >= time;
         }
 
         public void AddDelay(float delay)
         {
-            waitUntilTime = Time.gameTime + delay;
+
+            double time = Time.GameTime;
+            if (ignorePause)
+            {
+                time = Time.GameTimeNoPause;
+            }
+
+            waitUntilTime = time + delay;
         }
 
         public float GetRemainTime()
         {
-            return (float)(waitUntilTime - Time.gameTime);
+
+            double time = Time.GameTime;
+            if (ignorePause)
+            {
+                time = Time.GameTimeNoPause;
+            }
+
+            return (float)(waitUntilTime - time);
         }
 
     }

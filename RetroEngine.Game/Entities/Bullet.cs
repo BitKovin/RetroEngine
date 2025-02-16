@@ -205,7 +205,7 @@ namespace RetroEngine.Game.Entities
 
             mesh.Position = Position;
             mesh.Rotation = startRotation;
-            mesh.Scale = new Vector3((float)(1d-(Time.gameTime - SpawnTime) / LifeTime));
+            mesh.Scale = new Vector3((float)(1d-(Time.GameTime - SpawnTime) / LifeTime));
         }
 
         public override void LateUpdate()

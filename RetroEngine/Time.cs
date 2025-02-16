@@ -12,12 +12,15 @@ namespace RetroEngine
 
         public static float deltaTimeDifference = 1;
 
-        public static double gameTime = 0;
+        public static double GameTime = 0;
+        public static double GameTimeNoPause = 0;
 
         static List<float> frames = new List<float>();
         static int framesCount = 0;
 
         public static int FrameCount = 0;
+
+        static List<TimeScaleEffect> timeScaleEffects = new List<TimeScaleEffect>();
 
         public static void AddFrameTime(float time)
         {
@@ -37,8 +40,52 @@ namespace RetroEngine
 
             deltaTimeDifference = Math.Abs(avg - DeltaTime);
 
-            DeltaTime = avg*TimeScale;
+            DeltaTime = avg*GetFinalTimeScale();
             FrameCount++;
+        }
+
+        public static float GetFinalTimeScale()
+        {
+
+            float time = TimeScale;
+
+            foreach (TimeScaleEffect timeScaleEffect in timeScaleEffects.ToArray())
+            {
+                if (timeScaleEffect.DurationDelay.Wait())
+                {
+                    time *= timeScaleEffect.TimeScale;
+                }
+                else
+                {
+                    timeScaleEffects.Remove(timeScaleEffect);
+                }
+            }
+
+            return time;
+        }
+
+        public static float GetSoundFinalTimeScale()
+        {
+
+            float time = TimeScale;
+
+            foreach (TimeScaleEffect timeScaleEffect in timeScaleEffects.ToArray())
+            {
+
+                if (timeScaleEffect.AffectSound == false) continue;
+
+                if (timeScaleEffect.DurationDelay.Wait())
+                {
+                    time *= timeScaleEffect.TimeScale;
+                }
+                else
+                {
+                    timeScaleEffects.Remove(timeScaleEffect);
+                }
+            }
+
+            return time;
+
         }
 
         [ConsoleCommand("time.scale")]
@@ -55,7 +102,28 @@ namespace RetroEngine
             TimeScale = val;
         }
 
-
+        public static void AddTimeScaleEffect(TimeScaleEffect effect)
+        {
+            lock (timeScaleEffects)
+                timeScaleEffects.Add(effect);
+        }
 
     }
+
+    public class TimeScaleEffect
+    {
+
+        public Delay DurationDelay = new Delay(true);
+        public bool AffectSound = false;
+        public float TimeScale = 1.0f;
+
+        public TimeScaleEffect(float duration = 0.2f, float timeScale = 0.0f, bool affectSound = false)
+        {
+            DurationDelay.AddDelay(duration);
+            TimeScale = timeScale;
+            AffectSound = affectSound;
+
+        }
+    }
+
 }

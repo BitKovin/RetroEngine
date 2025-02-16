@@ -105,7 +105,7 @@ namespace RetroEngine
 
         public virtual void Start()
         {
-            SpawnTime = Time.gameTime;
+            SpawnTime = Time.GameTime;
         }
 
         public bool HasTag(string tag)
@@ -290,12 +290,13 @@ namespace RetroEngine
             GC.SuppressFinalize(this);
         }
 
-        public bool LoadAssetsIfNeeded()
+        public bool LoadAssetsIfNeeded(bool allowAnyThread = false)
         {
             if(loadedAssets) return false;
 
-            if (GameMain.CanLoadAssetsOnThisThread() == false)
-                return false;
+            if (allowAnyThread == false)
+                if (GameMain.CanLoadAssetsOnThisThread() == false)
+                    return false;
 
             LoadAssets();
 

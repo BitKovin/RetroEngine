@@ -159,8 +159,7 @@ namespace RetroEngine
 
             ormTexture = AssetRegistry.LoadTextureFromFile("engine/textures/defaultORM.png");
 
-            if(GameMain.CompatibilityMode == false)
-            OcclusionQuery = new OcclusionQuery(GameMain.Instance.GraphicsDevice);
+
 
             Shader = new SurfaceShaderInstance(GameMain.Instance.DefaultShader);
 
@@ -1839,6 +1838,10 @@ namespace RetroEngine
 
         public virtual void RenderPreparation()
         {
+
+            if (GameMain.CompatibilityMode == false)
+                if(OcclusionQuery == null)
+                    OcclusionQuery = new OcclusionQuery(GameMain.Instance.GraphicsDevice);
 
             WorldMatrix = GetWorldMatrix();
 

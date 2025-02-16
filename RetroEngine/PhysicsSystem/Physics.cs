@@ -358,10 +358,14 @@ namespace RetroEngine.PhysicsSystem
                     }
                 }
 
-                PopulateCallbackStacks(30, 150);
+                
 
             });
 
+            Task task2 = Task.Run(() => 
+            {
+                PopulateCallbackStacks(50, 200);
+            });
 
             lock (dynamicsWorld)
             {
@@ -376,12 +380,13 @@ namespace RetroEngine.PhysicsSystem
                 {
                     lock (dynamicsWorld.CollisionObjectArray)
                     {
-                        SimulationTicks += dynamicsWorld.StepSimulation(time * Time.TimeScale, 3, 1 / 50f * Time.TimeScale);
+                        SimulationTicks += dynamicsWorld.StepSimulation(time * Time.GetFinalTimeScale(), 3, 1 / 50f * Time.GetFinalTimeScale());
                     }
                 }
             }
 
             task.Wait();
+            task2.Wait();
 
         }
 

@@ -85,7 +85,7 @@ namespace RetroEngine.Game.Effects.Particles
 
             particle.transparency = 1f;
             particle.color = new Vector4(1,0.2f,0.2f,0.4f)/1.5f;
-            particle.deathTime = 0.5f;
+            particle.deathTime = 0.2f;
 
             return particle;
         }

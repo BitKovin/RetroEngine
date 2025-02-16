@@ -75,12 +75,19 @@ namespace RetroEngine.Game.Entities.Weapons
             weapon.Data = data;
             weapon.player = owner;
 
-            weapon.LoadAssetsIfNeeded();
+            weapon.LoadAssetsIfNeeded(true);
 
             weapon.Start();
             weapon.LateUpdate();
 
             return weapon;
+        }
+
+        public virtual void Blocked()
+        {
+
+
+
         }
 
         public override void Update()
@@ -89,7 +96,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             LateUpdateWhilePaused = true;
 
-            if(Time.gameTime - SpawnTime > DrawTime)
+            if(Time.GameTime - SpawnTime > DrawTime)
                 Drawing = false;
 
             
@@ -121,7 +128,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             UpdateSway();
 
-            float progress = Math.Clamp((float)((Time.gameTime - SpawnTime)/DrawTime), 0, 1);
+            float progress = Math.Clamp((float)((Time.GameTime - SpawnTime)/DrawTime), 0, 1);
 
             //DrawRotation = new Vector3((1 - progress) * 20, (1 - progress) * 20, (1 - progress) * 30);
 

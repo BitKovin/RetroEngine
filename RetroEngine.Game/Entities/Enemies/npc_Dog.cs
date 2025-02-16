@@ -4,6 +4,7 @@ using DotRecast.Detour.Crowd;
 using Microsoft.Xna.Framework;
 using RetroEngine.Audio;
 using RetroEngine.Entities;
+using RetroEngine.Game.Entities.Weapons;
 using RetroEngine.Map;
 using RetroEngine.NavigationSystem;
 using RetroEngine.ParticleSystem;
@@ -270,6 +271,27 @@ namespace RetroEngine.Game.Entities.Enemies
 
         public override void OnPointDamage(float damage, Vector3 point, Vector3 direction, Entity causer = null, Entity weapon = null)
         {
+
+            if (attacking)
+            {
+                if (weapon != null)
+                {
+
+                    Weapon weaponPlayer = weapon as Weapon;
+
+                    if (weaponPlayer != null)
+                    {
+                        if (hitedEntities.Contains(target) == false)
+                            if (weaponPlayer.IsMelee)
+                            {
+                                Time.AddTimeScaleEffect(new TimeScaleEffect(0.1f, 0.05f));
+                                weaponPlayer.Blocked();
+                            }
+
+                    }
+                }
+            }
+
             base.OnPointDamage(damage, point, direction, causer, weapon);
 
             damage = MathF.Max(15, damage);
@@ -295,6 +317,8 @@ namespace RetroEngine.Game.Entities.Enemies
         {
 
             if(stunned) return;
+
+            attacking = false;
 
             stunned = true;
             mesh.PlayAnimation("stun", false, 0.2f, true);
@@ -343,7 +367,7 @@ namespace RetroEngine.Game.Entities.Enemies
             if (distance < 6f && attacking == false && Vector3.Dot(mesh.Rotation.GetForwardVector(), toTarget) > 0.95f && attackCooldown.Wait() == false && stunned == false)
             {
 
-                rootMotionScale = Lerp(0.2f, 1, Saturate(distance - 1 / 4f));
+                rootMotionScale = Lerp(0.1f, 1f, Saturate(distance - 1 / 4f));
 
                 PerformAttack(toTarget);
 
@@ -436,8 +460,8 @@ namespace RetroEngine.Game.Entities.Enemies
 
                 body.LinearVelocity = new System.Numerics.Vector3(0, body.LinearVelocity.Y, 0);
 
-                body.TranslateSweep(motion.ToPhysics(), 0.3f);
-                Position += motion/2f;
+                body.TranslateSweep(motion.ToPhysics(), 0.4f);
+                Position += motion;
 
 
                 mesh.Rotation += rootTrans.Rotation;
@@ -480,7 +504,9 @@ namespace RetroEngine.Game.Entities.Enemies
 
             if(hitedEntities.Contains(target)) return;
 
-            Vector3 attackDir = targetLocation - Position;
+            Vector3 attackPos = mesh.Position + Vector3.UnitY;
+
+            Vector3 attackDir = targetLocation - attackPos;
             attackDir = attackDir.Normalized();
 
             if(Vector3.Dot(new Vector3(attackDir.X, attackDir.Y/4f, attackDir.Z).Normalized(), mesh.Rotation.GetForwardVector())<0.6f)
@@ -488,7 +514,7 @@ namespace RetroEngine.Game.Entities.Enemies
                 return;
             }
 
-            var hit = Physics.SphereTrace(Position, Position + attackDir * 0.6f * new Vector3(1,3,1), 0.1f, bodies, BodyType.CharacterCapsule);
+            var hit = Physics.SphereTrace(attackPos, attackPos + attackDir * 0.6f * new Vector3(1,3,1), 0.1f, bodies, BodyType.CharacterCapsule);
 
             if(hit.HasHit&& hit.entity == target)
             {

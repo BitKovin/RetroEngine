@@ -61,7 +61,7 @@ namespace RetroEngine.Particles
 
                 Vector3 p = particle.position;
 
-                p = Vector3.Transform(p, RelativeMatrix);
+                
 
                 Vector3 halfSize = particle.globalRotation.GetForwardVector() * particle.Scale / 2;
 
@@ -69,6 +69,8 @@ namespace RetroEngine.Particles
 
                 Vector3 p2 = p - halfSize;
 
+                p1 = Vector3.Transform(p1, RelativeMatrix);
+                p2 = Vector3.Transform(p2, RelativeMatrix);
 
                 // Calculate vertices for the quad
                 Vector3 topLeft = p1;
@@ -182,8 +184,9 @@ namespace RetroEngine.Particles
             }
 
 
+            effect.Parameters["isParticle"]?.SetValue(false);
+            effect.Parameters["Projection"]?.SetValue(Camera.projection);
 
-            
 
         }
 

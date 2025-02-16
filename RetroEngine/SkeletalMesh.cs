@@ -191,7 +191,7 @@ namespace RetroEngine
 
         }
 
-        public void SetCurrentAnimationFrame(int frame)
+        public void SetCurrentAnimationFrame(float frame)
         {
             if(frame< 0) frame = 0;
             if (RiggedModel == null) return;

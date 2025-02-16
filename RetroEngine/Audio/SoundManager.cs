@@ -60,7 +60,7 @@ namespace RetroEngine.Audio
             if (UseFmod == false) return;
 
 
-            StudioSystem.SetParameterValue("parameter:/GameSpeed", Time.TimeScale);
+            StudioSystem.SetParameterValue("parameter:/GameSpeed", Time.GetSoundFinalTimeScale());
 
             FmodManager.Update();
             listener3D.SetAttributes(SoundManager.listener.Position, Camera.velocity, SoundManager.listener.Forward, -SoundManager.listener.Up);

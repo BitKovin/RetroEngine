@@ -39,8 +39,8 @@ half3 CalculateDirectionalVertexLight(half3 tangentNormal)
 
     float shadowed = shadow;
 
-        if(isParticle)
-            tangentNormal = -LightDirection;
+    if(isParticle)
+        tangentNormal = -LightDirection;
 
 	shadow = lerp(shadow, 1, 1 - max(0, dot(tangentNormal, normalize(-LightDirection))));
 
@@ -199,6 +199,12 @@ PixelOutput PixelShaderFunction(PixelInput input)
     half3 light = input.Light;
 
 #if OPENGL
+
+
+    if(isParticle)
+        TangentNormal = -LightDirection;
+        
+    light = CalculateDirectionalVertexLight(TangentNormal);
 
 #else
     if(LargeObject)

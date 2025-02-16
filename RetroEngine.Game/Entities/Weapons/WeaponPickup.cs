@@ -69,9 +69,9 @@ namespace RetroEngine.Game.Entities.Weapons
         {
             base.AsyncUpdate();
 
-            staticMesh.Position = Position + ((float)Math.Sin((Time.gameTime - SpawnTime)*3)) * Vector3.Up * 0.3f;
+            staticMesh.Position = Position + ((float)Math.Sin((Time.GameTime - SpawnTime)*3)) * Vector3.Up * 0.3f;
 
-            staticMesh.Rotation = new Vector3(0, (float)(Time.gameTime - SpawnTime) * 100,0);
+            staticMesh.Rotation = new Vector3(0, (float)(Time.GameTime - SpawnTime) * 100,0);
 
         }
 

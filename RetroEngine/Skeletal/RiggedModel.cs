@@ -318,7 +318,7 @@ namespace RetroEngine.Skeletal
             animationPose = new AnimationPose();
         }
 
-        public void SetFrame(int frame)
+        public void SetFrame(float frame)
         {
             if(currentAnimation >= 0 && currentAnimation < originalAnimations.Count)
 

@@ -26,7 +26,7 @@ namespace RetroEngine.Game.Entities.Weapons
         {
             base.AsyncUpdate();
 
-            float progress = MathHelper.Saturate(((float)(Time.gameTime - SpawnTime)) / Duration);
+            float progress = MathHelper.Saturate(((float)(Time.GameTime - SpawnTime)) / Duration);
 
             radius = Radius * MathHelper.Lerp(1,0.5f, progress);
 
