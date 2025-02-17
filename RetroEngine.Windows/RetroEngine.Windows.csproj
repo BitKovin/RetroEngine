@@ -20,7 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Libs\FmodForFoxes.Desktop\FmodForFoxes.Desktop.csproj" />
-    <ProjectReference Include="..\RetroEngine.Game\RetroEngine.Game.csproj" />
+    <ProjectReference Include="..\RetroEngine.GameProjectReference\RetroEngine.GameProjectReference.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

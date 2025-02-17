@@ -461,7 +461,7 @@ namespace RetroEngine.Game.Entities.Enemies
                 body.LinearVelocity = new System.Numerics.Vector3(0, body.LinearVelocity.Y, 0);
 
                 body.TranslateSweep(motion.ToPhysics(), 0.4f);
-                Position += motion;
+                Position = body.WorldTransform.Translation;
 
 
                 mesh.Rotation += rootTrans.Rotation;
