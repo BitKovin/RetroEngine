@@ -13,6 +13,7 @@ using RetroEngine.Game.Effects;
 using RetroEngine.Audio;
 using RetroEngine.Entities.Light;
 using RetroEngine.Game.Entities.Enemies;
+using RetroEngine.Localization;
 
 namespace RetroEngine.Game
 {
@@ -37,6 +38,7 @@ namespace RetroEngine.Game
             devMenu = new GameDevMenu();
             devMenu.Init();
 
+            LocalizationManager.LoadLocalizationProfile("ua");
 
             Window.Title = "Game";
 

@@ -42,6 +42,18 @@ namespace RetroEngine
 
             DeltaTime = avg*GetFinalTimeScale();
             FrameCount++;
+
+            lock (timeScaleEffects)
+            {
+                foreach (TimeScaleEffect timeScaleEffect in timeScaleEffects.ToArray())
+                {
+                    if (timeScaleEffect.DurationDelay.Wait() == false)
+                    {
+                        timeScaleEffects.Remove(timeScaleEffect);
+                    }
+                }
+            }
+
         }
 
         public static float GetFinalTimeScale()
@@ -57,7 +69,7 @@ namespace RetroEngine
                 }
                 else
                 {
-                    timeScaleEffects.Remove(timeScaleEffect);
+                    
                 }
             }
 
@@ -80,7 +92,7 @@ namespace RetroEngine
                 }
                 else
                 {
-                    timeScaleEffects.Remove(timeScaleEffect);
+                    
                 }
             }
 

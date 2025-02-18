@@ -60,11 +60,14 @@ namespace RetroEngine.Game.Effects.Particles
 
             particle = base.UpdateParticle(particle);
 
+            if(particle.lifeTime < 0.3)
+                particle.Scale += Time.DeltaTime * 2f;
+
             particle.Scale += Time.DeltaTime * 0.7f;
 
             particle.velocity -= new Vector3(0, 10, 0) * (Time.DeltaTime / 2f);
 
-            particle.transparency = Math.Max(particle.transparency -= Time.DeltaTime/10f, 0);
+            particle.transparency = Math.Max(particle.transparency -= Time.DeltaTime/4f, 0);
 
             //particle.SetRotationFromVelocity();
 
@@ -77,13 +80,15 @@ namespace RetroEngine.Game.Effects.Particles
 
             particle.Scale = float.Lerp(0.4f,0.6f, (float)random.NextDouble());
 
+            particle.Scale = 0.05f;
+
             Vector3 randPos = RandomPosition(0.4f);
             //particle.HasCollision = true;
             particle.BouncePower = 0.1f;
             particle.position += randPos;
-            particle.velocity = RandomPosition(0.4f).Normalized() / 3f + Vector3.UnitY * float.Lerp(1,2,(float)random.NextDouble())  + Rotation.GetForwardVector()*0.7f;
+            particle.velocity = RandomPosition(0.4f).Normalized() / 1f + Vector3.UnitY * float.Lerp(1,2,(float)random.NextDouble())  + Rotation.GetForwardVector()*0.7f;
 
-            particle.velocity*= float.Lerp(0.4f, 1f, (float)random.NextDouble());
+            particle.velocity*= float.Lerp(0.3f, 1f, (float)random.NextDouble());
 
             particle.transparency = 1.2f;
             particle.deathTime = 5;

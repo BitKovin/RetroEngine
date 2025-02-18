@@ -158,7 +158,11 @@ namespace RetroEngine
 
                 var font = FontManager.LoadFont(path, bytes, 72, 0);
 
-                DynamicSpriteFont dynamicSpriteFont = new DynamicSpriteFont(GameMain.Instance.GraphicsDevice, font);
+                Font fallback = null;
+                if (GameMain.Instance.DefaultFallbackFont != null)
+                    fallback = GameMain.Instance.DefaultFallbackFont.Font;
+
+                DynamicSpriteFont dynamicSpriteFont = new DynamicSpriteFont(GameMain.Instance.GraphicsDevice, font, fallback);
 
 
                 loadedFonts.Add(path, dynamicSpriteFont);
@@ -560,7 +564,7 @@ namespace RetroEngine
             }
         }
 
-        const string assetsRoot = "GameData/";
+        public const string AssetsRoot = "GameData/";
 
         public static string FindPathForFile(string path)
         {
@@ -568,17 +572,17 @@ namespace RetroEngine
             string directory = Path.GetDirectoryName(path);
             string fileName = Path.GetFileName(path);
 
-            if (File.Exists(ROOT_PATH + assetsRoot + path))
-                return ROOT_PATH + assetsRoot + path;
+            if (File.Exists(ROOT_PATH + AssetsRoot + path))
+                return ROOT_PATH + AssetsRoot + path;
 
-            if (File.Exists(ROOT_PATH + assetsRoot + "textures/" + path))
-                return ROOT_PATH + assetsRoot + "textures/" + path;
+            if (File.Exists(ROOT_PATH + AssetsRoot + "textures/" + path))
+                return ROOT_PATH + AssetsRoot + "textures/" + path;
 
-            if (File.Exists(ROOT_PATH + assetsRoot + "textures/brushes/" + path))
-                return ROOT_PATH + assetsRoot + "textures/brushes/" + path;
+            if (File.Exists(ROOT_PATH + AssetsRoot + "textures/brushes/" + path))
+                return ROOT_PATH + AssetsRoot + "textures/brushes/" + path;
 
-            if (File.Exists(ROOT_PATH + assetsRoot + "maps/" + path))
-                return ROOT_PATH + assetsRoot + "maps/" + path;
+            if (File.Exists(ROOT_PATH + AssetsRoot + "maps/" + path))
+                return ROOT_PATH + AssetsRoot + "maps/" + path;
 
 
             return path;

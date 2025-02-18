@@ -30,6 +30,7 @@ namespace RetroEngine
     public class GameMain : Microsoft.Xna.Framework.Game
     {
         public DynamicSpriteFont DefaultFont;
+        public DynamicSpriteFont DefaultFallbackFont;
 
         public string DefaultShader = "";
 
@@ -224,7 +225,9 @@ namespace RetroEngine
             SpriteBatch = new SpriteBatch(GraphicsDevice);
             // TODO: use this.Content to load your game content here
 
-            DefaultFont = AssetRegistry.LoadFontSpriteFromFile("Fonts/dos.ttf");// Content.Load<SpriteFont>("Fonts/Font");
+            DefaultFallbackFont = AssetRegistry.LoadFontSpriteFromFile("Fonts/OpenSans-Regular.ttf");
+            DefaultFont = AssetRegistry.LoadFontSpriteFromFile("Fonts/dos.ttf");
+
 
             curentLevel.Start();
 
