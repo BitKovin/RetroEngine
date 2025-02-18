@@ -41,11 +41,11 @@ namespace RetroEngine.Game.Entities.Player
             idleAnimation = AddAnimation("Animations/human/idle.fbx");
 
             runFAnimation = AddAnimation("Animations/human/run_f.fbx", interpolation: true);
-            runBAnimation = AddAnimation("Animations/human/run_b.fbx", interpolation: false);
-            runRAnimation = AddAnimation("Animations/human/run_r.fbx", interpolation: true);
-            runLAnimation = AddAnimation("Animations/human/run_l.fbx", interpolation: true);
+            //runBAnimation = AddAnimation("Animations/human/run_b.fbx", interpolation: false);
+            //runRAnimation = AddAnimation("Animations/human/run_r.fbx", interpolation: true);
+            //runLAnimation = AddAnimation("Animations/human/run_l.fbx", interpolation: true);
 
-            
+
 
             proxy.LoadFromFile("Animations/human/rest.fbx");
 
@@ -80,10 +80,13 @@ namespace RetroEngine.Game.Entities.Player
 
             var locomotionPose = Animation.LerpPose(idlePose, CalculateMovementDirection(), blendFactor);
 
+            return locomotionPose;
+
             //locomotionPose = Animation.LerpPose(locomotionPose, actionAnimation.GetPoseLocal(), actionAnimation.GetBlendFactor());
 
+
             proxy.SetBoneMeshTransformModification("spine_03", Matrix.Identity);
-            proxy.PastePoseLocal(locomotionPose);
+
 
             proxy.SetBoneMeshTransformModification("spine_03", GetSpineTransforms());
 

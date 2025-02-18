@@ -47,7 +47,7 @@ namespace RetroEngine
         public static float Brightness = 1;
         public static float Gamma = 1.05f;
         public static float Exposure = 0.5f;
-        public static float Saturation = 0.0f;
+        public static float Saturation = 1.0f;
 
         public static float LightDistanceMultiplier = 1;
         public static Matrix LightViewProjection;

@@ -109,7 +109,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             //pistolAnimation.SetBoneMeshTransformModification("spine_02", transform.ToMatrix());
 
-            if (Input.GetAction("slotMelee").Pressed())
+            if (Input.GetAction("slotMelee").PressedBuffered())
                 Shoot();
 
             if(pendingAttack && pendingAttackStartDelay.Wait() == false && pendingAttackEndDelay.Wait())
@@ -210,27 +210,27 @@ namespace RetroEngine.Game.Entities.Weapons
             if (attack == 0)
             {
                 mesh.PlayAnimation("attack", false, 0.1f);
-                attackDelay.AddDelay(0.3f);
+                attackDelay.AddDelay(0.4f);
                 pendingAttackStartDelay.AddDelay(0.15f);
                 Camera.AddCameraShake(new CameraShake(interpIn: 1, duration: 1f, positionAmplitude: new Vector3(0f, 0f, 0f), positionFrequency: new Vector3(0f, 0f, 0f), rotationAmplitude: new Vector3(-5f, -5f, 0f), rotationFrequency: new Vector3(7f, 7f, 0f), falloff: 1f, shakeType: CameraShake.ShakeType.SingleWave)); 
             }
             else if (attack == 1)
             {
                 mesh.PlayAnimation("attack2", false, 0.1f);
-                attackDelay.AddDelay(0.3f);
+                attackDelay.AddDelay(0.4f);
                 pendingAttackStartDelay.AddDelay(0.15f);
                 Camera.AddCameraShake(new CameraShake(interpIn: 1, duration: 1f, positionAmplitude: new Vector3(0f, 0f, 0f), positionFrequency: new Vector3(0f, 0f, 0f), rotationAmplitude: new Vector3(-5f, 5f, 0f), rotationFrequency: new Vector3(7f, 7f, 0f), falloff: 1f, shakeType: CameraShake.ShakeType.SingleWave));
             }
             else if (attack == 2)
             {
                 mesh.PlayAnimation("attack_finish", false, 0.1f);
-                attackDelay.AddDelay(0.4f);
+                attackDelay.AddDelay(0.5f);
                 pendingAttackStartDelay.AddDelay(0.15f);
             }
             if (attack == -1)
             {
                 mesh.PlayAnimation("attack_start", false, 0f);
-                attackDelay.AddDelay(0.3f);
+                attackDelay.AddDelay(0.4f);
                 pendingAttackStartDelay.AddDelay(0.0f);
                 Camera.AddCameraShake(new CameraShake(interpIn: 1, duration: 1f, positionAmplitude: new Vector3(0f, 0f, 0f), positionFrequency: new Vector3(0f, 0f, 0f), rotationAmplitude: new Vector3(-5f, -5f, 0f), rotationFrequency: new Vector3(7f, 7f, 0f), falloff: 1f, shakeType: CameraShake.ShakeType.SingleWave));
             }
@@ -275,7 +275,6 @@ namespace RetroEngine.Game.Entities.Weapons
 
             hadHit = false;
 
-            DrawDebug.Line(hit.Start, hit.End);
 
             if (hit.HasHit)
             {

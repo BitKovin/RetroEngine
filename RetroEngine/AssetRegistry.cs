@@ -149,8 +149,14 @@ namespace RetroEngine
 
                 var stream = GetFileStreamFromPath(path);
 
-                var font = FontManager.LoadFont(path, 72);
-                Logger.Log("reading file:" + path);
+                var bytes = default(byte[]);
+                using (var memstream = new MemoryStream())
+                {
+                    stream.StreamReader.BaseStream.CopyTo(memstream);
+                    bytes = memstream.ToArray();
+                }
+
+                var font = FontManager.LoadFont(path, bytes, 72, 0);
 
                 DynamicSpriteFont dynamicSpriteFont = new DynamicSpriteFont(GameMain.Instance.GraphicsDevice, font);
 

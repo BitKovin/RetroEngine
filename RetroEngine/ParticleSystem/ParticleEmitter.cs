@@ -226,7 +226,7 @@ namespace RetroEngine.Particles
         public virtual Particle GetNewParticle()
         {
             currentId++;
-            return new Particle { position = Position, id = currentId, texturePath = TexturePath, globalRotation = Rotation };
+            return new Particle { position = Position, id = currentId, texturePath = TexturePath, globalRotation = Rotation, HasCollision = false };
         }
 
         public override void RenderPreparation()

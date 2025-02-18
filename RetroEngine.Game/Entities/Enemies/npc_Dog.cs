@@ -350,6 +350,18 @@ namespace RetroEngine.Game.Entities.Enemies
             SoundPlayer.SetSound(soundDeath);
             SoundPlayer.Play();
 
+            var hit = Physics.SphereTrace(Position + Vector3.UnitY * 0.2f, Position - Vector3.Up * 100, 0.3f, bodyType: BodyType.World);
+
+            Vector3 spawnPos = Position;
+
+            if(hit.HasHit)
+                spawnPos = hit.HitShapeLocation + Vector3.UnitY*0.2f;
+
+            Entity healthPickup = new HeartPickup();
+            healthPickup.Position = spawnPos;
+            healthPickup.Start();
+            Level.GetCurrent().AddEntity(healthPickup);
+
             dead = true;
 
         }
@@ -737,6 +749,8 @@ namespace RetroEngine.Game.Entities.Enemies
         public override void LoadData(EntitySaveData Data)
         {
             base.LoadData(Data);
+
+            new HeartPickup().LoadAssetsIfNeeded();
 
             body.SetPosition(Position);
 

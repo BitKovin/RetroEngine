@@ -39,6 +39,8 @@ namespace RetroEngine
             keyboardState = Keyboard.GetState();
             gamePadState = GamePad.GetState(PlayerIndex.One);
 
+            
+
             UpdateActions();
 
             if (PendingCenterCursor)
@@ -48,6 +50,11 @@ namespace RetroEngine
 
             GameMain.Instance.IsMouseVisible = !LockCursor;
 
+        }
+
+        static void JoystickCamera()
+        {
+            MouseDelta += gamePadState.ThumbSticks.Right*Time.DeltaTime*1500 * new Vector2(1,-1);
         }
 
         public static void UpdateMouse()
@@ -65,9 +72,12 @@ namespace RetroEngine
                 MouseDelta = MouseMoveCalculatorObject.GetMouseDelta();
 
                 AddMouseInput(MouseDelta);
+
+                JoystickCamera();
+
                 MouseDelta *= sensitivity;
 
-                
+
 
                 return;
             }
@@ -75,6 +85,8 @@ namespace RetroEngine
             Vector2 delta = mousePos - MousePos;
 
             AddMouseInput(delta);
+
+            JoystickCamera();
 
             MouseDelta *= sensitivity;
 
@@ -176,10 +188,6 @@ namespace RetroEngine
         List<Keys> keys = new List<Keys>();
         List<Buttons> buttons = new List<Buttons>();
 
-        bool lmbOld = false;
-        bool rmbOld = false;
-        bool mmbOld = false;
-
         public bool LMB = false;
         public bool RMB = false;
         public bool MMB = false;
@@ -187,7 +195,9 @@ namespace RetroEngine
         bool pressing;
         bool released;
         bool pressed;
-        Keys[] keysOld = new Keys[0];
+
+        double pressedTime = 0f;
+
         public InputAction()
         {
 
@@ -214,6 +224,11 @@ namespace RetroEngine
         public bool Holding()
         {
             return pressing;
+        }
+
+        public bool PressedBuffered(float bufferLength = 0.2f)
+        {
+            return pressedTime + bufferLength >= Time.GameTime;
         }
 
         public void Update()
@@ -252,8 +267,6 @@ namespace RetroEngine
                     pressing = true;
             }
 
-            keysOld = keysNow;
-
             //gamepad
 
             foreach(Buttons button in buttons)
@@ -276,7 +289,11 @@ namespace RetroEngine
             if(pressing && !oldPressing)
             {
                 pressed = true;
-            }else if (!pressing & oldPressing)
+
+                pressedTime = Time.GameTime;
+
+            }
+            else if (!pressing & oldPressing)
             {
                 released = true;
             }

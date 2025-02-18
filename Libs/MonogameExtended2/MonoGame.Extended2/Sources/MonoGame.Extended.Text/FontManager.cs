@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using SharpFont;
 
 namespace MonoGame.Extended.Text;
@@ -49,6 +49,22 @@ public sealed class FontManager : DisposableBase
         }
 
         var font = new Font(this, fontFilePath, fontSize, faceIndex);
+
+        _fonts[key] = font;
+
+        return font;
+    }
+
+    public Font LoadFont(string fontFilePath, byte[] fontData, float fontSize, int faceIndex)
+    {
+        var key = (fontFilePath, fontSize, faceIndex);
+
+        if (_fonts.ContainsKey(key))
+        {
+            return _fonts[key];
+        }
+
+        var font = new Font(this, fontData, fontSize, faceIndex);
 
         _fonts[key] = font;
 

@@ -169,7 +169,18 @@ namespace RetroEngine.Game.Entities.Player
             PlayerUI.Load();
         }
 
+        public bool Heal(float amount,float maxHealth = 100)
+        {
 
+            if (Health >= maxHealth) return false;
+
+            float healthAfterHeal = Health + amount;
+
+            Health = float.Clamp(healthAfterHeal, 0, maxHealth);
+
+            return true;
+
+        }
 
         public override void FromData(EntityData data)
         {

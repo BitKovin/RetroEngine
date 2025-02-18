@@ -130,7 +130,7 @@ namespace RetroEngine.Game
             Input.AddAction("slot5").AddKeyboardKey(Keys.D5);
             Input.AddAction("slot6").AddKeyboardKey(Keys.D6);
 
-            Input.AddAction("slotMelee").AddKeyboardKey(Keys.F);
+            Input.AddAction("slotMelee").AddKeyboardKey(Keys.F).AddButton(Buttons.RightShoulder);
 
             Input.AddAction("lastSlot").AddKeyboardKey(Keys.Q);
 
@@ -166,7 +166,9 @@ namespace RetroEngine.Game
             //Graphics.Exposure = 1;
             //Graphics.Gamma = 1.1f;
 
-            Graphics.EnableBloom = false;
+            Graphics.Saturation = 1.0f;
+
+            Graphics.EnableBloom = true;
 
             Render.DisableMultiPass = true;
 

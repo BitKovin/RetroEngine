@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework;
 using SharpFont;
 
@@ -27,6 +27,20 @@ public sealed class Font : DisposableBase
         }
 
         _fontFace = manager.Library.NewFace(fontFile, faceIndex);
+
+        _size = size;
+
+        InitializeFontFace(_fontFace, size, 0);
+    }
+
+    internal Font(FontManager manager, byte[] fontFile, float size, int faceIndex)
+    {
+        if (size <= 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(size), size, "Font size should be greater than zero.");
+        }
+
+        _fontFace = manager.Library.NewMemoryFace(fontFile, faceIndex);
 
         _size = size;
 

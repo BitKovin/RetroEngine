@@ -404,7 +404,7 @@ namespace RetroEngine
             }
 
 
-            if (SimpleRender)
+            if (SimpleRender && false)
             {
                 PerformSimplePostProcessing();
             }
@@ -485,7 +485,6 @@ namespace RetroEngine
 
                 
                 DepthApplyEffect.Parameters["OldFrame"].SetValue(GameMain.Instance.DefaultShader.ToLower() == "overdraw" ? black : oldFrame);
-                if (SimpleRender == false)
                     DrawFullScreenQuad(DepthPrepathBufferOutput, DepthApplyEffect);
             }
 
@@ -827,16 +826,17 @@ namespace RetroEngine
 
         void PerformPostProcessing()
         {
-            
+            if (SimpleRender == false)
+            {
                 PerformReflection();
                 ApplyReflection();
-            
+            }
 
             lock (PostProcessStep.StepsBefore)
             {
                 PerformPostProcessingShaders(ForwardOutput);
             }
-            
+
             PerformSSAO();
 
             PerformTonemapping();

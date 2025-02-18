@@ -518,7 +518,7 @@ namespace RetroEngine
             RiggedModel.additionalMeshOffsets = additionalMeshOffsets;
             RiggedModel.additionalLocalOffsets = additionalLocalOffsets;
 
-            RiggedModel.UpdateVisual = (isRendered && UpdatePose) || AlwaysUpdateVisual || playingRootMotion;
+            RiggedModel.UpdateVisual = (isRendered && UpdatePose) || AlwaysUpdateVisual || playingRootMotion || RiggedModel.loopAnimation == false;
             RiggedModel.Update(deltaTime);
 
             newAnimInterpolationProgress += deltaTime * newAnimInterpolationSpeed;
@@ -1933,7 +1933,7 @@ namespace RetroEngine
 
         public AnimationState GetAnimationState()
         {
-            return new AnimationState { CurrentFrame = GetCurrentAnimationFrame(), CurrrentAnimation = GetCurrentAnimationIndex(), Loop = RiggedModel.loopAnimation, PlayingRootMotion = playingRootMotion };
+            return new AnimationState { CurrentFrame = GetCurrentAnimationFrame(),OldFrame = OldFrame, CurrrentAnimation = GetCurrentAnimationIndex(), Loop = RiggedModel.loopAnimation, PlayingRootMotion = playingRootMotion };
         }
 
         public void SetAnimationState(AnimationState animationState)
@@ -1943,6 +1943,7 @@ namespace RetroEngine
             PlayAnimation(animationState.CurrrentAnimation, animationState.Loop,0);
             SetCurrentAnimationFrame(animationState.CurrentFrame);
             PullRootMotion();
+            OldFrame = animationState.OldFrame;
 
         }
 
@@ -1954,6 +1955,9 @@ namespace RetroEngine
 
             [JsonInclude]
             public int CurrentFrame = 0;
+
+            [JsonInclude]
+            public int OldFrame = 0;
 
             [JsonInclude]
             public bool Loop = false;

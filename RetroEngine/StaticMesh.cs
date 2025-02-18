@@ -1632,6 +1632,8 @@ namespace RetroEngine
 
             Console.WriteLine("loading model: " + filePath);
 
+            string hint = "";
+
             Assimp.Scene scene;
             Assimp.AssimpContext importer = new Assimp.AssimpContext();
             if (loadedScenes.ContainsKey(filePath))
@@ -1641,9 +1643,13 @@ namespace RetroEngine
             else
             {
 
-                string hint = "";
-                if (filePath.EndsWith(".obj"))
+
+                if (filePath.ToLower().EndsWith(".obj"))
                     hint = "obj";
+
+                if (filePath.ToLower().EndsWith(".fbx"))
+                    hint = "fbx";
+
                 using (var asset = AssetRegistry.GetFileStreamFromPath(filePath))
                 {
                     scene = importer.ImportFileFromStream(asset.FileStream, Assimp.PostProcessSteps.MakeLeftHanded | Assimp.PostProcessSteps.FlipUVs | Assimp.PostProcessSteps.CalculateTangentSpace | Assimp.PostProcessSteps.Triangulate | Assimp.PostProcessSteps.FindDegenerates, formatHint: hint);
@@ -1668,11 +1674,17 @@ namespace RetroEngine
 
             var meshParts = new List<ModelMeshPart>();
 
+            var meshNodes = GetMeshIdToNode(scene.RootNode);
 
             List<ModelMesh> modelMesh = new List<ModelMesh>();
             BoundingSphere boundingSphere = new BoundingSphere(Vector3.Zero, 100);
+
+            int n = -1;
+
             foreach (var mesh in scene.Meshes)
             {
+
+                n++;
 
                 if (mesh.Name.Contains("op_"))
                 {
@@ -1706,12 +1718,27 @@ namespace RetroEngine
                     }
                 }
 
+                Assimp.Matrix4x4 transform = Assimp.Matrix4x4.Identity;
+
+                if(meshNodes.ContainsKey(n))
+                    transform = meshNodes[n].Transform;
+
                 for (int i = 0; i < mesh.VertexCount; i++)
                 {
                     var vertex = mesh.Vertices[i];
                     var normal = mesh.Normals[i];
                     var tangent = mesh.Tangents[i];
                     var BiTangent = mesh.BiTangents[i];
+
+                    if(hint == "fbx")
+                    {
+
+                        vertex = TransformVector(vertex, transform)*0.01f;
+                        normal = TransformVector(normal, transform);
+                        tangent = TransformVector(tangent, transform);
+                        BiTangent = TransformVector(BiTangent, transform);
+
+                    }
 
 
                     var textureCoord = mesh.HasTextureCoords(0) ? mesh.TextureCoordinateChannels[0][i] : new Assimp.Vector3D(0, 0, 0);
@@ -1762,6 +1789,54 @@ namespace RetroEngine
             return model;
         }
 
+        static Assimp.Vector3D FixCoordinateSpace(Assimp.Vector3D vector)
+        {
+            return new Assimp.Vector3D(-vector.X, -vector.Z, -vector.Y);
+        }
+
+        static Assimp.Vector3D TransformVector(Assimp.Vector3D vector, Assimp.Matrix4x4 transform)
+        {
+            Vector3 vector3 = new Vector3(vector.X, vector.Y, vector.Z);
+
+
+
+            Matrix matrix = new Matrix(
+                transform.A1, transform.A2, transform.A3, transform.A4,
+                transform.B1, transform.B2, transform.B3, transform.B4,
+                transform.C1, transform.C2, transform.C3, transform.C4,
+                transform.D1, transform.D2, transform.D3, transform.D4);
+
+            Vector3 translation = matrix.DecomposeMatrix().Position;
+
+            var result = Vector3.Transform(vector3, matrix);
+
+            return new Assimp.Vector3D(-result.X, -result.Y, result.Z);
+
+        }
+
+        static Dictionary<int, Assimp.Node> GetMeshIdToNode(Assimp.Node node)
+        {
+            Dictionary<int, Assimp.Node> valuePairs = new Dictionary<int, Assimp.Node>();
+
+            foreach (int index in node.MeshIndices)
+            {
+                valuePairs.Add(index, node);
+            }
+
+            foreach(var n in node.Children)
+            {
+                var nodeValues = GetMeshIdToNode(n);
+
+                foreach(var v in nodeValues)
+                {
+                    valuePairs.Add(v.Key, v.Value);
+                }
+
+            }
+
+            return valuePairs;
+
+        }
 
         public static void ClearCache()
         {

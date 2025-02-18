@@ -31,12 +31,18 @@ namespace RetroEngine.Game.Entities.Weapons
         {
             base.FromData(data);
 
-            RigidBody TriggerBody = Physics.CreateSphere(this, 0, 0.5f, CollisionFlags.StaticObject| CollisionFlags.NoContactResponse);
+        }
+
+        public override void Start()
+        {
+            base.Start();
+
+            RigidBody TriggerBody = Physics.CreateSphere(this, 0, 0.5f, CollisionFlags.NoContactResponse);
+
+            TriggerBody.SetBodyType(BodyType.None);
 
             TriggerBody.SetPosition(Position);
             bodies.Add(TriggerBody);
-
-            typeName = data.GetPropertyString("type", "weapon_pistol_double");
 
         }
 

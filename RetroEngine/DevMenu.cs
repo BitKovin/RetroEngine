@@ -162,7 +162,7 @@ namespace RetroEngine
 
             ImGui.BeginChild("ScrollingRegion", new Vector2(ImGui.GetWindowWidth(), ImGui.GetWindowHeight() - 70));
 
-            foreach (var item in log)
+            foreach (var item in log.ToArray())
             {
                 if (item is not null)
                     if (ImGui.Selectable(item))

@@ -68,10 +68,13 @@ namespace RetroEngine
 
                 
 
-                if (collisionObject.UserIndex2 > -1)
+                if (collisionObject.UserIndex2 > 0)
                 {
 
-                    PhysicsSystem.BodyType bodyType = (PhysicsSystem.BodyType)collisionObject.UserIndex2;
+                    PhysicsSystem.BodyType bodyType = collisionObject.GetBodyType();
+
+                    if (bodyType == BodyType.None) return false;
+
 
                     if (bodyType.HasFlag(PhysicsSystem.BodyType.NoRayTest))
                         return false;

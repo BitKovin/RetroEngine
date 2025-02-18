@@ -23,13 +23,13 @@ namespace RetroEngine.PhysicsSystem
     [Flags]
     public enum BodyType
     {
-        None = 0,
-        MainBody = 1,          // 1
-        HitBox = 2,            // 2
-        World = 4,             // 4
-        CharacterCapsule = 8,  // 8
-        NoRayTest = 16,         // 16
-        Liquid = 32,         // 16
+        None = 1,
+        MainBody = 2,          // 1
+        HitBox = 4,            // 2
+        World = 8,             // 4
+        CharacterCapsule = 16,  // 8
+        NoRayTest = 32,         // 16
+        Liquid = 64,         // 16
 
         GroupAll = MainBody | HitBox | World | CharacterCapsule | NoRayTest | Liquid,
         GroupHitTest = GroupAll & ~CharacterCapsule & ~Liquid,

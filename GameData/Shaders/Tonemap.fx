@@ -172,11 +172,14 @@ float4 MainPS(VertexShaderOutput input) : COLOR0
 	
     float3 color = tex2D(SpriteTextureSampler, input.TextureCoordinates).rgb;
 	
-    //color = ToneMap(color*  Brightness, Gamma, Exposure);
-
-    color = pow(color, Gamma) * Exposure;
     
-    return float4(color, 1);
+    // Compute luminance (perceived brightness)
+    float luminance = dot(color, float3(0.299, 0.587, 0.114));
+
+    // Interpolate between grayscale and original color based on Saturation
+    color = lerp(luminance.xxx, color, Saturation);
+    
+    return float4(pow(color, Gamma) * Exposure, 1);
 }
 
 technique SpriteDrawing
