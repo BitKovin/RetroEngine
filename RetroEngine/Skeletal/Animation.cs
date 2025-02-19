@@ -57,6 +57,8 @@ namespace RetroEngine.Skeletal
 
             }
 
+            result.RootMotion = MathHelper.Transform.Lerp(poseA.RootMotion, poseB.RootMotion, factor);
+
             return result;
         }
 
@@ -73,7 +75,7 @@ namespace RetroEngine.Skeletal
         public override void LoadFromFile(string filePath)
         {
 
-            string path = AssetRegistry.FindPathForFile(filePath);
+            string path = AssetRegistry.FindPathForFile(filePath).ToLower();
 
             if (LoadedRigModelsAnimations.ContainsKey(path))
             {
@@ -107,6 +109,7 @@ namespace RetroEngine.Skeletal
         {
             var pose = base.GetPoseLocal();
             pose.BoneOverrides = new Dictionary<string, BonePoseBlend>();
+            pose.RootMotion = PullRootMotion();
             return pose;
         }
 

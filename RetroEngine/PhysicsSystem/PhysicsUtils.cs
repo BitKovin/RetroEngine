@@ -138,24 +138,74 @@ namespace RetroEngine
             return (RigidbodyData)obj;
         }
 
+
+
         public static void SetBodyType(this CollisionObject body, BodyType bodyType)
         {
             body.UserIndex2 = (int) bodyType;
+            return;
+
+            if (Physics.bodyTypeList.ContainsKey(body))
+            {
+
+                    Physics.bodyTypeList[body] = (int)bodyType;
+                
+            }
+            else
+            {
+
+                    Physics.bodyTypeList.Add(body, (int)bodyType);
+                
+            }
+
         }
+
 
         public static BodyType GetBodyType(this CollisionObject body)
         {
             return (BodyType)body.UserIndex2;
+
+
+            if(Physics.bodyTypeList.ContainsKey(body))
+            {
+                return (BodyType)Physics.bodyTypeList[body];
+            }
+
+            return (BodyType)0;
         }
 
         public static void SetCollisionMask(this CollisionObject body, BodyType bodyType)
         {
             body.UserIndex = (int)bodyType;
+            return;
+
+            if (Physics.collisionMaskList.ContainsKey(body))
+            {
+
+                Physics.collisionMaskList[body] = (int)bodyType;
+
+            }
+            else
+            {
+
+                Physics.collisionMaskList.Add(body, (int)bodyType);
+
+            }
+
         }
 
         public static BodyType GetCollisionMask(this CollisionObject body)
         {
             return (BodyType)body.UserIndex;
+
+
+            if (Physics.collisionMaskList.ContainsKey(body))
+            {
+                return (BodyType)Physics.collisionMaskList[body];
+            }
+
+            return (BodyType)0;
+
         }
 
         public static Microsoft.Xna.Framework.Vector3 FromPhysics(this Vector3 vector)

@@ -62,7 +62,7 @@ namespace RetroEngine
 
                 if(bodyType== BodyType.None) return false;
 
-                if (collisionObject.UserIndex2 > 0)
+                if ((int)collisionObject.GetBodyType() > 0)
                 {
 
                     if(bodyType.HasFlag(PhysicsSystem.BodyType.NoRayTest))

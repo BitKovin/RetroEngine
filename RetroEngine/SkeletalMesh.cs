@@ -1362,11 +1362,15 @@ namespace RetroEngine
 
                 var matrix = GetBoneMatrix(hitbox.BoneId, world);
 
-                
+                try
+                {
 
-                var boneTrans = matrix.Decompose(out _, out var rotation, out var pos);
-                hitbox.RagdollRigidBodyRef.SetTransform(pos, rotation);
+                    var boneTrans = matrix.Decompose(out _, out var rotation, out var pos);
 
+                    hitbox.RagdollRigidBodyRef.SetTransform(pos, rotation);
+
+                }
+                catch (Exception ex) { }
             }
 
         }
@@ -2009,6 +2013,8 @@ namespace RetroEngine
         public Dictionary<string, Matrix> Pose = new Dictionary<string, Matrix>();
         public Dictionary<string, BonePoseBlend> BoneOverrides = new Dictionary<string, BonePoseBlend>();
 
+        public MathHelper.Transform RootMotion = new MathHelper.Transform();
+
         public AnimationPose() { }
 
         public AnimationPose(AnimationPose original)
@@ -2026,6 +2032,9 @@ namespace RetroEngine
 
         public void LayeredBlend(RiggedModelNode node, AnimationPose pose, float progress = 1, float meshSpaceRotation = 1)
         {
+
+            if (progress < 0.001f) return;
+
             if (node == null) return;
             ApplyNodeChildrenOnPose(node, pose, progress);
 

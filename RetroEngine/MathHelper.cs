@@ -240,19 +240,16 @@ namespace RetroEngine
 
         public struct Transform
         {
-            public Vector3 Position;
-            public Vector3 Rotation;
-            public Quaternion RotationQuaternion;
-            public Vector3 Scale;
+            public Vector3 Position = Vector3.Zero;
+            public Vector3 Rotation = Vector3.Zero;
+            public Quaternion RotationQuaternion = Quaternion.Identity;
+            public Vector3 Scale = Vector3.One;
 
             
 
             public Transform()
             {
-                Position = new Vector3();
-                Rotation = new Vector3();
-                RotationQuaternion = new Quaternion();
-                Scale = new Vector3(1);
+
             }
 
             public static Transform Lerp(Transform a, Transform b, float factor)

@@ -33,11 +33,11 @@ namespace RetroEngine.PhysicsSystem
             if (colObj0.CollisionFlags.HasFlag(CollisionFlags.NoContactResponse)) return false;
             if (colObj1.CollisionFlags.HasFlag(CollisionFlags.NoContactResponse)) return false;
 
-            BodyType collidesWith1 = (BodyType)colObj0.UserIndex;
-            BodyType bodyType1 = (BodyType)colObj0.UserIndex2;
+            BodyType collidesWith1 = colObj0.GetCollisionMask();
+            BodyType bodyType1 = colObj0.GetBodyType();
 
-            BodyType collidesWith2 = (BodyType)colObj1.UserIndex;
-            BodyType bodyType2 = (BodyType)colObj1.UserIndex2;
+            BodyType collidesWith2 = colObj1.GetCollisionMask();
+            BodyType bodyType2 = colObj1.GetBodyType();
 
             bool test1 = ShouldCollide(collidesWith1, bodyType2);
             bool test2 = ShouldCollide(collidesWith2, bodyType1);

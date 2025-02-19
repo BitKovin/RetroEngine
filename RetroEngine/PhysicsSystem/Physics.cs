@@ -85,7 +85,16 @@ namespace RetroEngine.PhysicsSystem
             public string surfaceType = "default";
         }
 
-        static Vector3 tempVector = new Vector3(); 
+        static Vector3 tempVector = new Vector3();
+
+        internal static Dictionary<CollisionObject, int> bodyTypeList = new Dictionary<CollisionObject, int>();
+        internal static Dictionary<CollisionObject, int> collisionMaskList = new Dictionary<CollisionObject, int>();
+
+        internal static void ResetBodyTypeLists()
+        {
+            bodyTypeList.Clear();
+            collisionMaskList.Clear();
+        }
 
         /// <summary>
         /// creating callbacks is expencive AF, so it's faster to just keep then in memory for future use
@@ -485,7 +494,11 @@ namespace RetroEngine.PhysicsSystem
                     }
                     catch (Exception ex) { Logger.Log(ex); }
 
+                    if (colObj.GetBodyType() == 0)
+                        colObj.SetBodyType(BodyType.MainBody);
 
+                    if (colObj.GetCollisionMask() == 0)
+                        colObj.SetCollisionMask(BodyType.GroupCollisionTest);
 
                     // Check if the collision object is a rigid body
                     if (colObj is RigidBody rigidBody)
@@ -498,11 +511,7 @@ namespace RetroEngine.PhysicsSystem
                             }
                             return;
                         }
-                        if (colObj.UserIndex2 == -1)
-                            colObj.SetBodyType(BodyType.MainBody);
 
-                        if (colObj.UserIndex == -1)
-                            colObj.SetCollisionMask(BodyType.GroupCollisionTest);
 
                         BodyType bodyType = colObj.GetBodyType();
 

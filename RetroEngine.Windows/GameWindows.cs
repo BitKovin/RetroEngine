@@ -276,7 +276,7 @@ namespace RetroEngine.Windows
 
 #endif
 
-            AsyncGameThread = true;
+            AsyncGameThread = false;
 
         }
 

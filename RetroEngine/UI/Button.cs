@@ -30,7 +30,7 @@ namespace RetroEngine.UI
 
         public Button() : base()
         {
-            tex = AssetRegistry.LoadTextureFromFile("engine/texture/white.png", false, false);
+            tex = AssetRegistry.LoadTextureFromFile("engine/textures/white.png", false, false);
         }
 
         public override void Update()

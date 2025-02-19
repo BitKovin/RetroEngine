@@ -60,5 +60,10 @@ namespace RetroEngine.Skeletal
             
         }
 
+        public void Stop()
+        {
+            RiggedModel.animationRunning = false;
+        }
+
     }
 }

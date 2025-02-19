@@ -18,7 +18,7 @@ namespace RetroEngine.UI
 
         public Image() : base()
         {
-            tex = AssetRegistry.LoadTextureFromFile("engine/textures/white.png");
+            tex = AssetRegistry.LoadTextureFromFile("engine/textures/white.png", false, false);
         }
 
 

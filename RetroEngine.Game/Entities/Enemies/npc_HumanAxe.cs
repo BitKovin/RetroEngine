@@ -123,7 +123,7 @@ namespace RetroEngine.Game.Entities.Enemies
             {
                 stunned = false;
                 attacking = false;
-                speed = 5;
+                speed = 1;
             }
             else if(animationEvent.Name == "lookAtTarget")
             {
@@ -193,6 +193,8 @@ namespace RetroEngine.Game.Entities.Enemies
         protected override void LoadAssets()
         {
             base.LoadAssets();
+
+            new HeartPickup().LoadAssetsIfNeeded();
 
             mesh.LoadFromFile("models/enemies/enemy1.FBX");
 
@@ -290,6 +292,9 @@ namespace RetroEngine.Game.Entities.Enemies
                             {
                                 Time.AddTimeScaleEffect(new TimeScaleEffect(0.1f, 0.05f));
                                 weaponPlayer.Blocked();
+
+                                Stun((weapon.Position - Position).Normalized());
+
                             }
 
                     }
@@ -308,7 +313,6 @@ namespace RetroEngine.Game.Entities.Enemies
         {
             base.OnDamaged(damage, causer, weapon);
 
-            Stun((weapon.Position - Position).Normalized());
 
 
             if (Health <= 0)
@@ -319,7 +323,7 @@ namespace RetroEngine.Game.Entities.Enemies
 
         void Stun(Vector3 attackDirection)
         {
-            return;
+
             if(stunned) return;
 
             attacking = false;
@@ -328,6 +332,9 @@ namespace RetroEngine.Game.Entities.Enemies
             
             mesh.Rotation = MathHelper.FindLookAtRotation(Vector3.Zero, attackDirection.XZ());
             MoveDirection = attackDirection.XZ();
+
+            animator.stunAnimation.Play();
+            animator.attackAnimation.Stop();
 
             SoundPlayer.SetSound(soundStun);
             SoundPlayer.Play(true);
@@ -390,6 +397,8 @@ namespace RetroEngine.Game.Entities.Enemies
             }
 
         }
+
+        MathHelper.Transform rootTrans = new MathHelper.Transform();
 
         List<Entity> hitedEntities = new List<Entity>();
 
@@ -456,8 +465,6 @@ namespace RetroEngine.Game.Entities.Enemies
 
             }
 
-            var rootTrans = mesh.PullRootMotion();
-
             Vector3 motion = rootTrans.Position * rootMotionScale;
 
             motion = Vector3.Transform(motion, mesh.Rotation.GetRotationMatrix());
@@ -488,8 +495,6 @@ namespace RetroEngine.Game.Entities.Enemies
 
             if(stunned == false)
                 mesh.Rotation = new Vector3(0, MathHelper.FindLookAtRotation(Vector3.Zero, MoveDirection).Y, 0);
-
-            mesh.UpdateHitboxes();
 
             //crowdAgent.SetAgentTargetPosition(targetLocation);
 
@@ -535,11 +540,6 @@ namespace RetroEngine.Game.Entities.Enemies
 
             if (dead) return;
 
-            List<RigidBody> ignore = new List<RigidBody>();
-
-            ignore.Add(body);
-            ignore.AddRange(target.bodies);
-
             attacking = true;
 
             animator.attackAnimation.Play();
@@ -570,7 +570,13 @@ namespace RetroEngine.Game.Entities.Enemies
 
             animator.Update();
 
-            mesh.PastePoseLocal(animator.GetResultPose());
+            var pose = animator.GetResultPose();
+
+            rootTrans = pose.RootMotion;
+
+            mesh.PastePoseLocal(pose);
+            mesh.UpdateHitboxes();
+
 
             if (dead) return;
 
@@ -753,8 +759,6 @@ namespace RetroEngine.Game.Entities.Enemies
         {
             base.LoadData(Data);
 
-            new HeartPickup().LoadAssetsIfNeeded();
-
             body.SetPosition(Position);
 
             mesh.Rotation = Rotation;
@@ -784,6 +788,7 @@ namespace RetroEngine.Game.Entities.Enemies
             Animation runFAnimation;
 
             public ActionAnimation attackAnimation;
+            public ActionAnimation stunAnimation;
 
             public float MovementSpeed = 0;
 
@@ -797,6 +802,7 @@ namespace RetroEngine.Game.Entities.Enemies
                 runFAnimation = AddAnimation("models/enemies/enemy1.fbx", true, "run", interpolation: true);
 
                 attackAnimation = AddActionAnimation("models/enemies/enemy1.fbx", "attack",0.3f);
+                stunAnimation = AddActionAnimation("models/enemies/enemy1.fbx", "stun", 0.3f, 0.4f);
 
 
                 proxy.LoadFromFile("models/enemies/enemy1.fbx");
@@ -812,10 +818,10 @@ namespace RetroEngine.Game.Entities.Enemies
                 var locomotionPose = Animation.LerpPose(idleAnimation.GetPoseLocal(), runFAnimation.GetPoseLocal(), blendFactor);
 
 
-                if(attackAnimation.GetBlendFactor()>0)
-                    locomotionPose.LayeredBlend(attackAnimation.GetBoneByName("spine_01"), attackAnimation.GetPoseLocal(), attackAnimation.GetBlendFactor());
+                if(attackAnimation.GetBlendFactor() > 0)
+                    locomotionPose.LayeredBlend(attackAnimation.GetBoneByName("spine_01"), attackAnimation.GetPoseLocal(), attackAnimation.GetBlendFactor(), 0.7f);
 
-
+                locomotionPose = Animation.LerpPose(locomotionPose, stunAnimation.GetPoseLocal(), stunAnimation.GetBlendFactor());
 
                 return locomotionPose;
 

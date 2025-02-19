@@ -66,9 +66,9 @@ namespace RetroEngine
             {
                 if (ignoreList.Contains(proxy0.ClientObject)) return false;
 
-                
 
-                if (collisionObject.UserIndex2 > 0)
+
+                if ((int)collisionObject.GetBodyType() > 0)
                 {
 
                     PhysicsSystem.BodyType bodyType = collisionObject.GetBodyType();

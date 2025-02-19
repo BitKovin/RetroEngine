@@ -188,6 +188,8 @@ namespace RetroEngine.Game.Entities.Enemies
         {
             base.LoadAssets();
 
+            new HeartPickup().LoadAssetsIfNeeded();
+
             mesh.LoadFromFile("models/enemies/dog.FBX");
 
             ParticleSystemEnt.Preload("hitBlood");
@@ -750,7 +752,6 @@ namespace RetroEngine.Game.Entities.Enemies
         {
             base.LoadData(Data);
 
-            new HeartPickup().LoadAssetsIfNeeded();
 
             body.SetPosition(Position);
 
