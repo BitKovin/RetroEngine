@@ -107,7 +107,7 @@ namespace RetroEngine.Map
                         foreach (var face in loadedFaces)
                         {
                             var shape = Physics.CreateCollisionShapeFromModel(face.model, shapeData: new Physics.CollisionSurfaceData { surfaceType = face.textureName }, complex: entity.ConvexBrush == false);
-                            RigidBody rigidBody = Physics.CreateFromShape(entity, Vector3.One.ToPhysics(), shape, collisionFlags: BulletSharp.CollisionFlags.StaticObject, bodyType: PhysicsSystem.BodyType.World);
+                            RigidBody rigidBody = Physics.CreateFromShape(entity, Vector3.One.ToPhysics(), shape, collisionFlags: BulletSharp.CollisionFlags.StaticObject, bodyType: (face.Transperent || face.Masked) ? BodyType.WorldTrasnparent : BodyType.WorldOpaque);
                             rigidBody.SetCollisionMask(BodyType.GroupAll);
                             entity.bodies.Add(rigidBody);
                         }

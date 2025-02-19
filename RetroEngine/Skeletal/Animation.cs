@@ -17,6 +17,7 @@ namespace RetroEngine.Skeletal
 
         protected static Dictionary<string, RiggedModel> LoadedRigModelsAnimations = new Dictionary<string, RiggedModel>();
 
+
         public static AnimationPose LerpPose(AnimationPose poseA, AnimationPose poseB, float factor)
         {
 

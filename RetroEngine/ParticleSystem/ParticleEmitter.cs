@@ -313,7 +313,7 @@ namespace RetroEngine.Particles
 
             if (particle.useGlobalRotation == false)
             {
-                Matrix worldMatrix = Matrix.CreateScale(particle.Scale) * Matrix.CreateBillboard(particle.position, Camera.finalizedPosition, Camera.Up.RotateVector(Camera.Forward, particle.Rotation), Camera.Forward);
+                Matrix worldMatrix = Matrix.CreateScale(particle.Scale) * Matrix.CreateBillboard(particle.position, Camera.finalizedPosition, Camera.Up.RotateVector(Camera.Forward, particle.Rotation), (particle.position - Camera.finalizedPosition).Normalized());
 
                 return worldMatrix;
             }

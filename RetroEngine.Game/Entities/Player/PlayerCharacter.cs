@@ -33,7 +33,7 @@ namespace RetroEngine.Game.Entities.Player
 
         public RigidBody body;
 
-        float maxSpeed = 7;
+        float maxSpeed = 7.5f;
         float maxSpeedAir = 2;
         float acceleration = 90;
         float airAcceleration = 20;
@@ -213,7 +213,7 @@ namespace RetroEngine.Game.Entities.Player
 
 
             body.CcdMotionThreshold = 0.000001f;
-            body.CcdSweptSphereRadius = 0.4f;
+            body.CcdSweptSphereRadius = 0.5f;
             body.Friction = 1f;
 
             bodies.Add(body);
@@ -463,8 +463,10 @@ namespace RetroEngine.Game.Entities.Player
         public override void VisualUpdate()
         {
             base.VisualUpdate();
+            return;
 
-            PlayerBodyAnimator.MovementSpeed = ((Vector3)body.LinearVelocity).XZ().Length();
+            PlayerBodyAnimator.MovementSpeed = (PhysicalVelocity).XZ().Length();
+
 
             float Dx = Vector3.Dot(velocity.XZ().Normalized(), CameraRotation.GetRightVector());
             float Dy = Vector3.Dot(velocity.XZ().Normalized(), CameraRotation.GetForwardVector().XZ().Normalized());
@@ -506,6 +508,7 @@ namespace RetroEngine.Game.Entities.Player
             // Interpolate the position based on the elapsed time in the current frame
             float interpolationFactor = Time.DeltaTime / fixedDeltaTime;
             interpolatedPosition = Vector3.Lerp(previousPosition, currentPosition, Math.Min(interpolationFactor,1));
+
 
             cameraHeightOffset = MathHelper.Lerp(cameraHeightOffset, 0, interpolationFactor/5f);
 

@@ -254,6 +254,8 @@ namespace RetroEngine.Skeletal
 
             Vector3 motionRot = (transform.RotationQuaternion *  Quaternion.Inverse(OldRootTransform.RotationQuaternion)).ToEulerAnglesDegrees();
 
+            motionRot.Z = 0; //buggy so disabled
+            motionRot.X = 0; //buggy so disabled
 
             //motionPos = Vector3.Transform(motionPos, (-TotalRootMotionRot).GetRotationMatrix());
 
@@ -296,6 +298,9 @@ namespace RetroEngine.Skeletal
 
             Vector3 motionPos = transform.Position;
             Vector3 motionRot = transform.Rotation;
+
+            motionRot.Z = 0; //buggy so disabled
+            motionRot.X = 0; //buggy so disabled
 
             //motionPos = Vector3.Transform(motionPos, MathHelper.GetRotationMatrix(RootMotionOffsetRot));
 
@@ -680,6 +685,9 @@ namespace RetroEngine.Skeletal
                     break;
                 }
             }
+
+            //Logger.Log($"animaion {name} not found");
+
             currentAnimation = index;
             CurrentPlayingAnimationIndex = index;
             animationRunning = false;

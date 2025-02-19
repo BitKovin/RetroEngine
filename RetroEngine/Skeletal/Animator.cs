@@ -1,9 +1,12 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Assimp;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using static RetroEngine.SkeletalMesh;
 
 namespace RetroEngine.Skeletal
 {
@@ -60,14 +63,21 @@ namespace RetroEngine.Skeletal
             return new AnimationPose();
         }
 
-        protected Animation AddAnimation(string path, bool loop = true, int index = 0, bool interpolation = true)
+        protected Animation AddAnimation(string path, bool loop = true, string name = "", bool interpolation = true)
         {
 
             Animation animation = new Animation();
 
+            animation.Name = path + name;
             
             animation.LoadFromFile(path);
-            animation.PlayAnimation(index, loop);
+
+            if(name!= "")
+                animation.PlayAnimation(name, interpolation);
+            else
+                animation.PlayAnimation(0, interpolation);
+            
+
             lock (AnimationsToUpdate)
             {
                 AnimationsToUpdate.Add(animation);
@@ -81,14 +91,19 @@ namespace RetroEngine.Skeletal
             return animation;
         }
 
-        protected ActionAnimation AddActionAnimation(string path, int index = 0, float BlendIn = 0.2f, float BlendOut = 0.2f, bool interpolation = true)
+        protected ActionAnimation AddActionAnimation(string path, string name = "", float BlendIn = 0.2f, float BlendOut = 0.2f, bool interpolation = true)
         {
 
             ActionAnimation animation = new ActionAnimation();
 
+            animation.Name = path + name;
 
             animation.LoadFromFile(path);
-            animation.SetAnimation(index);
+
+            if (name != "")
+                animation.SetAnimation(name);
+            else
+                animation.SetAnimation(0);
             
 
             animation.UpdateFinalPose = false;
@@ -121,6 +136,46 @@ namespace RetroEngine.Skeletal
         protected virtual void Load()
         {
 
+        }
+
+        public AnimatorSaveState SaveState()
+        {
+            return new AnimatorSaveState(this);
+        }
+
+        public void LoadState(AnimatorSaveState animatorSaveState)
+        {
+            var animationStates = animatorSaveState.animationStates;
+
+            int i = -1;
+            foreach (Animation animation in AnimationsToUpdate)
+            {
+                i++;
+                if(i < animationStates.Length)
+                    animation.SetAnimationState(animationStates[i]);
+
+            }
+        }
+
+        public struct AnimatorSaveState
+        {
+            [JsonInclude]
+            public SkeletalMesh.AnimationState[] animationStates;
+
+            public AnimatorSaveState(Animator animator)
+            {
+
+                animationStates = new SkeletalMesh.AnimationState[animator.AnimationsToUpdate.Count];
+
+                int i = -1;
+                foreach(Animation animation in animator.AnimationsToUpdate)
+                {
+                    i++;
+
+                    animationStates[i] = animation.GetAnimationState();
+
+                }
+            }
         }
 
     }

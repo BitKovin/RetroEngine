@@ -71,6 +71,8 @@ namespace SkeletalMeshEditor
 
                 Level.GetCurrent().AddEntity(new SkeletalMeshPreview());
 
+                SkeletalMesh.LoadedMeta.Clear();
+
                 SkeletalMeshPreview.instance.skeletalMesh.LoadFromFile(path);
                 SkeletalMeshPreview.instance.skeletalMesh.texture = AssetRegistry.LoadTextureFromFile("cat.png"); //"__TB_empty.png"
             }

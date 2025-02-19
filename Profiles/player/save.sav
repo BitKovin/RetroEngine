@@ -1,1 +1,58 @@
-{"levelName":"test.map","entities":[{"Name":"","className":"ent_cat_point","id":"ent_cat_point--0","saveData":"{\u0022Position\u0022:{\u0022X\u0022:5.1103797,\u0022Y\u0022:0.9999999,\u0022Z\u0022:-4.031981},\u0022Rotation\u0022:{\u0022X\u0022:3.2680648E-06,\u0022Y\u0022:0.00061799353,\u0022Z\u0022:5.8473356E-06},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"},{"Name":"player","className":"info_player_start","id":"info_player_start-player-0","saveData":"{\u0022velocity\u0022:{\u0022X\u0022:0,\u0022Y\u0022:2.682209E-06,\u0022Z\u0022:0},\u0022weapons\u0022:[null,{\u0022weaponType\u0022:\u0022RetroEngine.Game.Entities.Weapons.weapon_pistol_double, RetroEngine.Game, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0022,\u0022ammo\u0022:24},null,null,null,null,null,null,null,null],\u0022weaponMeele\u0022:{\u0022weaponType\u0022:\u0022RetroEngine.Game.Entities.Weapons.weapon_sword, RetroEngine.Game, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0022,\u0022ammo\u0022:0},\u0022currentSlot\u0022:1,\u0022lastSlot\u0022:1,\u0022thirdPerson\u0022:false,\u0022Position\u0022:{\u0022X\u0022:1.0114647,\u0022Y\u0022:1.3999289,\u0022Z\u0022:-2.0176582},\u0022Rotation\u0022:{\u0022X\u0022:0.21253994,\u0022Y\u0022:90.21254,\u0022Z\u0022:0},\u0022name\u0022:\u0022player\u0022,\u0022Tags\u0022:[\u0022player\u0022],\u0022Health\u0022:100,\u0022OwnerId\u0022:\u0022\u0022}"},{"Name":"","className":"ent_cat_point","id":"ent_cat_point--1","saveData":"{\u0022Position\u0022:{\u0022X\u0022:-9.999555,\u0022Y\u0022:0.5000001,\u0022Z\u0022:10.498701},\u0022Rotation\u0022:{\u0022X\u0022:2.645693E-05,\u0022Y\u0022:0.0008930672,\u0022Z\u0022:8.627157E-05},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"},{"Name":"","className":"ent_cat_point","id":"ent_cat_point--2","saveData":"{\u0022Position\u0022:{\u0022X\u0022:-14.499697,\u0022Y\u0022:0.5,\u0022Z\u0022:2.5010703},\u0022Rotation\u0022:{\u0022X\u0022:1.2412138E-06,\u0022Y\u0022:1.4723719E-05,\u0022Z\u0022:-4.4754934E-06},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"},{"Name":"","className":"ent_cat_point","id":"ent_cat_point--3","saveData":"{\u0022Position\u0022:{\u0022X\u0022:-9.500026,\u0022Y\u0022:0.5,\u0022Z\u0022:-0.5001142},\u0022Rotation\u0022:{\u0022X\u0022:8.060329E-06,\u0022Y\u0022:0.0011069226,\u0022Z\u0022:1.209812E-07},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"},{"Name":"PlayerGlobal","className":"","id":"-PlayerGlobal-0","saveData":"{\u0022InAction\u0022:0,\u0022Position\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022PlayerGlobal\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"}],"entityId":41,"deletedIDs":["weaponPickup--0"],"deletedNames":[]}
+{
+  "levelName": "test.map",
+  "entities": [
+    {
+      "Name": "",
+      "className": "ent_cat_point",
+      "id": "ent_cat_point--0",
+      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:5.109481,\u0022Y\u0022:0.99999994,\u0022Z\u0022:-4.030436},\u0022Rotation\u0022:{\u0022X\u0022:90,\u0022Y\u0022:-38.45435,\u0022Z\u0022:1.090243E-05},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
+    },
+    {
+      "Name": "player",
+      "className": "info_player_start",
+      "id": "info_player_start-player-0",
+      "saveData": "{\u0022velocity\u0022:{\u0022X\u0022:0,\u0022Y\u0022:1.3709068E-06,\u0022Z\u0022:0},\u0022weapons\u0022:[null,null,null,null,null,null,null,null,null,null],\u0022weaponMeele\u0022:{\u0022weaponType\u0022:\u0022RetroEngine.Game.Entities.Weapons.weapon_sword, RetroEngine.Game, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0022,\u0022ammo\u0022:0},\u0022currentSlot\u0022:-1,\u0022lastSlot\u0022:-1,\u0022thirdPerson\u0022:false,\u0022Position\u0022:{\u0022X\u0022:-12.273282,\u0022Y\u0022:0.8999291,\u0022Z\u0022:2.803701},\u0022Rotation\u0022:{\u0022X\u0022:44.700035,\u0022Y\u0022:149.70006,\u0022Z\u0022:0},\u0022name\u0022:\u0022player\u0022,\u0022Tags\u0022:[\u0022player\u0022],\u0022Health\u0022:100,\u0022OwnerId\u0022:\u0022\u0022}"
+    },
+    {
+      "Name": "",
+      "className": "weaponPickup",
+      "id": "weaponPickup--0",
+      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:1.375,\u0022Y\u0022:1.125,\u0022Z\u0022:-2.125},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
+    },
+    {
+      "Name": "",
+      "className": "ent_cat_point",
+      "id": "ent_cat_point--1",
+      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:-10.000692,\u0022Y\u0022:0.4999999,\u0022Z\u0022:10.497193},\u0022Rotation\u0022:{\u0022X\u0022:-8.485401E-06,\u0022Y\u0022:-0.010193872,\u0022Z\u0022:-2.1368793E-05},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
+    },
+    {
+      "Name": "",
+      "className": "ent_cat_point",
+      "id": "ent_cat_point--2",
+      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:-14.501052,\u0022Y\u0022:0.5,\u0022Z\u0022:2.5020952},\u0022Rotation\u0022:{\u0022X\u0022:-8.078618E-06,\u0022Y\u0022:-0.0024989196,\u0022Z\u0022:-9.372896E-06},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
+    },
+    {
+      "Name": "",
+      "className": "ent_cat_point",
+      "id": "ent_cat_point--3",
+      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:-9.500017,\u0022Y\u0022:0.49999994,\u0022Z\u0022:-0.50067675},\u0022Rotation\u0022:{\u0022X\u0022:-1.1064664E-06,\u0022Y\u0022:0.00013832451,\u0022Z\u0022:-1.9946917E-06},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
+    },
+    {
+      "Name": "PlayerGlobal",
+      "className": "",
+      "id": "-PlayerGlobal-0",
+      "saveData": "{\u0022InAction\u0022:0,\u0022Position\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022PlayerGlobal\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
+    },
+    {
+      "Name": "",
+      "className": "npc_humanAxe",
+      "id": "npc_humanAxe--0",
+      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.74497575,\u0022Y\u0022:0,\u0022Z\u0022:0.6091819},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.5782069,\u0022Y\u0022:0,\u0022Z\u0022:0.8146211},\u0022speed\u0022:8,\u0022targetLocation\u0022:{\u0022X\u0022:-13.453405,\u0022Y\u0022:0.8999278,\u0022Z\u0022:4.0953007},\u0022dead\u0022:true,\u0022attacking\u0022:true,\u0022attackCooldown\u0022:{\u0022T\u0022:-2.5147972},\u0022stunned\u0022:false,\u0022rootMotionScale\u0022:0.95625454,\u0022reachedFloor\u0022:true,\u0022animationState\u0022:{\u0022animationStates\u0022:[{\u0022CurrrentAnimation\u0022:\u0022root|idle\u0022,\u0022CurrentFrame\u0022:4,\u0022OldFrame\u0022:4,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false},{\u0022CurrrentAnimation\u0022:\u0022root|run\u0022,\u0022CurrentFrame\u0022:16,\u0022OldFrame\u0022:16,\u0022Loop\u0022:true,\u0022PlayingRootMotion\u0022:false},{\u0022CurrrentAnimation\u0022:\u0022root|attack\u0022,\u0022CurrentFrame\u0022:16,\u0022OldFrame\u0022:16,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false}]},\u0022Position\u0022:{\u0022X\u0022:-12.903471,\u0022Y\u0022:6.2385057E-09,\u0022Z\u0022:3.038304},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:-50.72643,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:-20,\u0022OwnerId\u0022:\u0022\u0022}"
+    }
+  ],
+  "entityId": 37,
+  "deletedIDs": [
+    "heartPickup--0"
+  ],
+  "deletedNames": []
+}

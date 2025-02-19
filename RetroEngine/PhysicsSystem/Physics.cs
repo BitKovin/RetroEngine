@@ -26,11 +26,13 @@ namespace RetroEngine.PhysicsSystem
         None = 1,
         MainBody = 2,          // 1
         HitBox = 4,            // 2
-        World = 8,             // 4
+        WorldOpaque = 8,             // 4
         CharacterCapsule = 16,  // 8
         NoRayTest = 32,         // 16
         Liquid = 64,         // 16
+        WorldTrasnparent = 128,
 
+        World = WorldOpaque | WorldTrasnparent,
         GroupAll = MainBody | HitBox | World | CharacterCapsule | NoRayTest | Liquid,
         GroupHitTest = GroupAll & ~CharacterCapsule & ~Liquid,
         GroupCollisionTest = GroupAll & ~HitBox & ~Liquid,
@@ -465,10 +467,10 @@ namespace RetroEngine.PhysicsSystem
 
         }
 
+        static long oldSimTick = -1;
+
         public static void Update()
         {
-
-
 
             lock (dynamicsWorld)
             {
@@ -481,7 +483,9 @@ namespace RetroEngine.PhysicsSystem
                     {
                         colObj = collisionObjects[i];
                     }
-                    catch (Exception ex) { Console.WriteLine(ex); }
+                    catch (Exception ex) { Logger.Log(ex); }
+
+
 
                     // Check if the collision object is a rigid body
                     if (colObj is RigidBody rigidBody)
@@ -520,6 +524,11 @@ namespace RetroEngine.PhysicsSystem
                         // Assume this value is set based on your fixed physics update rate
                         float fixedDeltaTime = Math.Max(1 / 50f, Time.DeltaTime);
 
+                        if (oldSimTick != SimulationTicks)
+                        {
+                            ent.PhysicalVelocity = rigidBody.LinearVelocity;
+                        }
+
                         if (ent.DisablePhysicsInterpolation == false)
                         {
                             // Store the previous and current positions of the entity
@@ -550,6 +559,9 @@ namespace RetroEngine.PhysicsSystem
                     }
                 });
             }
+
+            oldSimTick = SimulationTicks;
+
         }
 
         /*

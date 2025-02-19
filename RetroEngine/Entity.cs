@@ -74,6 +74,8 @@ namespace RetroEngine
 
         public bool Visible = true;
 
+        public Vector3 PhysicalVelocity = Vector3.Zero;
+
         [JsonInclude]
         public string OwnerId = "";
         Entity owner;
@@ -333,6 +335,12 @@ namespace RetroEngine
         public static void Console_EntSpawn(string name)
         {
             var entity = LevelObjectFactory.CreateByTechnicalName(name);
+
+            if (entity == null)
+            {
+                Logger.Log("invalid entity name: " + name);
+                return;
+            }
 
             var hit = Physics.SphereTrace(Camera.position, Camera.position + Camera.Forward * 10, 0.5f, bodyType: BodyType.World);
 

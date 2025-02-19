@@ -189,7 +189,6 @@ namespace RetroEngine.Game.Entities.Enemies
             base.LoadAssets();
 
             mesh.LoadFromFile("models/enemies/dog.FBX");
-            mesh.LoadMeshMetaFromFile("models/enemies/dog.fbx");
 
             ParticleSystemEnt.Preload("hitBlood");
 
@@ -740,6 +739,7 @@ namespace RetroEngine.Game.Entities.Enemies
         protected override EntitySaveData SaveData(EntitySaveData baseData)
         {
 
+            Rotation = mesh.Rotation;
             animationState = mesh.GetAnimationState();
 
             return base.SaveData(baseData);
@@ -754,6 +754,7 @@ namespace RetroEngine.Game.Entities.Enemies
 
             body.SetPosition(Position);
 
+            mesh.Rotation = Rotation;
             mesh.Position = Position;
 
             if(dead)

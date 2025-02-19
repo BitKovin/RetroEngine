@@ -66,6 +66,8 @@ namespace RetroEngine
 
         public string Name = "";
 
+        public bool IgnoreAnimationEvents = false;
+        
 
         public SkeletalMesh() : base()
         {
@@ -216,6 +218,18 @@ namespace RetroEngine
             RiggedModel.animationRunning = playing;
         }
 
+        long boundSphereUpdateTick = 0;
+
+        public void CalculateBoundingSphereWithInterval(int tickInternval = 3)
+        {
+            boundSphereUpdateTick++;
+
+            if (boundSphereUpdateTick % tickInternval != 0) return;
+
+            CalculateBoundingSphere();
+
+        }
+
         public void CalculateBoundingSphere()
         {
             List<Vector3> points = new List<Vector3>();
@@ -230,7 +244,8 @@ namespace RetroEngine
                 {
                     foreach (var b in RiggedModel.flatListToBoneNodes)
                     {
-                        points.Add(b.CombinedTransformMg.Translation / 100);
+                        if(b.children.Count == 0)
+                            points.Add(b.CombinedTransformMg.Translation / 100);
                     }
                 }
             }
@@ -449,7 +464,7 @@ namespace RetroEngine
         }
 
         private int OldFrame = -1;
-        void UpdateAnimationEvents(bool negativeDelta)
+        protected void UpdateAnimationEvents(bool negativeDelta)
         {
 
 
@@ -474,7 +489,7 @@ namespace RetroEngine
 
             List<AnimationEvent> events = new List<AnimationEvent>();
 
-            while(currentFrame != newFrame)
+            while (currentFrame != newFrame)
             {
 
                 if (negativeDelta)
@@ -486,7 +501,7 @@ namespace RetroEngine
                     currentFrame++;
                 }
 
-                if(currentFrame >= animFrameDuration)
+                if (currentFrame >= animFrameDuration)
                     currentFrame = 0;
 
                 if (currentFrame < 0)
@@ -495,7 +510,7 @@ namespace RetroEngine
 
                 foreach (var e in CurrentAnimationInfo.AnimationEvents)
                 {
-                    if(e.AnimationFrame == currentFrame)
+                    if (e.AnimationFrame == currentFrame)
                         events.Add(e);
                 }
 
@@ -503,6 +518,8 @@ namespace RetroEngine
             }
 
             OldFrame = currentFrame;
+
+            if (IgnoreAnimationEvents) return;
 
             foreach (var e in events)
                 OnAnimationEvent?.Invoke(e);
@@ -622,12 +639,21 @@ namespace RetroEngine
 
         }
 
-        void SetCurrentAnimationInfo()
+        protected void SetCurrentAnimationInfo()
         {
 
             int id = RiggedModel.currentAnimation;
 
             string name = RiggedModel.GetCurrentAnimationName();
+
+            foreach (var anim in animationInfos)
+            {
+                if(anim.AnimationName == "")
+                {
+                    if(anim.AnimationIndex< RiggedModel.originalAnimations.Count)
+                    anim.AnimationName = RiggedModel.originalAnimations[anim.AnimationIndex].animationName;
+                }
+            }
 
             foreach (var anim in animationInfos)
             {
@@ -640,18 +666,21 @@ namespace RetroEngine
                 }
             }
 
+
+
             foreach (var anim in animationInfos)
             {
                 if(anim.AnimationIndex == id)
                 {
 
                     CurrentAnimationInfo = anim;
+                    
 
                     return;
                 }
             }
 
-            var newAnim = new AnimationInfo { AnimationIndex = id };
+            var newAnim = new AnimationInfo { AnimationIndex = id, AnimationName = name };
 
             CurrentAnimationInfo = newAnim;
 
@@ -809,6 +838,8 @@ namespace RetroEngine
                 frameStaticMeshData.IsRendered = false;
                 return;
             }
+
+            CalculateBoundingSphereWithInterval();
 
             RiggedModel.globalShaderMatrixs.CopyTo(finalizedBones, 0);
 
@@ -1336,8 +1367,6 @@ namespace RetroEngine
                 var boneTrans = matrix.Decompose(out _, out var rotation, out var pos);
                 hitbox.RagdollRigidBodyRef.SetTransform(pos, rotation);
 
-
-
             }
 
         }
@@ -1811,7 +1840,7 @@ namespace RetroEngine
 
         }
 
-        static Dictionary<string, string> loadedMeta = new Dictionary<string, string>();
+        public static Dictionary<string, string> LoadedMeta = new Dictionary<string, string>();
 
         public void LoadMeshMetaFromFile(string path)
         {
@@ -1822,9 +1851,9 @@ namespace RetroEngine
             string text;
 
 
-            if (loadedMeta.ContainsKey(path))
+            if (LoadedMeta.ContainsKey(path))
             {
-                text = loadedMeta[path];
+                text = LoadedMeta[path];
             }
             else
             {
@@ -1842,8 +1871,8 @@ namespace RetroEngine
 
                     text = reader.ReadToEnd();
 
-                    lock(loadedMeta)
-                    loadedMeta.TryAdd(path, text);
+                    lock(LoadedMeta)
+                    LoadedMeta.TryAdd(path, text);
 
                 }
 
@@ -1933,7 +1962,7 @@ namespace RetroEngine
 
         public AnimationState GetAnimationState()
         {
-            return new AnimationState { CurrentFrame = GetCurrentAnimationFrame(),OldFrame = OldFrame, CurrrentAnimation = GetCurrentAnimationIndex(), Loop = RiggedModel.loopAnimation, PlayingRootMotion = playingRootMotion };
+            return new AnimationState { CurrentFrame = GetCurrentAnimationFrame(),OldFrame = OldFrame, CurrrentAnimation = GetCurrentAnimationName(), Loop = RiggedModel.loopAnimation, PlayingRootMotion = playingRootMotion };
         }
 
         public void SetAnimationState(AnimationState animationState)
@@ -1951,7 +1980,7 @@ namespace RetroEngine
         {
 
             [JsonInclude]
-            public int CurrrentAnimation = 0;
+            public string CurrrentAnimation = "";
 
             [JsonInclude]
             public int CurrentFrame = 0;
@@ -2099,6 +2128,7 @@ namespace RetroEngine
         [JsonInclude]
         public int AnimationIndex = -1;
 
+        [JsonInclude]
         public string AnimationName = "";
 
         [JsonInclude]

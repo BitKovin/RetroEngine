@@ -314,7 +314,7 @@
 {
 "classname" "spawner"
 "origin" "1648 -6528 48.9987"
-"className" "npc_dog"
+"className" "npc_humanAxe"
 "targetname" "spg_1"
 "onSpawned" "add"
 "onDespawned" "sub"
@@ -324,7 +324,7 @@
 {
 "classname" "spawner"
 "origin" "1520 -6864 48.8933"
-"className" "npc_dog"
+"className" "npc_humanAxe"
 "targetname" "spg_1"
 "onSpawned" "add"
 "onDespawned" "sub"
@@ -334,7 +334,7 @@
 {
 "classname" "spawner"
 "origin" "1392 -6688 48.9651"
-"className" "npc_dog"
+"className" "npc_humanAxe"
 "targetname" "spg_1"
 "onSpawned" "add"
 "onDespawned" "sub"
@@ -344,7 +344,7 @@
 {
 "classname" "spawner"
 "origin" "1232 -6160 64"
-"className" "npc_dog"
+"className" "npc_humanAxe"
 "targetname" "spg_1"
 "target" "test_sp"
 "onSpawned" "add"
@@ -354,7 +354,7 @@
 {
 "classname" "spawner"
 "origin" "1168 -6304 64"
-"className" "npc_dog"
+"className" "npc_humanAxe"
 "targetname" "spg_1"
 "target" "test_sp"
 "onSpawned" "add"
@@ -364,7 +364,7 @@
 {
 "classname" "spawner"
 "origin" "1152 -6368 64"
-"className" "npc_dog"
+"className" "npc_humanAxe"
 "targetname" "spg_1"
 "target" "test_sp"
 "onSpawned" "add"
@@ -374,7 +374,7 @@
 {
 "classname" "spawner"
 "origin" "1120 -6464 64"
-"className" "npc_dog"
+"className" "npc_humanAxe"
 "targetname" "spg_1"
 "target" "test_sp"
 "onSpawned" "add"
@@ -384,7 +384,7 @@
 {
 "classname" "spawner"
 "origin" "1120 -6544 64"
-"className" "npc_dog"
+"className" "npc_humanAxe"
 "targetname" "spg_1"
 "target" "test_sp"
 "onSpawned" "add"
@@ -394,7 +394,7 @@
 {
 "classname" "spawner"
 "origin" "1104 -6624 64"
-"className" "npc_dog"
+"className" "npc_humanAxe"
 "targetname" "spg_1"
 "target" "test_sp"
 "onSpawned" "add"
@@ -404,7 +404,7 @@
 {
 "classname" "spawner"
 "origin" "1104 -6704 64"
-"className" "npc_dog"
+"className" "npc_humanAxe"
 "targetname" "spg_1"
 "target" "test_sp"
 "onSpawned" "add"
@@ -414,7 +414,7 @@
 {
 "classname" "spawner"
 "origin" "1120 -6816 64"
-"className" "npc_dog"
+"className" "npc_humanAxe"
 "targetname" "spg_1"
 "target" "test_sp"
 "onSpawned" "add"
@@ -424,7 +424,7 @@
 {
 "classname" "spawner"
 "origin" "1152 -6928 64"
-"className" "npc_dog"
+"className" "npc_humanAxe"
 "targetname" "spg_1"
 "target" "test_sp"
 "onSpawned" "add"
@@ -434,7 +434,7 @@
 {
 "classname" "spawner"
 "origin" "1200 -7040 48.9012"
-"className" "npc_dog"
+"className" "npc_humanAxe"
 "targetname" "spg_1"
 "target" "test_sp"
 "onSpawned" "add"
@@ -444,7 +444,7 @@
 {
 "classname" "spawner"
 "origin" "1232 -7216 48.8405"
-"className" "npc_dog"
+"className" "npc_humanAxe"
 "targetname" "spg_1"
 "target" "test_sp"
 "onSpawned" "add"

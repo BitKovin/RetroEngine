@@ -12,6 +12,11 @@ namespace RetroEngine.Skeletal
         public float BlendIn = 0.1f;
         public float BlendOut = 0.2f;
 
+        public ActionAnimation() 
+        {
+        }
+
+
         public float GetBlendFactor()
         {
             if (RiggedModel == null) return 0;
@@ -42,9 +47,17 @@ namespace RetroEngine.Skeletal
             }
         }
 
+        public override void Update(float deltaTime)
+        {
+
+            base.Update(deltaTime);
+        }
+
         public void Play()
         {
-            RiggedModel.StartCurrentAnimation();
+            PlayAnimation(RiggedModel.currentAnimation,false,0);
+            RiggedModel.Update(0.0001f);
+            
         }
 
     }
