@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.02.00">
 	<object class="AudioFile" id="{d422ff6f-2746-4544-8643-ccd8880b6308}">
 		<property name="assetPath">
-			<value>LWTW_Emo_Guitar_Loop_Golden_Lead_150_BPM_F.wav</value>
+			<value>Music/action2sample/LWTW_Emo_Guitar_Loop_Golden_Lead_150_BPM_F.wav</value>
 		</property>
 		<property name="isStreaming">
 			<value>true</value>

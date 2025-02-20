@@ -622,29 +622,31 @@ namespace RetroEngine
 
             List<Entity> result = new List<Entity>();
 
+            Entity[] list;
             lock (entities)
             {
-                var list = entities.ToArray();
-                foreach (Entity ent in entities)
-                {
-                    if (ent.name == name)
-                        result.Add(ent);
-                }
+                list = entities.ToArray();
             }
+
+            foreach (Entity ent in list)
+            {
+                if (ent.name == name)
+                    result.Add(ent);
+            }
+
             return result.ToArray();
         }
 
         public Entity FindEntityById(string id)
         {
-            lock (entities)
-            {
+            
                 var list = entities.ToArray();
-                foreach (Entity ent in entities)
+                foreach (Entity ent in list)
                 {
                     if (ent.Id == id)
                         return ent;
                 }
-            }
+            
             return null;
         }
 

@@ -59,20 +59,24 @@ namespace RetroEngine.Entities
             if (entity.Tags.Contains("player"))
             {
                 var ents = Level.GetCurrent().FindAllEntitiesWithName(target);
-                foreach (var ent in ents)
+
+                if (ents.Length > 0)
                 {
-                    if (ent != null)
+                    System.Threading.Tasks.Parallel.For(0, ents.Length, i =>
                     {
-                        ent.OnAction(enterAction);
+                        var ent = ents[i];
+                        if (ent != null)
+                        {
+                            ent.OnAction(enterAction);
+                        }
+                    });
 
-                        active = false;
-
-                    }
+                    active = false;
                 }
+
+
             }
-
         }
-
         public override void OnTriggerExit(Entity entity)
         {
             base.OnTriggerExit(entity);

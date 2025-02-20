@@ -57,6 +57,8 @@ namespace RetroEngine.PhysicsSystem
     public static class Physics
     {
 
+        public static float UpdateRate = 30;
+
         internal static DiscreteDynamicsWorld dynamicsWorld;
 
         internal static DiscreteDynamicsWorld hitboxWorld;
@@ -391,7 +393,7 @@ namespace RetroEngine.PhysicsSystem
                 {
                     lock (dynamicsWorld.CollisionObjectArray)
                     {
-                        SimulationTicks += dynamicsWorld.StepSimulation(time * Time.GetFinalTimeScale(), 3, 1 / 50f * Time.GetFinalTimeScale());
+                        SimulationTicks += dynamicsWorld.StepSimulation(time * Time.GetFinalTimeScale(), 3, 1 / UpdateRate * Time.GetFinalTimeScale());
                     }
                 }
             }
@@ -531,7 +533,7 @@ namespace RetroEngine.PhysicsSystem
                         Vector3 pos = colObj.WorldTransform.Translation;
 
                         // Assume this value is set based on your fixed physics update rate
-                        float fixedDeltaTime = Math.Max(1 / 50f, Time.DeltaTime);
+                        float fixedDeltaTime = Math.Max(1 / UpdateRate, Time.DeltaTime);
 
                         if (oldSimTick != SimulationTicks)
                         {

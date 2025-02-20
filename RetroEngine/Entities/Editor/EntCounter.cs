@@ -40,20 +40,20 @@ namespace RetroEngine.Entities.Editor
         public override void OnAction(string action)
         {
             base.OnAction(action);
-
-            if (action =="add")
+            lock (this)
             {
-                num++;
-                CheckNum();
-            }
+                if (action == "add")
+                {
+                    num++;
+                    CheckNum();
+                }
 
-            if (action == "sub")
-            {
-                num--;
-                CheckNum();
+                if (action == "sub")
+                {
+                    num--;
+                    CheckNum();
+                }
             }
-
-            Console.WriteLine(action + "  " + num);
 
         }
 

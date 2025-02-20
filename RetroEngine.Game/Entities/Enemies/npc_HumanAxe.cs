@@ -85,6 +85,7 @@ namespace RetroEngine.Game.Entities.Enemies
         SoundPlayer SoundPlayer;
 
         FmodEventInstance soundStun;
+        FmodEventInstance soundDamage;
         FmodEventInstance soundAttack;
         FmodEventInstance soundAttackStart;
         FmodEventInstance soundDeath;
@@ -139,12 +140,12 @@ namespace RetroEngine.Game.Entities.Enemies
         {
             base.Start();
 
-            body = Physics.CreateCharacterCapsule(this, 2f, 0.7f, 2, CollisionFlags.CharacterObject);
+            body = Physics.CreateCharacterCapsule(this, 2f, 0.5f, 1, CollisionFlags.CharacterObject);
             body.Gravity = new Vector3(0, -35, 0).ToNumerics();
             body.SetPosition(Position.ToPhysics());
 
-            body.CcdMotionThreshold = 0.5f;
-            body.CcdSweptSphereRadius = 0.7f;
+            body.CcdMotionThreshold = 0.001f;
+            body.CcdSweptSphereRadius = 0.5f;
 
             bodies.Add(body);
 
@@ -227,10 +228,11 @@ namespace RetroEngine.Game.Entities.Enemies
             deathSoundPlayer.SetSound(AssetRegistry.LoadSoundFmodFromFile("sounds/mew2.wav"));
             deathSoundPlayer.Volume = 1f;
 
-            soundStun = FmodEventInstance.Create("event:/NPC/Dog/DogStun");
-            soundAttack = FmodEventInstance.Create("event:/NPC/Dog/DogAttack");
-            soundAttackStart = FmodEventInstance.Create("event:/NPC/Dog/DogAttackStart");
-            soundDeath = FmodEventInstance.Create("event:/NPC/Dog/DogDeath");
+            soundStun = FmodEventInstance.Create("event:/NPC/Enemy1/Enemy1Stun");
+            soundAttack = FmodEventInstance.Create("event:/NPC/Enemy1/Enemy1Attack");
+            soundAttackStart = FmodEventInstance.Create("event:/NPC/Enemy1/Enemy1AttackStart");
+            soundDeath = FmodEventInstance.Create("event:/NPC/Enemy1/Enemy1Death");
+            soundDamage = FmodEventInstance.Create("event:/NPC/Enemy1/Enemy1Damage");
 
         }
 
@@ -313,6 +315,9 @@ namespace RetroEngine.Game.Entities.Enemies
         {
             base.OnDamaged(damage, causer, weapon);
 
+            SoundPlayer.SetSound(soundDamage);
+            SoundPlayer.Play(true);
+
             speed = float.Clamp(speed - damage / 3, 0, 10);
 
             if (Health <= 0)
@@ -389,7 +394,7 @@ namespace RetroEngine.Game.Entities.Enemies
 
             Vector3 toTarget = (target.Position - Position).XZ().Normalized();
 
-            if (distance < 1.3f && attacking == false && Vector3.Dot(mesh.Rotation.GetForwardVector(), toTarget) > 0.7f && attackCooldown.Wait() == false && stunned == false)
+            if (distance < 2f && attacking == false && Vector3.Dot(mesh.Rotation.GetForwardVector(), toTarget) > 0.7f && attackCooldown.Wait() == false && stunned == false)
             {
 
                 rootMotionScale = Lerp(0.1f, 1f, Saturate(distance - 1 / 4f));
@@ -470,7 +475,7 @@ namespace RetroEngine.Game.Entities.Enemies
 
                 if(crowdAgent != null)
                 {
-                    //body.LinearVelocity = new System.Numerics.Vector3(crowdAgent.vel.X, body.LinearVelocity.Y, crowdAgent.vel.Z);
+                    body.LinearVelocity = new System.Numerics.Vector3(crowdAgent.vel.X, body.LinearVelocity.Y, crowdAgent.vel.Z);
                 }
 
             }
@@ -515,7 +520,7 @@ namespace RetroEngine.Game.Entities.Enemies
 
 
 
-            if (crowdAgent == null && Vector3.Distance(Position, targetLocation) < 20)
+            if (crowdAgent == null && Vector3.Distance(Position, targetLocation) < 20 && false)
             {
                 crowdAgent = CrowdSystem.CreateAgent(this, Position);
                 crowdAgent.option.separationWeight = 1;

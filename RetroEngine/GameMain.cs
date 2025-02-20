@@ -719,6 +719,11 @@ namespace RetroEngine
 
             FocusGameWindow();
 
+            Thread.Sleep(10);
+
+            FocusGameWindow();
+            Thread.Sleep(10);
+
             _width = Graphics.Resolution.X;
            _height = Graphics.Resolution.Y;
 
@@ -727,6 +732,15 @@ namespace RetroEngine
             _graphics.ApplyChanges();
 
 
+
+            _graphics.IsFullScreen = true;
+            _graphics.ApplyChanges();
+
+            _graphics.IsFullScreen = false;
+            _graphics.ApplyChanges();
+
+            _graphics.IsFullScreen = true;
+            _graphics.ApplyChanges();
 
             _graphics.IsFullScreen = true;
             _graphics.ApplyChanges();
