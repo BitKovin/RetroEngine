@@ -271,7 +271,7 @@ namespace RetroEngine
                     lock (Level.GetCurrent().DeletedNames)
                     {
                         Level.GetCurrent().DeletedNames.Add(name);
-                        Logger.Log("Deleted entity with name " + name);
+                        Logger.Log($"Deleted {ClassName} with name " + name);
                     }
 
                 }
@@ -281,7 +281,7 @@ namespace RetroEngine
                     lock (Level.GetCurrent().DeletedIds)
                     {
                         Level.GetCurrent().DeletedIds.Add(Id);
-                        Logger.Log("Deleted entity with id " + Id.ToString());
+                        Logger.Log($"Deleted {ClassName} with id " + Id.ToString());
                     }
                 }
             }

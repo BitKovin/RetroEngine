@@ -59,7 +59,7 @@ namespace RetroEngine.Game.Entities.Player
         protected override AnimationPose ProcessResultPose()
         {
 
-            float speedFactor = MovementSpeed/5.5f;
+            float speedFactor = MovementSpeed/8;
 
             speedFactor = MathF.Min(speedFactor, 1.2f);
 

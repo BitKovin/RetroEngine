@@ -1971,7 +1971,7 @@ namespace RetroEngine
 
         public AnimationState GetAnimationState()
         {
-            return new AnimationState { CurrentFrame = GetCurrentAnimationFrame(),OldFrame = OldFrame, CurrrentAnimation = GetCurrentAnimationName(), Loop = RiggedModel.loopAnimation, PlayingRootMotion = playingRootMotion };
+            return new AnimationState { CurrentFrame = GetCurrentAnimationFrame(),OldFrame = OldFrame, CurrrentAnimation = GetCurrentAnimationName(), Loop = RiggedModel.loopAnimation, PlayingRootMotion = playingRootMotion, RunningAnimation = RiggedModel.animationRunning };
         }
 
         public void SetAnimationState(AnimationState animationState)
@@ -1982,6 +1982,7 @@ namespace RetroEngine
             SetCurrentAnimationFrame(animationState.CurrentFrame);
             PullRootMotion();
             OldFrame = animationState.OldFrame;
+            RiggedModel.animationRunning = animationState.RunningAnimation;
 
         }
 
@@ -2002,6 +2003,9 @@ namespace RetroEngine
 
             [JsonInclude]
             public bool PlayingRootMotion = false;
+
+            [JsonInclude]
+            public bool RunningAnimation = false;
 
             public AnimationState()
             {

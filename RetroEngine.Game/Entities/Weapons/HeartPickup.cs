@@ -4,6 +4,7 @@ using RetroEngine.Entities;
 using RetroEngine.Game.Entities.Player;
 using RetroEngine.Map;
 using RetroEngine.PhysicsSystem;
+using RetroEngine.SaveSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,11 +33,13 @@ namespace RetroEngine.Game.Entities.Weapons
 
         }
 
+        RigidBody TriggerBody;
+
         public override void Start()
         {
             base.Start();
 
-            RigidBody TriggerBody = Physics.CreateSphere(this, 0, 0.5f, CollisionFlags.NoContactResponse);
+            TriggerBody = Physics.CreateSphere(this, 0, 0.5f, CollisionFlags.NoContactResponse);
 
             TriggerBody.SetBodyType(BodyType.None);
 
@@ -72,6 +75,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             staticMesh.Rotation = new Vector3(0, (float)(Time.GameTime - SpawnTime) * 30,0);
 
+
         }
 
         protected override void LoadAssets()
@@ -85,6 +89,14 @@ namespace RetroEngine.Game.Entities.Weapons
             staticMesh.Position = Position;
 
             meshes.Add(staticMesh);
+
+        }
+
+        public override void LoadData(EntitySaveData Data)
+        {
+            base.LoadData(Data);
+
+            TriggerBody.SetPosition(Position);
 
         }
 

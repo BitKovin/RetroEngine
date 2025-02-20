@@ -32,7 +32,7 @@ namespace RetroEngine.Game.Effects.Particles
 
             particle_blood.Position = position;
             particle_blood.Rotation = orientation;
-            particle_blood.SpawnParticles((int)Scale.Z*5);
+            particle_blood.SpawnParticles((int)Scale.Z*4);
 
         }
 
@@ -60,10 +60,10 @@ namespace RetroEngine.Game.Effects.Particles
 
             particle = base.UpdateParticle(particle);
 
-            if(particle.lifeTime < 0.3)
+            if(particle.lifeTime < 0.4)
                 particle.Scale += Time.DeltaTime * 1f;
 
-            particle.Scale += Time.DeltaTime * 0.7f;
+            particle.Scale += Time.DeltaTime * 0.3f;
 
             particle.velocity -= new Vector3(0, 10, 0) * (Time.DeltaTime / 2f);
 
@@ -82,14 +82,14 @@ namespace RetroEngine.Game.Effects.Particles
 
             particle.Scale = float.Lerp(0.03f,0.06f, (float)random.NextDouble());
 
-            Vector3 randPos = RandomPosition(0.2f);
+            Vector3 randPos = RandomPosition(0.1f);
 
             particle.position += randPos;
-            particle.velocity = RandomPosition(0.4f).Normalized() + Vector3.UnitY * float.Lerp(1,2,(float)random.NextDouble())  + Rotation.GetForwardVector()*0.7f;
+            particle.velocity = RandomPosition(0.4f).Normalized() + Vector3.UnitY * float.Lerp(1,2,(float)random.NextDouble())  + Rotation.GetForwardVector()*4f;
 
             particle.velocity*= float.Lerp(0.6f, 1f, (float)random.NextDouble());
 
-            particle.transparency = 1.2f;
+            particle.transparency = 1f;
             particle.deathTime = 5;
 
 

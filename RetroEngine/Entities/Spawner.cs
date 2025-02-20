@@ -55,8 +55,6 @@ namespace RetroEngine.Entities
 
             ent.LoadAssetsIfNeeded();
 
-            ent.Destroy();
-
         }
 
         public override void OnAction(string action)

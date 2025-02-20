@@ -179,7 +179,7 @@ namespace RetroEngine.Game.Entities
                 {
                     if(data.Value.Surface == "default")
                     {
-                        GlobalParticleSystem.EmitAt($"hit_{data.Value.Surface}", hit.HitPointWorld, MathHelper.FindLookAtRotation(Vector3.Zero, hit.HitNormalWorld), new Vector3(0, 0, float.Max(Damage / 10f,1)));
+                        GlobalParticleSystem.EmitAt($"hit_{data.Value.Surface}", hit.HitPointWorld, MathHelper.FindLookAtRotation(Vector3.Zero, startRotation.GetForwardVector() * -1), new Vector3(0, 0, float.Max(Damage / 13f,1)));
                     }
                 }
 

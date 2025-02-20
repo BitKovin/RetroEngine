@@ -4,6 +4,7 @@ using RetroEngine.Entities;
 using RetroEngine.Game.Entities.Player;
 using RetroEngine.Map;
 using RetroEngine.PhysicsSystem;
+using RetroEngine.SaveSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,11 +34,13 @@ namespace RetroEngine.Game.Entities.Weapons
 
         }
 
+        RigidBody TriggerBody;
+
         public override void Start()
         {
             base.Start();
 
-            RigidBody TriggerBody = Physics.CreateSphere(this, 0, 0.5f, CollisionFlags.NoContactResponse);
+            TriggerBody = Physics.CreateSphere(this, 0, 0.5f, CollisionFlags.NoContactResponse);
 
             TriggerBody.SetBodyType(BodyType.None);
 
@@ -89,6 +92,14 @@ namespace RetroEngine.Game.Entities.Weapons
             staticMesh.texture = AssetRegistry.LoadTextureFromFile("cat.png");
             meshes.Add(staticMesh);
             staticMesh.Position = Position;
+
+        }
+
+        public override void LoadData(EntitySaveData Data)
+        {
+            base.LoadData(Data);
+
+            TriggerBody.SetPosition(Position);
 
         }
 
