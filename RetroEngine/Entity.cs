@@ -76,6 +76,10 @@ namespace RetroEngine
 
         public Vector3 PhysicalVelocity = Vector3.Zero;
 
+        public bool LazyStarted = false;
+
+        public bool AffectNavigation = true;
+
         [JsonInclude]
         public string OwnerId = "";
         Entity owner;
@@ -131,6 +135,11 @@ namespace RetroEngine
         }
 
         public virtual void AsyncUpdate()
+        {
+
+        }
+
+        public virtual void LazyStart()
         {
 
         }

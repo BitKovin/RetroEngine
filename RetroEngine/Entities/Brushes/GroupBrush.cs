@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RetroEngine.Map;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,14 @@ namespace RetroEngine.Entities.Brushes
         {
             mergeBrushes = true;
             Static = true;
+        }
+
+        public override void FromData(EntityData data)
+        {
+            base.FromData(data);
+
+            AffectNavigation = data.GetPropertyBool("affectsNavigation", AffectNavigation);
+
         }
 
     }

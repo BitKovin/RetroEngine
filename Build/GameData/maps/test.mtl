@@ -1,5 +1,14 @@
 newmtl __TB_empty
 
+newmtl brushes/Ground/grass
+map_Kd textures/brushes/Ground/grass.png
+
+newmtl brushes/Wall/brickWall1
+map_Kd textures/brushes/Wall/brickWall1.png
+
+newmtl brushes/Wall/brickWall2
+map_Kd textures/brushes/Wall/brickWall2.png
+
 newmtl brushes/__TB_empty
 map_Kd textures/brushes/__TB_empty.png
 

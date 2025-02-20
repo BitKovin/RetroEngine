@@ -236,23 +236,29 @@ namespace DotRecast.Detour.Crowd
         ///  @param[in]		pos		The requested position of the agent. [(x, y, z)]
         ///  @param[in]		params	The configuration of the agent.
         /// @return The index of the agent in the agent pool. Or -1 if the agent could not be added.
-        public DtCrowdAgent AddAgent(RcVec3f pos, DtCrowdAgentParams option)
+        public DtCrowdAgent AddAgent(RcVec3f pos, DtCrowdAgentParams option, RcVec3f? nearestPt = null, long? refs = null)
         {
             int idx = _agentIdx.GetAndIncrement();
             DtCrowdAgent ag = new DtCrowdAgent(idx);
             ag.corridor.Init(_maxPathResult);
             AddAgent(ag);
             UpdateAgentParameters(ag, option);
-
-            // Find nearest position on navmesh and place the agent there.
-            var status = _navQuery.FindNearestPoly(pos, _agentPlacementHalfExtents, _filters[ag.option.queryFilterType], out var refs, out var nearestPt, out var _);
-            if (status.Failed())
+            if (nearestPt == null | refs == null)
             {
-                nearestPt = pos;
-                refs = 0;
+                // Find nearest position on navmesh and place the agent there.
+                var status = _navQuery.FindNearestPoly(pos, _agentPlacementHalfExtents, _filters[ag.option.queryFilterType], out var refsRes, out var nearestPtRes, out var _);
+                if (status.Failed())
+                {
+                    nearestPt = pos;
+                    refs = 0;
+                }
+                else
+                {
+                    nearestPt = nearestPtRes;
+                    refs = refsRes;
+                }
             }
-
-            ag.corridor.Reset(refs, nearestPt);
+            ag.corridor.Reset(refs.Value, nearestPt.Value);
             ag.boundary.Reset();
             ag.partial = false;
 
@@ -263,7 +269,7 @@ namespace DotRecast.Detour.Crowd
             ag.dvel = RcVec3f.Zero;
             ag.nvel = RcVec3f.Zero;
             ag.vel = RcVec3f.Zero;
-            ag.npos = nearestPt;
+            ag.npos = nearestPt.Value;
 
             ag.desiredSpeed = 0;
 
@@ -298,6 +304,7 @@ namespace DotRecast.Detour.Crowd
         // Removes the agent from the crowd.
         public void RemoveAgent(DtCrowdAgent agent)
         {
+            if (agent == null) return;
             if (_agents.Remove(agent.idx))
             {
                 _activeAgents.Remove(agent);

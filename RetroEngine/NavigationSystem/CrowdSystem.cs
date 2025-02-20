@@ -2,7 +2,9 @@
 using DotRecast.Detour;
 using DotRecast.Detour.Crowd;
 using Microsoft.Xna.Framework;
+using Sdcb.FFmpeg.Filters;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -82,8 +84,17 @@ namespace RetroEngine.NavigationSystem
             agentParams.obstacleAvoidanceType = _agCfg.obstacleAvoidanceType;
             agentParams.separationWeight = _agCfg.separationWeight;
 
+            DtNavMeshQuery navMeshQuery = new DtNavMeshQuery(NavigationSystem.Recast.TileCache.GetNavMesh());
 
-            var agent = dtCrowd.AddAgent(position.ToRc(), agentParams);
+            RcVec3f m_polyPickExt = new RcVec3f(1, 4, 1);
+
+            long startRef;
+            RcVec3f startPoint;
+
+            lock (Recast.dtNavMesh)
+                navMeshQuery.FindNearestPoly(position.ToRc(), m_polyPickExt, new NavigationQueryFilter(), out startRef, out startPoint, out var _);
+
+            var agent = dtCrowd.AddAgent(position.ToRc(), agentParams, startPoint, startRef);
 
             entToAgent.Remove(entity);
             entToAgent.Add(entity, agent);
@@ -94,7 +105,8 @@ namespace RetroEngine.NavigationSystem
 
         public static void RemoveAgent(DtCrowdAgent agent)
         {
-            dtCrowd.RemoveAgent(agent);
+            if(agent != null)
+                dtCrowd.RemoveAgent(agent);
         }
 
         public static void SetAgentTargetPosition(this DtCrowdAgent agent, Vector3 position)
@@ -108,6 +120,8 @@ namespace RetroEngine.NavigationSystem
 
             dtCrowd.RequestMoveTarget(agent, _moveTargetRef, _moveTargetPos);
         }
+
+        static Queue pendingAddAgents = new Queue();
 
         internal static void Update()
         {

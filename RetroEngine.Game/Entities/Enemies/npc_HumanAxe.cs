@@ -34,7 +34,7 @@ namespace RetroEngine.Game.Entities.Enemies
         [JsonInclude]
         public float speed = 5f;
 
-        float maxSpeed = 9f;
+        float maxSpeed = 7f;
 
         Delay updateDelay = new Delay();
 
@@ -91,6 +91,8 @@ namespace RetroEngine.Game.Entities.Enemies
 
         CharacterAnimator animator = new CharacterAnimator();
 
+        DtCrowdAgent crowdAgent;
+
         public npc_HumanAxe()
         {
             SaveGame = true;
@@ -102,12 +104,11 @@ namespace RetroEngine.Game.Entities.Enemies
 
             attackCooldown.AddDelay(1);
 
+
         }
 
         private void Mesh_OnAnimationEvent(AnimationEvent animationEvent)
         {
-
-            Logger.Log(animationEvent.Name);
 
 
             if(animationEvent.Name == "attack")
@@ -138,7 +139,7 @@ namespace RetroEngine.Game.Entities.Enemies
         {
             base.Start();
 
-            body = Physics.CreateCharacterCapsule(this, 2f, 0.7f, 10, CollisionFlags.CharacterObject);
+            body = Physics.CreateCharacterCapsule(this, 2f, 0.7f, 2, CollisionFlags.CharacterObject);
             body.Gravity = new Vector3(0, -35, 0).ToNumerics();
             body.SetPosition(Position.ToPhysics());
 
@@ -166,7 +167,6 @@ namespace RetroEngine.Game.Entities.Enemies
             SoundPlayer = Level.GetCurrent().AddEntity(new SoundPlayer()) as SoundPlayer;
             SoundPlayer.Position = Position;
 
-            
 
         }
 
@@ -313,7 +313,7 @@ namespace RetroEngine.Game.Entities.Enemies
         {
             base.OnDamaged(damage, causer, weapon);
 
-
+            speed = float.Clamp(speed - damage / 3, 0, 10);
 
             if (Health <= 0)
             {
@@ -343,6 +343,8 @@ namespace RetroEngine.Game.Entities.Enemies
 
         void Death()
         {
+
+            CrowdSystem.RemoveAgent(crowdAgent);
 
             mesh.PlayAnimation("death", false);
 
@@ -435,19 +437,22 @@ namespace RetroEngine.Game.Entities.Enemies
             if (target != null)
                 targetLocation = target.Position;
 
-            //MoveDirection = crowdAgent.vel.FromRc().XZ().FastNormalize();
-
-
-            //crowdAgent.npos = (Position + Vector3.UnitY * heightDif).ToRc();
+            if (crowdAgent != null)
+            {
+                MoveDirection = crowdAgent.vel.FromRc().XZ().FastNormalize();
+                crowdAgent.npos = (Position + Vector3.UnitY * 1).ToRc();
+            }
 
             if (loadedAssets == false) return;
 
 
-            float desiredMaxSpeed = maxSpeed;
+            float desiredMaxSpeed = (Vector3.Distance(targetLocation, Position) < 1.3f) ? 2 : maxSpeed;
 
-            if(speed < desiredMaxSpeed)
-            speed += Time.DeltaTime * 10;
+            if (speed < desiredMaxSpeed)
+                speed += Time.DeltaTime * 10;
 
+            if (speed > desiredMaxSpeed)
+                speed = desiredMaxSpeed;
 
 
             speed = Math.Clamp(speed, 0, desiredMaxSpeed);
@@ -461,7 +466,12 @@ namespace RetroEngine.Game.Entities.Enemies
 
                 body.LinearVelocity = new System.Numerics.Vector3(MoveDirection.X * speed, body.LinearVelocity.Y, MoveDirection.Z * speed);
 
-                MoveDirection = Vector3.Lerp(MoveDirection, DesiredMoveDirection, Time.DeltaTime  * MathHelper.Lerp(1f,6, MathF.Pow(Vector3.Dot(MoveDirection, DesiredMoveDirection)/2 + 0.5f,1.5f)));
+                MoveDirection = Vector3.Lerp(MoveDirection, DesiredMoveDirection, Time.DeltaTime * MathHelper.Lerp(1f, 6, MathF.Pow(Vector3.Dot(MoveDirection, DesiredMoveDirection) / 2 + 0.5f, 1.5f)));
+
+                if(crowdAgent != null)
+                {
+                    //body.LinearVelocity = new System.Numerics.Vector3(crowdAgent.vel.X, body.LinearVelocity.Y, crowdAgent.vel.Z);
+                }
 
             }
 
@@ -493,20 +503,32 @@ namespace RetroEngine.Game.Entities.Enemies
 
             mesh.Position = Position - new Vector3(0, 1f, 0);
 
-            if(stunned == false)
+            if (stunned == false)
                 mesh.Rotation = new Vector3(0, MathHelper.FindLookAtRotation(Vector3.Zero, MoveDirection).Y, 0);
 
-            //crowdAgent.SetAgentTargetPosition(targetLocation);
+            if (crowdAgent != null)
+                crowdAgent.SetAgentTargetPosition(targetLocation);
 
             //return;
             if (updateDelay.Wait()) return;
-            RequestNewTargetLocation();
             updateDelay.AddDelay(Math.Min(Vector3.Distance(Position, targetLocation) / 30, 0.1f) + Random.Shared.NextSingle() / 8f);
+
+
+
+            if (crowdAgent == null && Vector3.Distance(Position, targetLocation) < 20)
+            {
+                crowdAgent = CrowdSystem.CreateAgent(this, Position);
+                crowdAgent.option.separationWeight = 1;
+                crowdAgent.option.pathOptimizationRange = 4;
+            }
+
+            if(crowdAgent == null)
+                RequestNewTargetLocation();
 
             //if(attacking == false)
             //TryStep(MoveDirection / 1.5f);
 
-                
+
         }
 
         void ProcessEnemyHit()
@@ -596,7 +618,7 @@ namespace RetroEngine.Game.Entities.Enemies
         {
             base.Destroy();
 
-
+            CrowdSystem.RemoveAgent(crowdAgent);
 
         }
 

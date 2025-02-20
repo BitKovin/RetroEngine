@@ -97,6 +97,7 @@
 
 @SolidClass base(Entity) = groupBrush : "Group Brush"
 [
+		affectsNavigation(bool) : "affectsNavigation" : "true"
 ]
 
 @SolidClass base(Entity) = videoBrush : "Video Brush"

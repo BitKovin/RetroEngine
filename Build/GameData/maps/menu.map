@@ -16,21 +16,16 @@
 }
 // entity 1
 {
-"classname" "main_menu"
-"origin" "-58 522 26"
-}
-// entity 2
-{
 "classname" "camera_target"
 "origin" "200 488 24"
 "targetname" "camera_target"
 }
-// entity 3
+// entity 2
 {
 "classname" "camera_point"
 "origin" "-472 488 216"
 }
-// entity 4
+// entity 3
 {
 "classname" "music_player"
 "origin" "127 191 31"
@@ -40,11 +35,28 @@
 "targetname" "music"
 "bankName" "Music.bank"
 }
-// entity 5
+// entity 4
 {
 "classname" "event_start"
 "origin" "218 186 106"
 "targetname" ""
 "target" "music"
 "actionName" "play"
+}
+// entity 5
+{
+"classname" "light_point"
+"origin" "-175 545 31"
+"intensity" "1"
+"radius" "5"
+}
+// entity 6
+{
+"classname" "main_menu"
+"origin" "-58 522 26"
+}
+// entity 7
+{
+"classname" "info_player_start"
+"origin" "-48 768 40"
 }

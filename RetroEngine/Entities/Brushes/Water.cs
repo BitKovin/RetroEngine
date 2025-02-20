@@ -20,6 +20,11 @@ namespace RetroEngine.Entities
         string enterAction = "trigger_enter";
         string exitAction = "trigger_exit";
 
+        public Water()
+        {
+            AffectNavigation = false;
+        }
+
 
 
         public override void Start()
@@ -30,10 +35,6 @@ namespace RetroEngine.Entities
             {
                 body.SetBodyType(PhysicsSystem.BodyType.Liquid);
             }
-
-            
-
-
         }
 
 

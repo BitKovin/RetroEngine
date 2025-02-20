@@ -1359,18 +1359,23 @@ namespace RetroEngine
             foreach (HitboxInfo hitbox in hitboxes)
             {
                 if (hitbox.RagdollRigidBodyRef == null) continue;
-
-                var matrix = GetBoneMatrix(hitbox.BoneId, world);
-
-                try
+                lock (hitbox)
                 {
+                    var matrix = GetBoneMatrix(hitbox.BoneId, world);
 
-                    var boneTrans = matrix.Decompose(out _, out var rotation, out var pos);
+                    try
+                    {
 
-                    hitbox.RagdollRigidBodyRef.SetTransform(pos, rotation);
+                        var boneTrans = matrix.Decompose(out _, out var rotation, out var pos);
 
+                        if (hitbox == null) continue;
+                        if (hitbox.RagdollRigidBodyRef == null) continue;
+
+                        hitbox.RagdollRigidBodyRef?.SetTransform(pos, rotation);
+
+                    }
+                    catch (Exception ex) { }
                 }
-                catch (Exception ex) { }
             }
 
         }

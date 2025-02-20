@@ -14,6 +14,7 @@ using RetroEngine.Audio;
 using RetroEngine.Entities.Light;
 using RetroEngine.Game.Entities.Enemies;
 using RetroEngine.Localization;
+using RetroEngine.NavigationSystem;
 
 namespace RetroEngine.Game
 {
@@ -78,9 +79,6 @@ namespace RetroEngine.Game
             }
 
             base.Update(gameTime);
-
-            
-            
 
 
             if (Input.GetAction("fullscreen").Pressed())

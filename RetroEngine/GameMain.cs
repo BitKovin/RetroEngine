@@ -373,6 +373,7 @@ namespace RetroEngine
 
             GameThread = Thread.CurrentThread;
 
+            curentLevel.LazyStartEnities();
 
             Stats.StartRecord("waiting for physics");
             physicsTask.Wait();

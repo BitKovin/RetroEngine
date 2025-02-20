@@ -33,7 +33,7 @@ namespace RetroEngine.Game.Entities.Player
 
         public RigidBody body;
 
-        float maxSpeed = 7.5f;
+        float maxSpeed = 7f;
         float maxSpeedAir = 2;
         float acceleration = 90;
         float airAcceleration = 20;
@@ -463,7 +463,7 @@ namespace RetroEngine.Game.Entities.Player
         public override void VisualUpdate()
         {
             base.VisualUpdate();
-            return;
+
 
             PlayerBodyAnimator.MovementSpeed = (PhysicalVelocity).XZ().Length();
 

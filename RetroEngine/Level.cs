@@ -233,6 +233,7 @@ namespace RetroEngine
 
             LoadingScreen.Update(0.95f);
 
+            Level.GetCurrent().LazyStartEnities(true);
 
             GC.Collect();
 
@@ -304,6 +305,22 @@ namespace RetroEngine
             foreach (Entity entity in list)
             {
                 entity.Start();
+            }
+        }
+
+        public virtual void LazyStartEnities(bool all = false)
+        {
+            Entity[] list = entities.ToArray();
+            foreach (Entity entity in list)
+            {
+                if(entity.LazyStarted == false)
+                {
+                    entity.LazyStarted = true;
+                    entity.LazyStart();
+
+                    if(all == false)
+                    return;
+                }
             }
         }
 
@@ -436,8 +453,9 @@ namespace RetroEngine
 
             allMeshes.Clear();
 
-            foreach (Entity ent in entities.ToArray())
+            foreach (Entity ent in list)
             {
+                if(ent == null) continue;
                 if (renderLayers.Contains(ent.Layer) == false && Level.ChangingLevel == false && GameMain.SkipFrames == 0) continue;
                 if (ent.loadedAssets == false || ent.Visible == false) continue;
                 if (ent.meshes != null)

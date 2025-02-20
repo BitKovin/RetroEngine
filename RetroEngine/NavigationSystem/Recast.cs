@@ -26,6 +26,7 @@ using DotRecast.Core.Collections;
 using DotRecast.Recast.Toolset.Tools;
 using Sdcb.FFmpeg.Filters;
 using System.Collections;
+using RetroEngine.Entities.Brushes;
 
 namespace RetroEngine.NavigationSystem
 {
@@ -213,10 +214,12 @@ namespace RetroEngine.NavigationSystem
             {
 
                 if (entity.Static == false) continue;
+                if(entity.AffectNavigation == false) continue;
 
                 foreach(StaticMesh mesh in entity.meshes)
                 {
                     if (mesh.Static == false) continue;
+
 
                     meshDatas.AddRange(mesh.GetMeshData());
 
@@ -275,8 +278,19 @@ namespace RetroEngine.NavigationSystem
             _proc.Init(geom);
 
             // Init cache
-            var bmin = geom.GetMeshBoundsMin();
-            var bmax = geom.GetMeshBoundsMax();
+            RcVec3f bmin;
+            RcVec3f bmax;
+
+            if(NavBounds.min == Vector3.Zero || NavBounds.max == Vector3.Zero || true)
+            {
+                bmin = geom.GetMeshBoundsMin();
+                bmax = geom.GetMeshBoundsMax();
+            }else
+            {
+                bmin = NavBounds.min.ToRc();
+                bmax= NavBounds.max.ToRc();
+            }
+
             RcRecast.CalcGridSize(bmin, bmax, setting.cellSize, out var gw, out var gh);
             int ts = setting.tileSize;
             int tw = (gw + ts - 1) / ts;

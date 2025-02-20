@@ -46,9 +46,9 @@ namespace RetroEngine.Entities
 
         }
 
-        public override void Update()
+        public override void AsyncUpdate()
         {
-            base.Update();
+            base.AsyncUpdate();
 
             List<Entity> oldEntities = new List<Entity>(entities);
             entities.Clear();
