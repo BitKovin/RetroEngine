@@ -152,7 +152,7 @@ namespace RetroEngine.Game.Entities
 
                 if (ent == null) return;
 
-                ent.OnPointDamage(Damage, hit.HitPointWorld, Rotation.GetForwardVector(), this, weapon);
+
 
                 hit.CollisionObject?.Activate();
 
@@ -175,13 +175,20 @@ namespace RetroEngine.Game.Entities
 
                 var data = rigidBody.GetData();
 
+                string bone = "";
+
                 if (data != null)
                 {
-                    if(data.Value.Surface == "default")
+
+                    bone = data.Value.HitboxName;
+
+                    if (data.Value.Surface == "default")
                     {
-                        GlobalParticleSystem.EmitAt($"hit_{data.Value.Surface}", hit.HitPointWorld, MathHelper.FindLookAtRotation(Vector3.Zero, startRotation.GetForwardVector() * -1), new Vector3(0, 0, float.Max(Damage / 13f,1)));
+                        GlobalParticleSystem.EmitAt($"hit_{data.Value.Surface}", hit.HitPointWorld, MathHelper.FindLookAtRotation(Vector3.Zero, startRotation.GetForwardVector() * -1), new Vector3(0, 0, float.Max(Damage / 16f,1)));
                     }
                 }
+
+                ent.OnPointDamage(Damage, hit.HitPointWorld, Rotation.GetForwardVector(),bone, this, weapon);
 
                 rigidBody?.ApplyCentralImpulse(startRotation.GetForwardVector().ToNumerics() * Damage / 2f * ImpactForce);
 

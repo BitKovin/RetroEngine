@@ -265,8 +265,11 @@ namespace RetroEngine.Game.Entities.Enemies
 
         }
 
-        public override void OnPointDamage(float damage, Vector3 point, Vector3 direction, Entity causer = null, Entity weapon = null)
+        public override void OnPointDamage(float damage, Vector3 point, Vector3 direction, string hitBone = "", Entity causer = null, Entity weapon = null)
         {
+
+            if (hitBone == "head")
+                damage *= 2;
 
             if (attacking)
             {
@@ -291,7 +294,7 @@ namespace RetroEngine.Game.Entities.Enemies
                 }
             }
 
-            base.OnPointDamage(damage, point, direction, causer, weapon);
+            base.OnPointDamage(damage, point, direction,hitBone, causer, weapon);
 
             damage = MathF.Max(15, damage);
 
@@ -340,6 +343,8 @@ namespace RetroEngine.Game.Entities.Enemies
             CrowdSystem.RemoveAgent(crowdAgent);
 
             mesh.PlayAnimation("death", false);
+
+            meshStopUpdateDelay.AddDelay(3);
 
             Physics.Remove(body);
 
@@ -538,7 +543,7 @@ namespace RetroEngine.Game.Entities.Enemies
 
             if(hit.HasHit&& hit.entity == target)
             {
-                target.OnPointDamage(10, hit.HitShapeLocation, attackDir, this, this);
+                target.OnPointDamage(10, hit.HitShapeLocation, attackDir,"", this, this);
 
                 SoundPlayer.SetSound(soundAttack);
                 SoundPlayer.Play();
@@ -572,11 +577,14 @@ namespace RetroEngine.Game.Entities.Enemies
 
         }
 
+        public Delay meshStopUpdateDelay = new Delay();
+
         public override void VisualUpdate()
         {
             base.VisualUpdate();
             if (dead)
             {
+                if(meshStopUpdateDelay.Wait())
                 mesh.Update(Time.DeltaTime * 1.2f);
                 return;
             }

@@ -119,7 +119,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
                     if (hitEnt != null)
                     {
-                        hitEnt.OnPointDamage(30, hit.HitPointWorld, Camera.rotation.GetForwardVector(), player, this);
+                        hitEnt.OnPointDamage(30, hit.HitPointWorld, Camera.rotation.GetForwardVector(),"", player, this);
                     }
 
                     CreateHitParticle(hit.HitPointWorld + hit.HitNormalWorld * 0.1f);

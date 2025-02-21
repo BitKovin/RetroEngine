@@ -234,7 +234,7 @@ namespace RetroEngine
             Health -= damage;
         }
 
-        public virtual void OnPointDamage(float damage, Vector3 point, Vector3 direction, Entity causer = null, Entity weapon = null)
+        public virtual void OnPointDamage(float damage, Vector3 point, Vector3 direction,string hitBone = "", Entity causer = null, Entity weapon = null)
         {
             OnDamaged(damage, causer, weapon);
         }

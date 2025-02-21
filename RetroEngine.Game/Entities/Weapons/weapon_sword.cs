@@ -284,7 +284,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
                 if (hitEnt != null)
                 {
-                    hitEnt.OnPointDamage(Damage, hit.HitPointWorld, Camera.rotation.GetForwardVector(), player, this);
+                    hitEnt.OnPointDamage(Damage, hit.HitPointWorld, Camera.rotation.GetForwardVector(),"", player, this);
                     hadHit = true;
                 }
 

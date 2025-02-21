@@ -215,9 +215,9 @@ namespace RetroEngine.Entities.Brushes
 
         }
 
-        public override void OnPointDamage(float damage, Vector3 point, Vector3 direction, Entity causer = null, Entity weapon = null)
+        public override void OnPointDamage(float damage, Vector3 point, Vector3 direction, string hitBone = "", Entity causer = null, Entity weapon = null)
         {
-            base.OnPointDamage(damage, point, direction, causer, weapon);
+            base.OnPointDamage(damage, point, direction, hitBone, causer, weapon);
 
             subtractSolids.Add(Solids.Sphere(1, point.ToCsg()));
             dirty = true;

@@ -28,6 +28,7 @@ namespace RetroEngine.Game.Entities.Player
     public class PlayerCharacter : Entity, ICharacter
     {
 
+        public static PlayerCharacter Instance = null;
 
         StaticMesh cylinder = new StaticMesh();
 
@@ -777,6 +778,8 @@ namespace RetroEngine.Game.Entities.Player
 
             ExitedWater();
 
+            Instance = null;
+
             base.Destroy();
         }
 
@@ -1205,9 +1208,9 @@ namespace RetroEngine.Game.Entities.Player
 
         }
 
-        public override void OnPointDamage(float damage, Vector3 point, Vector3 direction, Entity causer = null, Entity weapon = null)
+        public override void OnPointDamage(float damage, Vector3 point, Vector3 direction, string hitBone = "", Entity causer = null, Entity weapon = null)
         {
-            base.OnPointDamage(damage, point, direction, causer, weapon);
+            base.OnPointDamage(damage, point, direction, hitBone, causer, weapon);
 
             GlobalParticleSystem.EmitAt("hitBlood", Vector3.Lerp(point, Camera.position, 0.4f), MathHelper.FindLookAtRotation(Vector3.Zero, -direction), new Vector3(0, 0, damage / 2f));
 

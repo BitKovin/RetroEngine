@@ -5,6 +5,7 @@ using RetroEngine.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace RetroEngine.Particles
 {
@@ -264,10 +265,26 @@ namespace RetroEngine.Particles
 
         }
 
-        Matrix GetWorldForParticle(Particle particle)
+        Matrix GetWorldForParticle(Particle particle, Vector3 CameraForward, Vector3 CameraUp)
         {
 
-            if(particle.OrientRotationToVelocity)
+            if (particle.useGlobalRotation == false)
+            {
+                Matrix worldMatrix = Matrix.CreateScale(particle.Scale) * Matrix.CreateBillboard(particle.position, Camera.finalizedPosition, CameraUp.RotateVector(CameraForward, particle.Rotation), (particle.position - Camera.finalizedPosition).Normalized());
+
+                return worldMatrix;
+            }
+            else if(particle.OrientRotationToVelocity == false)
+            {
+                Matrix worldMatrix = Matrix.CreateScale(particle.Scale) *
+                                Matrix.CreateRotationX(particle.globalRotation.X / 180 * (float)Math.PI) *
+                                Matrix.CreateRotationY(particle.globalRotation.Y / 180 * (float)Math.PI) *
+                                Matrix.CreateRotationZ(particle.globalRotation.Z / 180 * (float)Math.PI) *
+                                Matrix.CreateTranslation(particle.position);
+
+                return worldMatrix;
+            }
+            else
             {
 
                 // Normalize the velocity vector to use it as the right vector (X-axis)
@@ -311,22 +328,7 @@ namespace RetroEngine.Particles
 
             }
 
-            if (particle.useGlobalRotation == false)
-            {
-                Matrix worldMatrix = Matrix.CreateScale(particle.Scale) * Matrix.CreateBillboard(particle.position, Camera.finalizedPosition, Camera.Up.RotateVector(Camera.Forward, particle.Rotation), (particle.position - Camera.finalizedPosition).Normalized());
 
-                return worldMatrix;
-            }
-            else
-            {
-                Matrix worldMatrix = Matrix.CreateScale(particle.Scale) *
-                                Matrix.CreateRotationX(particle.globalRotation.X / 180 * (float)Math.PI) *
-                                Matrix.CreateRotationY(particle.globalRotation.Y / 180 * (float)Math.PI) *
-                                Matrix.CreateRotationZ(particle.globalRotation.Z / 180 * (float)Math.PI) *
-                                Matrix.CreateTranslation(particle.position);
-
-                return worldMatrix;
-            }
         }
         public override void DrawUnified()
         {
@@ -395,33 +397,36 @@ namespace RetroEngine.Particles
             frameStaticMeshData.model = (particles[0].customModelPath == null) ? particleModel : GetModelFromPath(particles[0].customModelPath);
 
 
+
+            Vector3 cameraForward = Camera.Forward;
+            Vector3 cameraUp = Camera.Up;
+
             int i = -1;
-            foreach (var particle in particles)
+            Parallel.For(0, particles.Count,new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount}, i =>
             {
-                i++;
-                if (particle.transparency <= 0)
-                    continue;
+                var particle = particles[i];
 
-                if (particle.lifeTime >= particle.deathTime)
-                    continue;
+                if (particle.transparency <= 0 || particle.lifeTime >= particle.deathTime)
+                    return;
 
-                Matrix world = GetWorldForParticle(particle);
 
-                isParticle = particle.customModelPath == null;
+                Matrix world = GetWorldForParticle(particle, cameraForward, cameraUp);
 
-                InstanceData data = new InstanceData();
-                data.Row1 = world.GetRow(0);
-                data.Row2 = world.GetRow(1);
-                data.Row3 = world.GetRow(2);
-                data.Row4 = world.GetRow(3);
+                bool isParticle = particle.customModelPath == null;
 
-                data.Color = particle.color;
+                InstanceData data = new InstanceData
+                {
+                    Row1 = world.GetRow(0),
+                    Row2 = world.GetRow(1),
+                    Row3 = world.GetRow(2),
+                    Row4 = world.GetRow(3),
+                    Color = particle.color
+                };
 
-                data.Color.W = data.Color.W * particle.transparency;
+                data.Color.W *= particle.transparency;
 
                 instanceData_new[i] = data;
-
-            }
+            });
 
             instanceData = instanceData_new.ToArray();
 
@@ -500,7 +505,7 @@ namespace RetroEngine.Particles
                 texture = AssetRegistry.LoadTextureFromFile(particle.texturePath);
 
                 frameStaticMeshData.model = (particle.customModelPath == null) ? particleModel : GetModelFromPath(particle.customModelPath);
-                frameStaticMeshData.World = GetWorldForParticle(particle);
+                frameStaticMeshData.World = GetWorldForParticle(particle, Camera.Forward, Camera.Up);
                 frameStaticMeshData.Transparency = particle.transparency;
 
                 DrawColor();
@@ -554,7 +559,7 @@ namespace RetroEngine.Particles
                 texture = AssetRegistry.LoadTextureFromFile(particle.texturePath);
 
                 frameStaticMeshData.model = (particle.customModelPath == null) ? particleModel : GetModelFromPath(particle.customModelPath);
-                frameStaticMeshData.World = GetWorldForParticle(particle);
+                frameStaticMeshData.World = GetWorldForParticle(particle, Camera.Forward, Camera.Up);
                 frameStaticMeshData.Transparency = particle.transparency;
 
                 base.DrawNormals();
@@ -647,6 +652,10 @@ namespace RetroEngine.Particles
             public bool Collided = false;
 
             public bool destroyed = false;
+
+            public float UserData1 = 0;
+            public float UserData2 = 0;
+            public float UserData3 = 0;
 
             public void SetRotationFromVelocity()
             {
