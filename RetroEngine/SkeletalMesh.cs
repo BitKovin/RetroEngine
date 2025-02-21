@@ -1431,7 +1431,7 @@ namespace RetroEngine
                 // Create a transform for the offset
                 Matrix offsetTransform = MathHelper.GetRotationMatrix(hitbox.Rotation) * Matrix.CreateTranslation(hitbox.Position / 100);
 
-                BoxShape boxShape = new BoxShape(hitbox.Size * 0.5f);  // Bullet expects half extents
+                BoxShape boxShape = new BoxShape(hitbox.Size.ToPhysics() * 0.5f);  // Bullet expects half extents
 
                 // Add the box shape to the compound shape with the offset
                 compoundShape.AddChildShape(offsetTransform.ToPhysics(), boxShape);
@@ -1670,8 +1670,8 @@ namespace RetroEngine
 
             hitbox.Constraint = Physics.CreateGenericConstraint(hitbox.RagdollRigidBodyRef, hitbox.RagdollParrentRigidBody, Matrix.Identity.ToPhysics(), hitbox.ConstrainLocal2.ToPhysics());
 
-            hitbox.Constraint.AngularLowerLimit = (hitbox.AngularLowerLimit / 180 * (float)Math.PI);
-            hitbox.Constraint.AngularUpperLimit = (hitbox.AngularUpperLimit / 180 * (float)Math.PI);
+            hitbox.Constraint.AngularLowerLimit = (hitbox.AngularLowerLimit / 180 * (float)Math.PI).ToPhysics();
+            hitbox.Constraint.AngularUpperLimit = (hitbox.AngularUpperLimit / 180 * (float)Math.PI).ToPhysics();
 
             if (CreateHingeConstraints && hitbox.Parrent != "")
             {
@@ -1849,7 +1849,7 @@ namespace RetroEngine
 
         }
 
-        public static Dictionary<string, string> LoadedMeta = new Dictionary<string, string>();
+        public static Dictionary<string, SkeletalMeshMeta> LoadedMeta = new Dictionary<string, SkeletalMeshMeta>();
 
         public void LoadMeshMetaFromFile(string path)
         {
@@ -1862,7 +1862,7 @@ namespace RetroEngine
 
             if (LoadedMeta.ContainsKey(path))
             {
-                text = LoadedMeta[path];
+                meta = LoadedMeta[path].CloneWithDefaults();
             }
             else
             {
@@ -1880,19 +1880,25 @@ namespace RetroEngine
 
                     text = reader.ReadToEnd();
 
-                    lock(LoadedMeta)
-                    LoadedMeta.TryAdd(path, text);
+                    JsonSerializerOptions options = new JsonSerializerOptions();
+
+                    foreach (var conv in Helpers.JsonConverters.GetAll())
+                        options.Converters.Add(conv);
+
+                    meta = JsonSerializer.Deserialize<SkeletalMeshMeta>(text, options);
+
+                    lock (LoadedMeta)
+                    LoadedMeta.TryAdd(path, meta);
+
+                    meta = meta.CloneWithDefaults();
+
+
 
                 }
 
             }
 
-            JsonSerializerOptions options = new JsonSerializerOptions();
 
-            foreach (var conv in Helpers.JsonConverters.GetAll())
-                options.Converters.Add(conv);
-
-            meta = JsonSerializer.Deserialize<SkeletalMeshMeta>(text, options);
 
 
             if (meta.hitboxes != null)
@@ -1923,16 +1929,7 @@ namespace RetroEngine
 
         }
 
-        public struct SkeletalMeshMeta
-        {
 
-            [JsonInclude]
-            public HitboxInfo[] hitboxes;
-
-            [JsonInclude]
-            public AnimationInfo[] animationInfos;
-
-        }
 
 
         public override void AddNormalsToPositionNormalDictionary(ref Dictionary<Vector3, (Vector3 accumulatedNormal, List<Vector3> existingNormals)> positionToNormals)
@@ -2123,10 +2120,28 @@ namespace RetroEngine
 
     }
 
-    
+
+    public struct SkeletalMeshMeta
+    {
+        [JsonInclude]
+        public HitboxInfo[] hitboxes;
+
+        [JsonInclude]
+        public AnimationInfo[] animationInfos;
+
+        // Create a copy of this instance where non-JsonInclude members are left at default
+        public SkeletalMeshMeta CloneWithDefaults()
+        {
+            return new SkeletalMeshMeta
+            {
+                hitboxes = hitboxes?.Select(h => h.CloneWithDefaults()).ToArray(),
+                animationInfos = animationInfos?.Select(a => a.CloneWithDefaults()).ToArray()
+            };
+        }
+    }
+
     public class AnimationEvent
     {
-
         [JsonInclude]
         public int AnimationFrame = 0;
 
@@ -2138,11 +2153,19 @@ namespace RetroEngine
             return $"name: {Name}    Frame: {AnimationFrame}";
         }
 
+        // Only copy the JsonIncluded fields
+        public AnimationEvent CloneWithDefaults()
+        {
+            return new AnimationEvent
+            {
+                AnimationFrame = this.AnimationFrame,
+                Name = this.Name
+            };
+        }
     }
 
     public class AnimationInfo
     {
-
         [JsonInclude]
         public int AnimationIndex = -1;
 
@@ -2163,21 +2186,18 @@ namespace RetroEngine
             AnimationEvents = list.ToArray();
 
             return e;
-
         }
 
         public void RemoveEvent(AnimationEvent animationEvent)
         {
             var list = AnimationEvents.ToList();
-
             list.Remove(animationEvent);
             AnimationEvents = list.ToArray();
-
         }
 
         public AnimationEvent GetFromIndex(int index)
         {
-            if(index< AnimationEvents.Length)
+            if (index < AnimationEvents.Length)
             {
                 return AnimationEvents[index];
             }
@@ -2185,6 +2205,16 @@ namespace RetroEngine
             return null;
         }
 
+        // Copy only the fields marked with JsonInclude.
+        public AnimationInfo CloneWithDefaults()
+        {
+            return new AnimationInfo
+            {
+                AnimationIndex = this.AnimationIndex,
+                AnimationName = this.AnimationName,
+                AnimationEvents = AnimationEvents?.Select(e => e.CloneWithDefaults()).ToArray()
+            };
+        }
     }
 
     public class HitboxInfo
@@ -2196,12 +2226,13 @@ namespace RetroEngine
         public string Parrent = "";
 
         [JsonInclude]
-        public System.Numerics.Vector3 Position;
-        [JsonInclude]
-        public System.Numerics.Vector3 Rotation;
+        public Vector3 Position;
 
         [JsonInclude]
-        public System.Numerics.Vector3 Size;
+        public Vector3 Rotation;
+
+        [JsonInclude]
+        public Vector3 Size;
 
         [JsonInclude]
         public Matrix ConstrainLocal1 = Matrix.Identity;
@@ -2209,33 +2240,46 @@ namespace RetroEngine
         [JsonInclude]
         public Matrix ConstrainLocal2 = Matrix.Identity;
 
+        // These fields will be left at their default values when cloning
         public Matrix RigidBodyMatrix = Matrix.Identity;
 
         [JsonInclude]
         public Matrix savedRigidBodyMatrix = Matrix.Identity;
 
         [JsonInclude]
-        public System.Numerics.Vector3 AngularLowerLimit = new System.Numerics.Vector3(-3.14f / 15, -3.14f / 15, -3.14f / 4) / (float)Math.PI * 180;
+        public Vector3 AngularLowerLimit = new Vector3(-3.14f / 15, -3.14f / 15, -3.14f / 4) / (float)Math.PI * 180;
 
         [JsonInclude]
-        public System.Numerics.Vector3 AngularUpperLimit = new System.Numerics.Vector3(3.14f / 15, 3.14f / 15, 3.14f / 4) / (float)Math.PI * 180;
+        public Vector3 AngularUpperLimit = new Vector3(3.14f / 15, 3.14f / 15, 3.14f / 4) / (float)Math.PI * 180;
 
         public HitboxInfo ParrentHitbox;
-
-
         public Matrix BoneMatrix = Matrix.Identity;
-
         public Matrix StartBoneMatrix = Matrix.Identity;
-
         public RigidBody RagdollRigidBodyRef;
         public RigidBody RagdollParrentRigidBody;
-
         public Generic6DofConstraint Constraint;
         public TypedConstraint Constraint2;
-
         public int BoneId = -1;
 
-
+        // Clone only the properties decorated with [JsonInclude]
+        public HitboxInfo CloneWithDefaults()
+        {
+            return new HitboxInfo
+            {
+                Bone = this.Bone,
+                Parrent = this.Parrent,
+                Position = this.Position,
+                Rotation = this.Rotation,
+                Size = this.Size,
+                ConstrainLocal1 = this.ConstrainLocal1,
+                ConstrainLocal2 = this.ConstrainLocal2,
+                savedRigidBodyMatrix = this.savedRigidBodyMatrix,
+                AngularLowerLimit = this.AngularLowerLimit,
+                AngularUpperLimit = this.AngularUpperLimit
+                // Note: other non-JsonInclude fields (e.g. RigidBodyMatrix, ParrentHitbox, etc.)
+                // are not copied so they will be at their default values.
+            };
+        }
     }
 
     public struct BonePoseBlend

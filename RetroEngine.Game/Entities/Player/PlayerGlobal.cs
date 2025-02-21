@@ -68,7 +68,11 @@ namespace RetroEngine.Game.Entities.Player
 
             StudioSystem.SetParameterValue("parameter:/inAction", InAction);
 
+            //testSpawnTime();
+
         }
+
+
 
         public override void Destroy()
         {
@@ -111,6 +115,30 @@ namespace RetroEngine.Game.Entities.Player
                 }
             }
 
+        }
+
+        Entity spawnedEntity;
+
+        void testSpawnTime()
+        {
+
+            spawnedEntity?.Destroy();
+
+            var ent = LevelObjectFactory.CreateByTechnicalName("npc_humanAxe");
+
+            if (ent != null)
+            {
+                ent.Position = Position;
+                ent.Rotation = Rotation;
+                ent.SetOwner(this);
+
+                ent.Start();
+
+                Level.GetCurrent().AddEntity(ent);
+
+                spawnedEntity = ent;
+
+            }
         }
 
     }

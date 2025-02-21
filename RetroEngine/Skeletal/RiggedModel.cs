@@ -705,70 +705,141 @@ namespace RetroEngine.Skeletal
 
         static int copyId = 0;
 
+        // Static cache: one entry per original model instance.
+        private static readonly Dictionary<RiggedModel, CachedNodeData> s_cachedNodeData =
+            new Dictionary<RiggedModel, CachedNodeData>();
+
+        // Blueprint to hold node structure data
+        private class CachedNodeData
+        {
+            public RiggedModelNode[] UnionNodes;    // Array of all unique nodes in the model.
+            public int[] FlatAllIndices;            // Indices for flatListToAllNodes in UnionNodes.
+            public int[] FlatBoneIndices;           // Indices for flatListToBoneNodes in UnionNodes.
+            public int RootIndex;                   // Index of rootNodeOfTree in UnionNodes.
+            public int FirstRealBoneIndex;          // Index of firstRealBoneInTree in UnionNodes.
+        }
+
         public RiggedModel MakeCopy()
         {
-            RiggedModel copy = new RiggedModel();
-
-            copy.id = copyId;
-
-            copyId++;
-
-            copy.numberOfBonesInUse = numberOfBonesInUse;
-            copy.numberOfNodesInUse = numberOfNodesInUse;
-            copy.maxGlobalBones = maxGlobalBones;
-            copy.globalShaderMatrixs = new Matrix[128];
-            copy.meshes = meshes;
-            copy.currentAnimation = currentAnimation;
-            copy.currentFrame = currentFrame;
-            copy.animationRunning = animationRunning;
-            copy.loopAnimation = loopAnimation;
-            copy.UseStaticGeneratedFrames = UseStaticGeneratedFrames;
-            copy.overrideAnimationFrameTime = overrideAnimationFrameTime;
-
-            Dictionary<RiggedModelNode, RiggedModelNode> cloneNodesMap;
-
-            cloneNodesMap = new Dictionary<RiggedModelNode, RiggedModelNode>();
-
-
-            foreach (var node in flatListToAllNodes)
+            // Retrieve or build cached node structure.
+            if (!s_cachedNodeData.TryGetValue(this, out CachedNodeData cached))
             {
-                cloneNodesMap.Add(node, new RiggedModelNode());
+                cached = BuildCachedNodeData();
+                s_cachedNodeData[this] = cached;
             }
 
-            foreach (var node in flatListToBoneNodes)
+            // Allocate an array to hold new node copies.
+            var newNodes = new RiggedModelNode[cached.UnionNodes.Length];
+            for (int i = 0; i < newNodes.Length; i++)
             {
-                cloneNodesMap.TryAdd(node, new RiggedModelNode());
+                newNodes[i] = new RiggedModelNode();
             }
 
-            foreach(var key in cloneNodesMap.Keys)
+            // Build a temporary mapping from original node to new node.
+            var cloneNodesMap = new Dictionary<RiggedModelNode, RiggedModelNode>(cached.UnionNodes.Length);
+            for (int i = 0; i < cached.UnionNodes.Length; i++)
             {
-                cloneNodesMap[key] = key.MakeCopy(cloneNodesMap, cloneNodesMap[key]);
+                cloneNodesMap[cached.UnionNodes[i]] = newNodes[i];
             }
 
-            copy.flatListToAllNodes = new List<RiggedModelNode>();
-
-            foreach (var node in flatListToAllNodes)
+            // Call each node's MakeCopy method (which uses the mapping) in one pass.
+            for (int i = 0; i < cached.UnionNodes.Length; i++)
             {
-                copy.flatListToAllNodes.Add(cloneNodesMap[node]);
+                // We update newNodes[i] by copying data from the original.
+                newNodes[i] = cached.UnionNodes[i].MakeCopy(cloneNodesMap, newNodes[i]);
             }
 
-            copy.flatListToBoneNodes = new List<RiggedModelNode>();
-            foreach (var node in flatListToBoneNodes)
+            // Now build the new model copy.
+            var copy = new RiggedModel
             {
-                copy.flatListToBoneNodes.Add(cloneNodesMap[node]);
+                id = copyId++,
+                numberOfBonesInUse = numberOfBonesInUse,
+                numberOfNodesInUse = numberOfNodesInUse,
+                maxGlobalBones = maxGlobalBones,
+                globalShaderMatrixs = new Matrix[128], // new allocation
+                meshes = meshes,  // shallow copy if acceptable
+                currentAnimation = currentAnimation,
+                currentFrame = currentFrame,
+                animationRunning = animationRunning,
+                loopAnimation = loopAnimation,
+                UseStaticGeneratedFrames = UseStaticGeneratedFrames,
+                overrideAnimationFrameTime = overrideAnimationFrameTime,
+            };
+
+            // Reconstruct the flat lists from the cached indices.
+            copy.flatListToAllNodes = new List<RiggedModelNode>(cached.FlatAllIndices.Length);
+            for (int i = 0; i < cached.FlatAllIndices.Length; i++)
+            {
+                copy.flatListToAllNodes.Add(newNodes[cached.FlatAllIndices[i]]);
             }
-
-            copy.rootNodeOfTree = cloneNodesMap[rootNodeOfTree];
-            copy.firstRealBoneInTree = cloneNodesMap[firstRealBoneInTree];
-
-            copy.originalAnimations = new List<RiggedAnimation>();
-
-            foreach (var animation in originalAnimations)
+            copy.flatListToBoneNodes = new List<RiggedModelNode>(cached.FlatBoneIndices.Length);
+            for (int i = 0; i < cached.FlatBoneIndices.Length; i++)
             {
-                copy.originalAnimations.Add(animation.MakeCopy(cloneNodesMap));
+                copy.flatListToBoneNodes.Add(newNodes[cached.FlatBoneIndices[i]]);
+            }
+            copy.rootNodeOfTree = newNodes[cached.RootIndex];
+            copy.firstRealBoneInTree = newNodes[cached.FirstRealBoneIndex];
+
+            // Copy animations using the same clone mapping.
+            copy.originalAnimations = new List<RiggedAnimation>(originalAnimations.Count);
+            for (int i = 0; i < originalAnimations.Count; i++)
+            {
+                copy.originalAnimations.Add(originalAnimations[i].MakeCopy(cloneNodesMap));
             }
 
             return copy;
+        }
+
+        // Build and cache the node structure (blueprint) for the model.
+        private CachedNodeData BuildCachedNodeData()
+        {
+            // Use a dictionary to create the union of nodes.
+            var nodeToIndex = new Dictionary<RiggedModelNode, int>();
+            var unionNodes = new List<RiggedModelNode>();
+
+            void AddNode(RiggedModelNode node)
+            {
+                if (!nodeToIndex.ContainsKey(node))
+                {
+                    nodeToIndex[node] = unionNodes.Count;
+                    unionNodes.Add(node);
+                }
+            }
+
+            // Add nodes from both flat lists.
+            foreach (var node in flatListToAllNodes)
+            {
+                AddNode(node);
+            }
+            foreach (var node in flatListToBoneNodes)
+            {
+                AddNode(node);
+            }
+
+            // Build flat list indices.
+            var flatAllIndices = new int[flatListToAllNodes.Count];
+            for (int i = 0; i < flatListToAllNodes.Count; i++)
+            {
+                flatAllIndices[i] = nodeToIndex[flatListToAllNodes[i]];
+            }
+            var flatBoneIndices = new int[flatListToBoneNodes.Count];
+            for (int i = 0; i < flatListToBoneNodes.Count; i++)
+            {
+                flatBoneIndices[i] = nodeToIndex[flatListToBoneNodes[i]];
+            }
+
+            // Get indices for special nodes.
+            int rootIndex = nodeToIndex[rootNodeOfTree];
+            int firstRealBoneIndex = nodeToIndex[firstRealBoneInTree];
+
+            return new CachedNodeData
+            {
+                UnionNodes = unionNodes.ToArray(),
+                FlatAllIndices = flatAllIndices,
+                FlatBoneIndices = flatBoneIndices,
+                RootIndex = rootIndex,
+                FirstRealBoneIndex = firstRealBoneIndex
+            };
         }
 
         #endregion

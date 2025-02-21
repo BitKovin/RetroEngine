@@ -69,6 +69,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
         public override void AsyncUpdate()
         {
+
             base.AsyncUpdate();
 
             staticMesh.Position = Position + ((float)Math.Sin((Time.GameTime - SpawnTime)*3)) * Vector3.Up * 0.1f;

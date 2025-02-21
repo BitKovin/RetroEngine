@@ -47,13 +47,11 @@ namespace RetroEngine.Game.Entities.Enemies
 
         RigidBody body;
 
-        StaticMesh sm = new StaticMesh();
 
         static List<Vector3> directionsLUT = new List<Vector3>();
 
         PathfindingQuery pathfindingQuery = new PathfindingQuery();
 
-        SoundPlayer deathSoundPlayer;
 
         protected float AnimationInterpolationDistance = 10;
         protected float AnimationComplexDistance = 30;
@@ -210,23 +208,13 @@ namespace RetroEngine.Game.Entities.Enemies
             mesh.texture = AssetRegistry.LoadTextureFromFile("cat.png");
 
 
-            sm.LoadFromFile("models/cube.obj");
-            sm.texture = AssetRegistry.LoadTextureFromFile("cat.png");
-
             meshes.Add(mesh);
             mesh.CastShadows = true;
             //meshes.Add(sm);
 
             mesh.PreloadTextures();
 
-            sm.Transperent = false;
 
-            sm.Scale = new Vector3(0.7f);
-
-
-            deathSoundPlayer = (SoundPlayer)Level.GetCurrent().AddEntity(new SoundPlayer());
-            deathSoundPlayer.SetSound(AssetRegistry.LoadSoundFmodFromFile("sounds/mew2.wav"));
-            deathSoundPlayer.Volume = 1f;
 
             soundStun = FmodEventInstance.Create("event:/NPC/Enemy1/Enemy1Stun");
             soundAttack = FmodEventInstance.Create("event:/NPC/Enemy1/Enemy1Attack");
@@ -684,7 +672,6 @@ namespace RetroEngine.Game.Entities.Enemies
                 moveLocation = targetLocation;
             }
 
-            sm.Position = moveLocation;
 
             Vector3 newMoveDirection = moveLocation - Position;
 

@@ -294,17 +294,17 @@ namespace RetroEngine
 
         }
 
-        List<Vector3> vertexPosCache;
+        static Dictionary<Model, List<Vector3>> vertexPosCache = new Dictionary<Model, List<Vector3>>();
 
-        public virtual List<Vector3> GetMeshVertices()
+        public virtual List<Vector3> GetMeshVertices(bool onlyPreload = false)
         {
 
             List<Vector3> positions = new List<Vector3>();
 
-            if (vertexPosCache == null)
+            if (vertexPosCache.ContainsKey(model) == false)
             {
 
-                vertexPosCache = new List<Vector3>();
+                vertexPosCache.Add(model, new List<Vector3>());
 
                 foreach (ModelMesh mesh in model.Meshes)
                     foreach (ModelMeshPart meshPart in mesh.MeshParts)
@@ -318,12 +318,14 @@ namespace RetroEngine
 
                         foreach (VertexData data in vertexData)
                         {
-                            vertexPosCache.Add(data.Position);
+                            vertexPosCache[model].Add(data.Position);
                         }
                     }
             }
 
-            foreach (Vector3 pos in vertexPosCache)
+            if (onlyPreload) return new List<Vector3>();
+
+            foreach (Vector3 pos in vertexPosCache[model])
             {
                 if (Position != Vector3.Zero || Rotation != Vector3.Zero || Scale != Vector3.Zero)
                 {
@@ -1615,7 +1617,9 @@ namespace RetroEngine
         {
             model = GetModelFromPath(filePath);
 
-            avgVertexPosition = CalculateAvgVertexLocation();
+            GetMeshVertices(true);
+
+            //avgVertexPosition = CalculateAvgVertexLocation();
         }
 
         public static Dictionary<string, Assimp.Scene> loadedScenes = new Dictionary<string, Assimp.Scene>();

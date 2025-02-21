@@ -30,6 +30,9 @@ namespace RetroEngine
         public BrushFaceMesh(Model model, Texture texture, string textureName = "")
         {
             this.model = model;
+
+            GetMeshVertices();
+
             this.texture = texture;
             this.textureName = textureName;
             useAvgVertexPosition = true;
@@ -139,6 +142,8 @@ namespace RetroEngine
             };
 
             model = new Model(graphicsDevice, new List<ModelBone>(), new List<ModelMesh> { modelMesh });
+
+            GetMeshVertices();
 
         }
 
