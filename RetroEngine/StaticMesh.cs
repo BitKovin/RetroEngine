@@ -1580,37 +1580,46 @@ namespace RetroEngine
 
         public virtual Matrix GetWorldMatrix()
         {
+            // Precompute radians using MathHelper.ToRadians.
+            float yaw = MathHelper.ToRadians(Rotation.Y);
+            float pitch = MathHelper.ToRadians(Rotation.X);
+            float roll = MathHelper.ToRadians(Rotation.Z);
+
+            // Cache common matrices.
+            Matrix scaleMatrix = Matrix.CreateScale(Scale);
+            Matrix translationMatrix = Matrix.CreateTranslation(Position);
+            Matrix localRotOffset = GetLocalRotationOffset();
+            Matrix localOffset = GetLocalOffset();
+
+            Matrix rotationMatrix;
 
             if (UseAlternativeRotationCalculation)
             {
-                Matrix worldMatrix = Matrix.CreateScale(Scale) *
-                            Matrix.CreateRotationZ(Rotation.Z / 180 * (float)Math.PI) *
-                            Matrix.CreateRotationX(Rotation.X / 180 * (float)Math.PI) *
-                            Matrix.CreateRotationY(Rotation.Y / 180 * (float)Math.PI) *
-                            GetLocalRotationOffset() *
-                            Matrix.CreateTranslation(Position);
-
-                if (float.IsNaN(worldMatrix.M11))
-                    return Matrix.Identity;
-
-                return GetLocalOffset() * worldMatrix;
+                // Alternative rotation order: Z then X then Y.
+                rotationMatrix = Matrix.CreateRotationZ(roll) *
+                                 Matrix.CreateRotationX(pitch) *
+                                 Matrix.CreateRotationY(yaw);
             }
             else
             {
-
-                Matrix worldMatrix = Matrix.CreateScale(Scale) *
-                                Matrix.CreateRotationX(Rotation.X / 180 * (float)Math.PI) *
-                                Matrix.CreateRotationY(Rotation.Y / 180 * (float)Math.PI) *
-                                Matrix.CreateRotationZ(Rotation.Z / 180 * (float)Math.PI) *
-                                GetLocalRotationOffset() *
-                                Matrix.CreateTranslation(Position) * ParrentTransform;
-
-
-                if (float.IsNaN(worldMatrix.M11))
-                    return Matrix.Identity;
-
-                return GetLocalOffset() * worldMatrix;
+                // Standard rotation order using yaw (Y), pitch (X), and roll (Z).
+                rotationMatrix = Matrix.CreateFromYawPitchRoll(yaw, pitch, roll);
             }
+
+            // Build the base world matrix.
+            Matrix worldMatrix = scaleMatrix * rotationMatrix * localRotOffset * translationMatrix;
+
+            // Apply the parent transform for the standard branch.
+            if (!UseAlternativeRotationCalculation)
+            {
+                worldMatrix *= ParrentTransform;
+            }
+
+            // Check for NaN in the matrix.
+            if (float.IsNaN(worldMatrix.M11))
+                return Matrix.Identity;
+
+            return localOffset * worldMatrix;
         }
 
         public virtual void LoadFromFile(string filePath)
