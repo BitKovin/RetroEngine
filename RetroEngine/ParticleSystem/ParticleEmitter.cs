@@ -179,7 +179,9 @@ namespace RetroEngine.Particles
 
                 for (int i = 0; i < Particles.Count; i++)
                 {
-                    Particles[i] = UpdateParticle(Particles[i]);
+                    lock(Particles)
+                        lock(Particles[i])
+                            Particles[i] = UpdateParticle(Particles[i]);
                 }
 
                 finalizedParticles = Particles.ToList();
