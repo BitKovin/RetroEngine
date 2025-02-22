@@ -485,10 +485,10 @@ namespace RetroEngine
             }
 
 
-            renderList = renderList.OrderBy(m => Vector3.Distance(m.GetClosestToCameraPosition(), Camera.position) + (m.Static ? 0 : 1000)).ToList();
+            renderList = renderList.OrderBy(m => Vector3.Distance(m.GetClosestToCameraPosition(), Camera.position) + (m.Static ? 0 : 1000) - m.DistanceSortingRadius).ToList();
 
-            transperentMeshes = transperentMeshes.OrderByDescending(m => Vector3.Distance(m.GetClosestToCameraPosition(), Camera.position)).ToList();
-            maskedMeshes = maskedMeshes.OrderByDescending(m => Vector3.Distance(m.GetClosestToCameraPosition(), Camera.position)).ToList();
+            transperentMeshes = transperentMeshes.OrderByDescending(m => Vector3.Distance(m.GetClosestToCameraPosition(), Camera.position) - m.DistanceSortingRadius).ToList();
+            maskedMeshes = maskedMeshes.OrderByDescending(m => Vector3.Distance(m.GetClosestToCameraPosition(), Camera.position) - m.DistanceSortingRadius).ToList();
 
             renderList.AddRange(transperentMeshes);
 

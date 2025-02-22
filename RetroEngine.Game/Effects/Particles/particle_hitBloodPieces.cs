@@ -42,6 +42,14 @@ namespace RetroEngine.Game.Effects.Particles
 
         }
 
+        protected override void LoadAssets()
+        {
+            base.LoadAssets();
+
+            ParticleSystemEnt.Preload("decal_blood");
+
+        }
+
     }
 
 
@@ -53,6 +61,7 @@ namespace RetroEngine.Game.Effects.Particles
         public particle_hitBloodPieces()
         {
             TexturePath = "textures/particles/blood.png";
+
 
             InitialSpawnCount = 0;
             SpawnRate = 0;
@@ -83,23 +92,29 @@ namespace RetroEngine.Game.Effects.Particles
 
             particle = base.UpdateParticle(particle);
 
-            if(particle.position.Y < particle.UserData3 && particle.UserData2 < 1)
+            if(particle.position.Y < particle.UserData3 && particle.UserData2 < 2)
             {
 
-                if (random.NextSingle() < 0.3f)
+                if (random.NextSingle() < ((particle.UserData2 == 0) ? 0.3f : 0.3f))
                 {
 
-                    var hit = Physics.LineTraceForStatic((particle.position - particle.velocity.Normalized() * 0.1f).ToPhysics(), (particle.position + particle.velocity.Normalized()).ToPhysics());
+                    var hit = Physics.LineTraceForStatic((particle.position - particle.velocity.Normalized() * 0.2f).ToPhysics(), (particle.position + particle.velocity.Normalized()).ToPhysics());
 
                     if (hit.HasHit)
                     {
+
+                        if(Vector3.Distance(hit.HitPointWorld, particle.position2) > 0.25f)
+
                         particle_system_decal_blood.EmitAt("decal_blood", hit.HitPointWorld, hit.HitNormalWorld, Vector3.One);
                     }
 
                 }
-                particle.position.Y = particle.UserData3 + particle.CollisionRadius;
-                particle.velocity.Y = particle.velocity.Y * particle.BouncePower * -1;
 
+                if (particle.UserData2 < 1)
+                {
+                    particle.position.Y = particle.UserData3 + particle.CollisionRadius;
+                    particle.velocity.Y = particle.velocity.Y * particle.BouncePower * -1;
+                }
                 particle.UserData2++;
 
             }
@@ -126,6 +141,7 @@ namespace RetroEngine.Game.Effects.Particles
 
             particle.UserData3 = -10000000;
 
+            particle.position2 = Position;
 
             Vector3 randPos = RandomPosition(0.1f);
 
@@ -157,6 +173,7 @@ namespace RetroEngine.Game.Effects.Particles
 
             return particle;
         }
+
     }
 
 

@@ -60,7 +60,6 @@ namespace RetroEngine.Particles
 
             particle.globalRotation = RandomPosition(500);
 
-            particle.customModelPath = "models/particles/wood.obj";
             particle.useGlobalRotation = true;
 
             return particle;

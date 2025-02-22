@@ -62,7 +62,6 @@ namespace RetroEngine.Game.Effects.Particles
 
             particle.globalRotation = RandomPosition(500);
 
-            particle.customModelPath = "models/particles/wood.obj";
             particle.useGlobalRotation = true;
 
             particle.HasCollision = true;

@@ -234,7 +234,7 @@ namespace RetroEngine.Particles
         public virtual Particle GetNewParticle()
         {
             currentId++;
-            return new Particle { position = Position, id = currentId, texturePath = TexturePath, globalRotation = Rotation, HasCollision = false };
+            return new Particle { position = Position, id = currentId, globalRotation = Rotation, HasCollision = false };
         }
 
         public override void RenderPreparation()
@@ -249,9 +249,12 @@ namespace RetroEngine.Particles
             if (finalizedParticles != null)
                 if (finalizedParticles.Count > 0)
                 {
-                    frameStaticMeshData.model = (finalizedParticles[0].customModelPath == null) ? particleModel : GetModelFromPath(finalizedParticles[0].customModelPath);
 
-                    texture = AssetRegistry.LoadTextureFromFile(finalizedParticles[0].texturePath);
+                    
+
+                    frameStaticMeshData.model = (ModelPath == null) ? particleModel : GetModelFromPath(ModelPath);
+
+                    texture = AssetRegistry.LoadTextureFromFile(TexturePath);
 
                 }
             if (instanceDataPending != null)
@@ -463,7 +466,7 @@ namespace RetroEngine.Particles
 
 
 
-            bool isParticle = particles[0].customModelPath == null;
+            bool isParticle = ModelPath == null;
 
 
             int i = -1;
@@ -567,9 +570,9 @@ namespace RetroEngine.Particles
 
             foreach (var particle in particleList)
             {
-                texture = AssetRegistry.LoadTextureFromFile(particle.texturePath);
+                texture = AssetRegistry.LoadTextureFromFile(TexturePath);
 
-                frameStaticMeshData.model = (particle.customModelPath == null) ? particleModel : GetModelFromPath(particle.customModelPath);
+                frameStaticMeshData.model = (ModelPath == null) ? particleModel : GetModelFromPath(ModelPath);
                 frameStaticMeshData.World = GetWorldForParticle(particle, Camera.Forward, Camera.Up);
                 frameStaticMeshData.Transparency = particle.transparency;
 
@@ -621,9 +624,9 @@ namespace RetroEngine.Particles
 
             foreach (var particle in particleList)
             {
-                texture = AssetRegistry.LoadTextureFromFile(particle.texturePath);
+                texture = AssetRegistry.LoadTextureFromFile(TexturePath);
 
-                frameStaticMeshData.model = (particle.customModelPath == null) ? particleModel : GetModelFromPath(particle.customModelPath);
+                frameStaticMeshData.model = (ModelPath == null) ? particleModel : GetModelFromPath(ModelPath);
                 frameStaticMeshData.World = GetWorldForParticle(particle, Camera.Forward, Camera.Up);
                 frameStaticMeshData.Transparency = particle.transparency;
 
@@ -691,7 +694,7 @@ namespace RetroEngine.Particles
             public Vector3 globalRotation = new Vector3();
             public bool useGlobalRotation = false;
 
-            public string customModelPath = null;
+  
 
             public int seed = 0;
 
@@ -708,7 +711,6 @@ namespace RetroEngine.Particles
             public float Rotation = 0;
             public bool OrientRotationToVelocity = false;
 
-            public string texturePath = null;
 
             public bool HasCollision = false;
             public float CollisionRadius = 0.02f;

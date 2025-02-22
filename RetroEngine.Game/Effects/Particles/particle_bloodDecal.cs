@@ -45,6 +45,8 @@ namespace RetroEngine.Game.Effects.Particles
         {
             TexturePath = "textures/particles/smoke.png";
 
+            ModelPath = "models/particle.obj";
+
             InitialSpawnCount = 0;
             SpawnRate = 0;
             BoundingRadius = 300000000;
@@ -76,12 +78,17 @@ namespace RetroEngine.Game.Effects.Particles
             Particle particle = base.GetNewParticle();
 
             particle.useGlobalRotation = true;
-            particle.globalRotation = MathHelper.FindLookAtRotation(Vector3.Zero, -Rotation);
 
-            particle.position += particle.globalRotation.GetForwardVector() * -0.01f;
+            Vector3 normal = -Rotation;
+
+            particle.globalRotation = MathHelper.FindLookAtRotation(Vector3.Zero, normal);
+            particle.globalRotation.Z += random.Next()*360;
+
+            particle.position += -normal * 0.005f;
 
             particle.Scale = 1.4f;
 
+            particle.MaxDrawDistance = 40;
 
             particle.BouncePower = 0.1f;
 

@@ -86,7 +86,7 @@ namespace RetroEngine.Entities
                 ent.Position = Position;
                 ent.Rotation = Rotation;
                 ent.SetOwner(this);
-
+                ent.LoadAssetsIfNeeded(true);
                 ent.Start();
 
                 Level.GetCurrent().AddEntity(ent);

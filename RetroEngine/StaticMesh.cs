@@ -144,6 +144,7 @@ namespace RetroEngine
         public List<string> MeshHideList = new List<string>();
         protected string[] finalizedMeshHide = new string[0];
 
+        public float DistanceSortingRadius = 0;
 
 
         public Entity Owner;
