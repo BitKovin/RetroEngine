@@ -2,6 +2,7 @@
 using RetroEngine.Entities;
 using RetroEngine.Particles;
 using RetroEngine.ParticleSystem;
+using RetroEngine.PhysicsSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,17 +59,19 @@ namespace RetroEngine.Game.Effects.Particles
             BoundingRadius = 300000000;
             Emitting = true;
 
-
         }
 
         public override Particle UpdateParticle(Particle particle)
         {
-            if(particle.lifeTime<1)
+            if(particle.lifeTime<1.5)
             particle.UserData1 += Time.DeltaTime;
 
-            if (particle.UserData1 > 0.1)
+            const float spawnInterval = 0.07f;
+
+            
+            if (particle.UserData1 > spawnInterval)
             {
-                particle.UserData1 -= 0.1f;
+                particle.UserData1 -= spawnInterval;
 
                 drips.Position = particle.position;
                 drips.Rotation = particle.velocity/3; 
@@ -76,10 +79,30 @@ namespace RetroEngine.Game.Effects.Particles
                 //DrawDebug.Sphere(0.1f, drips.Position, Vector3.UnitX);
             }
 
-            particle.velocity -= new Vector3(0, 5, 0) * (Time.DeltaTime / 2f);
+            particle.velocity -= new Vector3(0, 10, 0) * (Time.DeltaTime / 2f);
 
             particle = base.UpdateParticle(particle);
 
+            if(particle.position.Y < particle.UserData3 && particle.UserData2 < 1)
+            {
+
+                if (random.NextSingle() < 0.3f)
+                {
+
+                    var hit = Physics.LineTraceForStatic((particle.position - particle.velocity.Normalized() * 0.1f).ToPhysics(), (particle.position + particle.velocity.Normalized()).ToPhysics());
+
+                    if (hit.HasHit)
+                    {
+                        particle_system_decal_blood.EmitAt("decal_blood", hit.HitPointWorld, hit.HitNormalWorld, Vector3.One);
+                    }
+
+                }
+                particle.position.Y = particle.UserData3 + particle.CollisionRadius;
+                particle.velocity.Y = particle.velocity.Y * particle.BouncePower * -1;
+
+                particle.UserData2++;
+
+            }
 
             //particle.Scale += Time.DeltaTime * 0.3f;
 
@@ -96,18 +119,22 @@ namespace RetroEngine.Game.Effects.Particles
         {
             Particle particle = base.GetNewParticle();
 
+            //particle.HasCollision = (0.3f < random.NextSingle());
+            particle.BouncePower = 0.5f;
+            particle.CollisionRadius = 0.2f;
+            particle.Scale = 0.6f;// float.Lerp(0.03f, 0.06f, (float)random.NextDouble());
 
+            particle.UserData3 = -10000000;
 
-            particle.Scale = 0.7f;// float.Lerp(0.03f, 0.06f, (float)random.NextDouble());
 
             Vector3 randPos = RandomPosition(0.1f);
 
             particle.position += randPos;
-            particle.velocity = RandomPosition(1f).Normalized()*1.5f + Vector3.UnitY * 2f * float.Lerp(1, 2, (float)random.NextDouble()) + Rotation.GetForwardVector() * 2.5f;
+            particle.velocity = RandomPosition(1f).Normalized()*2.5f + Vector3.UnitY * 2f * float.Lerp(1, 2, (float)random.NextDouble()) + Rotation.GetForwardVector() * 2.5f;
 
-            particle.velocity *= float.Lerp(0.6f, 1f, (float)random.NextDouble());
+            particle.velocity *= float.Lerp(0.3f, 1f, (float)random.NextDouble());
 
-            particle.transparency = 1.3f;
+            particle.transparency = 1.4f;
             particle.deathTime = 3;
 
 
@@ -115,6 +142,16 @@ namespace RetroEngine.Game.Effects.Particles
 
 
             particle.color = new Vector4(0.8f, 0.8f, 0.8f, 1);
+
+
+            Vector3 floorCheckPos = particle.position + particle.velocity/2f;
+
+            var hit = Physics.LineTraceForStatic(floorCheckPos.ToPhysics(), (floorCheckPos - Vector3.UnitY * 10).ToPhysics());
+
+            if (hit.HasHit)
+            {
+                particle.UserData3 = hit.HitPointWorld.Y;
+            }
 
             //particle.OrientRotationToVelocity = true;
 
@@ -140,14 +177,14 @@ namespace RetroEngine.Game.Effects.Particles
         public override Particle UpdateParticle(Particle particle)
         {
 
-            particle.velocity -= new Vector3(0, 7, 0) * (Time.DeltaTime / 2f);
+            particle.velocity -= new Vector3(0, 6, 0) * (Time.DeltaTime / 2f);
 
             particle = base.UpdateParticle(particle);
 
 
             //particle.Scale += Time.DeltaTime * 0.3f;
 
-            particle.velocity -= new Vector3(0, 7, 0) * (Time.DeltaTime / 2f);
+            particle.velocity -= new Vector3(0, 6, 0) * (Time.DeltaTime / 2f);
 
             particle.transparency = Math.Max(particle.transparency -= Time.DeltaTime / 3f, 0);
 
@@ -162,15 +199,15 @@ namespace RetroEngine.Game.Effects.Particles
 
             particle.velocity = Rotation;
 
-            particle.Scale = float.Lerp(0.15f, 0.25f, (float)random.NextDouble());
+            particle.Scale = float.Lerp(0.15f, 0.2f, (float)random.NextDouble());
 
             //particle.position += randPos;
             //particle.velocity = RandomPosition(0.4f).Normalized() + Vector3.UnitY * 1.5f * float.Lerp(1, 2, (float)random.NextDouble()) + Rotation.GetForwardVector() * 2.5f;
 
             //particle.velocity *= float.Lerp(0.6f, 1f, (float)random.NextDouble());
 
-            particle.transparency = 1.3f;
-            particle.deathTime = 3;
+            particle.transparency = 1.4f;
+            particle.deathTime = 1.5f;
 
 
             particle.Rotation = random.NextSingle() * 500f;

@@ -16,7 +16,7 @@ namespace RetroEngine.Game.Entities.Weapons
 {
 
     [LevelObject("weaponPickup")]
-    public class WeaponPickup : TriggerBase
+    public class WeaponPickup : Entity
     {
 
         string typeName = "weapon_pistol_double";
@@ -34,24 +34,16 @@ namespace RetroEngine.Game.Entities.Weapons
 
         }
 
-        RigidBody TriggerBody;
 
         public override void Start()
         {
             base.Start();
 
-            TriggerBody = Physics.CreateSphere(this, 0, 0.5f, CollisionFlags.NoContactResponse);
-
-            TriggerBody.SetBodyType(BodyType.None);
-
-            TriggerBody.SetPosition(Position);
-            bodies.Add(TriggerBody);
 
         }
 
-        public override void OnTriggerEnter(Entity entity)
+        public void OnTriggerEnter(Entity entity)
         {
-            base.OnTriggerEnter(entity);
 
             if (entity.Tags.Contains("player") == false) return;
 
@@ -78,6 +70,14 @@ namespace RetroEngine.Game.Entities.Weapons
         {
             base.AsyncUpdate();
 
+            if (PlayerCharacter.Instance != null)
+            {
+                if (Vector3.Distance(PlayerCharacter.Instance.Position, Position) < 1f)
+                {
+                    OnTriggerEnter(PlayerCharacter.Instance);
+                }
+            }
+
             staticMesh.Position = Position + ((float)Math.Sin((Time.GameTime - SpawnTime)*3)) * Vector3.Up * 0.3f;
 
             staticMesh.Rotation = new Vector3(0, (float)(Time.GameTime - SpawnTime) * 100,0);
@@ -99,7 +99,6 @@ namespace RetroEngine.Game.Entities.Weapons
         {
             base.LoadData(Data);
 
-            TriggerBody.SetPosition(Position);
 
         }
 

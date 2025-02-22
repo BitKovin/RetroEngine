@@ -24,9 +24,13 @@ namespace RetroEngine
 
         public Entity entity;
 
+        public bool DisableCustomChecks = false;
+
         public override float AddSingleResult(ref LocalRayResult rayResult, bool normalInWorldSpace)
         {
 
+            if(DisableCustomChecks)
+                return base.AddSingleResult(ref rayResult, normalInWorldSpace);
 
             if (rayResult.CollisionObject != null)
             {
@@ -50,6 +54,9 @@ namespace RetroEngine
 
         public override bool NeedsCollision(BroadphaseProxy proxy0)
         {
+
+            if(DisableCustomChecks)
+                return base.NeedsCollision(proxy0);
 
             CollisionObject collisionObject = CollisionFilterCallback.GetCollisionObjectFromProxy(proxy0);
 

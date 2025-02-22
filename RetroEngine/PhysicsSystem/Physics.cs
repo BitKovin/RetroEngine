@@ -496,11 +496,7 @@ namespace RetroEngine.PhysicsSystem
                     }
                     catch (Exception ex) { Logger.Log(ex); }
 
-                    if (colObj.GetBodyType() == 0)
-                        colObj.SetBodyType(BodyType.MainBody);
 
-                    if (colObj.GetCollisionMask() == 0)
-                        colObj.SetCollisionMask(BodyType.GroupCollisionTest);
 
                     // Check if the collision object is a rigid body
                     if (colObj is RigidBody rigidBody)
@@ -722,6 +718,10 @@ namespace RetroEngine.PhysicsSystem
             // Create a rigid body for the sphere
             var sphereRigidBodyInfo = new RigidBodyConstructionInfo(collisionFlags == CollisionFlags.StaticObject ? 0 : mass, motionState, sphereShape, inertia);
             RigidBody = new RigidBody(sphereRigidBodyInfo);
+
+            RigidBody.SetBodyType(BodyType.MainBody);
+            RigidBody.SetCollisionMask(BodyType.GroupCollisionTest);
+
             RigidBody.CollisionFlags = collisionFlags;
 
             RigidBody.UserObject = new RigidbodyData(entity);
@@ -756,6 +756,10 @@ namespace RetroEngine.PhysicsSystem
             // Create a rigid body for the sphere
             var boxRigidBodyInfo = new RigidBodyConstructionInfo(collisionFlags == CollisionFlags.StaticObject ? 0 : mass, motionState, sphereShape, inertia);
             RigidBody = new RigidBody(boxRigidBodyInfo);
+
+            RigidBody.SetBodyType(BodyType.MainBody);
+            RigidBody.SetCollisionMask(BodyType.GroupCollisionTest);
+
             RigidBody.CollisionFlags = collisionFlags;
 
             RigidBody.UserObject = new RigidbodyData(entity);
@@ -788,6 +792,10 @@ namespace RetroEngine.PhysicsSystem
             // Create a rigid body for the sphere
             var boxRigidBodyInfo = new RigidBodyConstructionInfo(collisionFlags == CollisionFlags.StaticObject ? 0 : mass, motionState, shape, inertia);
             RigidBody = new RigidBody(boxRigidBodyInfo);
+
+            RigidBody.SetBodyType(BodyType.MainBody);
+            RigidBody.SetCollisionMask(BodyType.GroupCollisionTest);
+
             RigidBody.CollisionFlags = collisionFlags;
 
             RigidBody.UserObject = new RigidbodyData(entity);
@@ -847,6 +855,10 @@ namespace RetroEngine.PhysicsSystem
             // Create a rigid body for the sphere
             var boxRigidBodyInfo = new RigidBodyConstructionInfo(collisionFlags == CollisionFlags.StaticObject ? 0 : mass, motionState, Shape);
             RigidBody = new RigidBody(boxRigidBodyInfo);
+
+            RigidBody.SetBodyType(BodyType.MainBody);
+            RigidBody.SetCollisionMask(BodyType.GroupCollisionTest);
+
             RigidBody.CollisionFlags = collisionFlags;
 
             RigidBody.UserObject = new RigidbodyData(entity);
@@ -885,6 +897,10 @@ namespace RetroEngine.PhysicsSystem
             // Create a rigid body for the sphere
             var boxRigidBodyInfo = new RigidBodyConstructionInfo(collisionFlags == CollisionFlags.StaticObject ? 0 : mass, motionState, Shape);
             RigidBody = new RigidBody(boxRigidBodyInfo);
+
+            RigidBody.SetBodyType(BodyType.MainBody);
+            RigidBody.SetCollisionMask(BodyType.GroupCollisionTest);
+
             RigidBody.CollisionFlags = collisionFlags;
 
             RigidBody.UserObject = new RigidbodyData(entity);
@@ -935,6 +951,7 @@ namespace RetroEngine.PhysicsSystem
                     callback.ConvexFromWorld = rayToWorld;
                     callback.Start = rayFromWorld;
                     callback.End = rayToWorld;
+                    callback.DisableCustomChecks = false;
                     return callback;
 
                 }
@@ -1047,6 +1064,8 @@ namespace RetroEngine.PhysicsSystem
 
             MyClosestConvexResultCallback convResultCallback = NewClosestConvexResultCallback(ref rayStart, ref rayEnd);
 
+            convResultCallback.DisableCustomChecks = true;
+
             // Set the callback to respond only to static objects
             convResultCallback.FlagToRespond = CollisionFlags.StaticObject;
             lock (staticWorld)
@@ -1124,6 +1143,8 @@ namespace RetroEngine.PhysicsSystem
             CollisionWorld world = staticWorld;
 
             MyClosestRayResultCallback rayCallback = NewClosestRayResultCallback(ref rayStart, ref rayEnd);
+
+            rayCallback.DisableCustomChecks = true;
 
             rayCallback.FlagToRespond = CollisionFlags.StaticObject;
 

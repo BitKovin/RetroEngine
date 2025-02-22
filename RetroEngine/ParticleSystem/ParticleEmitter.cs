@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static RetroEngine.Particles.ParticleEmitter;
 
 namespace RetroEngine.Particles
 {
@@ -43,6 +44,8 @@ namespace RetroEngine.Particles
         protected static List<VertexBuffer> freeIstanceBuffers = new List<VertexBuffer>();
 
         public Matrix RelativeMatrix = Matrix.Identity;
+
+        public bool DisableSorting = false;
 
         protected VertexBuffer ReuseOrCreateInstanceBuffer(GraphicsDevice graphicsDevice, int requiredVertexCount)
         {
@@ -95,7 +98,7 @@ namespace RetroEngine.Particles
                 }
 
             for (int j = 0; j < 1; j++)
-                for (int i = 1; i <= 500; i += 1)
+                for (int i = 1; i <= 1500; i += 1)
                 {
                     freeIstanceBuffers.Add(new VertexBuffer(GameMain.Instance.GraphicsDevice, InstanceData.VertexDeclaration, i, BufferUsage.WriteOnly));
                 }
@@ -179,13 +182,17 @@ namespace RetroEngine.Particles
                     Particles[i] = UpdateParticle(Particles[i]);
                 }
 
-                finalizedParticles = new List<Particle>(Particles);
+                finalizedParticles = Particles.ToList();
 
                 if (Emitting == false && Particles.Count == 0)
                 {
                     destroyed = true;
                 }
+
             }
+
+            UpdateInstancedData(finalizedParticles);
+
         }
 
         public override void UpdateCulling()
@@ -235,12 +242,30 @@ namespace RetroEngine.Particles
 
             inFrustrum = true;
 
+            CreateInitialBuffers();
 
             base.RenderPreparation();
 
-            CreateInitialBuffers();
+            if (finalizedParticles != null)
+                if (finalizedParticles.Count > 0)
+                {
+                    frameStaticMeshData.model = (finalizedParticles[0].customModelPath == null) ? particleModel : GetModelFromPath(finalizedParticles[0].customModelPath);
 
-            UpdateInstancedData(finalizedParticles);
+                    texture = AssetRegistry.LoadTextureFromFile(finalizedParticles[0].texturePath);
+
+                }
+            if (instanceDataPending != null)
+            {
+                instanceData = instanceDataPending.ToArray();
+            }
+            else
+            {
+                instanceData = null;
+            }
+
+
+
+
 
             if (instanceData == null) return;
 
@@ -251,8 +276,15 @@ namespace RetroEngine.Particles
                 instanceBuffer = ReuseOrCreateInstanceBuffer(GameMain.Instance.GraphicsDevice, instanceData.Length);
 
             }
-            instanceBuffer.SetData(instanceData);
 
+            if (instanceData.Length > 0)
+            {
+                instanceBuffer.SetData(instanceData);
+            }
+            else
+            {
+
+            }
         }
 
         private void FreeBuffers()
@@ -270,17 +302,42 @@ namespace RetroEngine.Particles
 
             if (particle.useGlobalRotation == false)
             {
-                Matrix worldMatrix = Matrix.CreateScale(particle.Scale) * Matrix.CreateBillboard(particle.position, Camera.finalizedPosition, CameraUp.RotateVector(CameraForward, particle.Rotation), (particle.position - Camera.finalizedPosition).Normalized());
+                // Cache the camera position if it's reused
+                Vector3 camPos = Camera.finalizedPosition;
+
+                // Compute the vector from the camera to the particle once
+                Vector3 diff = particle.position - camPos;
+                Vector3 viewDir = Vector3.Normalize(diff);
+
+                // If the particle has a non-zero rotation, compute the rotated up vector once.
+                Vector3 rotatedUp = CameraUp.RotateVector(CameraForward, particle.Rotation);
+
+                // Create the billboard matrix using the cached values.
+                Matrix billboardMatrix = Matrix.CreateBillboard(
+                    particle.position,
+                    camPos,
+                    rotatedUp,
+                    viewDir);
+
+                // Apply scaling by multiplying with the scale matrix.
+                Matrix worldMatrix = Matrix.CreateScale(particle.Scale) * billboardMatrix;
 
                 return worldMatrix;
             }
             else if(particle.OrientRotationToVelocity == false)
             {
+
+                float yaw =  MathHelper.ToRadians(particle.globalRotation.Y);
+                float pitch = MathHelper.ToRadians(particle.globalRotation.X);
+                float roll = MathHelper.ToRadians(particle.globalRotation.Z);
+
+                // Create a single rotation matrix.
+                Matrix rotation = Matrix.CreateFromYawPitchRoll(yaw, pitch, roll);
+
+                // Combine scale, rotation and translation.
                 Matrix worldMatrix = Matrix.CreateScale(particle.Scale) *
-                                Matrix.CreateRotationX(particle.globalRotation.X / 180 * (float)Math.PI) *
-                                Matrix.CreateRotationY(particle.globalRotation.Y / 180 * (float)Math.PI) *
-                                Matrix.CreateRotationZ(particle.globalRotation.Z / 180 * (float)Math.PI) *
-                                Matrix.CreateTranslation(particle.position);
+                                       rotation *
+                                       Matrix.CreateTranslation(particle.position);
 
                 return worldMatrix;
             }
@@ -373,6 +430,9 @@ namespace RetroEngine.Particles
 
         VertexBuffer instanceBuffer;
         InstanceData[] instanceData;
+
+        InstanceData[] instanceDataPending;
+
         public void DrawParticles()
         {
             if (instanceBuffer != null)
@@ -388,18 +448,23 @@ namespace RetroEngine.Particles
 
             var particles = particleList;
 
-            particles = particles.OrderByDescending(p => Vector3.Dot(p.position - Camera.position, Camera.rotation.GetForwardVector())).ToList();
+            Vector3 cameraForward = Camera.finalizedRotation.GetForwardVector();
+            Vector3 cameraUp = Camera.Up;
+
+            particles = particles.Where(p=> Vector3.Distance(p.position, Camera.finalizedPosition) < p.MaxDrawDistance).OrderByDescending(p => DisableSorting ? 0 : Vector3.Dot(p.position - Camera.finalizedPosition, cameraForward)).ToList();
 
             var instanceData_new = new InstanceData[particles.Count];
 
+            if(particles.Count == 0)
+            {
+                instanceDataPending = instanceData_new;
+                return;
+            }
 
-            texture = AssetRegistry.LoadTextureFromFile(particles[0].texturePath);
-            frameStaticMeshData.model = (particles[0].customModelPath == null) ? particleModel : GetModelFromPath(particles[0].customModelPath);
 
 
+            bool isParticle = particles[0].customModelPath == null;
 
-            Vector3 cameraForward = Camera.Forward;
-            Vector3 cameraUp = Camera.Up;
 
             int i = -1;
             Parallel.For(0, particles.Count,new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount}, i =>
@@ -412,14 +477,14 @@ namespace RetroEngine.Particles
 
                 Matrix world = GetWorldForParticle(particle, cameraForward, cameraUp);
 
-                bool isParticle = particle.customModelPath == null;
+
 
                 InstanceData data = new InstanceData
                 {
-                    Row1 = world.GetRow(0),
-                    Row2 = world.GetRow(1),
-                    Row3 = world.GetRow(2),
-                    Row4 = world.GetRow(3),
+                    Row1 = new Vector4(world.M11, world.M12, world.M13, world.M14),
+                    Row2 = new Vector4(world.M21, world.M22, world.M23, world.M24),
+                    Row3 = new Vector4(world.M31, world.M32, world.M33, world.M34),
+                    Row4 = new Vector4(world.M41, world.M42, world.M43, world.M44),
                     Color = particle.color
                 };
 
@@ -428,7 +493,7 @@ namespace RetroEngine.Particles
                 instanceData_new[i] = data;
             });
 
-            instanceData = instanceData_new.ToArray();
+            instanceDataPending = instanceData_new.ToArray();
 
         }
 
@@ -656,6 +721,8 @@ namespace RetroEngine.Particles
             public float UserData1 = 0;
             public float UserData2 = 0;
             public float UserData3 = 0;
+
+            public float MaxDrawDistance = 30;
 
             public void SetRotationFromVelocity()
             {

@@ -66,7 +66,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             if(PlayerCharacter.Instance != null)
             {
-                if(Vector3.Distance(PlayerCharacter.Instance.Position, Position) < 1.3f)
+                if(Vector3.Distance(PlayerCharacter.Instance.Position, Position) < 1f)
                 {
                     OnTriggerEnter(PlayerCharacter.Instance);
                 }

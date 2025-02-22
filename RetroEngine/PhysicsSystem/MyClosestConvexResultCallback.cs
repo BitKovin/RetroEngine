@@ -33,8 +33,13 @@ namespace RetroEngine
 
         public Entity entity;
 
+        public bool DisableCustomChecks = false;
+
         public override float AddSingleResult(ref LocalConvexResult convexResult, bool normalInWorldSpace)
         {
+
+            if(DisableCustomChecks)
+                return base.AddSingleResult(ref convexResult, normalInWorldSpace);
 
             HitShapeLocation = Vector3.Lerp(Start, End, convexResult.HitFraction);
 
@@ -59,6 +64,9 @@ namespace RetroEngine
 
         public override bool NeedsCollision(BroadphaseProxy proxy0)
         {
+
+            if(DisableCustomChecks)
+                return base.NeedsCollision(proxy0);
 
             CollisionObject collisionObject = CollisionFilterCallback.GetCollisionObjectFromProxy(proxy0);
 

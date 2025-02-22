@@ -67,8 +67,8 @@ namespace RetroEngine
         public string Name = "";
 
         public bool IgnoreAnimationEvents = false;
-        
 
+        public float MaxRenderDistance = 300;
         public SkeletalMesh() : base()
         {
 
@@ -1303,6 +1303,11 @@ namespace RetroEngine
             if (Visible == false) return;
 
             inFrustrum = false;
+
+            if (Vector3.Distance(Position, Camera.position) > MaxRenderDistance)
+                return;
+
+
 
             boundingSphere.Center = Position + boundingSphereOffset;
 

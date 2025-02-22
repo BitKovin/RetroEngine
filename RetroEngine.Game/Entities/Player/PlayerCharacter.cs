@@ -199,6 +199,8 @@ namespace RetroEngine.Game.Entities.Player
         {
             base.Start();
 
+            Instance = this;
+
             testSound = FmodEventInstance.Create("event:/NPC/Dog/DogAttack");
 
             body = Physics.CreateCharacterCapsule(this, 1.8f, 0.4f, 2);
@@ -214,7 +216,7 @@ namespace RetroEngine.Game.Entities.Player
 
 
             body.CcdMotionThreshold = 0.000001f;
-            body.CcdSweptSphereRadius = 0.5f;
+            body.CcdSweptSphereRadius = 0.4f;
             body.Friction = 1f;
 
             bodies.Add(body);

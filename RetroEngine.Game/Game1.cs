@@ -92,6 +92,7 @@ namespace RetroEngine.Game
             AssetRegistry.LoadFmodBankIntoMemory("Sounds/banks/Master.bank");
             AssetRegistry.LoadFmodBankIntoMemory("Sounds/banks/Master.strings.bank");
 
+            ParticleSystemEnt.Preload("hitBlood");
 
             //PostProcessStep.StepsAfter.Add(new TestPP());
 

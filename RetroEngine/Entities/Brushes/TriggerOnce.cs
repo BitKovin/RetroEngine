@@ -72,6 +72,7 @@ namespace RetroEngine.Entities
                     });
 
                     active = false;
+                    Destroy();
                 }
 
 

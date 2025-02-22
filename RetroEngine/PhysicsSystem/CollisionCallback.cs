@@ -42,41 +42,52 @@ namespace RetroEngine
 
             return base.NeedsCollision(proxy0) && ShouldCollide(collidesWith, bodyType);
         }
-
-        public override float AddSingleResult(ManifoldPoint cp, CollisionObjectWrapper colObj0Wrap, int partId0, int index0, CollisionObjectWrapper colObj1Wrap, int partId1, int index1)
+        public override float AddSingleResult(ManifoldPoint cp,
+            CollisionObjectWrapper colObj0Wrap, int partId0, int index0,
+            CollisionObjectWrapper colObj1Wrap, int partId1, int index1)
         {
+            // Early exit if wrappers or their collision objects are null.
+            if (colObj0Wrap == null || colObj1Wrap == null)
+                return 0;
 
-            if (colObj0Wrap == null) return 0;
-            if (colObj1Wrap == null) return 0;
+            var collisionObject0 = colObj0Wrap.CollisionObject;
+            var collisionObject1 = colObj1Wrap.CollisionObject;
+            if (collisionObject0 == null || collisionObject1 == null)
+                return 0;
 
-            if (colObj0Wrap.CollisionObject == null) return 0;
-            if (colObj1Wrap.CollisionObject == null) return 0;
+            // Cache the user objects and their associated entities.
+            var rbData0 = (RigidbodyData)collisionObject0.UserObject;
+            var rbData1 = (RigidbodyData)collisionObject1.UserObject;
+            var entity0 = rbData0.Entity;
+            var entity1 = rbData1.Entity;
 
-
+            // If there's no owner, immediately fire the collision event using colObj1's entity.
             if (owner == null)
             {
-                CollisionEvent?.Invoke(colObj0Wrap, colObj1Wrap, ((RigidbodyData)colObj1Wrap.CollisionObject.UserObject).Entity, cp);
+                CollisionEvent?.Invoke(colObj0Wrap, colObj1Wrap, entity1, cp);
                 return 0;
             }
 
-            if (((RigidbodyData)colObj0Wrap.CollisionObject.UserObject).Entity == owner)
+            // Depending on which entity matches the owner, check for flags and ignore conditions.
+            if (entity0 == owner)
             {
-
-                if (colObj1Wrap.CollisionObject.CollisionFlags.HasFlag(BulletSharp.CollisionFlags.NoContactResponse)) return 0;
-
-                if (ignore.Contains(((RigidbodyData)colObj1Wrap.CollisionObject.UserObject).Entity))
+                if (collisionObject1.CollisionFlags.HasFlag(BulletSharp.CollisionFlags.NoContactResponse))
                     return 0;
 
-                CollisionEvent?.Invoke(colObj0Wrap, colObj1Wrap, ((RigidbodyData)colObj1Wrap.CollisionObject.UserObject).Entity, cp);
+                if (ignore.Contains(entity1))
+                    return 0;
+
+                CollisionEvent?.Invoke(colObj0Wrap, colObj1Wrap, entity1, cp);
             }
-            else 
+            else
             {
-                if (colObj0Wrap.CollisionObject.CollisionFlags.HasFlag(BulletSharp.CollisionFlags.NoContactResponse)) return 0;
-
-                if (ignore.Contains(((RigidbodyData)colObj0Wrap.CollisionObject.UserObject).Entity))
+                if (collisionObject0.CollisionFlags.HasFlag(BulletSharp.CollisionFlags.NoContactResponse))
                     return 0;
 
-                CollisionEvent?.Invoke(colObj1Wrap, colObj0Wrap, ((RigidbodyData)colObj0Wrap.CollisionObject.UserObject).Entity, cp);
+                if (ignore.Contains(entity0))
+                    return 0;
+
+                CollisionEvent?.Invoke(colObj1Wrap, colObj0Wrap, entity0, cp);
             }
 
             return 0;

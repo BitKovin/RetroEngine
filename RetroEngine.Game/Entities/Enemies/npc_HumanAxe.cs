@@ -64,7 +64,6 @@ namespace RetroEngine.Game.Entities.Enemies
 
         Entity target;
 
-        Delay DeathSimulationEndDelay = new Delay();
 
         bool onGround = true;
 
@@ -344,6 +343,8 @@ namespace RetroEngine.Game.Entities.Enemies
 
             mesh.PlayAnimation("death", false);
 
+            mesh.MaxRenderDistance = 50;
+
             meshStopUpdateDelay.AddDelay(3);
 
             Physics.Remove(body);
@@ -577,6 +578,7 @@ namespace RetroEngine.Game.Entities.Enemies
 
         }
 
+        [JsonInclude]
         public Delay meshStopUpdateDelay = new Delay();
 
         public override void VisualUpdate()

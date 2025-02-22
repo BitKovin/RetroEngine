@@ -66,7 +66,6 @@ namespace RetroEngine.Game.Entities.Enemies
 
         Entity target;
 
-        Delay DeathSimulationEndDelay = new Delay();
 
         bool onGround = true;
 
@@ -331,10 +330,16 @@ namespace RetroEngine.Game.Entities.Enemies
 
         }
 
+        Delay meshStopUpdateDelay = new Delay();
+
         void Death()
         {
 
+            meshStopUpdateDelay.AddDelay(3);
+
             mesh.PlayAnimation("death", false);
+
+            mesh.MaxRenderDistance = 40;
 
             Physics.Remove(body);
 
@@ -570,6 +575,9 @@ namespace RetroEngine.Game.Entities.Enemies
         {
             base.VisualUpdate();
 
+            if (dead && meshStopUpdateDelay.Wait() == false)
+                return;
+
             mesh.Update(Time.DeltaTime);
 
             if (dead) return;
@@ -758,8 +766,11 @@ namespace RetroEngine.Game.Entities.Enemies
             mesh.Rotation = Rotation;
             mesh.Position = Position;
 
-            if(dead)
+            if (dead)
+            {
                 Death();
+                mesh.Update(10);
+            }
 
             mesh.SetAnimationState(animationState);
 
