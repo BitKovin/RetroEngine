@@ -11,24 +11,18 @@ namespace RetroEngine
 
         public static Vector3 GetForwardVector(this Vector3 rot)
         {
-            return Vector3.Transform(Vector3.UnitZ, Quaternion.CreateFromRotationMatrix(Matrix.CreateRotationX(rot.X / 180 * (float)Math.PI) *
-                                Matrix.CreateRotationY(rot.Y / 180 * (float)Math.PI) *
-                                Matrix.CreateRotationZ(rot.Z / 180 * (float)Math.PI)));
+            return Vector3.Transform(Vector3.UnitZ, rot.GetRotationQuaternion());
         }
 
         public static Vector3 GetRightVector(this Vector3 rot)
         {
 
-            return Vector3.Transform(-Vector3.UnitX, Quaternion.CreateFromRotationMatrix(Matrix.CreateRotationX(rot.X / 180 * (float)Math.PI) *
-                               Matrix.CreateRotationY(rot.Y / 180 * (float)Math.PI) *
-                               Matrix.CreateRotationZ(rot.Z / 180 * (float)Math.PI)));
+            return Vector3.Transform(-Vector3.UnitX, rot.GetRotationQuaternion());
         }
 
         public static Vector3 GetUpVector(this Vector3 rot)
         {
-            return Vector3.Transform(Vector3.UnitY, Quaternion.CreateFromRotationMatrix(Matrix.CreateRotationX(rot.X / 180 * (float)Math.PI) *
-                               Matrix.CreateRotationY(rot.Y / 180 * (float)Math.PI) *
-                               Matrix.CreateRotationZ(rot.Z / 180 * (float)Math.PI)));
+            return Vector3.Transform(Vector3.UnitY, rot.GetRotationQuaternion());
         }
 
         public static Vector3 XZ(this Vector3 vector)
@@ -155,6 +149,29 @@ namespace RetroEngine
             return (float)((double)degrees * (Math.PI / 180.0));
         }
 
+        public static Vector3 ToYawPitchRoll(this Quaternion q)
+        {
+            // Yaw (rotation about Y-axis)
+            double siny = 2.0 * (q.W * q.Y + q.Z * q.X);
+            double cosy = 1.0 - 2.0 * (q.X * q.X + q.Y * q.Y);
+            double yaw = Math.Atan2(siny, cosy);
+
+            // Pitch (rotation about X-axis)
+            double sinp = 2.0 * (q.W * q.X - q.Y * q.Z);
+            double pitch = Math.Abs(sinp) >= 1
+                ? Math.CopySign(Math.PI / 2, sinp)  // use 90° if out of range
+                : Math.Asin(sinp);
+
+            // Roll (rotation about Z-axis)
+            double sinr = 2.0 * (q.W * q.Z + q.X * q.Y);
+            double cosr = 1.0 - 2.0 * (q.X * q.X + q.Z * q.Z);
+            double roll = Math.Atan2(sinr, cosr);
+
+            // Return Vector3 where:
+            // X = yaw, Y = pitch, Z = roll
+            return new Vector3(MathHelper.ToDegrees((float)pitch), MathHelper.ToDegrees((float)yaw), MathHelper.ToDegrees((float)roll));
+        }
+
         public static Vector3 FindLookAtRotation(Vector3 source, Vector3 target)
         {
             Vector3 direction = target - source;
@@ -184,11 +201,24 @@ namespace RetroEngine
 
         public static Matrix GetRotationMatrix(this Vector3 rotation)
         {
-            return Matrix.CreateRotationX(rotation.X / 180 * (float)Math.PI) *
-                                Matrix.CreateRotationY(rotation.Y / 180 * (float)Math.PI) *
-                                Matrix.CreateRotationZ(rotation.Z / 180 * (float)Math.PI);
+
+            float yaw = MathHelper.ToRadians(rotation.Y);
+            float pitch = MathHelper.ToRadians(rotation.X);
+            float roll = MathHelper.ToRadians(rotation.Z);
+
+            return Matrix.CreateFromYawPitchRoll(yaw, pitch, roll);
         }
 
+        public static Quaternion GetRotationQuaternion(this Vector3 rotation)
+        {
+
+            float yaw = MathHelper.ToRadians(rotation.Y);
+            float pitch = MathHelper.ToRadians(rotation.X);
+            float roll = MathHelper.ToRadians(rotation.Z);
+
+            return Quaternion.CreateFromYawPitchRoll(yaw, pitch, roll);
+        }
+        /*
         public static Vector3 ToEulerAnglesDegrees(this Quaternion q)
         {
             Vector3 angles = new();
@@ -220,7 +250,7 @@ namespace RetroEngine
 
             return angles;
         }
-
+        */
         /// <summary>
         /// Converts a world transformation matrix into a local transformation matrix relative to another world transformation matrix.
         /// </summary>
@@ -258,7 +288,7 @@ namespace RetroEngine
 
                 result.Position = Vector3.Lerp(a.Position, b.Position, factor);
                 result.RotationQuaternion = Quaternion.Lerp(a.RotationQuaternion, b.RotationQuaternion, factor);
-                result.Rotation = result.RotationQuaternion.ToEulerAnglesDegrees();
+                result.Rotation = result.RotationQuaternion.ToYawPitchRoll();
                 result.Scale = Vector3.Lerp(a.Scale, b.Scale, factor);
 
                 return result;
@@ -383,7 +413,7 @@ namespace RetroEngine
 
             matrix.Decompose(out scale, out rotation, out position);
 
-            rotationDegrees = ToEulerAnglesDegrees(rotation);
+            rotationDegrees = rotation.ToYawPitchRoll();
 
             rotationDegrees.X = NormalizeAngle(rotationDegrees.X);
             rotationDegrees.Y = NormalizeAngle(rotationDegrees.Y);
@@ -404,9 +434,7 @@ namespace RetroEngine
             transform.Rotation = transform.Rotation.NonZeroAngles();
 
             return Matrix.CreateScale(transform.Scale) *
-                                Matrix.CreateRotationX(transform.Rotation.X / 180 * (float)Math.PI) *
-                                Matrix.CreateRotationY(transform.Rotation.Y / 180 * (float)Math.PI) *
-                                Matrix.CreateRotationZ(transform.Rotation.Z / 180 * (float)Math.PI) *
+                                transform.Rotation.GetRotationMatrix() *
                                 Matrix.CreateTranslation(transform.Position);
         }
 

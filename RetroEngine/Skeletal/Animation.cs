@@ -21,6 +21,7 @@ namespace RetroEngine.Skeletal
         public static AnimationPose LerpPose(AnimationPose poseA, AnimationPose poseB, float factor)
         {
 
+
             var a = poseA.Pose;
             var b = poseB.Pose;
 

@@ -338,6 +338,8 @@ namespace RetroEngine.Map
                             Matrix.CreateRotationZ(importRot.X) *
                             Matrix.CreateRotationY(importRot.Y);
 
+
+
             Vector3 rotation = rotM.DecomposeMatrix().Rotation;
 
             if (notForModel)

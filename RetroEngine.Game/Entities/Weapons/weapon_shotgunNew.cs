@@ -262,7 +262,7 @@ namespace RetroEngine.Game.Entities.Weapons
             //mesh.CastShadows = false;
             mesh.PreloadTextures();
             mesh.Viewmodel = true;
-            mesh.UseAlternativeRotationCalculation = true;
+            //mesh.UseAlternativeRotationCalculation = true;
             mesh.CastShadows = true;
 
             //mesh.DitherDisolve = 0.5f;
@@ -272,7 +272,7 @@ namespace RetroEngine.Game.Entities.Weapons
             arms.Scale = mesh.Scale;
             arms.Viewmodel = true;
             arms.CastShadows = true;
-            arms.UseAlternativeRotationCalculation = true;
+            //arms.UseAlternativeRotationCalculation = true;
 
 
             mesh.SetInterpolationEnabled(true);

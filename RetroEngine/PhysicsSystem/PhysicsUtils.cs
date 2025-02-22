@@ -74,16 +74,12 @@ namespace RetroEngine
 
         public static void SetRotation(this RigidBody body, Vector3 Rotation)
         {
-            SetRotation(body, Quaternion.CreateFromRotationMatrix(Matrix.CreateRotationX(Rotation.X / 180 * (float)Math.PI) *
-                                Matrix.CreateRotationY(Rotation.Y / 180 * (float)Math.PI) *
-                                Matrix.CreateRotationZ(Rotation.Z / 180 * (float)Math.PI)));
+            SetRotation(body, Rotation.GetRotationQuaternion());
         }
 
         public static void SetTransform(this RigidBody body, Vector3 Position, Vector3 Rotation)
         {
-             body.WorldTransform = (Matrix.CreateRotationX(Rotation.X / 180 * (float)Math.PI) *
-                                Matrix.CreateRotationY(Rotation.Y / 180 * (float)Math.PI) *
-                                Matrix.CreateRotationZ(Rotation.Z / 180 * (float)Math.PI) * Matrix.CreateTranslation(Position)).ToPhysics();
+             body.WorldTransform = (Rotation.GetRotationMatrix() * Matrix.CreateTranslation(Position)).ToPhysics();
 
         }
 

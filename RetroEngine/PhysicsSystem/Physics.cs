@@ -560,7 +560,12 @@ namespace RetroEngine.PhysicsSystem
                         Matrix4x4 rotationMatrix = rigidBody.WorldTransform.GetBasis();
                         Quaternion rotation = Quaternion.CreateFromRotationMatrix(rotationMatrix);
 
-                        Vector3 rotationEulerAngles = ToEulerAngles(rotation);
+
+                        
+
+                        Vector3 rotationEulerAngles = ((Microsoft.Xna.Framework.Quaternion)rotation).ToYawPitchRoll().ToPhysics();
+
+
 
                         ent.Rotation = new Microsoft.Xna.Framework.Vector3((float)rotationEulerAngles.X, (float)rotationEulerAngles.Y, (float)rotationEulerAngles.Z);
                     }
@@ -659,6 +664,8 @@ namespace RetroEngine.PhysicsSystem
     }
 }
          */ // old not parallel version
+
+
 
         public static Vector3 ToEulerAngles(Quaternion quaternion)
         {

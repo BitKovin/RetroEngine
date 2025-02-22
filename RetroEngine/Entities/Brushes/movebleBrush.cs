@@ -137,7 +137,7 @@ namespace RetroEngine.Entities.Brushes
             // Apply rotation transformation
             Matrix rotationMatrix = offsetRotation.GetRotationMatrix();
 
-            Rotation = Quaternion.Slerp(Quaternion.Identity, Quaternion.CreateFromRotationMatrix(rotationMatrix), progress).ToEulerAnglesDegrees();
+            Rotation = Quaternion.Slerp(Quaternion.Identity, Quaternion.CreateFromRotationMatrix(rotationMatrix), progress).ToYawPitchRoll();
 
             rotationMatrix = Rotation.GetRotationMatrix();
 

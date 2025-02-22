@@ -1436,7 +1436,7 @@ namespace RetroEngine
                 // Create a transform for the offset
                 Matrix offsetTransform = MathHelper.GetRotationMatrix(hitbox.Rotation) * Matrix.CreateTranslation(hitbox.Position / 100);
 
-                BoxShape boxShape = new BoxShape(hitbox.Size.ToPhysics() * 0.5f);  // Bullet expects half extents
+                BoxShape boxShape = new BoxShape(hitbox.Size * 0.5f);  // Bullet expects half extents
 
                 // Add the box shape to the compound shape with the offset
                 compoundShape.AddChildShape(offsetTransform.ToPhysics(), boxShape);
@@ -1675,8 +1675,8 @@ namespace RetroEngine
 
             hitbox.Constraint = Physics.CreateGenericConstraint(hitbox.RagdollRigidBodyRef, hitbox.RagdollParrentRigidBody, Matrix.Identity.ToPhysics(), hitbox.ConstrainLocal2.ToPhysics());
 
-            hitbox.Constraint.AngularLowerLimit = (hitbox.AngularLowerLimit / 180 * (float)Math.PI).ToPhysics();
-            hitbox.Constraint.AngularUpperLimit = (hitbox.AngularUpperLimit / 180 * (float)Math.PI).ToPhysics();
+            hitbox.Constraint.AngularLowerLimit = (hitbox.AngularLowerLimit / 180 * (float)Math.PI);
+            hitbox.Constraint.AngularUpperLimit = (hitbox.AngularUpperLimit / 180 * (float)Math.PI);
 
             if (CreateHingeConstraints && hitbox.Parrent != "")
             {
@@ -1686,14 +1686,10 @@ namespace RetroEngine
                 //hitbox.RagdollRigidBodyRef.SetTransform(boneTrans.Position, boneTrans.Rotation);
 
 
-                var boneT = Matrix.CreateRotationX(boneTrans.Rotation.X / 180 * (float)Math.PI) *
-                Matrix.CreateRotationY(boneTrans.Rotation.Y / 180 * (float)Math.PI) *
-                Matrix.CreateRotationZ(boneTrans.Rotation.Z / 180 * (float)Math.PI);
+                var boneT = boneTrans.Rotation.GetRotationMatrix();
                 boneT.Translation = boneTrans.Position;
 
-                var bonePT = Matrix.CreateRotationX(boneTransP.Rotation.X / 180 * (float)Math.PI) *
-                Matrix.CreateRotationY(boneTransP.Rotation.Y / 180 * (float)Math.PI) *
-                Matrix.CreateRotationZ(boneTransP.Rotation.Z / 180 * (float)Math.PI);
+                var bonePT = boneTransP.Rotation.GetRotationMatrix();
                 bonePT.Translation = boneTransP.Position;
 
                 var frame = boneT * Matrix.Invert(hitbox.RagdollParrentRigidBody.WorldTransform);
@@ -1735,9 +1731,7 @@ namespace RetroEngine
                 hitbox.RagdollRigidBodyRef.SetTransform(boneTrans.Position, boneTrans.Rotation);
 
 
-                hitbox.BoneMatrix = Matrix.CreateRotationX(boneTrans.Rotation.X / 180 * (float)Math.PI) *
-                Matrix.CreateRotationY(boneTrans.Rotation.Y / 180 * (float)Math.PI) *
-                Matrix.CreateRotationZ(boneTrans.Rotation.Z / 180 * (float)Math.PI);
+                hitbox.BoneMatrix = boneTrans.Rotation.GetRotationMatrix();
                 hitbox.BoneMatrix.Translation = boneTrans.Position;
 
                 hitbox.RigidBodyMatrix = hitbox.RagdollRigidBodyRef.WorldTransform;
@@ -2231,13 +2225,13 @@ namespace RetroEngine
         public string Parrent = "";
 
         [JsonInclude]
-        public Vector3 Position;
+        public System.Numerics.Vector3 Position;
 
         [JsonInclude]
-        public Vector3 Rotation;
+        public System.Numerics.Vector3 Rotation;
 
         [JsonInclude]
-        public Vector3 Size;
+        public System.Numerics.Vector3 Size;
 
         [JsonInclude]
         public Matrix ConstrainLocal1 = Matrix.Identity;
@@ -2252,10 +2246,10 @@ namespace RetroEngine
         public Matrix savedRigidBodyMatrix = Matrix.Identity;
 
         [JsonInclude]
-        public Vector3 AngularLowerLimit = new Vector3(-3.14f / 15, -3.14f / 15, -3.14f / 4) / (float)Math.PI * 180;
+        public System.Numerics.Vector3 AngularLowerLimit = new System.Numerics.Vector3(-3.14f / 15, -3.14f / 15, -3.14f / 4) / (float)Math.PI * 180;
 
         [JsonInclude]
-        public Vector3 AngularUpperLimit = new Vector3(3.14f / 15, 3.14f / 15, 3.14f / 4) / (float)Math.PI * 180;
+        public System.Numerics.Vector3 AngularUpperLimit = new System.Numerics.Vector3(3.14f / 15, 3.14f / 15, 3.14f / 4) / (float)Math.PI * 180;
 
         public HitboxInfo ParrentHitbox;
         public Matrix BoneMatrix = Matrix.Identity;

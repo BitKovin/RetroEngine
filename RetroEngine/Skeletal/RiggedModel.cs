@@ -252,7 +252,7 @@ namespace RetroEngine.Skeletal
 
             Vector3 motionPos = transform.Position - OldRootTransform.Position;
 
-            Vector3 motionRot = (transform.RotationQuaternion *  Quaternion.Inverse(OldRootTransform.RotationQuaternion)).ToEulerAnglesDegrees();
+            Vector3 motionRot = (transform.RotationQuaternion *  Quaternion.Inverse(OldRootTransform.RotationQuaternion)).ToYawPitchRoll();
 
             motionRot.Z = 0; //buggy so disabled
             motionRot.X = 0; //buggy so disabled
@@ -675,6 +675,8 @@ namespace RetroEngine.Skeletal
             AnimationTime = 0;
 
             int index = 0;
+
+            name = name.ToLower();
 
             for (int i = 0; i < originalAnimations.Count; i++)
             {

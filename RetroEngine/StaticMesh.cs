@@ -1597,14 +1597,13 @@ namespace RetroEngine
             if (UseAlternativeRotationCalculation)
             {
                 // Alternative rotation order: Z then X then Y.
-                rotationMatrix = Matrix.CreateRotationZ(roll) *
-                                 Matrix.CreateRotationX(pitch) *
-                                 Matrix.CreateRotationY(yaw);
+                rotationMatrix = Matrix.CreateFromYawPitchRoll(yaw, pitch, roll);
             }
             else
             {
-                // Standard rotation order using yaw (Y), pitch (X), and roll (Z).
+
                 rotationMatrix = Matrix.CreateFromYawPitchRoll(yaw, pitch, roll);
+
             }
 
             // Build the base world matrix.

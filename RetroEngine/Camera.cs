@@ -130,9 +130,7 @@ namespace RetroEngine
 
             StupidCameraFix();
 
-            return Matrix.CreateRotationX(rotation.X / 180 * (float)Math.PI) *
-                                Matrix.CreateRotationY(rotation.Y / 180 * (float)Math.PI) *
-                                Matrix.CreateRotationZ(rotation.Z / 180 * (float)Math.PI);
+            return rotation.GetRotationMatrix();
         }
 
         public static Matrix GetMatrix()
@@ -140,8 +138,7 @@ namespace RetroEngine
 
             StupidCameraFix();
 
-            return Matrix.CreateRotationX(rotation.X / 180 * (float)Math.PI) *
-                                Matrix.CreateRotationY(rotation.Y / 180 * (float)Math.PI) *
+            return rotation.GetRotationMatrix() *
                                 Matrix.CreateTranslation(position);
         }
 
