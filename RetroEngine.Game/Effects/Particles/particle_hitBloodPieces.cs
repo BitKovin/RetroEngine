@@ -203,7 +203,7 @@ namespace RetroEngine.Game.Effects.Particles
 
             particle.velocity -= new Vector3(0, 6, 0) * (Time.DeltaTime / 2f);
 
-            particle.transparency = Math.Max(particle.transparency -= Time.DeltaTime / 3f, 0);
+            particle.transparency = Math.Max(particle.transparency -= Time.DeltaTime / 1.5f, 0);
 
             //particle.SetRotationFromVelocity();
 
@@ -224,7 +224,7 @@ namespace RetroEngine.Game.Effects.Particles
             //particle.velocity *= float.Lerp(0.6f, 1f, (float)random.NextDouble());
 
             particle.transparency = 1.4f;
-            particle.deathTime = 1.5f;
+            particle.deathTime = 1f;
 
 
             particle.Rotation = random.NextSingle() * 500f;
