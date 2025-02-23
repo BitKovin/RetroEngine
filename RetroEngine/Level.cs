@@ -340,12 +340,14 @@ namespace RetroEngine
         {
 
             ParallelOptions options = new ParallelOptions();
-            options.MaxDegreeOfParallelism = Environment.ProcessorCount / 3;
+            options.MaxDegreeOfParallelism = Environment.ProcessorCount / 2;
             Entity[] list;
             lock (entities)
             {
                 list = entities.ToArray();
             }
+
+            list = list.OrderBy(e => e.AsyncUpdateOrder).ToArray();
 
             Parallel.ForEach(list, options, entity =>
             {
@@ -548,13 +550,12 @@ namespace RetroEngine
 
             Entity[] list;
 
-            lock (entities)
-                list = entities.ToArray();
+            list = entities.ToArray();
 
             foreach (Entity ent in list)
             {
                 if (LoadedAssetsThisFrame < 1)
-                    if (ent is not null)
+                    if (ent != null)
                         if (ent.LoadAssetsIfNeeded())
                         {
                             loaded = true;

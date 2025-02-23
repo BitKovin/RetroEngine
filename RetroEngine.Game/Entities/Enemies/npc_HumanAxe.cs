@@ -298,6 +298,7 @@ namespace RetroEngine.Game.Entities.Enemies
             damage = MathF.Max(15, damage);
 
             GlobalParticleSystem.EmitAt("hitBlood", point, MathHelper.FindLookAtRotation(Vector3.Zero, -direction), new Vector3(0, 0, damage / 10f));
+            GlobalParticleSystem.EmitAt("hitBlood", point, MathHelper.FindLookAtRotation(Vector3.Zero, direction), new Vector3(0, 0, damage / 20f));
 
         }
 

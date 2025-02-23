@@ -15,6 +15,7 @@ using RetroEngine.PhysicsSystem;
 using System.Threading.Tasks;
 using RetroEngine.Graphic;
 using SharpFont;
+using System.Collections.Concurrent;
 
 
 namespace RetroEngine
@@ -29,7 +30,7 @@ namespace RetroEngine
 
         public BoundingSphere boundingSphere = new BoundingSphere();
 
-        public static Dictionary<string, RiggedModel> LoadedRigModels = new Dictionary<string, RiggedModel>();
+        public static ConcurrentDictionary<string, RiggedModel> LoadedRigModels = new ConcurrentDictionary<string, RiggedModel>();
 
 
         protected Dictionary<string, Matrix> additionalLocalOffsets = new Dictionary<string, Matrix>();
@@ -96,7 +97,7 @@ namespace RetroEngine
 
                 GenerateSmoothNormals();
 
-                LoadedRigModels.Add(path, RiggedModel);
+                LoadedRigModels.TryAdd(path, RiggedModel);
             }
 
             RiggedModel = LoadedRigModels[path].MakeCopy();

@@ -84,6 +84,8 @@ namespace RetroEngine
         public string OwnerId = "";
         Entity owner;
 
+        public int AsyncUpdateOrder = 0;
+
         public Entity()
         {
             System.Reflection.MemberInfo info = this.GetType();

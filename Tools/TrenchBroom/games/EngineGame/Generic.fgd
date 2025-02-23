@@ -133,6 +133,13 @@
 	type(string) : "Type" : "weapon_pistol_double"
 ]
 
+@PointClass base(Entity) size(-10 -10 -10, 10 10 10) color(255 0 0) = delay : "Delay" 
+[
+	time(float) : "time" : "1"
+	target(string) : "Target" : ""
+	eventName(string) : "EventName" : ""
+]
+
 @PointClass base(Entity) size(-15 -15 -15, 15 15 15) color(150 30 150) = music_player : "Audio" 
 [
 	bankName(string) : "bankName" : "Music.bank"

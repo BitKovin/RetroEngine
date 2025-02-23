@@ -624,7 +624,6 @@ namespace RetroEngine
                         loading = true;
                     }
 
-                Thread.Sleep(1);
 
 
                 if (loading)

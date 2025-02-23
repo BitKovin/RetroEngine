@@ -24,6 +24,8 @@ namespace RetroEngine.Game.Effects.Particles
             particle_MeleeTrail = new particle_meleeTrail();
 
             emitters.Add(particle_MeleeTrail);
+
+
         }
 
         public override void AsyncUpdate()
@@ -50,6 +52,8 @@ namespace RetroEngine.Game.Effects.Particles
             Emitting = true;
 
             Viewmodel = true;
+
+            DistanceSortingRadius = 10000;
 
         }
 

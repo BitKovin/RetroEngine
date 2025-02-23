@@ -26,6 +26,9 @@ namespace RetroEngine.Entities
         public TriggerOnce()
         {
             SaveGame = true;
+
+            AsyncUpdateOrder = -10;
+
         }
 
         public override void Start()

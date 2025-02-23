@@ -38,7 +38,7 @@ namespace RetroEngine.Game.Effects.Particles
 
             particle_blood.Position = position;
             particle_blood.Rotation = orientation;
-            particle_blood.SpawnParticles((int)Scale.Z * 2);
+            particle_blood.SpawnParticles((int)(Scale.Z * 2f));
 
         }
 
@@ -75,7 +75,7 @@ namespace RetroEngine.Game.Effects.Particles
             if(particle.lifeTime<1.5)
             particle.UserData1 += Time.DeltaTime;
 
-            const float spawnInterval = 0.07f;
+            const float spawnInterval = 0.1f;
 
             
             if (particle.UserData1 > spawnInterval)
@@ -95,7 +95,7 @@ namespace RetroEngine.Game.Effects.Particles
             if(particle.position.Y < particle.UserData3 && particle.UserData2 < 2)
             {
 
-                if (random.NextSingle() < ((particle.UserData2 == 0) ? 0.3f : 0.3f))
+                if (random.NextSingle() < ((particle.UserData2 == 0) ? 0.5f : 0.5f))
                 {
 
                     var hit = Physics.LineTraceForStatic((particle.position - particle.velocity.Normalized() * 0.2f).ToPhysics(), (particle.position + particle.velocity.Normalized()).ToPhysics());

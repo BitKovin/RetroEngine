@@ -28,6 +28,7 @@ namespace RetroEngine.Entities
         public Spawner() 
         {
             SaveGame = true;
+
         }
 
         public override void FromData(EntityData data)
@@ -52,9 +53,11 @@ namespace RetroEngine.Entities
             base.LoadAssets();
 
             var ent = LevelObjectFactory.CreateByTechnicalName(className);
-
+            ent.SaveGame = false;
+            Level.GetCurrent().AddEntity(ent);
             ent.LoadAssetsIfNeeded();
-
+            ent.Start();
+            ent.Destroy();
         }
 
         public override void OnAction(string action)
@@ -86,7 +89,7 @@ namespace RetroEngine.Entities
                 ent.Position = Position;
                 ent.Rotation = Rotation;
                 ent.SetOwner(this);
-                ent.LoadAssetsIfNeeded(true);
+
                 ent.Start();
 
                 Level.GetCurrent().AddEntity(ent);

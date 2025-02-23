@@ -123,6 +123,7 @@ namespace RetroEngine.Game.Entities.Weapons
         void UpdateTrail()
         {
 
+
             if(startTrailDelay.Wait() == false)
             {
                 StartNewTrail();
@@ -142,6 +143,7 @@ namespace RetroEngine.Game.Entities.Weapons
             Vector3 trailEnd = mesh.GetBoneMatrix("trail_end").DecomposeMatrix().Position;
 
             trail.SetTrailTransform(trailStart, trailEnd);
+
 
         }
 

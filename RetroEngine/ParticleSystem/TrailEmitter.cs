@@ -38,10 +38,14 @@ namespace RetroEngine.Particles
 
             primitiveCount = 0;
 
-            if (particles == null || particles.Count < 2 || destroyed)
+            if (particles == null || particles.Count < 1 || destroyed)
             {
                 return;
             }
+
+            particles = particles.ToList();
+
+            particles.Add(GetNewParticle());
 
             GraphicsDevice _graphicsDevice = GameMain.Instance.GraphicsDevice;
 
