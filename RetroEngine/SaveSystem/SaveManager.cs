@@ -162,7 +162,7 @@ namespace RetroEngine.SaveSystem
 
                 if (targetEntity == null)
                 {
-                    Logger.Log($"failed to find or create entity with name '{entity.Name} and id '{entity.id}''");
+                    Logger.Log($"failed to find or create {entity.className} with name '{entity.Name} and id '{entity.id}''");
                     continue;
                 }
 

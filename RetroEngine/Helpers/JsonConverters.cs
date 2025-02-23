@@ -13,7 +13,7 @@ namespace RetroEngine.Helpers
     {
         public static List<JsonConverter> GetAll()
         {
-            return new List<JsonConverter> { new Vector3Converter(), new TypeConverter(), new SystemVector3Converter(), new MatrixConverter(), new DelayConverter() };
+            return new List<JsonConverter> { new Vector3Converter(), new Vector4Converter(), new TypeConverter(), new SystemVector3Converter(), new MatrixConverter(), new DelayConverter() };
         }
     }
 
@@ -88,6 +88,60 @@ namespace RetroEngine.Helpers
             writer.WriteNumber("X", value.X);
             writer.WriteNumber("Y", value.Y);
             writer.WriteNumber("Z", value.Z);
+            writer.WriteEndObject();
+        }
+    }
+
+    public class Vector4Converter : JsonConverter<Microsoft.Xna.Framework.Vector4>
+    {
+        public override Microsoft.Xna.Framework.Vector4 Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            if (reader.TokenType != JsonTokenType.StartObject)
+                throw new JsonException();
+
+            float x = 0, y = 0, z = 0, w = 0;
+
+            while (reader.Read())
+            {
+                if (reader.TokenType == JsonTokenType.EndObject)
+                    return new Microsoft.Xna.Framework.Vector4(x, y, z, w);
+
+                if (reader.TokenType != JsonTokenType.PropertyName)
+                    throw new JsonException();
+
+                string propertyName = reader.GetString();
+
+                reader.Read();
+
+                switch (propertyName)
+                {
+                    case "X":
+                        x = reader.GetSingle();
+                        break;
+                    case "Y":
+                        y = reader.GetSingle();
+                        break;
+                    case "Z":
+                        z = reader.GetSingle();
+                        break;
+                    case "W":
+                        w = reader.GetSingle();
+                        break;
+                    default:
+                        throw new JsonException();
+                }
+            }
+
+            throw new JsonException();
+        }
+
+        public override void Write(Utf8JsonWriter writer, Microsoft.Xna.Framework.Vector4 value, JsonSerializerOptions options)
+        {
+            writer.WriteStartObject();
+            writer.WriteNumber("X", value.X);
+            writer.WriteNumber("Y", value.Y);
+            writer.WriteNumber("Z", value.Z);
+            writer.WriteNumber("W", value.W);
             writer.WriteEndObject();
         }
     }

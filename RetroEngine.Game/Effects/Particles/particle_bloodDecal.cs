@@ -2,10 +2,12 @@
 using RetroEngine.Entities;
 using RetroEngine.Particles;
 using RetroEngine.ParticleSystem;
+using RetroEngine.SaveSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace RetroEngine.Game.Effects.Particles
@@ -13,17 +15,21 @@ namespace RetroEngine.Game.Effects.Particles
 
 
     [ParticleSys("decal_blood")]
+    [LevelObject("decal_blood")]
     public class particle_system_decal_blood : GlobalParticleSystem
     {
 
         particle_decal_blood particle_blood;
 
-        public particle_system_decal_blood()
+        public particle_system_decal_blood() : base()
         {
 
             particle_blood = new particle_decal_blood();
 
             emitters.Add(particle_blood);
+
+            SaveGame = true;
+
         }
 
         protected override void EmitAt(Vector3 position, Vector3 orientation, Vector3 Scale)
@@ -36,6 +42,25 @@ namespace RetroEngine.Game.Effects.Particles
 
         }
 
+        [JsonInclude]
+        public ParticleEmitter.ParticleEmitterSaveData decalSaveData = new ParticleEmitter.ParticleEmitterSaveData();
+
+        protected override EntitySaveData SaveData(EntitySaveData baseData)
+        {
+
+            decalSaveData = particle_blood.GetSaveData();
+
+            return base.SaveData(baseData);
+        }
+
+        public override void LoadData(EntitySaveData Data)
+        {
+            base.LoadData(Data);
+
+            particle_blood.LoadData(decalSaveData);
+
+        }
+
     }
 
 
@@ -45,14 +70,14 @@ namespace RetroEngine.Game.Effects.Particles
         {
             TexturePath = "textures/particles/smoke.png";
 
-            ModelPath = "models/particle.obj";
+            //ModelPath = "models/particle.obj";
 
             InitialSpawnCount = 0;
             SpawnRate = 0;
             BoundingRadius = 300000000;
             Emitting = true;
 
-            DisableSorting = true;
+            //DisableSorting = true;
 
         }
 

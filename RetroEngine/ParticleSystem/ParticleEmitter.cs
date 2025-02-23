@@ -5,6 +5,7 @@ using RetroEngine.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using static RetroEngine.Particles.ParticleEmitter;
 
@@ -13,7 +14,8 @@ namespace RetroEngine.Particles
 
     public class ParticleEmitter : StaticMesh
     {
-        protected List<Particle> Particles = new List<Particle>();
+
+        public List<Particle> Particles = new List<Particle>();
 
         static Model particleModel = null;
 
@@ -687,45 +689,83 @@ namespace RetroEngine.Particles
             return new BoundingSphere(Position, BoundingRadius).Intersects(sphere);
         }
 
+        public virtual ParticleEmitterSaveData GetSaveData()
+        {
+            return new ParticleEmitterSaveData { particles = Particles.ToArray() };
+        }
+
+        public virtual void LoadData(ParticleEmitterSaveData data)
+        {
+            Particles = data.particles.ToList();
+        }
+
+        public struct ParticleEmitterSaveData()
+        {
+            [JsonInclude]
+            public Particle[] particles;
+        }
+
         public class Particle
         {
+            [JsonInclude]
             public Vector3 position = new Vector3();
+            [JsonInclude]
             public Vector3 position2 = new Vector3(); //used for trails
+            [JsonInclude]
             public Vector3 velocity = new Vector3();
 
+            [JsonInclude]
             public Vector3 globalRotation = new Vector3();
+
+            [JsonInclude]
             public bool useGlobalRotation = false;
 
-  
 
+            [JsonInclude]
             public int seed = 0;
 
+            [JsonInclude]
             public int id = 0;
 
+            [JsonInclude]
             public float lifeTime = 0;
+            [JsonInclude]
             public float deathTime = 2;
 
+            [JsonInclude]
             public float transparency = 1;
 
+            [JsonInclude]
             public Vector4 color = Vector4.One;
 
+            [JsonInclude]
             public float Scale = 0;
+            [JsonInclude]
             public float Rotation = 0;
+
+            [JsonInclude]
             public bool OrientRotationToVelocity = false;
 
-
+            [JsonInclude]
             public bool HasCollision = false;
+            [JsonInclude]
             public float CollisionRadius = 0.02f;
+            [JsonInclude]
             public float BouncePower = 0.8f;
 
+            [JsonInclude]
             public bool Collided = false;
 
+            [JsonInclude]
             public bool destroyed = false;
 
+            [JsonInclude]
             public float UserData1 = 0;
+            [JsonInclude]
             public float UserData2 = 0;
+            [JsonInclude]
             public float UserData3 = 0;
-
+            [JsonInclude]
             public float MaxDrawDistance = 30;
 
             public void SetRotationFromVelocity()
@@ -741,7 +781,11 @@ namespace RetroEngine.Particles
             public Particle()
             {
             }
+
+
         }
+
+        
 
     }
 }

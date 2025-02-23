@@ -1,9 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using RetroEngine.Entities;
+using RetroEngine.SaveSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace RetroEngine.ParticleSystem
@@ -12,10 +14,22 @@ namespace RetroEngine.ParticleSystem
     /// <summary>
     /// Emitting must always stay "true" on every emitter. Otherwise emitter will be destroyed
     /// </summary>
+    /// 
+
     public class GlobalParticleSystem : ParticleSystemEnt
     {
 
+
         static Dictionary<string, GlobalParticleSystem> existingSystems = new Dictionary<string, GlobalParticleSystem>();
+
+        [JsonInclude]
+        public string SystemName = "";
+
+        public GlobalParticleSystem() : base() 
+        {
+
+        }
+
 
         static GlobalParticleSystem GetOrCreateGlobalSystem(string systemName)
         {
@@ -42,16 +56,22 @@ namespace RetroEngine.ParticleSystem
 
             var globalSystem = system as GlobalParticleSystem;
 
+            globalSystem.SystemName = systemName;
+
+            globalSystem.SaveGame = true;
+
             if (existingSystems.ContainsKey(systemName))
             {
+
+
                 existingSystems[systemName] = globalSystem;
             }
             else
             {
                 existingSystems.TryAdd(systemName, globalSystem);
             }
-            
-            
+
+            Logger.Log($"creating global system {systemName}");
             
 
             return globalSystem;
@@ -70,6 +90,37 @@ namespace RetroEngine.ParticleSystem
             if (sys == null) return;
 
             sys.EmitAt(position, orientation, Scale);
+
+        }
+
+        public override void Start()
+        {
+            base.Start();
+
+        }
+
+        public override void Destroy()
+        {
+            base.Destroy();
+
+            existingSystems.Remove(SystemName);
+
+        }
+
+        public override void LoadData(EntitySaveData Data)
+        {
+            base.LoadData(Data);
+
+            if (SaveGame && SystemName != "")
+            {
+                if(existingSystems.ContainsKey(SystemName))
+                {
+                    existingSystems[SystemName].SaveGame = false;
+                    existingSystems[SystemName].Destroy();
+                    existingSystems.Remove(SystemName);
+                }
+                existingSystems.Add(SystemName, this);
+            }
 
         }
 

@@ -3,10 +3,12 @@ using RetroEngine.Entities;
 using RetroEngine.Particles;
 using RetroEngine.ParticleSystem;
 using RetroEngine.PhysicsSystem;
+using RetroEngine.SaveSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace RetroEngine.Game.Effects.Particles
@@ -14,13 +16,14 @@ namespace RetroEngine.Game.Effects.Particles
 
 
     [ParticleSys("hitBlood")]
+    [LevelObject("hitBlood")]
     public class particle_system_hitBlood : GlobalParticleSystem
     {
 
         particle_hitBloodPieces particle_blood;
         particle_hitBloodDrips particle_bloodDrips;
 
-        public particle_system_hitBlood()
+        public particle_system_hitBlood() : base()
         {
 
             particle_blood = new particle_hitBloodPieces();
@@ -30,6 +33,9 @@ namespace RetroEngine.Game.Effects.Particles
 
             emitters.Add(particle_blood);
             emitters.Add(particle_bloodDrips);
+
+            SaveGame = true;
+
         }
 
         protected override void EmitAt(Vector3 position, Vector3 orientation, Vector3 Scale)
@@ -47,6 +53,31 @@ namespace RetroEngine.Game.Effects.Particles
             base.LoadAssets();
 
             ParticleSystemEnt.Preload("decal_blood");
+
+        }
+
+
+        [JsonInclude]
+        public ParticleEmitter.ParticleEmitterSaveData bloodSaveData = new ParticleEmitter.ParticleEmitterSaveData();
+
+        [JsonInclude]
+        public ParticleEmitter.ParticleEmitterSaveData piecesSaveData = new ParticleEmitter.ParticleEmitterSaveData();
+
+        protected override EntitySaveData SaveData(EntitySaveData baseData)
+        {
+
+            bloodSaveData = particle_bloodDrips.GetSaveData();
+            piecesSaveData = particle_blood.GetSaveData();
+
+            return base.SaveData(baseData);
+        }
+
+        public override void LoadData(EntitySaveData Data)
+        {
+            base.LoadData(Data);
+
+            particle_bloodDrips.LoadData(bloodSaveData);
+            particle_blood.LoadData(piecesSaveData);
 
         }
 

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace RetroEngine.Entities
 {
+
     public class ParticleSystemEnt : Entity
     {
 
@@ -15,9 +16,12 @@ namespace RetroEngine.Entities
 
         public float ParticleSizeMultiplier = 1;
 
-        public ParticleSystemEnt() { }
-
         public Matrix RelativeTransform = Matrix.Identity;
+
+        public ParticleSystemEnt() : base()
+        {
+
+        }
 
         public override void Start()
         {
