@@ -720,7 +720,6 @@ namespace RetroEngine.Particles
             [JsonInclude]
             public bool useGlobalRotation = false;
 
-
             [JsonInclude]
             public int seed = 0;
 

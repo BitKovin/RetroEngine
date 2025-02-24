@@ -30,6 +30,7 @@ namespace RetroEngine.Game.Effects.Particles
 
             SaveGame = true;
 
+
         }
 
         protected override void EmitAt(Vector3 position, Vector3 orientation, Vector3 Scale)
@@ -70,14 +71,18 @@ namespace RetroEngine.Game.Effects.Particles
         {
             TexturePath = "textures/particles/smoke.png";
 
-            //ModelPath = "models/particle.obj";
+            ModelPath = "models/particle.obj";
 
             InitialSpawnCount = 0;
             SpawnRate = 0;
             BoundingRadius = 300000000;
             Emitting = true;
 
-            //DisableSorting = true;
+            IsDecal = true;
+
+            DisableSorting = true;
+
+            TwoSided = false;
 
         }
 
@@ -113,7 +118,7 @@ namespace RetroEngine.Game.Effects.Particles
 
             particle.Scale = 1.4f;
 
-            particle.MaxDrawDistance = 40;
+            particle.MaxDrawDistance = 60;
 
             particle.BouncePower = 0.1f;
 

@@ -189,14 +189,26 @@ PixelOutput PixelShaderFunction(PixelInput input)
 
     screenCoords.y = 1.0f - screenCoords.y;
     
-    
-        //float depthIn = SampleMaxDepth(screenCoords);
 
-    if(earlyZ)
+
+    if(Decal)
     {
-        //DepthDiscard(depthIn,input);
-    }
+
+        float3 viewDir = normalize(input.MyPosition - viewPos);
+
+        float sampleDepth = SampleDepth(screenCoords);
     
+        float bias = lerp(3, 0.5, abs(dot(viewDir, normalize(input.Normal))));
+
+        float dist = distance(input.MyPosition, viewPos);
+
+        if(sampleDepth > input.MyPixelPosition.z + bias * dist/7)
+        {
+            discard;
+        }
+
+    }
+
     PixelOutput output = (PixelOutput)0;
     
     float Depth = input.MyPixelPosition.z;

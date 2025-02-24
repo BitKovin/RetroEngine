@@ -146,6 +146,7 @@ namespace RetroEngine
 
         public float DistanceSortingRadius = 0;
 
+        public bool IsDecal = false;
 
         public Entity Owner;
 
@@ -433,6 +434,8 @@ namespace RetroEngine
             effect.Parameters["LargeObject"]?.SetValue(LargeObject);
 
             effect.Parameters["earlyZ"]?.SetValue(Graphics.EarlyDepthDiscardShader && (SimpleTransperent == false || Transperent == false));
+
+            effect.Parameters["Decal"]?.SetValue(IsDecal);
 
             if (Viewmodel&&Graphics.ViewmodelShadows)
             {

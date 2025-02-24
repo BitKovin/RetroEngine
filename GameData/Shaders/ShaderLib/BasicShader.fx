@@ -121,6 +121,8 @@ float ShadowMapResolutionVeryClose;
 
 bool depthTestEqual;
 
+bool Decal;
+
 #ifndef MAX_POINT_LIGHTS
 
 #define MAX_POINT_LIGHTS 20
@@ -434,6 +436,21 @@ float SampleMaxDepth(float2 screenCoords)
 	float d4 = SampleDepth(screenCoords - texelSize * float2(-1, 1));
 
 	return max(d, max(d1, max(d2, max(d3, d4))));
+
+}
+
+float SampleMinDepth(float2 screenCoords)
+{
+
+	float2 texelSize = 2 / float2(ScreenWidth, ScreenHeight);
+
+	float d = SampleDepth(screenCoords);
+	float d1 = SampleDepth(screenCoords + texelSize);
+	float d2 = SampleDepth(screenCoords - texelSize);
+	float d3 = SampleDepth(screenCoords + texelSize * float2(1, -1));
+	float d4 = SampleDepth(screenCoords - texelSize * float2(-1, 1));
+
+	return min(d, min(d1, min(d2, min(d3, d4))));
 
 }
 
