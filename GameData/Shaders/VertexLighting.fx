@@ -32,17 +32,43 @@ sampler EmissiveTextureSampler = sampler_state
 bool earlyZ;
 
 
-half3 CalculateDirectionalVertexLight(half3 tangentNormal)
+half3 CalculateDirectionalVertexLight(half3 tangentNormal, PixelInput input)
 {
 
-    float shadow = 0;
+    float4 lightPos = mul(float4(input.MyPosition,1), ShadowMapViewProjection);
+	float4 lightClosePos = mul(float4(input.MyPosition,1), ShadowMapViewProjectionClose);
+	float4 lightVeryClosePos = mul(float4(input.MyPosition,1), ShadowMapViewProjectionVeryClose);
 
-    float shadowed = shadow;
+	float3 lightCoords = lightPos.xyz / lightPos.w;
+	lightCoords = (lightCoords + 1.0f) / 2.0f;
+	lightCoords.y = 1.0f - lightCoords.y;
 
-    if(isParticle)
-        tangentNormal = -LightDirection;
+	float3 lightCoordsClose = lightClosePos.xyz / lightClosePos.w;
+	lightCoordsClose = (lightCoordsClose + 1.0f) / 2.0f;
+	lightCoordsClose.y = 1.0f - lightCoordsClose.y;
 
-	shadow = lerp(shadow, 1, 1 - max(0, dot(tangentNormal, normalize(-LightDirection))));
+	float3 lightCoordsVeryClose = 0;
+
+	float shadow = 0;
+
+
+
+	if (isParticle)
+		tangentNormal = -LightDirection;
+
+
+	if (dot(tangentNormal, LightDirection) >= 0)
+	{
+		shadow += 1;
+	}
+	else
+	{
+		shadow += GetShadow(lightCoords, lightCoordsClose, lightCoordsVeryClose, input, tangentNormal);
+    }
+    //float shadowed = shadow;
+
+
+	shadow = lerp(shadow, 1, max(0, 1 - dot(normalize(tangentNormal), normalize(-LightDirection))));
 
 
 
@@ -61,7 +87,7 @@ half3 CalculateDirectionalVertexLight(half3 tangentNormal)
 	light *= (1.0f - shadow);
 
 
-	float3 globalLightColor = lerp(GlobalLightColor, SkyColor, shadowed);
+	float3 globalLightColor = lerp(GlobalLightColor, SkyColor, 0);
 
 	// Global ambient light
 	float3 globalLight = GlobalBrightness * globalLightColor * lerp(1.0f, 0.1f, (dot(tangentNormal, float3(0, -1, 0)) + 1) / 2);
@@ -130,7 +156,7 @@ half3 CalculateVertexLight(PixelInput input)
 
     
 
-    half3 light = CalculateDirectionalVertexLight(tangentNormal);
+    half3 light = 0;
 
 #if OPENGL
 #else
@@ -198,13 +224,15 @@ PixelOutput PixelShaderFunction(PixelInput input)
     
     half3 light = input.Light;
 
-#if OPENGL
-
-
     if(isParticle)
         TangentNormal = -LightDirection;
         
-    light = CalculateDirectionalVertexLight(TangentNormal);
+    light += CalculateDirectionalVertexLight(TangentNormal, input);
+
+#if OPENGL
+
+
+
 
 #else
     if(LargeObject)

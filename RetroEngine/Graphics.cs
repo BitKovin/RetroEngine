@@ -19,10 +19,10 @@ namespace RetroEngine
         public static Point Resolution = new Point(1280, 720);
 
         public static float ShadowBias = -0.000f;//0025f
-        public static int shadowMapResolution { get { return (int)(2048 * 2 * ShadowResolutionScale); } }
-        public static int closeShadowMapResolution { get { return (int)(2048 * ShadowResolutionScale); } }
-        public static int veryCloseShadowMapResolution { get { return (int)(2048 * ShadowResolutionScale); } }
-        public static int ViewmodelShadowMapResolution { get { return (int)(2048 * ShadowResolutionScale); } }
+        public static int shadowMapResolution { get { return (int)(1024 * 2 * ShadowResolutionScale); } }
+        public static int closeShadowMapResolution { get { return (int)(1024 * ShadowResolutionScale); } }
+        public static int veryCloseShadowMapResolution { get { return (int)(1024 * ShadowResolutionScale); } }
+        public static int ViewmodelShadowMapResolution { get { return (int)(1024 * ShadowResolutionScale); } }
 
         public static float ShadowResolutionScale = 1f;
 
@@ -152,7 +152,7 @@ namespace RetroEngine
 
         public static Matrix GetLightViewViewmodel()
         {
-            return Matrix.CreateLookAt(Camera.finalizedPosition + Camera.finalizedRotation.GetForwardVector()*0.5f, Camera.finalizedPosition + Camera.finalizedRotation.GetForwardVector() * 0.5f + LightDirection, GetLightUpVector());
+            return Matrix.CreateLookAt(Camera.finalizedPosition + Camera.finalizedRotation.GetForwardVector()*0.5f, Camera.finalizedPosition + Camera.finalizedRotation.GetForwardVector() * 0.5f + LightDirection, Vector3.UnitZ);
         }
 
         public static Matrix GetLightProjectionViewmodel()
@@ -211,17 +211,19 @@ namespace RetroEngine
 
             Vector3 pos = Camera.finalizedPosition;// + Camera.rotation.GetForwardVector().XZ().Normalized() * lightDistance / 3f * hFactor * Graphics.LightDistanceMultiplier;
 
-            //return pos;
+            
 
-            //ector3 pos = Camera.position - new Vector3(0, 1, 0);
+            Matrix view = Matrix.CreateLookAt(Vector3.Zero, LightDirection, Vector3.UnitZ);
+            view = Matrix.CreateScale(resolution / lightDistance) * view;
 
-            // Calculate step based on shadow map resolution and light distance
-            float step = lightDistance / resolution;
+            pos = Vector3.Transform(pos, view);
+            pos.X = float.Floor(pos.X);
+            pos.Y = float.Floor(pos.Y);
+            pos.Z = float.Floor(pos.Z);
 
-            // Adjust the position using the calculated step
-            pos = pos.SnapToGrid(step);
 
-            //DrawDebug.Line(pos - LightDirection * 100, pos + LightDirection*100,null, 0.01f);
+            pos = Vector3.Transform(pos, Matrix.Invert(view));
+
 
             return pos;
         }

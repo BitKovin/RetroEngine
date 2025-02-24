@@ -28,6 +28,7 @@ namespace RetroEngine.Game
 
             SetStylingGraphics();
 
+
         }
 
         protected override void LoadContent()
@@ -58,7 +59,7 @@ namespace RetroEngine.Game
 
 
                 
-            Level.LoadFromFile("lvl1");
+            Level.LoadFromFile("test");
 
             base.GameInitialized();
 
@@ -156,11 +157,12 @@ namespace RetroEngine.Game
             Graphics.EnableSSAO = false;
             Graphics.PointLightShadowQuality = 0;
             Graphics.DirectionalLightShadowQuality = 0;
-            Graphics.ShadowResolutionScale = 0.0f;
+            Graphics.ShadowResolutionScale = 0.2f;
 
             Render.SimpleRender = true;
 
             PointLight.DisableShadows = true;
+
 
             //Graphics.GeometricalShadowsEnabled = true;
 
@@ -168,6 +170,7 @@ namespace RetroEngine.Game
             //Graphics.Gamma = 1.1f;
 
             Graphics.Saturation = 1.0f;
+
 
             Graphics.EnableBloom = true;
 

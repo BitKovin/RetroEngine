@@ -153,7 +153,7 @@ namespace RetroEngine.Game.Entities.Player
 
             PlayerBodyAnimator.LoadAssets();
 
-            //meshes.Add(bodyMesh);
+            meshes.Add(bodyMesh);
 
             testCube.LoadFromFile("models/cube.obj");
             testCube.texture = AssetRegistry.LoadTextureFromFile("cat.png");

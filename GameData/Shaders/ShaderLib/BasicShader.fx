@@ -32,8 +32,8 @@ texture ShadowMapClose;
 sampler ShadowMapCloseSampler = sampler_state
 {
 	texture = <ShadowMapClose>;
-	MinFilter = Point;
-	MagFilter = Point;
+	MinFilter = Linear;
+	MagFilter = Linear;
 	AddressU = Clamp;
 	AddressV = Clamp;
 };
@@ -624,7 +624,7 @@ float GetShadowClose(float3 lightCoords, PixelInput input, float3 TangentNormal)
 	float resolution = 1;
 
 
-	int numSamples = 2; // Number of samples in each direction (total samples = numSamples^2)
+	int numSamples = 1; // Number of samples in each direction (total samples = numSamples^2)
 
 	float b = -0.00005;
 
@@ -655,7 +655,7 @@ float GetShadowClose(float3 lightCoords, PixelInput input, float3 TangentNormal)
 
 	float forceShadow = 0;
 
-	forceShadow = lerp(0, 1, saturate((dot(TangentNormal, LightDirection) + 0.4) * (10 / 4)));
+	forceShadow = 0;// lerp(0, 1, saturate((dot(TangentNormal, LightDirection) + 0.4) * (10 / 4)));
 
 	//bias *= lerp(1,5,saturate(forceShadow*1.75));
 

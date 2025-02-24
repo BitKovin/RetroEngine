@@ -60,9 +60,20 @@ namespace RetroEngine
             if (gridSize <= 0)
                 throw new ArgumentException("Grid size must be greater than zero.", nameof(gridSize));
 
-            float snappedX = (float)Math.Round(position.X / gridSize) * gridSize;
-            float snappedY = (float)Math.Round(position.Y / gridSize) * gridSize;
-            float snappedZ = (float)Math.Round(position.Z / gridSize) * gridSize;
+            float snappedX = (float)Math.Ceiling(position.X / gridSize) * gridSize;
+            float snappedY = (float)Math.Ceiling(position.Y / gridSize) * gridSize;
+            float snappedZ = (float)Math.Ceiling(position.Z / gridSize) * gridSize;
+
+            return new Vector3(snappedX, snappedY, snappedZ);
+        }
+
+        public static Vector3 SnapToGrid(this Vector3 position, Vector3 gridSize)
+        {
+
+
+            float snappedX = (float)Math.Floor(position.X / gridSize.X) * gridSize.X;
+            float snappedY = (float)Math.Floor(position.Y / gridSize.Y) * gridSize.Y;
+            float snappedZ = (float)Math.Floor(position.Z / gridSize.Z) * gridSize.Z;
 
             return new Vector3(snappedX, snappedY, snappedZ);
         }
@@ -80,6 +91,13 @@ namespace RetroEngine
         public static float Lerp(float a, float b, float progress)
         {
             return Vector2.Lerp(new Vector2(a), new Vector2(b), progress).X;
+        }
+
+        public static Vector3 Lerp(Vector3 a, Vector3 b, Vector3 progress)
+        {
+            return new Vector3(float.Lerp(a.X, b.X, progress.X),
+                float.Lerp(a.Y, b.Y, progress.Y),
+                float.Lerp(a.Z, b.Z, progress.Z));
         }
 
         public static float Saturate(float a)

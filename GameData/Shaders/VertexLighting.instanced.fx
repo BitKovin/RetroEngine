@@ -1,5 +1,5 @@
 ﻿#define NO_SPECULAR
-//#define SIMPLE_SHADOWS
+#define SIMPLE_SHADOWS
 
 
 texture Texture;
@@ -34,13 +34,68 @@ sampler EmissiveTextureSampler = sampler_state
 bool earlyZ;
 
 
-half3 CalculateDirectionalVertexLight(half3 tangentNormal)
+half3 CalculateDirectionalVertexLight(half3 tangentNormal, PixelInput input)
 {
-    half brightness = (dot(-tangentNormal, LightDirection) + 1) / 2;
 
-    half3 light = brightness * GlobalLightColor * DirectBrightness;
+    float4 lightPos = mul(float4(input.MyPosition,1), ShadowMapViewProjection);
+	float4 lightClosePos = mul(float4(input.MyPosition,1), ShadowMapViewProjectionClose);
+	float4 lightVeryClosePos = mul(float4(input.MyPosition,1), ShadowMapViewProjectionVeryClose);
 
-    light += lerp(0.3,1,((dot(-tangentNormal, float3(0,-1,0)) + 1) / 2)) * lerp(SkyColor, GlobalLightColor, brightness) * GlobalBrightness;
+	float3 lightCoords = lightPos.xyz / lightPos.w;
+	lightCoords = (lightCoords + 1.0f) / 2.0f;
+	lightCoords.y = 1.0f - lightCoords.y;
+
+	float3 lightCoordsClose = lightClosePos.xyz / lightClosePos.w;
+	lightCoordsClose = (lightCoordsClose + 1.0f) / 2.0f;
+	lightCoordsClose.y = 1.0f - lightCoordsClose.y;
+
+	float3 lightCoordsVeryClose = 0;
+
+	float shadow = 0;
+
+
+
+	if (isParticle)
+		tangentNormal = -LightDirection;
+
+
+	if (dot(tangentNormal, LightDirection) >= 0)
+	{
+		shadow += 1;
+	}
+	else
+	{
+		shadow += GetShadow(lightCoords, lightCoordsClose, lightCoordsVeryClose, input, tangentNormal);
+    }
+    //float shadowed = shadow;
+
+
+	shadow = lerp(shadow, 1, max(0, 1 - dot(normalize(tangentNormal), normalize(-LightDirection))));
+
+
+
+	//shadow = saturate(shadow);
+
+	float3 lightDir = normalize(-LightDirection);
+
+	// Calculate specular reflection
+
+
+	//float3 globalSpecularDir = normalize(-normal + float3(0, -5, 0) + LightDirection);
+	//specular += CalculateSpecular(input.MyPosition, normal, globalSpecularDir, roughness, metallic, albedo) * 0.02;
+
+	// Direct light contribution
+	float3 light = DirectBrightness * GlobalLightColor;
+	light *= (1.0f - shadow);
+
+
+	float3 globalLightColor = lerp(GlobalLightColor, SkyColor, 0);
+
+	// Global ambient light
+	float3 globalLight = GlobalBrightness * globalLightColor * lerp(1.0f, 0.1f, (dot(tangentNormal, float3(0, -1, 0)) + 1) / 2);
+
+	light = max(light, 0.0f);
+	light += globalLight;
 
     return light;
 
@@ -105,7 +160,7 @@ half3 CalculateVertexLight(PixelInput input)
 
     half3 tangentNormal = GetTangentNormal(input.Normal, input.Tangent, input.BiTangent);
 
-    half3 light = CalculateDirectionalVertexLight(tangentNormal);
+    half3 light = 0;
 
 #if OPENGL
 #else
@@ -190,7 +245,8 @@ PixelOutput PixelShaderFunction(PixelInput input)
     screenCoords.y = 1.0f - screenCoords.y;
     
 
-
+#if OPENGL
+#else
     if(Decal)
     {
 
@@ -198,7 +254,7 @@ PixelOutput PixelShaderFunction(PixelInput input)
 
         float sampleDepth = SampleDepth(screenCoords);
     
-        float bias = lerp(3, 0.5, abs(dot(viewDir, normalize(input.Normal))));
+        float bias = 0.5;
 
         float dist = distance(input.MyPosition, viewPos);
 
@@ -208,6 +264,7 @@ PixelOutput PixelShaderFunction(PixelInput input)
         }
 
     }
+#endif
 
     PixelOutput output = (PixelOutput)0;
     
@@ -253,6 +310,8 @@ PixelOutput PixelShaderFunction(PixelInput input)
     //textureColor += light;
     
     half3 light = input.Light;
+
+    light += CalculateDirectionalVertexLight(TangentNormal, input);
 
 #if OPENGL
 

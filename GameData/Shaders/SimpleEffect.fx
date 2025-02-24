@@ -1,5 +1,5 @@
 ﻿#define NO_SPECULAR
-//#define SIMPLE_SHADOWS
+#define SIMPLE_SHADOWS
 
 
 texture Texture;
