@@ -124,7 +124,7 @@ namespace RetroEngine.Game.Effects.Particles
 
             particle.deathTime = 30 * random.NextSingle()*3;
 
-            particle.color = new Vector4(1f, 0.0f, 0.0f, 0.7f);
+            particle.color = new Vector4(0.8f, 0.0f, 0.0f, 0.7f);
 
             //particle.OrientRotationToVelocity = true;
 

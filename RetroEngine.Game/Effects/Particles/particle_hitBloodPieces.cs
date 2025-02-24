@@ -188,7 +188,7 @@ namespace RetroEngine.Game.Effects.Particles
             particle.Rotation = random.NextSingle() * 500f;
 
 
-            particle.color = new Vector4(0.8f, 0.8f, 0.8f, 1);
+            particle.color = new Vector4(0.65f, 0.65f, 0.65f, 1);
 
 
             Vector3 floorCheckPos = particle.position + particle.velocity/2f;
@@ -261,7 +261,7 @@ namespace RetroEngine.Game.Effects.Particles
             particle.Rotation = random.NextSingle() * 500f;
 
 
-            particle.color = new Vector4(0.8f, 0.8f, 0.8f, 1);
+            particle.color = new Vector4(0.55f, 0.55f, 0.55f, 1);
 
             //particle.OrientRotationToVelocity = true;
 

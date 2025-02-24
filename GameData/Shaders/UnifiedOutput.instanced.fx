@@ -150,10 +150,7 @@ PixelOutput PixelShaderFunction(PixelInput input)
     textureColor += specular;
 
     //textureColor = ApplyReflection(textureColor, albedo, input, pixelNormal, roughness, metalic);
-    
-    light -= 1.1;
-    light = saturate(light/8);
-    textureColor += light;
+
     
     textureColor += tex2D(EmissiveTextureSampler, input.TexCoord).rgb * EmissionPower * tex2D(EmissiveTextureSampler, input.TexCoord).a;
     

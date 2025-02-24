@@ -330,7 +330,8 @@ namespace RetroEngine.Game.Entities.Enemies
 
         }
 
-        Delay meshStopUpdateDelay = new Delay();
+        [JsonInclude]
+        public Delay meshStopUpdateDelay = new Delay();
 
         void Death()
         {

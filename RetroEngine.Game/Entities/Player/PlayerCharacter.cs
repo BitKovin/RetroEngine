@@ -939,11 +939,11 @@ namespace RetroEngine.Game.Entities.Player
             Camera.rotation = CameraRotation;
             if(useThirdPersonAnimations)
             {
-                bodyMesh.Position = interpolatedPosition - Camera.rotation.GetForwardVector().XZ().Normalized() * 0.1f - new Vector3(0, 0.93f, 0);
+                bodyMesh.Position = interpolatedPosition - Camera.rotation.GetForwardVector().XZ().Normalized() * 0.1f - new Vector3(0, 0.90f, 0);
             }
             else
             {
-                bodyMesh.Position = interpolatedPosition - Camera.rotation.GetForwardVector().XZ().Normalized() * 0.35f - new Vector3(0, 0.93f, 0);
+                bodyMesh.Position = interpolatedPosition - Camera.rotation.GetForwardVector().XZ().Normalized() * 0.35f - new Vector3(0, 0.90f, 0);
             }
             bodyMesh.Rotation = new Vector3(0, Camera.rotation.Y, 0);
 

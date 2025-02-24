@@ -470,7 +470,7 @@ namespace RetroEngine.Particles
 
 
 
-            bool isParticle = ModelPath == null;
+            isParticle = ModelPath == null;
 
 
             int i = -1;

@@ -536,7 +536,7 @@ namespace RetroEngine
             RiggedModel.additionalMeshOffsets = additionalMeshOffsets;
             RiggedModel.additionalLocalOffsets = additionalLocalOffsets;
 
-            RiggedModel.UpdateVisual = (isRendered && UpdatePose) || AlwaysUpdateVisual || playingRootMotion || RiggedModel.loopAnimation == false;
+            RiggedModel.UpdateVisual = (isRendered && UpdatePose) || AlwaysUpdateVisual || playingRootMotion || Level.ChangingLevel || RiggedModel.loopAnimation == false;
             RiggedModel.Update(deltaTime);
 
             newAnimInterpolationProgress += deltaTime * newAnimInterpolationSpeed;
@@ -1305,6 +1305,7 @@ namespace RetroEngine
 
             inFrustrum = false;
 
+            if(Level.ChangingLevel == false && GameMain.SkipFrames == 0)
             if (Vector3.Distance(Position, Camera.position) > MaxRenderDistance)
                 return;
 
@@ -1979,6 +1980,10 @@ namespace RetroEngine
             SetCurrentAnimationFrame(animationState.CurrentFrame);
             PullRootMotion();
             OldFrame = animationState.OldFrame;
+            RiggedModel.animationRunning = true;
+
+            Update(0.0001f);
+
             RiggedModel.animationRunning = animationState.RunningAnimation;
 
         }

@@ -45,7 +45,8 @@ namespace RetroEngine.Particles
 
             particles = particles.ToList();
 
-            particles.Add(GetNewParticle());
+            if(Emitting)
+                particles.Add(GetNewParticle());
 
             GraphicsDevice _graphicsDevice = GameMain.Instance.GraphicsDevice;
 

@@ -325,9 +325,13 @@ namespace RetroEngine.Skeletal
 
         public void SetFrame(float frame)
         {
-            if(currentAnimation >= 0 && currentAnimation < originalAnimations.Count)
 
-            AnimationTime = (float)((double)frame * originalAnimations[currentAnimation].SecondsPerFrame);
+            if (currentAnimation >= 0 && currentAnimation < originalAnimations.Count)
+            {
+
+                AnimationTime = (float)((double)frame * originalAnimations[currentAnimation].SecondsPerFrame);
+
+            }
         }
 
         /// <summary>

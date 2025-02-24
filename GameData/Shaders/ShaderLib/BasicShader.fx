@@ -640,7 +640,7 @@ float GetShadowClose(float3 lightCoords, PixelInput input, float3 TangentNormal)
 
 	bias -= 0.00002;
 
-	float size = 0.4;
+	float size = 1;
 
 
 
@@ -675,11 +675,10 @@ float GetShadowClose(float3 lightCoords, PixelInput input, float3 TangentNormal)
 		for (int j = -numSamples; j <= numSamples; ++j)
 		{
 
-			if (length(float2(i, j)) > numSamples * 1.1) continue;
-
 			float2 offsetCoords = lightCoords.xy + float2(i, j) * texelSize;
 			float closestDepth;
-			closestDepth = SampleShadowMap(ShadowMapCloseSampler, offsetCoords / float2(2, 1), currentDepth + bias * (lerp(length(float2(i, j)), 1, 0.5)));
+			//closestDepth = SampleShadowMap(ShadowMapCloseSampler, offsetCoords / float2(2, 1), currentDepth + bias * (lerp(length(float2(i, j)), 1, 0.5)));
+			closestDepth = SampleShadowMapLinear(ShadowMapCloseSampler, offsetCoords / float2(2, 1), currentDepth + bias * (lerp(length(float2(i, j)), 1, 0.5)), float2(texelSize / 2, texelSize)/size);
 
 			closestDepth = saturate(closestDepth);
 
