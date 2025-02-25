@@ -1,4 +1,5 @@
-﻿using BulletSharp;
+﻿using BulletXNA;
+using BulletXNA.BulletDynamics;
 using FmodForFoxes.Studio;
 using ImGuiNET;
 using Microsoft.Xna.Framework;

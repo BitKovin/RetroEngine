@@ -1,5 +1,6 @@
 ﻿using Assimp;
-using BulletSharp;
+using BulletXNA;
+using BulletXNA.BulletCollision;
 using Microsoft.Xna.Framework;
 using RetroEngine.Entities;
 using RetroEngine.Game.Effects.Particles;

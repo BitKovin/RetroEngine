@@ -1,4 +1,6 @@
-﻿using BulletSharp;
+﻿using BulletXNA;
+using BulletXNA.BulletCollision;
+using BulletXNA.BulletDynamics;
 using Microsoft.Xna.Framework;
 using RetroEngine.PhysicsSystem;
 using System;
@@ -53,23 +55,24 @@ namespace RetroEngine
 
         public static void SetRotation(this CollisionObject body, Quaternion newRotation)
         {
-            
 
-                    // Create the new rotation matrix from the quaternion
-                    var newTransform = System.Numerics.Matrix4x4.CreateFromQuaternion(newRotation.ToPhysics());
 
-                    // Preserve the existing translation
-                    newTransform.Translation = body.WorldTransform.Translation;
+            // Create the new rotation matrix from the quaternion
+            var newTransform = Matrix.CreateFromQuaternion(newRotation.ToPhysics());
 
-                    // Update the body's world transform and motion state
-                    body.WorldTransform = newTransform;
 
-                    var rb = RigidBody.Upcast(body);
+            // Preserve the existing translation
+            newTransform.Translation = body.WorldTransform.Translation;
 
-                    if(rb != null)
-                    rb.MotionState.WorldTransform = newTransform;
+            // Update the body's world transform and motion state
+            body.WorldTransform = newTransform;
 
-                
+            var rb = RigidBody.Upcast(body);
+
+            if (rb != null)
+                rb.WorldTransform = newTransform;
+
+
         }
 
         public static void SetRotation(this RigidBody body, Vector3 Rotation)

@@ -77,6 +77,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoteLogger", "LoggerHost\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RetroEngine.GameProjectReference", "RetroEngine.GameProjectReference\RetroEngine.GameProjectReference.csproj", "{CAA0915C-2B05-4BBD-A670-C9B05A552863}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RetroEngine.Physics", "RetroEngine.Physics\RetroEngine.Physics.csproj", "{C705C149-CDAB-4A13-BA60-BD07A5FB156C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -569,6 +571,22 @@ Global
 		{CAA0915C-2B05-4BBD-A670-C9B05A552863}.Release|x64.Build.0 = Release|Any CPU
 		{CAA0915C-2B05-4BBD-A670-C9B05A552863}.Release|x86.ActiveCfg = Release|Any CPU
 		{CAA0915C-2B05-4BBD-A670-C9B05A552863}.Release|x86.Build.0 = Release|Any CPU
+		{C705C149-CDAB-4A13-BA60-BD07A5FB156C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C705C149-CDAB-4A13-BA60-BD07A5FB156C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C705C149-CDAB-4A13-BA60-BD07A5FB156C}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{C705C149-CDAB-4A13-BA60-BD07A5FB156C}.Debug|ARM.Build.0 = Debug|Any CPU
+		{C705C149-CDAB-4A13-BA60-BD07A5FB156C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C705C149-CDAB-4A13-BA60-BD07A5FB156C}.Debug|x64.Build.0 = Debug|Any CPU
+		{C705C149-CDAB-4A13-BA60-BD07A5FB156C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C705C149-CDAB-4A13-BA60-BD07A5FB156C}.Debug|x86.Build.0 = Debug|Any CPU
+		{C705C149-CDAB-4A13-BA60-BD07A5FB156C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C705C149-CDAB-4A13-BA60-BD07A5FB156C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C705C149-CDAB-4A13-BA60-BD07A5FB156C}.Release|ARM.ActiveCfg = Release|Any CPU
+		{C705C149-CDAB-4A13-BA60-BD07A5FB156C}.Release|ARM.Build.0 = Release|Any CPU
+		{C705C149-CDAB-4A13-BA60-BD07A5FB156C}.Release|x64.ActiveCfg = Release|Any CPU
+		{C705C149-CDAB-4A13-BA60-BD07A5FB156C}.Release|x64.Build.0 = Release|Any CPU
+		{C705C149-CDAB-4A13-BA60-BD07A5FB156C}.Release|x86.ActiveCfg = Release|Any CPU
+		{C705C149-CDAB-4A13-BA60-BD07A5FB156C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -607,6 +625,7 @@ Global
 		{5452B13D-7212-4D29-93DF-3BAA64375C55} = {AC782ACF-45CF-4201-9B0D-F0FA47102515}
 		{23DED2A8-BC1B-482A-9915-8458C4F8DEB2} = {B079FE1C-C9E6-4F63-90E5-37D30BDDC832}
 		{CAA0915C-2B05-4BBD-A670-C9B05A552863} = {1325DF66-824F-41AC-B950-9750A51C6569}
+		{C705C149-CDAB-4A13-BA60-BD07A5FB156C} = {AC782ACF-45CF-4201-9B0D-F0FA47102515}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CD871269-795C-4097-8657-7A67207223D4}

@@ -1,9 +1,10 @@
-﻿using BulletSharp;
+﻿using BulletXNA;
+using BulletXNA.BulletCollision;
+using Microsoft.Xna.Framework;
 using RetroEngine.PhysicsSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,7 +13,7 @@ namespace RetroEngine
 
     public class MyClosestRayResultCallback : ClosestRayResultCallback
     {
-        public MyClosestRayResultCallback(ref Vector3 rayFromWorld, ref Vector3 rayToWorld) : base(ref rayFromWorld, ref rayToWorld)
+        public MyClosestRayResultCallback(ref Vector3 rayFromWorld, ref Vector3 rayToWorld) : base(rayFromWorld, rayToWorld)
         {
         }
 
@@ -32,7 +33,7 @@ namespace RetroEngine
             if(DisableCustomChecks)
                 return base.AddSingleResult(ref rayResult, normalInWorldSpace);
 
-            if (rayResult.CollisionObject != null)
+            if (rayResult.m_collisionObject != null)
             {
 
                 var obj = rayResult.CollisionObject.UserObject;

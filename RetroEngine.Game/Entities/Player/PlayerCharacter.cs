@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using BulletSharp;
+using BulletXNA;
 using RetroEngine.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -17,9 +17,11 @@ using RetroEngine.Audio;
 using RetroEngine.Entities.Light;
 using RetroEngine.Game.Effects.Particles;
 using RetroEngine.PhysicsSystem;
-using BulletSharp.SoftBody;
+
 using RetroEngine.Graphic;
 using RetroEngine.ParticleSystem;
+using BulletXNA.BulletDynamics;
+using BulletXNA.BulletCollision;
 
 namespace RetroEngine.Game.Entities.Player
 {

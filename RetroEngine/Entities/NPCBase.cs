@@ -1,4 +1,6 @@
-﻿using BulletSharp;
+﻿using BulletXNA;
+using BulletXNA.BulletCollision;
+using BulletXNA.BulletDynamics;
 using DotRecast.Detour.Crowd;
 using Microsoft.Xna.Framework;
 using RetroEngine.NavigationSystem;

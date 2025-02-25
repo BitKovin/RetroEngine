@@ -1,12 +1,12 @@
-﻿using BulletSharp;
+﻿using BulletXNA;
+using BulletXNA.BulletCollision;
+using Microsoft.Xna.Framework;
 using RetroEngine.PhysicsSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
-using static Assimp.Metadata;
 
 namespace RetroEngine
 {
@@ -45,7 +45,7 @@ namespace RetroEngine
             }
             else
             {
-                Matrix4x4 worldTransform = base.CollisionObject.WorldTransform;
+                Matrix worldTransform = base.CollisionObject.WorldTransform;
                 resultCallback.HitNormalWorld = Vector3.Transform(rayResult.HitNormalLocal, worldTransform.GetBasis());
             }
 

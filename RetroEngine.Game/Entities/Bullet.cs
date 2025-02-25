@@ -1,4 +1,6 @@
-﻿using BulletSharp;
+﻿using BulletXNA;
+using BulletXNA.BulletCollision;
+using BulletXNA.BulletDynamics;
 using Microsoft.Xna.Framework;
 using RetroEngine.Entities;
 using RetroEngine.ParticleSystem;
@@ -84,8 +86,6 @@ namespace RetroEngine.Game.Entities
                 }
             }
 
-            collisionCallback.CollisionEvent += Hit;
-
             destroyDelay.AddDelay(LifeTime);
 
             OldPos = Position;
@@ -94,26 +94,6 @@ namespace RetroEngine.Game.Entities
             trail.Position = Position;
             trail.Start();
 
-        }
-
-        private void Hit(BulletSharp.CollisionObjectWrapper thisObject, BulletSharp.CollisionObjectWrapper collidedObject, Entity collidedEntity, BulletSharp.ManifoldPoint contactPoint)
-        {
-
-            RigidBody hitBody = collidedObject.CollisionObject as RigidBody;
-
-            if(hitBody != null)
-            {
-                if (ignoreObjects.Contains(collidedObject.CollisionObject)) return;
-                hitBody.Activate();
-                hitBody.ApplyCentralImpulse(startRotation.GetForwardVector().ToNumerics() * 10f);
-
-                collidedEntity.OnPointDamage(10, Position, startRotation.GetForwardVector());
-
-            }
-
-            Position = contactPoint.PositionWorldOnB;
-
-            Destroy();
         }
 
         public override void Destroy()

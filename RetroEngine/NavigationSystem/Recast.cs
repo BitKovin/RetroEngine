@@ -1,4 +1,4 @@
-﻿using BulletSharp;
+﻿using BulletXNA;
 using DotRecast.Core.Numerics;
 using DotRecast.Detour;
 using DotRecast.Recast.Toolset.Builder;

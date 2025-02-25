@@ -1,4 +1,5 @@
-﻿using BulletSharp;
+﻿using BulletXNA;
+using BulletXNA.BulletDynamics;
 using RetroEngine.Map;
 using RetroEngine.PhysicsSystem;
 using System;
@@ -25,7 +26,7 @@ namespace RetroEngine.Entities
             foreach (RigidBody body in bodies)
             {
 
-                body.CollisionFlags = BulletSharp.CollisionFlags.NoContactResponse;
+                body.CollisionFlags = BulletXNA.BulletCollision.CollisionFlags.NoContactResponse;
                 body.SetBodyType(PhysicsSystem.BodyType.NoRayTest | PhysicsSystem.BodyType.World);
             }
             collisionCallback.CollisionEvent += TriggerEntered;
@@ -34,16 +35,14 @@ namespace RetroEngine.Entities
             //meshes[0].Transperent = true;
         }
 
-        private void TriggerEntered(BulletSharp.CollisionObjectWrapper thisObject, BulletSharp.CollisionObjectWrapper collidedObject, Entity collidedEntity, BulletSharp.ManifoldPoint contactPoint)
+        private void TriggerEntered(BulletXNA.BulletCollision.CollisionObject thisObject, BulletXNA.BulletCollision.CollisionObject collidedObject, Entity collidedEntity, BulletXNA.BulletCollision.ManifoldPoint contactPoint)
         {
-
             if (collidedEntity is null) return;
 
             if (collidedEntity.Tags.Contains(collideToTag))
             {
                 entities.Add(collidedEntity);
             }
-
         }
 
         public override void AsyncUpdate()

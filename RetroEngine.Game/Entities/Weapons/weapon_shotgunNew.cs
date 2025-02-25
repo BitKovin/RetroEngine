@@ -1,4 +1,5 @@
-﻿using BulletSharp;
+﻿using BulletXNA;
+using BulletXNA.BulletDynamics;
 using Microsoft.Xna.Framework;
 using RetroEngine.Audio;
 using RetroEngine.Entities;

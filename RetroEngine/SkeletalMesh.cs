@@ -4,9 +4,9 @@ using RetroEngine.Skeletal;
 using System;
 using System.Xml.Linq;
 using System.Collections.Generic;
-using BulletSharp.SoftBody;
+
 using static RetroEngine.Skeletal.RiggedModel;
-using BulletSharp;
+using BulletXNA;
 using System.Text.Json.Serialization;
 using System.IO;
 using System.Text.Json;
@@ -16,6 +16,8 @@ using System.Threading.Tasks;
 using RetroEngine.Graphic;
 using SharpFont;
 using System.Collections.Concurrent;
+using BulletXNA.BulletDynamics;
+using BulletXNA.BulletCollision;
 
 
 namespace RetroEngine
@@ -1441,7 +1443,7 @@ namespace RetroEngine
                 BoxShape boxShape = new BoxShape(hitbox.Size * 0.5f);  // Bullet expects half extents
 
                 // Add the box shape to the compound shape with the offset
-                compoundShape.AddChildShape(offsetTransform.ToPhysics(), boxShape);
+                compoundShape.AddChildShape(offsetTransform, boxShape);
 
                 compoundShape.UserObject = new Physics.CollisionSurfaceData { surfaceType = "flesh" };
 
@@ -1467,7 +1469,7 @@ namespace RetroEngine
                 body.CcdSweptSphereRadius = 0.1f;
 
                 body.CollisionFlags = CollisionFlags.NoContactResponse | CollisionFlags.CustomMaterialCallback;
-                body.Flags = RigidBodyFlags.DisableWorldGravity;
+                body.SetFlags(RigidBodyFlags.DisableWorldGravity);
 
                 body.SetBodyType(BodyType.HitBox);
                 body.SetCollisionMask(BodyType.None);
@@ -1549,7 +1551,7 @@ namespace RetroEngine
 
 
 
-            body.Flags = RigidBodyFlags.None;
+            body.SetFlags(RigidBodyFlags.None);
 
             body.Gravity = new System.Numerics.Vector3(0, -9, 0);
 
@@ -1603,7 +1605,7 @@ namespace RetroEngine
                 body.Gravity = new System.Numerics.Vector3(0, 0, 0);
 
                 body.CollisionFlags = CollisionFlags.NoContactResponse | CollisionFlags.CustomMaterialCallback;
-                body.Flags = RigidBodyFlags.DisableWorldGravity;
+                body.SetFlags(RigidBodyFlags.DisableWorldGravity);
                 body.LinearVelocity = Vector3.Zero.ToPhysics();
                 body.AngularVelocity = Vector3.Zero.ToPhysics();
 
@@ -1619,7 +1621,6 @@ namespace RetroEngine
                 body.CcdSweptSphereRadius = 0.1f;
 
                 body.CollisionFlags = CollisionFlags.NoContactResponse | CollisionFlags.CustomMaterialCallback;
-                body.Flags = RigidBodyFlags.DisableWorldGravity;
 
                 body.ActivationState = ActivationState.WantsDeactivation;
 
@@ -1648,7 +1649,7 @@ namespace RetroEngine
                 if (hitbox.RagdollParrentRigidBody == null) continue;
 
 
-                Vector3 pos1 = (Matrix.Invert(hitbox.Constraint.FrameOffsetA) * hitbox.RagdollRigidBodyRef.WorldTransform).Translation;
+                Vector3 pos1 = (Matrix.Invert(hitbox.Constraint.GetFrameOffsetA()) * hitbox.RagdollRigidBodyRef.WorldTransform).Translation;
 
                 //DrawDebug.Text(pos1, hitbox.ConstrainLocal1.Translation.ToString(), 0.01f);
 
@@ -1677,8 +1678,8 @@ namespace RetroEngine
 
             hitbox.Constraint = Physics.CreateGenericConstraint(hitbox.RagdollRigidBodyRef, hitbox.RagdollParrentRigidBody, Matrix.Identity.ToPhysics(), hitbox.ConstrainLocal2.ToPhysics());
 
-            hitbox.Constraint.AngularLowerLimit = (hitbox.AngularLowerLimit / 180 * (float)Math.PI);
-            hitbox.Constraint.AngularUpperLimit = (hitbox.AngularUpperLimit / 180 * (float)Math.PI);
+            hitbox.Constraint.SetAngularLowerLimit(hitbox.AngularLowerLimit / 180 * (float)Math.PI);
+            hitbox.Constraint.SetAngularUpperLimit(hitbox.AngularUpperLimit / 180 * (float)Math.PI);
 
             if (CreateHingeConstraints && hitbox.Parrent != "")
             {
@@ -1696,12 +1697,12 @@ namespace RetroEngine
 
                 var frame = boneT * Matrix.Invert(hitbox.RagdollParrentRigidBody.WorldTransform);
 
-                HingeConstraint animfollowConstraint = Physics.CreateHingeConstraint(hitbox.RagdollRigidBodyRef, hitbox.RagdollParrentRigidBody, Matrix.Identity.ToPhysics(), frame.ToPhysics());
-                hitbox.Constraint2 = animfollowConstraint;
+                //HingeConstraint animfollowConstraint = Physics.CreateHingeConstraint(hitbox.RagdollRigidBodyRef, hitbox.RagdollParrentRigidBody, Matrix.Identity.ToPhysics(), frame.ToPhysics());
+                //hitbox.Constraint2 = animfollowConstraint;
 
                 //animfollowConstraint.SetFrames(Matrix.Identity.ToPhysics(), hitbox.ConstrainLocal2.ToPhysics());
 
-                animfollowConstraint.SetLimit(-MathF.PI, MathF.PI);
+                //animfollowConstraint.SetLimit(-MathF.PI, MathF.PI);
             }
         }
 

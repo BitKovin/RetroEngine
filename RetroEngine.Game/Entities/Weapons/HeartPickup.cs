@@ -1,4 +1,4 @@
-﻿using BulletSharp;
+﻿using BulletXNA;
 using Microsoft.Xna.Framework;
 using RetroEngine.Entities;
 using RetroEngine.Game.Entities.Player;

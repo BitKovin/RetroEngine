@@ -1,4 +1,5 @@
-﻿using BulletSharp;
+﻿using BulletXNA;
+using BulletXNA.BulletDynamics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RetroEngine.Entities.Light;
@@ -123,7 +124,7 @@ namespace RetroEngine.Entities
             foreach (RigidBody body in bodies)
             {
 
-                body.CollisionFlags = BulletSharp.CollisionFlags.NoContactResponse;
+                body.CollisionFlags = BulletXNA.BulletCollision.CollisionFlags.NoContactResponse;
                 body.SetBodyType(PhysicsSystem.BodyType.None);
                 body.SetCollisionMask(PhysicsSystem.BodyType.None);
                 Physics.Remove(body);

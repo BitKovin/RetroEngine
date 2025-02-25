@@ -1,4 +1,5 @@
-﻿using BulletSharp;
+﻿using BulletXNA;
+using BulletXNA.BulletCollision;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace RetroEngine.PhysicsSystem
 
     
 
-    internal class CollisionFilterCallback : OverlapFilterCallback
+    internal class CollisionFilterCallback : MultiSapOverlapFilterCallback
     {
 
         internal static Dictionary<BroadphaseProxy, CollisionObject> savedValues = new Dictionary<BroadphaseProxy, CollisionObject>();

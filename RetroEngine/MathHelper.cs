@@ -78,6 +78,20 @@ namespace RetroEngine
             return new Vector3(snappedX, snappedY, snappedZ);
         }
 
+        public static Matrix GetBasis(this Matrix matrix)
+        {
+            // Create a new matrix to hold only the basis (rotation) part.
+            Matrix basis = Matrix.Identity;
+
+            // Copy the upper-left 3x3 part of the matrix, which represents rotation and scale.
+            basis.M11 = matrix.M11; basis.M12 = matrix.M12; basis.M13 = matrix.M13;
+            basis.M21 = matrix.M21; basis.M22 = matrix.M22; basis.M23 = matrix.M23;
+            basis.M31 = matrix.M31; basis.M32 = matrix.M32; basis.M33 = matrix.M33;
+
+            return basis;
+        }
+
+
         public static Vector3 Clamp(this Vector3 vector, float min, float max)
         {
             return new Vector3(Math.Clamp(vector.X, min, max), Math.Clamp(vector.Y, min, max), Math.Clamp(vector.Z, min, max));

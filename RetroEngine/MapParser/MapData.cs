@@ -1,4 +1,4 @@
-﻿using BulletSharp;
+﻿using BulletXNA;
 using RetroEngine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -15,6 +15,7 @@ using RetroEngine.PhysicsSystem;
 using System.Globalization;
 using SharpFont;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using BulletXNA.BulletDynamics;
 
 namespace RetroEngine.Map
 {
@@ -107,7 +108,7 @@ namespace RetroEngine.Map
                         foreach (var face in loadedFaces)
                         {
                             var shape = Physics.CreateCollisionShapeFromModel(face.model, shapeData: new Physics.CollisionSurfaceData { surfaceType = face.textureName }, complex: entity.ConvexBrush == false);
-                            RigidBody rigidBody = Physics.CreateFromShape(entity, Vector3.One.ToPhysics(), shape, collisionFlags: BulletSharp.CollisionFlags.StaticObject, bodyType: (face.Transperent || face.Masked) ? BodyType.WorldTrasnparent : BodyType.WorldOpaque);
+                            RigidBody rigidBody = Physics.CreateFromShape(entity, Vector3.One.ToPhysics(), shape, collisionFlags: BulletXNA.BulletCollision.CollisionFlags.StaticObject, bodyType: (face.Transperent || face.Masked) ? BodyType.WorldTrasnparent : BodyType.WorldOpaque);
                             rigidBody.SetCollisionMask(BodyType.GroupAll);
                             entity.bodies.Add(rigidBody);
                         }

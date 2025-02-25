@@ -1,5 +1,6 @@
 ﻿using Assimp;
-using BulletSharp;
+using BulletXNA;
+using BulletXNA.BulletDynamics;
 using Microsoft.Xna.Framework;
 using RetroEngine.Csg;
 using RetroEngine.PhysicsSystem;
@@ -200,7 +201,7 @@ namespace RetroEngine.Entities.Brushes
                 if(face == null) continue;
 
                 var shape = Physics.CreateCollisionShapeFromModel(face.model, shapeData: new Physics.CollisionSurfaceData { surfaceType = face.textureName }, complex: this.ConvexBrush == false);
-                RigidBody rigidBody = Physics.CreateFromShape(this, Vector3.One.ToPhysics(), shape, collisionFlags: BulletSharp.CollisionFlags.StaticObject, bodyType: PhysicsSystem.BodyType.World);
+                RigidBody rigidBody = Physics.CreateFromShape(this, Vector3.One.ToPhysics(), shape, collisionFlags: BulletXNA.BulletCollision.CollisionFlags.StaticObject, bodyType: PhysicsSystem.BodyType.World);
                 rigidBody.SetCollisionMask(BodyType.GroupAll);
                 bodies.Add(rigidBody);
             }

@@ -14,7 +14,7 @@ using Microsoft.Xna.Framework;
 using System.Threading;
 using RetroEngine.Graphic;
 using RetroEngine.Audio;
-using BulletSharp;
+using BulletXNA;
 using FmodForFoxes;
 using System.Runtime.InteropServices;
 using FmodForFoxes.Studio;

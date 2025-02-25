@@ -1,4 +1,4 @@
-﻿using BulletSharp;
+﻿using BulletXNA;
 using RetroEngine;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -6,15 +6,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Numerics;
 using System.Threading;
 using System.Runtime.ExceptionServices;
 using System.Security;
 using System.Diagnostics;
 using System.Timers;
-using BulletSharp.SoftBody;
 using RetroEngine.NavigationSystem;
 using System.Collections;
+using BulletXNA.BulletDynamics;
+using BulletXNA.BulletCollision;
+using Microsoft.Xna.Framework;
+using BulletXNA.LinearMath;
 
 
 namespace RetroEngine.PhysicsSystem
@@ -155,28 +157,22 @@ namespace RetroEngine.PhysicsSystem
         {
 
             solver?.Reset();
-            solver?.Dispose();
-            broadphase?.Dispose();
-            dispatcher?.Dispose();
 
             removeList.Clear();
 
 
             if (dynamicsWorld != null)
             {
-                dynamicsWorld.Dispose();
                 dynamicsWorld = null;
             }
 
             if (staticWorld != null)
             {
-                staticWorld.Dispose();
                 staticWorld = null;
             }
 
             if (hitboxWorld != null)
             {
-                hitboxWorld.Dispose();
                 hitboxWorld = null;
             }
 
@@ -199,13 +195,13 @@ namespace RetroEngine.PhysicsSystem
 
             // Create the dynamics world
             dynamicsWorld = new DiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfig);
-            dynamicsWorld.Gravity = new Vector3(0, -9.81f, 0); // Set gravity
-            dynamicsWorld.DispatchInfo.UseContinuous = true;
-            dynamicsWorld.SolverInfo.NumIterations = 20;
+            dynamicsWorld.SetGravity(new Vector3(0, -9.81f, 0)); // Set gravity
+            dynamicsWorld.GetDispatchInfo().m_useContinuous = true;
+            dynamicsWorld.GetSolverInfo().m_numIterations = 20;
             //dynamicsWorld.SolverInfo.SplitImpulse = 0;
 
 
-            broadphase.OverlappingPairCache.SetOverlapFilterCallback(collisionFilterCallback);
+            broadphase.GetOverlappingPairCache().SetOverlapFilterCallback(collisionFilterCallback);
             //dynamicsWorld.ForceUpdateAllAabbs = false;
 
             CollisionFilterCallback.ResetCache();
@@ -215,8 +211,8 @@ namespace RetroEngine.PhysicsSystem
 
             hitboxWorld = new DiscreteDynamicsWorld(new CollisionDispatcher(new DefaultCollisionConfiguration()), new DbvtBroadphase(), new SequentialImpulseConstraintSolver(), new DefaultCollisionConfiguration());
 
-            dynamicsWorld.DebugDrawer = DrawDebug.instance;
-            hitboxWorld.DebugDrawer = DrawDebug.instance;
+            dynamicsWorld.SetDebugDrawer(DrawDebug.instance);
+            hitboxWorld.SetDebugDrawer(DrawDebug.instance);
         }
 
         public static void ResetWorld()
@@ -227,9 +223,6 @@ namespace RetroEngine.PhysicsSystem
             foreach (RigidBody body in staticBodies)
             {
                 staticWorld.RemoveCollisionObject(body);
-                body.CollisionShape?.Dispose();
-                body.MotionState = null;
-                body.Dispose();
             }
 
             lock (collisionObjects)
@@ -248,36 +241,31 @@ namespace RetroEngine.PhysicsSystem
             staticBodies.Clear();
             collisionObjects.Clear();
             solver.Reset();
-            broadphase.NeedCleanup = true;
-            broadphase.Optimize();
-
-            dynamicsWorld.UpdateAabbs();
-            broadphase.PairCache.Dispose();
-
-
 
             Start();
 
         }
 
-        public static Generic6DofConstraint CreateGenericConstraint(RigidBody body1, RigidBody body2, Matrix4x4? transform1 = null, Matrix4x4? transform2 = null)
+        
+
+        public static Generic6DofConstraint CreateGenericConstraint(RigidBody body1, RigidBody body2, Matrix? transform1 = null, Matrix? transform2 = null)
         {
-            var constraint = new Generic6DofConstraint(body1, body2, transform1 == null ? Matrix4x4.Identity : transform1.Value, transform2 == null ? Matrix4x4.Identity : transform2.Value, true);
+            var constraint = new Generic6DofConstraint(body1, body2, transform1 == null ? Matrix.Identity : transform1.Value, transform2 == null ? Matrix.Identity : transform2.Value, true);
 
 
             //constraint.InternalSetAppliedImpulse(0);
 
             // Set linear limits (translation). The first vector is the lower limit, and the second is the upper limit.
             // Use Vector3.Zero for no movement in a particular axis.
-            constraint.LinearLowerLimit = Vector3.Zero; // Example limits
-            constraint.LinearUpperLimit = Vector3.Zero;     // Example limits
+            constraint.SetLinearLowerLimit(Vector3.Zero);
+            constraint.SetLinearUpperLimit(Vector3.Zero);// Example limits
 
 
-            constraint.SetParam(ConstraintParam.StopErp,0.85f);
-            constraint.SetParam(ConstraintParam.StopCfm, 0.85f);
+            constraint.SetParam(ConstraintParams.BT_CONSTRAINT_STOP_ERP,0.85f);
+            constraint.SetParam(ConstraintParams.BT_CONSTRAINT_STOP_CFM, 0.85f);
 
-            constraint.SetParam(ConstraintParam.Erp, 0.85f);
-            constraint.SetParam(ConstraintParam.Cfm, 0.85f);
+            constraint.SetParam(ConstraintParams.BT_CONSTRAINT_ERP, 0.85f);
+            constraint.SetParam(ConstraintParams.BT_CONSTRAINT_CFM, 0.85f);
 
             //constraint.TranslationalLimitMotor.StopErp = Vector3.One * 100;
 
@@ -285,23 +273,8 @@ namespace RetroEngine.PhysicsSystem
 
             // Set angular limits (rotation). The first vector is the lower limit, and the second is the upper limit.
             // Values are in radians. Use Vector3.Zero for no rotation in a particular axis.
-            constraint.AngularLowerLimit = (new Vector3(-3.14f / 15, -3.14f / 15, -3.14f / 4)); // Example limits
-            constraint.AngularUpperLimit = (new Vector3(3.14f / 15, 3.14f / 15, 3.14f / 4));     // Example limits
-
-
-
-            lock (dynamicsWorld)
-                dynamicsWorld.AddConstraint(constraint, true);
-
-            return constraint;
-
-        }
-
-        public static HingeConstraint CreateHingeConstraint(RigidBody body1, RigidBody body2, Matrix4x4? transform1 = null, Matrix4x4? transform2 = null)
-        {
-
-
-            var constraint = new HingeConstraint(body1, body2, transform1 == null ? Matrix4x4.Identity : transform1.Value, transform2 == null ? Matrix4x4.Identity : transform2.Value, true);
+            constraint.SetAngularLowerLimit(new Vector3(-3.14f / 15, -3.14f / 15, -3.14f / 4)); // Example limits
+            constraint.SetAngularUpperLimit(new Vector3(3.14f / 15, 3.14f / 15, 3.14f / 4));     // Example limits
 
 
 
@@ -316,8 +289,8 @@ namespace RetroEngine.PhysicsSystem
         {
 
 
-            Matrix4x4.Invert(body1.WorldTransform, out var m1);
-            Matrix4x4.Invert(body2.WorldTransform, out var m2);
+            var m1 = Matrix.Invert(body1.WorldTransform);
+            var m2 = Matrix.Invert(body2.WorldTransform);
 
             // Calculate the pivot points in the local space of each rigid body
             Vector3 pivotInA = Vector3.Transform(attachPoint, m1);
@@ -360,25 +333,17 @@ namespace RetroEngine.PhysicsSystem
 
             Task task = Task.Run(() =>
             {
-                lock (hitboxWorld)
-                    hitboxWorld.StepSimulation(Time.DeltaTime, 1, 0.01f);
-
-                lock (staticWorld)
-                {
-                    foreach (StaticRigidBody staticRigidBody in staticBodies)
-                    {
-                        staticRigidBody.UpdateFromParrent();
-                    }
-                }
-
-                
-
-            });
-
-            Task task2 = Task.Run(() => 
-            {
                 PopulateCallbackStacks(50, 200);
+
             });
+
+            lock (staticWorld)
+            {
+                foreach (StaticRigidBody staticRigidBody in staticBodies)
+                {
+                    staticRigidBody.UpdateFromParrent();
+                }
+            }
 
             lock (dynamicsWorld)
             {
@@ -391,15 +356,12 @@ namespace RetroEngine.PhysicsSystem
 
                 if (GameMain.Instance.paused == false)
                 {
-                    lock (dynamicsWorld.CollisionObjectArray)
+                    lock (dynamicsWorld.GetCollisionObjectArray())
                     {
                         SimulationTicks += dynamicsWorld.StepSimulation(time * Time.GetFinalTimeScale(), 3, 1 / UpdateRate * Time.GetFinalTimeScale());
                     }
                 }
             }
-
-            task.Wait();
-            task2.Wait();
 
         }
 
@@ -440,9 +402,12 @@ namespace RetroEngine.PhysicsSystem
         {
             lock (hitboxWorld)
             {
+
+                var arr = hitboxWorld.GetCollisionObjectArray();
+
                 hitboxWorld.RemoveRigidBody(body);
-                lock (hitboxWorld.CollisionObjectArray)
-                    hitboxWorld.CollisionObjectArray.Remove(body);
+                lock (arr)
+                    arr.Remove(body);
             }
         }
 
@@ -450,7 +415,9 @@ namespace RetroEngine.PhysicsSystem
         {
             if (body is null) return;
 
-            lock (dynamicsWorld) lock (dynamicsWorld.CollisionObjectArray)
+            var arr = dynamicsWorld.GetCollisionObjectArray();
+
+            lock (dynamicsWorld) lock (arr)
                 {
                     dynamicsWorld.RemoveRigidBody(body);
 
@@ -485,7 +452,7 @@ namespace RetroEngine.PhysicsSystem
 
             lock (dynamicsWorld)
             {
-                var collisionObjects = dynamicsWorld.CollisionObjectArray.ToArray();
+                var collisionObjects = dynamicsWorld.GetCollisionObjectArray().ToArray();
 
                 Parallel.For(0, collisionObjects.Length, i =>
                 {
@@ -523,7 +490,7 @@ namespace RetroEngine.PhysicsSystem
                                 return;
                                 break;
                         }
-                        if (colObj.IsActive == false) return;
+                        if (colObj.IsActive() == false) return;
                         Entity ent = ((RigidbodyData)colObj.UserObject).Entity;
 
                         Vector3 pos = colObj.WorldTransform.Translation;
@@ -557,7 +524,7 @@ namespace RetroEngine.PhysicsSystem
                             ent.Position = pos;
                         }
 
-                        Matrix4x4 rotationMatrix = rigidBody.WorldTransform.GetBasis();
+                        Matrix rotationMatrix = rigidBody.WorldTransform.GetBasis();
                         Quaternion rotation = Quaternion.CreateFromRotationMatrix(rotationMatrix);
 
 
@@ -652,7 +619,7 @@ namespace RetroEngine.PhysicsSystem
                     ent.Position = pos;
                 }
 
-                Matrix4x4 rotationMatrix = rigidBody.WorldTransform.GetBasis();
+                Matrix rotationMatrix = rigidBody.WorldTransform.GetBasis();
                 Quaternion rotation = Quaternion.CreateFromRotationMatrix(rotationMatrix);
 
                 Vector3 rotationEulerAngles = ToEulerAngles(rotation);
@@ -717,7 +684,7 @@ namespace RetroEngine.PhysicsSystem
             // Create a sphere shape
             var sphereShape = new SphereShape(radius);
             sphereShape.UserObject = new CollisionSurfaceData();
-            var motionState = new DefaultMotionState(Matrix4x4.CreateTranslation(0, 0, 0));
+            var motionState = new DefaultMotionState();
 
             Vector3 inertia = Vector3.Zero;
             sphereShape.CalculateLocalInertia(mass, out inertia);
@@ -753,7 +720,7 @@ namespace RetroEngine.PhysicsSystem
             // Create a sphere shape
             var sphereShape = new BoxShape(size / 2);
             sphereShape.UserObject = new CollisionSurfaceData();
-            var motionState = new DefaultMotionState(Matrix4x4.CreateTranslation(0, 0, 0));
+            var motionState = new DefaultMotionState(Matrix.CreateTranslation(0, 0, 0));
 
             //sphereShape.Margin = 0;
 
@@ -790,11 +757,14 @@ namespace RetroEngine.PhysicsSystem
             RigidBody RigidBody;
 
 
-            var motionState = new DefaultMotionState(Matrix4x4.CreateTranslation(0, 0, 0));
+            var motionState = new DefaultMotionState(Matrix.CreateTranslation(0, 0, 0));
 
             Vector3 inertia = Vector3.Zero;
             shape.CalculateLocalInertia(mass, out inertia);
-            shape.LocalScaling = size;
+
+            IndexedVector3 iSize = size;
+
+            shape.SetLocalScaling(ref iSize);
 
             // Create a rigid body for the sphere
             var boxRigidBodyInfo = new RigidBodyConstructionInfo(collisionFlags == CollisionFlags.StaticObject ? 0 : mass, motionState, shape, inertia);
@@ -853,10 +823,10 @@ namespace RetroEngine.PhysicsSystem
 
             // Create a sphere shape
             var Shape = new CapsuleShape(radius, Height - radius*2);
-            Shape.Margin = 0;
+            Shape.SetMargin(0);
 
             Shape.UserObject = new CollisionSurfaceData();
-            var motionState = new DefaultMotionState(Matrix4x4.CreateTranslation(0, 0, 0));
+            var motionState = new DefaultMotionState(Matrix.CreateTranslation(0, 0, 0));
 
 
             // Create a rigid body for the sphere
@@ -895,10 +865,10 @@ namespace RetroEngine.PhysicsSystem
 
             // Create a sphere shape
             var Shape = new CapsuleShape(radius, Height - radius * 2);
-            Shape.Margin = 0;
+            Shape.SetMargin(0);
 
             Shape.UserObject = new CollisionSurfaceData();
-            var motionState = new DefaultMotionState(Matrix4x4.CreateTranslation(0, 0, 0));
+            var motionState = new DefaultMotionState(Matrix.CreateTranslation(0, 0, 0));
 
 
             // Create a rigid body for the sphere
@@ -1065,8 +1035,8 @@ namespace RetroEngine.PhysicsSystem
             // Create a sphere shape with the specified radius
             SphereShape sphereShape = new SphereShape(radius);
 
-            Matrix4x4 start = Matrix4x4.CreateTranslation(rayStart);
-            Matrix4x4 end = Matrix4x4.CreateTranslation(rayEnd);
+            Matrix start = Matrix.CreateTranslation(rayStart);
+            Matrix end = Matrix.CreateTranslation(rayEnd);
 
 
             MyClosestConvexResultCallback convResultCallback = NewClosestConvexResultCallback(ref rayStart, ref rayEnd);
@@ -1100,8 +1070,8 @@ namespace RetroEngine.PhysicsSystem
                 Vector3 rStart = rayStart.ToPhysics();
                 Vector3 rEnd = rayEnd.ToPhysics();
 
-                Matrix4x4 start = Matrix4x4.CreateTranslation(rayStart.ToPhysics());
-                Matrix4x4 end = Matrix4x4.CreateTranslation(rayEnd.ToPhysics());
+                Matrix start = Matrix.CreateTranslation(rayStart.ToPhysics());
+                Matrix end = Matrix.CreateTranslation(rayEnd.ToPhysics());
 
 
                 MyClosestConvexResultCallback convResultCallback = NewClosestConvexResultCallback(ref rStart, ref rEnd);
@@ -1194,7 +1164,7 @@ namespace RetroEngine.PhysicsSystem
 
 
                     // Calculate the mesh's transformation matrix (position and rotation)
-                    Matrix4x4 transform = Matrix4x4.Identity;
+                    Matrix transform = Matrix.Identity;
 
                     // Add the convex shape to the compound shape with the calculated transformation
                     compoundShape.AddChildShape(transform, Shape);
@@ -1242,7 +1212,7 @@ namespace RetroEngine.PhysicsSystem
 
 
             // Calculate the mesh's transformation matrix (position and rotation)
-            Matrix4x4 transform = Matrix4x4.Identity;
+            Matrix transform = Matrix.Identity;
 
             // Add the convex shape to the compound shape with the calculated transformation
             compoundShape.AddChildShape(transform, Shape);
@@ -1292,12 +1262,12 @@ namespace RetroEngine.PhysicsSystem
                 var vertex0 = vertices[indices[i]].Position.ToPhysics();
                 var vertex1 = vertices[indices[i + 1]].Position.ToPhysics();
                 var vertex2 = vertices[indices[i + 2]].Position.ToPhysics();
-                triangleMesh.AddTriangle(vertex0, vertex1, vertex2, false);  // Assume triangles are not welded
+                triangleMesh.AddTriangle(vertex0, vertex1, vertex2);  // Assume triangles are not welded
             }
 
 
             // 6. Create the collision shape
-            BvhTriangleMeshShape meshShape = new BvhTriangleMeshShape(triangleMesh, true); // Use quantization for better performance
+            BvhTriangleMeshShape meshShape = new BvhTriangleMeshShape(triangleMesh, true, true); // Use quantization for better performance
 
             return meshShape;
         }
@@ -1323,12 +1293,12 @@ namespace RetroEngine.PhysicsSystem
                 var vertex0 = vertices[indices[i]].Position.ToPhysics();
                 var vertex1 = vertices[indices[i + 1]].Position.ToPhysics();
                 var vertex2 = vertices[indices[i + 2]].Position.ToPhysics();
-                triangleMesh.AddTriangle(vertex0, vertex1, vertex2, false);  // Assume triangles are not welded
+                triangleMesh.AddTriangle(vertex0, vertex1, vertex2);  // Assume triangles are not welded
             }
 
 
             // 6. Create the collision shape
-            BvhTriangleMeshShape meshShape = new BvhTriangleMeshShape(triangleMesh, true); // Use quantization for better performance
+            BvhTriangleMeshShape meshShape = new BvhTriangleMeshShape(triangleMesh, true, true); // Use quantization for better performance
 
             meshShape.UserObject = collisionShapeData;
 

@@ -1,10 +1,12 @@
-﻿using BulletSharp;
+﻿using BulletXNA;
+using BulletXNA.BulletCollision;
+using BulletXNA.BulletDynamics;
+using Microsoft.Xna.Framework;
 using RetroEngine.PhysicsSystem;
 using System;
 using System.Collections.Generic;
 using System.IO.Pipelines;
 using System.Linq;
-using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using static Assimp.Metadata;
@@ -14,7 +16,7 @@ namespace RetroEngine
 
     public class MyClosestConvexResultCallback : ClosestConvexResultCallback
     {
-        public MyClosestConvexResultCallback(ref Vector3 rayFromWorld, ref Vector3 rayToWorld) : base(ref rayFromWorld, ref rayToWorld)
+        public MyClosestConvexResultCallback(ref Vector3 rayFromWorld, ref Vector3 rayToWorld) : base(rayFromWorld, rayToWorld)
         {
             Start = rayFromWorld;
             End = rayToWorld;

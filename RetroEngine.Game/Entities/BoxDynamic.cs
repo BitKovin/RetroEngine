@@ -1,4 +1,4 @@
-﻿using BulletSharp;
+﻿using BulletXNA;
 using RetroEngine;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -12,9 +12,9 @@ using Microsoft.Xna.Framework;
 using RetroEngine.Entities;
 using RetroEngine.SaveSystem;
 using RetroEngine.PhysicsSystem;
-using BulletSharp.SoftBody;
 using MonoGame.Extended.Framework.Media;
 using System.Threading;
+using BulletXNA.BulletDynamics;
 
 namespace RetroEngine.Game.Entities
 {

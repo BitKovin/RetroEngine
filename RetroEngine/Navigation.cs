@@ -1,5 +1,4 @@
-﻿using BulletSharp.SoftBody;
-using DotRecast.Detour;
+﻿using DotRecast.Detour;
 using Microsoft.Xna.Framework;
 using RetroEngine.Entities.Navigaion;
 using RetroEngine.NavigationSystem;

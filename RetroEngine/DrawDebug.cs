@@ -1,4 +1,6 @@
-﻿using BulletSharp;
+﻿using BulletXNA;
+using BulletXNA.LinearMath;
+using FMOD;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Text;
@@ -137,13 +139,12 @@ namespace RetroEngine
 
         }
 
-        public override DebugDrawModes DebugMode
+        public override void Draw3dText(ref IndexedVector3 location, string textString)
         {
-            get { return DebugDrawModes.DrawWireframe; }
-            set { }
+            Draw3DText(ref location, textString);
         }
 
-        public override void Draw3DText(ref System.Numerics.Vector3 location, string textString)
+        public void Draw3DText(ref IndexedVector3 location, string textString)
         {
             SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
 
@@ -171,7 +172,7 @@ namespace RetroEngine
         private static int[] sphereIndices;
         private static bool sphereInitialized = false;
 
-        private void InitializeSphere(ref System.Numerics.Vector3 color)
+        private void InitializeSphere(ref IndexedVector3 color)
         {
 
             float radius = 1;
@@ -227,7 +228,7 @@ namespace RetroEngine
             sphereInitialized = true;
         }
 
-        public override void DrawSphere(float radius, ref System.Numerics.Matrix4x4 transform, ref System.Numerics.Vector3 color)
+        public override void DrawSphere(float radius, ref IndexedMatrix transform, ref IndexedVector3 color)
         {
             if (!sphereInitialized)
             {
@@ -243,7 +244,7 @@ namespace RetroEngine
 
             basicEffect.View = Camera.finalizedView;
             basicEffect.Projection = Camera.finalizedProjection;
-            basicEffect.World = Matrix.CreateScale(radius) * transform;
+            basicEffect.World = Matrix.CreateScale(radius) * transform.ToMatrix();
 
             foreach (EffectPass pass in basicEffect.CurrentTechnique.Passes)
             {
@@ -263,7 +264,7 @@ namespace RetroEngine
 
         #endregion
 
-        public override void DrawLine(ref System.Numerics.Vector3 from, ref System.Numerics.Vector3 to, ref System.Numerics.Vector3 color)
+        public override void DrawLine(ref IndexedVector3 from, ref IndexedVector3 to, ref IndexedVector3 color)
         {
             VertexPositionColor[] vertices = new VertexPositionColor[2];
             vertices[0] = new VertexPositionColor(from, new Microsoft.Xna.Framework.Color(color.X, color.Y, color.Z));
@@ -277,6 +278,33 @@ namespace RetroEngine
                 pass.Apply();
                 graphicsDevice.DrawUserPrimitives(PrimitiveType.LineList, vertices, 0, 1);
             }
+        }
+
+        public override void DrawLine(IndexedVector3 from, IndexedVector3 to, IndexedVector3 color)
+        {
+            DrawLine(ref from, ref to, ref color);
+        }
+
+        public override void DrawContactPoint(IndexedVector3 pointOnB, IndexedVector3 normalOnB, float distance, int lifeTime, IndexedVector3 color)
+        {
+            
+        }
+
+        public override void DrawContactPoint(ref IndexedVector3 pointOnB, ref IndexedVector3 normalOnB, float distance, int lifeTime, ref IndexedVector3 color)
+        {
+            
+        }
+
+        DebugDrawModes DebugMode = DebugDrawModes.DBG_DrawWireframe;
+
+        public override void SetDebugMode(DebugDrawModes debugMode)
+        {
+            DebugMode = debugMode;
+        }
+
+        public override DebugDrawModes GetDebugMode()
+        {
+            return DebugMode;
         }
 
         class DrawShapeCommand
@@ -299,7 +327,7 @@ namespace RetroEngine
         class DrawText : DrawShapeCommand
         {
 
-            System.Numerics.Vector3 position;
+            IndexedVector3 position;
             string text;
             Vector3 Color;
 
@@ -314,7 +342,7 @@ namespace RetroEngine
             {
                 base.Draw(draw);
 
-                draw.Draw3DText(ref position, text);
+                draw.Draw3dText(ref position, text);
 
             }
 
@@ -347,15 +375,15 @@ namespace RetroEngine
         class DrawShapeBox : DrawShapeCommand
         {
 
-            System.Numerics.Vector3 pointA;
-            System.Numerics.Vector3 pointB;
-            System.Numerics.Vector3 Color;
+            IndexedVector3 pointA;
+            IndexedVector3 pointB;
+            IndexedVector3 Color;
 
             public DrawShapeBox(Vector3 min, Vector3 max, Vector3 color, float time) : base(time)
             {
-                pointA = min.ToNumerics();
-                pointB = max.ToNumerics();
-                Color = color.ToNumerics();
+                pointA = min;
+                pointB = max;
+                Color = color;
             }
 
             public override void Draw(DebugDraw draw)
@@ -373,8 +401,8 @@ namespace RetroEngine
         {
 
             float radius;
-            Vector3 position;
-            Vector3 Color;
+            IndexedVector3 position;
+            IndexedVector3 Color;
 
             public DrawShapeSphere(float radius, Vector3 position, Vector3 color, float time) : base(time)
             {
@@ -387,9 +415,9 @@ namespace RetroEngine
             {
                 base.Draw(draw);
 
-                var mat = Matrix.CreateTranslation(position).ToPhysics();
+                IndexedMatrix mat = Matrix.CreateTranslation(position);
 
-                var col = Color.ToPhysics();
+                var col = Color;
 
                 draw.DrawSphere(radius, ref mat, ref col);
 

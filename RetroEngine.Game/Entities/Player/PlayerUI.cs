@@ -1,4 +1,5 @@
-﻿using BulletSharp;
+﻿using BulletXNA;
+using BulletXNA.BulletCollision;
 using Microsoft.Xna.Framework;
 using RetroEngine.Game.Entities.Weapons;
 using RetroEngine.PhysicsSystem;
