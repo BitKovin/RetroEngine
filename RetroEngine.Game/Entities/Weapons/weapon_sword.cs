@@ -296,10 +296,9 @@ namespace RetroEngine.Game.Entities.Weapons
 
                 if (data != null)
                 {
-                    if (data.Value.Surface == "default")
-                    {
-                        GlobalParticleSystem.EmitAt($"hitBlood", hit.HitPointWorld, MathHelper.FindLookAtRotation(Vector3.Zero, hit.HitNormalWorld), new Vector3(10, 10, 10));
-                    }
+                    
+                    GlobalParticleSystem.EmitAt($"hit_{data.Value.Surface}", hit.HitPointWorld, MathHelper.FindLookAtRotation(Vector3.Zero, hit.HitNormalWorld), new Vector3(10, 10, 10));
+                    
                 }
                 hitSoundPlayer.Position = hit.HitPointWorld;
                 hitSoundPlayer.Update();

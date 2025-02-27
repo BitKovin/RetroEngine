@@ -182,10 +182,9 @@ namespace RetroEngine.Game.Entities
 
                     bone = data.Value.HitboxName;
 
-                    if (data.Value.Surface == "default")
-                    {
-                        GlobalParticleSystem.EmitAt($"hit_{data.Value.Surface}", hit.HitPointWorld, MathHelper.FindLookAtRotation(Vector3.Zero, startRotation.GetForwardVector() * -1), new Vector3(0, 0, float.Max(Damage / 16f,1)));
-                    }
+
+                    GlobalParticleSystem.EmitAt($"hit_{data.Value.Surface}", hit.HitPointWorld, MathHelper.FindLookAtRotation(Vector3.Zero, startRotation.GetForwardVector() * -1), new Vector3(0, 0, float.Max(Damage / 16f,1)));
+                    
                 }
 
                 ent.OnPointDamage(Damage, hit.HitPointWorld, Rotation.GetForwardVector(),bone, this, weapon);

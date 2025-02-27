@@ -34,7 +34,7 @@ namespace RetroEngine
 
         public static float roll = 0;
         public static float FOV = 80;
-        public static float ViewmodelFOV = 60;
+        public static float ViewmodelFOV = 55;
 
         public static float FarPlane = 3000;
 

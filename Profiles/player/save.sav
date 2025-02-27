@@ -1,451 +1,53 @@
 {
-  "levelName": "lvl1.map",
+  "levelName": "test.map",
   "entities": [
+    {
+      "Name": "",
+      "className": "ent_cat_point",
+      "id": "ent_cat_point--0",
+      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:5.306396,\u0022Y\u0022:1.0000001,\u0022Z\u0022:-4.1913724},\u0022Rotation\u0022:{\u0022X\u0022:90,\u0022Y\u0022:169.38034,\u0022Z\u0022:-172.87497},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
+    },
     {
       "Name": "player",
       "className": "info_player_start",
       "id": "info_player_start-player-0",
-      "saveData": "{\u0022velocity\u0022:{\u0022X\u0022:0,\u0022Y\u0022:1.0728836E-06,\u0022Z\u0022:0},\u0022weapons\u0022:[null,{\u0022weaponType\u0022:\u0022RetroEngine.Game.Entities.Weapons.weapon_pistol_double, RetroEngine.Game, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0022,\u0022ammo\u0022:24},null,null,null,null,null,null,null,null],\u0022weaponMeele\u0022:{\u0022weaponType\u0022:\u0022RetroEngine.Game.Entities.Weapons.weapon_sword, RetroEngine.Game, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0022,\u0022ammo\u0022:0},\u0022currentSlot\u0022:1,\u0022lastSlot\u0022:1,\u0022thirdPerson\u0022:false,\u0022Position\u0022:{\u0022X\u0022:57.079758,\u0022Y\u0022:1.4292924,\u0022Z\u0022:208.52998},\u0022Rotation\u0022:{\u0022X\u0022:9.402729,\u0022Y\u0022:-371.0725,\u0022Z\u0022:0},\u0022name\u0022:\u0022player\u0022,\u0022Tags\u0022:[\u0022player\u0022],\u0022Health\u0022:100,\u0022OwnerId\u0022:\u0022\u0022}"
+      "saveData": "{\u0022velocity\u0022:{\u0022X\u0022:0,\u0022Y\u0022:1.001358E-05,\u0022Z\u0022:0},\u0022weapons\u0022:[null,null,null,null,null,null,null,null,null,null],\u0022weaponMeele\u0022:{\u0022weaponType\u0022:\u0022RetroEngine.Game.Entities.Weapons.weapon_sword, RetroEngine.Game, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0022,\u0022ammo\u0022:0},\u0022currentSlot\u0022:-1,\u0022lastSlot\u0022:-1,\u0022thirdPerson\u0022:false,\u0022Position\u0022:{\u0022X\u0022:-4.720601,\u0022Y\u0022:3.8999276,\u0022Z\u0022:26.337765},\u0022Rotation\u0022:{\u0022X\u0022:80.433464,\u0022Y\u0022:289.63864,\u0022Z\u0022:0},\u0022name\u0022:\u0022player\u0022,\u0022Tags\u0022:[\u0022player\u0022],\u0022Health\u0022:100,\u0022OwnerId\u0022:\u0022\u0022}"
     },
     {
       "Name": "",
-      "className": "spawner",
-      "id": "spawner-spg_1-0",
-      "saveData": "{\u0022isEntAlive\u0022:false,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:51.5,\u0022Y\u0022:1.5312093,\u0022Z\u0022:204},\u0022Rotation\u0022:{\u0022X\u0022:-0.0001,\u0022Y\u0022:90.0001,\u0022Z\u0022:0.0001},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
+      "className": "weaponPickup",
+      "id": "weaponPickup--0",
+      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:1.375,\u0022Y\u0022:1.125,\u0022Z\u0022:-2.125},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
     },
     {
       "Name": "",
-      "className": "spawner",
-      "id": "spawner-spg_1-1",
-      "saveData": "{\u0022isEntAlive\u0022:false,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:47.5,\u0022Y\u0022:1.5279156,\u0022Z\u0022:214.5},\u0022Rotation\u0022:{\u0022X\u0022:-0.0001,\u0022Y\u0022:90.0001,\u0022Z\u0022:0.0001},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
+      "className": "ent_cat_point",
+      "id": "ent_cat_point--1",
+      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:-10.010214,\u0022Y\u0022:0.5,\u0022Z\u0022:10.485399},\u0022Rotation\u0022:{\u0022X\u0022:-2.2913751E-05,\u0022Y\u0022:-0.0029187836,\u0022Z\u0022:-1.5783387E-05},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
     },
     {
       "Name": "",
-      "className": "spawner",
-      "id": "spawner-spg_1-2",
-      "saveData": "{\u0022isEntAlive\u0022:false,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:43.5,\u0022Y\u0022:1.5301594,\u0022Z\u0022:209},\u0022Rotation\u0022:{\u0022X\u0022:-0.0001,\u0022Y\u0022:90.0001,\u0022Z\u0022:0.0001},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
+      "className": "ent_cat_point",
+      "id": "ent_cat_point--2",
+      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:-14.49954,\u0022Y\u0022:0.4999998,\u0022Z\u0022:2.5048258},\u0022Rotation\u0022:{\u0022X\u0022:-1.554209E-07,\u0022Y\u0022:0.0022321364,\u0022Z\u0022:0.00014441604},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
     },
     {
       "Name": "",
-      "className": "spawner",
-      "id": "spawner-spg_1-3",
-      "saveData": "{\u0022isEntAlive\u0022:false,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:38.5,\u0022Y\u0022:2,\u0022Z\u0022:192.5},\u0022Rotation\u0022:{\u0022X\u0022:-0.0001,\u0022Y\u0022:90.0001,\u0022Z\u0022:0.0001},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "spawner",
-      "id": "spawner-spg_1-4",
-      "saveData": "{\u0022isEntAlive\u0022:false,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:36.5,\u0022Y\u0022:2,\u0022Z\u0022:197},\u0022Rotation\u0022:{\u0022X\u0022:-0.0001,\u0022Y\u0022:90.0001,\u0022Z\u0022:0.0001},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "spawner",
-      "id": "spawner-spg_1-5",
-      "saveData": "{\u0022isEntAlive\u0022:false,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:36,\u0022Y\u0022:2,\u0022Z\u0022:199},\u0022Rotation\u0022:{\u0022X\u0022:-0.0001,\u0022Y\u0022:90.0001,\u0022Z\u0022:0.0001},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "spawner",
-      "id": "spawner-spg_1-6",
-      "saveData": "{\u0022isEntAlive\u0022:false,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:35,\u0022Y\u0022:2,\u0022Z\u0022:202},\u0022Rotation\u0022:{\u0022X\u0022:-0.0001,\u0022Y\u0022:90.0001,\u0022Z\u0022:0.0001},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "spawner",
-      "id": "spawner-spg_1-7",
-      "saveData": "{\u0022isEntAlive\u0022:false,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:35,\u0022Y\u0022:2,\u0022Z\u0022:204.5},\u0022Rotation\u0022:{\u0022X\u0022:-0.0001,\u0022Y\u0022:90.0001,\u0022Z\u0022:0.0001},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "spawner",
-      "id": "spawner-spg_1-8",
-      "saveData": "{\u0022isEntAlive\u0022:false,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:34.5,\u0022Y\u0022:2,\u0022Z\u0022:207},\u0022Rotation\u0022:{\u0022X\u0022:-0.0001,\u0022Y\u0022:90.0001,\u0022Z\u0022:0.0001},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "spawner",
-      "id": "spawner-spg_1-9",
-      "saveData": "{\u0022isEntAlive\u0022:false,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:34.5,\u0022Y\u0022:2,\u0022Z\u0022:209.5},\u0022Rotation\u0022:{\u0022X\u0022:-0.0001,\u0022Y\u0022:90.0001,\u0022Z\u0022:0.0001},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "spawner",
-      "id": "spawner-spg_1-10",
-      "saveData": "{\u0022isEntAlive\u0022:false,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:35,\u0022Y\u0022:2,\u0022Z\u0022:213},\u0022Rotation\u0022:{\u0022X\u0022:-0.0001,\u0022Y\u0022:90.0001,\u0022Z\u0022:0.0001},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "spawner",
-      "id": "spawner-spg_1-11",
-      "saveData": "{\u0022isEntAlive\u0022:false,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:36,\u0022Y\u0022:2,\u0022Z\u0022:216.5},\u0022Rotation\u0022:{\u0022X\u0022:-0.0001,\u0022Y\u0022:90.0001,\u0022Z\u0022:0.0001},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "spawner",
-      "id": "spawner-spg_1-12",
-      "saveData": "{\u0022isEntAlive\u0022:false,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:37.5,\u0022Y\u0022:1.5281625,\u0022Z\u0022:220},\u0022Rotation\u0022:{\u0022X\u0022:-0.0001,\u0022Y\u0022:90.0001,\u0022Z\u0022:0.0001},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "spawner",
-      "id": "spawner-spg_1-13",
-      "saveData": "{\u0022isEntAlive\u0022:false,\u0022active\u0022:true,\u0022Position\u0022:{\u0022X\u0022:38.5,\u0022Y\u0022:1.5262656,\u0022Z\u0022:225.5},\u0022Rotation\u0022:{\u0022X\u0022:-0.0001,\u0022Y\u0022:90.0001,\u0022Z\u0022:0.0001},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "test_sp",
-      "className": "counter",
-      "id": "counter-test_sp-0",
-      "saveData": "{\u0022num\u0022:0,\u0022Position\u0022:{\u0022X\u0022:20.5,\u0022Y\u0022:16.534063,\u0022Z\u0022:211},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022test_sp\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "movebleBrush",
-      "id": "movebleBrush--0",
-      "saveData": "{\u0022progress\u0022:1,\u0022open\u0022:true,\u0022Position\u0022:{\u0022X\u0022:190.94875,\u0022Y\u0022:-0.00035905838,\u0022Z\u0022:289.48383},\u0022Rotation\u0022:{\u0022X\u0022:-0.0001,\u0022Y\u0022:-109.999985,\u0022Z\u0022:9.999999E-05},\u0022name\u0022:\u0022a1_d1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "movebleBrush",
-      "id": "movebleBrush--1",
-      "saveData": "{\u0022progress\u0022:1,\u0022open\u0022:true,\u0022Position\u0022:{\u0022X\u0022:118.000244,\u0022Y\u0022:-0.0005784035,\u0022Z\u0022:454.60934},\u0022Rotation\u0022:{\u0022X\u0022:-9.9999976E-05,\u0022Y\u0022:149.99998,\u0022Z\u0022:9.999999E-05},\u0022name\u0022:\u0022spg_1\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
+      "className": "ent_cat_point",
+      "id": "ent_cat_point--3",
+      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:-9.528901,\u0022Y\u0022:0.49990872,\u0022Z\u0022:-0.49865186},\u0022Rotation\u0022:{\u0022X\u0022:-0.0061118547,\u0022Y\u0022:0.041256446,\u0022Z\u0022:-0.00049720856},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
     },
     {
       "Name": "PlayerGlobal",
       "className": "",
       "id": "-PlayerGlobal-0",
       "saveData": "{\u0022InAction\u0022:0,\u0022Position\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022PlayerGlobal\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "npc_humanAxe",
-      "id": "npc_humanAxe--14",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.8130733,\u0022Y\u0022:3.927974E-30,\u0022Z\u0022:-0.58033043},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.81936944,\u0022Y\u0022:0,\u0022Z\u0022:-0.5715881},\u0022speed\u0022:0,\u0022targetLocation\u0022:{\u0022X\u0022:31.951496,\u0022Y\u0022:1.4347662,\u0022Z\u0022:197.54088},\u0022dead\u0022:true,\u0022attacking\u0022:false,\u0022attackCooldown\u0022:{\u0022T\u0022:-168.80992},\u0022stunned\u0022:false,\u0022rootMotionScale\u0022:1,\u0022reachedFloor\u0022:true,\u0022meshStopUpdateDelay\u0022:{\u0022T\u0022:2.6956756},\u0022animationState\u0022:{\u0022animationStates\u0022:[{\u0022CurrrentAnimation\u0022:\u0022root|idle\u0022,\u0022CurrentFrame\u0022:4,\u0022OldFrame\u0022:4,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:false},{\u0022CurrrentAnimation\u0022:\u0022root|run\u0022,\u0022CurrentFrame\u0022:8,\u0022OldFrame\u0022:8,\u0022Loop\u0022:true,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:true},{\u0022CurrrentAnimation\u0022:\u0022root|attack\u0022,\u0022CurrentFrame\u0022:0,\u0022OldFrame\u0022:0,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:false},{\u0022CurrrentAnimation\u0022:\u0022root|stun\u0022,\u0022CurrentFrame\u0022:0,\u0022OldFrame\u0022:0,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:false}]},\u0022Position\u0022:{\u0022X\u0022:41.05326,\u0022Y\u0022:0.53210884,\u0022Z\u0022:203.86342},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:-125.51731,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:-15,\u0022OwnerId\u0022:\u0022spawner-spg_1-4\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "npc_humanAxe",
-      "id": "npc_humanAxe--15",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.6633113,\u0022Y\u0022:0,\u0022Z\u0022:0.6586348},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.70830816,\u0022Y\u0022:0,\u0022Z\u0022:0.70428693},\u0022speed\u0022:0,\u0022targetLocation\u0022:{\u0022X\u0022:50.16598,\u0022Y\u0022:1.4329009,\u0022Z\u0022:199.4001},\u0022dead\u0022:true,\u0022attacking\u0022:false,\u0022attackCooldown\u0022:{\u0022T\u0022:-149.91232},\u0022stunned\u0022:true,\u0022rootMotionScale\u0022:1,\u0022reachedFloor\u0022:true,\u0022meshStopUpdateDelay\u0022:{\u0022T\u0022:2.6956756},\u0022animationState\u0022:{\u0022animationStates\u0022:[{\u0022CurrrentAnimation\u0022:\u0022root|idle\u0022,\u0022CurrentFrame\u0022:4,\u0022OldFrame\u0022:4,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:false},{\u0022CurrrentAnimation\u0022:\u0022root|run\u0022,\u0022CurrentFrame\u0022:9,\u0022OldFrame\u0022:9,\u0022Loop\u0022:true,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:true},{\u0022CurrrentAnimation\u0022:\u0022root|attack\u0022,\u0022CurrentFrame\u0022:3,\u0022OldFrame\u0022:3,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:false},{\u0022CurrrentAnimation\u0022:\u0022root|stun\u0022,\u0022CurrentFrame\u0022:0,\u0022OldFrame\u0022:0,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:true}]},\u0022Position\u0022:{\u0022X\u0022:48.921955,\u0022Y\u0022:0.533485,\u0022Z\u0022:198.15233},\u0022Rotation\u0022:{\u0022X\u0022:-0,\u0022Y\u0022:45.202686,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022spawner-spg_1-1\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "npc_humanAxe",
-      "id": "npc_humanAxe--16",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.7582841,\u0022Y\u0022:4.8176945E-33,\u0022Z\u0022:-0.6494745},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.7451731,\u0022Y\u0022:0,\u0022Z\u0022:-0.6653115},\u0022speed\u0022:0,\u0022targetLocation\u0022:{\u0022X\u0022:27.919271,\u0022Y\u0022:1.4292233,\u0022Z\u0022:194.08517},\u0022dead\u0022:true,\u0022attacking\u0022:false,\u0022attackCooldown\u0022:{\u0022T\u0022:-168.80992},\u0022stunned\u0022:false,\u0022rootMotionScale\u0022:1,\u0022reachedFloor\u0022:true,\u0022meshStopUpdateDelay\u0022:{\u0022T\u0022:2.6956756},\u0022animationState\u0022:{\u0022animationStates\u0022:[{\u0022CurrrentAnimation\u0022:\u0022root|idle\u0022,\u0022CurrentFrame\u0022:4,\u0022OldFrame\u0022:4,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:false},{\u0022CurrrentAnimation\u0022:\u0022root|run\u0022,\u0022CurrentFrame\u0022:6,\u0022OldFrame\u0022:6,\u0022Loop\u0022:true,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:true},{\u0022CurrrentAnimation\u0022:\u0022root|attack\u0022,\u0022CurrentFrame\u0022:0,\u0022OldFrame\u0022:0,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:false},{\u0022CurrrentAnimation\u0022:\u0022root|stun\u0022,\u0022CurrentFrame\u0022:0,\u0022OldFrame\u0022:0,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:false}]},\u0022Position\u0022:{\u0022X\u0022:31.477898,\u0022Y\u0022:0.53504974,\u0022Z\u0022:197.25008},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:-130.58023,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022spawner-spg_1-6\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "npc_humanAxe",
-      "id": "npc_humanAxe--17",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.70601946,\u0022Y\u0022:0,\u0022Z\u0022:-0.594778},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.7575619,\u0022Y\u0022:0,\u0022Z\u0022:-0.65110016},\u0022speed\u0022:0,\u0022targetLocation\u0022:{\u0022X\u0022:27.919271,\u0022Y\u0022:1.4292662,\u0022Z\u0022:194.08517},\u0022dead\u0022:true,\u0022attacking\u0022:false,\u0022attackCooldown\u0022:{\u0022T\u0022:-157.35587},\u0022stunned\u0022:true,\u0022rootMotionScale\u0022:1,\u0022reachedFloor\u0022:true,\u0022meshStopUpdateDelay\u0022:{\u0022T\u0022:2.6956756},\u0022animationState\u0022:{\u0022animationStates\u0022:[{\u0022CurrrentAnimation\u0022:\u0022root|idle\u0022,\u0022CurrentFrame\u0022:4,\u0022OldFrame\u0022:4,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:false},{\u0022CurrrentAnimation\u0022:\u0022root|run\u0022,\u0022CurrentFrame\u0022:6,\u0022OldFrame\u0022:6,\u0022Loop\u0022:true,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:true},{\u0022CurrrentAnimation\u0022:\u0022root|attack\u0022,\u0022CurrentFrame\u0022:7,\u0022OldFrame\u0022:7,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:false},{\u0022CurrrentAnimation\u0022:\u0022root|stun\u0022,\u0022CurrentFrame\u0022:0,\u0022OldFrame\u0022:0,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:true}]},\u0022Position\u0022:{\u0022X\u0022:29.1212,\u0022Y\u0022:0.53221965,\u0022Z\u0022:195.09973},\u0022Rotation\u0022:{\u0022X\u0022:-0,\u0022Y\u0022:-130.11208,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022spawner-spg_1-0\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "npc_humanAxe",
-      "id": "npc_humanAxe--18",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.97713345,\u0022Y\u0022:0,\u0022Z\u0022:0.20759565},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.97715336,\u0022Y\u0022:0,\u0022Z\u0022:0.20728298},\u0022speed\u0022:0,\u0022targetLocation\u0022:{\u0022X\u0022:50.068394,\u0022Y\u0022:1.4330041,\u0022Z\u0022:199.11058},\u0022dead\u0022:true,\u0022attacking\u0022:false,\u0022attackCooldown\u0022:{\u0022T\u0022:-155.98729},\u0022stunned\u0022:false,\u0022rootMotionScale\u0022:1,\u0022reachedFloor\u0022:true,\u0022meshStopUpdateDelay\u0022:{\u0022T\u0022:2.6956756},\u0022animationState\u0022:{\u0022animationStates\u0022:[{\u0022CurrrentAnimation\u0022:\u0022root|idle\u0022,\u0022CurrentFrame\u0022:4,\u0022OldFrame\u0022:4,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:false},{\u0022CurrrentAnimation\u0022:\u0022root|run\u0022,\u0022CurrentFrame\u0022:16,\u0022OldFrame\u0022:16,\u0022Loop\u0022:true,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:true},{\u0022CurrrentAnimation\u0022:\u0022root|attack\u0022,\u0022CurrentFrame\u0022:7,\u0022OldFrame\u0022:7,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:false},{\u0022CurrrentAnimation\u0022:\u0022root|stun\u0022,\u0022CurrentFrame\u0022:40,\u0022OldFrame\u0022:40,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:false}]},\u0022Position\u0022:{\u0022X\u0022:45.42667,\u0022Y\u0022:0.5337459,\u0022Z\u0022:198.12604},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:78.00563,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:-15,\u0022OwnerId\u0022:\u0022spawner-spg_1-2\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "npc_humanAxe",
-      "id": "npc_humanAxe--19",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.9846224,\u0022Y\u0022:0,\u0022Z\u0022:-0.17469597},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.1833774,\u0022Y\u0022:0,\u0022Z\u0022:-0.981432},\u0022speed\u0022:0,\u0022targetLocation\u0022:{\u0022X\u0022:31.37432,\u0022Y\u0022:1.4349549,\u0022Z\u0022:192.58757},\u0022dead\u0022:true,\u0022attacking\u0022:false,\u0022attackCooldown\u0022:{\u0022T\u0022:-156.79196},\u0022stunned\u0022:true,\u0022rootMotionScale\u0022:1,\u0022reachedFloor\u0022:true,\u0022meshStopUpdateDelay\u0022:{\u0022T\u0022:2.6956756},\u0022animationState\u0022:{\u0022animationStates\u0022:[{\u0022CurrrentAnimation\u0022:\u0022root|idle\u0022,\u0022CurrentFrame\u0022:4,\u0022OldFrame\u0022:4,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:false},{\u0022CurrrentAnimation\u0022:\u0022root|run\u0022,\u0022CurrentFrame\u0022:10,\u0022OldFrame\u0022:10,\u0022Loop\u0022:true,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:true},{\u0022CurrrentAnimation\u0022:\u0022root|attack\u0022,\u0022CurrentFrame\u0022:18,\u0022OldFrame\u0022:18,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:false},{\u0022CurrrentAnimation\u0022:\u0022root|stun\u0022,\u0022CurrentFrame\u0022:29,\u0022OldFrame\u0022:29,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:true}]},\u0022Position\u0022:{\u0022X\u0022:30.038698,\u0022Y\u0022:0.53324914,\u0022Z\u0022:193.8844},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:134.15575,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022spawner-spg_1-5\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "npc_humanAxe",
-      "id": "npc_humanAxe--20",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.71726125,\u0022Y\u0022:3.1988365E-28,\u0022Z\u0022:-0.6956363},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.72920394,\u0022Y\u0022:0,\u0022Z\u0022:-0.6836027},\u0022speed\u0022:0,\u0022targetLocation\u0022:{\u0022X\u0022:36.007187,\u0022Y\u0022:1.4334105,\u0022Z\u0022:200.67084},\u0022dead\u0022:true,\u0022attacking\u0022:false,\u0022attackCooldown\u0022:{\u0022T\u0022:-168.80992},\u0022stunned\u0022:false,\u0022rootMotionScale\u0022:1,\u0022reachedFloor\u0022:true,\u0022meshStopUpdateDelay\u0022:{\u0022T\u0022:2.6956756},\u0022animationState\u0022:{\u0022animationStates\u0022:[{\u0022CurrrentAnimation\u0022:\u0022root|idle\u0022,\u0022CurrentFrame\u0022:4,\u0022OldFrame\u0022:4,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:false},{\u0022CurrrentAnimation\u0022:\u0022root|run\u0022,\u0022CurrentFrame\u0022:2,\u0022OldFrame\u0022:2,\u0022Loop\u0022:true,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:true},{\u0022CurrrentAnimation\u0022:\u0022root|attack\u0022,\u0022CurrentFrame\u0022:0,\u0022OldFrame\u0022:0,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:false},{\u0022CurrrentAnimation\u0022:\u0022root|stun\u0022,\u0022CurrentFrame\u0022:0,\u0022OldFrame\u0022:0,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:false}]},\u0022Position\u0022:{\u0022X\u0022:39.187893,\u0022Y\u0022:0.5323586,\u0022Z\u0022:203.52449},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:-134.12312,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022spawner-spg_1-3\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "npc_humanAxe",
-      "id": "npc_humanAxe--21",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.68155384,\u0022Y\u0022:0,\u0022Z\u0022:-0.7294204},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.6955533,\u0022Y\u0022:0,\u0022Z\u0022:-0.7169199},\u0022speed\u0022:0,\u0022targetLocation\u0022:{\u0022X\u0022:41.546734,\u0022Y\u0022:1.4313914,\u0022Z\u0022:205.61145},\u0022dead\u0022:true,\u0022attacking\u0022:false,\u0022attackCooldown\u0022:{\u0022T\u0022:-164.53522},\u0022stunned\u0022:false,\u0022rootMotionScale\u0022:1,\u0022reachedFloor\u0022:true,\u0022meshStopUpdateDelay\u0022:{\u0022T\u0022:2.6956756},\u0022animationState\u0022:{\u0022animationStates\u0022:[{\u0022CurrrentAnimation\u0022:\u0022root|idle\u0022,\u0022CurrentFrame\u0022:4,\u0022OldFrame\u0022:4,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:false},{\u0022CurrrentAnimation\u0022:\u0022root|run\u0022,\u0022CurrentFrame\u0022:7,\u0022OldFrame\u0022:7,\u0022Loop\u0022:true,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:true},{\u0022CurrrentAnimation\u0022:\u0022root|attack\u0022,\u0022CurrentFrame\u0022:33,\u0022OldFrame\u0022:33,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:false},{\u0022CurrrentAnimation\u0022:\u0022root|stun\u0022,\u0022CurrentFrame\u0022:0,\u0022OldFrame\u0022:0,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:false}]},\u0022Position\u0022:{\u0022X\u0022:46.376152,\u0022Y\u0022:0.52945155,\u0022Z\u0022:210.54442},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:-136.94298,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022spawner-spg_1-7\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "npc_humanAxe",
-      "id": "npc_humanAxe--22",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.9246887,\u0022Y\u0022:0,\u0022Z\u0022:0.37121633},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.94085455,\u0022Y\u0022:0,\u0022Z\u0022:0.3356387},\u0022speed\u0022:0,\u0022targetLocation\u0022:{\u0022X\u0022:41.20788,\u0022Y\u0022:1.434334,\u0022Z\u0022:197.22424},\u0022dead\u0022:true,\u0022attacking\u0022:false,\u0022attackCooldown\u0022:{\u0022T\u0022:-155.93819},\u0022stunned\u0022:false,\u0022rootMotionScale\u0022:0.6718517,\u0022reachedFloor\u0022:true,\u0022meshStopUpdateDelay\u0022:{\u0022T\u0022:2.6956756},\u0022animationState\u0022:{\u0022animationStates\u0022:[{\u0022CurrrentAnimation\u0022:\u0022root|idle\u0022,\u0022CurrentFrame\u0022:4,\u0022OldFrame\u0022:4,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:false},{\u0022CurrrentAnimation\u0022:\u0022root|run\u0022,\u0022CurrentFrame\u0022:3,\u0022OldFrame\u0022:3,\u0022Loop\u0022:true,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:true},{\u0022CurrrentAnimation\u0022:\u0022root|attack\u0022,\u0022CurrentFrame\u0022:33,\u0022OldFrame\u0022:33,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:false},{\u0022CurrrentAnimation\u0022:\u0022root|stun\u0022,\u0022CurrentFrame\u0022:0,\u0022OldFrame\u0022:0,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:false}]},\u0022Position\u0022:{\u0022X\u0022:37.281727,\u0022Y\u0022:0.53511065,\u0022Z\u0022:195.84132},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:68.127,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:-15,\u0022OwnerId\u0022:\u0022spawner-spg_1-8\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "npc_humanAxe",
-      "id": "npc_humanAxe--23",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.7279958,\u0022Y\u0022:2.565466E-34,\u0022Z\u0022:-0.6841901},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.7248865,\u0022Y\u0022:0,\u0022Z\u0022:-0.6876081},\u0022speed\u0022:0,\u0022targetLocation\u0022:{\u0022X\u0022:27.919271,\u0022Y\u0022:1.4292649,\u0022Z\u0022:194.08517},\u0022dead\u0022:true,\u0022attacking\u0022:false,\u0022attackCooldown\u0022:{\u0022T\u0022:-168.80992},\u0022stunned\u0022:false,\u0022rootMotionScale\u0022:1,\u0022reachedFloor\u0022:true,\u0022meshStopUpdateDelay\u0022:{\u0022T\u0022:2.6956756},\u0022animationState\u0022:{\u0022animationStates\u0022:[{\u0022CurrrentAnimation\u0022:\u0022root|idle\u0022,\u0022CurrentFrame\u0022:4,\u0022OldFrame\u0022:4,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:false},{\u0022CurrrentAnimation\u0022:\u0022root|run\u0022,\u0022CurrentFrame\u0022:1,\u0022OldFrame\u0022:1,\u0022Loop\u0022:true,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:true},{\u0022CurrrentAnimation\u0022:\u0022root|attack\u0022,\u0022CurrentFrame\u0022:0,\u0022OldFrame\u0022:0,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:false},{\u0022CurrrentAnimation\u0022:\u0022root|stun\u0022,\u0022CurrentFrame\u0022:0,\u0022OldFrame\u0022:0,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:false}]},\u0022Position\u0022:{\u0022X\u0022:30.306395,\u0022Y\u0022:0.5352416,\u0022Z\u0022:196.4049},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:-133.22325,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022spawner-spg_1-10\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "npc_humanAxe",
-      "id": "npc_humanAxe--24",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.6870875,\u0022Y\u0022:6.0822325E-25,\u0022Z\u0022:-0.7250347},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.6907834,\u0022Y\u0022:0,\u0022Z\u0022:-0.72152615},\u0022speed\u0022:0,\u0022targetLocation\u0022:{\u0022X\u0022:37.222786,\u0022Y\u0022:1.433125,\u0022Z\u0022:201.45308},\u0022dead\u0022:true,\u0022attacking\u0022:false,\u0022attackCooldown\u0022:{\u0022T\u0022:-168.80992},\u0022stunned\u0022:false,\u0022rootMotionScale\u0022:1,\u0022reachedFloor\u0022:true,\u0022meshStopUpdateDelay\u0022:{\u0022T\u0022:2.6956756},\u0022animationState\u0022:{\u0022animationStates\u0022:[{\u0022CurrrentAnimation\u0022:\u0022root|idle\u0022,\u0022CurrentFrame\u0022:4,\u0022OldFrame\u0022:4,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:false},{\u0022CurrrentAnimation\u0022:\u0022root|run\u0022,\u0022CurrentFrame\u0022:2,\u0022OldFrame\u0022:2,\u0022Loop\u0022:true,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:true},{\u0022CurrrentAnimation\u0022:\u0022root|attack\u0022,\u0022CurrentFrame\u0022:0,\u0022OldFrame\u0022:0,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:false},{\u0022CurrrentAnimation\u0022:\u0022root|stun\u0022,\u0022CurrentFrame\u0022:0,\u0022OldFrame\u0022:0,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:false}]},\u0022Position\u0022:{\u0022X\u0022:42.35324,\u0022Y\u0022:0.53101176,\u0022Z\u0022:206.81178},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:-136.53929,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022spawner-spg_1-9\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "npc_humanAxe",
-      "id": "npc_humanAxe--25",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.9929742,\u0022Y\u0022:0,\u0022Z\u0022:-0.038821954},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.9921276,\u0022Y\u0022:0,\u0022Z\u0022:0.12479572},\u0022speed\u0022:0,\u0022targetLocation\u0022:{\u0022X\u0022:50.16598,\u0022Y\u0022:1.4328994,\u0022Z\u0022:199.4001},\u0022dead\u0022:true,\u0022attacking\u0022:true,\u0022attackCooldown\u0022:{\u0022T\u0022:-151.1719},\u0022stunned\u0022:false,\u0022rootMotionScale\u0022:1,\u0022reachedFloor\u0022:true,\u0022meshStopUpdateDelay\u0022:{\u0022T\u0022:2.6956756},\u0022animationState\u0022:{\u0022animationStates\u0022:[{\u0022CurrrentAnimation\u0022:\u0022root|idle\u0022,\u0022CurrentFrame\u0022:4,\u0022OldFrame\u0022:4,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:false},{\u0022CurrrentAnimation\u0022:\u0022root|run\u0022,\u0022CurrentFrame\u0022:1,\u0022OldFrame\u0022:1,\u0022Loop\u0022:true,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:true},{\u0022CurrrentAnimation\u0022:\u0022root|attack\u0022,\u0022CurrentFrame\u0022:16,\u0022OldFrame\u0022:16,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:true},{\u0022CurrrentAnimation\u0022:\u0022root|stun\u0022,\u0022CurrentFrame\u0022:0,\u0022OldFrame\u0022:0,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:false}]},\u0022Position\u0022:{\u0022X\u0022:49.25637,\u0022Y\u0022:0.5330932,\u0022Z\u0022:199.23285},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:92.23893,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:-15,\u0022OwnerId\u0022:\u0022spawner-spg_1-11\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "npc_humanAxe",
-      "id": "npc_humanAxe--26",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.955208,\u0022Y\u0022:0,\u0022Z\u0022:0.28708705},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.9499345,\u0022Y\u0022:0,\u0022Z\u0022:0.30949178},\u0022speed\u0022:0,\u0022targetLocation\u0022:{\u0022X\u0022:40.09415,\u0022Y\u0022:1.43449,\u0022Z\u0022:196.88368},\u0022dead\u0022:true,\u0022attacking\u0022:false,\u0022attackCooldown\u0022:{\u0022T\u0022:-156.95128},\u0022stunned\u0022:false,\u0022rootMotionScale\u0022:1,\u0022reachedFloor\u0022:true,\u0022meshStopUpdateDelay\u0022:{\u0022T\u0022:2.6956756},\u0022animationState\u0022:{\u0022animationStates\u0022:[{\u0022CurrrentAnimation\u0022:\u0022root|idle\u0022,\u0022CurrentFrame\u0022:4,\u0022OldFrame\u0022:4,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:false},{\u0022CurrrentAnimation\u0022:\u0022root|run\u0022,\u0022CurrentFrame\u0022:16,\u0022OldFrame\u0022:16,\u0022Loop\u0022:true,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:true},{\u0022CurrrentAnimation\u0022:\u0022root|attack\u0022,\u0022CurrentFrame\u0022:12,\u0022OldFrame\u0022:12,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:false},{\u0022CurrrentAnimation\u0022:\u0022root|stun\u0022,\u0022CurrentFrame\u0022:40,\u0022OldFrame\u0022:40,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:false}]},\u0022Position\u0022:{\u0022X\u0022:33.68172,\u0022Y\u0022:0.5357317,\u0022Z\u0022:194.77908},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:73.27188,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022spawner-spg_1-12\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "npc_humanAxe",
-      "id": "npc_humanAxe--27",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.97713995,\u0022Y\u0022:0,\u0022Z\u0022:0.20694837},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.979789,\u0022Y\u0022:0,\u0022Z\u0022:0.19492789},\u0022speed\u0022:0,\u0022targetLocation\u0022:{\u0022X\u0022:45.714977,\u0022Y\u0022:1.4335712,\u0022Z\u0022:198.39966},\u0022dead\u0022:true,\u0022attacking\u0022:false,\u0022attackCooldown\u0022:{\u0022T\u0022:-165.8289},\u0022stunned\u0022:false,\u0022rootMotionScale\u0022:1,\u0022reachedFloor\u0022:true,\u0022meshStopUpdateDelay\u0022:{\u0022T\u0022:2.6956756},\u0022animationState\u0022:{\u0022animationStates\u0022:[{\u0022CurrrentAnimation\u0022:\u0022root|idle\u0022,\u0022CurrentFrame\u0022:4,\u0022OldFrame\u0022:4,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:false},{\u0022CurrrentAnimation\u0022:\u0022root|run\u0022,\u0022CurrentFrame\u0022:5,\u0022OldFrame\u0022:5,\u0022Loop\u0022:true,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:true},{\u0022CurrrentAnimation\u0022:\u0022root|attack\u0022,\u0022CurrentFrame\u0022:11,\u0022OldFrame\u0022:11,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:false},{\u0022CurrrentAnimation\u0022:\u0022root|stun\u0022,\u0022CurrentFrame\u0022:40,\u0022OldFrame\u0022:40,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:false}]},\u0022Position\u0022:{\u0022X\u0022:38.383415,\u0022Y\u0022:0.53464395,\u0022Z\u0022:196.97925},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:78.04203,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022spawner-spg_1-13\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "hitBlood",
-      "id": "hitBlood--0",
-      "saveData": "{\u0022bloodSaveData\u0022:{\u0022particles\u0022:[]},\u0022piecesSaveData\u0022:{\u0022particles\u0022:[]},\u0022SystemName\u0022:\u0022hitBlood\u0022,\u0022Position\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "decal_blood",
-      "id": "decal_blood--0",
-      "saveData": "{\u0022decalSaveData\u0022:{\u0022particles\u0022:[{\u0022position\u0022:{\u0022X\u0022:45.759224,\u0022Y\u0022:0.5385216,\u0022Z\u0022:198.7149},\u0022position2\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022velocity\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022globalRotation\u0022:{\u0022X\u0022:90,\u0022Y\u0022:-168.03816,\u0022Z\u0022:267548800},\u0022useGlobalRotation\u0022:true,\u0022seed\u0022:0,\u0022id\u0022:2,\u0022lifeTime\u0022:83.33346,\u0022deathTime\u0022:87.899765,\u0022transparency\u0022:1,\u0022color\u0022:{\u0022X\u0022:1,\u0022Y\u0022:0,\u0022Z\u0022:0,\u0022W\u0022:0.7},\u0022Scale\u0022:3.2970755,\u0022Rotation\u0022:0,\u0022OrientRotationToVelocity\u0022:false,\u0022HasCollision\u0022:false,\u0022CollisionRadius\u0022:0.02,\u0022BouncePower\u0022:0.1,\u0022Collided\u0022:false,\u0022destroyed\u0022:false,\u0022UserData1\u0022:0,\u0022UserData2\u0022:0,\u0022UserData3\u0022:0,\u0022MaxDrawDistance\u0022:60},{\u0022position\u0022:{\u0022X\u0022:47.12845,\u0022Y\u0022:0.5386271,\u0022Z\u0022:198.1148},\u0022position2\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022velocity\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022globalRotation\u0022:{\u0022X\u0022:90,\u0022Y\u0022:-168.03816,\u0022Z\u0022:-962084600},\u0022useGlobalRotation\u0022:true,\u0022seed\u0022:0,\u0022id\u0022:3,\u0022lifeTime\u0022:83.01972,\u0022deathTime\u0022:83.04421,\u0022transparency\u0022:-0.01931311,\u0022color\u0022:{\u0022X\u0022:1,\u0022Y\u0022:0,\u0022Z\u0022:0,\u0022W\u0022:0.7},\u0022Scale\u0022:3.2970805,\u0022Rotation\u0022:0,\u0022OrientRotationToVelocity\u0022:false,\u0022HasCollision\u0022:false,\u0022CollisionRadius\u0022:0.02,\u0022BouncePower\u0022:0.1,\u0022Collided\u0022:false,\u0022destroyed\u0022:false,\u0022UserData1\u0022:0,\u0022UserData2\u0022:0,\u0022UserData3\u0022:0,\u0022MaxDrawDistance\u0022:60},{\u0022position\u0022:{\u0022X\u0022:48.588737,\u0022Y\u0022:0.5398788,\u0022Z\u0022:194.12717},\u0022position2\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022velocity\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022globalRotation\u0022:{\u0022X\u0022:90,\u0022Y\u0022:-168.03816,\u0022Z\u0022:1.3249224E\u002B09},\u0022useGlobalRotation\u0022:true,\u0022seed\u0022:0,\u0022id\u0022:13,\u0022lifeTime\u0022:74.40174,\u0022deathTime\u0022:79.11308,\u0022transparency\u0022:1,\u0022color\u0022:{\u0022X\u0022:1,\u0022Y\u0022:0,\u0022Z\u0022:0,\u0022W\u0022:0.7},\u0022Scale\u0022:3.2970915,\u0022Rotation\u0022:0,\u0022OrientRotationToVelocity\u0022:false,\u0022HasCollision\u0022:false,\u0022CollisionRadius\u0022:0.02,\u0022BouncePower\u0022:0.1,\u0022Collided\u0022:false,\u0022destroyed\u0022:false,\u0022UserData1\u0022:0,\u0022UserData2\u0022:0,\u0022UserData3\u0022:0,\u0022MaxDrawDistance\u0022:60},{\u0022position\u0022:{\u0022X\u0022:49.610027,\u0022Y\u0022:0.5407168,\u0022Z\u0022:191.448},\u0022position2\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022velocity\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022globalRotation\u0022:{\u0022X\u0022:90,\u0022Y\u0022:-168.03816,\u0022Z\u0022:-2.093863E\u002B09},\u0022useGlobalRotation\u0022:true,\u0022seed\u0022:0,\u0022id\u0022:15,\u0022lifeTime\u0022:72.071915,\u0022deathTime\u0022:85.51495,\u0022transparency\u0022:1,\u0022color\u0022:{\u0022X\u0022:1,\u0022Y\u0022:0,\u0022Z\u0022:0,\u0022W\u0022:0.7},\u0022Scale\u0022:3.2971427,\u0022Rotation\u0022:0,\u0022OrientRotationToVelocity\u0022:false,\u0022HasCollision\u0022:false,\u0022CollisionRadius\u0022:0.02,\u0022BouncePower\u0022:0.1,\u0022Collided\u0022:false,\u0022destroyed\u0022:false,\u0022UserData1\u0022:0,\u0022UserData2\u0022:0,\u0022UserData3\u0022:0,\u0022MaxDrawDistance\u0022:60},{\u0022position\u0022:{\u0022X\u0022:51.986523,\u0022Y\u0022:0.5409101,\u0022Z\u0022:190.37662},\u0022position2\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022velocity\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022globalRotation\u0022:{\u0022X\u0022:90,\u0022Y\u0022:-168.03816,\u0022Z\u0022:405040900},\u0022useGlobalRotation\u0022:true,\u0022seed\u0022:0,\u0022id\u0022:18,\u0022lifeTime\u0022:70.86923,\u0022deathTime\u0022:72.21164,\u0022transparency\u0022:0.31022945,\u0022color\u0022:{\u0022X\u0022:1,\u0022Y\u0022:0,\u0022Z\u0022:0,\u0022W\u0022:0.7},\u0022Scale\u0022:3.2971346,\u0022Rotation\u0022:0,\u0022OrientRotationToVelocity\u0022:false,\u0022HasCollision\u0022:false,\u0022CollisionRadius\u0022:0.02,\u0022BouncePower\u0022:0.1,\u0022Collided\u0022:false,\u0022destroyed\u0022:false,\u0022UserData1\u0022:0,\u0022UserData2\u0022:0,\u0022UserData3\u0022:0,\u0022MaxDrawDistance\u0022:60},{\u0022position\u0022:{\u0022X\u0022:48.20803,\u0022Y\u0022:0.54042655,\u0022Z\u0022:192.59818},\u0022position2\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022velocity\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022globalRotation\u0022:{\u0022X\u0022:90,\u0022Y\u0022:-168.03816,\u0022Z\u0022:-1.9830173E\u002B09},\u0022useGlobalRotation\u0022:true,\u0022seed\u0022:0,\u0022id\u0022:19,\u0022lifeTime\u0022:70.65404,\u0022deathTime\u0022:85.26916,\u0022transparency\u0022:1,\u0022color\u0022:{\u0022X\u0022:1,\u0022Y\u0022:0,\u0022Z\u0022:0,\u0022W\u0022:0.7},\u0022Scale\u0022:3.2971418,\u0022Rotation\u0022:0,\u0022OrientRotationToVelocity\u0022:false,\u0022HasCollision\u0022:false,\u0022CollisionRadius\u0022:0.02,\u0022BouncePower\u0022:0.1,\u0022Collided\u0022:false,\u0022destroyed\u0022:false,\u0022UserData1\u0022:0,\u0022UserData2\u0022:0,\u0022UserData3\u0022:0,\u0022MaxDrawDistance\u0022:60},{\u0022position\u0022:{\u0022X\u0022:49.804657,\u0022Y\u0022:0.5402829,\u0022Z\u0022:192.68198},\u0022position2\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022velocity\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022globalRotation\u0022:{\u0022X\u0022:90,\u0022Y\u0022:-168.03816,\u0022Z\u0022:580741760},\u0022useGlobalRotation\u0022:true,\u0022seed\u0022:0,\u0022id\u0022:20,\u0022lifeTime\u0022:70.589096,\u0022deathTime\u0022:81.229485,\u0022transparency\u0022:1,\u0022color\u0022:{\u0022X\u0022:1,\u0022Y\u0022:0,\u0022Z\u0022:0,\u0022W\u0022:0.7},\u0022Scale\u0022:3.2971358,\u0022Rotation\u0022:0,\u0022OrientRotationToVelocity\u0022:false,\u0022HasCollision\u0022:false,\u0022CollisionRadius\u0022:0.02,\u0022BouncePower\u0022:0.1,\u0022Collided\u0022:false,\u0022destroyed\u0022:false,\u0022UserData1\u0022:0,\u0022UserData2\u0022:0,\u0022UserData3\u0022:0,\u0022MaxDrawDistance\u0022:60},{\u0022position\u0022:{\u0022X\u0022:49.436325,\u0022Y\u0022:0.5405551,\u0022Z\u0022:191.96017},\u0022position2\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022velocity\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022globalRotation\u0022:{\u0022X\u0022:90,\u0022Y\u0022:-168.03816,\u0022Z\u0022:324519550},\u0022useGlobalRotation\u0022:true,\u0022seed\u0022:0,\u0022id\u0022:22,\u0022lifeTime\u0022:70.52089,\u0022deathTime\u0022:83.32607,\u0022transparency\u0022:1,\u0022color\u0022:{\u0022X\u0022:1,\u0022Y\u0022:0,\u0022Z\u0022:0,\u0022W\u0022:0.7},\u0022Scale\u0022:3.2971323,\u0022Rotation\u0022:0,\u0022OrientRotationToVelocity\u0022:false,\u0022HasCollision\u0022:false,\u0022CollisionRadius\u0022:0.02,\u0022BouncePower\u0022:0.1,\u0022Collided\u0022:false,\u0022destroyed\u0022:false,\u0022UserData1\u0022:0,\u0022UserData2\u0022:0,\u0022UserData3\u0022:0,\u0022MaxDrawDistance\u0022:60},{\u0022position\u0022:{\u0022X\u0022:60.91691,\u0022Y\u0022:0.53877765,\u0022Z\u0022:194.7511},\u0022position2\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022velocity\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022globalRotation\u0022:{\u0022X\u0022:90,\u0022Y\u0022:-168.03816,\u0022Z\u0022:1.2530757E\u002B09},\u0022useGlobalRotation\u0022:true,\u0022seed\u0022:0,\u0022id\u0022:29,\u0022lifeTime\u0022:69.16016,\u0022deathTime\u0022:74.783646,\u0022transparency\u0022:1,\u0022color\u0022:{\u0022X\u0022:1,\u0022Y\u0022:0,\u0022Z\u0022:0,\u0022W\u0022:0.7},\u0022Scale\u0022:3.297146,\u0022Rotation\u0022:0,\u0022OrientRotationToVelocity\u0022:false,\u0022HasCollision\u0022:false,\u0022CollisionRadius\u0022:0.02,\u0022BouncePower\u0022:0.1,\u0022Collided\u0022:false,\u0022destroyed\u0022:false,\u0022UserData1\u0022:0,\u0022UserData2\u0022:0,\u0022UserData3\u0022:0,\u0022MaxDrawDistance\u0022:60},{\u0022position\u0022:{\u0022X\u0022:57.71959,\u0022Y\u0022:0.53901035,\u0022Z\u0022:194.74469},\u0022position2\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022velocity\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022globalRotation\u0022:{\u0022X\u0022:90,\u0022Y\u0022:-168.03816,\u0022Z\u0022:-470557280},\u0022useGlobalRotation\u0022:true,\u0022seed\u0022:0,\u0022id\u0022:30,\u0022lifeTime\u0022:69.09473,\u0022deathTime\u0022:79.0719,\u0022transparency\u0022:1,\u0022color\u0022:{\u0022X\u0022:1,\u0022Y\u0022:0,\u0022Z\u0022:0,\u0022W\u0022:0.7},\u0022Scale\u0022:3.2971425,\u0022Rotation\u0022:0,\u0022OrientRotationToVelocity\u0022:false,\u0022HasCollision\u0022:false,\u0022CollisionRadius\u0022:0.02,\u0022BouncePower\u0022:0.1,\u0022Collided\u0022:false,\u0022destroyed\u0022:false,\u0022UserData1\u0022:0,\u0022UserData2\u0022:0,\u0022UserData3\u0022:0,\u0022MaxDrawDistance\u0022:60},{\u0022position\u0022:{\u0022X\u0022:65.99501,\u0022Y\u0022:0.62842035,\u0022Z\u0022:206.64626},\u0022position2\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022velocity\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022globalRotation\u0022:{\u0022X\u0022:0.0041527553,\u0022Y\u0022:90,\u0022Z\u0022:566235800},\u0022useGlobalRotation\u0022:true,\u0022seed\u0022:0,\u0022id\u0022:34,\u0022lifeTime\u0022:65.54089,\u0022deathTime\u0022:69.81164,\u0022transparency\u0022:1,\u0022color\u0022:{\u0022X\u0022:1,\u0022Y\u0022:0,\u0022Z\u0022:0,\u0022W\u0022:0.7},\u0022Scale\u0022:3.2971456,\u0022Rotation\u0022:0,\u0022OrientRotationToVelocity\u0022:false,\u0022HasCollision\u0022:false,\u0022CollisionRadius\u0022:0.02,\u0022BouncePower\u0022:0.1,\u0022Collided\u0022:false,\u0022destroyed\u0022:false,\u0022UserData1\u0022:0,\u0022UserData2\u0022:0,\u0022UserData3\u0022:0,\u0022MaxDrawDistance\u0022:60},{\u0022position\u0022:{\u0022X\u0022:65.56478,\u0022Y\u0022:0.5346773,\u0022Z\u0022:205.81552},\u0022position2\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022velocity\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022globalRotation\u0022:{\u0022X\u0022:90,\u0022Y\u0022:-168.03816,\u0022Z\u0022:405349980},\u0022useGlobalRotation\u0022:true,\u0022seed\u0022:0,\u0022id\u0022:35,\u0022lifeTime\u0022:65.42848,\u0022deathTime\u0022:67.04032,\u0022transparency\u0022:0.3779141,\u0022color\u0022:{\u0022X\u0022:1,\u0022Y\u0022:0,\u0022Z\u0022:0,\u0022W\u0022:0.7},\u0022Scale\u0022:3.2971473,\u0022Rotation\u0022:0,\u0022OrientRotationToVelocity\u0022:false,\u0022HasCollision\u0022:false,\u0022CollisionRadius\u0022:0.02,\u0022BouncePower\u0022:0.1,\u0022Collided\u0022:false,\u0022destroyed\u0022:false,\u0022UserData1\u0022:0,\u0022UserData2\u0022:0,\u0022UserData3\u0022:0,\u0022MaxDrawDistance\u0022:60},{\u0022position\u0022:{\u0022X\u0022:66.8335,\u0022Y\u0022:0.53341115,\u0022Z\u0022:209.26752},\u0022position2\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022velocity\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022globalRotation\u0022:{\u0022X\u0022:90,\u0022Y\u0022:-168.03816,\u0022Z\u0022:-1.1328548E\u002B09},\u0022useGlobalRotation\u0022:true,\u0022seed\u0022:0,\u0022id\u0022:39,\u0022lifeTime\u0022:64.46633,\u0022deathTime\u0022:89.317215,\u0022transparency\u0022:1,\u0022color\u0022:{\u0022X\u0022:1,\u0022Y\u0022:0,\u0022Z\u0022:0,\u0022W\u0022:0.7},\u0022Scale\u0022:3.29714,\u0022Rotation\u0022:0,\u0022OrientRotationToVelocity\u0022:false,\u0022HasCollision\u0022:false,\u0022CollisionRadius\u0022:0.02,\u0022BouncePower\u0022:0.1,\u0022Collided\u0022:false,\u0022destroyed\u0022:false,\u0022UserData1\u0022:0,\u0022UserData2\u0022:0,\u0022UserData3\u0022:0,\u0022MaxDrawDistance\u0022:60},{\u0022position\u0022:{\u0022X\u0022:61.349247,\u0022Y\u0022:0.5331238,\u0022Z\u0022:211.27382},\u0022position2\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022velocity\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022globalRotation\u0022:{\u0022X\u0022:90,\u0022Y\u0022:-168.03816,\u0022Z\u0022:521070000},\u0022useGlobalRotation\u0022:true,\u0022seed\u0022:0,\u0022id\u0022:42,\u0022lifeTime\u0022:63.881683,\u0022deathTime\u0022:65.51881,\u0022transparency\u0022:0.38427708,\u0022color\u0022:{\u0022X\u0022:1,\u0022Y\u0022:0,\u0022Z\u0022:0,\u0022W\u0022:0.7},\u0022Scale\u0022:3.2971425,\u0022Rotation\u0022:0,\u0022OrientRotationToVelocity\u0022:false,\u0022HasCollision\u0022:false,\u0022CollisionRadius\u0022:0.02,\u0022BouncePower\u0022:0.1,\u0022Collided\u0022:false,\u0022destroyed\u0022:false,\u0022UserData1\u0022:0,\u0022UserData2\u0022:0,\u0022UserData3\u0022:0,\u0022MaxDrawDistance\u0022:60},{\u0022position\u0022:{\u0022X\u0022:60.541744,\u0022Y\u0022:0.5343247,\u0022Z\u0022:207.91576},\u0022position2\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022velocity\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022globalRotation\u0022:{\u0022X\u0022:90,\u0022Y\u0022:-168.03816,\u0022Z\u0022:1.8380362E\u002B09},\u0022useGlobalRotation\u0022:true,\u0022seed\u0022:0,\u0022id\u0022:46,\u0022lifeTime\u0022:62.962704,\u0022deathTime\u0022:65.717,\u0022transparency\u0022:0.6626663,\u0022color\u0022:{\u0022X\u0022:1,\u0022Y\u0022:0,\u0022Z\u0022:0,\u0022W\u0022:0.7},\u0022Scale\u0022:3.2971363,\u0022Rotation\u0022:0,\u0022OrientRotationToVelocity\u0022:false,\u0022HasCollision\u0022:false,\u0022CollisionRadius\u0022:0.02,\u0022BouncePower\u0022:0.1,\u0022Collided\u0022:false,\u0022destroyed\u0022:false,\u0022UserData1\u0022:0,\u0022UserData2\u0022:0,\u0022UserData3\u0022:0,\u0022MaxDrawDistance\u0022:60},{\u0022position\u0022:{\u0022X\u0022:58.66428,\u0022Y\u0022:0.53414,\u0022Z\u0022:208.85638},\u0022position2\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022velocity\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022globalRotation\u0022:{\u0022X\u0022:90,\u0022Y\u0022:-168.03816,\u0022Z\u0022:-726615740},\u0022useGlobalRotation\u0022:true,\u0022seed\u0022:0,\u0022id\u0022:47,\u0022lifeTime\u0022:62.872795,\u0022deathTime\u0022:86.23745,\u0022transparency\u0022:1,\u0022color\u0022:{\u0022X\u0022:1,\u0022Y\u0022:0,\u0022Z\u0022:0,\u0022W\u0022:0.7},\u0022Scale\u0022:3.2971382,\u0022Rotation\u0022:0,\u0022OrientRotationToVelocity\u0022:false,\u0022HasCollision\u0022:false,\u0022CollisionRadius\u0022:0.02,\u0022BouncePower\u0022:0.1,\u0022Collided\u0022:false,\u0022destroyed\u0022:false,\u0022UserData1\u0022:0,\u0022UserData2\u0022:0,\u0022UserData3\u0022:0,\u0022MaxDrawDistance\u0022:60},{\u0022position\u0022:{\u0022X\u0022:50.53062,\u0022Y\u0022:0.5327612,\u0022Z\u0022:214.63129},\u0022position2\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022velocity\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022globalRotation\u0022:{\u0022X\u0022:90,\u0022Y\u0022:-168.03816,\u0022Z\u0022:1.3282019E\u002B09},\u0022useGlobalRotation\u0022:true,\u0022seed\u0022:0,\u0022id\u0022:53,\u0022lifeTime\u0022:59.548843,\u0022deathTime\u0022:67.03826,\u0022transparency\u0022:1,\u0022color\u0022:{\u0022X\u0022:1,\u0022Y\u0022:0,\u0022Z\u0022:0,\u0022W\u0022:0.7},\u0022Scale\u0022:3.2971373,\u0022Rotation\u0022:0,\u0022OrientRotationToVelocity\u0022:false,\u0022HasCollision\u0022:false,\u0022CollisionRadius\u0022:0.02,\u0022BouncePower\u0022:0.1,\u0022Collided\u0022:false,\u0022destroyed\u0022:false,\u0022UserData1\u0022:0,\u0022UserData2\u0022:0,\u0022UserData3\u0022:0,\u0022MaxDrawDistance\u0022:60},{\u0022position\u0022:{\u0022X\u0022:33.781948,\u0022Y\u0022:0.5343822,\u0022Z\u0022:213.41603},\u0022position2\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022velocity\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022globalRotation\u0022:{\u0022X\u0022:90,\u0022Y\u0022:-168.03816,\u0022Z\u0022:1.1980404E\u002B09},\u0022useGlobalRotation\u0022:true,\u0022seed\u0022:0,\u0022id\u0022:59,\u0022lifeTime\u0022:55.06131,\u0022deathTime\u0022:70.96612,\u0022transparency\u0022:1,\u0022color\u0022:{\u0022X\u0022:1,\u0022Y\u0022:0,\u0022Z\u0022:0,\u0022W\u0022:0.7},\u0022Scale\u0022:3.2971203,\u0022Rotation\u0022:0,\u0022OrientRotationToVelocity\u0022:false,\u0022HasCollision\u0022:false,\u0022CollisionRadius\u0022:0.02,\u0022BouncePower\u0022:0.1,\u0022Collided\u0022:false,\u0022destroyed\u0022:false,\u0022UserData1\u0022:0,\u0022UserData2\u0022:0,\u0022UserData3\u0022:0,\u0022MaxDrawDistance\u0022:60},{\u0022position\u0022:{\u0022X\u0022:26.165426,\u0022Y\u0022:0.5347897,\u0022Z\u0022:213.8325},\u0022position2\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022velocity\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022globalRotation\u0022:{\u0022X\u0022:90,\u0022Y\u0022:-168.03816,\u0022Z\u0022:63068920},\u0022useGlobalRotation\u0022:true,\u0022seed\u0022:0,\u0022id\u0022:61,\u0022lifeTime\u0022:53.734734,\u0022deathTime\u0022:78.209465,\u0022transparency\u0022:1,\u0022color\u0022:{\u0022X\u0022:1,\u0022Y\u0022:0,\u0022Z\u0022:0,\u0022W\u0022:0.7},\u0022Scale\u0022:3.2971406,\u0022Rotation\u0022:0,\u0022OrientRotationToVelocity\u0022:false,\u0022HasCollision\u0022:false,\u0022CollisionRadius\u0022:0.02,\u0022BouncePower\u0022:0.1,\u0022Collided\u0022:false,\u0022destroyed\u0022:false,\u0022UserData1\u0022:0,\u0022UserData2\u0022:0,\u0022UserData3\u0022:0,\u0022MaxDrawDistance\u0022:60},{\u0022position\u0022:{\u0022X\u0022:26.005804,\u0022Y\u0022:0.5347455,\u0022Z\u0022:213.99596},\u0022position2\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022velocity\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022globalRotation\u0022:{\u0022X\u0022:90,\u0022Y\u0022:-168.03816,\u0022Z\u0022:-171836030},\u0022useGlobalRotation\u0022:true,\u0022seed\u0022:0,\u0022id\u0022:62,\u0022lifeTime\u0022:53.70558,\u0022deathTime\u0022:72.491165,\u0022transparency\u0022:1,\u0022color\u0022:{\u0022X\u0022:1,\u0022Y\u0022:0,\u0022Z\u0022:0,\u0022W\u0022:0.7},\u0022Scale\u0022:3.2971299,\u0022Rotation\u0022:0,\u0022OrientRotationToVelocity\u0022:false,\u0022HasCollision\u0022:false,\u0022CollisionRadius\u0022:0.02,\u0022BouncePower\u0022:0.1,\u0022Collided\u0022:false,\u0022destroyed\u0022:false,\u0022UserData1\u0022:0,\u0022UserData2\u0022:0,\u0022UserData3\u0022:0,\u0022MaxDrawDistance\u0022:60},{\u0022position\u0022:{\u0022X\u0022:24.55189,\u0022Y\u0022:0.5343921,\u0022Z\u0022:215.3425},\u0022position2\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022velocity\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022globalRotation\u0022:{\u0022X\u0022:90,\u0022Y\u0022:-168.03816,\u0022Z\u0022:-1.4499128E\u002B09},\u0022useGlobalRotation\u0022:true,\u0022seed\u0022:0,\u0022id\u0022:65,\u0022lifeTime\u0022:53.02177,\u0022deathTime\u0022:68.78377,\u0022transparency\u0022:1,\u0022color\u0022:{\u0022X\u0022:1,\u0022Y\u0022:0,\u0022Z\u0022:0,\u0022W\u0022:0.7},\u0022Scale\u0022:3.2970731,\u0022Rotation\u0022:0,\u0022OrientRotationToVelocity\u0022:false,\u0022HasCollision\u0022:false,\u0022CollisionRadius\u0022:0.02,\u0022BouncePower\u0022:0.1,\u0022Collided\u0022:false,\u0022destroyed\u0022:false,\u0022UserData1\u0022:0,\u0022UserData2\u0022:0,\u0022UserData3\u0022:0,\u0022MaxDrawDistance\u0022:60}]},\u0022SystemName\u0022:\u0022decal_blood\u0022,\u0022Position\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "heartPickup",
-      "id": "heartPickup--0",
-      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:42.35324,\u0022Y\u0022:0.930949,\u0022Z\u0022:206.81178},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "heartPickup",
-      "id": "heartPickup--1",
-      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:39.187893,\u0022Y\u0022:0.9322504,\u0022Z\u0022:203.52449},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "heartPickup",
-      "id": "heartPickup--2",
-      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:41.05326,\u0022Y\u0022:0.9320302,\u0022Z\u0022:203.86342},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "heartPickup",
-      "id": "heartPickup--3",
-      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:31.477898,\u0022Y\u0022:0.93496466,\u0022Z\u0022:197.25008},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "heartPickup",
-      "id": "heartPickup--4",
-      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:30.306395,\u0022Y\u0022:0.94015205,\u0022Z\u0022:196.4049},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "heartPickup",
-      "id": "heartPickup--5",
-      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:29.1212,\u0022Y\u0022:0.9318507,\u0022Z\u0022:195.09973},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "heartPickup",
-      "id": "heartPickup--6",
-      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:30.038698,\u0022Y\u0022:0.93299806,\u0022Z\u0022:193.8844},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "heartPickup",
-      "id": "heartPickup--7",
-      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:33.68172,\u0022Y\u0022:0.9356617,\u0022Z\u0022:194.77908},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "heartPickup",
-      "id": "heartPickup--8",
-      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:37.281727,\u0022Y\u0022:0.93498445,\u0022Z\u0022:195.84132},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "heartPickup",
-      "id": "heartPickup--9",
-      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:38.383415,\u0022Y\u0022:-12.957637,\u0022Z\u0022:196.97925},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "heartPickup",
-      "id": "heartPickup--10",
-      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:45.42667,\u0022Y\u0022:0.93365705,\u0022Z\u0022:198.12604},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "heartPickup",
-      "id": "heartPickup--11",
-      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:48.921955,\u0022Y\u0022:0.9334147,\u0022Z\u0022:198.15233},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "npc_dog",
-      "id": "npc_dog--0",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.9035609,\u0022Y\u0022:0,\u0022Z\u0022:-0.30349052},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.9470734,\u0022Y\u0022:0,\u0022Z\u0022:-0.31841478},\u0022speed\u0022:5.519584,\u0022targetLocation\u0022:{\u0022X\u0022:47.31559,\u0022Y\u0022:1.4338882,\u0022Z\u0022:197.0904},\u0022dead\u0022:true,\u0022attacking\u0022:false,\u0022attackCooldown\u0022:{\u0022T\u0022:-104.20592},\u0022stunned\u0022:true,\u0022rootMotionScale\u0022:0.9136581,\u0022meshStopUpdateDelay\u0022:{\u0022T\u0022:2.6956756},\u0022reachedFloor\u0022:true,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:\u0022root|death\u0022,\u0022CurrentFrame\u0022:13,\u0022OldFrame\u0022:13,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:false},\u0022Position\u0022:{\u0022X\u0022:45.337406,\u0022Y\u0022:0.5338777,\u0022Z\u0022:197.7579},\u0022Rotation\u0022:{\u0022X\u0022:-0,\u0022Y\u0022:108.56631,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:-20,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "heartPickup",
-      "id": "heartPickup--12",
-      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:45.337406,\u0022Y\u0022:0.9337821,\u0022Z\u0022:197.7579},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "npc_dog",
-      "id": "npc_dog--1",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.7486854,\u0022Y\u0022:0,\u0022Z\u0022:-0.66292536},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.7453803,\u0022Y\u0022:0,\u0022Z\u0022:-0.6649278},\u0022speed\u0022:2,\u0022targetLocation\u0022:{\u0022X\u0022:47.90158,\u0022Y\u0022:1.4337386,\u0022Z\u0022:197.40115},\u0022dead\u0022:true,\u0022attacking\u0022:false,\u0022attackCooldown\u0022:{\u0022T\u0022:-83.45988},\u0022stunned\u0022:true,\u0022rootMotionScale\u0022:1,\u0022meshStopUpdateDelay\u0022:{\u0022T\u0022:2.6956756},\u0022reachedFloor\u0022:true,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:\u0022root|death\u0022,\u0022CurrentFrame\u0022:13,\u0022OldFrame\u0022:13,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:false},\u0022Position\u0022:{\u0022X\u0022:45.12512,\u0022Y\u0022:0.5331715,\u0022Z\u0022:199.87798},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:131.52336,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:-5,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "heartPickup",
-      "id": "heartPickup--13",
-      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:45.12512,\u0022Y\u0022:0.9331018,\u0022Z\u0022:199.87798},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "npc_dog",
-      "id": "npc_dog--2",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.767213,\u0022Y\u0022:0,\u0022Z\u0022:-0.6241629},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.77536446,\u0022Y\u0022:0,\u0022Z\u0022:-0.630654},\u0022speed\u0022:7.7413044,\u0022targetLocation\u0022:{\u0022X\u0022:49.84037,\u0022Y\u0022:1.4354134,\u0022Z\u0022:192.07988},\u0022dead\u0022:true,\u0022attacking\u0022:false,\u0022attackCooldown\u0022:{\u0022T\u0022:-74.58616},\u0022stunned\u0022:true,\u0022rootMotionScale\u0022:1,\u0022meshStopUpdateDelay\u0022:{\u0022T\u0022:2.6956756},\u0022reachedFloor\u0022:true,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:\u0022root|death\u0022,\u0022CurrentFrame\u0022:13,\u0022OldFrame\u0022:13,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:false},\u0022Position\u0022:{\u0022X\u0022:46.168896,\u0022Y\u0022:0.5347336,\u0022Z\u0022:195.06665},\u0022Rotation\u0022:{\u0022X\u0022:-0,\u0022Y\u0022:129.12993,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:-5,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "heartPickup",
-      "id": "heartPickup--14",
-      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:46.168896,\u0022Y\u0022:0.9345131,\u0022Z\u0022:195.06665},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "npc_dog",
-      "id": "npc_dog--3",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:0.7064347,\u0022Y\u0022:0,\u0022Z\u0022:0.63502413},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:0.7814156,\u0022Y\u0022:0,\u0022Z\u0022:0.6221817},\u0022speed\u0022:7.6378884,\u0022targetLocation\u0022:{\u0022X\u0022:58.39442,\u0022Y\u0022:1.4346678,\u0022Z\u0022:192.44443},\u0022dead\u0022:true,\u0022attacking\u0022:false,\u0022attackCooldown\u0022:{\u0022T\u0022:-70.19172},\u0022stunned\u0022:true,\u0022rootMotionScale\u0022:1,\u0022meshStopUpdateDelay\u0022:{\u0022T\u0022:2.6956756},\u0022reachedFloor\u0022:true,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:\u0022root|death\u0022,\u0022CurrentFrame\u0022:13,\u0022OldFrame\u0022:13,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:false},\u0022Position\u0022:{\u0022X\u0022:56.88758,\u0022Y\u0022:0.5353125,\u0022Z\u0022:191.09462},\u0022Rotation\u0022:{\u0022X\u0022:-0,\u0022Y\u0022:48.047176,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:-5,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "heartPickup",
-      "id": "heartPickup--15",
-      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:56.88758,\u0022Y\u0022:0.93522656,\u0022Z\u0022:191.09462},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "npc_dog",
-      "id": "npc_dog--4",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.45336622,\u0022Y\u0022:0,\u0022Z\u0022:0.80116713},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.4808909,\u0022Y\u0022:0,\u0022Z\u0022:0.8754796},\u0022speed\u0022:2,\u0022targetLocation\u0022:{\u0022X\u0022:62.51601,\u0022Y\u0022:1.4286119,\u0022Z\u0022:209.38058},\u0022dead\u0022:true,\u0022attacking\u0022:false,\u0022attackCooldown\u0022:{\u0022T\u0022:-64.5365},\u0022stunned\u0022:true,\u0022rootMotionScale\u0022:1,\u0022meshStopUpdateDelay\u0022:{\u0022T\u0022:2.6956756},\u0022reachedFloor\u0022:true,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:\u0022root|death\u0022,\u0022CurrentFrame\u0022:13,\u0022OldFrame\u0022:13,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:false},\u0022Position\u0022:{\u0022X\u0022:63.2871,\u0022Y\u0022:0.52909213,\u0022Z\u0022:208.01776},\u0022Rotation\u0022:{\u0022X\u0022:-0,\u0022Y\u0022:-29.50475,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:-20,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "heartPickup",
-      "id": "heartPickup--16",
-      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:63.2871,\u0022Y\u0022:0.9289912,\u0022Z\u0022:208.01776},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "npc_dog",
-      "id": "npc_dog--5",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.94224465,\u0022Y\u0022:0,\u0022Z\u0022:-0.28535867},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.9524503,\u0022Y\u0022:0,\u0022Z\u0022:-0.299795},\u0022speed\u0022:2,\u0022targetLocation\u0022:{\u0022X\u0022:43.799473,\u0022Y\u0022:1.4297372,\u0022Z\u0022:209.77579},\u0022dead\u0022:true,\u0022attacking\u0022:false,\u0022attackCooldown\u0022:{\u0022T\u0022:-57.506443},\u0022stunned\u0022:true,\u0022rootMotionScale\u0022:1,\u0022meshStopUpdateDelay\u0022:{\u0022T\u0022:2.6956756},\u0022reachedFloor\u0022:true,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:\u0022root|death\u0022,\u0022CurrentFrame\u0022:13,\u0022OldFrame\u0022:13,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:false},\u0022Position\u0022:{\u0022X\u0022:47.73498,\u0022Y\u0022:0.5291964,\u0022Z\u0022:211.00609},\u0022Rotation\u0022:{\u0022X\u0022:-0,\u0022Y\u0022:-106.84892,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:-5,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "heartPickup",
-      "id": "heartPickup--17",
-      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:47.73498,\u0022Y\u0022:0.8367665,\u0022Z\u0022:211.00609},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "npc_dog",
-      "id": "npc_dog--6",
-      "saveData": "{\u0022MoveDirection\u0022:{\u0022X\u0022:-0.9552389,\u0022Y\u0022:0,\u0022Z\u0022:-0.027165383},\u0022DesiredMoveDirection\u0022:{\u0022X\u0022:-0.9990871,\u0022Y\u0022:0,\u0022Z\u0022:-0.01292254},\u0022speed\u0022:2,\u0022targetLocation\u0022:{\u0022X\u0022:25.224293,\u0022Y\u0022:1.4298258,\u0022Z\u0022:213.56673},\u0022dead\u0022:true,\u0022attacking\u0022:false,\u0022attackCooldown\u0022:{\u0022T\u0022:-52.616886},\u0022stunned\u0022:true,\u0022rootMotionScale\u0022:1,\u0022meshStopUpdateDelay\u0022:{\u0022T\u0022:2.6956756},\u0022reachedFloor\u0022:true,\u0022animationState\u0022:{\u0022CurrrentAnimation\u0022:\u0022root|death\u0022,\u0022CurrentFrame\u0022:13,\u0022OldFrame\u0022:13,\u0022Loop\u0022:false,\u0022PlayingRootMotion\u0022:false,\u0022RunningAnimation\u0022:false},\u0022Position\u0022:{\u0022X\u0022:27.592,\u0022Y\u0022:0.529763,\u0022Z\u0022:213.60884},\u0022Rotation\u0022:{\u0022X\u0022:-0,\u0022Y\u0022:-91.62895,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:-20,\u0022OwnerId\u0022:\u0022\u0022}"
-    },
-    {
-      "Name": "",
-      "className": "heartPickup",
-      "id": "heartPickup--18",
-      "saveData": "{\u0022Position\u0022:{\u0022X\u0022:27.592,\u0022Y\u0022:0.9342228,\u0022Z\u0022:213.60884},\u0022Rotation\u0022:{\u0022X\u0022:0,\u0022Y\u0022:0,\u0022Z\u0022:0},\u0022name\u0022:\u0022\u0022,\u0022Tags\u0022:[],\u0022Health\u0022:0,\u0022OwnerId\u0022:\u0022\u0022}"
     }
   ],
-  "entityId": 1127,
+  "entityId": 24,
   "deletedIDs": [
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
     "",
     ""
   ],
-  "deletedNames": [
-    "pistols_start_pickup",
-    "spt_1"
-  ]
+  "deletedNames": []
 }
