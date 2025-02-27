@@ -506,6 +506,12 @@ namespace RetroEngine
 
                 }
 
+                if(transperent)
+                {
+                    merged.AddRange(keyValuePairs[texture]);
+                    continue;
+                }
+
                 BrushFaceMesh brushFaceMesh = new BrushFaceMesh(MergeModels(models), texture);
 
                 brushFaceMesh.textureName = keyValuePairs[texture][0].textureName;

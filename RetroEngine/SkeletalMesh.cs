@@ -116,6 +116,8 @@ namespace RetroEngine
 
             CalculateBoundingSphere();
 
+            Bounds = new MeshBounds { Position = boundingSphere.Center, InnerRadius = 0, OuterRadius = boundingSphere.Radius };
+
             RiggedModel.overrideAnimationFrameTime = -1;
         }
 

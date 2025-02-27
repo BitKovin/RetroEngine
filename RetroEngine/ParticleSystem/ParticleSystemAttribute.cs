@@ -27,8 +27,15 @@ namespace RetroEngine
         {
             if (TypeCache.TryGetValue(technicalName, out var objectType))
             {
+
+                if (objectType == null)
+                    return null;
+
                 return Activator.CreateInstance(objectType) as ParticleSystemEnt;
             }
+
+            return null;
+
             if(Level.ChangingLevel == false)
             Logger.Log($"System '{technicalName}' not found. Searching...");
             objectType = GetObjectTypeByTechnicalName(technicalName);
@@ -40,6 +47,7 @@ namespace RetroEngine
             }
             else
             {
+                TypeCache.TryAdd(technicalName, null);
                 return null;
             }
         }

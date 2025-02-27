@@ -54,7 +54,11 @@ namespace RetroEngine.ParticleSystem
         {
             var system = ParticleSystemEnt.Create(systemName);
 
+            if (system == null) return null;
+
             var globalSystem = system as GlobalParticleSystem;
+
+            if (globalSystem == null) return null;
 
             globalSystem.SystemName = systemName;
 

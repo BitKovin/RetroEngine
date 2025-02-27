@@ -150,6 +150,8 @@ namespace RetroEngine
 
         public Entity Owner;
 
+        public MeshBounds Bounds;
+
         public StaticMesh()
         {
 
@@ -298,7 +300,7 @@ namespace RetroEngine
 
         static Dictionary<Model, List<Vector3>> vertexPosCache = new Dictionary<Model, List<Vector3>>();
 
-        public virtual List<Vector3> GetMeshVertices(bool onlyPreload = false)
+        public virtual List<Vector3> GetMeshVertices(bool onlyPreload = false, bool DisableTransform = false)
         {
 
             List<Vector3> positions = new List<Vector3>();
@@ -329,9 +331,8 @@ namespace RetroEngine
 
             foreach (Vector3 pos in vertexPosCache[model])
             {
-                if (Position != Vector3.Zero || Rotation != Vector3.Zero || Scale != Vector3.Zero)
+                if ((Position != Vector3.Zero || Rotation != Vector3.Zero || Scale != Vector3.Zero) && DisableTransform == false)
                 {
-
 
                     positions.Add(Vector3.Transform(pos, GetWorldMatrix()));
 
@@ -1631,7 +1632,9 @@ namespace RetroEngine
 
             GetMeshVertices(true);
 
-            //avgVertexPosition = CalculateAvgVertexLocation();
+            Bounds = CalculateMeshBounds(model);
+
+            avgVertexPosition = Bounds.Position;
         }
 
         public static Dictionary<string, Assimp.Scene> loadedScenes = new Dictionary<string, Assimp.Scene>();
@@ -1871,6 +1874,7 @@ namespace RetroEngine
             }
             loadedModels.Clear();
             loadedScenes.Clear();
+            cachedBounds.Clear();
         }
         public virtual void PreloadTextures()
         {
@@ -1938,6 +1942,9 @@ namespace RetroEngine
 
             WorldMatrix = GetWorldMatrix();
 
+            //DrawDebug.Sphere(Bounds.InnerRadius, Vector3.Transform(Bounds.Position, WorldMatrix), Vector3.UnitX, 0.01f);
+            //DrawDebug.Sphere(Bounds.OuterRadius, Vector3.Transform(Bounds.Position, WorldMatrix), Vector3.UnitZ, 0.01f);
+
             frameStaticMeshData.Projection = Camera.projection;
             frameStaticMeshData.ProjectionViewmodel = Camera.projectionViewmodel;
             frameStaticMeshData.model = model;
@@ -2001,27 +2008,21 @@ namespace RetroEngine
         }
 
 
-        protected Vector3 CalculateAvgVertexLocation()
+        protected Vector3 CalculateAvgVertexLocation(IList<Vector3> vertices = null)
         {
             float n = 0;
 
+            if(vertices == null)
+                vertices = GetMeshVertices(DisableTransform: true);
+
             Vector3 vector = new Vector3();
 
-            foreach (ModelMesh mesh in model.Meshes)
+            foreach (var vertex in vertices)
             {
-
-                // Get the vertices from the model's mesh part
-                VertexData[] vertices = new VertexData[mesh.MeshParts[0].VertexBuffer.VertexCount];
-                mesh.MeshParts[0].VertexBuffer.GetData(vertices);
-                // Extract the positions and scale them if necessary
-                Vector3[] positions = new Vector3[vertices.Length];
-                for (int i = 0; i < vertices.Length; i++)
-                {
-                    vector += vertices[i].Position;
-                    n++;
-                }
-
+                vector += vertex;
+                n++;
             }
+            
             return vector / n;
         }
 
@@ -2108,6 +2109,46 @@ namespace RetroEngine
                     part.IndexBuffer?.Dispose();
                     part.Tag = null;
                 }
+        }
+
+        static Dictionary<Object, MeshBounds> cachedBounds = new Dictionary<Object, MeshBounds>();
+        protected MeshBounds CalculateMeshBounds(Object model)
+        {
+            lock (cachedBounds)
+            {
+                if(cachedBounds.ContainsKey(model)) return cachedBounds[model];
+            }
+
+            List<Vector3> vertices = GetMeshVertices(DisableTransform: true);
+
+            Vector3 avgPos = CalculateAvgVertexLocation(vertices);
+
+            float minDist = MathHelper.CalculateMinDistance(avgPos, vertices);
+            float maxDist = MathHelper.CalculateMaxDistance(avgPos, vertices);
+
+            var bounds = new MeshBounds { InnerRadius = minDist, OuterRadius = maxDist, Position = avgPos };
+
+            cachedBounds.TryAdd(model, bounds);
+
+            return bounds;
+
+        }
+
+        public  void CalculateMeshBounds()
+        {
+            
+            Bounds = CalculateMeshBounds(this);
+
+            DistanceSortingRadius = Bounds.InnerRadius*1.5f;
+
+        }
+
+        public struct MeshBounds
+        {
+            public Vector3 Position;
+            public float OuterRadius;
+            public float InnerRadius;
+
         }
 
     }

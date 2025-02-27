@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace RetroEngine
@@ -284,6 +285,22 @@ namespace RetroEngine
             Matrix localTransform = worldTransform * inverseRelativeWorld;
 
             return localTransform;
+        }
+
+        public static float CalculateMinDistance(Vector3 center, IList<Vector3> points)
+        {
+            if (points == null || points.Count == 0)
+                throw new ArgumentException("Points list cannot be null or empty.");
+
+            return points.Min(p => Vector3.Distance(center, p));
+        }
+
+        public static float CalculateMaxDistance(Vector3 center, IList<Vector3> points)
+        {
+            if (points == null || points.Count == 0)
+                throw new ArgumentException("Points list cannot be null or empty.");
+
+            return points.Max(p => Vector3.Distance(center, p));
         }
 
         public struct Transform

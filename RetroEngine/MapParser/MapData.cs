@@ -156,9 +156,17 @@ namespace RetroEngine.Map
 
                             var mergedResult = BrushFaceMesh.MergeFaceMeshes(faceList);
 
+                            foreach(var face in mergedResult)
+                            {
+                                face.CalculateMeshBounds();
+                                faces.Remove(face);
+                            }
+
                             entity.meshes.AddRange(mergedResult);
 
                             loadedFaces.AddRange(mergedResult);
+
+                            
 
                         }
 
@@ -170,6 +178,12 @@ namespace RetroEngine.Map
                     }
                     else
                     {
+
+                        foreach (var face in faces)
+                        {
+                            face.CalculateMeshBounds();
+                        }
+
                         entity.meshes.AddRange(faces);
                     }
 
