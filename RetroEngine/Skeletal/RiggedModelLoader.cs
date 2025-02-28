@@ -168,6 +168,10 @@ namespace RetroEngine.Skeletal
 
             if (scene == null) return null;
 
+            if(scene.Animations.Count > 0)
+                this.defaultAnimatedFramesPerSecondLod = (int)scene.Animations.FirstOrDefault().TicksPerSecond;
+
+
             return CreateModel(filepathorname);
         }
 

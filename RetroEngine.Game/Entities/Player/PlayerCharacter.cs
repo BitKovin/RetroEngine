@@ -1111,9 +1111,11 @@ namespace RetroEngine.Game.Entities.Player
                     {
                         if (currentWeapon.IsMelee)
                         {
-                            lastSlot = currentSlot;
-                            currentSlot = slot;
-                            
+                            if (slot != currentSlot)
+                            {
+                                lastSlot = currentSlot;
+                                currentSlot = slot;
+                            }
                         }
 
                         return;
@@ -1125,8 +1127,11 @@ namespace RetroEngine.Game.Entities.Player
             if (weapons[slot] != null)
             {
 
-                lastSlot = currentSlot;
-                currentSlot = slot;
+                if (slot != currentSlot)
+                {
+                    lastSlot = currentSlot;
+                    currentSlot = slot;
+                }
 
                 SwitchWeapon(weapons[slot]);
             }
