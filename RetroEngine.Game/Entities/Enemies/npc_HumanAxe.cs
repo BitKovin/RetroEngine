@@ -268,7 +268,7 @@ namespace RetroEngine.Game.Entities.Enemies
         {
 
             if (hitBone == "head")
-                damage *= 2;
+                damage *= 1.5f;
 
             if (attacking)
             {

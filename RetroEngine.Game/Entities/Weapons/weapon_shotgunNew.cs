@@ -151,6 +151,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             int i = 0;
 
+            WeaponFireFlash.CreateAt(Camera.position + Camera.Forward * 0.3f, 0.15f, 15, 1f);
 
             for (float y = -4; y <= 4; y += 2f)
                 for (float x = -4; x <= 4; x += 2f)
@@ -197,7 +198,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
                 }
 
-            Console.WriteLine(i);
+
 
             return;
 
