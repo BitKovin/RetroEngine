@@ -44,7 +44,7 @@ namespace RetroEngine.Game.Effects.Particles
 
             particle_blood.Position = position;
             particle_blood.Rotation = orientation;
-            particle_blood.SpawnParticles((int)(Scale.Z * 2f));
+            particle_blood.SpawnParticles((int)(Scale.Z * 1f));
 
         }
 

@@ -36,6 +36,10 @@ namespace RetroEngine.Game
             {
                 ConsoleCommands.ProcessCommand("weapon.give weapon_shotgunNew");
             }
+            if (ImGui.Button("weapon_shotgun_double"))
+            {
+                ConsoleCommands.ProcessCommand("weapon.give weapon_shotgun_double");
+            }
 
 
             ImGui.End();

@@ -164,9 +164,9 @@ namespace RetroEngine.Game.Entities.Weapons
             return Camera.rotation.GetRightVector()*Sway.X + Camera.rotation.GetUpVector()*Sway.Y + Camera.rotation.GetForwardVector()*Sway.Z;
         }
 
-        public Vector3 GetWorldOffset()
+        public Vector3 GetWorldOffset(bool leftHand = false)
         {
-            return Camera.rotation.GetRightVector() * Offset.X + Camera.rotation.GetUpVector() * Offset.Y + Camera.rotation.GetForwardVector() * Offset.Z;
+            return Camera.rotation.GetRightVector() * Offset.X * (leftHand ? -1 : 1) + Camera.rotation.GetUpVector() * Offset.Y + Camera.rotation.GetForwardVector() * Offset.Z;
         }
         protected override void LoadAssets()
         {

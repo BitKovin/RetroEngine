@@ -803,7 +803,7 @@ namespace RetroEngine
                     foreach (ModelMeshPart meshPart in mesh.MeshParts)
                     {
 
-                        if (meshPart.PrimitiveCount < 1) continue;
+                        if (meshPart.PrimitiveCount <= 0) continue;
 
                         // Set the vertex buffer and index buffer for this mesh part
                         graphicsDevice.SetVertexBuffer(meshPart.VertexBuffer);
@@ -933,6 +933,8 @@ namespace RetroEngine
 
                     foreach (ModelMeshPart meshPart in mesh.MeshParts)
                     {
+
+                        if (meshPart.PrimitiveCount <= 0) continue;
 
                         MeshPartData meshPartData = meshPart.Tag as MeshPartData;
 

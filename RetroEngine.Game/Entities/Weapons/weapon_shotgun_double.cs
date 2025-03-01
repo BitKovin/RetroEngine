@@ -13,12 +13,14 @@ using System.Threading.Tasks;
 
 namespace RetroEngine.Game.Entities.Weapons
 {
-    internal class weapon_shotgunNew : Weapon
+    internal class weapon_shotgun_double : Weapon
     {
         SkeletalMesh mesh = new SkeletalMesh();
+        SkeletalMesh mesh2 = new SkeletalMesh();
         SkeletalMesh meshTp = new SkeletalMesh();
 
         SkeletalMesh arms = new SkeletalMesh();
+        SkeletalMesh arms2 = new SkeletalMesh();
 
         Delay attackDelay = new Delay();
 
@@ -26,9 +28,11 @@ namespace RetroEngine.Game.Entities.Weapons
 
         Animation TpFire = new Animation();
 
-        public weapon_shotgunNew()
+        public weapon_shotgun_double()
         {
             ShowHandL = false;
+
+            Offset = new Vector3(0.035f, 0, 0);
 
         }
 
@@ -66,6 +70,7 @@ namespace RetroEngine.Game.Entities.Weapons
                 Shoot();
 
             mesh.Update(Time.DeltaTime * 1.2f);
+            mesh2.Update(Time.DeltaTime * 1.2f);
 
             float targetRot = Camera.rotation.X;
 
@@ -83,6 +88,12 @@ namespace RetroEngine.Game.Entities.Weapons
             arms.Visible = ((ICharacter)player).isFirstPerson();
             mesh.Viewmodel = ((ICharacter)player).isFirstPerson();
             mesh.Visible = ((ICharacter)player).isFirstPerson();
+
+
+            arms2.Visible = ((ICharacter)player).isFirstPerson();
+            mesh2.Viewmodel = ((ICharacter)player).isFirstPerson();
+            mesh2.Visible = ((ICharacter)player).isFirstPerson();
+
             meshTp.Visible = !mesh.Visible;
             TpFire.UpdatePose = ((ICharacter)player).isFirstPerson() == false;
         }
@@ -98,13 +109,27 @@ namespace RetroEngine.Game.Entities.Weapons
         {
             base.LateUpdate();
 
-            mesh.Position = Position + GetWorldSway();
-            mesh.Rotation = Rotation + DrawRotation;
+            float depthDif = 0.04f;
+            float depthOffset = -0.05f;
+
+            Vector3 forward = Camera.rotation.GetForwardVector();
+            Vector3 up = Camera.rotation.GetUpVector();
+            Vector3 right = Camera.rotation.GetRightVector();
+
+            mesh.Position = Position + GetWorldSway() + GetWorldOffset() + forward * depthDif + forward * depthOffset;
+            mesh.Rotation = Rotation;
 
             arms.Position = mesh.Position;
             arms.Rotation = mesh.Rotation;
 
+            mesh2.Position = Position + GetWorldSway() + GetWorldOffset(true) - forward * depthDif + forward * depthOffset - up * 0.02f + right * 0.02f;
+            mesh2.Rotation = Rotation;
+            arms2.Position = mesh2.Position;
+            arms2.Rotation = mesh2.Rotation;
+
             arms.PastePose(mesh.GetPose());
+            arms2.PastePose(mesh2.GetPose());
+
 
             ICharacter character = ((ICharacter)player);
 
@@ -133,21 +158,32 @@ namespace RetroEngine.Game.Entities.Weapons
             fireSoundPlayer.Position = Camera.position;
         }
 
+        bool a = true;
+
         void Shoot()
         {
             if (Drawing) return;
 
             if (attackDelay.Wait()) return;
 
-            attackDelay.AddDelay(1);
+            attackDelay.AddDelay(0.5f);
 
             fireSoundPlayer.Play(true);
 
-            mesh.PlayAnimation(0,false,0.1f);
+            if(a)
+            {
+                mesh.PlayAnimation(0, false, 0.1f);
+            }
+            else
+            {
+                mesh2.PlayAnimation(0, false, 0.1f);
+            }
+
 
             TpFire.PlayAnimation(0,false);
 
-            Camera.AddCameraShake(new CameraShake(interpIn: 0.15f, duration: 1, positionAmplitude: new Vector3(0f, 0f, -0.2f), positionFrequency: new Vector3(0f, 0f, 6.4f), rotationAmplitude: new Vector3(-4f, 0.15f, 0f), rotationFrequency: new Vector3(-5f, 28.8f, 0f), falloff: 1.2f, shakeType: CameraShake.ShakeType.SingleWave));
+            Camera.AddCameraShake(new CameraShake(interpIn: 0.15f, duration: 1, positionAmplitude: new Vector3(0f, 0f, -0.2f), positionFrequency: new Vector3(0f, 0f, 6.4f), rotationAmplitude: new Vector3(-3f, 0.15f, 0f), rotationFrequency: new Vector3(-5f, 28.8f, 0f), falloff: 1f, shakeType: CameraShake.ShakeType.SingleWave));
+
 
             int i = 0;
 
@@ -173,11 +209,19 @@ namespace RetroEngine.Game.Entities.Weapons
 
                     Vector3 bulletRotation;
 
-                    Vector3 startPos = (Camera.position.ToPhysics() + Camera.rotation.GetForwardVector().ToPhysics() * 0.2f + Camera.rotation.GetRightVector().ToPhysics() / 10f - Camera.rotation.GetUpVector().ToPhysics() / 4f);
+                    Vector3 right = Camera.rotation.GetRightVector();
+
+                    if(a == false)
+                        right = -right;
+
+                    Vector3 startPos = (Camera.position + Camera.rotation.GetForwardVector() * 0.2f + right / 10f - Camera.rotation.GetUpVector() / 4f);
 
                     startPos = Vector3.Lerp(startPos, Camera.position, 0.6f);
 
-                    Vector3 endPos = Camera.position - new Vector3(0, -1, 0) + Camera.rotation.GetForwardVector() * 70 + Camera.rotation.GetRightVector() * x + Camera.rotation.GetUpVector() * y;
+                    Vector3 endPos = Camera.position - new Vector3(0, -1, 0) + Camera.rotation.GetForwardVector() * 70 + right * x + Camera.rotation.GetUpVector() * y;
+
+
+
 
                     bulletRotation = MathHelper.FindLookAtRotation(startPos, endPos);
 
@@ -192,13 +236,14 @@ namespace RetroEngine.Game.Entities.Weapons
 
                     bullet.Start();
                     bullet.Speed = 100;
-                    bullet.Damage = 5;
+                    bullet.Damage = 4;
 
                     bullet.ignore.Add(player);
 
                 }
 
 
+            a = !a;
 
             return;
 
@@ -233,21 +278,54 @@ namespace RetroEngine.Game.Entities.Weapons
 
         void LoadVisual()
         {
-            mesh.Scale = new Vector3(1f);
 
             mesh.LoadFromFile("models/weapons/shotgun.fbx");
+            mesh.Transperent = true;
+
+            mesh.PreloadTextures();
+            mesh.Viewmodel = true;
+
+            mesh.textureSearchPaths.Add("textures/weapons/general/");
+            mesh.textureSearchPaths.Add("textures/weapons/shotgun_new/");
+
+            mesh.SetInterpolationEnabled(true);
+
+            mesh.CastShadows = true;
+
+            mesh2.LoadFromFile("models/weapons/shotgun.fbx");
+            mesh2.Transperent = true;
+
+            mesh2.PreloadTextures();
+            mesh2.Viewmodel = true;
+
+            mesh2.textureSearchPaths.Add("textures/weapons/general/");
+            mesh2.textureSearchPaths.Add("textures/weapons/shotgun_new/");
+
+            mesh2.SetInterpolationEnabled(true);
+
+            mesh2.CastShadows = true;
 
             arms.LoadFromFile(PlayerCharacter.armsModelPath);
             arms.textureSearchPaths.Add("textures/weapons/arms/");
 
-            //mesh.DepthTestEqual = false;
-            //mesh.Transparency = 0.5f;
-            mesh.Transperent = true;
+            arms.PreloadTextures();
+            arms.Scale = mesh.Scale;
+            arms.Viewmodel = true;
+            arms.CastShadows = true;
 
-            //mesh.TwoSided = true;
 
-            mesh.textureSearchPaths.Add("textures/weapons/general/");
-            mesh.textureSearchPaths.Add("textures/weapons/shotgun_new/");
+            arms2.LoadFromFile(PlayerCharacter.armsModelPath);
+            arms2.textureSearchPaths.Add("textures/weapons/arms/");
+
+            arms2.PreloadTextures();
+            arms2.Scale = mesh.Scale;
+            arms2.Viewmodel = true;
+            arms2.CastShadows = true;
+
+            mesh2.Scale = new Vector3(-1,1,1);
+            arms2.Scale = new Vector3(-1,1,1);
+
+
 
 
             TpFire.LoadFromFile("models/weapons/shotgun.fbx");
@@ -260,39 +338,25 @@ namespace RetroEngine.Game.Entities.Weapons
 
             meshTp.PreloadTextures();
 
-            //mesh.CastShadows = false;
-            mesh.PreloadTextures();
-            mesh.Viewmodel = true;
-            //mesh.UseAlternativeRotationCalculation = true;
-            mesh.CastShadows = true;
 
-            //mesh.DitherDisolve = 0.5f;
+           
 
-            //arms.CastShadows = false;
-            arms.PreloadTextures();
-            arms.Scale = mesh.Scale;
-            arms.Viewmodel = true;
-            arms.CastShadows = true;
-            //arms.UseAlternativeRotationCalculation = true;
-
-
-            mesh.SetInterpolationEnabled(true);
-            
-
-            Console.WriteLine("loaded shotgun");
+            Console.WriteLine("loaded shotgun double");
 
             mesh.Update(0);
+            mesh2.Update(0);
 
             meshes.Add(mesh);
             meshes.Add(arms);
+            meshes.Add(mesh2);
+            meshes.Add(arms2);
             meshes.Add(meshTp);
-            //new Bullet().LoadAssetsIfNeeded();
 
         }
 
         public override WeaponData GetDefaultWeaponData()
         {
-            return new WeaponData { Slot = 2, weaponType = typeof(weapon_shotgunNew), ammo = 6 };
+            return new WeaponData { Slot = 2, weaponType = typeof(weapon_shotgun_double), ammo = 6, Priority = 1 };
         }
 
     }
