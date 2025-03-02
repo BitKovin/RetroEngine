@@ -161,6 +161,8 @@ namespace RetroEngine.Game
 
             Render.SimpleRender = true;
 
+            //Render.LimitedColorSpace = true;
+
             PointLight.DisableShadows = true;
 
 

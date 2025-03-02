@@ -214,7 +214,7 @@ namespace RetroEngine.Game.Entities.Weapons
                     if(a == false)
                         right = -right;
 
-                    Vector3 startPos = (Camera.position + Camera.rotation.GetForwardVector() * 0.2f + right / 10f - Camera.rotation.GetUpVector() / 4f);
+                    Vector3 startPos = (Camera.position + Camera.rotation.GetForwardVector() * 0.2f + right / 10f - Camera.rotation.GetUpVector() / 6f);
 
                     startPos = Vector3.Lerp(startPos, Camera.position, 0.6f);
 

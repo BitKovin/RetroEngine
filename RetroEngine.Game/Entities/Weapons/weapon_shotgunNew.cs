@@ -173,7 +173,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
                     Vector3 bulletRotation;
 
-                    Vector3 startPos = (Camera.position.ToPhysics() + Camera.rotation.GetForwardVector().ToPhysics() * 0.2f + Camera.rotation.GetRightVector().ToPhysics() / 10f - Camera.rotation.GetUpVector().ToPhysics() / 4f);
+                    Vector3 startPos = (Camera.position.ToPhysics() + Camera.rotation.GetForwardVector().ToPhysics() * 0.2f + Camera.rotation.GetRightVector().ToPhysics() / 10f - Camera.rotation.GetUpVector().ToPhysics() / 6f);
 
                     startPos = Vector3.Lerp(startPos, Camera.position, 0.6f);
 

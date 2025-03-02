@@ -337,6 +337,10 @@ namespace RetroEngine
             curentLevel.StartVisualUpdate();
 
             base.Update(gameTime);
+
+            if(SkipFrames > 0)
+                GC.Collect();
+
         }
 
         void UpdateTime(GameTime gameTime)

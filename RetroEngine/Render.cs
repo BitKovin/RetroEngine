@@ -129,6 +129,8 @@ namespace RetroEngine
 
         public static bool SimpleRender = false;
 
+        public static bool LimitedColorSpace = false;
+
         public Render()
         {
             graphics = GameMain.Instance._graphics;
@@ -1578,7 +1580,7 @@ namespace RetroEngine
                         (int)GetScreenResolution().X,
                         (int)GetScreenResolution().Y,
                         false, // No mipmaps
-                        SurfaceFormat.HalfVector4, // Color format
+                        LimitedColorSpace ? SurfaceFormat.Color : SurfaceFormat.HalfVector4, // Color format
                         depthFormat, 0, RenderTargetUsage.PreserveContents); // Depth format
 
 

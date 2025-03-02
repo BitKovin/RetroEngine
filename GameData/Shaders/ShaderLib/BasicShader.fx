@@ -715,7 +715,7 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input, float3 TangentNor
 
 		int numSamples = 2; // Number of samples in each direction (total samples = numSamples^2)
 
-		float b = 0.00001;
+		float b = 0.000015;
 
 		float bias = b * (1 - saturate(dot(input.Normal, -LightDirection))) + b / 2.0f;
 
@@ -723,27 +723,23 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input, float3 TangentNor
 
 		f *= lerp(f, 1, 0.5);
 
-		bias *= lerp(12, 1, f);
+		bias *= lerp(22, 1, f);
 
 		//bias += 0.00016;
 
 		bias *= (LightDistanceMultiplier + 1) / 2;
 
 
-		float forceShadow = 0;
 
-		//if(Viewmodel == false)
-		forceShadow = lerp(0, 1, saturate((dot(TangentNormal, LightDirection) + 0.3) * (10 / 3)));
-
-		bias *= lerp(1, 2, saturate(forceShadow * 1.5));
+		
 
 		resolution = ShadowMapResolutionVeryClose;
 
 		//bias -= max(dot(input.Normal, float3(0,1,0)),0) * b/2;
 
-		float size = (abs(dot(input.Normal, -LightDirection)) - 0.5) * 2;
+		float size = 1;// (abs(dot(input.Normal, -LightDirection)) - 0.5) * 2;
 
-		size = 1; max(size, 0.001);
+		size = 1;
 
 		float texelSize = size / resolution; // Assuming ShadowMapSize is the size of your shadow map texture
 
@@ -757,8 +753,6 @@ float GetShadowVeryClose(float3 lightCoords, PixelInput input, float3 TangentNor
 
 		numSamples = 2;
 
-		if (forceShadow > 0)
-			numSamples = 1;
 
 		int n = 0;
 
@@ -1589,7 +1583,7 @@ half3 CalculateLight(PixelInput input, float3 normal, float roughness, float met
 		normal = -LightDirection;
 
 
-	if (dot(normal, LightDirection) >= 0)
+	if (dot(normal, LightDirection) >= 0.3)
 	{
 		shadow += 1;
 	}

@@ -122,6 +122,17 @@ namespace RetroEngine.Game.Entities.Weapons
 
         }
 
+        public override void FinalizeFrame()
+        {
+            base.FinalizeFrame();
+
+            foreach(var mesh in meshes)
+            {
+                mesh.DistanceSortingRadius = 10000000000;
+            }
+
+        }
+
         public override void LateUpdate()
         {
             base.LateUpdate();
