@@ -80,7 +80,7 @@ namespace RetroEngine.Game.Effects.Particles
             Vector3 randPos = RandomPosition(0.6f);
             //particle.HasCollision = true;
             particle.BouncePower = 0.1f;
-            particle.velocity = randPos.Normalized() / 6f + Vector3.UnitY*0.5f + Rotation.GetForwardVector()*0.3f;
+            particle.velocity = randPos.Normalized() / 6f + Vector3.UnitY*0.5f + Rotation.GetForwardVector()*0.5f;
             particle.transparency = 1.2f;
             particle.deathTime = 5;
 

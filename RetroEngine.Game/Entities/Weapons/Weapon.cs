@@ -68,6 +68,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
         public bool IsMelee = false;
 
+
         public static Weapon CreateFromData(WeaponData data, Entity owner = null)
         {
             Weapon weapon = Activator.CreateInstance(data.weaponType) as Weapon;
@@ -139,6 +140,8 @@ namespace RetroEngine.Game.Entities.Weapons
 
             UpdateSway();
 
+            Rotation.Z *= -2;
+
             float progress = Math.Clamp((float)((Time.GameTime - SpawnTime)/DrawTime), 0, 1);
 
             //DrawRotation = new Vector3((1 - progress) * 20, (1 - progress) * 20, (1 - progress) * 30);
@@ -166,6 +169,8 @@ namespace RetroEngine.Game.Entities.Weapons
 
             Sway.Z = Math.Abs(Sway.X) + Math.Abs(Sway.Y);
             Sway.Z /= -1.2f;
+
+            Sway.Z -= 0.03f;
 
 
         }
@@ -214,6 +219,19 @@ namespace RetroEngine.Game.Entities.Weapons
 
                 character.AddWeapon(weaponData);
             }catch (Exception ex) { Logger.Log(ex.Message); }
+        }
+
+        public virtual bool ShouldHideLeftHand()
+        {
+            return false;
+        }
+
+        protected void SetHideLeftHand(SkeletalMesh mesh, bool hide)
+        {
+
+            Matrix scale = hide ? Matrix.CreateScale(0) : Matrix.Identity;
+
+            mesh.SetBoneLocalTransformModification("clavicle_l", scale);
         }
 
         public virtual bool CanChangeSlot()

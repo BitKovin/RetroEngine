@@ -32,7 +32,6 @@ namespace RetroEngine
         public static BoundingFrustum frustum = new BoundingFrustum(new Matrix());
         public static BoundingFrustum frustumOcclusion = new BoundingFrustum(new Matrix());
 
-        public static float roll = 0;
         public static float FOV = 80;
         public static float ViewmodelFOV = 60;
 
@@ -61,7 +60,7 @@ namespace RetroEngine
 
             world = Matrix.CreateTranslation(Vector3.Zero);
 
-            if(rotation.GetUpVector().RotateVector(rotation.GetForwardVector(), roll).Y > 0)
+            if(rotation.GetUpVector().Y > 0)
             {
                 lastWorkingRotation = rotation;
                 
@@ -95,7 +94,6 @@ namespace RetroEngine
         public static void ApplyCameraShake()
         {
 
-            rotation.Z = 0;
 
             foreach(var shake in CameraShakes.ToArray())
             {
@@ -113,7 +111,7 @@ namespace RetroEngine
 
             //roll += rotation.Z;
 
-            rotation.Z = 0;
+
 
         }
 
@@ -156,7 +154,7 @@ namespace RetroEngine
 
         public static Matrix CalculateView()
         {
-            return Matrix.CreateLookAt(finalizedPosition, finalizedPosition + finalizedRotation.GetForwardVector(), finalizedRotation.GetUpVector().RotateVector(finalizedRotation.GetForwardVector(), roll));
+            return Matrix.CreateLookAt(finalizedPosition, finalizedPosition + finalizedRotation.GetForwardVector(), finalizedRotation.GetUpVector());
         }
 
         public static void ViewportUpdate()

@@ -30,6 +30,7 @@ namespace RetroEngine.Game.Entities.Weapons
         {
             ShowHandL = false;
 
+            Offset = new Vector3(-0.01f, 0.015f, -0.07f);
         }
 
         public override void Start()
@@ -65,7 +66,9 @@ namespace RetroEngine.Game.Entities.Weapons
             if (Input.GetAction("attack").Holding())
                 Shoot();
 
-            mesh.Update(Time.DeltaTime * 1.25f);
+            SetHideLeftHand(mesh, ShouldHideLeftHand());
+
+            mesh.Update(Time.DeltaTime * 1.2f);
 
             float targetRot = Camera.rotation.X;
 
@@ -87,6 +90,8 @@ namespace RetroEngine.Game.Entities.Weapons
             TpFire.UpdatePose = ((ICharacter)player).isFirstPerson() == false;
         }
 
+
+
         public override void Destroy()
         {
             base.Destroy();
@@ -98,7 +103,7 @@ namespace RetroEngine.Game.Entities.Weapons
         {
             base.LateUpdate();
 
-            mesh.Position = Position + GetWorldSway();
+            mesh.Position = Position + GetWorldSway() + GetWorldOffset();
             mesh.Rotation = Rotation + DrawRotation;
 
             arms.Position = mesh.Position;
@@ -139,7 +144,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             if (attackDelay.Wait()) return;
 
-            attackDelay.AddDelay(0.9f);
+            attackDelay.AddDelay(1f);
 
             fireSoundPlayer.Play(true);
 

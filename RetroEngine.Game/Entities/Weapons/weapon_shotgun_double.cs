@@ -69,6 +69,9 @@ namespace RetroEngine.Game.Entities.Weapons
             if (Input.GetAction("attack").Holding())
                 Shoot();
 
+            SetHideLeftHand(mesh, ShouldHideLeftHand());
+            SetHideLeftHand(mesh2, ShouldHideLeftHand());
+
             mesh.Update(Time.DeltaTime * 1.2f);
             mesh2.Update(Time.DeltaTime * 1.2f);
 
@@ -156,6 +159,11 @@ namespace RetroEngine.Game.Entities.Weapons
             }
 
             fireSoundPlayer.Position = Camera.position;
+        }
+
+        public override bool ShouldHideLeftHand()
+        {
+            return true;
         }
 
         bool a = true;

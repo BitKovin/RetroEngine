@@ -127,6 +127,7 @@ namespace RetroEngine.Game.Entities.Player
 
             Health = 100;
 
+
         }
 
 
@@ -540,8 +541,8 @@ namespace RetroEngine.Game.Entities.Player
             //bob += CameraRotation.GetForwardVector() * (float)Math.Sin(bobProgress * 1 * bobSpeed * 1) * -0.5f;
 
             //bob += Camera.rotation.GetUpVector() * (float)(Math.Abs(Math.Sin(bobProgress * bobSpeed * 1)) - 0.5f) * 0.2f;
-            bob += Camera.rotation.GetUpVector() * (float)(Math.Sin(bobProgress * bobSpeed * 2)) * -0.15f;
-            bob += Camera.rotation.GetRightVector() * (float)((Math.Sin(bobProgress * bobSpeed * 1))) * 0.3f;
+            bob += Camera.rotation.GetUpVector() * (float)(Math.Sin(bobProgress * bobSpeed * 2) + 0.2f) * -0.15f;
+            bob += Camera.rotation.GetRightVector() * (float)((Math.Sin(bobProgress * bobSpeed * 1)) - 0.5f) * 0.3f;
         }
 
         Delay stepSoundCooldown = new Delay();
@@ -647,7 +648,6 @@ namespace RetroEngine.Game.Entities.Player
 
             cameraRoll = MathHelper.Lerp(cameraRoll, input.X * 1.5f, Time.DeltaTime * 10);
 
-            Camera.roll = cameraRoll;
 
             stepSoundPlayer.Position = interpolatedPosition - Vector3.Up;
 
@@ -742,7 +742,7 @@ namespace RetroEngine.Game.Entities.Player
 
             cameraRoll = MathHelper.Lerp(cameraRoll, input.X * 1.5f, Time.DeltaTime * 10);
 
-            Camera.roll = cameraRoll;
+            Camera.rotation.Z = cameraRoll;
 
             stepSoundPlayer.Position = interpolatedPosition - Vector3.Up;
 
@@ -950,6 +950,7 @@ namespace RetroEngine.Game.Entities.Player
 
             if (FreeCamera.active) return;
             Camera.rotation = CameraRotation;
+            Camera.rotation.Z = cameraRoll;
             if(useThirdPersonAnimations)
             {
                 bodyMesh.Position = interpolatedPosition - Camera.rotation.GetForwardVector().XZ().Normalized() * 0.1f - new Vector3(0, 0.90f, 0);
