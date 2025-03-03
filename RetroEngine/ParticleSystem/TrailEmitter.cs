@@ -83,6 +83,7 @@ namespace RetroEngine.Particles
 
                 // Calculate texture coordinates
                 float texCoordX = (float)i / (particles.Count - 1);
+
                 float texCoordYTop = 0f;
                 float texCoordYBottom = 1f;
 

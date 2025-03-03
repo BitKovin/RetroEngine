@@ -28,7 +28,6 @@ namespace RetroEngine.Game
 
             SetStylingGraphics();
 
-
         }
 
         protected override void LoadContent()

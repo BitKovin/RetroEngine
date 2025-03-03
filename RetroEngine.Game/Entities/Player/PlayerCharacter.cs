@@ -70,7 +70,7 @@ namespace RetroEngine.Game.Entities.Player
 
         public bool flashlightEnabled = false;
 
-        float bobSpeed = 8;
+        float bobSpeed = 6.5f;
 
         PlayerUI PlayerUI;
 
@@ -316,11 +316,14 @@ namespace RetroEngine.Game.Entities.Player
             return currentWeapon.CanChangeSlot();
 
         }
+
+        bool pendingStepSound = false;
+
         private void PlayerBodyAnimator_OnAnimationEvent(AnimationEvent animationEvent)
         {
             if(animationEvent.Name == "step")
             {
-                PlayStepSound();
+                pendingStepSound = true;
             }
         }
 
@@ -398,6 +401,9 @@ namespace RetroEngine.Game.Entities.Player
             CheckGround();
 
             InterpolatePos();
+
+            if(pendingStepSound)
+                PlayStepSound();
 
             underwaterAmbientPlayer.Position = Position;
 
@@ -531,8 +537,9 @@ namespace RetroEngine.Game.Entities.Player
 
             bob = Vector3.Zero;
 
-            bob += CameraRotation.GetForwardVector() * (float)Math.Sin(bobProgress * 1 * bobSpeed * 1) * -0.5f;
-            //bob += Camera.rotation.GetUpVector() * (float)(Math.Abs(Math.Sin(bobProgress * bobSpeed * 1))) * 0.2f;
+            //bob += CameraRotation.GetForwardVector() * (float)Math.Sin(bobProgress * 1 * bobSpeed * 1) * -0.5f;
+            bob += Camera.rotation.GetUpVector() * (float)(Math.Abs(Math.Sin(bobProgress * bobSpeed * 1)) - 0.5f) * 0.2f;
+            bob += Camera.rotation.GetRightVector() * (float)((Math.Sin(bobProgress * bobSpeed * 1))) * 0.2f;
         }
 
         Delay stepSoundCooldown = new Delay();
@@ -646,11 +653,15 @@ namespace RetroEngine.Game.Entities.Player
 
         void PlayStepSound()
         {
+            pendingStepSound = false;
+
             if (stepSoundCooldown.Wait()) return;
             stepSoundCooldown.AddDelay(0.05f);
 
-            if(onGround)
-            stepSoundPlayer.Play(true);
+            if (onGround)
+            {
+                stepSoundPlayer.Play(true);
+            }
 
         }
         void UpdateMovementWater()
@@ -971,7 +982,7 @@ namespace RetroEngine.Game.Entities.Player
             if (currentWeapon is not null)
             {
                 currentWeapon.Position = Camera.position + bob * 0.05f * currentWeapon.BobScale + CameraRotation.GetForwardVector() * Camera.rotation.X / 2000f;
-                currentWeapon.Rotation = Vector3.Lerp(Camera.rotation, CameraRotation, 0.2f) - new Vector3(0, 0, (float)Math.Sin(bobProgress * -1 * bobSpeed) * -1.5f) * currentWeapon.BobScale;
+                currentWeapon.Rotation = Vector3.Lerp(Camera.rotation, CameraRotation, 0.2f);// - new Vector3(0, 0, (float)Math.Sin(bobProgress * -1 * bobSpeed) * -1.5f) * currentWeapon.BobScale;
             }
 
             UpdatePlayerLight();

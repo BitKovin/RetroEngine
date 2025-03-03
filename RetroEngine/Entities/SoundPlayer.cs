@@ -100,6 +100,38 @@ namespace RetroEngine.Entities
             fade = 0;
         }
 
+        public static void PlayAtLocation(AudioClip clip, Vector3 location, float Volume = 1, float Distance = 20, bool isUI = false, float duration = 2)
+        {
+            SoundPlayer soundPlayer = Level.GetCurrent().AddEntity(new SoundPlayer()) as SoundPlayer;
+
+            soundPlayer.Position = location;
+
+            soundPlayer.Volume = Volume;
+
+            soundPlayer.Is3DSound = true;
+            soundPlayer.IsUiSound = isUI;
+            soundPlayer.MaxDistance = Distance;
+
+            soundPlayer.SetSound(clip);
+            soundPlayer.Play();
+            soundPlayer.Destroy(duration);
+
+        }
+
+        public static void Play2D(AudioClip clip, bool isUI = false)
+        {
+            SoundPlayer soundPlayer = Level.GetCurrent().AddEntity(new SoundPlayer()) as SoundPlayer;
+
+            soundPlayer.IsUiSound = isUI;
+
+            soundPlayer.SetSound(clip);
+
+            soundPlayer.Play();
+
+            soundPlayer.Destroy(clip.GetDuration() + 0.1f);
+
+        }
+
         public override void Destroy()
         {
             base.Destroy();

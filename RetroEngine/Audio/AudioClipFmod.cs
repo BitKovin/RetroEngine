@@ -65,6 +65,16 @@ namespace RetroEngine.Audio
             sound.Volume = 0;
         }
 
+        public override float GetDuration()
+        {
+            if(sound == null) return 0;
+
+            sound.LengthTimeunit = FMOD.TIMEUNIT.MS;
+
+            return ((float)sound.Length) / 1000.0f;
+
+        }
+
         void ApplyDistance()
         {
 

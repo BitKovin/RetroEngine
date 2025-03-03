@@ -65,7 +65,7 @@ namespace RetroEngine.Game.Entities.Weapons
             if (Input.GetAction("attack").Holding())
                 Shoot();
 
-            mesh.Update(Time.DeltaTime * 1.2f);
+            mesh.Update(Time.DeltaTime * 1.25f);
 
             float targetRot = Camera.rotation.X;
 
@@ -139,7 +139,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             if (attackDelay.Wait()) return;
 
-            attackDelay.AddDelay(1);
+            attackDelay.AddDelay(0.9f);
 
             fireSoundPlayer.Play(true);
 

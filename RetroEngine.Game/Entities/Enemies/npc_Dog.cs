@@ -296,6 +296,8 @@ namespace RetroEngine.Game.Entities.Enemies
 
             damage = MathF.Max(15, damage);
 
+            SoundPlayer.PlayAtLocation(FmodEventInstance.Create("event:/NPC/General/FleshHit"), point, Volume: damage/20f);
+
             GlobalParticleSystem.EmitAt("hitBlood", point, MathHelper.FindLookAtRotation(Vector3.Zero, -direction), new Vector3(0, 0, damage / 10f));
 
         }

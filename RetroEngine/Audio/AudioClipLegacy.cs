@@ -77,6 +77,11 @@ namespace RetroEngine.Audio
             }
         }
 
+        public override float GetDuration()
+        {
+            return 10;
+        }
+
         internal void SetSound(SoundEffect sound)
         {
             if (sound != null)

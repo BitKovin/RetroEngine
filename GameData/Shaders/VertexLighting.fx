@@ -7,8 +7,8 @@ sampler TextureSampler = sampler_state
 {
     texture = <Texture>;
 
-    MinFilter = Point;
-    MagFilter = Point;
+    MinFilter = Linear;
+    MagFilter = Linear;
 
     MipLODBias = -0.5;
 
@@ -20,8 +20,8 @@ sampler EmissiveTextureSampler = sampler_state
 {
     texture = <EmissiveTexture>;
 
-    MinFilter = Point;
-    MagFilter = Point;
+    MinFilter = Linear;
+    MagFilter = Linear;
 
     AddressU = Wrap;
     AddressV = Wrap;

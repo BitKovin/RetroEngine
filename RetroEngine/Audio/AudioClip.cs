@@ -62,6 +62,11 @@ namespace RetroEngine.Audio
             return 0;
         }
 
+
+        public virtual float GetDuration()
+        {
+            return 0;
+        }
         public virtual void SetPlaybackPosition(float position)
         {
 
