@@ -538,8 +538,10 @@ namespace RetroEngine.Game.Entities.Player
             bob = Vector3.Zero;
 
             //bob += CameraRotation.GetForwardVector() * (float)Math.Sin(bobProgress * 1 * bobSpeed * 1) * -0.5f;
-            bob += Camera.rotation.GetUpVector() * (float)(Math.Abs(Math.Sin(bobProgress * bobSpeed * 1)) - 0.5f) * 0.2f;
-            bob += Camera.rotation.GetRightVector() * (float)((Math.Sin(bobProgress * bobSpeed * 1))) * 0.2f;
+
+            //bob += Camera.rotation.GetUpVector() * (float)(Math.Abs(Math.Sin(bobProgress * bobSpeed * 1)) - 0.5f) * 0.2f;
+            bob += Camera.rotation.GetUpVector() * (float)(Math.Sin(bobProgress * bobSpeed * 2)) * -0.15f;
+            bob += Camera.rotation.GetRightVector() * (float)((Math.Sin(bobProgress * bobSpeed * 1))) * 0.3f;
         }
 
         Delay stepSoundCooldown = new Delay();
