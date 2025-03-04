@@ -30,7 +30,7 @@ namespace RetroEngine.Game.Entities.Weapons
         {
             ShowHandL = false;
 
-            Offset = new Vector3(-0.01f, 0.015f, -0.07f);
+            Offset = new Vector3(-0.007f, 0.013f, -0.06f);
         }
 
         public override void Start()
@@ -90,7 +90,10 @@ namespace RetroEngine.Game.Entities.Weapons
             TpFire.UpdatePose = ((ICharacter)player).isFirstPerson() == false;
         }
 
-
+        public override bool ShouldHideLeftHand()
+        {
+            return true;
+        }
 
         public override void Destroy()
         {
@@ -104,6 +107,10 @@ namespace RetroEngine.Game.Entities.Weapons
             base.LateUpdate();
 
             mesh.Position = Position + GetWorldSway() + GetWorldOffset();
+
+            if (ShouldHideLeftHand())
+                mesh.Position += Camera.Forward * 0.06f;
+
             mesh.Rotation = Rotation + DrawRotation;
 
             arms.Position = mesh.Position;
@@ -241,6 +248,8 @@ namespace RetroEngine.Game.Entities.Weapons
             mesh.Scale = new Vector3(1f);
 
             mesh.LoadFromFile("models/weapons/shotgun.fbx");
+
+            mesh.PlayAnimation("draw",false,0);
 
             arms.LoadFromFile(PlayerCharacter.armsModelPath);
             arms.textureSearchPaths.Add("textures/weapons/arms/");

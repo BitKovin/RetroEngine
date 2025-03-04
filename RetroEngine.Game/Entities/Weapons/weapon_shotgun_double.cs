@@ -346,8 +346,9 @@ namespace RetroEngine.Game.Entities.Weapons
 
             meshTp.PreloadTextures();
 
+            mesh.PlayAnimation("draw", false, 0);
+            mesh2.PlayAnimation("draw", false, 0);
 
-           
 
             Console.WriteLine("loaded shotgun double");
 
