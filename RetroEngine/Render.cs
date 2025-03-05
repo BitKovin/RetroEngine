@@ -509,7 +509,7 @@ namespace RetroEngine
                     }
                 }
             }
-            //ParticleEmitter.RenderEmitter.DrawParticles(particlesToDraw);
+
             if (DrawOnlyOpaque || SimpleRender)
             {
                 if (Graphics.DrawPhysics)

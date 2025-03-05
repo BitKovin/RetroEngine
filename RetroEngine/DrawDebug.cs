@@ -107,7 +107,9 @@ namespace RetroEngine
             {
                 list = new List<DrawShapeCommand>(commands);
 
-                foreach(var command in list)
+
+
+                foreach (var command in list)
                 {
                     if(command.drawTime.Wait()==false)
                     {
@@ -118,7 +120,9 @@ namespace RetroEngine
                 list = new List<DrawShapeCommand>(commands);
             }
 
-            foreach(var command in list)
+            list = list.OrderBy(c => (c is DrawText) ? 1 : 0).ToList();
+
+            foreach (var command in list)
             {
                 command.Draw(instance);
             }

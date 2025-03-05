@@ -39,6 +39,8 @@ namespace RetroEngine.Entities
             enterAction = data.GetPropertyString("onEnterAction", enterAction);
             exitAction = data.GetPropertyString("onExitAction",exitAction);
 
+
+
         }
 
         public override void OnTriggerEnter(Entity entity)

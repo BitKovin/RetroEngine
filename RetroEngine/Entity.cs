@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Framework;
 using RetroEngine;
+using RetroEngine.Helpers;
 using RetroEngine.Map;
 using RetroEngine.PhysicsSystem;
 using static Assimp.Metadata;
@@ -86,8 +87,14 @@ namespace RetroEngine
 
         public int AsyncUpdateOrder = 0;
 
+        public BoundingBox Bounds = new BoundingBox();
+        public bool ManualBounds = false;
+
         public Entity()
         {
+
+            Bounds = Bounds.SetSize(Vector3.One);
+
             System.Reflection.MemberInfo info = this.GetType();
             object[] attributes = info.GetCustomAttributes(true);
 
@@ -99,6 +106,12 @@ namespace RetroEngine
                     break;
                 }
             }
+        }
+
+        protected void BoundsFollowPosition()
+        {
+            if (ManualBounds) return;
+            Bounds = Bounds.SetCenter(Position);
         }
 
         public Entity GetOwner()
@@ -126,6 +139,9 @@ namespace RetroEngine
             if(pendingDestroy)
             if (destroyDelay.Wait() == false)
                 Destroy();
+
+            BoundsFollowPosition();
+
         }
 
         public virtual void FromData(EntityData data)
@@ -138,7 +154,7 @@ namespace RetroEngine
 
         public virtual void AsyncUpdate()
         {
-
+            BoundsFollowPosition();
         }
 
         public virtual void LazyStart()
@@ -148,7 +164,7 @@ namespace RetroEngine
 
         public virtual void LateUpdate()
         {
-
+            BoundsFollowPosition();
         }
 
         public virtual void FinalizeFrame()

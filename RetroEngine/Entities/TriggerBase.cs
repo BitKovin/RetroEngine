@@ -1,4 +1,6 @@
 ﻿using BulletSharp;
+using Microsoft.Xna.Framework;
+using RetroEngine.Helpers;
 using RetroEngine.Map;
 using RetroEngine.PhysicsSystem;
 using System;
@@ -18,6 +20,8 @@ namespace RetroEngine.Entities
 
         List<Entity> entities = new List<Entity>();
 
+        int disableUpdateTicks = 2;
+
         public override void Start()
         {
             base.Start();
@@ -32,6 +36,20 @@ namespace RetroEngine.Entities
             collisionCallback.owner = this;
             collisionCallback.collidesWith = BodyType.CharacterCapsule;
             //meshes[0].Transperent = true;
+
+            List<Vector3> verts = new List<Vector3>();
+
+            foreach (var mesh in meshes)
+                foreach(var box in mesh.GetSubdividedBoundingBoxes())
+                {
+                    verts.Add(box.Min);
+                    verts.Add(box.Max);
+                }
+
+            Bounds = BoundingBox.CreateFromPoints(verts);
+
+            ManualBounds = true;
+
         }
 
         private void TriggerEntered(BulletSharp.CollisionObjectWrapper thisObject, BulletSharp.CollisionObjectWrapper collidedObject, Entity collidedEntity, BulletSharp.ManifoldPoint contactPoint)
@@ -49,6 +67,16 @@ namespace RetroEngine.Entities
         public override void AsyncUpdate()
         {
             base.AsyncUpdate();
+
+            if (CheckBoundsCollisionToTargetEntities())
+                disableUpdateTicks = 3;
+
+            DrawDebug.Box(Bounds.Min, Bounds.Max, Vector3.UnitY, 0.01f);
+            DrawDebug.Text(Bounds.GetCenter(), disableUpdateTicks.ToString(), 0.01f);
+
+            disableUpdateTicks--;
+
+            if (disableUpdateTicks <= 0) return;
 
             List<Entity> oldEntities = new List<Entity>(entities);
             entities.Clear();
@@ -86,5 +114,22 @@ namespace RetroEngine.Entities
 
         }
 
+
+        protected bool CheckBoundsCollisionToTargetEntities()
+        {
+            var entities = Level.GetCurrent().entities;
+
+            foreach (var entity in entities)
+            {
+
+                if (entity.Bounds.Contains(Bounds) != ContainmentType.Disjoint)
+                {
+                    if (entity.Tags.Contains(collideToTag))
+                        return true;
+                }
+
+            }
+            return false;
+        }
     }
 }
