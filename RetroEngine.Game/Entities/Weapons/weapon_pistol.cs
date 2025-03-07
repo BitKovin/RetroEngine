@@ -286,12 +286,12 @@ namespace RetroEngine.Game.Entities.Weapons
         void LoadVisual()
         {
 
-            const string pistolPath = "models/weapons/pistol2.fbx";
+            const string pistolPath = "models/weapons/pistol_revolver.fbx";
 
             mesh.Scale = new Vector3(1f);
             mesh.LoadFromFile(pistolPath);
 
-            mesh.textureSearchPaths.Add("textures/weapons/pistol/");
+            mesh.textureSearchPaths.Add("textures/weapons/pistol/old/");
             mesh.textureSearchPaths.Add("textures/weapons/general/");
 
             //mesh.CastShadows = false;
@@ -305,7 +305,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             meshTp.LoadFromFile("models/weapons/pistol_tp.fbx");
 
-            meshTp.textureSearchPaths.Add("textures/weapons/pistol/");
+            meshTp.textureSearchPaths.Add("textures/weapons/pistol/old/");
             meshTp.textureSearchPaths.Add("textures/weapons/general/");
 
             meshTp.PreloadTextures();

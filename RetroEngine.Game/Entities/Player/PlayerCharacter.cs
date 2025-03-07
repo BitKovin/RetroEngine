@@ -37,7 +37,7 @@ namespace RetroEngine.Game.Entities.Player
         float maxSpeed = 7f;
         float maxSpeedAir = 2;
         float acceleration = 90;
-        float airAcceleration = 20;
+        float airAcceleration = 30;
         bool tryLimit = false;
 
         [JsonInclude]

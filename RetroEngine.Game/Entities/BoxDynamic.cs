@@ -24,7 +24,7 @@ namespace RetroEngine.Game.Entities
     {
         StaticMesh mesh = new StaticMesh();
 
-        public Vector3 scale = new Vector3(1);
+        public Vector3 scale = new Vector3(3);
 
         SoundPlayer soundPlayer;
 
@@ -72,13 +72,15 @@ namespace RetroEngine.Game.Entities
 
             mesh.CastShadows = true;
 
+            mesh.Scale = scale;
+
             //mesh.GenerateSmoothNormals();
 
             //mesh.CastGeometricShadow = true;
 
             //video = AssetRegistry.LoadVideoFromFile("test.mp4");
 
-            
+
 
 
             meshes.Add(mesh);

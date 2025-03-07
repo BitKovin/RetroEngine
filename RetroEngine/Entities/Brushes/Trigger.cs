@@ -49,14 +49,8 @@ namespace RetroEngine.Entities
 
             if (entity.Tags.Contains("player"))
             {
-                var ents = Level.GetCurrent().FindAllEntitiesWithName(target);
-                foreach (var ent in ents)
-                {
-                    if (ent != null)
-                    {
-                        ent.OnAction(enterAction);
-                    }
-                }
+                CallActionOnEntsWithName(target, enterAction);
+                Logger.Log("enter");
             }
 
         }
@@ -67,11 +61,8 @@ namespace RetroEngine.Entities
 
             if (entity.Tags.Contains("player"))
             {
-                Entity targetEntity = Level.GetCurrent().FindEntityByName(target);
-                if (targetEntity != null)
-                {
-                    targetEntity.OnAction(exitAction);
-                }
+                CallActionOnEntsWithName(target, exitAction);
+                Logger.Log("exit");
             }
 
         }

@@ -59,7 +59,8 @@ namespace RetroEngine.Entities
 
             if (collidedEntity.Tags.Contains(collideToTag))
             {
-                entities.Add(collidedEntity);
+                if(entities.Contains(collidedEntity) == false)
+                    entities.Add(collidedEntity);
             }
 
         }
@@ -76,9 +77,11 @@ namespace RetroEngine.Entities
 
             disableUpdateTicks--;
 
+            List<Entity> oldEntities = new List<Entity>(entities);
+
+
             if (disableUpdateTicks <= 0) return;
 
-            List<Entity> oldEntities = new List<Entity>(entities);
             entities.Clear();
 
             foreach (RigidBody body in bodies)

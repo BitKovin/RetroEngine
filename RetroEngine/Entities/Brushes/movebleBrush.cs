@@ -43,7 +43,7 @@ namespace RetroEngine.Entities.Brushes
         {
             base.FromData(data);
 
-            targetLocation = data.GetPropertyVector("targetLocation",new Vector3(0,0,0));
+            targetLocation = data.GetPropertyVectorPosition("targetLocation");
 
             time = data.GetPropertyFloat("time", time);
 

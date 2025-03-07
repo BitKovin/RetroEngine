@@ -1,8 +1,5 @@
 newmtl __TB_empty
 
-newmtl brushes/Ground/grass
-map_Kd textures/brushes/Ground/grass.png
-
 newmtl brushes/Wall/brickWall1
 map_Kd textures/brushes/Wall/brickWall1.png
 
@@ -18,8 +15,20 @@ map_Kd textures/brushes/bricks.png
 newmtl brushes/cat
 map_Kd textures/brushes/cat.png
 
+newmtl brushes/delvenPack/dlv_ground4a
+map_Kd textures/brushes/delvenPack/dlv_ground4a.png
+
+newmtl brushes/delvenPack/dlv_stonebrk4d
+map_Kd textures/brushes/delvenPack/dlv_stonebrk4d.png
+
 newmtl brushes/grass
 map_Kd textures/brushes/grass.png
+
+newmtl brushes/libreQuake/lq_flesh/may_flesh1_tet
+map_Kd textures/brushes/libreQuake/lq_flesh/may_flesh1_tet.png
+
+newmtl brushes/libreQuake/lq_mayan/may_tomb1_1_fbr
+map_Kd textures/brushes/libreQuake/lq_mayan/may_tomb1_1_fbr.png
 
 newmtl brushes/trigger_t
 map_Kd textures/brushes/trigger_t.png

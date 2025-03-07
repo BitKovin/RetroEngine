@@ -1,0 +1,16 @@
+// Game: GenericEngine
+// Format: Standard
+// entity 0
+{
+"classname" "worldspawn"
+"_tb_textures" "textures\brushes\libreQuake\lq_conc;textures\brushes\libreQuake\lq_flesh;textures\brushes\libreQuake\lq_greek;textures\brushes\libreQuake\lq_health_ammo;textures\brushes\libreQuake\lq_legacy;textures\brushes\libreQuake\lq_liquidsky;textures\brushes\libreQuake\lq_mayan;textures\brushes\libreQuake\lq_medieval;textures\brushes\libreQuake\lq_metal;textures\brushes\libreQuake\lq_props;textures\brushes\libreQuake\lq_tech;textures\brushes\libreQuake\lq_tech\src;textures\brushes\libreQuake\lq_terra;textures\brushes\libreQuake\lq_terra\src;textures\brushes\libreQuake\lq_utility;textures\brushes\libreQuake\lq_wood;textures\brushes\tormentPack"
+// brush 0
+{
+( -64 -64 -16 ) ( -64 -63 -16 ) ( -64 -64 -15 ) __TB_empty 0 0 0 1 1
+( -64 -64 -16 ) ( -64 -64 -15 ) ( -63 -64 -16 ) __TB_empty 0 0 0 1 1
+( -64 -64 -16 ) ( -63 -64 -16 ) ( -64 -63 -16 ) __TB_empty 0 0 0 1 1
+( 64 64 16 ) ( 64 65 16 ) ( 65 64 16 ) __TB_empty 0 0 0 1 1
+( 64 64 16 ) ( 65 64 16 ) ( 64 64 17 ) __TB_empty 0 0 0 1 1
+( 64 64 16 ) ( 64 64 17 ) ( 64 65 16 ) __TB_empty 0 0 0 1 1
+}
+}

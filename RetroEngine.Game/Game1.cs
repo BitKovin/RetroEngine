@@ -155,7 +155,7 @@ namespace RetroEngine.Game
             Graphics.EnableSSR = false;
             Graphics.EnableSSAO = false;
             Graphics.PointLightShadowQuality = 0;
-            Graphics.DirectionalLightShadowQuality = 1;
+            Graphics.DirectionalLightShadowQuality = 0;
             Graphics.ShadowResolutionScale = 0.3f;
 
             Render.SimpleRender = true;

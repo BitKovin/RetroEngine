@@ -1,0 +1,178 @@
+mtllib flesh.mtl
+# vertices
+v -424 28 -156
+v -424 28 168
+v -424 52 168
+v -424 52 -156
+v 152 52 168
+v 152 28 168
+v 152 28 -156
+v 152 52 -156
+v -424 268 -156
+v -424 268 168
+v -424 292 168
+v -424 292 -156
+v 152 292 168
+v 152 268 168
+v 152 268 -156
+v 152 292 -156
+v -424 52 -156
+v -424 52 -108
+v -424 268 -60
+v -424 268 -156
+v 152 268 -60
+v 152 52 -108
+v 152 52 -156
+v 152 268 -156
+v -424 52 120
+v -424 52 168
+v -424 268 168
+v -424 268 72
+v 152 268 168
+v 152 52 168
+v 152 52 120
+v 152 268 72
+v 152 52 -288
+v 152 52 288
+v 104 268 288
+v 104 268 -288
+v 200 268 288
+v 200 52 288
+v 200 52 -288
+v 200 268 -288
+
+# texture coordinates
+vt 1.625 -0.125
+vt -1.75 -0.125
+vt -1.75 0.12500003
+vt 1.625 0.12500003
+vt 1.875 0.12500003
+vt -4.125 0.12500003
+vt -4.125 -0.125
+vt 1.875 -0.125
+vt 1.875 -1.75
+vt -4.125 -1.75
+vt -4.125 1.625
+vt 1.875 1.625
+vt 1.625 2.375
+vt -1.75 2.375
+vt -1.75 2.625
+vt 1.625 2.625
+vt 1.875 2.625
+vt -4.125 2.625
+vt -4.125 2.375
+vt 1.875 2.375
+vt 1.625 0.12500006
+vt 1.125 0.12500006
+vt 0.625 2.375
+vt -4.125 0.12500006
+vt 1.875 0.12500006
+vt 1.875 1.125
+vt -4.125 1.125
+vt -4.125 0.625
+vt 1.875 0.625
+vt -1.375 0.12500006
+vt -1.875 0.12500006
+vt -1.875 2.375
+vt -0.875 2.375
+vt 1.875 -1.875
+vt -4.125 -1.875
+vt -4.125 -1.375
+vt 1.875 -1.375
+vt 1.875 -0.875
+vt -4.125 -0.875
+vt -3.125 0.12500006
+vt 2.875 0.12500006
+vt 2.875 2.375
+vt -3.125 2.375
+vt 2.625 2.375
+vt 2.125 0.12500006
+vt 2.625 0.12500006
+vt 2.875 2.625
+vt 2.875 2.125
+vt -3.125 2.125
+vt -3.125 2.625
+vt -3.125 1.625
+vt 2.875 1.625
+
+# normals
+vn -1 0 -0
+vn 0 0 1
+vn 0 -1 -0
+vn 0 1 -0
+vn 0 0 -1
+vn 1 0 -0
+vn 0 -0.21693045781865616 0.9761870601839527
+vn 0 -0.21693045781865616 -0.9761870601839527
+vn -0.9761870601839527 -0.21693045781865616 -0
+
+o entity0_brush0
+usemtl brushes/libreQuake/lq_flesh/may_flesh1_b
+f  1/1/1  2/2/1  3/3/1  4/4/1
+usemtl brushes/libreQuake/lq_flesh/may_flesh1_b
+f  5/5/2  3/6/2  2/7/2  6/8/2
+usemtl brushes/libreQuake/lq_flesh/may_flesh1_b
+f  6/9/3  2/10/3  1/11/3  7/12/3
+usemtl brushes/libreQuake/lq_flesh/may_flesh1_b
+f  8/12/4  4/11/4  3/10/4  5/9/4
+usemtl brushes/libreQuake/lq_flesh/may_flesh1_b
+f  7/8/5  1/7/5  4/6/5  8/5/5
+usemtl brushes/libreQuake/lq_flesh/may_flesh1_b
+f  8/4/6  5/3/6  6/2/6  7/1/6
+
+o entity0_brush1
+usemtl brushes/libreQuake/lq_flesh/may_flesh2_b
+f  9/13/1  10/14/1  11/15/1  12/16/1
+usemtl brushes/libreQuake/lq_flesh/may_flesh2_b
+f  13/17/2  11/18/2  10/19/2  14/20/2
+usemtl brushes/libreQuake/lq_flesh/may_flesh2_b
+f  14/9/3  10/10/3  9/11/3  15/12/3
+usemtl brushes/libreQuake/lq_flesh/may_flesh2_b
+f  16/12/4  12/11/4  11/10/4  13/9/4
+usemtl brushes/libreQuake/lq_flesh/may_flesh2_b
+f  15/20/5  9/19/5  12/18/5  16/17/5
+usemtl brushes/libreQuake/lq_flesh/may_flesh2_b
+f  16/16/6  13/15/6  14/14/6  15/13/6
+
+o entity0_brush2
+usemtl brushes/libreQuake/lq_flesh/may_flesh4a_det
+f  17/21/1  18/22/1  19/23/1  20/13/1
+usemtl brushes/libreQuake/lq_flesh/may_flesh4a_det
+f  21/20/7  19/19/7  18/24/7  22/25/7
+usemtl brushes/libreQuake/lq_flesh/may_flesh4a_det
+f  22/26/3  18/27/3  17/11/3  23/12/3
+usemtl brushes/libreQuake/lq_flesh/may_flesh4a_det
+f  24/12/4  20/11/4  19/28/4  21/29/4
+usemtl brushes/libreQuake/lq_flesh/may_flesh4a_det
+f  23/25/5  17/24/5  20/19/5  24/20/5
+usemtl brushes/libreQuake/lq_flesh/may_flesh4a_det
+f  24/13/6  21/23/6  22/22/6  23/21/6
+
+o entity0_brush3
+usemtl brushes/libreQuake/lq_flesh/may_flesh4a_det
+f  25/30/1  26/31/1  27/32/1  28/33/1
+usemtl brushes/libreQuake/lq_flesh/may_flesh4a_det
+f  29/20/2  27/19/2  26/24/2  30/25/2
+usemtl brushes/libreQuake/lq_flesh/may_flesh4a_det
+f  30/34/3  26/35/3  25/36/3  31/37/3
+usemtl brushes/libreQuake/lq_flesh/may_flesh4a_det
+f  32/38/4  28/39/4  27/35/4  29/34/4
+usemtl brushes/libreQuake/lq_flesh/may_flesh4a_det
+f  31/25/8  25/24/8  28/19/8  32/20/8
+usemtl brushes/libreQuake/lq_flesh/may_flesh4a_det
+f  32/33/6  29/32/6  30/31/6  31/30/6
+
+o entity0_brush4
+usemtl brushes/libreQuake/lq_flesh/may_flesh4a_det
+f  33/40/9  34/41/9  35/42/9  36/43/9
+usemtl brushes/libreQuake/lq_flesh/may_flesh4a_det
+f  37/44/2  35/13/2  34/45/2  38/46/2
+usemtl brushes/libreQuake/lq_flesh/may_flesh4a_det
+f  38/47/3  34/48/3  33/49/3  39/50/3
+usemtl brushes/libreQuake/lq_flesh/may_flesh4a_det
+f  40/50/4  36/51/4  35/52/4  37/47/4
+usemtl brushes/libreQuake/lq_flesh/may_flesh4a_det
+f  39/46/5  33/45/5  36/13/5  40/44/5
+usemtl brushes/libreQuake/lq_flesh/may_flesh4a_det
+f  40/43/6  37/42/6  38/41/6  39/40/6
+

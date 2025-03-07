@@ -1,0 +1,60 @@
+// Game: GenericEngine
+// Format: Standard
+// entity 0
+{
+"classname" "worldspawn"
+"_tb_textures" "textures\brushes\libreQuake\lq_conc;textures\brushes\libreQuake\lq_flesh;textures\brushes\libreQuake\lq_greek;textures\brushes\libreQuake\lq_health_ammo;textures\brushes\libreQuake\lq_legacy;textures\brushes\libreQuake\lq_liquidsky;textures\brushes\libreQuake\lq_mayan;textures\brushes\libreQuake\lq_medieval;textures\brushes\libreQuake\lq_metal;textures\brushes\libreQuake\lq_props;textures\brushes\libreQuake\lq_tech;textures\brushes\libreQuake\lq_tech\src;textures\brushes\libreQuake\lq_terra;textures\brushes\libreQuake\lq_terra\src;textures\brushes\libreQuake\lq_utility;textures\brushes\libreQuake\lq_wood;textures\brushes\tormentPack"
+"globalLightBrightness" "0.7"
+"directLightBrightness" "0"
+// brush 0
+{
+( -424 -48 28 ) ( -424 -47.25 28 ) ( -424 -48 28.75 ) brushes/libreQuake/lq_flesh/may_flesh1_b 0 53.333332 0 0.75 0.75
+( -76 -168 28 ) ( -76 -168 28.75 ) ( -75.25 -168 28 ) brushes/libreQuake/lq_flesh/may_flesh1_b 37.33333 53.333332 0 0.75 0.75
+( -76 -48 28 ) ( -75.25 -48 28 ) ( -76 -47.25 28 ) brushes/libreQuake/lq_flesh/may_flesh1_b 37.33333 0 0 0.75 0.75
+( 20 48 52 ) ( 20 48.75 52 ) ( 20.75 48 52 ) brushes/libreQuake/lq_flesh/may_flesh1_b 37.33333 0 0 0.75 0.75
+( 20 156 52 ) ( 20.75 156 52 ) ( 20 156 52.75 ) brushes/libreQuake/lq_flesh/may_flesh1_b 37.33333 53.333332 0 0.75 0.75
+( 152 48 52 ) ( 152 48 52.75 ) ( 152 48.75 52 ) brushes/libreQuake/lq_flesh/may_flesh1_b 0 53.333332 0 0.75 0.75
+}
+// brush 1
+{
+( -424 -168 292 ) ( -424 156 268 ) ( -424 156 292 ) brushes/libreQuake/lq_flesh/may_flesh2_b 0 53.333344 0 0.75 0.75
+( 152 -168 292 ) ( -424 -168 268 ) ( -424 -168 292 ) brushes/libreQuake/lq_flesh/may_flesh2_b 37.33333 53.333344 0 0.75 0.75
+( 152 156 268 ) ( -424 -168 268 ) ( 152 -168 268 ) brushes/libreQuake/lq_flesh/may_flesh2_b 37.33333 0 0 0.75 0.75
+( 152 156 292 ) ( -424 -168 292 ) ( -424 156 292 ) brushes/libreQuake/lq_flesh/may_flesh2_b 37.33333 0 0 0.75 0.75
+( 152 156 292 ) ( -424 156 268 ) ( 152 156 268 ) brushes/libreQuake/lq_flesh/may_flesh2_b 37.33333 53.333344 0 0.75 0.75
+( 152 156 292 ) ( 152 -168 268 ) ( 152 -168 292 ) brushes/libreQuake/lq_flesh/may_flesh2_b 0 53.333344 0 0.75 0.75
+}
+// brush 2
+{
+( -424 60 268 ) ( -424 108 52 ) ( -424 156 52 ) brushes/libreQuake/lq_flesh/may_flesh4a_det 0 53.33333 0 0.75 0.75
+( 152 60 268 ) ( 152 108 52 ) ( -424 108 52 ) brushes/libreQuake/lq_flesh/may_flesh4a_det 37.33333 53.33333 0 0.75 0.75
+( 152 108 52 ) ( 152 156 52 ) ( -424 156 52 ) brushes/libreQuake/lq_flesh/may_flesh4a_det 37.33333 0 0 0.75 0.75
+( -424 156 268 ) ( 152 156 268 ) ( 152 60 268 ) brushes/libreQuake/lq_flesh/may_flesh4a_det 37.33333 0 0 0.75 0.75
+( 152 156 52 ) ( 152 156 268 ) ( -424 156 268 ) brushes/libreQuake/lq_flesh/may_flesh4a_det 37.33333 53.33333 0 0.75 0.75
+( 152 60 268 ) ( 152 156 268 ) ( 152 156 52 ) brushes/libreQuake/lq_flesh/may_flesh4a_det 0 53.33333 0 0.75 0.75
+}
+// brush 3
+{
+( -424 -72 268 ) ( -424 -168 268 ) ( -424 -168 52 ) brushes/libreQuake/lq_flesh/may_flesh4a_det -16 53.33333 0 0.75 0.75
+( -424 -168 268 ) ( 152 -168 268 ) ( 152 -168 52 ) brushes/libreQuake/lq_flesh/may_flesh4a_det 37.33333 53.33333 0 0.75 0.75
+( 152 -168 52 ) ( 152 -120 52 ) ( -424 -120 52 ) brushes/libreQuake/lq_flesh/may_flesh4a_det 37.33333 16 0 0.75 0.75
+( -424 -72 268 ) ( 152 -72 268 ) ( 152 -168 268 ) brushes/libreQuake/lq_flesh/may_flesh4a_det 37.33333 16 0 0.75 0.75
+( 152 -120 52 ) ( 152 -72 268 ) ( -424 -72 268 ) brushes/libreQuake/lq_flesh/may_flesh4a_det 37.33333 53.33333 0 0.75 0.75
+( 152 -168 268 ) ( 152 -72 268 ) ( 152 -120 52 ) brushes/libreQuake/lq_flesh/may_flesh4a_det -16 53.33333 0 0.75 0.75
+}
+// brush 4
+{
+( 104 -288 268 ) ( 152 -288 52 ) ( 152 288 52 ) brushes/libreQuake/lq_flesh/may_flesh4a_det -16 53.33333 180 0.75 -0.75
+( 104 -288 268 ) ( 200 -288 268 ) ( 200 -288 52 ) brushes/libreQuake/lq_flesh/may_flesh4a_det 69.33333 53.33333 0 0.75 0.75
+( 152 -288 52 ) ( 200 -288 52 ) ( 200 288 52 ) brushes/libreQuake/lq_flesh/may_flesh4a_det -16 -69.33333 270 0.75 0.75
+( 200 288 268 ) ( 200 -288 268 ) ( 104 -288 268 ) brushes/libreQuake/lq_flesh/may_flesh4a_det -16 -69.33333 270 0.75 0.75
+( 104 288 268 ) ( 152 288 52 ) ( 200 288 52 ) brushes/libreQuake/lq_flesh/may_flesh4a_det 69.33333 53.33333 0 0.75 0.75
+( 200 -288 52 ) ( 200 -288 268 ) ( 200 288 268 ) brushes/libreQuake/lq_flesh/may_flesh4a_det -16 53.33333 180 0.75 -0.75
+}
+}
+// entity 1
+{
+"classname" "info_player_start"
+"origin" "96 -16 88"
+"angle" "180"
+}
