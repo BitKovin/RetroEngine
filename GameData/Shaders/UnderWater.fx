@@ -39,11 +39,37 @@ struct VertexShaderOutput
 	float2 TextureCoordinates : TEXCOORD0;
 };
 
+float4 SampleBlur(float2 screenCoords)
+{
+	int n = 4;
+
+	float blurSize = 0.01;
+
+	float3 col = 0;
+
+	col += tex2D(SpriteTextureSampler, screenCoords + float2(0 , blurSize)).rgb;
+	col += tex2D(SpriteTextureSampler, screenCoords + float2(0 , -blurSize)).rgb;
+	col += tex2D(SpriteTextureSampler, screenCoords + float2(-blurSize , 0)).rgb;
+	col += tex2D(SpriteTextureSampler, screenCoords + float2(blurSize , 0)).rgb;
+
+	col/=4;
+
+	return float4(col,0);
+
+}
+
 float4 MainPS(VertexShaderOutput input) : COLOR
 {
 	
     float4 color = tex2D(SpriteTextureSampler, input.TextureCoordinates);
 	
+	color*=1;
+
+	color += SampleBlur(input.TextureCoordinates);
+	color/=2;
+
+	color += float4(0, 0, 0.02, 0);
+
     float depth = tex2D(DepthTextureSampler, input.TextureCoordinates).r;
 	
     //float3 pos = tex2D(PositionTextureSampler, input.TextureCoordinates).rgb + viewPos;
