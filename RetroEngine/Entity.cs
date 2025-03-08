@@ -93,7 +93,7 @@ namespace RetroEngine
         public Entity()
         {
 
-            Bounds = Bounds.SetSize(Vector3.One);
+            Bounds = Bounds.SetSize(Vector3.One * 2);
 
             System.Reflection.MemberInfo info = this.GetType();
             object[] attributes = info.GetCustomAttributes(true);

@@ -20,6 +20,7 @@ using RetroEngine.PhysicsSystem;
 using BulletSharp.SoftBody;
 using RetroEngine.Graphic;
 using RetroEngine.ParticleSystem;
+using RetroEngine.Helpers;
 
 namespace RetroEngine.Game.Entities.Player
 {
@@ -39,6 +40,10 @@ namespace RetroEngine.Game.Entities.Player
         float acceleration = 90;
         float airAcceleration = 30;
         bool tryLimit = false;
+
+        // Underwater swimming parameters
+        float swimAcceleration = 10.0f; // how fast the swimmer accelerates toward the desired velocity
+        float swimMaxSpeed = 6.0f;     // maximum swim speed underwater
 
         [JsonInclude]
         public Vector3 velocity = new Vector3();
@@ -127,6 +132,7 @@ namespace RetroEngine.Game.Entities.Player
 
             Health = 100;
 
+            Bounds = Bounds.SetSize(new Vector3(1, 2, 1));
 
         }
 
@@ -236,7 +242,7 @@ namespace RetroEngine.Game.Entities.Player
             underwaterAmbientPlayer.Play(true);
             underwaterAmbientPlayer.Update();
 
-            stepSound.SetParameter("Surface", 1);
+            stepSound.SetParameter("Surface", 0);
 
 
             weaponMeele = new weapon_sword().GetDefaultWeaponData();
@@ -338,14 +344,6 @@ namespace RetroEngine.Game.Entities.Player
 
             bool inWater = isInWater();
 
-            if(inWater)
-            {
-                Gravity = -10;
-            }
-            else
-            {
-                Gravity = -27;
-            }
 
             if(oldInWater != inWater)
             {
@@ -356,7 +354,12 @@ namespace RetroEngine.Game.Entities.Player
                 }
                 else
                 {
+
+                    if (Input.GetAction("jump").Holding() || CameraRotation.GetForwardVector().Y > 0.4f)
+                        PerformJump();
+
                     ExitedWater();
+
                 }
 
             }
@@ -402,6 +405,9 @@ namespace RetroEngine.Game.Entities.Player
             CheckGround();
 
             InterpolatePos();
+
+            stepSound.SetParameter("Surface", (waterBodies > 0) ? 1 : 0);
+
 
             if(pendingStepSound)
                 PlayStepSound();
@@ -547,9 +553,8 @@ namespace RetroEngine.Game.Entities.Player
 
         Delay stepSoundCooldown = new Delay();
 
-        void UpdateMovement()
+        void GroundMovement()
         {
-
             Vector2 input = new Vector2();
 
             if (Input.GetAction("moveForward").Holding())
@@ -588,7 +593,7 @@ namespace RetroEngine.Game.Entities.Player
 
                 if (onGround)
                 {
-                    
+
                     if (Math.Sin(bobProgress * bobSpeed * 2) <= 0 && Math.Sin((bobProgress + Time.DeltaTime) * bobSpeed * 2) > 0)
                     {
                         //stepSoundPlayer.Play(true);
@@ -601,7 +606,7 @@ namespace RetroEngine.Game.Entities.Player
 
                     body.LinearVelocity = new Vector3(velocity.X, body.LinearVelocity.Y, velocity.Z).ToPhysics();
 
-                    TryStep(motion.Normalized()/1.5f);
+                    TryStep(motion.Normalized() / 1.5f);
 
                     TryStep(MathHelper.RotateVector(motion.Normalized() * 1f / 1.6f, Vector3.UnitY, 35));
                     TryStep(MathHelper.RotateVector(motion.Normalized() * 1f / 1.6f, Vector3.UnitY, -35));
@@ -650,6 +655,73 @@ namespace RetroEngine.Game.Entities.Player
 
 
             stepSoundPlayer.Position = interpolatedPosition - Vector3.Up;
+        }
+
+        void UpdateMovementWater()
+        {
+            // Underwater movement: free 3D swimming
+            Vector3 motion = new Vector3();
+
+            // Horizontal movement based on camera orientation
+            if (Input.GetAction("moveForward").Holding())
+                motion += Camera.rotation.GetForwardVector();
+            if (Input.GetAction("moveBackward").Holding())
+                motion -= Camera.rotation.GetForwardVector();
+            if (Input.GetAction("moveRight").Holding())
+                motion += Camera.rotation.GetRightVector();
+            if (Input.GetAction("moveLeft").Holding())
+                motion -= Camera.rotation.GetRightVector();
+
+            // Vertical movement (if these input actions exist)
+            if (Input.GetAction("moveUp").Holding())
+                motion += Vector3.UnitY;
+            if (Input.GetAction("moveDown").Holding())
+                motion -= Vector3.UnitY;
+
+            // Activate the physics body
+            body.Activate(true);
+
+            // Apply reduced gravity underwater for a buoyancy effect
+            body.Gravity = new System.Numerics.Vector3(0, Gravity * 0.4f, 0);
+
+            // Get current velocity from the physics body
+            velocity = body.LinearVelocity;
+
+            if (motion.Length() > 0.1f)
+            {
+                // Normalize the input vector to ensure consistent movement
+                motion = motion.Normalized();
+                Vector3 desiredVelocity = motion * swimMaxSpeed;
+
+                // Smoothly interpolate current velocity toward the desired velocity on all axes
+                velocity.X = MathHelper.Lerp(velocity.X, desiredVelocity.X, Time.DeltaTime * swimAcceleration);
+                velocity.Y = MathHelper.Lerp(velocity.Y, desiredVelocity.Y, Time.DeltaTime * swimAcceleration);
+                velocity.Z = MathHelper.Lerp(velocity.Z, desiredVelocity.Z, Time.DeltaTime * swimAcceleration);
+            }
+            else
+            {
+                // No input: apply damping to simulate water drag
+                float damping = 0.8f;
+                velocity.X *= damping;
+                velocity.Y *= damping;
+                velocity.Z *= damping;
+            }
+
+            // Update the physics body's velocity (all axes)
+            body.LinearVelocity = velocity.ToPhysics();
+        }
+
+        void UpdateMovement()
+        {
+            if(underWater)
+            {
+                UpdateMovementWater();
+            }
+            else
+            {
+                GroundMovement();
+            }
+            
 
         }
 
@@ -666,87 +738,7 @@ namespace RetroEngine.Game.Entities.Player
             }
 
         }
-        void UpdateMovementWater()
-        {
-
-            Vector2 input = new Vector2();
-
-            if (Input.GetAction("moveForward").Holding())
-                input += new Vector2(0, 1);
-
-            if (Input.GetAction("moveBackward").Holding())
-                input -= new Vector2(0, 1);
-
-            if (Input.GetAction("moveRight").Holding())
-                input += new Vector2(1, 0);
-
-            if (Input.GetAction("moveLeft").Holding())
-                input -= new Vector2(1, 0);
-
-
-            Vector3 motion = new Vector3();
-
-            Vector3 right = Camera.rotation.GetRightVector().XZ();
-            Vector3 forward = Camera.rotation.GetForwardVector();
-
-            body.Activate(true);
-
-
-            body.Gravity = new System.Numerics.Vector3(0, -2, 0);
-
-            // Ground movement
-
-            //velocity = body.LinearVelocity;
-            body.Friction = 0.0f;
-            if (input.Length() > 0.1f)
-            {
-                input.Normalize();
-
-                motion += right * input.X;
-                motion += forward * input.Y;
-
-                
-
-                    if (Math.Sin(bobProgress * bobSpeed * 2) <= 0 && Math.Sin((bobProgress + Time.DeltaTime) * bobSpeed * 2) > 0)
-                    {
-                        stepSoundPlayer.Play(true);
-                    }
-
-                    bobProgress += Time.DeltaTime;
-
-
-                    velocity = UpdateGroundVelocity(motion, velocity);
-
-                    body.LinearVelocity = new Vector3(velocity.X, velocity.Y, velocity.Z).ToPhysics();
-
-
-                
-            }
-            else
-            {
-
-                if (onGround)
-                {
-                    velocity = Friction(velocity);
-                    body.LinearVelocity = new Vector3(velocity.X, body.LinearVelocity.Y, velocity.Z).ToPhysics();
-                }
-                else
-                {
-                    velocity = UpdateAirVelocity(new Vector3(), velocity);
-                    body.LinearVelocity = new Vector3(velocity.X, body.LinearVelocity.Y, velocity.Z).ToPhysics();
-                }
-                // No input, apply friction
-                body.Friction = 0.2f;
-            }
-
-
-            cameraRoll = MathHelper.Lerp(cameraRoll, input.X * 1.5f, Time.DeltaTime * 10);
-
-            Camera.rotation.Z = cameraRoll;
-
-            stepSoundPlayer.Position = interpolatedPosition - Vector3.Up;
-
-        }
+        
 
         void CheckGround()
         {
@@ -1028,9 +1020,14 @@ namespace RetroEngine.Game.Entities.Player
             
             if (onGround && isInWater() == false)
             {
-                body.LinearVelocity = new Vector3(body.LinearVelocity.X, 9.5f, body.LinearVelocity.Z).ToNumerics();
-                jumpDelay.AddDelay(0.1f);
+                PerformJump();
             }
+        }
+
+        void PerformJump()
+        {
+            body.LinearVelocity = new Vector3(body.LinearVelocity.X, 9.5f, body.LinearVelocity.Z).ToNumerics();
+            jumpDelay.AddDelay(0.1f);
         }
 
         Vector3 UpdateGroundVelocity(Vector3 withDir, Vector3 vel)
@@ -1219,11 +1216,24 @@ namespace RetroEngine.Game.Entities.Player
         void CheckUnderWater()
         {
 
+            underWater = false;
+
             Vector3 waterCheckPos = interpolatedPosition + Vector3.UnitY * 0.8f;
 
             var hit = Physics.LineTrace((waterCheckPos + Vector3.UnitY * 100).ToPhysics(), waterCheckPos.ToPhysics(), bodyType: BodyType.Liquid);
 
-            underWater = hit.HasHit;
+
+            if(hit.HasHit)
+            {
+                if(hit.entity != null)
+                {
+                    if (hit.entity.Bounds.Max.Y > waterCheckPos.Y &&
+                        hit.entity.Bounds.Min.Y < waterCheckPos.Y)
+                    {
+                        underWater = true;
+                    }
+                }
+            }
 
             underWaterAmbient.SetParameter("underWater", underWater ? 1 : 0);
 

@@ -14,7 +14,7 @@ sampler2D SpriteTextureSampler = sampler_state
 	Texture = <SpriteTexture>;
 };
 
-float offset = 1.05f;
+float offset = 1.08f;
 
 float screenWidth = 1280; // Change to your actual screen width
 float screenHeight = 720; // Change to your actual screen height

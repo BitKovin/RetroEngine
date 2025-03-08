@@ -91,7 +91,7 @@ namespace RetroEngine.NavigationSystem
 
 
 
-            RcVec3f m_polyPickExt = new RcVec3f(2, 4, 2);
+            RcVec3f m_polyPickExt = new RcVec3f(1, 4, 1);
 
             lock (dtNavMesh)
                 navMeshQuery.FindNearestPoly(start.ToRc(), m_polyPickExt, filter, out startRef, out var _, out var _);
@@ -241,7 +241,7 @@ namespace RetroEngine.NavigationSystem
 
             rcNavMeshBuildSettings.cellSize = 0.3f;
             rcNavMeshBuildSettings.agentRadius = 0.3f;
-            rcNavMeshBuildSettings.tileSize = 32;
+            rcNavMeshBuildSettings.tileSize = 13;
 
 
             NavMeshBuildResult buildResult;

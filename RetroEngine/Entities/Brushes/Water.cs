@@ -35,6 +35,16 @@ namespace RetroEngine.Entities
             {
                 body.SetBodyType(PhysicsSystem.BodyType.Liquid);
             }
+
+            foreach(var mesh in meshes)
+            {
+                mesh.Transperent = true;
+                mesh.Transparency = 0.95f;
+                mesh.TwoSided = true;
+
+                mesh.DistanceSortingRadius = -10000;
+            }
+
         }
 
 
@@ -56,18 +66,6 @@ namespace RetroEngine.Entities
 
             entity?.OnAction("water_enter");
 
-            if (entity.Tags.Contains("player"))
-            {
-                var ents = Level.GetCurrent().FindAllEntitiesWithName(target);
-                foreach (var ent in ents)
-                {
-                    if (ent != null)
-                    {
-                        ent.OnAction(enterAction);
-                    }
-                }
-            }
-
         }
 
         public override void OnTriggerExit(Entity entity)
@@ -75,15 +73,6 @@ namespace RetroEngine.Entities
             base.OnTriggerExit(entity);
 
             entity?.OnAction("water_exit");
-
-            if (entity.Tags.Contains("player"))
-            {
-                Entity targetEntity = Level.GetCurrent().FindEntityByName(target);
-                if (targetEntity != null)
-                {
-                    targetEntity.OnAction(exitAction);
-                }
-            }
 
         }
 

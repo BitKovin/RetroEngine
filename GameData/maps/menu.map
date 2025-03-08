@@ -55,8 +55,3 @@
 "classname" "main_menu"
 "origin" "-58 522 26"
 }
-// entity 7
-{
-"classname" "info_player_start"
-"origin" "-48 768 40"
-}

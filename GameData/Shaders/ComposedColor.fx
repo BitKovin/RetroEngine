@@ -141,7 +141,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 	
     bloomColor = lerp(bloomColor, float3(bloomL, bloomL, bloomL), bloomL * 0.5);
 	
-    bloomColor*=3;
+    bloomColor*=2;
     
     bloomL = length(bloomColor);
 	

@@ -22,6 +22,11 @@ namespace RetroEngine.Entities
 
         int disableUpdateTicks = 2;
 
+        public TriggerBase() : base() 
+        {
+            ManualBounds = true;
+        }
+
         public override void Start()
         {
             base.Start();
@@ -40,15 +45,12 @@ namespace RetroEngine.Entities
             List<Vector3> verts = new List<Vector3>();
 
             foreach (var mesh in meshes)
-                foreach(var box in mesh.GetSubdividedBoundingBoxes())
-                {
-                    verts.Add(box.Min);
-                    verts.Add(box.Max);
-                }
+            {
+                foreach (var vert in mesh.GetMeshVertices())
+                    verts.Add(vert);
+            }
 
             Bounds = BoundingBox.CreateFromPoints(verts);
-
-            ManualBounds = true;
 
         }
 
@@ -77,10 +79,22 @@ namespace RetroEngine.Entities
 
             disableUpdateTicks--;
 
-            List<Entity> oldEntities = new List<Entity>(entities);
+
+
+            if(disableUpdateTicks == 0)
+            {
+                foreach (var entity in entities)
+                {
+                    OnTriggerExit(entity);
+                }
+
+                entities.Clear();
+            }
 
 
             if (disableUpdateTicks <= 0) return;
+
+            List<Entity> oldEntities = new List<Entity>(entities);
 
             entities.Clear();
 

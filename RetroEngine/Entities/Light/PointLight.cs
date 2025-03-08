@@ -89,7 +89,7 @@ namespace RetroEngine.Entities.Light
 
             lightData.Radius = radius;
 
-            Dynamic = data.GetPropertyBool("dynamic");
+            Dynamic = data.GetPropertyBool("dynamic", Dynamic);
 
             
             resolution = 256;
@@ -108,7 +108,7 @@ namespace RetroEngine.Entities.Light
 
             //DrawDebug.Line(Position, Position + Rotation.GetForwardVector() * 4, Vector3.One, 40);
 
-            CastShadows = data.GetPropertyBool("shadows",true);
+            CastShadows = data.GetPropertyBool("shadows", true);
 
             CollisionTestRadius = data.GetPropertyFloat("collisionTestRadius", 0);
 

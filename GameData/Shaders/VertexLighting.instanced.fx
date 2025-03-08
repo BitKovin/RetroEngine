@@ -92,7 +92,7 @@ half3 CalculateDirectionalVertexLight(half3 tangentNormal, PixelInput input)
 	float3 globalLightColor = lerp(GlobalLightColor, SkyColor, 0);
 
 	// Global ambient light
-	float3 globalLight = GlobalBrightness * globalLightColor * lerp(1.0f, 0.1f, (dot(tangentNormal, float3(0, -1, 0)) + 1) / 2);
+	float3 globalLight = GlobalBrightness * globalLightColor * lerp(1.0f, 0.2f, (dot(tangentNormal, float3(0, -1, 0)) + 1) / 2);
 
 	light = max(light, 0.0f);
 	light += globalLight;
