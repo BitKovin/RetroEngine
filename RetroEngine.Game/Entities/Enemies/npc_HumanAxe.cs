@@ -34,7 +34,7 @@ namespace RetroEngine.Game.Entities.Enemies
         [JsonInclude]
         public float speed = 5f;
 
-        float maxSpeed = 7.5f;
+        float maxSpeed = 6.5f;
 
         Delay updateDelay = new Delay();
 

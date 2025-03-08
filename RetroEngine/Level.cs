@@ -69,6 +69,11 @@ namespace RetroEngine
             Physics.Start();
         }
 
+        public Entity[] GetEntities()
+        {
+            return entities.ToArray();
+        }
+
         public static Level GetCurrent()
         {
             return GameMain.Instance.curentLevel;

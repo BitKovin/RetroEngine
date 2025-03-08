@@ -157,7 +157,16 @@
 @PointClass base(Entity) size(-10 -10 -10, 10 10 10) color(255 255 0) = event_start : "Event" 
 [
 	target(string) : "Target" : ""
+]
 
+@PointClass base(Entity) size(-10 -10 -10, 10 10 10) color(255 255 100) = logicOnce : "LogicOnce" 
+[
+	target(string) : "Target" : ""
+]
+
+@SolidClass base(Entity) = navBlock : "navBlock" 
+[
+	
 ]
 
 @PointClass decal() = infodecal : "Decal"

@@ -1,3 +1,6 @@
+newmtl brushes/libreQuake/lq_dev/floor_pink_c
+map_Kd textures/brushes/libreQuake/lq_dev/floor_pink_c.png
+
 newmtl brushes/libreQuake/lq_flesh/may_flesh1_b
 map_Kd textures/brushes/libreQuake/lq_flesh/may_flesh1_b.png
 
@@ -9,6 +12,9 @@ map_Kd textures/brushes/libreQuake/lq_flesh/may_flesh1_te.png
 
 newmtl brushes/libreQuake/lq_flesh/may_flesh2_b
 map_Kd textures/brushes/libreQuake/lq_flesh/may_flesh2_b.png
+
+newmtl brushes/libreQuake/lq_flesh/may_flesh3_1b
+map_Kd textures/brushes/libreQuake/lq_flesh/may_flesh3_1b.png
 
 newmtl brushes/libreQuake/lq_flesh/may_flesh4a_det
 map_Kd textures/brushes/libreQuake/lq_flesh/may_flesh4a_det.png

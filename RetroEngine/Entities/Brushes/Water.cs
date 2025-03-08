@@ -39,7 +39,7 @@ namespace RetroEngine.Entities
             foreach(var mesh in meshes)
             {
                 mesh.Transperent = true;
-                mesh.Transparency = 0.95f;
+                mesh.Transparency = 0.9f;
                 mesh.TwoSided = true;
 
                 mesh.DistanceSortingRadius = -10000;

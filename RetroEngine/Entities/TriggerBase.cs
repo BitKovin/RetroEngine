@@ -134,7 +134,7 @@ namespace RetroEngine.Entities
 
         protected bool CheckBoundsCollisionToTargetEntities()
         {
-            var entities = Level.GetCurrent().entities;
+            var entities = Level.GetCurrent().GetEntities();
 
             foreach (var entity in entities)
             {

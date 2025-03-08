@@ -3,7 +3,7 @@
 // entity 0
 {
 "classname" "worldspawn"
-"_tb_textures" "textures\brushes\libreQuake\lq_conc;textures\brushes\libreQuake\lq_dev;textures\brushes\libreQuake\lq_flesh;textures\brushes\libreQuake\lq_greek;textures\brushes\libreQuake\lq_health_ammo;textures\brushes\libreQuake\lq_legacy;textures\brushes\libreQuake\lq_liquidsky;textures\brushes\libreQuake\lq_mayan;textures\brushes\libreQuake\lq_medieval;textures\brushes\libreQuake\lq_metal;textures\brushes\libreQuake\lq_props;textures\brushes\libreQuake\lq_tech;textures\brushes\libreQuake\lq_tech\src;textures\brushes\libreQuake\lq_terra;textures\brushes\libreQuake\lq_terra\src;textures\brushes\libreQuake\lq_utility;textures\brushes\libreQuake\lq_wood;textures\brushes\tormentPack"
+"_tb_textures" "textures\brushes\libreQuake\lq_conc;textures\brushes\libreQuake\lq_flesh;textures\brushes\libreQuake\lq_greek;textures\brushes\libreQuake\lq_health_ammo;textures\brushes\libreQuake\lq_legacy;textures\brushes\libreQuake\lq_liquidsky;textures\brushes\libreQuake\lq_mayan;textures\brushes\libreQuake\lq_medieval;textures\brushes\libreQuake\lq_metal;textures\brushes\libreQuake\lq_props;textures\brushes\libreQuake\lq_tech;textures\brushes\libreQuake\lq_tech\src;textures\brushes\libreQuake\lq_terra;textures\brushes\libreQuake\lq_terra\src;textures\brushes\libreQuake\lq_utility;textures\brushes\libreQuake\lq_wood;textures\brushes\tormentPack"
 "globalLightBrightness" "0.7"
 "directLightBrightness" "0"
 "globalLightColor" "1 0.8 0.8"
@@ -1243,44 +1243,7 @@
 {
 "classname" "func_group"
 "_tb_type" "_tb_layer"
-"_tb_name" "navBlock"
+"_tb_name" "navBloc"
 "_tb_id" "1"
 "_tb_layer_sort_index" "0"
-}
-// entity 23
-{
-"classname" "navBlock"
-"_tb_textures" "textures\brushes\libreQuake\lq_conc;textures\brushes\libreQuake\lq_dev;textures\brushes\libreQuake\lq_flesh;textures\brushes\libreQuake\lq_greek;textures\brushes\libreQuake\lq_health_ammo;textures\brushes\libreQuake\lq_legacy;textures\brushes\libreQuake\lq_liquidsky;textures\brushes\libreQuake\lq_mayan;textures\brushes\libreQuake\lq_medieval;textures\brushes\libreQuake\lq_metal;textures\brushes\libreQuake\lq_props;textures\brushes\libreQuake\lq_tech;textures\brushes\libreQuake\lq_tech\src;textures\brushes\libreQuake\lq_terra;textures\brushes\libreQuake\lq_terra\src;textures\brushes\libreQuake\lq_utility;textures\brushes\libreQuake\lq_wood;textures\brushes\tormentPack"
-"_tb_layer" "1"
-// brush 0
-{
-( -1864.4138285132888 199.64342824555166 42.39999999999998 ) ( -1932 84.44342824555167 546.4 ) ( -1876.3254174460958 -304.35657175444834 56.79999999999998 ) brushes/libreQuake/lq_dev/floor_pink_c 2.1739688 -0.8888855 0 0.9 0.9
-( -1876.3254174460958 -304.35657175444834 56.79999999999998 ) ( -1932 84.44342824555167 546.4 ) ( -1888.8 -189.15657175444835 546.4 ) brushes/libreQuake/lq_dev/floor_pink_c 2.1739807 -0.888855 0 0.9 0.9
-( -1864.4138285132888 199.64342824555166 42.39999999999998 ) ( -1888.8 257.2434282455517 546.4 ) ( -1932 84.44342824555167 546.4 ) brushes/libreQuake/lq_dev/floor_pink_c 2.1739655 -0.8888855 0 0.9 0.9
-( -1840.5906506476747 257.2434282455517 13.59999999999998 ) ( -1888.8 257.2434282455517 546.4 ) ( -1864.4138285132888 199.64342824555166 42.39999999999998 ) brushes/libreQuake/lq_dev/floor_pink_c 2.1739502 -0.8888855 0 0.9 0.9
-( -1840.5906506476747 257.2434282455517 13.59999999999998 ) ( -1864.4138285132888 199.64342824555166 42.39999999999998 ) ( -1876.3254174460958 -304.35657175444834 56.79999999999998 ) brushes/libreQuake/lq_dev/floor_pink_c 2.1739693 -0.8888855 0 0.9 0.9
-( -1831.2 -333.1565717544483 17.19999999999999 ) ( -1840.5906506476747 257.2434282455517 13.59999999999998 ) ( -1876.3254174460958 -304.35657175444834 56.79999999999998 ) brushes/libreQuake/lq_dev/floor_pink_c 18.666748 -2.1739655 0 0.9 0.9
-( -1759.2 -261.1565717544483 546.4 ) ( -1876.3254174460958 -304.35657175444834 56.79999999999998 ) ( -1888.8 -189.15657175444835 546.4 ) brushes/libreQuake/lq_dev/floor_pink_c 18.666748 -0.888855 0 0.9 0.9
-( -1744.8 308.4251366655335 13.59999999999998 ) ( -1888.8 257.2434282455517 546.4 ) ( -1840.5906506476747 257.2434282455517 13.59999999999998 ) brushes/libreQuake/lq_dev/floor_pink_c 18.666626 -0.88887024 0 0.9 0.9
-( -1759.2 -261.1565717544483 546.4 ) ( -1831.2 -333.1565717544483 17.19999999999999 ) ( -1876.3254174460958 -304.35657175444834 56.79999999999998 ) brushes/libreQuake/lq_dev/floor_pink_c 18.666626 -0.88887024 0 0.9 0.9
-( -1759.2 -261.1565717544483 546.4 ) ( -1788 -347.5565717544483 17.19999999999999 ) ( -1831.2 -333.1565717544483 17.19999999999999 ) brushes/libreQuake/lq_dev/floor_pink_c 18.666626 -0.8888855 0 0.9 0.9
-( -1744.8 308.4251366655335 13.59999999999998 ) ( -1802.4 271.6434282455517 546.4 ) ( -1888.8 257.2434282455517 546.4 ) brushes/libreQuake/lq_dev/floor_pink_c 18.666748 -0.888855 0 0.9 0.9
-( -1788 -347.5565717544483 17.19999999999999 ) ( -1840.5906506476747 257.2434282455517 13.59999999999998 ) ( -1831.2 -333.1565717544483 17.19999999999999 ) brushes/libreQuake/lq_dev/floor_pink_c 18.666748 -2.1739655 0 0.9 0.9
-( -1370.4 -117.15657175444832 546.4 ) ( -1802.4 271.6434282455517 546.4 ) ( -1428 142.04342824555167 546.4 ) brushes/libreQuake/lq_dev/floor_pink_c 18.666748 -2.1739674 0 0.9 0.9
-( -1471.2 -318.7565717544483 17.19999999999999 ) ( -1840.5906506476747 257.2434282455517 13.59999999999998 ) ( -1788 -347.5565717544483 17.19999999999999 ) brushes/libreQuake/lq_dev/floor_pink_c 18.666748 -2.1739807 0 0.9 0.9
-( -1471.2 -318.7565717544483 17.19999999999999 ) ( -1744.8 308.4251366655335 13.59999999999998 ) ( -1840.5906506476747 257.2434282455517 13.59999999999998 ) brushes/libreQuake/lq_dev/floor_pink_c 18.666748 -2.1739655 0 0.9 0.9
-( -1356 -246.75657175444834 17.19999999999999 ) ( -1744.8 308.4251366655335 13.59999999999998 ) ( -1471.2 -318.7565717544483 17.19999999999999 ) brushes/libreQuake/lq_dev/floor_pink_c 18.666748 -2.173973 0 0.9 0.9
-( -1284 -131.55657175444833 17.19999999999999 ) ( -1744.8 308.4251366655335 13.59999999999998 ) ( -1356 -246.75657175444834 17.19999999999999 ) brushes/libreQuake/lq_dev/floor_pink_c 18.666626 -2.1739693 0 0.9 0.9
-( -1284 -131.55657175444833 17.19999999999999 ) ( -1298.4 156.44342824555167 17.19999999999999 ) ( -1744.8 308.4251366655335 13.59999999999998 ) brushes/libreQuake/lq_dev/floor_pink_c 18.666748 -2.1739655 0 0.9 0.9
-( -1298.4 156.44342824555167 17.19999999999999 ) ( -1514.4 300.44342824555173 17.19999999999999 ) ( -1744.8 308.4251366655335 13.59999999999998 ) brushes/libreQuake/lq_dev/floor_pink_c 18.666626 -2.1739807 0 0.9 0.9
-( -1514.4 300.44342824555173 17.19999999999999 ) ( -1802.4 271.6434282455517 546.4 ) ( -1744.8 308.4251366655335 13.59999999999998 ) brushes/libreQuake/lq_dev/floor_pink_c 18.666748 -0.88890076 0 0.9 0.9
-( -1471.2 -318.7565717544483 17.19999999999999 ) ( -1788 -347.5565717544483 17.19999999999999 ) ( -1759.2 -261.1565717544483 546.4 ) brushes/libreQuake/lq_dev/floor_pink_c 18.666748 -0.8888855 0 0.9 0.9
-( -1428 142.04342824555167 546.4 ) ( -1802.4 271.6434282455517 546.4 ) ( -1514.4 300.44342824555173 17.19999999999999 ) brushes/libreQuake/lq_dev/floor_pink_c 18.666748 -0.8888855 0 0.9 0.9
-( -1370.4 -117.15657175444832 546.4 ) ( -1471.2 -318.7565717544483 17.19999999999999 ) ( -1759.2 -261.1565717544483 546.4 ) brushes/libreQuake/lq_dev/floor_pink_c 18.666626 -0.8888855 0 0.9 0.9
-( -1356 -246.75657175444834 17.19999999999999 ) ( -1471.2 -318.7565717544483 17.19999999999999 ) ( -1370.4 -117.15657175444832 546.4 ) brushes/libreQuake/lq_dev/floor_pink_c 18.666748 -0.8888855 0 0.9 0.9
-( -1298.4 156.44342824555167 17.19999999999999 ) ( -1428 142.04342824555167 546.4 ) ( -1514.4 300.44342824555173 17.19999999999999 ) brushes/libreQuake/lq_dev/floor_pink_c 18.666748 -0.8888855 0 0.9 0.9
-( -1284 -131.55657175444833 17.19999999999999 ) ( -1356 -246.75657175444834 17.19999999999999 ) ( -1370.4 -117.15657175444832 546.4 ) brushes/libreQuake/lq_dev/floor_pink_c 2.1739807 -0.8888855 0 0.9 0.9
-( -1298.4 156.44342824555167 17.19999999999999 ) ( -1370.4 -117.15657175444832 546.4 ) ( -1428 142.04342824555167 546.4 ) brushes/libreQuake/lq_dev/floor_pink_c 2.173973 -0.8888855 0 0.9 0.9
-( -1284 -131.55657175444833 17.19999999999999 ) ( -1370.4 -117.15657175444832 546.4 ) ( -1298.4 156.44342824555167 17.19999999999999 ) brushes/libreQuake/lq_dev/floor_pink_c 2.1739693 -0.8888855 0 0.9 0.9
-}
 }

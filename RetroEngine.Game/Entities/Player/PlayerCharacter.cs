@@ -42,7 +42,7 @@ namespace RetroEngine.Game.Entities.Player
         bool tryLimit = false;
 
         // Underwater swimming parameters
-        float swimAcceleration = 10.0f; // how fast the swimmer accelerates toward the desired velocity
+        float swimAcceleration = 6; // how fast the swimmer accelerates toward the desired velocity
         float swimMaxSpeed = 6.0f;     // maximum swim speed underwater
 
         [JsonInclude]
@@ -531,6 +531,7 @@ namespace RetroEngine.Game.Entities.Player
 
         }
 
+        Delay noInputDelay = new Delay();
         void UpdateCamera()
         {
 
@@ -586,6 +587,9 @@ namespace RetroEngine.Game.Entities.Player
             body.Friction = 0.0f;
             if (input.Length() > 0.1f)
             {
+
+                noInputDelay.AddDelay(0.3f);
+
                 input.Normalize();
 
                 motion += right * input.X;
@@ -638,6 +642,10 @@ namespace RetroEngine.Game.Entities.Player
 
                 if (onGround)
                 {
+
+                    // No input, apply friction
+                    body.Friction = 0.3f;
+
                     velocity = Friction(velocity);
                     body.LinearVelocity = new Vector3(velocity.X, body.LinearVelocity.Y, velocity.Z).ToPhysics();
                 }
@@ -646,10 +654,11 @@ namespace RetroEngine.Game.Entities.Player
                     velocity = UpdateAirVelocity(new Vector3(), velocity);
                     body.LinearVelocity = new Vector3(velocity.X, body.LinearVelocity.Y, velocity.Z).ToPhysics();
                 }
-                // No input, apply friction
-                body.Friction = 0.2f;
+                
             }
 
+            if(noInputDelay.Wait() == false)
+                body.Friction = 1f;
 
             cameraRoll = MathHelper.Lerp(cameraRoll, input.X * 1.5f, Time.DeltaTime * 10);
 
@@ -672,11 +681,10 @@ namespace RetroEngine.Game.Entities.Player
             if (Input.GetAction("moveLeft").Holding())
                 motion -= Camera.rotation.GetRightVector();
 
-            // Vertical movement (if these input actions exist)
-            if (Input.GetAction("moveUp").Holding())
+            if(Input.GetAction("jump").Holding())
                 motion += Vector3.UnitY;
-            if (Input.GetAction("moveDown").Holding())
-                motion -= Vector3.UnitY;
+
+            body.Friction = 0;
 
             // Activate the physics body
             body.Activate(true);
@@ -689,6 +697,9 @@ namespace RetroEngine.Game.Entities.Player
 
             if (motion.Length() > 0.1f)
             {
+
+                noInputDelay.AddDelay(0.3f);
+
                 // Normalize the input vector to ensure consistent movement
                 motion = motion.Normalized();
                 Vector3 desiredVelocity = motion * swimMaxSpeed;
@@ -706,6 +717,9 @@ namespace RetroEngine.Game.Entities.Player
                 velocity.Y *= damping;
                 velocity.Z *= damping;
             }
+
+            if (noInputDelay.Wait() == false)
+                body.Friction = 0.8f;
 
             // Update the physics body's velocity (all axes)
             body.LinearVelocity = velocity.ToPhysics();
