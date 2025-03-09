@@ -436,7 +436,7 @@ namespace RetroEngine
             foreach(Entity entity in list)
             { 
                 if (entity != null)
-                    if (renderLayers.Contains(entity.Layer) || Level.ChangingLevel || GameMain.SkipFrames>0)
+                    if (renderLayers.Contains(entity.Layer) || Level.ChangingLevel || GameMain.SkipFrames>0 || entity.AlwaysFinalizeFrame)
                     {
 
                         entity.FinalizeFrame();

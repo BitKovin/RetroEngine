@@ -92,6 +92,8 @@ namespace RetroEngine.Entities
         {
             base.Start();
 
+            AlwaysFinalizeFrame = true;
+
             Console.WriteLine("rendering cubemap!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             //Thread.Sleep(2000);
 
@@ -129,6 +131,8 @@ namespace RetroEngine.Entities
                 Physics.Remove(body);
             }
 
+            LateUpdateWhilePaused = true;
+
             bodies.Clear();
         }
 
@@ -137,6 +141,8 @@ namespace RetroEngine.Entities
             base.Update();
 
             cubeMaps.Clear();
+
+            DrawDebug.Box(boundingBox.Min, boundingBox.Max, duration: 0.01f);
 
             finalizedMaps = false;
 
@@ -228,6 +234,8 @@ namespace RetroEngine.Entities
 
         void RenderFace(CubeMapFace face)
         {
+
+            DrawDebug.Sphere(1, Position, Vector3.UnitX, 1000);
 
             Camera.position = Position;
 

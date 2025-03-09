@@ -90,6 +90,8 @@ namespace RetroEngine
         public BoundingBox Bounds = new BoundingBox();
         public bool ManualBounds = false;
 
+        public bool AlwaysFinalizeFrame = false;
+
         public Entity()
         {
 

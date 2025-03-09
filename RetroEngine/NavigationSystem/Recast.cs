@@ -104,9 +104,15 @@ namespace RetroEngine.NavigationSystem
 
             int maxItt = (int)(Vector3.Distance(start, end)*3)+50;
 
-
-            result = rcTestNavMeshTool.FindFollowPath(NavigationSystem.Recast.dtNavMesh, navMeshQuery, startRef, endRef, start.ToRc(), end.ToRc(), filter, false, ref longs, 0, ref path, 1000);
-
+            try
+            {
+                result = rcTestNavMeshTool.FindFollowPath(NavigationSystem.Recast.dtNavMesh, navMeshQuery, startRef, endRef, start.ToRc(), end.ToRc(), filter, false, ref longs, 0, ref path, 1000);
+            }
+            catch (Exception ex)
+            {
+                lock (NavigationSystem.Recast.dtNavMesh)
+                    result = rcTestNavMeshTool.FindFollowPath(NavigationSystem.Recast.dtNavMesh, navMeshQuery, startRef, endRef, start.ToRc(), end.ToRc(), filter, false, ref longs, 0, ref path, 1000);
+            }
 
             if (result.Succeeded())
                 return path.ConvertPath();

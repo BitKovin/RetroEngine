@@ -31,3 +31,6 @@ map_Kd textures/brushes/libreQuake/lq_liquidsky/star_water3.png
 newmtl brushes/libreQuake/lq_utility/trigger
 map_Kd textures/brushes/libreQuake/lq_utility/trigger.png
 
+newmtl brushes/mirror
+map_Kd textures/brushes/mirror.png
+
