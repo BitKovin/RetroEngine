@@ -159,7 +159,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
             TpFire.PlayAnimation(0,false);
 
-            Camera.AddCameraShake(new CameraShake(interpIn: 0.15f, duration: 1, positionAmplitude: new Vector3(0f, 0f, -0.2f), positionFrequency: new Vector3(0f, 0f, 6.4f), rotationAmplitude: new Vector3(-4f, 0.15f, 0f), rotationFrequency: new Vector3(-5f, 28.8f, 0f), falloff: 1.2f, shakeType: CameraShake.ShakeType.SingleWave));
+            Camera.AddCameraShake(new CameraShake(interpIn: 0.1f, duration: 1, positionAmplitude: new Vector3(0f, 0f, -0.2f), positionFrequency: new Vector3(0f, 0f, 6.4f), rotationAmplitude: new Vector3(-4f, 0.15f, 0f), rotationFrequency: new Vector3(-5f, 28.8f, 0f), falloff: 1.2f, shakeType: CameraShake.ShakeType.SingleWave));
 
             int i = 0;
 

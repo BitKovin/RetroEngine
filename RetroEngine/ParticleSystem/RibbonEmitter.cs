@@ -49,6 +49,24 @@ namespace RetroEngine.Particles
                     return;
                 }
 
+                particles = new List<Particle>(particles);
+
+                if (Emitting)
+                {
+
+                    Particle newParticle = GetNewParticle();
+
+                    newParticle.position = Position + particles.Last().globalRotation.GetForwardVector() * 0.001f;
+
+                    particles.Add(newParticle);
+
+                    newParticle = GetNewParticle();
+
+                    newParticle.position = Position + particles.Last().globalRotation.GetForwardVector() * 0.001f;
+
+                    particles.Add(newParticle);
+                }
+
                 int currentParticleCount = particles.Count;
                 int requiredVertexCount = currentParticleCount * 2;
                 int requiredIndexCount = (currentParticleCount - 1) * 6;
@@ -154,7 +172,6 @@ namespace RetroEngine.Particles
         {
 
 
-            SetLastParticlePos();
 
             base.Update();
         }

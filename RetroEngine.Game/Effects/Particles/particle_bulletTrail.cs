@@ -28,7 +28,7 @@ namespace RetroEngine.Game.Effects.Particles
 
 
             InitialSpawnCount = 3;
-            SpawnRate = 10;
+            SpawnRate = 20;
             //BoundingRadius = 30000;
             Emitting = true;
             

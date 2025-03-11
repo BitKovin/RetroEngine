@@ -1433,6 +1433,12 @@ namespace RetroEngine
             {
                 foreach (string item in textureSearchPaths)
                 {
+
+                    if(textures.ContainsKey(item + name))
+                    {
+                        return textures[item + name];
+                    }
+
                     output = AssetRegistry.LoadTextureFromFile(item + name, false);
                     if (output != null)
                     {
@@ -1479,6 +1485,12 @@ namespace RetroEngine
                 {
                     foreach (string item in textureSearchPaths)
                     {
+
+                        if (textures.ContainsKey(item + name))
+                        {
+                            return textures[item + name];
+                        }
+
                         output = AssetRegistry.LoadTextureFromFile(item + name, true);
                         if (output != null)
                         {

@@ -94,6 +94,9 @@ namespace RetroEngine.Entities
 
             AlwaysFinalizeFrame = true;
 
+            UpdateWhilePaused = true;
+            LateUpdateWhilePaused = true;
+
             Console.WriteLine("rendering cubemap!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             //Thread.Sleep(2000);
 

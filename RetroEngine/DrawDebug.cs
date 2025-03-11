@@ -82,6 +82,9 @@ namespace RetroEngine
 
         public static void Text(Vector3 position, string text, float duration = 1)
         {
+
+            if(Enabled == false) return;
+
             lock (commands)
             {
                 commands.Add(new DrawText(position, text, Vector3.One, duration));
