@@ -1,0 +1,36 @@
+newmtl brushes/libreQuake/lq_dev/floor_pink_c
+map_Kd textures/brushes/libreQuake/lq_dev/floor_pink_c.png
+
+newmtl brushes/libreQuake/lq_flesh/may_flesh1_b
+map_Kd textures/brushes/libreQuake/lq_flesh/may_flesh1_b.png
+
+newmtl brushes/libreQuake/lq_flesh/may_flesh1_c
+map_Kd textures/brushes/libreQuake/lq_flesh/may_flesh1_c.png
+
+newmtl brushes/libreQuake/lq_flesh/may_flesh1_te
+map_Kd textures/brushes/libreQuake/lq_flesh/may_flesh1_te.png
+
+newmtl brushes/libreQuake/lq_flesh/may_flesh2_b
+map_Kd textures/brushes/libreQuake/lq_flesh/may_flesh2_b.png
+
+newmtl brushes/libreQuake/lq_flesh/may_flesh3_1b
+map_Kd textures/brushes/libreQuake/lq_flesh/may_flesh3_1b.png
+
+newmtl brushes/libreQuake/lq_flesh/may_flesh4a_det
+map_Kd textures/brushes/libreQuake/lq_flesh/may_flesh4a_det.png
+
+newmtl brushes/libreQuake/lq_flesh/meat_pipe1
+map_Kd textures/brushes/libreQuake/lq_flesh/meat_pipe1.png
+
+newmtl brushes/libreQuake/lq_flesh/plus_aflesh_but2
+map_Kd textures/brushes/libreQuake/lq_flesh/plus_aflesh_but2.png
+
+newmtl brushes/libreQuake/lq_liquidsky/star_water3
+map_Kd textures/brushes/libreQuake/lq_liquidsky/star_water3.png
+
+newmtl brushes/libreQuake/lq_utility/trigger
+map_Kd textures/brushes/libreQuake/lq_utility/trigger.png
+
+newmtl brushes/mirror
+map_Kd textures/brushes/mirror.png
+

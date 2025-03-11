@@ -195,7 +195,7 @@ namespace RetroEngine.Game.Entities.Weapons
 
                     bullet.Rotation = bulletRotation;
 
-                    bullet.LifeTime = 0.4f;
+                    bullet.LifeTime = 0.2f;
 
                     Level.GetCurrent().AddEntity(bullet);
 
@@ -203,7 +203,7 @@ namespace RetroEngine.Game.Entities.Weapons
                     bullet.Position = startPos;
 
                     bullet.Start();
-                    bullet.Speed = 100;
+                    bullet.Speed = 200;
                     bullet.Damage = 5;
 
                     bullet.ignore.Add(player);
