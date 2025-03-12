@@ -79,6 +79,8 @@ namespace RetroEngine
 
         public static bool LowLatency = false;
 
+        public static float PointLightShadowBias = 1;
+
         public static BoundingFrustum DirectionalLightFrustrum = new BoundingFrustum(Matrix.Identity);
         public static BoundingFrustum DirectionalLightFrustrumClose = new BoundingFrustum(Matrix.Identity);
         public static BoundingFrustum DirectionalLightFrustrumVeryClose = new BoundingFrustum(Matrix.Identity);

@@ -171,8 +171,6 @@ namespace RetroEngine.Particles
         public override void Update()
         {
 
-
-
             base.Update();
         }
 

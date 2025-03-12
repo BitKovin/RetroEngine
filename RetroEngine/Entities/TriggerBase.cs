@@ -74,8 +74,8 @@ namespace RetroEngine.Entities
             if (CheckBoundsCollisionToTargetEntities())
                 disableUpdateTicks = 3;
 
-            DrawDebug.Box(Bounds.Min, Bounds.Max, Vector3.UnitY, 0.01f);
-            DrawDebug.Text(Bounds.GetCenter(), disableUpdateTicks.ToString(), 0.01f);
+            //DrawDebug.Box(Bounds.Min, Bounds.Max, Vector3.UnitY, 0.01f);
+            //DrawDebug.Text(Bounds.GetCenter(), disableUpdateTicks.ToString(), 0.01f);
 
             disableUpdateTicks--;
 

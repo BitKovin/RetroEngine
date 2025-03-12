@@ -145,7 +145,6 @@ namespace RetroEngine.Entities
 
             cubeMaps.Clear();
 
-            DrawDebug.Box(boundingBox.Min, boundingBox.Max, duration: 0.01f);
 
             finalizedMaps = false;
 
@@ -238,7 +237,6 @@ namespace RetroEngine.Entities
         void RenderFace(CubeMapFace face)
         {
 
-            DrawDebug.Sphere(1, Position, Vector3.UnitX, 1000);
 
             Camera.position = Position;
 

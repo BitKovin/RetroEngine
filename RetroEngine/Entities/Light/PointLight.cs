@@ -34,7 +34,7 @@ namespace RetroEngine.Entities.Light
         {
             LateUpdateWhilePaused = true;
 
-            lightData.shadowData = this;
+            lightData.sourceData = this;
 
             graphicsDevice = GameMain.Instance.GraphicsDevice;
 
@@ -78,6 +78,12 @@ namespace RetroEngine.Entities.Light
 
         public static bool DisableShadows = false;
 
+        public bool ShadowCaster = false;
+
+        public bool OnlyDynamicObjects = false;
+
+        internal RenderTargetCube renderTargetCube;
+
         public override void FromData(EntityData data)
         {
             base.FromData(data);
@@ -115,7 +121,7 @@ namespace RetroEngine.Entities.Light
             SkipUp = data.GetPropertyBool("dynamicSkipUp", false);
             SkipDown = data.GetPropertyBool("dynamicSkipDown", false);
 
-            if(DisableShadows)
+            if(DisableShadows && ShadowCaster == false)
                 CastShadows = false;
 
             if (CastShadows == false)
@@ -124,10 +130,11 @@ namespace RetroEngine.Entities.Light
             lightData.Resolution = resolution;
 
             mesh.LoadFromFile("models/cube.obj");
+            mesh.CastShadows = false;
             //meshes.Add(mesh);
             //mesh.Visible = false;
 
-            lightData.shadowData = this;
+            lightData.sourceData = this;
             graphicsDevice = GameMain.Instance.GraphicsDevice;
 
 
@@ -323,6 +330,18 @@ namespace RetroEngine.Entities.Light
             float cameraDist = Vector3.Distance(Camera.finalizedPosition, lightData.Position);
             lightVisibilityCheckMesh.Visible = cameraDist > lightData.Radius;
 
+            if (lightData.visible && ShadowCaster && renderTargetCube == null)
+            {
+                renderTargetCube = GetFreeRenderTargetCube(resolution);
+                mesh.texture = renderTargetCube;
+            }else if(lightData.visible == false)
+            {
+                if (renderTargetCube != null)
+                    FreeRenderTargetCube(renderTargetCube);
+
+                renderTargetCube = null;
+            }
+
             if (finalizedFrame == true) return;
 
             //finalLights = new List<PointLight>(lights);
@@ -345,10 +364,7 @@ namespace RetroEngine.Entities.Light
                 GameMain.pendingDispose.Add(renderTarget);
             }
 
-            //renderTarget?.Dispose();
-
-            //renderTargetCube?.Dispose();
-
+            FreeRenderTargetCube(renderTargetCube);
 
         }
 
@@ -436,19 +452,38 @@ namespace RetroEngine.Entities.Light
             {
                 if (Level.ChangingLevel)
                 {
-                    light.shadowData.Render(light.shadowData.lightData);
+                    light.sourceData.Render(light.sourceData.lightData);
                 }
                 else
                 {
-                    light.shadowData.Render(light);
+                    light.sourceData.Render(light);
                 }
             }
+
+
+            foreach (var light in LightManager.FinalShadowCasters)
+            {
+
+                if(light.sourceData == null) continue;
+
+                if (Level.ChangingLevel)
+                {
+                    light.sourceData.Render(light.sourceData.lightData);
+                }
+                else
+                {
+                    light.sourceData.Render(light);
+                }
+            }
+
         }
 
         void InitRenderTargetIfNeeded()
         {
 
             if (Destroyed) return;
+
+            if (ShadowCaster) return;
 
             if (renderTarget == null)
                 InitRenderTarget();
@@ -466,11 +501,14 @@ namespace RetroEngine.Entities.Light
                 GameMain.pendingDispose.Add(renderTarget);
             }
 
-            renderTarget = new RenderTarget2D(graphicsDevice, lightData.Resolution * 2, lightData.Resolution * 3,false, resolution > 400 ? SurfaceFormat.Single : SurfaceFormat.HalfSingle, DepthFormat.Depth24);
+            if (ShadowCaster) return;
+
+            renderTarget = new RenderTarget2D(graphicsDevice, lightData.Resolution * 2, lightData.Resolution * 3, false, resolution > 400 ? SurfaceFormat.Single : SurfaceFormat.HalfSingle, DepthFormat.Depth24);
 
             //renderTarget = new RenderTargetCube(graphicsDevice, lightData.Resolution, false, resolution>400 ? SurfaceFormat.Single : SurfaceFormat.HalfSingle, DepthFormat.Depth24, 0, RenderTargetUsage.DiscardContents);
 
-            mesh.texture = renderTarget;
+            //mesh.texture = renderTarget;
+
 
             dirty = true;
 
@@ -482,7 +520,7 @@ namespace RetroEngine.Entities.Light
             if (Destroyed)
                 return;
 
-            if (DisableShadows) return;
+            if (DisableShadows && ShadowCaster == false) return;
 
             InitRenderTargetIfNeeded();
 
@@ -533,16 +571,20 @@ namespace RetroEngine.Entities.Light
 
             //lightData.Radius = radius;
 
-            graphicsDevice.SetRenderTarget(renderTarget);
-            graphicsDevice.Clear(Microsoft.Xna.Framework.Color.Black);
-            
-            SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
-            spriteBatch.Begin(effect: GameMain.Instance.render.maxDepth);
-            Rectangle screenRectangle = new Rectangle(0, 0, renderTarget.Width, renderTarget.Height);
+            if (renderTarget != null)
+            {
 
-            // Draw the full-screen quad using SpriteBatch
-            spriteBatch.Draw(GameMain.Instance.render.black, screenRectangle, Microsoft.Xna.Framework.Color.White);
-            spriteBatch.End();
+                graphicsDevice.SetRenderTarget(renderTarget);
+                graphicsDevice.Clear(Microsoft.Xna.Framework.Color.Black);
+
+                SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
+                spriteBatch.Begin(effect: GameMain.Instance.render.maxDepth);
+                Rectangle screenRectangle = new Rectangle(0, 0, renderTarget.Width, renderTarget.Height);
+
+                // Draw the full-screen quad using SpriteBatch
+                spriteBatch.Draw(GameMain.Instance.render.black, screenRectangle, Microsoft.Xna.Framework.Color.White);
+                spriteBatch.End();
+            }
 
             RenderFace(CubeMapFace.PositiveX, pointLightData,0);
             RenderFace(CubeMapFace.NegativeX, pointLightData,1);
@@ -553,6 +595,7 @@ namespace RetroEngine.Entities.Light
             RetroEngine.Render.IgnoreFrustrumCheck = false;
 
             graphicsDevice.SetRenderTarget(null);
+
 
             bool wasDirty = dirty;
 
@@ -567,7 +610,7 @@ namespace RetroEngine.Entities.Light
 
             //DrawDebug.Line(Position, Position + GetCubemapDirection(face));
 
-            var view = GetViewForFace(face, lightData);
+            var view = GetViewForFace(face, lightData, ShadowCaster);
             var projection = Matrix.CreatePerspectiveFieldOfView(Microsoft.Xna.Framework.MathHelper.ToRadians(90f), 1, 0.005f, lightData.Radius*1.5f);
 
             if (customfrustrum)
@@ -587,16 +630,33 @@ namespace RetroEngine.Entities.Light
 
             var l = Level.GetCurrent().GetAllOpaqueMeshes();
 
-            graphicsDevice.SetRenderTarget(renderTarget);
+            if (ShadowCaster == false)
+            {
 
-            Vector2 offset = new Vector2();
+                if (renderTarget == null)
+                {
+                    Logger.Log("a");
+                }
 
-            int res = renderTarget.Width / 2;
+                graphicsDevice.SetRenderTarget(renderTarget);
 
-            offset.X = slice > 2 ? 1 : 0;
-            offset.Y = slice > 2 ? slice - 3 : slice;
+                Vector2 offset = new Vector2();
 
-            graphicsDevice.Viewport = new Viewport((int)offset.X * res, (int)offset.Y * res, res, res);
+                int res = renderTarget.Width / 2;
+
+                offset.X = slice > 2 ? 1 : 0;
+                offset.Y = slice > 2 ? slice - 3 : slice;
+
+                graphicsDevice.Viewport = new Viewport((int)offset.X * res, (int)offset.Y * res, res, res);
+
+            }else
+            {
+
+                graphicsDevice.SetRenderTarget(renderTargetCube, face);
+                graphicsDevice.Clear(ClearOptions.Target, Microsoft.Xna.Framework.Color.Black, 0, 0);
+
+
+            }
             //graphicsDevice.Clear(Microsoft.Xna.Framework.Color.Red);
             
 
@@ -607,17 +667,17 @@ namespace RetroEngine.Entities.Light
             GameMain.Instance.render.OcclusionEffect.Parameters["CameraPos"].SetValue(lightData.Position);
             GameMain.Instance.render.OcclusionEffect.Parameters["pointDistance"].SetValue(true);
 
-            GameMain.Instance.render.OcclusionEffect.Parameters["NormalBias"]?.SetValue(radius / resolution * 2f);
+            GameMain.Instance.render.OcclusionEffect.Parameters["NormalBias"]?.SetValue(1f/ resolution * Graphics.PointLightShadowBias * 2);
 
             GameMain.Instance.render.OcclusionStaticEffect.Parameters["ViewProjection"].SetValue(view * projection);
             GameMain.Instance.render.OcclusionStaticEffect.Parameters["CameraPos"].SetValue(lightData.Position);
             GameMain.Instance.render.OcclusionStaticEffect.Parameters["pointDistance"].SetValue(true);
-            GameMain.Instance.render.OcclusionStaticEffect.Parameters["NormalBias"]?.SetValue(radius / lightData.Resolution * 1f);
+            GameMain.Instance.render.OcclusionStaticEffect.Parameters["NormalBias"]?.SetValue(1f/ resolution * Graphics.PointLightShadowBias * 2);
 
 
 
 
-            GameMain.Instance.render.RenderLevelGeometryDepth(l, OnlyStatic: !isDynamic(), onlyShadowCasters: true, pointLight: true);
+            GameMain.Instance.render.RenderLevelGeometryDepth(l, OnlyStatic: !isDynamic(), onlyShadowCasters: true, pointLight: true, OnlyDynamic: OnlyDynamicObjects);
 
             GameMain.Instance.render.OcclusionEffect.Parameters["NormalBias"]?.SetValue(0);
             GameMain.Instance.render.OcclusionStaticEffect.Parameters["NormalBias"]?.SetValue(0);
@@ -626,10 +686,31 @@ namespace RetroEngine.Entities.Light
 
             GameMain.Instance.render.BoundingSphere.Radius = 0;
             //graphicsDevice.SetRenderTarget(null);
+
         }
 
-        Matrix GetViewForFace(CubeMapFace face, LightManager.PointLightData lightData)
+        Matrix GetViewForFace(CubeMapFace face, LightManager.PointLightData lightData, bool forCubemap = false)
         {
+
+            if(forCubemap)
+            {
+                switch (face)
+                {
+                    case CubeMapFace.NegativeX:
+                        return Matrix.CreateLookAt(lightData.Position + Vector3.Zero, lightData.Position + new Vector3(1, 0, 0), Vector3.Up);
+                    case CubeMapFace.PositiveX:
+                        return Matrix.CreateLookAt(lightData.Position + Vector3.Zero, lightData.Position + new Vector3(-1, 0, 0), Vector3.Up);
+                    case CubeMapFace.PositiveY:
+                        return Matrix.CreateLookAt(lightData.Position + Vector3.Zero, lightData.Position + new Vector3(0, 1, 0), new Vector3(0, 0, -1));
+                    case CubeMapFace.NegativeY:
+                        return Matrix.CreateLookAt(lightData.Position + Vector3.Zero, lightData.Position + new Vector3(0, -1, 0), new Vector3(0, 0, 1));
+                    case CubeMapFace.PositiveZ:
+                        return Matrix.CreateLookAt(lightData.Position + Vector3.Zero, lightData.Position + new Vector3(0, 0, 1), Vector3.Up);
+                    case CubeMapFace.NegativeZ:
+                        return Matrix.CreateLookAt(lightData.Position + Vector3.Zero, lightData.Position + new Vector3(0, 0, -1), Vector3.Up);
+                }
+            }
+
             switch (face)
             {
                 case CubeMapFace.NegativeX:
@@ -658,6 +739,64 @@ namespace RetroEngine.Entities.Light
             meshes.Add(lightVisibilityCheckMesh);
 
         }
+
+        static Dictionary<int, Queue<RenderTargetCube>> renderTargetCubePool = new Dictionary<int, Queue<RenderTargetCube>>();
+
+        static RenderTargetCube GetFreeRenderTargetCube(int resolution)
+        {
+            lock (renderTargetCubePool)
+            {
+                // Try to get an existing queue for the given resolution.
+                if (renderTargetCubePool.TryGetValue(resolution, out Queue<RenderTargetCube> queue) && queue.Count > 0)
+                {
+                    // Return an available instance from the pool.
+                    return queue.Dequeue();
+                }
+            }
+            // No free instance was found, so create a new one.
+            return new RenderTargetCube(GameMain.Instance.GraphicsDevice, resolution, false, SurfaceFormat.HalfSingle, DepthFormat.Depth24);
+        }
+
+        static void FreeRenderTargetCube(RenderTargetCube cube)
+        {
+
+            if (cube == null) return;
+
+            lock (renderTargetCubePool)
+            {
+                // If no queue exists for the resolution, create one.
+                if (!renderTargetCubePool.TryGetValue(cube.Size, out Queue<RenderTargetCube> queue))
+                {
+                    queue = new Queue<RenderTargetCube>();
+                    renderTargetCubePool[cube.Size] = queue;
+                }
+                // Enqueue the render target for future reuse.
+                queue.Enqueue(cube);
+            }
+        }
+
+        internal static void PopulatePool(int resolution, int count)
+        {
+            lock (renderTargetCubePool)
+            {
+                if (!renderTargetCubePool.TryGetValue(resolution, out Queue<RenderTargetCube> queue))
+                {
+                    queue = new Queue<RenderTargetCube>();
+                    renderTargetCubePool[resolution] = queue;
+                }
+                for (int i = 0; i < count; i++)
+                {
+                    RenderTargetCube cube = new RenderTargetCube(
+                        GameMain.Instance.GraphicsDevice,
+                        resolution,
+                        false,
+                        SurfaceFormat.HalfSingle,
+                        DepthFormat.Depth24);
+                    queue.Enqueue(cube);
+                }
+            }
+        }
+
 
         static bool customfrustrum = true;
 

@@ -31,6 +31,18 @@ sampler2D SSAOTextureSampler = sampler_state
     AddressV = Clamp;
 };
 
+Texture2D ShadowTexture;
+
+sampler2D ShadowTextureSampler = sampler_state
+{
+    Texture = <ShadowTexture>;
+
+    MinFilter = Linear;
+    MagFilter = Linear;
+    AddressU = Clamp;
+    AddressV = Clamp;
+};
+
 float2 ssaoResolution;
 
 Texture2D BloomTexture;
@@ -148,6 +160,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR
     //bloomColor *= lerp(bloomL + 1, 1, 0.1);
 	
     float ssao = tex2D(SSAOTextureSampler, input.TextureCoordinates).r;
+    float Shadow = tex2D(ShadowTextureSampler, input.TextureCoordinates).r;
 	
     float2 ssaoTexel = 1/ssaoResolution;
 
@@ -163,17 +176,24 @@ float4 MainPS(VertexShaderOutput input) : COLOR
             float2 offset = float2(i,j) * ssaoTexel;
 
             ssao += tex2D(SSAOTextureSampler, input.TextureCoordinates + offset).r;
+            
+            float sampleShadow = tex2D(ShadowTextureSampler, input.TextureCoordinates + offset*1.5).r;
+
+            if(sampleShadow.r < Shadow)
+                Shadow = sampleShadow.r;
+
             n++;
         }
     }
 
     ssao/=n;
 
+
     ssao = 1 - ssao;
     ssao*= 1.5;
     ssao = 1 - ssao;
 
-    float3 result = (color + bloomColor)*ssao;
+    float3 result = (color + bloomColor) * ssao * Shadow;
 
     float3 lutResult = result;
 

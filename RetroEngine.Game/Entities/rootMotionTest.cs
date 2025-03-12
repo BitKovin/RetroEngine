@@ -49,8 +49,8 @@ namespace RetroEngine.Game.Entities
             mesh.Position = Position;
             mesh.Rotation = Rotation;
 
-            DrawDebug.Sphere(0.3f, Position, Vector3.Zero, 0.01f);
-            DrawDebug.Line(Position + Vector3.UnitY, Position + Vector3.UnitY + Rotation.GetForwardVector(), Vector3.UnitY, 0.01f);
+            //DrawDebug.Sphere(0.3f, Position, Vector3.Zero, 0.01f);
+            //DrawDebug.Line(Position + Vector3.UnitY, Position + Vector3.UnitY + Rotation.GetForwardVector(), Vector3.UnitY, 0.01f);
 
             mesh.UpdateHitboxes();
 

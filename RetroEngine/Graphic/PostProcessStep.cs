@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static RetroEngine.Graphic.PostProcessStep;
 
 namespace RetroEngine.Graphic
 {
@@ -28,6 +29,9 @@ namespace RetroEngine.Graphic
 
         internal Texture2D BackBuffer;
 
+        public delegate void BeforePerform();
+        public event BeforePerform OnBeforePerform;
+
         internal void Perform()
         {
             if(Shader == null)
@@ -37,6 +41,8 @@ namespace RetroEngine.Graphic
             }
 
             GameMain.Instance.render.UpdateDataForShader(Shader);
+
+            OnBeforePerform?.Invoke();
 
             RenderStep();
 

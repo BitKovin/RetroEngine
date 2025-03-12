@@ -248,8 +248,13 @@ PixelOutput PixelShaderFunction(PixelInput input)
     
     textureAlpha *= Transparency;
     
+	float pbs = 1;
+    
+    if (textureAlpha * input.Color.a<0.95)
+        pbs = 0;
+
     output.Color = float4(textureColor, textureAlpha);
-    output.Normal = float4(TangentNormal, 1);
+    output.Normal = float4((TangentNormal + 1) / 2, pbs);
     output.Reflectiveness = float4(0,0,0,1);
     output.Position = float4(input.MyPosition - viewPos,1);
     return output;

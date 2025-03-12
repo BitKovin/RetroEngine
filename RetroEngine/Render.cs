@@ -14,6 +14,7 @@ using RetroEngine.Entities.Light;
 using RetroEngine.Graphic;
 using RetroEngine.PhysicsSystem;
 using CppNet;
+using SharpDX.Multimedia;
 
 namespace RetroEngine
 {
@@ -92,6 +93,9 @@ namespace RetroEngine
         public Effect BloomEffect;
 
         public Effect BlurEffect;
+
+        Shader ShadowCasterPathEffect;
+        Effect ShadowCasterApplyEffect;
 
         public Effect ComposeEffect;
         Effect TonemapperEffect;
@@ -173,7 +177,10 @@ namespace RetroEngine
             ReflectionEffect = AssetRegistry.GetShaderFromName("ReflectionPath");
             ReflectionResultEffect = GameMain.content.Load<Effect>("Shaders/ReflectionResult");
 
-            
+            ShadowCasterPathEffect = AssetRegistry.GetPostProcessShaderFromName("ShadowCasterPath");
+
+            ShadowCasterApplyEffect = GameMain.content.Load<Effect>("Shaders/ShadowCasterApply");
+
 
             //InitSampler();
         }
@@ -304,7 +311,7 @@ namespace RetroEngine
 
             
 
-            InitRenderTargetIfNeed(ref oldFrame, DepthFormat.Depth24);
+            InitRenderTargetVectorIfNeed(ref oldFrame);
 
             if (DisableMultiPass == false)
             {
@@ -383,6 +390,7 @@ namespace RetroEngine
 
             PointLight.DrawDirtyPointLights();
 
+
             if (SimpleRender)
             {
                 RenderForwardPath(renderList);
@@ -398,6 +406,7 @@ namespace RetroEngine
 
                 DownsampleToTexture(ForwardOutput, oldFrame);
 
+
                 DrawOnlyOpaque = false;
                 DrawOnlyTransparent = true;
                 RenderForwardPath(renderList, true);
@@ -405,6 +414,7 @@ namespace RetroEngine
                 DrawOnlyTransparent = false;
             }
 
+            DrawShadowCasterPath();
 
             if (SimpleRender && false)
             {
@@ -414,6 +424,10 @@ namespace RetroEngine
             {
                 PerformPostProcessing();
             }
+
+
+            if (Input.GetAction("test").Holding())
+                return normalPath;
 
             return outputPath;
 
@@ -494,7 +508,7 @@ namespace RetroEngine
 
 
 
-            if (onlyTransperent == false)
+            if (onlyTransperent == false || true)
             {
                 if (Graphics.GeometricalShadowsEnabled)
                 {
@@ -538,12 +552,12 @@ namespace RetroEngine
             }
         }
 
-        public void RenderLevelGeometryDepth(List<StaticMesh> renderList, bool OnlyStatic = false, bool onlyShadowCasters = false, RasterizerState rasterizerState = null, bool pointLight = false)
+        public void RenderLevelGeometryDepth(List<StaticMesh> renderList, bool OnlyStatic = false, bool onlyShadowCasters = false, RasterizerState rasterizerState = null, bool pointLight = false, bool OnlyDynamic = false)
         {
             graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 
-            if(rasterizerState == null)
-            graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
+            if (rasterizerState == null)
+                graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
             else
                 graphics.GraphicsDevice.RasterizerState = rasterizerState;
 
@@ -554,7 +568,8 @@ namespace RetroEngine
                 if (mesh == null) continue;
                 if (mesh.Transperent == false)
                 {
-                    if (mesh.Static || OnlyStatic == false && mesh.CastShadows == true || onlyShadowCasters == false)
+                    if ((mesh.CastShadows == true && ((mesh.Static && OnlyDynamic == false) || (OnlyDynamic && mesh.Static == false) || (OnlyDynamic == false && OnlyStatic == false)))
+                        || onlyShadowCasters == false)
                         mesh.DrawDepth(pointLight);
 
                 }
@@ -630,6 +645,44 @@ namespace RetroEngine
         public bool renderShadow()
         {
             return !shadowPassRenderDelay.Wait() || Level.ChangingLevel;
+        }
+
+        RenderTarget2D shadowCasterPath;
+        RenderTarget2D shadowCasterPathFinal;
+
+        void DrawShadowCasterPath()
+        {
+
+            InitSizedRenderTargetIfNeed(ref shadowCasterPath, (int)(GetScreenResolution().Y / 2), DepthFormat.None, SurfaceFormat.Color);
+            InitSizedRenderTargetIfNeed(ref shadowCasterPathFinal, (int)(GetScreenResolution().Y / 2), DepthFormat.None, SurfaceFormat.Color);
+
+            graphics.GraphicsDevice.SetRenderTarget(shadowCasterPath);
+            graphics.GraphicsDevice.Viewport = new Viewport(0,0, shadowCasterPath.Width, shadowCasterPath.Height);
+            graphics.GraphicsDevice.Clear(Color.White);
+
+            ShadowCasterPathEffect.Parameters["DepthTexture"]?.SetValue(GameMain.Instance.render.DepthPrepathOutput);
+
+            ShadowCasterPathEffect.Parameters["PositionTexture"]?.SetValue(positionPath);
+
+
+            ShadowCasterPathEffect.Parameters["NormalTexture"]?.SetValue(normalPath);
+
+            UpdateDataForShader(ShadowCasterPathEffect);
+
+            PointShadowCaster.ApplyShadowCastersToShader(ShadowCasterPathEffect);
+
+            SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
+            spriteBatch.Begin(effect: ShadowCasterPathEffect, sortMode: SpriteSortMode.FrontToBack, blendState: BlendState.Opaque);
+
+            // Draw a full-screen quad to apply the lighting
+            DrawFullScreenQuad(spriteBatch, GameMain.Instance.render.positionPath);
+
+            // End the SpriteBatch
+            spriteBatch.End();
+
+
+            DownsampleToTexture(shadowCasterPath, shadowCasterPathFinal, true, 0.5f);
+
         }
 
         internal void RenderShadowMap(List<StaticMesh> renderList)
@@ -1145,6 +1198,7 @@ namespace RetroEngine
 
             ComposeEffect.Parameters["ColorTexture"].SetValue(TonemapResult);
             ComposeEffect.Parameters["SSAOTexture"].SetValue(ssaoOutput);
+            ComposeEffect.Parameters["ShadowTexture"].SetValue(shadowCasterPathFinal);
             ComposeEffect.Parameters["BloomTexture"].SetValue(bloomSample);
             ComposeEffect.Parameters["Bloom2Texture"].SetValue(bloomSample2);
             ComposeEffect.Parameters["Bloom3Texture"].SetValue(bloomSample3);
@@ -1241,7 +1295,7 @@ namespace RetroEngine
 
         }
 
-        void DownsampleToTexture(Texture2D source, RenderTarget2D target, bool blur = false)
+        void DownsampleToTexture(Texture2D source, RenderTarget2D target, bool blur = false, float blurRadiusMultiplier = 1)
         {
 
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, target.Width, target.Height);
@@ -1255,8 +1309,8 @@ namespace RetroEngine
 
                 SpriteBatch spriteBatch = GameMain.Instance.SpriteBatch;
 
-                BlurEffect.Parameters["screenWidth"].SetValue(source.Width);
-                BlurEffect.Parameters["screenHeight"].SetValue(source.Height);
+                BlurEffect.Parameters["screenWidth"].SetValue(source.Width / blurRadiusMultiplier);
+                BlurEffect.Parameters["screenHeight"].SetValue(source.Height / blurRadiusMultiplier);
 
                 spriteBatch.Begin(blendState: BlendState.Opaque, effect: blur ? BlurEffect : null);
 

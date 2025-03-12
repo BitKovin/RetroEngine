@@ -1,4 +1,4 @@
-﻿#if OPENGL
+#if OPENGL
 	#define SV_POSITION POSITION
 	#define VS_SHADERMODEL vs_3_0
 	#define PS_SHADERMODEL ps_3_0
@@ -6,6 +6,17 @@
 	#define VS_SHADERMODEL vs_5_0
 	#define PS_SHADERMODEL ps_5_0
 #endif
+
+Texture2D BaseSpriteTexture;
+
+sampler2D BaseSpriteTextureSampler = sampler_state
+{
+	Texture = <BaseSpriteTexture>;
+
+    MinFilter = Linear;
+    MagFilter = Linear;
+
+};
 
 Texture2D SpriteTexture;
 
@@ -37,6 +48,8 @@ float Gaussian(float x, float y, float sigma) {
 float4 MainPS(VertexShaderOutput input) : COLOR
 {
 	
+    float3 baseColor = tex2D(BaseSpriteTextureSampler, input.TextureCoordinates);
+
     float3 color = 0;
 	
 float n = 0;
@@ -45,12 +58,12 @@ float2 texelSize = 1 / float2(screenWidth, screenHeight);
 float weightSum = 0.0;
 color = float3(0, 0, 0);
 
-float2 blurRadius = float2(2,2);
+float2 blurRadius = float2(3,3);
 
 for (int x = -blurRadius.x; x <= blurRadius.x; x++) {
     for (int y = -blurRadius.y; y <= blurRadius.y; y++) {
 
-        float2 TextureOffset = float2(x, y) * 1.3;
+        float2 TextureOffset = float2(x, y);
         float2 offsetCoords = TextureOffset * texelSize;
         float weight = Gaussian(x, y, 2);
         weightSum += weight;
@@ -58,14 +71,14 @@ for (int x = -blurRadius.x; x <= blurRadius.x; x++) {
     }
 }
 
-// Normalize the color by the sum of the weights
-color = color / weightSum;
+    // Normalize the color by the sum of the weights
+    color = color / weightSum;
 	
     //color = length(color)*lerp(normalize(color), length(color), lerp(length(color),1,0.5));
 	
     //float l = CalcLuminance(color) * 2;
 
-    return float4(color,1);
+    return float4(baseColor,1);
 }
 
 technique SpriteDrawing

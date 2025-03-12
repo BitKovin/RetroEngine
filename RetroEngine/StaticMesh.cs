@@ -558,8 +558,8 @@ namespace RetroEngine
             {
                 var shadowCasters = LightManager.FinalPointLights
                     .Select((l, i) => new { Light = l, Index = i })
-                    .Where(x => x.Light.visible && x.Light.shadowData.CastShadows)
-                    .OrderBy(x => Vector3.Distance(referencePosition, x.Light.Position) / x.Light.shadowData.Priority)
+                    .Where(x => x.Light.visible && x.Light.sourceData.CastShadows)
+                    .OrderBy(x => Vector3.Distance(referencePosition, x.Light.Position) / x.Light.sourceData.Priority)
                     .ToList();
 
                 foreach (var entry in shadowCasters)
@@ -625,8 +625,8 @@ namespace RetroEngine
 
             if (_cachedFeatures.SupportsShadows)
             {
-                _lightRes[index] = light.shadowData.CastShadows ? light.Resolution : 0f;
-                _lightMaps[index] = light.shadowData.renderTarget;
+                _lightRes[index] = light.sourceData.CastShadows ? light.Resolution : 0f;
+                _lightMaps[index] = light.sourceData.renderTarget;
             }
 
             if (_cachedFeatures.SupportsDirectionalLights)

@@ -89,7 +89,7 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
     output.Position = mul(mul(input.Position, boneTrans), World);
     
 
-    input.Position -= float4(normalize((mul(mul(float4(input.SmoothNormal,0), boneTrans), World)*NormalBias).xyz),0);
+    output.Position -= float4(normalize((mul(mul(float4(input.SmoothNormal,0), boneTrans), World)).xyz)*NormalBias,0);
 
     output.WorldPos = output.Position;
     

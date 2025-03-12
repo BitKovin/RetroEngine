@@ -58,7 +58,7 @@ namespace RetroEngine.Game
 
 
                 
-            Level.LoadFromFile("menu");
+            Level.LoadFromFile("test");
 
             base.GameInitialized();
 
@@ -175,7 +175,7 @@ namespace RetroEngine.Game
 
             Graphics.EnableBloom = true;
 
-            Render.DisableMultiPass = true;
+            Render.DisableMultiPass = false;
 
             DefaultShader = "VertexLighting";
 

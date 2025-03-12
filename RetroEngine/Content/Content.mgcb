@@ -13,6 +13,13 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin ../../GameData/Shaders/ShadowCasterPath.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/processorParam:Defines=
+/build:../../GameData/Shaders/ShadowCasterPath.fx;Shaders/ShadowCasterPath.fx
+
 #begin ../../GameData/Shaders/BloomSampler.fx
 /importer:EffectImporter
 /processor:EffectProcessor
@@ -125,6 +132,13 @@
 /processorParam:Defines=
 /build:../../GameData/Shaders/NormalOutput.fx;Shaders/NormalOutput.fx
 
+#begin ../../GameData/Shaders/OcclusionPath.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/processorParam:Defines=
+/build:../../GameData/Shaders/OcclusionPath.fx;Shaders/OcclusionPath.fx
+
 #begin ../../GameData/Shaders/OcclusionPathStatic.fx
 /importer:EffectImporter
 /processor:EffectProcessor
@@ -152,6 +166,20 @@
 /processorParam:DebugMode=Auto
 /processorParam:Defines=
 /build:../../GameData/Shaders/PostProcessing.fx;Shaders/PostProcessing.fx
+
+#begin ../../GameData/Shaders/ReflectionPath.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/processorParam:Defines=
+/build:../../GameData/Shaders/ReflectionPath.fx;Shaders/ReflectionPath.fx
+
+#begin ../../GameData/Shaders/ReflectionResult.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/processorParam:Defines=
+/build:../../GameData/Shaders/ReflectionResult.fx;Shaders/ReflectionResult.fx
 
 #begin ../../GameData/Shaders/ShadowMap.fx
 /importer:EffectImporter
@@ -216,48 +244,6 @@
 /processorParam:Defines=
 /build:../../GameData/Shaders/UnderWater.fx;Shaders/UnderWater.fx
 
-#begin ../../GameData/Shaders/Unlit.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/processorParam:Defines=
-/build:../../GameData/Shaders/Unlit.fx;Shaders/Unlit.fx
-
-#begin ../../GameData/Shaders/VertexLighting.instanced.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/processorParam:Defines=
-/build:../../GameData/Shaders/VertexLighting.instanced.fx;Shaders/VertexLighting.instanced.fx
-
-#begin ../../GameData/Shaders/OcclusionPath.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/processorParam:Defines=
-/build:../../GameData/Shaders/OcclusionPath.fx;Shaders/OcclusionPath.fx
-
-#begin ../../GameData/Shaders/ReflectionResult.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/processorParam:Defines=
-/build:../../GameData/Shaders/ReflectionResult.fx;Shaders/ReflectionResult.fx
-
-#begin ../../GameData/Shaders/VertexLighting.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/processorParam:Defines=
-/build:../../GameData/Shaders/VertexLighting.fx;Shaders/VertexLighting.fx
-
-#begin ../../GameData/Shaders/ReflectionPath.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/processorParam:Defines=
-/build:../../GameData/Shaders/ReflectionPath.fx;Shaders/ReflectionPath.fx
-
 #begin ../../GameData/Shaders/UnifiedOutput.fx
 /importer:EffectImporter
 /processor:EffectProcessor
@@ -278,3 +264,31 @@
 /processorParam:DebugMode=Auto
 /processorParam:Defines=
 /build:../../GameData/Shaders/UnifiedOutput.transperent.fx;Shaders/UnifiedOutput.transperent.fx
+
+#begin ../../GameData/Shaders/Unlit.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/processorParam:Defines=
+/build:../../GameData/Shaders/Unlit.fx;Shaders/Unlit.fx
+
+#begin ../../GameData/Shaders/VertexLighting.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/processorParam:Defines=
+/build:../../GameData/Shaders/VertexLighting.fx;Shaders/VertexLighting.fx
+
+#begin ../../GameData/Shaders/VertexLighting.instanced.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/processorParam:Defines=
+/build:../../GameData/Shaders/VertexLighting.instanced.fx;Shaders/VertexLighting.instanced.fx
+
+#begin ../../GameData/Shaders/ShadowCasterApply.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/processorParam:Defines=
+/build:../../GameData/Shaders/ShadowCasterApply.fx;Shaders/ShadowCasterApply.fx

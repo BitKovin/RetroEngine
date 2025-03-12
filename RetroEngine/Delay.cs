@@ -8,7 +8,7 @@ namespace RetroEngine
 {
     public class Delay
     {
-        double waitUntilTime = 0;
+        double waitUntilTime = -10000;
 
         bool ignorePause;
 

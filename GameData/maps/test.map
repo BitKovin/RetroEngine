@@ -18479,10 +18479,11 @@
 }
 // entity 12
 {
-"classname" "light_point"
-"origin" "95 31 129"
-"radius" "5"
-"intensity" "-3"
+"classname" "shadow_point"
+"origin" "79 303 49"
+"radius" "15"
+"intensity" "0.5"
+"resolution" "1024"
 }
 // entity 13
 {
@@ -18593,4 +18594,20 @@
 ( 528 -48 96 ) ( 368 -48 0 ) ( 528 -48 0 ) brushes/trigger_t 0 0 0 0.5 0.5
 ( 496 -64 96 ) ( 496 -176 0 ) ( 496 -176 96 ) brushes/trigger_t 0 0 0 0.5 0.5
 }
+}
+// entity 18
+{
+"classname" "shadow_point"
+"origin" "168 184 120"
+"radius" "15"
+"intensity" "0.5"
+"resolution" "1024"
+}
+// entity 19
+{
+"classname" "shadow_point"
+"origin" "40 136 88"
+"radius" "15"
+"intensity" "0.5"
+"resolution" "1024"
 }

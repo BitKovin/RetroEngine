@@ -14,9 +14,13 @@ namespace RetroEngine
 
         public static int MAX_POINT_LIGHTS = 20;
 
+        public static int MAX_POINT_SHADOW_CASTERS = 6;
+
         static List<PointLightData> pointLights = new List<PointLightData>();
 
         public static List<PointLightData> FinalPointLights = new List<PointLightData>();
+
+        public static List<PointLightData> FinalShadowCasters = new List<PointLightData>();
 
         public static void AddPointLight(PointLightData pointLight)
         {
@@ -33,7 +37,24 @@ namespace RetroEngine
         {
             pointLights = pointLights.OrderBy(l => Vector3.Distance(l.Position,Camera.position)).ToList();
 
+            var shadowCasterList = pointLights.Where(l => l.sourceData.ShadowCaster).ToList();
+
+            FinalShadowCasters.Clear();
             FinalPointLights.Clear();
+
+            for (int i = 0; i < MAX_POINT_SHADOW_CASTERS; i++)
+            {
+                if (shadowCasterList.Count <= i)
+                {
+                    FinalShadowCasters.Add(new PointLightData());
+                }
+                else
+                {
+                    FinalShadowCasters.Add(shadowCasterList[i]);
+                }
+            }
+
+            pointLights = pointLights.Where(l=> l.sourceData.ShadowCaster == false).ToList();
 
             if (Graphics.GlobalPointLights == false)
             {
@@ -65,7 +86,7 @@ namespace RetroEngine
             public float InnerMinDot = 0;
             public float Radius = 0;
             public int Resolution = 256;
-            public PointLight shadowData = null;
+            public PointLight sourceData = null;
 
             public bool visible = true;
 

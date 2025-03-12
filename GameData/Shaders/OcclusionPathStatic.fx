@@ -54,7 +54,7 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 
     
     
-    input.Position -= float4(input.SmoothNormal*NormalBias,0);
+    input.Position -= float4(normalize(mul(input.SmoothNormal, (float3x3)World).xyz)*NormalBias,0);
 
     // Transform the vertex position to world space
     output.Position = mul(input.Position, World);
