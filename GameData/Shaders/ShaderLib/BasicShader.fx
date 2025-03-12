@@ -1822,11 +1822,16 @@ float3 ApplyReflectionOnSurface(float3 color, float3 albedo, float2 screenCoords
 
 	//reflection = saturate(reflection);
 
-	float lum = 0;// saturate(CalcLuminance(reflection))/30;
+	float lum = saturate(CalcLuminance(reflection))/30;
 
 	float3 reflectionIntens = lerp(0, reflectiveness, metalic);
 
-	return lerp(color, reflection * albedo, reflectiveness);
+	float3 resMetalic1 = lerp(color, reflection * albedo, reflectiveness);
+	float3 resMetalic0 = lerp(color, reflection * albedo, reflection);
+
+	float3 result = lerp(resMetalic0, resMetalic1, metalic);
+
+	return result;
 }
 
 // Function to generate a random float based on the surface coordinates
@@ -1923,5 +1928,10 @@ float3 ApplyReflectionCubemapOnSurface(float3 color, float3 albedo, float reflec
 
 	//return cube;
 
-	return lerp(color, cube * albedo, reflectiveness);
+	float3 resMetalic1 = lerp(color, cube * albedo, reflectiveness);
+	float3 resMetalic0 = lerp(color, cube * albedo, cube);
+
+	float3 result = lerp(resMetalic0, resMetalic1, metalic);
+
+	return result;
 }
