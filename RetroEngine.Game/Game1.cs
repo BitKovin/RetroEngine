@@ -26,7 +26,7 @@ namespace RetroEngine.Game
         public Game() 
         {
 
-            //SetStylingGraphics();
+            SetStylingGraphics();
 
         }
 
@@ -58,7 +58,7 @@ namespace RetroEngine.Game
 
 
                 
-            Level.LoadFromFile("test2");
+            Level.LoadFromFile("test");
 
             base.GameInitialized();
 
