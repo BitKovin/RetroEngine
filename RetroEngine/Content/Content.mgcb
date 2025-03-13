@@ -3,7 +3,7 @@
 
 /outputDir:bin/$(Platform)
 /intermediateDir:obj/$(Platform)
-/platform:DesktopGL
+/platform:Windows
 /config:
 /profile:Reach
 /compress:False
@@ -181,6 +181,13 @@
 /processorParam:Defines=
 /build:../../GameData/Shaders/ReflectionResult.fx;Shaders/ReflectionResult.fx
 
+#begin ../../GameData/Shaders/ShadowCasterApply.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/processorParam:Defines=
+/build:../../GameData/Shaders/ShadowCasterApply.fx;Shaders/ShadowCasterApply.fx
+
 #begin ../../GameData/Shaders/ShadowMap.fx
 /importer:EffectImporter
 /processor:EffectProcessor
@@ -285,10 +292,3 @@
 /processorParam:DebugMode=Auto
 /processorParam:Defines=
 /build:../../GameData/Shaders/VertexLighting.instanced.fx;Shaders/VertexLighting.instanced.fx
-
-#begin ../../GameData/Shaders/ShadowCasterApply.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/processorParam:Defines=
-/build:../../GameData/Shaders/ShadowCasterApply.fx;Shaders/ShadowCasterApply.fx

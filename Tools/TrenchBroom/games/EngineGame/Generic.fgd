@@ -113,6 +113,21 @@
 	intensity(float) : "Intensity" : "1"
 	light_angle(float) : "Light Angle" : "180"
 	resolution(int) : "Resolution" : "256"
+	dynamic(bool) : "Dynamic" : "true"
+	shadows(bool) : "Shadows" : "true"
+	collisionTestRadius(float) : "CollisionTestRadius" : "0"
+	dynamicSkipUp(bool) : "DynamicSkipUp" : "false"
+	dynamicSkipDown(bool) : "DynamicSkipDown" : "false"
+]
+
+@PointClass base(Entity) size(-15 -15 -15, 15 15 15) color(255 200 0) model({ "path": "models/tools/spotlight.obj", "scale": radius * 32 * 2}) = shadow_point : "Graphics" 
+[
+	radius(float) : "Radius" : "5"
+	angles(Vector3): "Angles" : "0 0 0"
+	light_color(Vector3) : "Color" : "1 1 1"
+	intensity(float) : "Intensity" : "1"
+	light_angle(float) : "Light Angle" : "180"
+	resolution(int) : "Resolution" : "1024"
 	dynamic(bool) : "Dynamic" : "false"
 	shadows(bool) : "Shadows" : "true"
 	collisionTestRadius(float) : "CollisionTestRadius" : "0"

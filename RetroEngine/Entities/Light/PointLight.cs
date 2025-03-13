@@ -52,7 +52,7 @@ namespace RetroEngine.Entities.Light
 
         static bool finalizedFrame = false;
 
-        public int resolution = 512;
+        public int resolution = 256;
 
         public float radius = 10;
         protected float MinDot = -1f;
@@ -97,10 +97,9 @@ namespace RetroEngine.Entities.Light
 
             Dynamic = data.GetPropertyBool("dynamic", Dynamic);
 
-            
-            resolution = 256;
+           
 
-            resolution = (int)data.GetPropertyFloat("resolution", 256);
+            resolution = (int)data.GetPropertyFloat("resolution", resolution);
 
             Vector3 importRot = data.GetPropertyVector("angles", Vector3.Zero);
 

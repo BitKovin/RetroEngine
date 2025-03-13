@@ -211,7 +211,7 @@ namespace RetroEngine
 
             float hFactor = 1f - Math.Abs(Camera.finalizedRotation.GetForwardVector().GetForwardVector().Y);
 
-            Vector3 pos = Camera.finalizedPosition;// + Camera.rotation.GetForwardVector().XZ().Normalized() * lightDistance / 3f * hFactor * Graphics.LightDistanceMultiplier;
+            Vector3 pos = Camera.finalizedPosition + Camera.finalizedRotation.GetForwardVector().XZ().Normalized() * lightDistance / 3f * hFactor * Graphics.LightDistanceMultiplier;
 
             
 

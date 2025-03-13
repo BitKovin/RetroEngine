@@ -20,6 +20,8 @@ namespace RetroEngine.Entities.Light
 
             OnlyDynamicObjects = true;
 
+            resolution = 1024;
+
         }
 
 
@@ -32,7 +34,8 @@ namespace RetroEngine.Entities.Light
         internal static void ApplyShadowCastersToShader(Effect effect)
         {
 
-            Vector3[] LightPos = new Vector3[LightManager.MAX_POINT_SHADOW_CASTERS];
+            Vector4[] LightPos = new Vector4[LightManager.MAX_POINT_SHADOW_CASTERS];
+            Vector3[] LightColors = new Vector3[LightManager.MAX_POINT_SHADOW_CASTERS];
             float[] LightRadius = new float[LightManager.MAX_POINT_SHADOW_CASTERS];
             float[] LightRes = new float[LightManager.MAX_POINT_SHADOW_CASTERS];
             Vector4[] LightDirections = new Vector4[LightManager.MAX_POINT_SHADOW_CASTERS];
@@ -43,8 +46,9 @@ namespace RetroEngine.Entities.Light
 
                 if (LightManager.FinalShadowCasters[i].sourceData == null) continue;
 
-                LightPos[i] = LightManager.FinalShadowCasters[i].Position;
-                LightDirections[i] = new Vector4(LightManager.FinalShadowCasters[i].Direction, LightManager.FinalShadowCasters[i].sourceData.Intensity);
+                LightPos[i] = new Vector4(LightManager.FinalShadowCasters[i].Position, LightManager.FinalShadowCasters[i].InnerMinDot);
+                LightDirections[i] = new Vector4(LightManager.FinalShadowCasters[i].Direction, LightManager.FinalShadowCasters[i].MinDot);
+                LightColors[i] = LightManager.FinalShadowCasters[i].Color;
                 LightRadius[i] = LightManager.FinalShadowCasters[i].Radius;
                 LightRes[i] = LightManager.FinalShadowCasters[i].Resolution;
 
@@ -57,6 +61,7 @@ namespace RetroEngine.Entities.Light
             effect.Parameters["LightRadiuses"]?.SetValue(LightRadius);
             effect.Parameters["LightResolutions"]?.SetValue(LightRes);
             effect.Parameters["LightDirections"]?.SetValue(LightDirections);
+            effect.Parameters["LightColors"]?.SetValue(LightColors);
 
         }
 

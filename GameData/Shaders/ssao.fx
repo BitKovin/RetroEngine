@@ -249,8 +249,8 @@ float CalculateSSAONew(float3 position, float currentDepth, float3 normal)
 
     float bias = 0.08;
 
-    const float minRadius = 0.01; 
-    float maxRadius = 0.5; 
+    const float minRadius = 0.03; 
+    float maxRadius = 1; 
 
     float distanceMultiplier = map(clamp(distance(viewPos, position),1,30), 3, 30, 1, 4);
 
