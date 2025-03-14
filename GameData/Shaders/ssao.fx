@@ -252,7 +252,7 @@ float CalculateSSAONew(float3 position, float currentDepth, float3 normal)
     const float minRadius = 0.03; 
     float maxRadius = 1; 
 
-    float distanceMultiplier = map(clamp(distance(viewPos, position),1,30), 3, 30, 1, 4);
+    float distanceMultiplier = map(clamp(distance(viewPos, position),3,30), 3, 30, 1, 2);
 
     maxRadius *= distanceMultiplier;
 

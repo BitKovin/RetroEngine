@@ -1094,17 +1094,26 @@ namespace RetroEngine
 
         }
 
+
+        RenderTarget2D ssaoResult;
         void PerformSSAO()
         {
+            InitSizedRenderTargetIfNeed(ref ssaoResult, ssaoOutput.Height, DepthFormat.None, SurfaceFormat.Color);
 
             graphics.GraphicsDevice.Viewport = new Viewport(0, 0, ssaoOutput.Width, ssaoOutput.Height);
 
+            if (Graphics.EnableSSAO == false)
+            {
+
+                graphics.GraphicsDevice.SetRenderTarget(ssaoResult);
+
+                graphics.GraphicsDevice.Clear(Color.White);
+                return;
+            }
+
             graphics.GraphicsDevice.SetRenderTarget(ssaoOutput);
 
-            if(Graphics.EnableSSAO == false)
-            {
-                graphics.GraphicsDevice.Clear(Color.White);
-            }
+
 
             SSAOEffect.Parameters["NormalTexture"]?.SetValue(normalPath);
             SSAOEffect.Parameters["DepthTexture"]?.SetValue(DepthPrepathOutput);
@@ -1133,6 +1142,8 @@ namespace RetroEngine
             DrawFullScreenQuad(spriteBatch, DepthPrepathOutput);
 
             spriteBatch.End();
+
+            DownsampleToTexture(ssaoOutput, ssaoResult, true);
 
             //graphics.GraphicsDevice.SetRenderTarget(null);
         }
@@ -1197,7 +1208,7 @@ namespace RetroEngine
             ComposeEffect.Parameters["ssaoResolution"].SetValue(new Vector2(ssaoOutput.Width, ssaoOutput.Height));
 
             ComposeEffect.Parameters["ColorTexture"].SetValue(TonemapResult);
-            ComposeEffect.Parameters["SSAOTexture"].SetValue(ssaoOutput);
+            ComposeEffect.Parameters["SSAOTexture"].SetValue(ssaoResult);
             ComposeEffect.Parameters["ShadowTexture"].SetValue(shadowCasterPathFinal);
             ComposeEffect.Parameters["BloomTexture"].SetValue(bloomSample);
             ComposeEffect.Parameters["Bloom2Texture"].SetValue(bloomSample2);

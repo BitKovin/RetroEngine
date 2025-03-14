@@ -117,7 +117,7 @@ PixelOutput PixelShaderFunction(PixelInput input)
     
     float pbs = 1;
     
-    if (textureAlpha * input.Color.a<0.95)
+    if (textureAlpha * input.Color.a<0.99)
         pbs = 0;
     
     float3 reflection = reflect(vDir, pixelNormal);
