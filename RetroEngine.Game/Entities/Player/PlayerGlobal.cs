@@ -60,11 +60,11 @@ namespace RetroEngine.Game.Entities.Player
 
             if (GameMain.Instance.paused) return;
 
-            DrawDebug.Line(offset, offset + Vector3.UnitX/6, Vector3.UnitX, Time.DeltaTime*1.5f);
+            DrawDebug.Line(offset, offset + Vector3.UnitX/6, Vector3.UnitX, 0);
 
-            DrawDebug.Line(offset, offset + Vector3.UnitY/6, Vector3.UnitY, Time.DeltaTime * 1.5f);
+            DrawDebug.Line(offset, offset + Vector3.UnitY/6, Vector3.UnitY, 0);
 
-            DrawDebug.Line(offset, offset + Vector3.UnitZ/6, Vector3.UnitZ, Time.DeltaTime * 1.5f);
+            DrawDebug.Line(offset, offset + Vector3.UnitZ/6, Vector3.UnitZ, 0);
 
             StudioSystem.SetParameterValue("parameter:/inAction", InAction);
 

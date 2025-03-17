@@ -100,26 +100,15 @@ namespace RetroEngine
             }
         }
 
-        internal static void Draw()
-        {
+        static List<DrawShapeCommand> finalizesCommands = new List<DrawShapeCommand>();
 
+        internal static void FinalizeCommands()
+        {
             if (!Enabled) return;
 
             List<DrawShapeCommand> list;
             lock (commands)
             {
-                list = new List<DrawShapeCommand>(commands);
-
-
-
-                foreach (var command in list)
-                {
-                    if(command.drawTime.Wait()==false)
-                    {
-                        commands.Remove(command);
-                    }
-                }
-
                 list = new List<DrawShapeCommand>(commands);
             }
 
@@ -130,6 +119,28 @@ namespace RetroEngine
                 command.Draw(instance);
             }
 
+            finalizesCommands = list.ToList();
+
+            lock (commands)
+            {
+
+                foreach (var command in list)
+                {
+                    if (command.drawTime.Wait() == false)
+                    {
+                        commands.Remove(command);
+                    }
+                }
+
+            }
+        }
+
+        internal static void Draw()
+        {
+            foreach(var command in finalizesCommands)
+            {
+                command.Draw(instance);
+            }
         }
 
         public DrawDebug(GraphicsDevice graphicsDevice)

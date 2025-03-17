@@ -422,6 +422,8 @@ namespace RetroEngine
         public virtual void RenderPreparation()
         {
 
+            DrawDebug.FinalizeCommands();
+
             //Camera.finalizedPosition = Camera.position;
             //Camera.finalizedRotation = Camera.rotation;
             GameMain.Instance.render.EndOcclusionTest(Render.testedMeshes);

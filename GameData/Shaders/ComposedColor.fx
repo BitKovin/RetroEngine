@@ -179,8 +179,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR
             
             float sampleShadow = tex2D(ShadowTextureSampler, input.TextureCoordinates + offset*1.5).r;
 
-            if(sampleShadow.r < Shadow)
-                Shadow = sampleShadow.r;
+            Shadow = min(Shadow,sampleShadow.r);
 
             n++;
         }

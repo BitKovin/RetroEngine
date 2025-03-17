@@ -185,21 +185,23 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 
         float texelSizeWorld = lightDist / LightResolutions[i];
 
-        currentFactor -= GetShadowFromSource(i, pos, normal, lightDist, texelSizeWorld);
+        currentFactor += GetShadowFromSource(i, pos, normal, lightDist, texelSizeWorld);
 
         float offset = texelSizeWorld * 3;
 
-        currentFactor -= GetShadowFromSource(i, pos + float3(offset,0,0), normal, lightDist, texelSizeWorld);
-        currentFactor -= GetShadowFromSource(i, pos + float3(0,offset,0), normal, lightDist, texelSizeWorld);
-        currentFactor -= GetShadowFromSource(i, pos + float3(0,0,offset), normal, lightDist, texelSizeWorld);
+        currentFactor += GetShadowFromSource(i, pos + float3(offset,0,0), normal, lightDist, texelSizeWorld);
+        currentFactor += GetShadowFromSource(i, pos + float3(0,offset,0), normal, lightDist, texelSizeWorld);
+        currentFactor += GetShadowFromSource(i, pos + float3(0,0,offset), normal, lightDist, texelSizeWorld);
 
-        currentFactor -= GetShadowFromSource(i, pos + float3(-offset,0,0), normal, lightDist, texelSizeWorld);
-        currentFactor -= GetShadowFromSource(i, pos + float3(0,-offset,0), normal, lightDist, texelSizeWorld);
-        currentFactor -= GetShadowFromSource(i, pos + float3(0,0,-offset), normal, lightDist, texelSizeWorld);
+        currentFactor += GetShadowFromSource(i, pos + float3(-offset,0,0), normal, lightDist, texelSizeWorld);
+        currentFactor += GetShadowFromSource(i, pos + float3(0,-offset,0), normal, lightDist, texelSizeWorld);
+        currentFactor += GetShadowFromSource(i, pos + float3(0,0,-offset), normal, lightDist, texelSizeWorld);
         
         currentFactor/=7;
 
-        factor += currentFactor;
+
+
+        factor -= currentFactor;
 
 
     }

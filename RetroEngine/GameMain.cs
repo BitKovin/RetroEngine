@@ -614,7 +614,7 @@ namespace RetroEngine
         internal virtual void DrawSplashIfNeed()
         {
 #if RELEASE
-            if (GameTotalTime.Elapsed.TotalSeconds < 3)
+            if (GameTotalTime.Elapsed.TotalSeconds < 2)
                 DrawSplash();
 #endif
         }
