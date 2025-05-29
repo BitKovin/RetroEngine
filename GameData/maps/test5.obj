@@ -1,4 +1,4 @@
-mtllib test2.mtl
+mtllib test5.mtl
 # vertices
 v -352 16 -528
 v -352 16 480
@@ -741,17 +741,17 @@ usemtl brushes/bricks
 f  162/168/6  159/177/6  160/176/6  161/167/6
 
 o entity3_brush0
-usemtl brushes/trigger
+usemtl brushes/trigger_t
 f  163/188/1  164/189/1  165/190/1  166/191/1
-usemtl brushes/trigger
+usemtl brushes/trigger_t
 f  167/192/2  165/193/2  164/194/2  168/195/2
-usemtl brushes/trigger
+usemtl brushes/trigger_t
 f  168/196/3  164/197/3  163/198/3  169/199/3
-usemtl brushes/trigger
+usemtl brushes/trigger_t
 f  170/199/4  166/198/4  165/197/4  167/196/4
-usemtl brushes/trigger
+usemtl brushes/trigger_t
 f  169/195/5  163/194/5  166/193/5  170/192/5
-usemtl brushes/trigger
+usemtl brushes/trigger_t
 f  170/191/6  167/190/6  168/189/6  169/188/6
 
 o entity8_brush0
